@@ -1,0 +1,124 @@
+::selection {
+  	background: none;
+}
+::-moz-selection {
+  	background: none;
+}
+.checklist {
+	border: 2px solid #e8e8e8;
+	border-radius: 30px;
+	display: inline-block;
+	width: auto;
+	padding: 4px
+}
+.checklist > * {
+	display: inline-block;
+	padding: 10px 0px;
+	width: 38px;
+	cursor: pointer;
+	text-align: center;
+	color: #0036ff;
+	border: 2px solid transparent;
+	font-size: 13px;
+}
+.checklist > *:not(:first-child) {
+	margin-left: -7px;
+}
+.checklist > .active {
+	border-radius: 50px;
+	border: 2px solid #0036ff;
+	color: #000000;
+}
+.checklist > .right-side {
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-left: 2px solid transparent;
+}
+.checklist > .left-side {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+	border-right: 2px solid transparent;
+}
+.checklist > .center-side {
+	border-bottom-right-radius:0;
+	border-top-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	border-right: 2px solid transparent;
+	border-left: 2px solid transparent;
+}
+.checklist.vertical {
+	width: 38px;
+	padding: 3px 4px;
+}
+.checklist.vertical > * {
+	margin-left: -2px;
+}
+.checklist.vertical > *:not(:first-child) {
+	margin-top: -7px;
+}
+.checklist.vertical > .right-side {
+	border-radius: 50px;
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	border-left: 2px solid #0036ff;
+	border-top: 2px solid transparent;
+}
+.checklist.vertical > .left-side {
+	border-radius: 50px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	border-right: 2px solid #0036ff;
+	border-bottom: 2px solid transparent;
+}
+.checklist.vertical > .center-side {
+	border-bottom-right-radius:0;
+	border-top-right-radius: 0 ;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0 ;
+	border-top: 2px solid transparent;
+	border-bottom: 2px solid transparent;
+	border-right: 2px solid #0036ff;
+	border-left: 2px solid #0036ff;
+}
+.checklist.small > * {
+	width: 30px;
+	padding: 7px 0;
+	font-size: 11px;
+}
+.checklist.small > .active {
+	border-width: 1px;
+	padding: 8px 1px;
+}
+.checklist.vertical.small {
+	width: 30px;
+}
+.checklist.vertical.small {
+	padding: 2px 3px;
+}
+.checklist.large > * {
+	width: 45px;
+	padding: 12px 0px;
+	font-size: 15px;
+}
+.checklist.large > .active {
+	border-width: 2px;
+}
+.checklist.vertical.large {
+	width: 45px;
+}
+.checklist.vertical.large {
+	padding: 5px 5px;
+}
+.checklist.quadratic, .checklist.quadratic > * , .checklist.vertical.quadratic > * {
+	border-radius: 0;
+}
+.checklist input {
+	display: none;
+}
+.checklist.more-padded-l {
+	padding-left: 11px;
+}
+.checklist.more-padded-t {
+	padding-top: 10px;
+}

@@ -1,0 +1,165 @@
+.lobipanel .panel-heading {
+  padding: 13px 20px !important;
+}
+.lobipanel .panel-heading .panel-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  padding: 0;
+  margin-top: 5px;
+}
+.lobipanel .panel-heading .panel-title input {
+  border: 1px solid rgba(197, 214, 222, 0.7);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  color: #343434 !important;
+  -webkit-border-radius: 2px;
+          border-radius: 2px;
+  font-size: 13px;
+  line-height: 13px;
+  background: #fff;
+  padding: 4px 10px;
+  font-weight: 400;
+}
+.lobipanel .panel-heading .panel-title input:focus,
+.lobipanel .panel-heading .panel-title input.active {
+  border-color: #c5d6de;
+  background: #fff;
+}
+.lobipanel .panel-heading a {
+  display: inline-block;
+  vertical-align: top;
+  border: none;
+  background: 0 0;
+  margin: 0;
+}
+.lobipanel .panel-heading a i {
+  color: #adb7be;
+  font-size: 0.8rem;
+  line-height: 18px;
+}
+.lobipanel .panel-heading a:hover {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  background: none !important;
+}
+.lobipanel .panel-heading a:hover i {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  color: #00a8ff !important;
+  background: none !important;
+}
+.lobipanel .panel-heading .dropdown {
+  margin-right: -10px;
+  margin-top: 1px;
+}
+.lobipanel .panel-heading .dropdown .dropdown-toggle,
+.lobipanel .panel-heading .dropdown .dropdown-toggle:hover {
+  width: auto;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  background: none !important;
+  position: relative;
+  top: 4px;
+}
+.lobipanel .panel-heading .dropdown .dropdown-toggle span,
+.lobipanel .panel-heading .dropdown .dropdown-toggle:hover span {
+  color: #adb7be;
+  font-size: 0.8rem;
+  line-height: 18px;
+}
+.lobipanel .panel-heading .dropdown .dropdown-toggle .panel-control-icon,
+.lobipanel .panel-heading .dropdown .dropdown-toggle:hover .panel-control-icon {
+  margin: 0;
+  color: #adb7be;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  font-size: 15px;
+  vertical-align: middle;
+  line-height: 13px;
+  position: relative;
+  top: -1px;
+}
+.lobipanel .panel-heading .dropdown .dropdown-toggle::after {
+  color: #adb7be;
+}
+.lobipanel .panel-heading .dropdown.open .dropdown-menu {
+  border-color: #d8e2e7;
+  font-size: 15px;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 6px 0 0;
+  color: #373a3c;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: .25rem;
+  border-radius: .25rem;
+}
+.lobipanel .panel-heading .dropdown.open .dropdown-menu li a {
+  display: block;
+  width: 100%;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #373a3c;
+  text-align: inherit;
+  background: 0 0;
+  border: 0;
+  font-size: 15px;
+  padding: 4px 12px;
+}
+.lobipanel .panel-heading .dropdown.open .dropdown-menu li a .control-title {
+  margin-left: 10px;
+}
+.lobipanel .panel-heading .dropdown.open .dropdown-menu li a .panel-control-icon {
+  margin: 0;
+  color: #adb7be;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  font-size: 15px;
+  vertical-align: middle;
+  line-height: 16px;
+  position: relative;
+  top: -1px;
+}
+.lobipanel.panel-unpin {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.lobipanel.panel-expanded {
+  border-top: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 100 !important;
+  -webkit-border-radius: 0;
+          border-radius: 0;
+  margin: 0 0 20px;
+}
+.lobipanel.panel-expanded .panel-heading {
+  position: relative;
+  z-index: 110;
+}
+.lobipanel.panel-expanded .panel-heading .panel-title {
+  margin-top: 0px;
+  font-size: 1.5rem !important;
+}
+.lobipanel.panel-expanded .tbl-typical th,
+.lobipanel.panel-expanded .tbl-typical td {
+  font-size: 0.9375rem /*15/16*/;
+}
+.lobipanel-placeholder {
+  -webkit-border-radius: 2px;
+          border-radius: 2px;
+  background-color: rgba(57, 81, 155, 0.05);
+  border: dashed 1px rgba(57, 81, 155, 0.15);
+}

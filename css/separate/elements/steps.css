@@ -1,0 +1,183 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   Steps numeric
+   ========================================================================== */
+.steps-numeric-block .steps-numeric-header {
+  border-bottom: solid 1px #d8e2e7;
+  text-align: center;
+}
+.steps-numeric-block .steps-numeric-header-in {
+  color: #919fa9;
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 -2px;
+}
+.steps-numeric-block .steps-numeric-header-in ul {
+  display: table-row;
+  list-style: none;
+}
+.steps-numeric-block .steps-numeric-header-in li {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 0;
+  line-height: 0;
+  padding: 0 10px;
+}
+.steps-numeric-block .steps-numeric-header-in .item {
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  overflow: hidden;
+  font-size: 1rem;
+  border-bottom: solid 2px transparent;
+}
+.steps-numeric-block .steps-numeric-header-in .num {
+  border: solid 1px #919fa9;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 22px;
+  position: relative;
+  top: -1px;
+  margin: 0 4px 0 0;
+}
+.steps-numeric-block .steps-numeric-header-in .active {
+  color: #0082c6;
+}
+.steps-numeric-block .steps-numeric-header-in .active .item {
+  border-bottom-color: #0082c6;
+}
+.steps-numeric-block .steps-numeric-header-in .active .num {
+  border-color: #0082c6;
+}
+.steps-numeric-block .steps-numeric-inner {
+  padding: 30px 20px 25px;
+}
+.steps-numeric-block .steps-numeric-inner .form-control {
+  width: 100%;
+  max-width: 280px;
+}
+.steps-numeric-block .steps-numeric-title {
+  font-size: 1.25rem /*20/16*/;
+  margin: 0 0 20px;
+}
+.steps-numeric-block .steps-numeric-footer {
+  border-top: solid 1px #d8e2e7;
+  text-align: center;
+  line-height: 50px;
+  font-weight: 600;
+}
+.steps-numeric-block .steps-numeric-footer .tbl-cell {
+  border-left: solid 1px #d8e2e7;
+  padding: 0 20px;
+}
+.steps-numeric-block .steps-numeric-footer .tbl-cell:first-child {
+  border-left: none;
+}
+.steps-numeric-block .steps-numeric-footer a {
+  color: #6c7a86;
+}
+/* ==========================================================================
+   Steps icon
+   ========================================================================== */
+.steps-icon-block {
+  padding: 30px 20px 25px;
+  text-align: center;
+  zoom: 1;
+}
+.steps-icon-block:before,
+.steps-icon-block:after {
+  content: " ";
+  display: table;
+}
+.steps-icon-block:after {
+  clear: both;
+}
+.steps-icon-block .steps-numeric-title {
+  font-size: 1.25rem /*20/16*/;
+  margin: 0 0 15px;
+}
+.steps-icon-block .form-control {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.steps-icon-block .btn {
+  min-width: 100px;
+  margin: 14px 5px 5px;
+}
+.steps-icon-progress {
+  overflow: hidden;
+}
+.steps-icon-progress ul {
+  zoom: 1;
+  text-align: center;
+  margin: 0 0 25px;
+}
+.steps-icon-progress ul:before,
+.steps-icon-progress ul:after {
+  content: " ";
+  display: table;
+}
+.steps-icon-progress ul:after {
+  clear: both;
+}
+.steps-icon-progress li {
+  float: left;
+  width: 25%;
+  position: relative;
+}
+.steps-icon-progress li:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 8px;
+  background: #e1e4e9;
+  position: absolute;
+  left: -50%;
+  top: 10px;
+}
+.steps-icon-progress li:first-child:before {
+  display: none;
+}
+.steps-icon-progress .icon {
+  width: 28px;
+  height: 28px;
+  margin: 0 auto 5px;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+  text-align: center;
+  line-height: 28px;
+  background: #e1e4e9;
+  color: #919fa9;
+  position: relative;
+  z-index: 5;
+}
+.steps-icon-progress .icon .font-icon {
+  position: relative;
+  top: 1px;
+}
+.steps-icon-progress .caption {
+  display: inline-block;
+  color: #919fa9;
+}
+.steps-icon-progress .active:before {
+  background-color: #0082c6;
+}
+.steps-icon-progress .active .icon {
+  background-color: #0082c6;
+  color: #fff;
+}
+.steps-icon-progress .active .caption {
+  color: #343434;
+}

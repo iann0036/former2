@@ -1,0 +1,71 @@
+.fl-flex-label {
+    position: relative;
+}
+
+.fl-flex-label .form-control:not(.form-control-lg) {
+    padding: 0.6rem .75rem;
+    min-height: 41px;
+}
+
+.fl-flex-label .fl-label {
+    position: absolute;
+    top: 1px;
+    padding-top: 10px;
+    color: #858585;
+    cursor: text;
+    font-size: 14px;
+    transition: all .3s ease;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    z-index: 2;
+}
+
+.fl-flex-label.fl-flex-label-lg .fl-label {
+    font-size: 19px;
+}
+
+.fl-flex-label.fl-flex-label-sm .fl-label {
+    font-size: 10px;
+    padding-top: 7px;
+}
+
+.fl-flex-label.fl-collapsed .fl-label {
+    font-size: 11px;
+    padding-top: 3px;
+    display: block;
+}
+
+.fl-flex-label.fl-flex-label-sm.fl-collapsed .fl-label {
+    padding-top: 1px;
+}
+
+.fl-flex-label.fl-collapsed.fl-background .fl-label {
+    background: #fff;
+}
+
+.fl-flex-label .fl-label .fl-required {
+    display: inline-block;
+    margin-left: 2px;
+    color: red;
+}
+
+.fl-flex-label.fl-collapsed .form-control {
+    font-size: 13px;
+    padding-top: 16px;
+    padding-bottom: 3px;
+}
+
+.fl-flex-label.fl-collapsed textarea.form-control {
+    padding-top: 16px;
+    padding-bottom: 11px;
+}
+
+.form-group.has-success .fl-flex-label.fl-collapsed .fl-label,
+.form-group.has-warning .fl-flex-label.fl-collapsed .fl-label,
+.form-group.has-danger .fl-flex-label.fl-collapsed .fl-label {
+    width: 90%;
+}

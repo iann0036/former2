@@ -1,0 +1,333 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+.messenger .chat-list-settings-header .description {
+  padding-top: 8px;
+}
+.messenger .chat-list-settings-header .action {
+  font-size: 1rem;
+  padding-top: 8px;
+}
+.messenger .chat-list-settings-header .action a {
+  font-size: 1.1rem;
+  color: #c3cbd2;
+}
+.messenger .chat-list-settings-header .action a:hover {
+  color: #00a8ff;
+}
+.messenger .chat-list {
+  float: left;
+  width: 300px;
+  position: relative;
+  z-index: 2;
+}
+.messenger .chat-area {
+  float: right;
+  width: 100%;
+  margin-left: -300px;
+  margin-right: -300px;
+}
+.messenger .chat-area-in {
+  margin-left: 300px;
+  border-left: solid 1px #d8e2e7;
+  margin-right: 300px;
+}
+.messenger .chat-list-info {
+  float: right;
+  width: 300px;
+  position: relative;
+  z-index: 2;
+}
+.messenger .chat-area-header {
+  padding: 0;
+}
+.messenger .chat-area-bottom {
+  border-right: solid 1px #d8e2e7;
+}
+.messenger .chat-area-bottom,
+.messenger .write-message {
+  padding: 0;
+}
+.messenger .write-message textarea {
+  border: none;
+  height: 60px;
+  padding-right: 45px;
+  padding-top: 13px;
+}
+.messenger .write-message .form-group {
+  position: relative;
+}
+.messenger .dropdown-typical.attach {
+  position: absolute !important;
+  right: 0 !important;
+  top: 14px !important;
+}
+.messenger .write-message .attach span.font-icon {
+  font-size: 1rem !important;
+}
+.messenger .chat-area-header .chat-list-item.online {
+  text-align: center;
+}
+.messenger .chat-dialog-area {
+  border-right: solid 1px #d8e2e7;
+}
+.messenger .chat-user-info {
+  border-bottom: solid 1px #d8e2e7;
+}
+.messenger .chat-settings {
+  padding: 15px;
+  border-bottom: solid 1px #d8e2e7;
+}
+.messenger .checkbox-bird {
+  display: inline-block !important;
+}
+.messenger .checkbox-bird input + label:before {
+  content: " ";
+  -webkit-border-radius: 12px;
+          border-radius: 12px;
+  width: 18px;
+  height: 18px;
+}
+.messenger .checkbox-bird.green input + label:before,
+.messenger .checkbox-bird.green input:checked + label:before,
+.messenger .messenger-message-container.from.bg-green .messages .message div {
+  background: #44BFC7;
+  color: #44BFC7;
+}
+.messenger .checkbox-bird.yellow input + label:before,
+.messenger .checkbox-bird.yellow input:checked + label:before,
+.messenger .messenger-message-container.from.bg-yellow .messages .message div {
+  background: #FFC10A;
+  color: #FFC10A;
+}
+.messenger .checkbox-bird.blue input + label:before,
+.messenger .checkbox-bird.blue input:checked + label:before,
+.messenger .messenger-message-container.from.bg-blue .messages .message div {
+  background: #00a8ff;
+  color: #00a8ff;
+}
+.messenger .checkbox-bird.red input + label:before,
+.messenger .checkbox-bird.red input:checked + label:before,
+.messenger .messenger-message-container.from.bg-red .messages .message div {
+  background: #F33D4C;
+  color: #F33D4C;
+}
+.messenger .checkbox-bird.pink input + label:before,
+.messenger .checkbox-bird.pink input:checked + label:before,
+.messenger .messenger-message-container.from.bg-pink .messages .message div {
+  background: #D797BC;
+  color: #D797BC;
+}
+.messenger .checkbox-bird.blue-light input + label:before,
+.messenger .checkbox-bird.blue-light input:checked + label:before,
+.messenger .messenger-message-container.from.bg-blue-light .messages .message div {
+  background: #1FCCF4;
+  color: #1FCCF4;
+}
+.messenger .checkbox-bird.green-dark input + label:before,
+.messenger .checkbox-bird.green-dark input:checked + label:before,
+.messenger .messenger-message-container.from.bg-green-dark .messages .message div {
+  background: #69B869;
+  color: #69B869;
+}
+.messenger .checkbox-bird.purple-light input + label:before,
+.messenger .checkbox-bird.purple-light input:checked + label:before,
+.messenger .messenger-message-container.from.bg-purple-light .messages .message div {
+  background: #669ACC;
+  color: #669ACC;
+}
+.messenger .checkbox-bird.lime input + label:before,
+.messenger .checkbox-bird.lime input:checked + label:before,
+.messenger .messenger-message-container.from.bg-lime .messages .message div {
+  background: #14C918;
+  color: #14C918;
+}
+.messenger .checkbox-bird.orange input + label:before,
+.messenger .checkbox-bird.orange input:checked + label:before,
+.messenger .messenger-message-container.from.bg-orange .messages .message div {
+  background: #FF7E2A;
+  color: #FF7E2A;
+}
+.messenger .checkbox-bird.pink-dark input + label:before,
+.messenger .checkbox-bird.pink-dark input:checked + label:before,
+.messenger .messenger-message-container.from.bg-pink-dark .messages .message div {
+  background: #E68485;
+  color: #E68485;
+}
+.messenger .checkbox-bird.purple input + label:before,
+.messenger .checkbox-bird.purple input:checked + label:before,
+.messenger .messenger-message-container.from.bg-purple .messages .message div {
+  background: #7645FF;
+  color: #7645FF;
+}
+.messenger .checkbox-bird input:checked + label:before {
+  content: "\55";
+  background: none !important;
+  line-height: 18px;
+}
+.messenger .checkbox-bird {
+  margin: 0;
+}
+.messenger .checkbox-bird input + label {
+  padding: 0;
+  margin: 0;
+}
+.chat-settings .item {
+  margin-bottom: 10px;
+}
+.chat-settings .item a {
+  color: #343434;
+  display: inline-block;
+}
+.chat-settings .item a .font-icon {
+  font-size: .875rem;
+  display: inline-block;
+  margin-right: 5px;
+  color: #c3cbd2;
+}
+.chat-settings .item a:hover,
+.chat-settings .item a:hover .font-icon {
+  color: #00a8ff;
+}
+.chat-settings .checkbox-toggle {
+  margin-bottom: 0;
+}
+.chat-profiles header {
+  color: #919fa9;
+  margin-bottom: 5px;
+}
+.chat-profiles {
+  padding: 15px;
+}
+.messenger-dialog-area {
+  padding: 15px;
+}
+.messenger-message-container,
+.messenger-message-container .messages ul {
+  display: table;
+}
+.messenger-message-container .messages ul {
+  width: 70%;
+}
+.messenger-message-container.from .messages ul {
+  float: right;
+}
+.messenger-message-container .avatar,
+.messenger-message-container .messages,
+.messenger-message-container .messages .message,
+.messenger-message-container .messages .time-ago {
+  display: table-cell;
+}
+.messenger-message-container .avatar {
+  vertical-align: bottom;
+  padding-right: 10px;
+}
+.messenger-message-container.from .avatar {
+  padding-right: 0;
+  padding-left: 10px;
+}
+.messenger-message-container .messages .message {
+  width: 100%;
+}
+.messenger-message-container .messages .message div {
+  background: #EDF2F6;
+  display: inline-block;
+  padding: 10px;
+  -webkit-border-radius: 22px;
+          border-radius: 22px;
+  font-size: .950rem;
+}
+.messenger-message-container {
+  margin-bottom: 5px;
+  width: 100%;
+}
+.messenger-message-container .messages .time-ago {
+  vertical-align: middle;
+  font-size: .875rem;
+  color: #adb7be;
+  padding-left: 10px;
+}
+.messenger-message-container.from .messages .time-ago {
+  padding-right: 10px;
+  white-space: nowrap;
+  text-align: right;
+}
+.messenger-message-container .messages li {
+  margin-bottom: 5px;
+}
+.messenger-message-container .messages li:last-child {
+  margin-bottom: 0;
+}
+.messenger-message-container.from .messages .message div {
+  color: #fff !important;
+}
+.messenger-message-container .avatar img {
+  width: 32px;
+  height: 32px;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+}
+.messenger-message-container.from .messages li {
+  float: right;
+}
+.chat-list-info .chat-list-settings-header {
+  text-align: right;
+  padding-top: 20px;
+}
+.chat-list-info .chat-list-settings-header a {
+  color: #C3CAD0;
+  font-size: 1.1rem;
+  display: inline-block;
+  margin-left: 10px;
+}
+.chat-list-info .chat-list-settings-header a:hover {
+  color: #00a8ff;
+}
+@media (max-width: 767px) {
+  .messenger .chat-list {
+    float: none;
+    width: auto;
+  }
+  .messenger .chat-area {
+    float: none;
+    width: auto;
+    margin-left: 0;
+  }
+  .messenger .chat-area-in {
+    float: none;
+    margin-left: 0;
+    width: auto;
+    border-left: none;
+  }
+  .messenger .chat-list-info {
+    float: none;
+    margin-left: 0;
+    width: auto;
+    border-left: none;
+  }
+  .messenger .chat-list-info .chat-list-settings-header {
+    text-align: left;
+  }
+  .messenger .chat-list-in {
+    height: auto !important;
+    border-bottom: solid 1px #d8e2e7;
+  }
+}
+@media (max-width: 1056px) {
+  .messenger .messenger-message-container .messages ul {
+    width: 100%;
+  }
+}
+@media (max-width: 1199px) {
+  .messenger .messenger-message-container .messages ul {
+    width: 100%;
+  }
+}
+@media (max-width: 1499px) {
+  .messenger .messenger-message-container .messages ul {
+    width: 100%;
+  }
+}

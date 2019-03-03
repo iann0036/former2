@@ -1,0 +1,235 @@
+.label {
+  display: inline-block;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+}
+.label:empty {
+  display: none;
+}
+.btn .label {
+  position: relative;
+  top: -1px;
+}
+a.label:focus,
+a.label:hover {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.label-pill {
+  padding-right: .6em;
+  padding-left: .6em;
+  -webkit-border-radius: 10rem;
+          border-radius: 10rem;
+}
+.label-default {
+  background-color: #818a91;
+}
+.label-default[href]:focus,
+.label-default[href]:hover {
+  background-color: #687077;
+}
+.label-primary {
+  background-color: #0275d8;
+}
+.label-primary[href]:focus,
+.label-primary[href]:hover {
+  background-color: #025aa5;
+}
+.label-success {
+  background-color: #5cb85c;
+}
+.label-success[href]:focus,
+.label-success[href]:hover {
+  background-color: #449d44;
+}
+.label-info {
+  background-color: #5bc0de;
+}
+.label-info[href]:focus,
+.label-info[href]:hover {
+  background-color: #31b0d5;
+}
+.label-warning {
+  background-color: #f0ad4e;
+}
+.label-warning[href]:focus,
+.label-warning[href]:hover {
+  background-color: #ec971f;
+}
+.label-danger {
+  background-color: #d9534f;
+}
+.label-danger[href]:focus,
+.label-danger[href]:hover {
+  background-color: #c9302c;
+}
+.breadcrumb {
+  padding: .75rem 1rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  background-color: #eceeef;
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+}
+.breadcrumb::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+.breadcrumb > li {
+  float: left;
+}
+.breadcrumb > li + li::before {
+  padding-right: .5rem;
+  padding-left: .5rem;
+  color: #818a91;
+  content: "/";
+}
+.breadcrumb > .active {
+  color: #818a91;
+}
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+}
+.page-item {
+  display: inline;
+}
+.page-item:first-child .page-link {
+  margin-left: 0;
+  -webkit-border-top-left-radius: .25rem;
+          border-top-left-radius: .25rem;
+  -webkit-border-bottom-left-radius: .25rem;
+          border-bottom-left-radius: .25rem;
+}
+.page-item:last-child .page-link {
+  -webkit-border-top-right-radius: .25rem;
+          border-top-right-radius: .25rem;
+  -webkit-border-bottom-right-radius: .25rem;
+          border-bottom-right-radius: .25rem;
+}
+.page-item.active .page-link,
+.page-item.active .page-link:focus,
+.page-item.active .page-link:hover {
+  z-index: 2;
+  color: #fff;
+  cursor: default;
+  background-color: #0275d8;
+  border-color: #0275d8;
+}
+.page-item.disabled .page-link,
+.page-item.disabled .page-link:focus,
+.page-item.disabled .page-link:hover {
+  color: #818a91;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.page-link {
+  position: relative;
+  float: left;
+  padding: .5rem .75rem;
+  margin-left: -1px;
+  line-height: 1.5;
+  color: #0275d8;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+.page-link:focus,
+.page-link:hover {
+  color: #014c8c;
+  background-color: #eceeef;
+  border-color: #ddd;
+}
+.pagination-lg .page-link {
+  padding: .75rem 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.333333;
+}
+.pagination-lg .page-item:first-child .page-link {
+  -webkit-border-top-left-radius: .3rem;
+          border-top-left-radius: .3rem;
+  -webkit-border-bottom-left-radius: .3rem;
+          border-bottom-left-radius: .3rem;
+}
+.pagination-lg .page-item:last-child .page-link {
+  -webkit-border-top-right-radius: .3rem;
+          border-top-right-radius: .3rem;
+  -webkit-border-bottom-right-radius: .3rem;
+          border-bottom-right-radius: .3rem;
+}
+.pagination-sm .page-link {
+  padding: .275rem .75rem;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+.pagination-sm .page-item:first-child .page-link {
+  -webkit-border-top-left-radius: .2rem;
+          border-top-left-radius: .2rem;
+  -webkit-border-bottom-left-radius: .2rem;
+          border-bottom-left-radius: .2rem;
+}
+.pagination-sm .page-item:last-child .page-link {
+  -webkit-border-top-right-radius: .2rem;
+          border-top-right-radius: .2rem;
+  -webkit-border-bottom-right-radius: .2rem;
+          border-bottom-right-radius: .2rem;
+}
+.pager {
+  padding-left: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  list-style: none;
+}
+.pager li {
+  display: inline;
+}
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 15px;
+          border-radius: 15px;
+}
+.pager li > a:focus,
+.pager li > a:hover {
+  text-decoration: none;
+  background-color: #eceeef;
+}
+.pager .disabled > a,
+.pager .disabled > a:focus,
+.pager .disabled > a:hover {
+  color: #818a91;
+  cursor: not-allowed;
+  background-color: #fff;
+}
+.pager .disabled > span {
+  color: #818a91;
+  cursor: not-allowed;
+  background-color: #fff;
+}
+.pager-next > a,
+.pager-next > span {
+  float: right;
+}
+.pager-prev > a,
+.pager-prev > span {
+  float: left;
+}

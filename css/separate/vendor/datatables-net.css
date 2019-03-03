@@ -1,0 +1,75 @@
+table.dataTable tbody td {
+  padding: 9px 8px;
+  height: auto;
+}
+table.dataTable {
+  margin-top: 15px !important;
+}
+table.dataTable th {
+  white-space: nowrap;
+}
+table.dataTable .sorting:before,
+table.dataTable .sorting_asc:before,
+table.dataTable .sorting_desc:before,
+table.dataTable .sorting_asc_disabled:before,
+table.dataTable .sorting_desc_disabled:before,
+table.dataTable .sorting:after,
+table.dataTable .sorting_asc:after,
+table.dataTable .sorting_desc:after,
+table.dataTable .sorting_asc_disabled:after,
+table.dataTable .sorting_desc_disabled:after {
+  bottom: 0.6em !important;
+}
+table.dataTable tr.selected,
+table.dataTable tr.selected .sorting_1 {
+  background-color: rgba(0, 136, 204, 0.8) !important;
+}
+table.dataTable.collapsed tr td:first-child::before {
+  top: 15px !important;
+  line-height: 16px !important;
+}
+table.dataTable.collapsed tr td:first-child {
+  padding-left: 30px !important;
+}
+.dataTables_filter {
+  float: right;
+}
+.dt-bootstrap.form-inline {
+  display: block !important;
+}
+.dt-bootstrap .pagination {
+  margin-top: 10px !important;
+}
+.dt-bootstrap .pagination .paginate_button {
+  display: inline-block;
+}
+.dt-bootstrap .pagination .paginate_button a {
+  border: 1px solid #d8e2e7;
+  border-right: none;
+  color: #0082c6;
+  display: inline-block;
+  padding: .275rem .75rem;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+.dt-bootstrap .pagination .paginate_button.disabled a {
+  opacity: 0.8;
+}
+.dt-bootstrap .pagination .paginate_button.active a {
+  color: #fff;
+  border-color: #00a8ff !important;
+  background-color: #00a8ff !important;
+}
+.dt-bootstrap .pagination .paginate_button:first-child a {
+  -webkit-border-top-left-radius: 4px;
+          border-top-left-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+}
+.dt-bootstrap .pagination .paginate_button:last-child a {
+  border-right: 1px solid #d8e2e7;
+  -webkit-border-top-right-radius: 4px;
+          border-top-right-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+          border-bottom-right-radius: 4px;
+}

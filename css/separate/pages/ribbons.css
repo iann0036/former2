@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   Ribbons
+   ========================================================================== */
+.ribbon-block {
+  background: #ffffff;
+  padding: 30px;
+  border: 1px solid #c5d6de;
+  margin-bottom: 30px;
+  position: relative;
+  min-height: 175px;
+}
+.ribbon-block .block-icon {
+  font-size: 84px;
+  color: #c3cbd2;
+  position: relative;
+}
+.ribbon-block .title {
+  display: block;
+  font-size: 15px;
+  margin-top: 10px;
+  position: relative;
+}
+.ribbon-block.with-bg {
+  background-color: #00a8ff;
+  border-color: #00a8ff;
+  color: #ffffff;
+}
+.ribbon-block.with-bg .block-icon {
+  color: #ffffff;
+}
+.ribbon-block.with-image {
+  background-color: #343434;
+  color: #ffffff;
+}
+.ribbon-block.with-image .block-icon {
+  color: #ffffff;
+}
+.ribbon-block.with-image .background-image {
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 0;
+  opacity: .4;
+}

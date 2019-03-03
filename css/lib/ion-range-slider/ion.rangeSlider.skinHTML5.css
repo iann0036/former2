@@ -1,0 +1,184 @@
+/* Ion.RangeSlider, Simple Skin
+// css version 2.0.3
+// © Denis Ineshin, 2014    https://github.com/IonDen
+// © guybowden, 2014        https://github.com/guybowden
+// ===================================================================================================================*/
+
+/* =====================================================================================================================
+// Skin details */
+
+.irs {
+    height: 55px;
+}
+.irs-with-grid {
+    height: 75px;
+}
+.irs-line {
+    height: 10px; top: 33px;
+    background: #e1e4e9;
+    border-radius: 16px;
+}
+    .irs-line-left {
+        height: 10px;
+    }
+    .irs-line-mid {
+        height: 10px;
+    }
+    .irs-line-right {
+        height: 10px;
+    }
+
+.irs-bar {
+    height: 10px; top: 33px;
+    background: #00a8ff;
+}
+    .irs-bar-edge {
+        height: 10px; top: 33px;
+        width: 14px;
+        background: #00a8ff;
+        border-radius: 16px 0 0 16px;
+        -moz-border-radius: 16px 0 0 16px;
+    }
+
+.irs-shadow {
+    height: 10px; top: 33px;
+    background: #000;
+    opacity: 0.3;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+.lt-ie9 .irs-shadow {
+    filter: alpha(opacity=30);
+}
+
+.irs-slider {
+    top: 25px;
+    width: 27px; height: 27px;
+    background: #fff;
+    border-radius: 27px;
+    -moz-border-radius: 27px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2), 0 3px 1px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.irs-slider.state_hover, .irs-slider:hover {
+    background: #FFF;
+}
+
+.irs-min, .irs-max {
+    color: #8e9fa7;
+    font-size: .875rem; line-height: 1.333;
+    text-shadow: none;
+    top: 0;
+    padding: 1px 5px;
+    background: #e1e4e9;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+
+.lt-ie9 .irs-min, .lt-ie9 .irs-max {
+    background: #ccc;
+}
+
+.irs-from, .irs-to, .irs-single {
+    color: #fff;
+    font-size: .875rem; line-height: 1.333;
+    text-shadow: none;
+    padding: 1px 5px;
+    background: #00a8ff;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+}
+.lt-ie9 .irs-from, .lt-ie9 .irs-to, .lt-ie9 .irs-single {
+    background: #999;
+}
+
+.irs-grid {
+    height: 27px;
+    bottom: 5px;
+}
+.irs-grid-pol {
+    opacity: 0.5;
+    background: #d0d3d8;
+}
+.irs-grid-pol.small {
+    background: #d0d3d8;
+}
+
+.irs-grid-text {
+    bottom: 3px;
+    color: #99a4ac;
+    font-size: .75rem;
+}
+
+.irs-disabled {
+}
+
+/* Colors */
+.range-slider-green .irs-bar,
+.range-slider-green .irs-bar-edge,
+.range-slider-green .irs-from,
+.range-slider-green .irs-to,
+.range-slider-green .irs-single { background-color: #46c35f }
+
+.range-slider-orange .irs-bar,
+.range-slider-orange .irs-bar-edge,
+.range-slider-orange .irs-from,
+.range-slider-orange .irs-to,
+.range-slider-orange .irs-single { background-color: #f29824 }
+
+.range-slider-red .irs-bar,
+.range-slider-red .irs-bar-edge,
+.range-slider-red .irs-from,
+.range-slider-red .irs-to,
+.range-slider-red .irs-single { background-color: #fa424a }
+
+.range-slider-purple .irs-bar,
+.range-slider-purple .irs-bar-edge,
+.range-slider-purple .irs-from,
+.range-slider-purple .irs-to,
+.range-slider-purple .irs-single { background-color: #ac6bec }
+
+/* Simple style */
+.range-slider-simple .irs-slider { top: 28px; width: 20px; height: 20px; background: #0090d8; border-radius: 20px; -moz-border-radius: 20px; box-shadow: none; }
+.range-slider-simple .irs-slider:before { content: ''; display: block; width: 10px; height: 10px; background: #fff; border-radius: 50%; position: absolute; left: 50%; top: 50%; margin: -5px 0 0 -5px; }
+.range-slider-simple .irs-bar { background-color: #1db7fc; }
+.range-slider-simple .irs-bar-edge { background-color: #1db7fc; }
+.range-slider-simple .irs-grid { bottom: -3px; }
+.range-slider-simple .irs-grid-pol.small { height: 8px; }
+.range-slider-simple .irs-grid-text { bottom: 2px; }
+
+.range-slider-simple.range-slider-aquamarine .irs-slider { background-color: #009984; }
+.range-slider-simple.range-slider-aquamarine .irs-bar { background-color: #07b49d; }
+.range-slider-simple.range-slider-aquamarine .irs-bar-edge { background-color: #07b49d; }
+.range-slider-simple.range-slider-aquamarine .irs-from,
+.range-slider-simple.range-slider-aquamarine .irs-to,
+.range-slider-simple.range-slider-aquamarine .irs-single { background-color: #009984; }
+
+.range-slider-simple.range-slider-purple .irs-slider { background-color: #9951e0; }
+.range-slider-simple.range-slider-purple .irs-bar { background-color: #b377ee; }
+.range-slider-simple.range-slider-purple .irs-bar-edge { background-color: #b377ee; }
+.range-slider-simple.range-slider-purple .irs-from,
+.range-slider-simple.range-slider-purple .irs-to,
+.range-slider-simple.range-slider-purple .irs-single { background-color: #9951e0; }
+
+.range-slider-simple.range-slider-red .irs-slider { background-color: #e41f2d; }
+.range-slider-simple.range-slider-red .irs-bar { background-color: #fb5057; }
+.range-slider-simple.range-slider-red .irs-bar-edge { background-color: #fb5057; }
+.range-slider-simple.range-slider-red .irs-from,
+.range-slider-simple.range-slider-red .irs-to,
+.range-slider-simple.range-slider-red .irs-single { background-color: #e41f2d; }
+
+.range-slider-simple.range-slider-grey .irs-slider { background-color: #7e8c96; }
+.range-slider-simple.range-slider-grey .irs-bar { background-color: #a2adb6; }
+.range-slider-simple.range-slider-grey .irs-bar-edge { background-color: #a2adb6; }
+.range-slider-simple.range-slider-grey .irs-from,
+.range-slider-simple.range-slider-grey .irs-to,
+.range-slider-simple.range-slider-grey .irs-single { background-color: #7e8c96; }
+
+.range-slider-simple.range-slider-orange .irs-slider { background-color: #c48c22; }
+.range-slider-simple.range-slider-orange .irs-bar { background-color: #f6ba3e; }
+.range-slider-simple.range-slider-orange .irs-bar-edge { background-color: #f6ba3e; }
+.range-slider-simple.range-slider-orange .irs-from,
+.range-slider-simple.range-slider-orange .irs-to,
+.range-slider-simple.range-slider-orange .irs-single { background-color: #c48c22; }

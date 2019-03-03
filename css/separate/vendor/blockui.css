@@ -1,0 +1,30 @@
+.blockUI.blockOverlay {
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+}
+.block-msg-default,
+.block-msg-message-loader {
+  border: none !important;
+  background-color: transparent !important;
+}
+.block-msg-default .fa {
+  font-size: 42px;
+  color: #fff;
+  display: inline-block;
+  width: 42px;
+  height: 40px;
+}
+.block-msg-default h6 {
+  margin-top: 8px;
+  color: #fff;
+  font-size: 17px;
+  line-height: 24px;
+}
+.block-msg-message-loader .blockui-default-message {
+  padding: 20px;
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+  color: #102943;
+  font-size: 17px;
+  background: #fff;
+}

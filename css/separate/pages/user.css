@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   Card User
+   ========================================================================== */
+.card-user {
+  padding: 15px 15px 10px;
+  text-align: center;
+}
+.card-user .card-user-action {
+  text-decoration: none;
+  color: #919fa9;
+  font-size: 1rem;
+}
+.card-user .card-user-action:hover {
+  color: #00a8ff;
+}
+.card-user .card-user-action .dropdown-user-menu button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: #919fa9;
+  position: relative;
+  right: -5px;
+  -webkit-transition: none;
+  transition: none;
+}
+.card-user .card-user-action .dropdown-user-menu button:hover {
+  color: #00a8ff;
+}
+.card-user .card-user-action .dropdown-user-menu.open button {
+  color: #00a8ff;
+}
+.card-user .card-user-photo {
+  width: 92px;
+  height: 102px;
+  margin: 0 auto 10px;
+  clear: both;
+  padding: 10px 0 0;
+}
+.card-user .card-user-photo img {
+  display: block;
+  width: 100%;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+}
+.card-user .card-user-name {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 .15rem;
+}
+.card-user .card-user-status {
+  font-size: 0.875rem /*14/16*/;
+  color: #00a8ff;
+}
+.card-user .card-user-info-row {
+  font-size: 0.8125rem /*13/16*/;
+  text-align: left;
+  margin: 0 0 .25rem;
+}
+.card-user .card-user-info-row .font-icon {
+  vertical-align: middle;
+  margin: 0 5px 0 0;
+  color: #919fa9;
+  font-size: 1rem;
+  position: relative;
+  top: -0.2rem;
+}
+.card-user .card-user-social {
+  text-align: center;
+  font-size: 1.25rem;
+  padding: 0 0 10px 0;
+}
+.card-user .card-user-social a {
+  margin: 0 8px;
+  text-decoration: none;
+  color: #919fa9;
+  border: none;
+}
+.card-user .card-user-social a:hover {
+  color: #00a8ff;
+}
+.card-user .btn {
+  min-width: 100px;
+  margin: 12px 0 20px;
+}
+.card-user .dropdown-item {
+  font-size: .9375rem;
+}
+@media (min-width: 1600px) {
+  .card-user-grid > div {
+    width: 20%;
+  }
+}
+@media (min-width: 1800px) {
+  .card-user-grid > div {
+    width: 16.666667%;
+  }
+}

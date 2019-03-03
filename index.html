@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Former2</title>
+
+        <link href="img/apple-touch-icon.png" rel="apple-touch-icon" type="image/png">
+        <link href="img/favicon.png" rel="icon" type="image/png">
+        <link href="favicon.ico" rel="shortcut icon">
+
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <link rel="stylesheet" href="css/separate/elements/steps.min.css">
+        <!--<link rel="stylesheet" href="css/lib/bootstrap-table/bootstrap-table.min.css">-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.5/bootstrap-table.min.css">
+        <link rel="stylesheet" href="css/lib/font-awesome/font-awesome.min.css">
+        <link rel="stylesheet" href="css/lib/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/custom.css">
+
+        <!-- CodeMirror -->
+        <link rel="stylesheet" href="lib/codemirror/codemirror.css">
+
+        <link rel="stylesheet" href="lib/codemirror/theme/3024-day.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/3024-night.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/abcdef.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/ambiance-mobile.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/ambiance.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/base16-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/base16-light.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/bespin.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/blackboard.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/cobalt.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/colorforth.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/darcula.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/dracula.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/duotone-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/duotone-light.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/eclipse.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/elegant.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/erlang-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/gruvbox-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/hopscotch.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/icecoder.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/idea.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/isotope.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/lesser-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/liquibyte.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/lucario.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/material.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/mbo.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/mdn-like.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/midnight.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/monokai.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/neat.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/neo.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/night.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/oceanic-next.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/panda-syntax.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/paraiso-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/paraiso-light.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/pastel-on-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/railscasts.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/rubyblue.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/seti.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/shadowfox.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/solarized.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/ssms.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/the-matrix.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/tomorrow-night-bright.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/tomorrow-night-eighties.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/ttcn.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/twilight.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/vibrant-ink.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/xq-dark.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/xq-light.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/yeti.css">
+        <link rel="stylesheet" href="lib/codemirror/theme/zenburn.css">
+
+        <script src="lib/codemirror/codemirror.js"></script>
+        <script src="lib/codemirror/mode/python/python.js"></script>
+        <script src="lib/codemirror/mode/shell/shell.js"></script>
+        <script src="lib/codemirror/mode/go/go.js"></script>
+        <script src="lib/codemirror/mode/javascript/javascript.js"></script>
+        <script src="lib/codemirror/mode/yaml/yaml.js"></script>
+        <script src="lib/codemirror/mode/ruby/ruby.js"></script>
+    </head>
+    <body class="with-side-menu">
+
+        <header class="site-header">
+            <div class="container-fluid">
+                <a href="#" class="site-logo">
+                    <img class="hidden-md-down" src="img/logo-2.png" alt="">
+                    <img class="hidden-lg-down" src="img/logo-2-mob.png" alt="">
+                </a>
+
+                <button id="show-hide-sidebar-toggle" class="show-hide-sidebar">
+                    <span>toggle menu</span>
+                </button>
+
+                <button class="hamburger hamburger--htla">
+                    <span>toggle menu</span>
+                </button>
+                <div class="site-header-content">
+                    <div class="site-header-content-in">
+                        <div class="site-header-shown">
+                            <button type="button" class="burger-right">
+                                <i class="font-icon-menu-addl"></i>
+                            </button>
+                        </div>
+
+                        <div class="mobile-menu-right-overlay"></div>
+                        <div class="site-header-collapsed">
+                            <div class="site-header-collapsed-in" style="margin-right: 0;">
+
+                                <a class="btn btn-nav btn-inline btn-info" id="generate-outputs">
+                                    Generate
+                                </a>
+                                <div class="site-header-search-container">
+                                    <form class="site-header-search closed">
+                                        <input type="text" placeholder="Search"/>
+                                        <button type="submit">
+                                            <span class="font-icon-search"></span>
+                                        </button>
+                                        <div class="overlay"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="mobile-menu-left-overlay"></div>
+        <nav class="side-menu">
+            <ul class="side-menu-list">
+                <li class="magenta">
+                    <a href="#section-dashboard">
+                        <i class="font-icon font-icon-dashboard"></i>
+                        <span class="lbl">Dashboard</span>
+                    </a>
+                </li>
+                <li class="grey with-sub opened">
+                    <span>
+                        <i class="font-icon glyphicon glyphicon-cog"></i>
+                        <span class="lbl">Setup</span>
+                    </span>
+                    <ul>
+                        <li><a href="#section-setup-introduction"><span class="lbl">Introduction</span></a></li>
+                        <li class="selected"><a href="#section-setup-credentials"><span class="lbl">Credentials</span></a></li>
+                        <li><a href="#section-setup-accountscan"><span class="lbl">Account Scan</span></a></li>
+                    </ul>
+                </li>
+                <li class="aquamarine with-sub">
+                    <span>
+                        <i class="font-icon glyphicon glyphicon-list-alt"></i>
+                        <span class="lbl">Outputs</span>
+                    </span>
+                    <ul>
+                        <li><a href="#section-outputs-cloudformation"><span class="lbl">CloudFormation</span></a></li>
+                        <li><a href="#section-outputs-terraform"><span class="lbl">Terraform</span></a></li>
+                        <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
+                        <li><a href="#section-outputs-boto3"><span class="lbl">Boto3 (Python)</span></a></li>
+                        <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
+                        <li><a href="#section-outputs-cli"><span class="lbl">AWS CLI</span></a></li>
+                        <li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>
+                        <li><a href="#section-outputs-js"><span class="lbl">JavaScript</span></a></li>
+                        <li><a href="#section-outputs-go"><span class="lbl">Go SDK (v1)</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <section>
+                <header class="side-menu-title">Categories</header>
+                <ul class="side-menu-list">
+                    <li class="gold with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Compute_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Compute</span>
+                        </span>
+                        <ul>
+                            <li>
+                                <a href="#section-compute-ec2">
+                                    <span class="lbl">EC2</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-ecr">
+                                    <span class="lbl">ECR</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-ecs">
+                                    <span class="lbl">ECS</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-eks">
+                                    <span class="lbl">EKS</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-lambda">
+                                    <span class="lbl">Lambda</span>
+                                    <span class="label label-custom label-pill label-danger">6</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-batch">
+                                    <span class="lbl">Batch</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#section-compute-elasticbeanstalk">
+                                    <span class="lbl">Elastic Beanstalk</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="green with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Storage_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Storage</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-s3"><span class="lbl">S3</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="blue with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Database_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Database</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="green with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Migration-and-Transfer_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Migration &amp; Transfer</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="purple with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Networking-and-Content-Delivery_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Networking &amp; Content Delivery</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="blue with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Developer-Tools_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Developer Tools</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="blue with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Robotics_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Robotics</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="blue with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Management-and-Governance_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Management &amp; Governance</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Machine-Learning_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Machine Learning</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Analytics_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Analytics</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Security-Identity-and-Compliance_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Security, Identity &amp; Compliance</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Mobile_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Mobile</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Application-Integration_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">App Integration</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/AWS-Cost-Management_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">AWS Cost Management</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Customer-Engagement_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Customer Engagement</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Business-Application_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">End User Computing</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Internet-of-Things_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Internet Of Things</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="pink with-sub">
+                        <span>
+                            <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Game-Tech_light-bg.png" style="width: 16px; height: 16px;" /></i>
+                            <span class="lbl">Game Development</span>
+                        </span>
+                        <ul>
+                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+
+        <div class="page-content">
+            <div class="container-fluid">
+                <header class="section-header">
+                    <div class="tbl">
+                        <div class="tbl-row">
+                            <div class="tbl-cell">
+                                <h3 id="header-title">Introduction</h3>
+                                <ol class="breadcrumb breadcrumb-simple">
+                                    <li><a id="header-breadcrumb1" href="#section-setup-introduction">Setup</a></li>
+                                    <li id="header-breadcrumb2" class="active">Introduction</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <section id="section-setup-introduction" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Introduction" class="former2-section box-typical steps-numeric-block">
+                    <div class="steps-numeric-header">
+                        <div class="steps-numeric-header-in">
+                            <ul>
+                                <li class="active"><div class="item"><span class="num">1</span>Introduction</div></li>
+                                <li><div class="item"><span class="num">2</span>Credentials</div></li>
+                                <li><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li><div class="item"><span class="num">4</span>Finish</div></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps-numeric-inner">
+                        <header class="steps-numeric-title">How former2 works:</header>
+                        <p>TBC</p>
+                    </div>
+
+                    <div class="tbl steps-numeric-footer">
+                        <div class="tbl-row">
+                            <a href="#section-setup-credentials" class="tbl-cell color-green">Continue to Credentials →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-setup-credentials" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Credentials" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div class="steps-numeric-header">
+                        <div class="steps-numeric-header-in">
+                            <ul>
+                                <li><div class="item"><span class="num">1</span>Introduction</div></li>
+                                <li class="active"><div class="item"><span class="num">2</span>Credentials</div></li>
+                                <li><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li><div class="item"><span class="num">4</span>Finish</div></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps-numeric-inner">
+                        <header class="steps-numeric-title">Enter your IAM credentials:</header>
+                        <div class="form-group">
+                            <input id="credentials-accesskey" type="text" class="form-control" placeholder="Access Key"/>
+                        </div>
+                        <div class="form-group">
+                            <input id="credentials-secretkey" type="text" class="form-control" placeholder="Secret Key"/>
+                        </div>
+                        <div class="form-group">
+                            <input id="credentials-sessiontoken" type="text" class="form-control" placeholder="Session Token (optional)"/>
+                        </div>
+                    </div>
+
+                    <div class="tbl steps-numeric-footer">
+                        <div class="tbl-row">
+                            <a href="#section-setup-introduction" class="tbl-cell">← Return to Introduction</a>
+                            <a href="#section-setup-accountscan" class="tbl-cell color-green">Continue to Account Scan →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-setup-accountscan" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Account Scan" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div class="steps-numeric-header">
+                        <div class="steps-numeric-header-in">
+                            <ul>
+                                <li><div class="item"><span class="num">1</span>Introduction</div></li>
+                                <li></li><div class="item"><span class="num">2</span>Credentials</div></li>
+                                <li class="active"><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li><div class="item"><span class="num">4</span>Finish</div></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps-numeric-inner">
+                        <header class="steps-numeric-title">Start scanning:</header>
+                        <div class="form-group">
+                            <button id="scan-account" class="btn btn-success">
+                                <i class="font-icon font-icon-scanner"></i> Scan Account
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="tbl steps-numeric-footer">
+                        <div class="tbl-row">
+                            <a href="#section-setup-credentials" class="tbl-cell">← Return to Credentials</a>
+                            <a href="#section-setup-finish" class="tbl-cell color-green">Finish →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="section-compute-lambda" class="former2-section" data-section-breadcrumb1-title="Compute" data-section-breadcrumb1-link="#section-compute-ec2" data-section-title="Lambda" style="display: none;">
+                    <section class="box-typical">
+                        <div id="section-compute-lambda-functions-toolbar" class="f2toolbar">
+                            <div class="bootstrap-table-header">Lambda Functions</div>
+                            <button class="additems btn btn-primary" data-datatable="section-compute-lambda-functions-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="section-compute-lambda-functions-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-compute-lambda-functions-toolbar"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-export="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+                    </section>
+                    
+                    <br />
+
+                    <section class="box-typical">
+                        <div id="section-compute-lambda-aliases-toolbar" class="f2toolbar">
+                            <div class="bootstrap-table-header">Lambda Aliases</div>
+                            <button class="additems btn btn-primary" data-datatable="section-compute-lambda-aliases-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="section-compute-lambda-aliases-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-compute-lambda-aliases-toolbar"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-export="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="section-storage-s3" data-section-breadcrumb1-title="Storage" data-section-breadcrumb1-link="#section-storage-s3" data-section-title="S3" class="former2-section" style="display: none;">
+                    <section class="box-typical">
+                        <div id="section-storage-s3-toolbar" class="f2toolbar">
+                            <div class="bootstrap-table-header">S3 Buckets</div>
+                            <button class="additems btn btn-primary" data-datatable="section-storage-s3-buckets-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="section-storage-s3-buckets-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-storage-s3-toolbar"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-esxport="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <section id="section-outputs-cloudformation" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CloudFormation" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cfn_container'>
+                        <textarea id='cfn'></textarea>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+        <script src="js/lib/jquery/jquery-3.2.1.min.js"></script>
+        <script src="js/lib/popper/popper.min.js"></script>
+        <script src="js/lib/tether/tether.min.js"></script>
+        <script src="js/lib/bootstrap/bootstrap.min.js"></script>
+        <script src="js/ui-plugins.js"></script>
+
+        <!--<script src="js/lib/bootstrap-table/bootstrap-table.js"></script>
+        <script src="js/lib/bootstrap-table/bootstrap-table-export.min.js"></script>
+        <script src="js/lib/bootstrap-table/tableExport.min.js"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.5/bootstrap-table.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.13.5/extensions/export/bootstrap-table-export.min.js"></script>
+        
+        
+        <script src="js/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+        <script src="js/ui-app.js"></script>
+
+        <script src="aws-sdk-2.412.0.min.js"></script>
+
+        <script src="js/mappings.js"></script>
+        <script src="js/datatables.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>

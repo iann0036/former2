@@ -1,0 +1,160 @@
+@charset "UTF-8";
+.context-menu-icon:before {
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  width: 28px;
+  font-family: "FontAwesome";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  color: #939FAB;
+  text-align: center;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.context-menu-icon-add:before {
+  content: "\f067";
+}
+.context-menu-icon-copy:before {
+  content: "\f0c5";
+}
+.context-menu-icon-cut:before {
+  content: "\f0c4";
+}
+.context-menu-icon-delete:before {
+  content: "\f1f8";
+  font-size: 20px;
+  left: 5px;
+}
+.context-menu-icon-edit:before {
+  content: "\f040";
+}
+.context-menu-icon-paste:before {
+  content: "\f0ea";
+}
+.context-menu-icon-quit:before {
+  content: "\f08b";
+  font-size: 20px;
+}
+.context-menu-icon.context-menu-hover:before {
+  color: #fff;
+}
+.context-menu-list {
+  position: absolute;
+  display: inline-block;
+  min-width: 180px;
+  max-width: 360px;
+  padding: 6px 0;
+  margin: 8px;
+  font-family: inherit;
+  font-size: inherit;
+  list-style-type: none;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: .25rem;
+  border-radius: .25rem;
+  z-index: 4 !important;
+}
+.context-menu-item {
+  position: relative;
+  padding: 5px 38px;
+  color: #1E1E1E;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  z-index: 4 !important;
+}
+.context-menu-separator {
+  padding: 0;
+  margin: 5px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+.context-menu-item > label > input,
+.context-menu-item > label > textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+.context-menu-item.context-menu-hover {
+  color: #fff;
+  cursor: pointer;
+  background-color: #00A8FF !important;
+}
+.context-menu-item.context-menu-disabled {
+  color: #626262;
+  background-color: #fff;
+}
+.context-menu-item.context-menu-disabled {
+  color: #999;
+}
+.context-menu-input.context-menu-hover,
+.context-menu-item.context-menu-disabled.context-menu-hover {
+  cursor: default;
+  background-color: #eee;
+}
+.context-menu-submenu:after {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  z-index: 4 !important;
+  width: 0;
+  height: 0;
+  content: '';
+  border-color: transparent transparent transparent #1E1E1E;
+  border-style: solid;
+  border-width: 4px 0 4px 4px;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+.context-menu-submenu:hover:after {
+  border-color: transparent transparent transparent #fff;
+}
+/**
+ * Inputs
+ */
+.context-menu-item.context-menu-input {
+  padding: 5px 10px;
+}
+/* vertically align inside labels */
+.context-menu-input > label > * {
+  vertical-align: top;
+}
+/* position checkboxes and radios as icons */
+.context-menu-input > label > input[type="checkbox"],
+.context-menu-input > label > input[type="radio"] {
+  position: relative;
+  top: 3px;
+}
+.context-menu-input > label,
+.context-menu-input > label > input[type="text"],
+.context-menu-input > label > textarea,
+.context-menu-input > label > select {
+  display: block;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.context-menu-input > label > textarea {
+  height: 100px;
+}
+.context-menu-item > .context-menu-list {
+  top: 5px;
+  /* re-positioned by js */
+  right: -5px;
+  display: none;
+}
+.context-menu-item.context-menu-visible > .context-menu-list {
+  display: block;
+}
+.context-menu-accesskey {
+  text-decoration: underline;
+}

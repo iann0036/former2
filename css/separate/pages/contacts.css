@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   Contacts
+   ========================================================================== */
+.contacts-page {
+  zoom: 1;
+}
+.contacts-page:before,
+.contacts-page:after {
+  content: " ";
+  display: table;
+}
+.contacts-page:after {
+  clear: both;
+}
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h1,
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h2,
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h3,
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h4,
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h5,
+.contacts-page .box-typical-header .tbl-cell.tbl-cell-title h6 {
+  display: inline;
+  margin-right: 25px;
+}
+.contacts-page .contacts-tabs {
+  display: inline-block;
+  font-size: 0.9375rem /*15/16*/;
+  font-weight: 600;
+}
+.contacts-page .contacts-tabs .nav-item {
+  display: inline-block;
+  margin: 0 25px 0 0;
+}
+.contacts-page .contacts-tabs .nav-item:last-child {
+  margin-right: 0;
+}
+.contacts-page .contacts-tabs a {
+  display: block;
+  color: #343434;
+  -webkit-border-radius: 25rem;
+          border-radius: 25rem;
+  padding: 0 10px;
+  line-height: 22px;
+}
+.contacts-page .contacts-tabs a:hover {
+  color: #00a8ff;
+}
+.contacts-page .contacts-tabs a.active {
+  color: #fff;
+  background: #00a8ff;
+}
+.contacts-page-col-right {
+  float: right;
+  width: 280px;
+  position: relative;
+}
+.contacts-page-col-left {
+  float: left;
+  width: 100%;
+  margin-right: -280px;
+}
+.contacts-page-col-left-in {
+  margin-right: 280px;
+  border-right: solid 1px #d8e2e7;
+}
+.contacts-page-col-left-in .map {
+  height: 300px;
+}
+.contacts-page-section {
+  border-top: solid 1px #d8e2e7;
+  padding: 15px;
+  zoom: 1;
+}
+.contacts-page-section:before,
+.contacts-page-section:after {
+  content: " ";
+  display: table;
+}
+.contacts-page-section:after {
+  clear: both;
+}
+.contacts-page-section:first-child {
+  border-top: none;
+}
+.contacts-page-section .box-typical-header-sm {
+  padding: 0 0 15px;
+}
+.contacts-page-section .contact {
+  font-size: 1.125rem /*18/16*/;
+  margin: 0 25px 10px 0;
+}
+.contacts-page-section .contact:hover {
+  opacity: .7;
+}
+.contacts-page-section .contact .font-icon {
+  vertical-align: middle;
+}
+.contacts-page-section .contact .font-icon-facebook {
+  color: #37559a;
+}
+.contacts-page-section .contact .font-icon-twitter {
+  color: #00aaed;
+}
+.contacts-page-section .contact .font-icon-linkedin {
+  color: #007ab4;
+}
+.contacts-page-section .contact .font-icon-google-plus {
+  color: #d33928;
+}
+.contacts-page-section .contact .font-icon-instagram {
+  color: #105881;
+}
+.contacts-page-section .contact-other {
+  margin: 0 0 10px;
+}
+.contacts-page-section .contact-other .font-icon {
+  vertical-align: middle;
+  color: #adb7be;
+  margin: 0 8px 0 0;
+}
+@media (max-width: 700px) {
+  .contacts-page-col-right {
+    float: none;
+    width: auto;
+  }
+  .contacts-page-col-left {
+    float: none;
+    margin-right: 0;
+  }
+  .contacts-page-col-left-in {
+    margin-right: 0;
+    border-right: none;
+  }
+}
+/* ==========================================================================
+   Google maps
+   ========================================================================== */
+.gm-style {
+  font-family: 'Proxima Nova', sans-serif;
+}
+.infoBox {
+  background: rgba(44, 57, 73, 0.95);
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  color: #fff;
+  padding: 5px 10px 5px 15px;
+  font-size: 1rem;
+  margin: 10px 0 0;
+}
+.infoBox:before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -10px;
+  margin-left: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent rgba(44, 57, 73, 0.95) transparent;
+}
+.infoBox > img {
+  width: 8px;
+  margin: 0 !important;
+  position: absolute !important;
+  right: 5px;
+  top: 5px;
+  opacity: .5;
+}
+.infoBox > img:hover {
+  opacity: 1;
+}
+.infoBox p {
+  margin: .5rem 0;
+  position: relative;
+  padding: 0 0 0 26px;
+}
+.infoBox .font-icon {
+  position: absolute;
+  left: 0;
+  top: 2px;
+}

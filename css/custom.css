@@ -1,0 +1,18 @@
+.CodeMirror {
+    font-size: 18px;
+    border: 2px solid #aaaaaa;
+    height: auto;
+}
+
+.bootstrap-table .fixed-table-toolbar .bs-bars {
+    margin-top: 0px !important;
+}
+
+.CodeMirror-scroll {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.side-menu-list li.with-sub>span {
+    padding-right: 35px !important;
+}

@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   Tasks
+   ========================================================================== */
+.tasks-grid {
+  zoom: 1;
+}
+.tasks-grid:before,
+.tasks-grid:after {
+  content: " ";
+  display: table;
+}
+.tasks-grid:after {
+  clear: both;
+}
+.tasks-grid .tasks-grid-col {
+  float: left;
+  width: 230px;
+  margin: 0 30px 0 0;
+}
+.tasks-grid .tasks-grid-col-title {
+  margin: 0 0 10px;
+}
+.tasks-grid .tasks-grid-col-title strong {
+  font-weight: 600;
+}
+.tasks-grid .sortable {
+  padding: 0 0 30px;
+}
+.task-card {
+  margin: 0 0 30px;
+}
+.task-card .task-card-create-title {
+  padding: 15px;
+  font-weight: 600;
+}
+.task-card .task-card-create input[type="text"] {
+  border: none;
+  background: none;
+  padding: 15px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #343434;
+}
+.task-card .task-card-create ::-webkit-input-placeholder {
+  color: #343434 !important;
+}
+.task-card .task-card-create ::-moz-placeholder {
+  color: #343434 !important;
+  opacity: 1 !important;
+}
+.task-card .task-card-create :-moz-placeholder {
+  color: #343434 !important;
+  opacity: 1 !important;
+}
+.task-card .task-card-create ::-moz-placeholder {
+  color: #343434 !important;
+}
+.task-card .task-card-create :-ms-input-placeholder {
+  color: #343434 !important;
+}
+.task-card .task-card-footer {
+  padding: 8px 15px;
+  background: #f6f8fa;
+  -webkit-border-radius: 0 0 3px 3px;
+          border-radius: 0 0 3px 3px;
+  border-top: solid 1px #d8e2e7;
+  zoom: 1;
+}
+.task-card .task-card-footer:before,
+.task-card .task-card-footer:after {
+  content: " ";
+  display: table;
+}
+.task-card .task-card-footer:after {
+  clear: both;
+}
+.task-card .task-card-in {
+  padding: 0 15px;
+  position: relative;
+}
+.task-card .task-card-photo {
+  margin: 0 15px 10px;
+}
+.task-card .task-card-photo img {
+  display: block;
+  width: 100%;
+}
+.task-card .task-card-title {
+  margin: 0 15px 10px 0;
+}
+.task-card .task-card-title a {
+  color: #343434;
+}
+.task-card .task-card-title a:hover {
+  color: #00a8ff;
+}
+.task-card .task-card-title-label {
+  color: #6c7a86;
+  font-size: .875rem;
+}
+.task-card .task-card-tags {
+  padding: 5px 0 11px;
+}
+.task-card .task-card-tags .label {
+  font-size: .875rem;
+  color: #6c7a86;
+  font-weight: 400;
+  margin: 0 3px 8px 0;
+}
+.task-card .task-card-tags .label:hover {
+  color: #fff;
+}
+.task-card .avatar-preview {
+  float: right;
+}
+.task-card .task-card-meta-item {
+  float: left;
+  height: 32px;
+  line-height: 32px;
+  margin: 0 15px 0 0;
+  font-size: .875rem;
+  position: relative;
+  top: 1px;
+}
+.task-card .task-card-meta-item .font-icon {
+  color: #919fa9;
+  margin: 0 5px 0 0;
+}
+.task-card .task-card-menu {
+  position: absolute;
+  top: 0;
+  right: 9px;
+}
+.task-card .task-card-menu button {
+  border: none;
+  background: none;
+  color: #919fa9;
+}
+.task-card .task-card-menu.open button,
+.task-card .task-card-menu button:hover {
+  color: #00a8ff;
+}
+.task-card .task-card-menu .dropdown-menu {
+  min-width: auto;
+  margin-top: 0;
+}
+.task-card .progress-compact-style {
+  margin: 0 0 3px;
+}
+.task-card .progress-compact-style .progress-compact-style-label {
+  font-size: .875rem;
+}
+.task-card.task {
+  padding-top: 20px;
+  border-top: solid 4px #00a8ff;
+  -webkit-border-radius: 5px 5px .25rem .25rem;
+          border-radius: 5px 5px .25rem .25rem;
+}
+.tasks-grid-col.red .task-card.task {
+  border-top-color: #fa424a;
+}
+.tasks-grid-col.green .task-card.task {
+  border-top-color: #46c35f;
+}
+.tasks-grid-col.purple .task-card.task {
+  border-top-color: #ac6bec;
+}
+.sortable-placeholder {
+  height: 100px;
+  text-align: center;
+  line-height: 96px;
+  border: dashed 2px #adb7be;
+  -webkit-border-radius: .25rem;
+          border-radius: .25rem;
+  margin: 0 0 30px;
+}
+.sortable-placeholder:before {
+  content: 'Move';
+  font-size: .875rem;
+  font-weight: 600;
+  color: #919fa9;
+}
