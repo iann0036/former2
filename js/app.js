@@ -1,3 +1,5 @@
+var extension_available = false;
+
 $(document).ready(function(){
     /* ========================================================================== */
     // Section Templating
@@ -279,73 +281,93 @@ $(document).ready(function(){
         }
     }
 
-    AWS = new Proxy({}, {
-        get: function(obj, prop) {
-            if (prop == "config") {
-                return AWSConfigClass;
-            } else if (prop == "Credentials") {
-                return AWSCredentialsClass;
-            }
-            
-            return function (service_params) {
-                return new Proxy({
-                    'name': prop,
-                    'properties': service_params
-                }, {
-                    get: function(service, service_action) {
-                        return (params, callback) => {
-                            chrome.runtime.sendMessage(
-                                HELPER_EXTENSION_ID,
-                                {
-                                    action: 'serviceAction',
-                                    args: this.serviceArgs,
-                                    service: service,
-                                    service_action: service_action,
-                                    params: params
-                                },
-                                function(response) {
-                                    if (!response.success) {
-                                        callback(response.error, response.data);
-                                    } else {
-                                        callback(null, response.data);
+    if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
+        chrome.runtime.sendMessage(
+            HELPER_EXTENSION_ID,
+            {
+                action: 'ping'
+            },
+            function(response) {
+                if (response) {
+                    extension_available = true;
+
+                    AWS = new Proxy({}, {
+                        get: function(obj, prop) {
+                            if (prop == "config") {
+                                return AWSConfigClass;
+                            } else if (prop == "Credentials") {
+                                return AWSCredentialsClass;
+                            }
+                            
+                            return function (service_params) {
+                                return new Proxy({
+                                    'name': prop,
+                                    'properties': service_params
+                                }, {
+                                    get: function(service, service_action) {
+                                        return (params, callback) => {
+                                            chrome.runtime.sendMessage(
+                                                HELPER_EXTENSION_ID,
+                                                {
+                                                    action: 'serviceAction',
+                                                    args: this.serviceArgs,
+                                                    service: service,
+                                                    service_action: service_action,
+                                                    params: params
+                                                },
+                                                function(response) {
+                                                    if (!response.success) {
+                                                        callback(response.error, response.data);
+                                                    } else {
+                                                        callback(null, response.data);
+                                                    }
+                                                }
+                                            );
+                                        }
                                     }
-                                }
-                            );
+                                });
+                            };
                         }
-                    }
-                });
-            };
-        }
-    });
+                    });
+                }
 
-    /* ========================================================================== */
-    // AWS Base Config (must be before Account Scan and after SDK Proxy)
-    /* ========================================================================== */
+                postExtensionPing();
+            }
+        );
+    } else {
+        postExtensionPing();
+    }
 
-    AWS.config.update({
-        credentials: new AWS.Credentials(
-            window.localStorage.getItem('credentials-accesskey'),
-            window.localStorage.getItem('credentials-secretkey'),
-            window.localStorage.getItem('credentials-sessiontoken')
-        ),
-        region: 'us-east-1'
-    });
+    function postExtensionPing() {
+        /* ========================================================================== */
+        // AWS Base Config (must be before Account Scan and after SDK Proxy)
+        /* ========================================================================== */
 
-    /* ========================================================================== */
-    // Account Scan
-    /* ========================================================================== */
+        AWS.config.update({
+            credentials: new AWS.Credentials(
+                window.localStorage.getItem('credentials-accesskey'),
+                window.localStorage.getItem('credentials-secretkey'),
+                window.localStorage.getItem('credentials-sessiontoken')
+            ),
+            region: 'us-east-1'
+        });
 
-    $('#scan-account').on('click', () => {
-        updateDatatableComputeLambda();
-        updateDatatableStorageS3();
-    });
+        /* ========================================================================== */
+        // Account Scan
+        /* ========================================================================== */
 
-    $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
-    $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
-    $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
+        $('#scan-account').on('click', () => {
+            updateDatatableComputeLambda();
+            updateDatatableStorageS3();
+        });
 
-    //updateDatatableComputeLambda();
-    //updateDatatableStorageS3();
+        $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+        $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+        $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
+
+        //updateDatatableComputeLambda();
+        //updateDatatableStorageS3();
+    }
 
 }); // <-- End of documentReady
 
