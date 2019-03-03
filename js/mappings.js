@@ -2189,8 +2189,22 @@ function performF2Mappings(objects) {
                 'options': reqParams
             });
         } else if (obj.type == "lambda.alias") {
-
-            // TODO: Many properties here
+            reqParams.cfn['Description'] = obj.data.Description;
+            var split = obj.data.AliasArn.split(":");
+            reqParams.cfn['FunctionName'] = split[split.length - 2];
+            reqParams.cfn['FunctionVersion'] = obj.data.FunctionVersion;
+            reqParams.cfn['Name'] = obj.data.Name;
+            if (obj.data.RoutingConfig && obj.data.RoutingConfig.AdditionalVersionWeights) {
+                reqParams.cfn['RoutingConfig'] = {
+                    'AdditionalVersionWeights': []
+                };
+                for (var func_version in obj.data.RoutingConfig.AdditionalVersionWeights) {
+                    reqParams.cfn['RoutingConfig']['AdditionalVersionWeights'].push({
+                        FunctionVersion: func_version,
+                        FunctionWeight: obj.data.RoutingConfig.AdditionalVersionWeights[func_version]
+                    });
+                }
+            }
 
             tracked_resources.push({
                 'logicalId': getResourceName('lambda', obj.id),

@@ -7,6 +7,9 @@ function updateDatatableComputeLambda() {
 
     var svc_lambda = new AWS.Lambda({apiVersion: '2015-03-31', region: region});
 
+    blockUI('#section-compute-lambda-functions-datatable');
+    blockUI('#section-compute-lambda-aliases-datatable');
+
     svc_lambda.listFunctions({
         MaxItems: 100
     }, function(err, data) {
@@ -89,6 +92,11 @@ function updateDatatableComputeLambda() {
             });
         }
     });
+
+    setTimeout(() => {
+        unblockUI('#section-compute-lambda-functions-datatable');
+        unblockUI('#section-compute-lambda-aliases-datatable');
+    }, 1000);
 }
 
 /* ========================================================================== */

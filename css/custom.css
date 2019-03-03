@@ -16,3 +16,7 @@
 .side-menu-list li.with-sub>span {
     padding-right: 35px !important;
 }
+
+.tab-pane .table-responsive .bootstrap-table .fixed-table-toolbar {
+    padding: 0px !important;
+}

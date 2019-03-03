@@ -1,6 +1,113 @@
 $(document).ready(function(){
     /* ========================================================================== */
-    // DataTables
+    // Section Templating
+    /* ========================================================================== */
+
+    function navlower(str) {
+        return str.toLowerCase();
+    }
+
+    var sections = [
+        {
+            'category': 'Compute',
+            'service': 'Lambda',
+            'resourcetypes': [
+                'Functions',
+                'Aliases'
+            ]
+        },
+        {
+            'category': 'Storage',
+            'service': 'S3',
+            'resourcetypes': [
+                'Buckets'
+            ]
+        }
+    ];
+
+    sections.forEach(section => {
+        var html = `
+            <div id="section-${navlower(section.category)}-lambda" class="former2-section" data-section-breadcrumb1-title="${section.category}" data-section-breadcrumb1-link="#section-${navlower(section.category)}-ec2" data-section-title="Lambda" style="display: none;">
+            <section class="tabs-section">
+                <div class="tabs-section-nav tabs-section-nav-inline">
+                    <ul class="nav" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#section-${navlower(section.category)}-lambda-tab-1" role="tab" data-toggle="tab">
+                                Functions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#section-${navlower(section.category)}-lambda-tab-2" role="tab" data-toggle="tab">
+                                Aliases
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade in active show" id="section-${navlower(section.category)}-lambda-tab-1">
+                        <div id="section-${navlower(section.category)}-lambda-functions-toolbar" class="f2toolbar">
+                            <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-lambda-functions-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="section-${navlower(section.category)}-lambda-functions-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-${navlower(section.category)}-lambda-functions-toolbar"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-export="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="section-${navlower(section.category)}-lambda-tab-2">
+                        <div id="section-${navlower(section.category)}-lambda-aliases-toolbar" class="f2toolbar">
+                            <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-lambda-aliases-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="section-${navlower(section.category)}-lambda-aliases-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-${navlower(section.category)}-lambda-aliases-toolbar"
+                                data-search="true"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-export="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </div>
+        `;
+        $('#templated-section-container').append(html);
+    });
+
+    /* ========================================================================== */
+    // DataTable Pre-Config
     /* ========================================================================== */
 
     var output_objects = [];
@@ -96,214 +203,196 @@ $(document).ready(function(){
         return ids;
     }
 
-    $('#section-compute-lambda-functions-datatable').bootstrapTable({
-        iconsPrefix: 'font-icon',
-        icons: {
-            paginationSwitchDown:'font-icon-arrow-square-down',
-            paginationSwitchUp: 'font-icon-arrow-square-down up',
-            refresh: 'font-icon-refresh',
-            toggleOn: 'font-icon-list-square',
-            toggleOff: 'font-icon-list-square',
-            columns: 'font-icon-list-rotate',
-            export: 'font-icon-download',
-            detailOpen: 'font-icon-plus',
-            detailClose: 'font-icon-minus-1'
-        },
-        paginationPreText: '<i class="font-icon font-icon-arrow-left"></i>',
-        paginationNextText: '<i class="font-icon font-icon-arrow-right"></i>',
-        columns: [
-            [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: 'Function Name',
-                    field: 'name',
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle',
-                    sortable: true,
-                    footerFormatter: textFormatter
-                },
-                {
-                    title: 'Properties',
-                    colspan: 4,
-                    align: 'center'
-                }
-            ],
-            [
-                {
-                    field: 'description',
-                    title: 'Description',
-                    sortable: true,
-                    editable: true,
-                    footerFormatter: textFormatter,
-                    align: 'center'
-                },
-                {
-                    field: 'runtime',
-                    title: 'Runtime',
-                    sortable: true,
-                    align: 'center',
-                    formatter: lambdaRuntimeFormatter,
-                    footerFormatter: textFormatter
-                },
-                {
-                    field: 'codesize',
-                    title: 'Code Size',
-                    sortable: true,
-                    align: 'center',
-                    formatter: byteSizeFormatter,
-                    footerFormatter: textFormatter
-                },
-                {
-                    field: 'lastmodified',
-                    title: 'Last Modified',
-                    sortable: true,
-                    align: 'center',
-                    formatter: timeFormatter,
-                    footerFormatter: textFormatter
-                }
-            ]
-        ]
-    });
+    function initDatatableWithColumns(selector, columndata) {
+        $(selector).bootstrapTable({
+            iconsPrefix: 'font-icon',
+            icons: {
+                paginationSwitchDown:'font-icon-arrow-square-down',
+                paginationSwitchUp: 'font-icon-arrow-square-down up',
+                refresh: 'font-icon-refresh',
+                toggleOn: 'font-icon-list-square',
+                toggleOff: 'font-icon-list-square',
+                columns: 'font-icon-list-rotate',
+                export: 'font-icon-download',
+                detailOpen: 'font-icon-plus',
+                detailClose: 'font-icon-minus-1'
+            },
+            paginationPreText: '<i class="font-icon font-icon-arrow-left"></i>',
+            paginationNextText: '<i class="font-icon font-icon-arrow-right"></i>',
+            columns: columndata
+        });
+    }
 
-    $('#section-compute-lambda-aliases-datatable').bootstrapTable({
-        iconsPrefix: 'font-icon',
-        icons: {
-            paginationSwitchDown:'font-icon-arrow-square-down',
-            paginationSwitchUp: 'font-icon-arrow-square-down up',
-            refresh: 'font-icon-refresh',
-            toggleOn: 'font-icon-list-square',
-            toggleOff: 'font-icon-list-square',
-            columns: 'font-icon-list-rotate',
-            export: 'font-icon-download',
-            detailOpen: 'font-icon-plus',
-            detailClose: 'font-icon-minus-1'
-        },
-        paginationPreText: '<i class="font-icon font-icon-arrow-left"></i>',
-        paginationNextText: '<i class="font-icon font-icon-arrow-right"></i>',
-        columns: [
-            [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: 'Alias Name',
-                    field: 'name',
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle',
-                    sortable: true,
-                    footerFormatter: textFormatter
-                },
-                {
-                    title: 'Properties',
-                    colspan: 4,
-                    align: 'center'
-                }
-            ],
-            [
-                {
-                    field: 'functionname',
-                    title: 'Function Name',
-                    sortable: true,
-                    editable: true,
-                    footerFormatter: textFormatter,
-                    align: 'center'
-                },
-                {
-                    field: 'functionversion',
-                    title: 'Function Version',
-                    sortable: true,
-                    align: 'center',
-                    footerFormatter: textFormatter
-                },
-                {
-                    field: 'description',
-                    title: 'Description',
-                    sortable: true,
-                    align: 'center',
-                    footerFormatter: textFormatter
-                }
-            ]
-        ]
-    });
+    /* ========================================================================== */
+    // DataTable Initializations
+    /* ========================================================================== */
 
-    $('#section-storage-s3-buckets-datatable').bootstrapTable({
-        iconsPrefix: 'font-icon',
-        icons: {
-            paginationSwitchDown:'font-icon-arrow-square-down',
-            paginationSwitchUp: 'font-icon-arrow-square-down up',
-            refresh: 'font-icon-refresh',
-            toggleOn: 'font-icon-list-square',
-            toggleOff: 'font-icon-list-square',
-            columns: 'font-icon-list-rotate',
-            export: 'font-icon-download',
-            detailOpen: 'font-icon-plus',
-            detailClose: 'font-icon-minus-1'
-        },
-        paginationPreText: '<i class="font-icon font-icon-arrow-left"></i>',
-        paginationNextText: '<i class="font-icon font-icon-arrow-right"></i>',
-        columns: [
-            [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: 'Bucket Name',
-                    field: 'name',
-                    rowspan: 2,
-                    align: 'center',
-                    valign: 'middle',
-                    sortable: true,
-                    footerFormatter: textFormatter
-                },
-                {
-                    title: 'Properties',
-                    colspan: 4,
-                    align: 'center'
-                }
-            ],
-            [
-                {
-                    field: 'creationdate',
-                    title: 'Creation Date',
-                    sortable: true,
-                    editable: true,
-                    //formatter: statusFormatter,
-                    footerFormatter: textFormatter,
-                    align: 'center'
-                }
-            ]
+    initDatatableWithColumns('#section-compute-lambda-functions-datatable', [
+        [
+            {
+                field: 'state',
+                checkbox: true,
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: 'Function Name',
+                field: 'name',
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                footerFormatter: textFormatter
+            },
+            {
+                title: 'Properties',
+                colspan: 4,
+                align: 'center'
+            }
+        ],
+        [
+            {
+                field: 'description',
+                title: 'Description',
+                sortable: true,
+                editable: true,
+                footerFormatter: textFormatter,
+                align: 'center'
+            },
+            {
+                field: 'runtime',
+                title: 'Runtime',
+                sortable: true,
+                align: 'center',
+                formatter: lambdaRuntimeFormatter,
+                footerFormatter: textFormatter
+            },
+            {
+                field: 'codesize',
+                title: 'Code Size',
+                sortable: true,
+                align: 'center',
+                formatter: byteSizeFormatter,
+                footerFormatter: textFormatter
+            },
+            {
+                field: 'lastmodified',
+                title: 'Last Modified',
+                sortable: true,
+                align: 'center',
+                formatter: timeFormatter,
+                footerFormatter: textFormatter
+            }
         ]
-    });
+    ]);
+
+    initDatatableWithColumns('#section-compute-lambda-aliases-datatable', [
+        [
+            {
+                field: 'state',
+                checkbox: true,
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: 'Alias Name',
+                field: 'name',
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                footerFormatter: textFormatter
+            },
+            {
+                title: 'Properties',
+                colspan: 4,
+                align: 'center'
+            }
+        ],
+        [
+            {
+                field: 'functionname',
+                title: 'Function Name',
+                sortable: true,
+                editable: true,
+                footerFormatter: textFormatter,
+                align: 'center'
+            },
+            {
+                field: 'functionversion',
+                title: 'Function Version',
+                sortable: true,
+                align: 'center',
+                footerFormatter: textFormatter
+            },
+            {
+                field: 'description',
+                title: 'Description',
+                sortable: true,
+                align: 'center',
+                footerFormatter: textFormatter
+            }
+        ]
+    ]);
+
+    initDatatableWithColumns('#section-storage-s3-buckets-datatable', [
+        [
+            {
+                field: 'state',
+                checkbox: true,
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: 'Bucket Name',
+                field: 'name',
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                footerFormatter: textFormatter
+            },
+            {
+                title: 'Properties',
+                colspan: 4,
+                align: 'center'
+            }
+        ],
+        [
+            {
+                field: 'creationdate',
+                title: 'Creation Date',
+                sortable: true,
+                editable: true,
+                //formatter: statusFormatter,
+                footerFormatter: textFormatter,
+                align: 'center'
+            }
+        ]
+    ]);
+
+    /* ========================================================================== */
+    // DataTable Post-Config
+    /* ========================================================================== */
 
     $('.f2datatable').on('check.bs.table uncheck.bs.table ' +
         'check-all.bs.table uncheck-all.bs.table', function () {
-            $('.additems').prop('disabled', !$(this).bootstrapTable('getSelections').length);
+            $('.additems').each(function(index) {
+                $(this).prop('disabled', !$("#" + $(this).attr('data-datatable')).bootstrapTable('getSelections').length);
+            });
     });
 
     $('.additems').click(function () {
         var ids = addSelectedRowsToTemplate("#" + $(this).attr('data-datatable'));
         
-        $('.additems').prop('disabled', true);
+        $(this).prop('disabled', true);
     });
 
-    $('.f2toolbar').find('select').change(function () {
-        $('.f2datatable').bootstrapTable('refreshOptions', {
+    $('.f2toolbar').find('select').change(function () { // unused
+        $(this).bootstrapTable('refreshOptions', {
             exportDataType: $(this).val()
         });
     });
@@ -354,6 +443,25 @@ $(document).ready(function(){
             },{
                 type: 'warning'
             });
+        } else {
+            $('.former2-section').attr('style', 'display: none;');
+            $('#section-setup-introduction').attr('style', 'display: block;');
+
+            $('#header-title').html(
+                $('#section-setup-introduction').attr('data-section-title')
+            );
+            $('#header-breadcrumb1').text(
+                $('#section-setup-introduction').attr('data-section-breadcrumb1-title')
+            );
+            $('#header-breadcrumb1').attr(
+                'href',
+                $('#section-setup-introduction').attr('data-section-breadcrumb1-link')
+            );
+            $('#header-breadcrumb2').text(
+                $('#section-setup-introduction').attr('data-section-title')
+            );
+
+            window.scrollTo({ top: 0 });
         }
     }
 
@@ -487,8 +595,36 @@ $(document).ready(function(){
         updateDatatableStorageS3();
     });
 
-    updateDatatableComputeLambda();
-    updateDatatableStorageS3();
+    $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+    $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+    $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
 
-    /* ========================================================================== */
-});
+    //updateDatatableComputeLambda();
+    //updateDatatableStorageS3();
+
+}); // <-- End of documentReady
+
+/* ========================================================================== */
+// BlockUI
+/* ========================================================================== */
+
+function blockUI(selector) {
+    $(selector).block({
+        message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
+        overlayCSS:  {
+            background: 'rgba(142, 159, 167, 0.8)',
+            opacity: 1,
+            cursor: 'wait'
+        },
+        css: {
+            width: '50%'
+        },
+        blockMsgClass: 'block-msg-default'
+    });
+}
+
+function unblockUI(selector) {
+    $(selector).unblock();
+}
+
+/* ========================================================================== */
