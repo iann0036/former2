@@ -1,3 +1,22 @@
+var sections = [
+    {
+        'category': 'Compute',
+        'service': 'Lambda',
+        'resourcetypes': [
+            'Functions',
+            'Aliases'
+        ]
+    },
+    {
+        'category': 'Storage',
+        'service': 'S3',
+        'resourcetypes': [
+            'Buckets'
+        ]
+    }
+];
+
+
 $(document).ready(function(){
     /* ========================================================================== */
     // Section Templating
@@ -7,54 +26,34 @@ $(document).ready(function(){
         return str.toLowerCase();
     }
 
-    var sections = [
-        {
-            'category': 'Compute',
-            'service': 'Lambda',
-            'resourcetypes': [
-                'Functions',
-                'Aliases'
-            ]
-        },
-        {
-            'category': 'Storage',
-            'service': 'S3',
-            'resourcetypes': [
-                'Buckets'
-            ]
-        }
-    ];
-
     sections.forEach(section => {
         var html = `
-            <div id="section-${navlower(section.category)}-lambda" class="former2-section" data-section-breadcrumb1-title="${section.category}" data-section-breadcrumb1-link="#section-${navlower(section.category)}-ec2" data-section-title="Lambda" style="display: none;">
+            <div id="section-${navlower(section.category)}-${navlower(section.service)}" class="former2-section" data-section-breadcrumb1-title="${section.category}" data-section-breadcrumb1-link="#section-${navlower(section.category)}-ec2" data-section-title="${section.service}" style="display: none;">
             <section class="tabs-section">
                 <div class="tabs-section-nav tabs-section-nav-inline">
                     <ul class="nav" role="tablist">
+                    ${section.resourcetypes.map((resourcetype, i) => `
                         <li class="nav-item">
-                            <a class="nav-link active" href="#section-${navlower(section.category)}-lambda-tab-1" role="tab" data-toggle="tab">
-                                Functions
+                            <a class="nav-link${i==0 ? " active" : ""}" href="#section-${navlower(section.category)}-${navlower(section.service)}-tab-${i}" role="tab" data-toggle="tab">
+                                ${resourcetype}
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#section-${navlower(section.category)}-lambda-tab-2" role="tab" data-toggle="tab">
-                                Aliases
-                            </a>
-                        </li>
+                    `).join('\n')}
                     </ul>
                 </div>
 
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane fade in active show" id="section-${navlower(section.category)}-lambda-tab-1">
-                        <div id="section-${navlower(section.category)}-lambda-functions-toolbar" class="f2toolbar">
-                            <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-lambda-functions-datatable" disabled>
+                ${section.resourcetypes.map((resourcetype, i) => `
+                    <div role="tabpanel" class="tab-pane fade${i==0 ? " in active show" : ""}" id="section-${navlower(section.category)}-${navlower(section.service)}-tab-${i}">
+                        <div id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-toolbar" class="f2toolbar">
+                            <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable" disabled>
                                 <i class="font-icon font-icon-plus"></i> Add Selected
                             </button>
                         </div>
                         <div class="table-responsive">
-                            <table id="section-${navlower(section.category)}-lambda-functions-datatable"
+                            <table id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable"
                                 class="table table-striped f2datatable"
-                                data-toolbar="#section-${navlower(section.category)}-lambda-functions-toolbar"
+                                data-toolbar="#section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-toolbar"
                                 data-search="true"
                                 data-show-refresh="true"
                                 data-show-toggle="true"
@@ -72,33 +71,7 @@ $(document).ready(function(){
                             </table>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane fade" id="section-${navlower(section.category)}-lambda-tab-2">
-                        <div id="section-${navlower(section.category)}-lambda-aliases-toolbar" class="f2toolbar">
-                            <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-lambda-aliases-datatable" disabled>
-                                <i class="font-icon font-icon-plus"></i> Add Selected
-                            </button>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="section-${navlower(section.category)}-lambda-aliases-datatable"
-                                class="table table-striped f2datatable"
-                                data-toolbar="#section-${navlower(section.category)}-lambda-aliases-toolbar"
-                                data-search="true"
-                                data-show-refresh="true"
-                                data-show-toggle="true"
-                                data-show-columns="true"
-                                data-show-export="true"
-                                data-detail-view="true"
-                                data-detail-formatter="detailFormatter"
-                                data-minimum-count-columns="2"
-                                data-show-pagination-switch="true"
-                                data-pagination="true"
-                                data-id-field="id"
-                                data-page-list="[10, 25, 50, 100, ALL]"
-                                data-show-footer="false"
-                                data-response-handler="responseHandler">
-                            </table>
-                        </div>
-                    </div>
+                `).join('\n')}
                 </div>
             </section>
             </div>
