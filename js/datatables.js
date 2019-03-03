@@ -64,6 +64,34 @@ function lambdaRuntimeFormatter(data) {
 }
 
 /* ========================================================================== */
+// SDK Helpers
+/* ========================================================================== */
+
+function sdkcall(method, params, alert_on_errors) {
+    return new Promise(function(resolve, reject) {
+        method.call(null, params, function(err, data) {
+            if (err) {
+                if (alert_on_errors) {
+                    console.log(err, err.stack);
+                    $.notify({
+                        icon: 'font-icon font-icon-warning',
+                        title: '<strong>Error</strong>',
+                        message: err
+                    },{
+                        type: 'danger'
+                    });
+                    reject(data);
+                } else {
+                    resolve();
+                }
+            } else {
+                resolve(data);
+            }
+        });
+    });
+}
+
+/* ========================================================================== */
 // Lambda
 /* ========================================================================== */
 
@@ -367,49 +395,44 @@ function updateDatatableStorageS3() {
 
     var svc_s3 = new AWS.S3({apiVersion: '2015-03-31', region: region});
 
-    svc_s3.listBuckets({
+    blockUI('#section-storage-s3-buckets-datatable');
+    blockUI('#section-storage-s3-bucketpolicies-datatable');
 
-    }, function(err, data) {
-        if (err) {
-            console.log(err, err.stack);
-            $.notify({
-                icon: 'font-icon font-icon-warning',
-                title: '<strong>Error</strong>',
-                message: err
-            },{
-                type: 'danger'
+    sdkcall(svc_s3.listBuckets, {
+        // no params
+    }, true).then((data) => {
+        $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
+        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
+
+        data.Buckets.forEach(bucket => {
+            $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
+                f2id: bucket.Name,
+                f2type: 's3.bucket',
+                f2data: bucket,
+                f2region: region,
+                name: bucket.Name,
+                creationdate: bucket.CreationDate
+            }]);
+
+            svc_s3.getBucketPolicy({
+                Bucket: bucket.Name
+            }, function(err, data) {
+                if (!err) {
+                    data['Bucket'] = bucket.Name;
+                    $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+                        f2id: bucket.Name + "_Policy",
+                        f2type: 's3.bucketpolicy',
+                        f2data: data,
+                        f2region: region,
+                        bucketname: bucket.Name,
+                        policy: data.Policy,
+                        policylength: data.Policy.length
+                    }]);
+                }
             });
-        } else {
-            $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
-            $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
+        });
 
-            data.Buckets.forEach(bucket => {
-                $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
-                    f2id: bucket.Name,
-                    f2type: 's3.bucket',
-                    f2data: bucket,
-                    f2region: region,
-                    name: bucket.Name,
-                    creationdate: bucket.CreationDate
-                }]);
-
-                svc_s3.getBucketPolicy({
-                    Bucket: bucket.Name
-                }, function(err, data) {
-                    if (!err) {
-                        data['Bucket'] = bucket.Name;
-                        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
-                            f2id: bucket.Name + "_Policy",
-                            f2type: 's3.bucketpolicy',
-                            f2data: data,
-                            f2region: region,
-                            bucketname: bucket.Name,
-                            policy: data.Policy,
-                            policylength: data.Policy.length
-                        }]);
-                    }
-                });
-            });
-        }
+        unblockUI('#section-storage-s3-buckets-datatable');
+        unblockUI('#section-storage-s3-bucketpolicies-datatable');
     });
 }
