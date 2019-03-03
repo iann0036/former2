@@ -1,6 +1,190 @@
+var sections = [];
+
+/* ========================================================================== */
+// Formatters
+/* ========================================================================== */
+
+function textFormatter(data) {
+    return data;
+}
+
+function byteSizeFormatter(data) {
+    var bytes = parseInt(data);
+
+    if (bytes < 1024) {
+        return bytes + " bytes";
+    } else if (bytes < 1024*1024) {
+        return (bytes/1024).toFixed(1) + " kB";
+    } else if (bytes < 1024*1024*1024) {
+        return (bytes/1024/1024).toFixed(1) + " MB";
+    }
+
+    return data;
+}
+
+function timeFormatter(data) {
+    const NOW = new Date();
+    const times = [["second", 1], ["minute", 60], ["hour", 3600], ["day", 86400], ["week", 604800], ["month", 2592000], ["year", 31536000], ["", Infinity]]
+
+    var date = Date.parse(data);
+
+    var diff = Math.round((NOW - date) / 1000)
+    for (var t = 0; t < times.length; t++) {
+        if (diff < times[t][1]) {
+            if (t == 0) {
+                return "Just now"
+            } else {
+                diff = Math.round(diff / times[t - 1][1])
+                return diff + " " + times[t - 1][0] + (diff == 1?" ago":"s ago")
+            }
+        }
+    }
+}
+
+function lambdaRuntimeFormatter(data) {
+    var runtimeMappings = {
+        'nodejs8.10': 'Node.js 8.10',
+        'nodejs6.10': 'Node.js 6.10',
+        'python3.6': 'Python 3.6',
+        'python3.7': 'Python 3.7',
+        'python2.7': 'Python 2.7',
+        'ruby2.5': 'Ruby 2.5',
+        'java8': 'Java 8',
+        'go1.x': 'Go 1.x',
+        'dotnetcore2.1': '.NET Core 2.1',
+        'dotnetcore2.0': '.NET Core 2.0',
+        'dotnetcore1.0': '.NET Core 1.0'
+    }
+
+    if (runtimeMappings[data]) {
+        return runtimeMappings[data];
+    }
+
+    return data;
+}
+
 /* ========================================================================== */
 // Lambda
 /* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'Lambda',
+    'resourcetypes': {
+        'Functions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Function Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'runtime',
+                        title: 'Runtime',
+                        sortable: true,
+                        align: 'center',
+                        formatter: lambdaRuntimeFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'codesize',
+                        title: 'Code Size',
+                        sortable: true,
+                        align: 'center',
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'lastmodified',
+                        title: 'Last Modified',
+                        sortable: true,
+                        align: 'center',
+                        formatter: timeFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ]
+            ]
+        },
+        'Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Alias Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'functionname',
+                        title: 'Function Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'functionversion',
+                        title: 'Function Version',
+                        sortable: true,
+                        align: 'center',
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        align: 'center',
+                        footerFormatter: textFormatter
+                    }
+                ]
+            ]
+        }
+    }
+});
 
 function updateDatatableComputeLambda() {
     var region = 'ap-southeast-2';
@@ -102,6 +286,89 @@ function updateDatatableComputeLambda() {
 /* ========================================================================== */
 // S3
 /* ========================================================================== */
+
+sections.push({
+    'category': 'Storage',
+    'service': 'S3',
+    'resourcetypes': {
+        'Buckets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Bucket Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationdate',
+                        title: 'Creation Date',
+                        sortable: true,
+                        editable: true,
+                        //formatter: statusFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Bucket Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Bucket Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policylength',
+                        title: 'Policy Length',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
 
 function updateDatatableStorageS3() {
     var region = 'us-east-1';

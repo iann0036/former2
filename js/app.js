@@ -1,29 +1,10 @@
-var sections = [
-    {
-        'category': 'Compute',
-        'service': 'Lambda',
-        'resourcetypes': [
-            'Functions',
-            'Aliases'
-        ]
-    },
-    {
-        'category': 'Storage',
-        'service': 'S3',
-        'resourcetypes': [
-            'Buckets'
-        ]
-    }
-];
-
-
 $(document).ready(function(){
     /* ========================================================================== */
     // Section Templating
     /* ========================================================================== */
 
     function navlower(str) {
-        return str.toLowerCase();
+        return str.toLowerCase().replace(/\s/g, "");
     }
 
     sections.forEach(section => {
@@ -32,7 +13,7 @@ $(document).ready(function(){
             <section class="tabs-section">
                 <div class="tabs-section-nav tabs-section-nav-inline">
                     <ul class="nav" role="tablist">
-                    ${section.resourcetypes.map((resourcetype, i) => `
+                    ${Object.keys(section.resourcetypes).map((resourcetype, i) => `
                         <li class="nav-item">
                             <a class="nav-link${i==0 ? " active" : ""}" href="#section-${navlower(section.category)}-${navlower(section.service)}-tab-${i}" role="tab" data-toggle="tab">
                                 ${resourcetype}
@@ -43,7 +24,7 @@ $(document).ready(function(){
                 </div>
 
                 <div class="tab-content">
-                ${section.resourcetypes.map((resourcetype, i) => `
+                ${Object.keys(section.resourcetypes).map((resourcetype, i) => `
                     <div role="tabpanel" class="tab-pane fade${i==0 ? " in active show" : ""}" id="section-${navlower(section.category)}-${navlower(section.service)}-tab-${i}">
                         <div id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-toolbar" class="f2toolbar">
                             <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable" disabled>
@@ -85,81 +66,11 @@ $(document).ready(function(){
 
     var output_objects = [];
 
-    function textFormatter(data) {
-        return data;
-    }
-
-    function byteSizeFormatter(data) {
-        var bytes = parseInt(data);
-
-        if (bytes < 1024) {
-            return bytes + " bytes";
-        } else if (bytes < 1024*1024) {
-            return (bytes/1024).toFixed(1) + " kB";
-        } else if (bytes < 1024*1024*1024) {
-            return (bytes/1024/1024).toFixed(1) + " MB";
-        }
-
-        return data;
-    }
-
-    function timeFormatter(data) {
-        const NOW = new Date();
-        const times = [["second", 1], ["minute", 60], ["hour", 3600], ["day", 86400], ["week", 604800], ["month", 2592000], ["year", 31536000], ["", Infinity]]
-
-        var date = Date.parse(data);
-
-        var diff = Math.round((NOW - date) / 1000)
-        for (var t = 0; t < times.length; t++) {
-            if (diff < times[t][1]) {
-                if (t == 0) {
-                    return "Just now"
-                } else {
-                    diff = Math.round(diff / times[t - 1][1])
-                    return diff + " " + times[t - 1][0] + (diff == 1?" ago":"s ago")
-                }
-            }
-        }
-    }
-
-    function lambdaRuntimeFormatter(data) {
-        var runtimeMappings = {
-            'nodejs8.10': 'Node.js 8.10',
-            'nodejs6.10': 'Node.js 6.10',
-            'python3.6': 'Python 3.6',
-            'python3.7': 'Python 3.7',
-            'python2.7': 'Python 2.7',
-            'ruby2.5': 'Ruby 2.5',
-            'java8': 'Java 8',
-            'go1.x': 'Go 1.x',
-            'dotnetcore2.1': '.NET Core 2.1',
-            'dotnetcore2.0': '.NET Core 2.0',
-            'dotnetcore1.0': '.NET Core 1.0'
-        }
-
-        if (runtimeMappings[data]) {
-            return runtimeMappings[data];
-        }
-
-        return data;
-    }
-
     window.operateEvents = {
         'click .like': function (e, value, row, index) {
             alert('You click like action, row: ' + JSON.stringify(row));
         }
     };
-
-    function operateFormatter(value, row, index) {
-        return [
-            '<a class="like" href="javascript:void(0)" title="Like">',
-            '<i class="glyphicon glyphicon-heart"></i>',
-            '</a>  ',
-            '<a class="remove" href="javascript:void(0)" title="Remove">',
-            '<i class="glyphicon glyphicon-remove"></i>',
-            '</a>'
-        ].join('');
-    }
 
     function addSelectedRowsToTemplate(selector) {
         var ids = $.map($(selector).bootstrapTable('getSelections'), function (row) {
@@ -200,152 +111,13 @@ $(document).ready(function(){
     // DataTable Initializations
     /* ========================================================================== */
 
-    initDatatableWithColumns('#section-compute-lambda-functions-datatable', [
-        [
-            {
-                field: 'state',
-                checkbox: true,
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                title: 'Function Name',
-                field: 'name',
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                footerFormatter: textFormatter
-            },
-            {
-                title: 'Properties',
-                colspan: 4,
-                align: 'center'
-            }
-        ],
-        [
-            {
-                field: 'description',
-                title: 'Description',
-                sortable: true,
-                editable: true,
-                footerFormatter: textFormatter,
-                align: 'center'
-            },
-            {
-                field: 'runtime',
-                title: 'Runtime',
-                sortable: true,
-                align: 'center',
-                formatter: lambdaRuntimeFormatter,
-                footerFormatter: textFormatter
-            },
-            {
-                field: 'codesize',
-                title: 'Code Size',
-                sortable: true,
-                align: 'center',
-                formatter: byteSizeFormatter,
-                footerFormatter: textFormatter
-            },
-            {
-                field: 'lastmodified',
-                title: 'Last Modified',
-                sortable: true,
-                align: 'center',
-                formatter: timeFormatter,
-                footerFormatter: textFormatter
-            }
-        ]
-    ]);
+    sections.forEach(section => {
+        Object.keys(section.resourcetypes).forEach(resourcetype => {
+            var selector = "#section-" + navlower(section.category) + "-" + navlower(section.service) + "-" + navlower(resourcetype) + "-datatable";
 
-    initDatatableWithColumns('#section-compute-lambda-aliases-datatable', [
-        [
-            {
-                field: 'state',
-                checkbox: true,
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                title: 'Alias Name',
-                field: 'name',
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                footerFormatter: textFormatter
-            },
-            {
-                title: 'Properties',
-                colspan: 4,
-                align: 'center'
-            }
-        ],
-        [
-            {
-                field: 'functionname',
-                title: 'Function Name',
-                sortable: true,
-                editable: true,
-                footerFormatter: textFormatter,
-                align: 'center'
-            },
-            {
-                field: 'functionversion',
-                title: 'Function Version',
-                sortable: true,
-                align: 'center',
-                footerFormatter: textFormatter
-            },
-            {
-                field: 'description',
-                title: 'Description',
-                sortable: true,
-                align: 'center',
-                footerFormatter: textFormatter
-            }
-        ]
-    ]);
-
-    initDatatableWithColumns('#section-storage-s3-buckets-datatable', [
-        [
-            {
-                field: 'state',
-                checkbox: true,
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle'
-            },
-            {
-                title: 'Bucket Name',
-                field: 'name',
-                rowspan: 2,
-                align: 'center',
-                valign: 'middle',
-                sortable: true,
-                footerFormatter: textFormatter
-            },
-            {
-                title: 'Properties',
-                colspan: 4,
-                align: 'center'
-            }
-        ],
-        [
-            {
-                field: 'creationdate',
-                title: 'Creation Date',
-                sortable: true,
-                editable: true,
-                //formatter: statusFormatter,
-                footerFormatter: textFormatter,
-                align: 'center'
-            }
-        ]
-    ]);
+            initDatatableWithColumns(selector, section.resourcetypes[resourcetype].columns);
+        });
+    });
 
     /* ========================================================================== */
     // DataTable Post-Config
