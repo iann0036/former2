@@ -2188,6 +2188,17 @@ function performF2Mappings(objects) {
                 'type': 'AWS::S3::Bucket',
                 'options': reqParams
             });
+        } else if (obj.type == "s3.bucketpolicy") {
+            reqParams.cfn['Bucket'] = obj.data.Bucket;
+            reqParams.cfn['PolicyDocument'] = JSON.parse(obj.data.Policy);
+
+            tracked_resources.push({
+                'logicalId': getResourceName('s3', obj.id),
+                'region': obj.region,
+                'service': 's3',
+                'type': 'AWS::S3::BucketPolicy',
+                'options': reqParams
+            });
         } else if (obj.type == "lambda.alias") {
             reqParams.cfn['Description'] = obj.data.Description;
             var split = obj.data.AliasArn.split(":");

@@ -207,14 +207,6 @@ function updateDatatableComputeLambda() {
                 type: 'danger'
             });
         } else {
-            /*
-            data = {
-                Functions: [
-                ], 
-                NextMarker: ""
-            }
-            */
-            
             $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
             $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
 
@@ -341,7 +333,7 @@ sections.push({
                     },
                     {
                         title: 'Bucket Name',
-                        field: 'name',
+                        field: 'bucketname',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -376,7 +368,7 @@ function updateDatatableStorageS3() {
     var svc_s3 = new AWS.S3({apiVersion: '2015-03-31', region: region});
 
     svc_s3.listBuckets({
-        //MaxItems: 100
+
     }, function(err, data) {
         if (err) {
             console.log(err, err.stack);
@@ -389,6 +381,7 @@ function updateDatatableStorageS3() {
             });
         } else {
             $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
+            $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
 
             data.Buckets.forEach(bucket => {
                 $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
@@ -399,6 +392,23 @@ function updateDatatableStorageS3() {
                     name: bucket.Name,
                     creationdate: bucket.CreationDate
                 }]);
+
+                svc_s3.getBucketPolicy({
+                    Bucket: bucket.Name
+                }, function(err, data) {
+                    if (!err) {
+                        data['Bucket'] = bucket.Name;
+                        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+                            f2id: bucket.Name + "_Policy",
+                            f2type: 's3.bucketpolicy',
+                            f2data: data,
+                            f2region: region,
+                            bucketname: bucket.Name,
+                            policy: data.Policy,
+                            policylength: data.Policy.length
+                        }]);
+                    }
+                });
             });
         }
     });
