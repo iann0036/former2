@@ -120,10 +120,34 @@
                         <div class="site-header-collapsed">
                             <div class="site-header-collapsed-in" style="margin-right: 0;">
 
-                                <a class="btn btn-nav btn-inline btn-info" id="generate-outputs">
+                                <button class="btn btn-nav btn-inline btn-primary" id="generate-outputs" disabled>
                                     Generate
-                                </a>
-                                <!--
+                                </button>
+
+                                <div class="dropdown" style="float: right;">
+                                    <button class="btn btn-rounded btn-inline btn-secondary dropdown-toggle" id="selected-region" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        US East (N. Virginia)
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="selected-region">
+                                        <a class="dropdown-item region-item" data-region="us-east-1"><b>US East (N. Virginia)</b></a>
+                                        <a class="dropdown-item region-item" data-region="us-east-2">US East (Ohio)</a>
+                                        <a class="dropdown-item region-item" data-region="us-west-1">US West (N. California)</a>
+                                        <a class="dropdown-item region-item" data-region="us-west-2">US West (Oregon)</a>
+                                        <a class="dropdown-item region-item" data-region="ap-south-1">Asia Pacific (Mumbai)</a>
+                                        <a class="dropdown-item region-item" data-region="ap-northeast-2">Asia Pacific (Seoul)</a>
+                                        <a class="dropdown-item region-item" data-region="ap-southeast-1">Asia Pacific (Singapore)</a>
+                                        <a class="dropdown-item region-item" data-region="ap-southeast-2">Asia Pacific (Sydney)</a>
+                                        <a class="dropdown-item region-item" data-region="ap-northeast-1">Asia Pacific (Tokyo)</a>
+                                        <a class="dropdown-item region-item" data-region="ca-central-1">Canada (Central)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-central-1">EU (Frankfurt)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-west-1">EU (Ireland)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-west-2">EU (London)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-west-3">EU (Paris)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-north-1">EU (Stockholm)</a>
+                                        <a class="dropdown-item region-item" data-region="sa-east-1">South America (S&#227;o Paulo)</a>
+                                    </div>
+                                </div>
+
                                 <div class="site-header-search-container">
                                     <form class="site-header-search closed">
                                         <input type="text" placeholder="Search"/>
@@ -133,7 +157,6 @@
                                         <div class="overlay"></div>
                                     </form>
                                 </div>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -242,7 +265,7 @@
                             <span class="lbl">Database</span>
                         </span>
                         <ul>
-                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                            <li><a href="#section-database-rds"><span class="lbl">RDS</span></a></li>
                         </ul>
                     </li>
                     <li class="aquamarine with-sub">
@@ -260,7 +283,7 @@
                             <span class="lbl">Networking &amp; Content Delivery</span>
                         </span>
                         <ul>
-                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                            <li><a href="#section-networkingandcontentdelivery-vpc"><span class="lbl">VPC</span></a></li>
                         </ul>
                     </li>
                     <li class="blue with-sub">
@@ -389,7 +412,7 @@
                 <header class="section-header">
                     <div class="tbl">
                         <div class="tbl-row">
-                            <div class="tbl-cell">
+                            <div id="header-breadcrumb" class="tbl-cell" style="visibility: hidden;">
                                 <h3 id="header-title"></h3>
                                 <ol class="breadcrumb breadcrumb-simple">
                                     <li><a id="header-breadcrumb1" href="#section-setup-introduction"></a></li>

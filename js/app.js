@@ -1,4 +1,5 @@
 var extension_available = false;
+var region = 'us-east-1';
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -6,12 +7,12 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     function navlower(str) {
-        return str.toLowerCase().replace(/\s/g, "");
+        return str.toLowerCase().replace(/\s/g, "").replace(/\&amp\;/g, "and");
     }
 
     sections.forEach(section => {
         var html = `
-            <div id="section-${navlower(section.category)}-${navlower(section.service)}" class="former2-section" data-section-breadcrumb1-title="${section.category}" data-section-breadcrumb1-link="#section-${navlower(section.category)}-ec2" data-section-title="${section.service}" style="display: none;">
+            <div id="section-${navlower(section.category)}-${navlower(section.service)}" class="former2-section" data-section-breadcrumb1-title="${section.category}" data-section-breadcrumb1-link="#section-${navlower(section.category)}-${navlower(section.service)}" data-section-title="${section.service}" style="display: none;">
             <section class="tabs-section">
                 <div class="tabs-section-nav tabs-section-nav-inline">
                     <ul class="nav" role="tablist">
@@ -85,6 +86,9 @@ $(document).ready(function(){
 
             return row.f2id;
         });
+
+        $('#generate-outputs').text("Generate (" + output_objects.length + ")");
+        $('#generate-outputs').removeAttr('disabled');
 
         return ids;
     }
@@ -217,6 +221,7 @@ $(document).ready(function(){
     }, false);
 
     doNavigation();
+    $('#header-breadcrumb').attr('style', '');
 
     /* ========================================================================== */
     // Outputs
@@ -237,6 +242,24 @@ $(document).ready(function(){
     }
 
     /* ========================================================================== */
+    // Region Selector
+    /* ========================================================================== */
+
+    $('.region-item').on('click', el => {
+        region = $(el.target).attr('data-region');
+        var region_name = $(el.target).html();
+
+        window.localStorage.setItem('region', region);
+
+        $('#selected-region').html(region_name);
+    });
+    
+    var storedregion = window.localStorage.getItem('region');
+    if (storedregion) {
+        region = storedregion;
+    }
+
+    /* ========================================================================== */
     // CodeMirror Init
     /* ========================================================================== */
 
@@ -250,7 +273,7 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    cfn_editor.getDoc().setValue("");
+    cfn_editor.getDoc().setValue("# No resources created");
     setTimeout(function(){
         cfn_editor.refresh();
     }, 1);
@@ -357,16 +380,42 @@ $(document).ready(function(){
         /* ========================================================================== */
 
         $('#scan-account').on('click', () => {
+            updateDatatableComputeEC2();
             updateDatatableComputeLambda();
             updateDatatableStorageS3();
+            updateDatatableDatabaseRDS();
+            updateDatatableNetworkingAndContentDeliveryVPC();
         });
 
+        $('#section-compute-ec2-instances-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-hosts-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-loadbalancers-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-autoscalinggroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-launchconfigurations-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-launchtemplates-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-targetgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-volumes-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-volumeattachments-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-spotrequests-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-placementgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        
         $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
         $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+
         $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
 
-        //updateDatatableComputeLambda();
-        //updateDatatableStorageS3();
+        $('#section-databases-rds-instances-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+
+        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
     }
 
 }); // <-- End of documentReady

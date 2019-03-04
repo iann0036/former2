@@ -20,3 +20,8 @@
 .tab-pane .table-responsive .bootstrap-table .fixed-table-toolbar {
     padding: 0px !important;
 }
+
+.site-header .dropdown .btn.dropdown-toggle {
+    background-color: #6b7a85 !important;
+    border-color: #6b7a85 !important;
+}

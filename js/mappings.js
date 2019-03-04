@@ -1726,15 +1726,15 @@ function outputMapCli(service, method, options, region, was_blocked) {
 function compileOutputs() {
     /*if (!outputs.length) {
         return {
-            'boto3': '# No recorded actions yet',
-            'go': '// No recorded actions yet',
-            'cfn': '# No recorded actions yet',
-            'tf': '# No recorded actions yet',
-            'cli': '# No recorded actions yet',
-            'js': '// No recorded actions yet',
-            'cdkts': '// No recorded actions yet',
-            'iam': '// No recorded actions yet',
-            'troposphere': '# No recorded actions yet'
+            'boto3': '# No resources created',
+            'go': '// No resources created',
+            'cfn': '# No resources created',
+            'tf': '# No resources created',
+            'cli': '# No resources created',
+            'js': '// No resources created',
+            'cdkts': '// No resources created',
+            'iam': '// No resources created',
+            'troposphere': '# No resources created'
         };
     }*/
 
@@ -1801,13 +1801,13 @@ ${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${mapServic
 
 func main() {
 `,
-        'cfn': `${!has_cfn ? '# No resources created in recording' : `AWSTemplateFormatVersion: "2010-09-09"
+        'cfn': `${!has_cfn ? '# No resources created' : `AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
     Generator: "former2"
 Description: ""
 Resources:
 `}`,
-        'tf': `${!has_tf ? '# No resources created in recording' : `# https://www.terraform.io/downloads.html
+        'tf': `${!has_tf ? '# No resources created' : `# https://www.terraform.io/downloads.html
 
 provider "aws" {
     region = "${tracked_resources[0].region}"
@@ -1819,7 +1819,7 @@ provider "aws" {
         'js': `// npm install aws-sdk
 
 var AWS = require('aws-sdk');`,
-        'cdkts': `${!has_cfn ? '// No resources created in recording' : `// npm i -g aws-cdk
+        'cdkts': `${!has_cfn ? '// No resources created' : `// npm i -g aws-cdk
 
 ${services.cdkts.map(service => `import ${service} = require('@aws-cdk/aws-${service}');`).join(`
 `)}
@@ -1831,7 +1831,7 @@ class MyStack extends cdk.Stack {
 
 `}`,
         'iam': null,
-        'troposphere': `${!has_cfn ? '# No resources created in recording' : `# pip install troposphere
+        'troposphere': `${!has_cfn ? '# No resources created' : `# pip install troposphere
 
 from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
 from troposphere import Ref, GetAtt, Template
@@ -2224,6 +2224,15 @@ function performF2Mappings(objects) {
                 'type': 'AWS::Lambda::Alias',
                 'options': reqParams
             });
+        } else {
+            $.notify({
+                icon: 'font-icon font-icon-warning',
+                title: '<strong>No Mapping Available</strong>',
+                message: 'There is currently no mappings available for the <b>' + obj.type + '</b> type.'
+            },{
+                type: 'warning'
+            });
+            console.log(JSON.stringify(obj));
         }
     });
 
