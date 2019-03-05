@@ -1643,6 +1643,80 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1651,6 +1725,8 @@ function updateDatatableDatabaseRDS() {
     var svc_rds = new AWS.RDS({region: region});
 
     blockUI('#section-database-rds-instances-datatable');
+    blockUI('#section-database-rds-subnetgroups-datatable');
+    blockUI('#section-database-rds-parametergroups-datatable');
 
     sdkcall(svc_rds.describeDBInstances, {
         // no params
@@ -1669,4 +1745,225 @@ function updateDatatableDatabaseRDS() {
 
         unblockUI('#section-database-rds-instances-datatable');
     });
+
+    sdkcall(svc_rds.describeDBSubnetGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
+
+        data.SubnetGroups.forEach(subnetGroup => {
+            $('#section-database-rds-subnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.Name,
+                f2type: 'rds.subnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.Name
+            }]);
+        });
+
+        unblockUI('#section-database-rds-subnetgroups-datatable');
+    });
+
+    sdkcall(svc_rds.describeDBParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
+
+        data.ParameterGroups.forEach(parameterGroup => {
+            $('#section-database-rds-parametergroups-datatable').bootstrapTable('append', [{
+                f2id: parameterGroup.Name,
+                f2type: 'rds.parametergroup',
+                f2data: parameterGroup,
+                f2region: region,
+                name: parameterGroup.Name
+            }]);
+        });
+
+        unblockUI('#section-database-rds-parametergroups-datatable');
+    });
 }
+
+/* ========================================================================== */
+// ElastiCache
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Database',
+    'service': 'ElastiCache',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDatabaseElastiCache() {
+    var svc_elasticache = new AWS.ElastiCache({region: region});
+
+    blockUI('#section-database-elasticache-clusters-datatable');
+    blockUI('#section-database-elasticache-subnetgroups-datatable');
+    blockUI('#section-database-elasticache-parametergroups-datatable');
+
+    sdkcall(svc_elasticache.describeCacheClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-elasticache-clusters-datatable').bootstrapTable('removeAll');
+
+        data.Clusters.forEach(cluster => {
+            $('#section-database-elasticache-clusters-datatable').bootstrapTable('append', [{
+                f2id: cluster.DBInstanceIdentifier,
+                f2type: 'elasticache.cluster',
+                f2data: cluster,
+                f2region: region,
+                instanceid: cluster.DBInstanceIdentifier
+            }]);
+        });
+
+        unblockUI('#section-database-elasticache-clusters-datatable');
+    });
+
+    sdkcall(svc_elasticache.describeCacheSubnetGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('removeAll');
+
+        data.SubnetGroups.forEach(subnetGroup => {
+            $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.Name,
+                f2type: 'elasticache.subnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.Name
+            }]);
+        });
+
+        unblockUI('#section-database-elasticache-subnetgroups-datatable');
+    });
+
+    sdkcall(svc_elasticache.describeCacheParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('removeAll');
+
+        data.ParameterGroups.forEach(parameterGroup => {
+            $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('append', [{
+                f2id: parameterGroup.Name,
+                f2type: 'elasticache.parametergroup',
+                f2data: parameterGroup,
+                f2region: region,
+                name: parameterGroup.Name
+            }]);
+        });
+
+        unblockUI('#section-database-elasticache-parametergroups-datatable');
+    });
+}
+

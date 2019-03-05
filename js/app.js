@@ -384,6 +384,7 @@ $(document).ready(function(){
             updateDatatableComputeLambda();
             updateDatatableStorageS3();
             updateDatatableDatabaseRDS();
+            updateDatatableDatabaseElastiCache();
             updateDatatableNetworkingAndContentDeliveryVPC();
         });
 
@@ -405,6 +406,12 @@ $(document).ready(function(){
         $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
 
         $('#section-databases-rds-instances-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+        $('#section-databases-rds-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+        $('#section-databases-rds-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+
+        $('#section-databases-elasticache-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
+        $('#section-databases-elasticache-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
+        $('#section-databases-elasticache-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
 
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-subnets-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
