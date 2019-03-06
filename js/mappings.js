@@ -2176,6 +2176,47 @@ function performF2Mappings(objects) {
                 'type': 'AWS::Lambda::Function',
                 'options': reqParams
             });
+        } else if (obj.type == "ec2.vpc") {
+            reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+            reqParams.cfn['EnableDnsSupport'] = obj.data.EnableDnsSupport;
+            reqParams.cfn['EnableDnsHostnames'] = obj.data.EnableDnsHostnames;
+            reqParams.cfn['InstanceTenancy'] = obj.data.InstanceTenancy;
+            reqParams.cfn['Tags'] = obj.data.Tags;
+
+            var attrCidrBlockAssociations = [];
+            obj.data.CidrBlockAssociationSet.forEach(cidrBlockAssociation => {
+                attrCidrBlockAssociations.push(cidrBlockAssociation.AssociationId);
+            });
+
+            var attrIpv6CidrBlockAssociations = [];
+            obj.data.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
+                attrIpv6CidrBlockAssociations.push(ipv6CidrBlockAssociation.Ipv6CidrBlock);
+            });
+
+            /*
+            TODO: ReturnValues
+            DefaultNetworkAcl
+            The default network ACL ID that is associated with the VPC. For example, acl-814dafe3.
+
+            DefaultSecurityGroup
+            The default security group ID that is associated with the VPC. For example, sg-b178e0d3.
+            */
+
+            tracked_resources.push({
+                'logicalId': getResourceName('ec2', obj.id),
+                'region': obj.region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::VPC',
+                'options': reqParams,
+                'returnValues': {
+                    'Ref': obj.data.VpcId,
+                    'GetAtt': {
+                        'CidrBlock': obj.data.CidrBlock,
+                        'CidrBlockAssociations': attrCidrBlockAssociations,
+                        'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
+                    }
+                }
+            });
         } else if (obj.type == "s3.bucket") {
             reqParams.cfn['BucketName'] = obj.data.Name;
 

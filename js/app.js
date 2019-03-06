@@ -239,6 +239,11 @@ $(document).ready(function(){
         setTimeout(function(){
             cfn_editor.refresh();
         }, 1);
+
+        raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
+        setTimeout(function(){
+            raw_editor.refresh();
+        }, 1);
     }
 
     /* ========================================================================== */
@@ -276,6 +281,21 @@ $(document).ready(function(){
     cfn_editor.getDoc().setValue("# No resources created");
     setTimeout(function(){
         cfn_editor.refresh();
+    }, 1);
+
+    raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    raw_editor.getDoc().setValue("// No resources created");
+    setTimeout(function(){
+        raw_editor.refresh();
     }, 1);
 
     /* ========================================================================== */
@@ -382,10 +402,16 @@ $(document).ready(function(){
         $('#scan-account').on('click', () => {
             updateDatatableComputeEC2();
             updateDatatableComputeLambda();
+            updateDatatableComputeElasticBeanstalk();
             updateDatatableStorageS3();
             updateDatatableDatabaseRDS();
             updateDatatableDatabaseElastiCache();
+            updateDatatableDatabaseRedshift();
             updateDatatableNetworkingAndContentDeliveryVPC();
+            updateDatatableNetworkingAndContentDeliveryRoute53();
+            updateDatatableManagementAndGovernanceOpsWorks();
+            updateDatatableApplicationIntegrationSNS();
+            updateDatatableApplicationIntegrationSQS();
         });
 
         $('#section-compute-ec2-instances-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
@@ -402,12 +428,22 @@ $(document).ready(function(){
         
         $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
         $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
+        
+        $('#section-compute-elasticbeanstalk-applications-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
+        $('#section-compute-elasticbeanstalk-applicationversions-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
+        $('#section-compute-elasticbeanstalk-environments-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
+        $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
 
         $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
 
         $('#section-databases-rds-instances-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
         $('#section-databases-rds-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
         $('#section-databases-rds-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+
+        $('#section-databases-redshift-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
+        $('#section-databases-redshift-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
+        $('#section-databases-redshift-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
+        $('#section-databases-redshift-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
 
         $('#section-databases-elasticache-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
         $('#section-databases-elasticache-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
@@ -423,6 +459,22 @@ $(document).ready(function(){
         $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+
+        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
+        $('#section-networkingandcontentdelivery-route53-records-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
+        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
+
+        $('#section-managementandgovernance-opsworks-stacks-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+        $('#section-managementandgovernance-opsworks-apps-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+        $('#section-managementandgovernance-opsworks-layers-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+        $('#section-managementandgovernance-opsworks-elbattachments-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+        $('#section-managementandgovernance-opsworks-instances-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+
+        $('#section-applicationintegration-sns-topics-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);
+        $('#section-applicationintegration-sns-topicpolicies-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);
+        
+        $('#section-applicationintegration-sqs-queues-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSQS);
+        $('#section-applicationintegration-sqs-queuepolicies-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSQS);
     }
 
 }); // <-- End of documentReady

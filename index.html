@@ -204,6 +204,7 @@
                         <li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>
                         <li><a href="#section-outputs-js"><span class="lbl">JavaScript</span></a></li>
                         <li><a href="#section-outputs-go"><span class="lbl">Go SDK (v1)</span></a></li>
+                        <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -272,6 +273,7 @@
                         <ul>
                             <li><a href="#section-database-rds"><span class="lbl">RDS</span></a></li>
                             <li><a href="#section-database-elasticache"><span class="lbl">ElastiCache</span></a></li>
+                            <li><a href="#section-database-redshift"><span class="lbl">Redshift</span></a></li>
                         </ul>
                     </li>
                     <li class="aquamarine with-sub">
@@ -290,6 +292,7 @@
                         </span>
                         <ul>
                             <li><a href="#section-networkingandcontentdelivery-vpc"><span class="lbl">VPC</span></a></li>
+                            <li><a href="#section-networkingandcontentdelivery-route53"><span class="lbl">Route 53</span></a></li>
                         </ul>
                     </li>
                     <li class="blue with-sub">
@@ -358,10 +361,11 @@
                     <li class="pink with-sub">
                         <span>
                             <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Application-Integration_light-bg.png" style="width: 16px; height: 16px;" /></i>
-                            <span class="lbl">App Integration</span>
+                            <span class="lbl">Application Integration</span>
                         </span>
                         <ul>
-                            <li><a href="#section-storage-unknown"><span class="lbl">TBC</span></a></li>
+                            <li><a href="#section-applicationintegration-sns"><span class="lbl">SNS</span></a></li>
+                            <li><a href="#section-applicationintegration-sqs"><span class="lbl">SQS</span></a></li>
                         </ul>
                     </li>
                     <li class="green with-sub">
@@ -520,6 +524,12 @@
                 <section id="section-outputs-cloudformation" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CloudFormation" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div id='cfn_container'>
                         <textarea id='cfn'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-raw" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Raw Output (Debug)" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='raw_container'>
+                        <textarea id='raw'></textarea>
                     </div>
                 </section>
 

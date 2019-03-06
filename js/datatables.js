@@ -854,29 +854,14 @@ function updateDatatableComputeEC2() {
     }, true).then((data) => {
         $('#section-compute-ec2-hosts-datatable').bootstrapTable('removeAll');
 
-        console.log(data);return;
-        data.Reservations.forEach(reservation => {
-            reservation.Hosts.forEach(instance => {
-                var name = "";
-
-                instance.Tags.forEach(tag => {
-                    if (tag.Key == "Name") {
-                        name = tag.Value;
-                    }
-                });
-
-                $('#section-compute-ec2-hosts-datatable').bootstrapTable('append', [{
-                    f2id: instance.InstanceId,
-                    f2type: 'ec2.hosts',
-                    f2data: instance,
-                    f2region: region,
-                    name: name,
-                    instanceid: instance.InstanceId,
-                    instancetype: instance.InstanceType,
-                    availabilityzone: instance.Placement.AvailabilityZone,
-                    instancestate: instance.State.Name
-                }]);
-            });
+        data.Hosts.forEach(host => {
+            $('#section-compute-ec2-hosts-datatable').bootstrapTable('append', [{
+                f2id: host.HostId,
+                f2type: 'ec2.host',
+                f2data: host,
+                f2region: region,
+                hostid: host.HostId
+            }]);
         });
 
         unblockUI('#section-compute-ec2-hosts-datatable');
@@ -1012,7 +997,6 @@ function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('removeAll');
-        console.dir(data);
 
         data.PlacementGroups.forEach(placementGroup => {
             $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('append', [{
@@ -1424,13 +1408,26 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
 
         data.Vpcs.forEach(vpc => {
-            $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('append', [{
-                f2id: vpc.VpcId,
-                f2type: 'ec2.vpc',
-                f2data: vpc,
-                f2region: region,
-                vpcid: vpc.VpcId
-            }]);
+            sdkcall(svc_ec2.describeVpcAttribute, {
+                Attribute: "enableDnsSupport", 
+                VpcId: vpc.VpcId
+            }, true).then((dnsSupport) => {
+                sdkcall(svc_ec2.describeVpcAttribute, {
+                    Attribute: "enableDnsHostnames", 
+                    VpcId: vpc.VpcId
+                }, true).then((dnsHostnames) => {
+                    vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
+                    vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
+
+                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('append', [{
+                        f2id: vpc.VpcId,
+                        f2type: 'ec2.vpc',
+                        f2data: vpc,
+                        f2region: region,
+                        vpcid: vpc.VpcId
+                    }]);
+                });
+            });
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
@@ -1549,7 +1546,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
 
-        data.PeeringConnections.forEach(peeringConnection => {
+        data.VpcPeeringConnections.forEach(peeringConnection => {
             $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('append', [{
                 f2id: peeringConnection.PeeringConnectionId,
                 f2type: 'ec2.peeringconnection',
@@ -1964,6 +1961,1220 @@ function updateDatatableDatabaseElastiCache() {
         });
 
         unblockUI('#section-database-elasticache-parametergroups-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Route 53
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Networking &amp; Content Delivery',
+    'service': 'Route 53',
+    'resourcetypes': {
+        'Hosted Zones': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Hosted Zone ID',
+                        field: 'hostedzoneid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Records': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Health Checks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableNetworkingAndContentDeliveryRoute53() {
+    var svc_route53 = new AWS.Route53({region: region});
+
+    blockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-records-datatable');
+    blockUI('#section-networkingandcontentdelivery-healthchecks-records-datatable');
+
+    sdkcall(svc_route53.listHostedZones, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
+
+        data.HostedZones.forEach(hostedZone => {
+            sdkcall(svc_route53.listResourceRecordSets, {
+                HostedZoneId: hostedZone.Id.split("/").pop()
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
+        
+                data.ResourceRecordSets.forEach(resourceRecordSets => {
+                    $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
+                        f2id: resourceRecordSets.Name,
+                        f2type: 'route53.record',
+                        f2data: resourceRecordSets,
+                        f2region: region,
+                        name: resourceRecordSets.Name,
+                        type: resourceRecordSets.Type
+                    }]);
+                });
+        
+                unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
+            });
+
+            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('append', [{
+                f2id: hostedZone.Id.split("/").pop(),
+                f2type: 'route53.hostedzone',
+                f2data: hostedZone,
+                f2region: region,
+                hostedzoneid: hostedZone.Id.split("/").pop()
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
+    });
+
+    sdkcall(svc_route53.listHealthChecks, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
+
+        data.HealthChecks.forEach(healthCheck => {
+            $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('append', [{
+                f2id: healthCheck.Id,
+                f2type: 'route53.healthcheck',
+                f2data: healthCheck,
+                f2region: region,
+                id: healthCheck.Id
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-healthchecks-datatable');
+    });
+}
+
+/* ========================================================================== */
+// OpsWorks
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Management &amp; Governance',
+    'service': 'OpsWorks',
+    'resourcetypes': {
+        'Stacks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Stack ID',
+                        field: 'stackid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Apps': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Layers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Layer ID',
+                        field: 'layerid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'ELB Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Instances': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Instance ID',
+                        field: 'instanceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableManagementAndGovernanceOpsWorks() {
+    var svc_opsworks = new AWS.OpsWorks({region: region});
+
+    blockUI('#section-managementandgovernance-opsworks-stacks-datatable');
+    blockUI('#section-managementandgovernance-opsworks-apps-datatable');
+    blockUI('#section-managementandgovernance-opsworks-layers-datatable');
+    blockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
+    blockUI('#section-managementandgovernance-opsworks-instances-datatable');
+
+    sdkcall(svc_opsworks.describeStacks, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('removeAll');
+
+        data.Stacks.forEach(stack => {
+            $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('append', [{
+                f2id: stack.Arn,
+                f2type: 'opsworks.stack',
+                f2data: stack,
+                f2region: region,
+                stackid: stack.StackId
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-stacks-datatable');
+    });
+
+    sdkcall(svc_opsworks.describeApps, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
+
+        data.Apps.forEach(app => {
+            $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('append', [{
+                f2id: app.AppId,
+                f2type: 'opsworks.app',
+                f2data: app,
+                f2region: region,
+                name: app.Name
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
+    });
+
+    sdkcall(svc_opsworks.describeLayers, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
+
+        data.Layers.forEach(layer => {
+            $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('append', [{
+                f2id: layer.Arn,
+                f2type: 'opsworks.layer',
+                f2data: layer,
+                f2region: region,
+                layerid: layer.LayerId
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
+    });
+
+    sdkcall(svc_opsworks.describeElasticLoadBalancers, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
+
+        data.ElasticLoadBalancers.forEach(elbAttachment => {
+            $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('append', [{
+                f2id: elbAttachment.ElasticLoadBalancerName,
+                f2type: 'opsworks.elbattachment',
+                f2data: elbAttachment,
+                f2region: region,
+                name: elbAttachment.ElasticLoadBalancerName
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
+    });
+
+    sdkcall(svc_opsworks.describeInstances, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
+
+        data.Instances.forEach(instance => {
+            $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('append', [{
+                f2id: instance.Arn,
+                f2type: 'opsworks.instance',
+                f2data: instance,
+                f2region: region,
+                instanceid: instance.InstanceId
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-instances-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Redshift
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Database',
+    'service': 'Redshift',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Security Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Group ID',
+                        field: 'groupid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDatabaseRedshift() {
+    var svc_redshift = new AWS.Redshift({region: region});
+
+    blockUI('#section-database-redshift-clusters-datatable');
+    blockUI('#section-database-redshift-subnetgroups-datatable');
+    blockUI('#section-database-redshift-parametergroups-datatable');
+    blockUI('#section-database-redshift-securitygroups-datatable');
+
+    sdkcall(svc_redshift.describeClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-redshift-clusters-datatable').bootstrapTable('removeAll');
+
+        data.Clusters.forEach(cluster => {
+            $('#section-database-redshift-clusters-datatable').bootstrapTable('append', [{
+                f2id: cluster.ClusterIdentifier,
+                f2type: 'redshift.cluster',
+                f2data: cluster,
+                f2region: region,
+                clusterid: cluster.ClusterIdentifier
+            }]);
+        });
+
+        unblockUI('#section-database-redshift-clusters-datatable');
+    });
+
+    sdkcall(svc_redshift.describeClusterSubnetGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('removeAll');
+
+        data.ClusterSubnetGroups.forEach(subnetGroup => {
+            $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.ClusterSubnetGroupName,
+                f2type: 'redshift.subnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.ClusterSubnetGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-redshift-subnetgroups-datatable');
+    });
+
+    sdkcall(svc_redshift.describeClusterParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-redshift-parametergroups-datatable').bootstrapTable('removeAll');
+
+        data.ParameterGroups.forEach(parameterGroup => {
+            $('#section-database-redshift-parametergroups-datatable').bootstrapTable('append', [{
+                f2id: parameterGroup.ParameterGroupName,
+                f2type: 'redshift.parametergroup',
+                f2data: parameterGroup,
+                f2region: region,
+                name: parameterGroup.ParameterGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-redshift-parametergroups-datatable');
+    });
+
+    sdkcall(svc_redshift.describeClusterSecurityGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-redshift-securitygroups-datatable').bootstrapTable('removeAll');
+
+        data.ClusterSecurityGroups.forEach(securityGroup => {
+            $('#section-database-redshift-securitygroups-datatable').bootstrapTable('append', [{
+                f2id: securityGroup.ClusterSecurityGroupName,
+                f2type: 'redshift.securitygroup',
+                f2data: securityGroup,
+                f2region: region,
+                name: securityGroup.ClusterSecurityGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-redshift-securitygroups-datatable');
+    });
+}
+
+/* ========================================================================== */
+// SNS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Application Integration',
+    'service': 'SNS',
+    'resourcetypes': {
+        'Topics': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Topic Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableApplicationIntegrationSNS() {
+    var svc_sns = new AWS.SNS({region: region});
+
+    blockUI('#section-database-sns-topics-datatable');
+    blockUI('#section-database-sns-topicpolicies-datatable');
+
+    sdkcall(svc_sns.listTopics, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-sns-topics-datatable').bootstrapTable('removeAll');
+        $('#section-database-sns-topicpolicies-datatable').bootstrapTable('removeAll');
+
+        data.Topics.forEach(topic => {
+            $('#section-database-sns-topics-datatable').bootstrapTable('append', [{
+                f2id: topic.TopicArn,
+                f2type: 'sns.topic',
+                f2data: topic,
+                f2region: region,
+                topicarn: topic.TopicArn
+            }]);
+
+            sdkcall(svc_sns.getTopicAttributes, {
+                TopicArn: topic.TopicArn
+            }, true).then((data) => {
+        
+                $('#section-database-sns-topicpolicies-datatable').bootstrapTable('append', [{
+                    f2id: topic.TopicArn,
+                    f2type: 'sns.topicpolicy',
+                    f2data: data.Attributes.Policy,
+                    f2region: region,
+                    policy: data.Attributes.Policy
+                }]);
+        
+                unblockUI('#section-database-sns-topicpolicies-datatable');
+            });
+        });
+
+        unblockUI('#section-database-sns-topics-datatable');
+    });
+}
+
+/* ========================================================================== */
+// SQS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Application Integration',
+    'service': 'SQS',
+    'resourcetypes': {
+        'Queues': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Queue Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableApplicationIntegrationSQS() {
+    var svc_sqs = new AWS.SQS({region: region});
+
+    blockUI('#section-database-sqs-queues-datatable');
+    blockUI('#section-database-sqs-queuepolicies-datatable');
+
+    sdkcall(svc_sqs.listQueues, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-sqs-queues-datatable').bootstrapTable('removeAll');
+        $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
+
+        data.QueueUrls.forEach(queueUrl => {
+            $('#section-database-sqs-queues-datatable').bootstrapTable('append', [{
+                f2id: queueUrl,
+                f2type: 'sqs.queue',
+                f2data: queueUrl,
+                f2region: region,
+                queueurl: queueUrl
+            }]);
+
+            sdkcall(svc_sqs.getQueueAttributes, {
+                QueueUrl: queueUrl,
+                AttributeNames: Policy
+            }, true).then((data) => {
+        
+                $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('append', [{
+                    f2id: queueUrl,
+                    f2type: 'sqs.queuepolicy',
+                    f2data: data.Attributes.Policy,
+                    f2region: region,
+                    policy: data.Attributes.Policy
+                }]);
+        
+                unblockUI('#section-database-sqs-queuepolicies-datatable');
+            });
+        });
+
+        unblockUI('#section-database-sqs-queues-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Elastic Beanstalk
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'Elastic Beanstalk',
+    'resourcetypes': {
+        'Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Environments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Configuration Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeElasticBeanstalk() {
+    var svc_elasticbeanstalk = new AWS.ElasticBeanstalk({region: region});
+
+    blockUI('#section-compute-elasticbeanstalk-applications-datatable');
+    blockUI('#section-compute-elasticbeanstalk-applicationversions-datatable');
+    blockUI('#section-compute-elasticbeanstalk-environments-datatable');
+    blockUI('#section-compute-elasticbeanstalk-configurationtemplates-datatable');
+
+    sdkcall(svc_elasticbeanstalk.describeApplications, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
+
+        data.Applications.forEach(application => {
+            $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('append', [{
+                f2id: application.ApplicationName,
+                f2type: 'elasticbeanstalk.application',
+                f2data: application,
+                f2region: region,
+                name: application.ApplicationName
+            }]);
+
+            sdkcall(svc_elasticbeanstalk.describeConfigurationSettings, {
+                ApplicationName: application.ApplicationName
+            }, true).then((data) => {
+                $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
+        
+                data.ConfigurationSettings.forEach(configurationTemplate => {
+                    $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('append', [{
+                        f2id: application.ApplicationName + configurationTemplate.TemplateName,
+                        f2type: 'elasticbeanstalk.configurationtemplate',
+                        f2data: configurationTemplate,
+                        f2region: region,
+                        name: configurationTemplate.TemplateName
+                    }]);
+                });
+        
+                unblockUI('#section-compute-elasticbeanstalk-configurationtemplates-datatable');
+            });
+        });
+
+        unblockUI('#section-compute-elasticbeanstalk-applications-datatable');
+    });
+
+    sdkcall(svc_elasticbeanstalk.describeApplicationVersions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('removeAll');
+
+        data.ApplicationVersions.forEach(applicationVersion => {
+            $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('append', [{
+                f2id: applicationVersion.ApplicationName + applicationVersion.VersionLabel,
+                f2type: 'elasticbeanstalk.applicationversion',
+                f2data: applicationVersion,
+                f2region: region,
+                name: applicationVersion.VersionLabel
+            }]);
+        });
+
+        unblockUI('#section-compute-elasticbeanstalk-applicationversions-datatable');
+    });
+
+    sdkcall(svc_elasticbeanstalk.describeEnvironments, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('removeAll');
+
+        data.Environments.forEach(environment => {
+            $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('append', [{
+                f2id: environment.EnvironmentId,
+                f2type: 'elasticbeanstalk.environment',
+                f2data: environment,
+                f2region: region,
+                name: environment.EnvironmentName
+            }]);
+        });
+
+        unblockUI('#section-compute-elasticbeanstalk-environments-datatable');
     });
 }
 
