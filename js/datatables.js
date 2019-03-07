@@ -575,6 +575,117 @@ sections.push({
                 ]
             ]
         },
+        'Auto Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Auto Scaling Scheduled Actions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Security Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Launch Configurations': {
             'columns': [
                 [
@@ -699,6 +810,43 @@ sections.push({
                     {
                         title: 'Volume ID',
                         field: 'volumeid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Interfaces': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Interface ID',
+                        field: 'interfaceid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -975,6 +1123,24 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-volumes-datatable');
     });
 
+    sdkcall(svc_ec2.describeNetworkInterfaces, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('removeAll');
+
+        data.NetworkInterfaces.forEach(networkInterface => {
+            $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('append', [{
+                f2id: networkInterface.NetworkInterfaceId,
+                f2type: 'ec2.networkinterface',
+                f2data: networkInterface,
+                f2region: region,
+                interfaceid: networkInterface.NetworkInterfaceId
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-networkinterfaces-datatable');
+    });
+
     sdkcall(svc_ec2.describeSpotFleetRequests, {
         // no params
     }, true).then((data) => {
@@ -1011,6 +1177,60 @@ function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-placementgroups-datatable');
+    });
+
+    sdkcall(svc_autoscaling.describePolicies, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('removeAll');
+
+        data.ScalingPolicies.forEach(scalingPolicy => {
+            $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('append', [{
+                f2id: scalingPolicy.PolicyARN,
+                f2type: 'autoscaling.policy',
+                f2data: scalingPolicy,
+                f2region: region,
+                name: scalingPolicy.PolicyName
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-autoscalingpolicies-datatable');
+    });
+
+    sdkcall(svc_autoscaling.describeScheduledActions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('removeAll');
+
+        data.ScheduledUpdateGroupActions.forEach(scheduledAction => {
+            $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('append', [{
+                f2id: scheduledAction.ScheduledActionARN,
+                f2type: 'autoscaling.scheduledaction',
+                f2data: scheduledAction,
+                f2region: region,
+                name: scheduledAction.ScheduledActionName
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
+    });
+
+    sdkcall(svc_ec2.describeSecurityGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('removeAll');
+
+        data.SecurityGroups.forEach(securityGroup => {
+            $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('append', [{
+                f2id: securityGroup.GroupId,
+                f2type: 'ec2.securitygroup',
+                f2data: securityGroup,
+                f2region: region,
+                id: securityGroup.GroupId
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-securitygroups-datatable');
     });
 }
 
@@ -1184,6 +1404,43 @@ sections.push({
                     {
                         title: 'Gateway ID',
                         field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Elastic IPs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'IP',
+                        field: 'ip',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1505,6 +1762,24 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
     });
 
+    sdkcall(svc_ec2.describeAddresses, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
+
+        data.Addresses.forEach(address => {
+            $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
+                f2id: address.AllocationId,
+                f2type: 'ec2.elasticip',
+                f2data: address,
+                f2region: region,
+                ip: address.PublicIp
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
+    });
+
     sdkcall(svc_ec2.describeDhcpOptions, {
         // no params
     }, true).then((data) => {
@@ -1714,6 +1989,43 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Security Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1777,6 +2089,24 @@ function updateDatatableDatabaseRDS() {
         });
 
         unblockUI('#section-database-rds-parametergroups-datatable');
+    });
+
+    sdkcall(svc_rds.describeDBSecurityGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-securitygroups-datatable').bootstrapTable('removeAll');
+
+        data.DBSecurityGroups.forEach(securityGroup => {
+            $('#section-database-rds-securitygroups-datatable').bootstrapTable('append', [{
+                f2id: securityGroup.DBSecurityGroupName,
+                f2type: 'rds.securitygroup',
+                f2data: securityGroup,
+                f2region: region,
+                name: securityGroup.DBSecurityGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-rds-securitygroups-datatable');
     });
 }
 
@@ -1898,6 +2228,43 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Security Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1961,6 +2328,24 @@ function updateDatatableDatabaseElastiCache() {
         });
 
         unblockUI('#section-database-elasticache-parametergroups-datatable');
+    });
+
+    sdkcall(svc_elasticache.describeCacheSecurityGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-elasticache-securitygroups-datatable').bootstrapTable('removeAll');
+
+        data.CacheSecurityGroups.forEach(securityGroup => {
+            $('#section-database-elasticache-securitygroups-datatable').bootstrapTable('append', [{
+                f2id: securityGroup.CacheSecurityGroupName,
+                f2type: 'elasticache.securitygroup',
+                f2data: securityGroup,
+                f2region: region,
+                name: securityGroup.CacheSecurityGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-elasticache-securitygroups-datatable');
     });
 }
 
@@ -3181,6 +3566,374 @@ function updateDatatableComputeElasticBeanstalk() {
         });
 
         unblockUI('#section-compute-elasticbeanstalk-environments-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CloudWatch
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Management &amp; Governance',
+    'service': 'CloudWatch',
+    'resourcetypes': {
+        'Alarms': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableManagementAndGovernanceCloudWatch() {
+    var svc_cloudwatch = new AWS.CloudWatch({region: region});
+
+    blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+
+    sdkcall(svc_cloudwatch.describeAlarms, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('removeAll');
+
+        data.MetricAlarms.forEach(metricAlarm => {
+            $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('append', [{
+                f2id: metricAlarm.AlarmArn,
+                f2type: 'cloudwatch.alarm',
+                f2data: metricAlarm,
+                f2region: region,
+                name: metricAlarm.AlarmName
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CloudTrail
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Management &amp; Governance',
+    'service': 'CloudTrail',
+    'resourcetypes': {
+        'Trails': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableManagementAndGovernanceCloudTrail() {
+    var svc_cloudtrail = new AWS.CloudTrail({region: region});
+
+    blockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
+
+    sdkcall(svc_cloudtrail.describeTrails, {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('removeAll');
+
+        data.trailList.forEach(trail => {
+            $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('append', [{
+                f2id: trail.TrailARN,
+                f2type: 'cloudtrail.trail',
+                f2data: trail,
+                f2region: region,
+                name: trail.Name
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CloudFront
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Networking &amp; Content Delivery',
+    'service': 'CloudFront',
+    'resourcetypes': {
+        'Distributions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain Name',
+                        field: 'domainname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableNetworkingAndContentDeliveryCloudFront() {
+    var svc_cloudfront = new AWS.CloudFront({region: region});
+
+    blockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
+
+    sdkcall(svc_cloudfront.listDistributions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('removeAll');
+
+        data.DistributionList.Items.forEach(distribution => {
+            $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('append', [{
+                f2id: distribution.ARN,
+                f2type: 'cloudfront.distribution',
+                f2data: distribution,
+                f2region: region,
+                domainname: distribution.DomainName
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
+    });
+}
+
+/* ========================================================================== */
+// DynamoDB
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Database',
+    'service': 'DynamoDB',
+    'resourcetypes': {
+        'Tables': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDatabaseDynamoDB() {
+    var svc_dynamodb = new AWS.DynamoDB({region: region});
+
+    blockUI('#section-database-dynamodb-tables-datatable');
+
+    sdkcall(svc_dynamodb.listTables, {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-dynamodb-tables-datatable').bootstrapTable('removeAll');
+
+        data.TableNames.forEach(tableName => {
+            sdkcall(svc_dynamodb.listTables, {
+                TableName: tableName
+            }, true).then((data) => {
+                $('#section-database-dynamodb-tables-datatable').bootstrapTable('append', [{
+                    f2id: data.Table.TableName,
+                    f2type: 'dynamodb.table',
+                    f2data: data.Table,
+                    f2region: region,
+                    name: data.Table.TableName
+                }]);
+            });
+        });
+
+        unblockUI('#section-database-dynamodb-tables-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Kinesis
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Analytics',
+    'service': 'Kinesis',
+    'resourcetypes': {
+        'Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableAnalyticsKinesis() {
+    var svc_kinesis = new AWS.Kineses({region: region});
+
+    blockUI('#section-analytics-kinesis-tables-datatable');
+
+    sdkcall(svc_kinesis.listStreams, {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-kinesis-tables-datatable').bootstrapTable('removeAll');
+
+        data.StreamNames.forEach(streamName => {
+            sdkcall(svc_kinesis.describeStream, {
+                StreamName: streamName
+            }, true).then((data) => {
+                $('#section-analytics-kinesis-tables-datatable').bootstrapTable('append', [{
+                    f2id: data.StreamDescription.StreamARN,
+                    f2type: 'kinesis.table',
+                    f2data: data.StreamDescription,
+                    f2region: region,
+                    name: data.StreamDescription.StreamName
+                }]);
+            });
+        });
+
+        unblockUI('#section-analytics-kinesis-tables-datatable');
     });
 }
 
