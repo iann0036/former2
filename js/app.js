@@ -7,7 +7,7 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     function navlower(str) {
-        return str.toLowerCase().replace(/\s/g, "").replace(/\&amp\;/g, "and");
+        return str.toLowerCase().replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "and");
     }
 
     sections.forEach(section => {

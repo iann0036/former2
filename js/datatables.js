@@ -387,7 +387,7 @@ function updateDatatableStorageS3() {
                     policy: data.Policy,
                     policylength: data.Policy.length
                 }]);
-            });
+            }).catch(() => {});
         });
 
         unblockUI('#section-storage-s3-buckets-datatable');
@@ -1748,7 +1748,7 @@ function updateDatatableDatabaseRDS() {
     }, true).then((data) => {
         $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
 
-        data.SubnetGroups.forEach(subnetGroup => {
+        data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-rds-subnetgroups-datatable').bootstrapTable('append', [{
                 f2id: subnetGroup.Name,
                 f2type: 'rds.subnetgroup',
@@ -1766,7 +1766,7 @@ function updateDatatableDatabaseRDS() {
     }, true).then((data) => {
         $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
 
-        data.ParameterGroups.forEach(parameterGroup => {
+        data.DBParameterGroups.forEach(parameterGroup => {
             $('#section-database-rds-parametergroups-datatable').bootstrapTable('append', [{
                 f2id: parameterGroup.Name,
                 f2type: 'rds.parametergroup',
@@ -1932,7 +1932,7 @@ function updateDatatableDatabaseElastiCache() {
     }, true).then((data) => {
         $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('removeAll');
 
-        data.SubnetGroups.forEach(subnetGroup => {
+        data.CacheSubnetGroups.forEach(subnetGroup => {
             $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('append', [{
                 f2id: subnetGroup.Name,
                 f2type: 'elasticache.subnetgroup',
@@ -1950,7 +1950,7 @@ function updateDatatableDatabaseElastiCache() {
     }, true).then((data) => {
         $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('removeAll');
 
-        data.ParameterGroups.forEach(parameterGroup => {
+        data.CacheParameterGroups.forEach(parameterGroup => {
             $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('append', [{
                 f2id: parameterGroup.Name,
                 f2type: 'elasticache.parametergroup',
@@ -2104,14 +2104,16 @@ function updateDatatableNetworkingAndContentDeliveryRoute53() {
             }, true).then((data) => {
                 $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
         
-                data.ResourceRecordSets.forEach(resourceRecordSets => {
+                data.ResourceRecordSets.forEach(resourceRecordSet => {
+                    resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
+
                     $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
-                        f2id: resourceRecordSets.Name,
+                        f2id: resourceRecordSet.Name,
                         f2type: 'route53.record',
-                        f2data: resourceRecordSets,
+                        f2data: resourceRecordSet,
                         f2region: region,
-                        name: resourceRecordSets.Name,
-                        type: resourceRecordSets.Type
+                        name: resourceRecordSet.Name,
+                        type: resourceRecordSet.Type
                     }]);
                 });
         
@@ -2367,81 +2369,81 @@ function updateDatatableManagementAndGovernanceOpsWorks() {
                 f2region: region,
                 stackid: stack.StackId
             }]);
+
+            sdkcall(svc_opsworks.describeLayers, {
+                StackId: stack.StackId
+            }, true).then((data) => {
+                $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
+        
+                data.Layers.forEach(layer => {
+                    $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('append', [{
+                        f2id: layer.Arn,
+                        f2type: 'opsworks.layer',
+                        f2data: layer,
+                        f2region: region,
+                        layerid: layer.LayerId
+                    }]);
+                });
+        
+                unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
+            });
+
+            sdkcall(svc_opsworks.describeApps, {
+                StackId: stack.StackId
+            }, true).then((data) => {
+                $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
+        
+                data.Apps.forEach(app => {
+                    $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('append', [{
+                        f2id: app.AppId,
+                        f2type: 'opsworks.app',
+                        f2data: app,
+                        f2region: region,
+                        name: app.Name
+                    }]);
+                });
+        
+                unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
+            });
+        
+            sdkcall(svc_opsworks.describeElasticLoadBalancers, {
+                StackId: stack.StackId
+            }, true).then((data) => {
+                $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
+        
+                data.ElasticLoadBalancers.forEach(elbAttachment => {
+                    $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('append', [{
+                        f2id: elbAttachment.ElasticLoadBalancerName,
+                        f2type: 'opsworks.elbattachment',
+                        f2data: elbAttachment,
+                        f2region: region,
+                        name: elbAttachment.ElasticLoadBalancerName
+                    }]);
+                });
+        
+                unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
+            });
+
+            sdkcall(svc_opsworks.describeInstances, {
+                StackId: stack.StackId
+            }, true).then((data) => {
+                $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
+        
+                data.Instances.forEach(instance => {
+                    $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('append', [{
+                        f2id: instance.Arn,
+                        f2type: 'opsworks.instance',
+                        f2data: instance,
+                        f2region: region,
+                        instanceid: instance.InstanceId
+                    }]);
+                });
+        
+                unblockUI('#section-managementandgovernance-opsworks-instances-datatable');
+            });
         });
 
         unblockUI('#section-managementandgovernance-opsworks-stacks-datatable');
-    });
-
-    sdkcall(svc_opsworks.describeApps, {
-        // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
-
-        data.Apps.forEach(app => {
-            $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('append', [{
-                f2id: app.AppId,
-                f2type: 'opsworks.app',
-                f2data: app,
-                f2region: region,
-                name: app.Name
-            }]);
-        });
-
-        unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
-    });
-
-    sdkcall(svc_opsworks.describeLayers, {
-        // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
-
-        data.Layers.forEach(layer => {
-            $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('append', [{
-                f2id: layer.Arn,
-                f2type: 'opsworks.layer',
-                f2data: layer,
-                f2region: region,
-                layerid: layer.LayerId
-            }]);
-        });
-
-        unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
-    });
-
-    sdkcall(svc_opsworks.describeElasticLoadBalancers, {
-        // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
-
-        data.ElasticLoadBalancers.forEach(elbAttachment => {
-            $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('append', [{
-                f2id: elbAttachment.ElasticLoadBalancerName,
-                f2type: 'opsworks.elbattachment',
-                f2data: elbAttachment,
-                f2region: region,
-                name: elbAttachment.ElasticLoadBalancerName
-            }]);
-        });
-
-        unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
-    });
-
-    sdkcall(svc_opsworks.describeInstances, {
-        // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
-
-        data.Instances.forEach(instance => {
-            $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('append', [{
-                f2id: instance.Arn,
-                f2type: 'opsworks.instance',
-                f2data: instance,
-                f2region: region,
-                instanceid: instance.InstanceId
-            }]);
-        });
-
-        unblockUI('#section-managementandgovernance-opsworks-instances-datatable');
     });
 }
 
@@ -2783,22 +2785,24 @@ function updateDatatableApplicationIntegrationSNS() {
         $('#section-database-sns-topicpolicies-datatable').bootstrapTable('removeAll');
 
         data.Topics.forEach(topic => {
-            $('#section-database-sns-topics-datatable').bootstrapTable('append', [{
-                f2id: topic.TopicArn,
-                f2type: 'sns.topic',
-                f2data: topic,
-                f2region: region,
-                topicarn: topic.TopicArn
-            }]);
-
             sdkcall(svc_sns.getTopicAttributes, {
                 TopicArn: topic.TopicArn
             }, true).then((data) => {
+                $('#section-database-sns-topics-datatable').bootstrapTable('append', [{
+                    f2id: topic.TopicArn,
+                    f2type: 'sns.topic',
+                    f2data: data,
+                    f2region: region,
+                    topicarn: topic.TopicArn
+                }]);
         
                 $('#section-database-sns-topicpolicies-datatable').bootstrapTable('append', [{
                     f2id: topic.TopicArn,
                     f2type: 'sns.topicpolicy',
-                    f2data: data.Attributes.Policy,
+                    f2data: {
+                        'Policy': data.Attributes.Policy,
+                        'Topic': topic.TopicArn
+                    },
                     f2region: region,
                     policy: data.Attributes.Policy
                 }]);
@@ -2909,23 +2913,25 @@ function updateDatatableApplicationIntegrationSQS() {
         $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
 
         data.QueueUrls.forEach(queueUrl => {
-            $('#section-database-sqs-queues-datatable').bootstrapTable('append', [{
-                f2id: queueUrl,
-                f2type: 'sqs.queue',
-                f2data: queueUrl,
-                f2region: region,
-                queueurl: queueUrl
-            }]);
-
             sdkcall(svc_sqs.getQueueAttributes, {
                 QueueUrl: queueUrl,
-                AttributeNames: Policy
+                AttributeNames: All
             }, true).then((data) => {
+                $('#section-database-sqs-queues-datatable').bootstrapTable('append', [{
+                    f2id: queueUrl,
+                    f2type: 'sqs.queue',
+                    f2data: data,
+                    f2region: region,
+                    queueurl: queueUrl
+                }]);
         
                 $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('append', [{
                     f2id: queueUrl,
                     f2type: 'sqs.queuepolicy',
-                    f2data: data.Attributes.Policy,
+                    f2data: {
+                        'Policy': data.Attributes.Policy,
+                        'Queue': queueUrl
+                    },
                     f2region: region,
                     policy: data.Attributes.Policy
                 }]);
