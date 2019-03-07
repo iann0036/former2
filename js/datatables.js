@@ -3910,7 +3910,7 @@ sections.push({
 });
 
 function updateDatatableAnalyticsKinesis() {
-    var svc_kinesis = new AWS.Kineses({region: region});
+    var svc_kinesis = new AWS.Kinesis({region: region});
 
     blockUI('#section-analytics-kinesis-tables-datatable');
 
@@ -3934,6 +3934,350 @@ function updateDatatableAnalyticsKinesis() {
         });
 
         unblockUI('#section-analytics-kinesis-tables-datatable');
+    });
+}
+
+/* ========================================================================== */
+// ECR
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'ECR',
+    'resourcetypes': {
+        'Repositories': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeECR() {
+    var svc_ecr = new AWS.ECR({region: region});
+
+    blockUI('#section-compute-ecr-repositories-datatable');
+
+    sdkcall(svc_ecr.describeRepositories, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
+
+        data.repositories.forEach(repository => {
+            $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
+                f2id: repository.repositoryArn,
+                f2type: 'ecr.repository',
+                f2data: repository,
+                f2region: region,
+                name: repository.repositoryName
+            }]);
+        });
+
+        unblockUI('#section-compute-ecr-repositories-datatable');
+    });
+}
+
+/* ========================================================================== */
+// EKS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'EKS',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeEKS() {
+    var svc_eks = new AWS.EKS({region: region});
+
+    blockUI('#section-compute-eks-clusters-datatable');
+
+    sdkcall(svc_eks.listClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-eks-clusters-datatable').bootstrapTable('removeAll');
+
+        data.clusters.forEach(cluster => {
+            sdkcall(svc_eks.describeCluster, {
+                name: cluster
+            }, true).then((data) => {
+                $('#section-compute-eks-clusters-datatable').bootstrapTable('append', [{
+                    f2id: data.cluster.arn,
+                    f2type: 'eks.cluster',
+                    f2data: data.cluster,
+                    f2region: region,
+                    name: data.cluster.name
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-eks-clusters-datatable');
+    });
+}
+
+/* ========================================================================== */
+// ECS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'ECS',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Services': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Task Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name / Family',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeECS() {
+    var svc_ecs = new AWS.ECS({region: region});
+
+    blockUI('#section-compute-ecs-clusters-datatable');
+    blockUI('#section-compute-ecs-services-datatable');
+    blockUI('#section-compute-ecs-taskdefinitions-datatable');
+
+    sdkcall(svc_ecs.listClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
+
+        data.clusterArns.forEach(clusterArn => {
+            sdkcall(svc_ecs.describeClusters, {
+                clusters: [clusterArn]
+            }, true).then((data) => {
+                $('#section-compute-ecs-clusters-datatable').bootstrapTable('append', [{
+                    f2id: data.clusters[0].clusterArn,
+                    f2type: 'ecs.cluster',
+                    f2data: data.clusters[0],
+                    f2region: region,
+                    name: data.clusters[0].clusterName
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-ecs-clusters-datatable');
+    });
+
+    sdkcall(svc_ecs.listServices, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
+
+        data.serviceArns.forEach(serviceArn => {
+            sdkcall(svc_ecs.describeServices, {
+                services: [serviceArn]
+            }, true).then((data) => {
+                $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
+                    f2id: data.services[0].serviceArn,
+                    f2type: 'ecs.service',
+                    f2data: data.services[0],
+                    f2region: region,
+                    name: data.services[0].serviceName
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-ecs-services-datatable');
+    });
+
+    sdkcall(svc_ecs.listTaskDefinitions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
+
+        data.taskDefinitionArns.forEach(taskDefinitionArn => {
+            sdkcall(svc_ecs.describeTaskDefinitions, {
+                taskDefinition: taskDefinitionArn
+            }, true).then((data) => {
+                $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
+                    f2id: data.taskDefinition.taskDefinitionArn,
+                    f2type: 'ecs.taskdefinition',
+                    f2data: data.taskDefinition,
+                    f2region: region,
+                    name: data.taskDefinition.family
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-ecs-taskdefinitions-datatable');
     });
 }
 

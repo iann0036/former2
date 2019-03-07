@@ -1476,7 +1476,7 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
     }
 
     output += `${logicalId} = template.add_resource(${troposervice}.${tropotype}(
-    "${logicalId}"${params}
+    '${logicalId}'${params}
 ))${was_blocked ? ' # blocked' : ''}
 
 `;

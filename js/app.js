@@ -240,6 +240,16 @@ $(document).ready(function(){
             cfn_editor.refresh();
         }, 1);
 
+        troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
+        setTimeout(function(){
+            troposphere_editor.refresh();
+        }, 1);
+
+        cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
+        setTimeout(function(){
+            cdkts_editor.refresh();
+        }, 1);
+
         raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
         setTimeout(function(){
             raw_editor.refresh();
@@ -250,19 +260,43 @@ $(document).ready(function(){
     // Region Selector
     /* ========================================================================== */
 
+    var region_map = {
+        "us-east-1": "US East (N. Virginia)",
+        "us-east-2": "US East (Ohio)",
+        "us-west-1": "US West (N. California)",
+        "us-west-2": "US West (Oregon)",
+        "ap-south-1": "Asia Pacific (Mumbai)",
+        "ap-northeast-2": "Asia Pacific (Seoul)",
+        "ap-southeast-1": "Asia Pacific (Singapore)",
+        "ap-southeast-2": "Asia Pacific (Sydney)",
+        "ap-northeast-1": "Asia Pacific (Tokyo)",
+        "ca-central-1": "Canada (Central)",
+        "eu-central-1": "EU (Frankfurt)",
+        "eu-west-1": "EU (Ireland)",
+        "eu-west-2": "EU (London)",
+        "eu-west-3": "EU (Paris)",
+        "eu-north-1": "EU (Stockholm)",
+        "sa-east-1": "South America (S&#227;o Paulo)"
+    };
+
     $('.region-item').on('click', el => {
         region = $(el.target).attr('data-region');
-        var region_name = $(el.target).html();
+
+        $('#selected-region').html(region_map[region]);
+        $('.region-item').removeAttr('style');
+        $('.region-item[data-region=\'' + region + '\']').attr('style', 'font-weight: bold;')
 
         window.localStorage.setItem('region', region);
-
-        $('#selected-region').html(region_name);
     });
     
     var storedregion = window.localStorage.getItem('region');
     if (storedregion) {
         region = storedregion;
+    } else {
+        region = 'us-east-1';
     }
+    $('#selected-region').html(region_map[region]);
+    $('.region-item[data-region=\'' + region + '\']').attr('style', 'font-weight: bold;')
 
     /* ========================================================================== */
     // CodeMirror Init
@@ -281,6 +315,36 @@ $(document).ready(function(){
     cfn_editor.getDoc().setValue("# No resources created");
     setTimeout(function(){
         cfn_editor.refresh();
+    }, 1);
+
+    troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "python",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    troposphere_editor.getDoc().setValue("# No resources created");
+    setTimeout(function(){
+        troposphere_editor.refresh();
+    }, 1);
+
+    cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    cdkts_editor.getDoc().setValue("// No resources created");
+    setTimeout(function(){
+        cdkts_editor.refresh();
     }, 1);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
@@ -401,15 +465,23 @@ $(document).ready(function(){
 
         $('#scan-account').on('click', () => {
             updateDatatableComputeEC2();
+            updateDatatableComputeECR();
+            updateDatatableComputeECS();
+            updateDatatableComputeEKS();
             updateDatatableComputeLambda();
             updateDatatableComputeElasticBeanstalk();
             updateDatatableStorageS3();
             updateDatatableDatabaseRDS();
+            updateDatatableDatabaseDynamoDB();
             updateDatatableDatabaseElastiCache();
             updateDatatableDatabaseRedshift();
             updateDatatableNetworkingAndContentDeliveryVPC();
+            updateDatatableNetworkingAndContentDeliveryCloudFront();
             updateDatatableNetworkingAndContentDeliveryRoute53();
+            updateDatatableManagementAndGovernanceCloudWatch();
+            updateDatatableManagementAndGovernanceCloudTrail();
             updateDatatableManagementAndGovernanceOpsWorks();
+            updateDatatableAnalyticsKinesis();
             updateDatatableApplicationIntegrationSNS();
             updateDatatableApplicationIntegrationSQS();
         });
@@ -418,13 +490,24 @@ $(document).ready(function(){
         $('#section-compute-ec2-hosts-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-loadbalancers-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-autoscalinggroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-autoscalingpolicies-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-autoscalingscheduledactions-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-securitygroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-launchconfigurations-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-launchtemplates-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-targetgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-volumes-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-volumeattachments-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+        $('#section-compute-ec2-networkinterfaces-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-spotrequests-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
         $('#section-compute-ec2-placementgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
+
+        $('#section-compute-ecr-repositories-datatable').on('refresh.bs.table', updateDatatableComputeECR);
+
+        $('#section-compute-ecs-clusters-datatable').on('refresh.bs.table', updateDatatableComputeECS);
+        $('#section-compute-ecs-services-datatable').on('refresh.bs.table', updateDatatableComputeECS);
+        $('#section-compute-ecs-taskdefinitions-datatable').on('refresh.bs.table', updateDatatableComputeECS);
+
+        $('#section-compute-eks-clusters-datatable').on('refresh.bs.table', updateDatatableComputeEKS);
         
         $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
         $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
@@ -435,40 +518,54 @@ $(document).ready(function(){
         $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
 
         $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
+        $('#section-storage-s3-bucketpolicies-datatable').on('refresh.bs.table', updateDatatableStorageS3);
 
         $('#section-databases-rds-instances-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
         $('#section-databases-rds-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
         $('#section-databases-rds-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+        $('#section-databases-rds-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
+
+        $('#section-databases-dynamodb-tables-datatable').on('refresh.bs.table', updateDatatableDatabaseDynamoDB);
+
+        $('#section-databases-elasticache-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
+        $('#section-databases-elasticache-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
+        $('#section-databases-elasticache-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
+        $('#section-databases-elasticache-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
 
         $('#section-databases-redshift-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
         $('#section-databases-redshift-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
         $('#section-databases-redshift-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
         $('#section-databases-redshift-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
 
-        $('#section-databases-elasticache-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-        $('#section-databases-elasticache-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-        $('#section-databases-elasticache-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-subnets-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
+        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
 
+        $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryCloudFront);
+
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
         $('#section-networkingandcontentdelivery-route53-records-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
         $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
+
+        $('#section-managementandgovernance-cloudwatch-alarms-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudWatch);
+
+        $('#section-managementandgovernance-cloudtrail-trails-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudTrail);
 
         $('#section-managementandgovernance-opsworks-stacks-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
         $('#section-managementandgovernance-opsworks-apps-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
         $('#section-managementandgovernance-opsworks-layers-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
         $('#section-managementandgovernance-opsworks-elbattachments-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
         $('#section-managementandgovernance-opsworks-instances-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
+
+        $('#section-analytics-kinesis-streams-datatable').on('refresh.bs.table', updateDatatableAnalyticsKinesis);
 
         $('#section-applicationintegration-sns-topics-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);
         $('#section-applicationintegration-sns-topicpolicies-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);

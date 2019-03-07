@@ -130,11 +130,9 @@
                                 </button>
 
                                 <div class="dropdown" style="float: right;">
-                                    <button class="btn btn-rounded btn-inline btn-secondary dropdown-toggle" id="selected-region" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        US East (N. Virginia)
-                                    </button>
+                                    <button class="btn btn-rounded btn-inline btn-secondary dropdown-toggle" id="selected-region" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp;&nbsp;</button>
                                     <div class="dropdown-menu" aria-labelledby="selected-region">
-                                        <a class="dropdown-item region-item" data-region="us-east-1"><b>US East (N. Virginia)</b></a>
+                                        <a class="dropdown-item region-item" data-region="us-east-1">US East (N. Virginia)</a>
                                         <a class="dropdown-item region-item" data-region="us-east-2">US East (Ohio)</a>
                                         <a class="dropdown-item region-item" data-region="us-west-1">US West (N. California)</a>
                                         <a class="dropdown-item region-item" data-region="us-west-2">US West (Oregon)</a>
@@ -153,6 +151,7 @@
                                     </div>
                                 </div>
 
+                                <!--
                                 <div class="site-header-search-container">
                                     <form class="site-header-search closed">
                                         <input type="text" placeholder="Search"/>
@@ -162,6 +161,7 @@
                                         <div class="overlay"></div>
                                     </form>
                                 </div>
+                                -->
                             </div>
                         </div>
                     </div>
@@ -178,14 +178,14 @@
                         <span class="lbl">Dashboard</span>
                     </a>
                 </li>
-                <li class="grey with-sub opened">
+                <li class="grey with-sub">
                     <span>
                         <i class="font-icon glyphicon glyphicon-cog"></i>
                         <span class="lbl">Setup</span>
                     </span>
                     <ul>
                         <li><a href="#section-setup-introduction"><span class="lbl">Introduction</span></a></li>
-                        <li class="selected"><a href="#section-setup-credentials"><span class="lbl">Credentials</span></a></li>
+                        <li><a href="#section-setup-credentials"><span class="lbl">Credentials</span></a></li>
                         <li><a href="#section-setup-accountscan"><span class="lbl">Account Scan</span></a></li>
                     </ul>
                 </li>
@@ -218,42 +218,13 @@
                             <span class="lbl">Compute</span>
                         </span>
                         <ul>
-                            <li>
-                                <a href="#section-compute-ec2">
-                                    <span class="lbl">EC2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-ecr">
-                                    <span class="lbl">ECR</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-ecs">
-                                    <span class="lbl">ECS</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-eks">
-                                    <span class="lbl">EKS</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-lambda">
-                                    <span class="lbl">Lambda</span>
-                                    <span class="label label-custom label-pill label-danger">6</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-batch">
-                                    <span class="lbl">Batch</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#section-compute-elasticbeanstalk">
-                                    <span class="lbl">Elastic Beanstalk</span>
-                                </a>
-                            </li>
+                            <li><a href="#section-compute-ec2"><span class="lbl">EC2</span></a></li>
+                            <li><a href="#section-compute-ecr"><span class="lbl">ECR</span></a></li>
+                            <li><a href="#section-compute-ecs"><span class="lbl">ECS</span></a></li>
+                            <li><a href="#section-compute-eks"><span class="lbl">EKS</span></a></li>
+                            <li><a href="#section-compute-lambda"><span class="lbl">Lambda</span><span class="label label-custom label-pill label-danger">6</span></a></li>
+                            <li><a href="#section-compute-batch"><span class="lbl">Batch</span></a></li>
+                            <li><a href="#section-compute-elasticbeanstalk"><span class="lbl">Elastic Beanstalk</span></a></li>
                         </ul>
                     </li>
                     <li class="green with-sub">
@@ -480,7 +451,6 @@
                                 <li class="active"><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li><div class="item"><span class="num">2</span>Credentials</div></li>
                                 <li><div class="item"><span class="num">3</span>Account Scan</div></li>
-                                <li><div class="item"><span class="num">4</span>Finish</div></li>
                             </ul>
                         </div>
                     </div>
@@ -488,6 +458,7 @@
                     <div class="steps-numeric-inner">
                         <header class="steps-numeric-title">How former2 works:</header>
                         <p>TBC</p>
+                        <p><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank">Link to Helper Extension</a></p>
                     </div>
 
                     <div class="tbl steps-numeric-footer">
@@ -504,7 +475,6 @@
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li class="active"><div class="item"><span class="num">2</span>Credentials</div></li>
                                 <li><div class="item"><span class="num">3</span>Account Scan</div></li>
-                                <li><div class="item"><span class="num">4</span>Finish</div></li>
                             </ul>
                         </div>
                     </div>
@@ -537,7 +507,6 @@
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li></li><div class="item"><span class="num">2</span>Credentials</div></li>
                                 <li class="active"><div class="item"><span class="num">3</span>Account Scan</div></li>
-                                <li><div class="item"><span class="num">4</span>Finish</div></li>
                             </ul>
                         </div>
                     </div>
@@ -554,7 +523,7 @@
                     <div class="tbl steps-numeric-footer">
                         <div class="tbl-row">
                             <a href="#section-setup-credentials" class="tbl-cell">← Return to Credentials</a>
-                            <a href="#section-setup-finish" class="tbl-cell color-green">Finish →</a>
+                            <a href="#section-dashboard" class="tbl-cell color-green">Finish →</a>
                         </div>
                     </div>
                 </section>
@@ -564,6 +533,18 @@
                 <section id="section-outputs-cloudformation" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CloudFormation" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div id='cfn_container'>
                         <textarea id='cfn'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-troposphere" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Troposphere" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='troposphere_container'>
+                        <textarea id='troposphere'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-cdkts" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (TypeScript)" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cdkts_container'>
+                        <textarea id='cdkts'></textarea>
                     </div>
                 </section>
 
