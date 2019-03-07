@@ -162,6 +162,19 @@ $(document).ready(function(){
         window.localStorage.setItem('credentials-sessiontoken', $('#credentials-sessiontoken').val().trim());
     });
 
+    var accesskey = window.localStorage.getItem('credentials-accesskey');
+    if (accesskey) {
+        $('#credentials-accesskey').val(accesskey);
+    }
+    var secretkey = window.localStorage.getItem('credentials-secretkey');
+    if (secretkey) {
+        $('#credentials-secretkey').val(secretkey);
+    }
+    var sessiontoken = window.localStorage.getItem('credentials-sessiontoken');
+    if (sessiontoken) {
+        $('#credentials-sessiontoken').val(sessiontoken);
+    }
+
     /* ========================================================================== */
     // Navigation
     /* ========================================================================== */
@@ -366,7 +379,7 @@ $(document).ready(function(){
     // AWS SDK Proxy for Extension (must be before Account Scan)
     /* ========================================================================== */
 
-    var HELPER_EXTENSION_ID = "lmjgdikkekfmlhjaohllgnklmmmdpiad";
+    var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi";
 
     class AWSConfigClass {
         static update(obj) {

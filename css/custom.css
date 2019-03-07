@@ -25,3 +25,7 @@
     background-color: #6b7a85 !important;
     border-color: #6b7a85 !important;
 }
+
+.credentials-field {
+    max-width: 420px !important;
+}
