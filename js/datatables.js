@@ -3091,8 +3091,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Topic ARN',
+                        field: 'topicarn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -3128,8 +3128,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Topic ARN',
+                        field: 'topicarn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -3158,22 +3158,23 @@ sections.push({
 });
 
 function updateDatatableApplicationIntegrationSNS() {
+
     var svc_sns = new AWS.SNS({region: region});
 
-    blockUI('#section-database-sns-topics-datatable');
-    blockUI('#section-database-sns-topicpolicies-datatable');
+    blockUI('#section-applicationintegration-sns-topics-datatable');
+    blockUI('#section-applicationintegration-sns-topicpolicies-datatable');
 
     sdkcall(svc_sns.listTopics, {
         // no params
     }, true).then((data) => {
-        $('#section-database-sns-topics-datatable').bootstrapTable('removeAll');
-        $('#section-database-sns-topicpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('removeAll');
 
         data.Topics.forEach(topic => {
             sdkcall(svc_sns.getTopicAttributes, {
                 TopicArn: topic.TopicArn
             }, true).then((data) => {
-                $('#section-database-sns-topics-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('append', [{
                     f2id: topic.TopicArn,
                     f2type: 'sns.topic',
                     f2data: data,
@@ -3181,7 +3182,7 @@ function updateDatatableApplicationIntegrationSNS() {
                     topicarn: topic.TopicArn
                 }]);
         
-                $('#section-database-sns-topicpolicies-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('append', [{
                     f2id: topic.TopicArn,
                     f2type: 'sns.topicpolicy',
                     f2data: {
@@ -3189,14 +3190,15 @@ function updateDatatableApplicationIntegrationSNS() {
                         'Topic': topic.TopicArn
                     },
                     f2region: region,
+                    topicarn: topic.TopicArn,
                     policy: data.Attributes.Policy
                 }]);
         
-                unblockUI('#section-database-sns-topicpolicies-datatable');
+                unblockUI('#section-applicationintegration-sns-topicpolicies-datatable');
             });
         });
 
-        unblockUI('#section-database-sns-topics-datatable');
+        unblockUI('#section-applicationintegration-sns-topics-datatable');
     });
 }
 
@@ -3288,21 +3290,21 @@ sections.push({
 function updateDatatableApplicationIntegrationSQS() {
     var svc_sqs = new AWS.SQS({region: region});
 
-    blockUI('#section-database-sqs-queues-datatable');
-    blockUI('#section-database-sqs-queuepolicies-datatable');
+    blockUI('#section-applicationintegration-sqs-queues-datatable');
+    blockUI('#section-applicationintegration-sqs-queuepolicies-datatable');
 
     sdkcall(svc_sqs.listQueues, {
         // no params
     }, true).then((data) => {
-        $('#section-database-sqs-queues-datatable').bootstrapTable('removeAll');
-        $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
 
         data.QueueUrls.forEach(queueUrl => {
             sdkcall(svc_sqs.getQueueAttributes, {
                 QueueUrl: queueUrl,
-                AttributeNames: All
+                AttributeNames: ['All']
             }, true).then((data) => {
-                $('#section-database-sqs-queues-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('append', [{
                     f2id: queueUrl,
                     f2type: 'sqs.queue',
                     f2data: data,
@@ -3310,7 +3312,7 @@ function updateDatatableApplicationIntegrationSQS() {
                     queueurl: queueUrl
                 }]);
         
-                $('#section-database-sqs-queuepolicies-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('append', [{
                     f2id: queueUrl,
                     f2type: 'sqs.queuepolicy',
                     f2data: {
@@ -3321,11 +3323,11 @@ function updateDatatableApplicationIntegrationSQS() {
                     policy: data.Attributes.Policy
                 }]);
         
-                unblockUI('#section-database-sqs-queuepolicies-datatable');
+                unblockUI('#section-applicationintegration-sqs-queuepolicies-datatable');
             });
         });
 
-        unblockUI('#section-database-sqs-queues-datatable');
+        unblockUI('#section-applicationintegration-sqs-queues-datatable');
     });
 }
 

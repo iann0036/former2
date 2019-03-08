@@ -142,7 +142,7 @@ function processTfParameter(param, spacing, index) {
             }
         }
 
-        return `${param}`;
+        return param;
     }
     if (typeof param == "string") {
         if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
@@ -235,7 +235,7 @@ function processCfnParameter(param, spacing, index) {
             }
         }
 
-        return `${param}`;
+        return param;
     }
     if (typeof param == "string") {
         if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
@@ -349,7 +349,7 @@ function processCdktsParameter(param, spacing, index) {
         return "false";
     }
     if (typeof param == "number")
-        return `${param}`;
+        return param;
     if (typeof param == "string") {
         if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
             return undefined; // TODO: Fix this
@@ -441,7 +441,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
             }
         }
 
-        return `${param}`;
+        return param;
     }
     if (typeof param == "string") {
         if (param.startsWith("!Ref ")) {
@@ -1139,7 +1139,7 @@ function processJsParameter(param, spacing) {
         return "false";
     }
     if (typeof param == "number")
-        return `${param}`;
+        return param;
     if (typeof param == "string") {
         var string_return = param;
 
@@ -1197,7 +1197,7 @@ function processBoto3Parameter(param, spacing) {
         return "False";
     }
     if (typeof param == "number")
-        return `${param}`;
+        return param;
     if (typeof param == "string") {
         var string_return = param;
 
@@ -2768,8 +2768,8 @@ function performF2Mappings(objects) {
                     'options': reqParams
                 });
             } else if (obj.type == "sns.topic") {
-                reqParams.cfn['DisplayName'] = obj.data.DisplayName;
-                reqParams.cfn['TopicName'] = obj.data.TopicArn.split(':').pop();
+                reqParams.cfn['DisplayName'] = obj.data.Attributes.DisplayName;
+                reqParams.cfn['TopicName'] = obj.data.Attributes.TopicArn.split(':').pop();
 
                 /*
                 TODO:
@@ -2822,7 +2822,7 @@ function performF2Mappings(objects) {
                     'type': 'AWS::SQS::Queue',
                     'options': reqParams
                 });
-            } else if (obj.type == "sqs.topicpolicy") {
+            } else if (obj.type == "sqs.queuepolicy") {
                 reqParams.cfn['PolicyDocument'] = obj.data.Policy;
                 reqParams.cfn['Queues'] = [obj.data.Queue];
 
