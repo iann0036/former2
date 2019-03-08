@@ -3102,6 +3102,355 @@ function performF2Mappings(objects) {
                     'type': 'AWS::EC2::NetworkInterface',
                     'options': reqParams
                 });
+            } else if (obj.type == "redshift.cluster") {
+                reqParams.cfn['ClusterIdentifier'] = obj.data.ClusterIdentifier;
+                reqParams.cfn['NodeType'] = obj.data.NodeType;
+                reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.cfn['DBName'] = obj.data.DBName;
+                reqParams.cfn['Port'] = obj.data.Endpoint.Port;
+                reqParams.cfn['AutomatedSnapshotRetentionPeriod'] = obj.data.AutomatedSnapshotRetentionPeriod;
+                if (obj.data.ClusterSecurityGroups) {
+                    reqParams.cfn['ClusterSecurityGroups'] = [];
+                    obj.data.ClusterSecurityGroups.forEach(clusterSecurityGroup => {
+                        reqParams.cfn['ClusterSecurityGroups'].push(clusterSecurityGroup['ClusterSecurityGroupName'])
+                    });
+                }
+                if (obj.data.VpcSecurityGroups) {
+                    reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
+                        reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup['VpcSecurityGroupId'])
+                    });
+                }
+                reqParams.cfn['ClusterSubnetGroupName'] = obj.data.ClusterSubnetGroupName;
+                reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.cfn['ClusterVersion'] = obj.data.ClusterVersion;
+                reqParams.cfn['AllowVersionUpgrade'] = obj.data.AllowVersionUpgrade;
+                reqParams.cfn['NumberOfNodes'] = obj.data.NumberOfNodes;
+                reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+                reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+                reqParams.cfn['HsmClientCertificateIdentifier'] = obj.data.HsmStatus.HsmClientCertificateIdentifier;
+                reqParams.cfn['HsmConfigurationIdentifier'] = obj.data.HsmStatus.HsmConfigurationIdentifier;
+                reqParams.cfn['ElasticIp'] = obj.data.ElasticIpStatus.ElasticIp;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                if (obj.data.IamRoles) {
+                    reqParams.cfn['IamRoles'] = [];
+                    obj.data.IamRoles.forEach(iamRole => {
+                        reqParams.cfn['IamRoles'].push(iamRole['IamRoleArn'])
+                    });
+                }
+
+                /*
+                TODO:
+                ClusterParameterGroupName: String
+                ClusterType: String
+                LoggingProperties: 
+                    LoggingProperties
+                MasterUserPassword: String
+                OwnerAccount: String
+                SnapshotClusterIdentifier: String
+                SnapshotIdentifier: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', obj.id),
+                    'region': obj.region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::Cluster',
+                    'options': reqParams
+                });
+            } else if (obj.type == "redshift.subnetgroup") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['SubnetIds'] = [];
+                obj.data.Description.forEach(subnet => {
+                    reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                });
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', obj.id),
+                    'region': obj.region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::ClusterSubnetGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "redshift.parametergroup") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['ParameterGroupFamily'] = obj.data.ParameterGroupFamily;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                /*
+                TODO:
+                Parameters:
+                - Parameter
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', obj.id),
+                    'region': obj.region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::ClusterParameterGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "redshift.securitygroup") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('redshift', obj.id),
+                    'region': obj.region,
+                    'service': 'redshift',
+                    'type': 'AWS::Redshift::ClusterSecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "rds.subnetgroup") {
+                reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+                reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+                reqParams.cfn['SubnetIds'] = [];
+                obj.data.Description.forEach(subnet => {
+                    reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                });
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('rds', obj.id),
+                    'region': obj.region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBSubnetGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "rds.parametergroup") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+
+                /*
+                TODO:
+                Parameters:
+                - Parameter
+                Tags:
+                - Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('rds', obj.id),
+                    'region': obj.region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBParameterGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "rds.securitygroup") {
+                reqParams.cfn['GroupDescription'] = obj.data.DBSecurityGroupDescription;
+                reqParams.cfn['EC2VpcId'] = obj.data.VpcId;
+
+                /*
+                TODO:
+                DBSecurityGroupIngress:
+                    - RDS Security Group Rule
+                Tags:
+                    - Resource Tag 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('rds', obj.id),
+                    'region': obj.region,
+                    'service': 'rds',
+                    'type': 'AWS::RDS::DBSecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "elasticache.subnetgroup") {
+                reqParams.cfn['Description'] = obj.data.CacheSubnetGroupDescription;
+                reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+                reqParams.cfn['SubnetIds'] = [];
+                obj.data.Description.forEach(subnet => {
+                    reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', obj.id),
+                    'region': obj.region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::SubnetGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "elasticache.parametergroup") {
+                reqParams.cfn['CacheParameterGroupFamily'] = obj.data.CacheParameterGroupFamily;
+                reqParams.cfn['Description'] = obj.data.Description;
+                
+                /*
+                TODO:
+                Properties
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', obj.id),
+                    'region': obj.region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::ParameterGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "elasticache.securitygroup") {
+                reqParams.cfn['Description'] = obj.data.Description;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', obj.id),
+                    'region': obj.region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::SecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudfront.distribution") {
+                reqParams.cfn['DistributionConfig'] = {};
+                reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
+                reqParams.cfn.DistributionConfig['Origins'] = [];
+                obj.data.Origins.Items.forEach(origin => {
+                    reqParams.cfn.DistributionConfig['Origins'].push({
+                        'CustomOriginConfig': {
+                            'HTTPPort': origin.CustomOriginConfig.HTTPPort,
+                            'HTTPSPort': origin.CustomOriginConfig.HTTPSPort,
+                            'OriginKeepaliveTimeout': origin.CustomOriginConfig.OriginKeepaliveTimeout,
+                            'OriginProtocolPolicy': origin.CustomOriginConfig.OriginProtocolPolicy,
+                            'OriginReadTimeout': origin.CustomOriginConfig.OriginReadTimeout,
+                            'OriginSSLProtocols': origin.CustomOriginConfig.OriginSslProtocols.Items
+                        },
+                        'DomainName': origin.DomainName,
+                        'Id': origin.Id,
+                        'OriginCustomHeaders': origin.CustomHeaders.Items,
+                        'OriginPath': origin.OriginPath,
+                        'S3OriginConfig': origin.S3OriginConfig
+                    });
+                });
+                var defaultCacheLambdaFunctionAssociations = [];
+                if (obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items && obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.length) {
+                    obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
+                        defaultCacheLambdaFunctionAssociations.push({
+                            'EventType': lambdaFunctionAssociation.EventType,
+                            'LambdaFunctionARN': lambdaFunctionAssociation.LambdaFunctionARN
+                        });
+                    });
+                }
+                reqParams.cfn.DistributionConfig['DefaultCacheBehavior'] = {
+                    'AllowedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.Items,
+                    'CachedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
+                    'Compress': obj.data.DefaultCacheBehavior.Compress,
+                    'DefaultTTL': obj.data.DefaultCacheBehavior.DefaultTTL,
+                    'FieldLevelEncryptionId': obj.data.DefaultCacheBehavior.FieldLevelEncryptionId,
+                    'ForwardedValues': {
+                        'Cookies': {
+                            'Forward': obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward,
+                            'WhitelistedNames': obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items
+                        },
+                        'Headers': obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items,
+                        'QueryString': obj.data.DefaultCacheBehavior.ForwardedValues.QueryString,
+                        'QueryStringCacheKeys': obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items
+                    },
+                    'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
+                    'MaxTTL': obj.data.DefaultCacheBehavior.MaxTTL,
+                    'MinTTL': obj.data.DefaultCacheBehavior.MinTTL,
+                    'SmoothStreaming': obj.data.DefaultCacheBehavior.SmoothStreaming,
+                    'TargetOriginId': obj.data.DefaultCacheBehavior.TargetOriginId,
+                    'TrustedSigners': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
+                    'ViewerProtocolPolicy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
+                };
+                if (obj.data.CacheBehaviors.Items && obj.data.CacheBehaviors.Items.length) {
+                    reqParams.cfn.DistributionConfig['CacheBehaviors'] = [];
+                    obj.data.CacheBehaviors.Items.forEach(cacheBehaviour => {
+                        var cacheLambdaFunctionAssociations = [];
+                        if (cacheBehaviour.LambdaFunctionAssociations.Items && cacheBehaviour.LambdaFunctionAssociations.Items.length) {
+                            cacheBehaviour.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
+                                cacheLambdaFunctionAssociations.push({
+                                    'EventType': lambdaFunctionAssociation.EventType,
+                                    'LambdaFunctionARN': lambdaFunctionAssociation.LambdaFunctionARN
+                                });
+                            });
+                        }
+                        reqParams.cfn.DistributionConfig['CacheBehaviors'].push({
+                            'AllowedMethods': cacheBehaviour.AllowedMethods.Items,
+                            'CachedMethods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
+                            'Compress': cacheBehaviour.Compress,
+                            'DefaultTTL': cacheBehaviour.DefaultTTL,
+                            'FieldLevelEncryptionId': cacheBehaviour.FieldLevelEncryptionId,
+                            'ForwardedValues': {
+                                'Cookies': {
+                                    'Forward': cacheBehaviour.ForwardedValues.Cookies.Forward,
+                                    'WhitelistedNames': cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames.Items
+                                },
+                                'Headers': cacheBehaviour.ForwardedValues.Headers.Items,
+                                'QueryString': cacheBehaviour.ForwardedValues.QueryString,
+                                'QueryStringCacheKeys': cacheBehaviour.ForwardedValues.QueryStringCacheKeys.Items
+                            },
+                            'LambdaFunctionAssociations': cacheLambdaFunctionAssociations,
+                            'MaxTTL': cacheBehaviour.MaxTTL,
+                            'MinTTL': cacheBehaviour.MinTTL,
+                            'PathPattern': cacheBehaviour.PathPattern,
+                            'SmoothStreaming': cacheBehaviour.SmoothStreaming,
+                            'TargetOriginId': cacheBehaviour.TargetOriginId,
+                            'TrustedSigners': cacheBehaviour.TrustedSigners.Items,
+                            'ViewerProtocolPolicy': cacheBehaviour.ViewerProtocolPolicy
+                        });
+                    });
+                }
+                reqParams.cfn.DistributionConfig['CustomErrorResponses'] = obj.data.CustomErrorResponses.Items;
+                reqParams.cfn.DistributionConfig['Comment'] = obj.data.Comment;
+                reqParams.cfn.DistributionConfig['PriceClass'] = obj.data.PriceClass;
+                reqParams.cfn.DistributionConfig['Enabled'] = obj.data.Enabled;
+                reqParams.cfn.DistributionConfig['ViewerCertificate'] = {
+                    'AcmCertificateArn': obj.data.ViewerCertificate.ACMCertificateArn,
+                    'CloudFrontDefaultCertificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
+                    'IamCertificateId': obj.data.ViewerCertificate.IAMCertificateId,
+                    'MinimumProtocolVersion': obj.data.ViewerCertificate.MinimumProtocolVersion,
+                    'SslSupportMethod': obj.data.ViewerCertificate.SSLSupportMethod
+                };
+                reqParams.cfn.DistributionConfig['Restrictions'] = {
+                    'GeoRestriction': {
+                        'RestrictionType': obj.data.Restrictions.GeoRestriction.RestrictionType,
+                        'Locations': obj.data.Restrictions.GeoRestriction.Items
+                    }
+                };
+                reqParams.cfn.DistributionConfig['WebACLId'] = obj.data.WebACLId;
+                reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion;
+                reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
+
+                /*
+                TODO:
+                DistributionConfig:
+                    DefaultRootObject: String
+                    Logging:
+                    Logging
+                    Origins:
+                    - Origin
+                Tags
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudfront', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudfront',
+                    'type': 'AWS::CloudFront::Distribution',
+                    'options': reqParams
+                });
+            } else if (obj.type == "kinesis.stream") {
+                reqParams.cfn['Name'] = obj.data.StreamName;
+                reqParams.cfn['RetentionPeriodHours'] = obj.data.RetentionPeriodHours;
+                reqParams.cfn['StreamEncryption'] = {
+                    'EncryptionType': obj.data.EncryptionType,
+                    'KeyId': obj.data.KeyId
+                };
+                reqParams.cfn['ShardCount'] = obj.data.Shards.length;
+
+                /*
+                TODO:
+                Tags:
+                    - Resource Tag 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('kinesis', obj.id),
+                    'region': obj.region,
+                    'service': 'kinesis',
+                    'type': 'AWS::Kinesis::Stream',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
