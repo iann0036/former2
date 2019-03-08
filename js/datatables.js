@@ -4231,31 +4231,31 @@ function updateDatatableComputeECS() {
                     name: data.clusters[0].clusterName
                 }]);
             });
-        });
 
-        unblockUI('#section-compute-ecs-clusters-datatable');
-    });
-
-    sdkcall(svc_ecs.listServices, {
-        // no params
-    }, true).then((data) => {
-        $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
-
-        data.serviceArns.forEach(serviceArn => {
-            sdkcall(svc_ecs.describeServices, {
-                services: [serviceArn]
+            sdkcall(svc_ecs.listServices, {
+                cluster: clusterArn
             }, true).then((data) => {
-                $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
-                    f2id: data.services[0].serviceArn,
-                    f2type: 'ecs.service',
-                    f2data: data.services[0],
-                    f2region: region,
-                    name: data.services[0].serviceName
-                }]);
+                $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
+        
+                data.serviceArns.forEach(serviceArn => {
+                    sdkcall(svc_ecs.describeServices, {
+                        services: [serviceArn]
+                    }, true).then((data) => {
+                        $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
+                            f2id: data.services[0].serviceArn,
+                            f2type: 'ecs.service',
+                            f2data: data.services[0],
+                            f2region: region,
+                            name: data.services[0].serviceName
+                        }]);
+                    });
+                });
+        
+                unblockUI('#section-compute-ecs-services-datatable');
             });
         });
 
-        unblockUI('#section-compute-ecs-services-datatable');
+        unblockUI('#section-compute-ecs-clusters-datatable');
     });
 
     sdkcall(svc_ecs.listTaskDefinitions, {

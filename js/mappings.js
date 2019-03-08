@@ -2909,6 +2909,199 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ElasticBeanstalk::ConfigurationTemplate',
                     'options': reqParams
                 });
+            } else if (obj.type == "opsworks.stack") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
+                reqParams.cfn['DefaultInstanceProfileArn'] = obj.data.DefaultInstanceProfileArn;
+                reqParams.cfn['DefaultOs'] = obj.data.DefaultOs;
+                reqParams.cfn['HostnameTheme'] = obj.data.HostnameTheme;
+                reqParams.cfn['DefaultAvailabilityZone'] = obj.data.DefaultAvailabilityZone;
+                reqParams.cfn['DefaultSubnetId'] = obj.data.DefaultSubnetId;
+                reqParams.cfn['CustomJson'] = obj.data.CustomJson;
+                reqParams.cfn['ConfigurationManager'] = obj.data.ConfigurationManager;
+                reqParams.cfn['ChefConfiguration'] = obj.data.ChefConfiguration;
+                reqParams.cfn['UseCustomCookbooks'] = obj.data.UseCustomCookbooks;
+                reqParams.cfn['UseOpsworksSecurityGroups'] = obj.data.UseOpsworksSecurityGroups;
+                reqParams.cfn['CustomCookbooksSource'] = obj.data.CustomCookbooksSource;
+                reqParams.cfn['DefaultSshKeyName'] = obj.data.DefaultSshKeyName;
+                reqParams.cfn['DefaultRootDeviceType'] = obj.data.DefaultRootDeviceType;
+                reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+                reqParams.cfn['Attributes'] = obj.data.Attributes;
+
+                /*
+                TODO:
+                CloneAppIds: 
+                - String
+                ClonePermissions: Boolean
+                EcsClusterArn: String
+                ElasticIps: 
+                - ElasticIp
+                RdsDbInstances: 
+                - RdsDbInstance
+                SourceStackId: String
+                Tags: 
+                - Tags
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::Stack',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.app") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Shortname'] = obj.data.Shortname;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DataSources'] = obj.data.DataSources;
+                reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.cfn['StackId'] = obj.data.StackId;
+                reqParams.cfn['AppSource'] = obj.data.AppSource;
+                reqParams.cfn['Domains'] = obj.data.Domains;
+                reqParams.cfn['EnableSsl'] = obj.data.EnableSsl;
+                reqParams.cfn['SslConfiguration'] = obj.data.SslConfiguration;
+                reqParams.cfn['Attributes'] = obj.data.Attributes;
+                reqParams.cfn['Environment'] = obj.data.Environment;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::App',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.layer") {
+                reqParams.cfn['StackId'] = obj.data.StackId;
+                reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Shortname'] = obj.data.Shortname;
+                reqParams.cfn['Attributes'] = obj.data.Attributes;
+                reqParams.cfn['CustomInstanceProfileArn'] = obj.data.CustomInstanceProfileArn;
+                reqParams.cfn['CustomJson'] = obj.data.CustomJson;
+                reqParams.cfn['CustomSecurityGroupIds'] = obj.data.CustomSecurityGroupIds;
+                reqParams.cfn['Packages'] = obj.data.Packages;
+                reqParams.cfn['VolumeConfigurations'] = obj.data.VolumeConfigurations;
+                reqParams.cfn['EnableAutoHealing'] = obj.data.EnableAutoHealing;
+                reqParams.cfn['AutoAssignElasticIps'] = obj.data.AutoAssignElasticIps;
+                reqParams.cfn['AutoAssignPublicIps'] = obj.data.AutoAssignPublicIps;
+                reqParams.cfn['CustomRecipes'] = obj.data.CustomRecipes;
+                reqParams.cfn['InstallUpdatesOnBoot'] = obj.data.InstallUpdatesOnBoot;
+                if (obj.data.LifecycleEventConfiguration && obj.data.LifecycleEventConfiguration.Shutdown) {
+                    reqParams.cfn['LifecycleEventConfiguration'] = {
+                        'ShutdownEventConfiguration': obj.data.LifecycleEventConfiguration.Shutdown
+                    };
+                }
+
+                /*
+                TODO:
+                LifecycleEventConfiguration:
+                    LifeCycleEventConfiguration
+                LoadBasedAutoScaling:
+                    LoadBasedAutoScaling
+                Tags: 
+                - Tags 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::Layer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.elbattachment") {
+                reqParams.cfn['ElasticLoadBalancerName'] = obj.data.ElasticLoadBalancerName;
+                reqParams.cfn['LayerId'] = obj.data.LayerId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::ElasticLoadBalancerAttachment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.instance") {
+                reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+                reqParams.cfn['AmiId'] = obj.data.AmiId;
+                reqParams.cfn['Architecture'] = obj.data.Architecture;
+                reqParams.cfn['AutoScalingType'] = obj.data.AutoScalingType;
+                reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.cfn['BlockDeviceMappings'] = obj.data.BlockDeviceMappings;
+                reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                if (obj.data.ElasticIp) {
+                    reqParams.cfn['ElasticIps'] = [obj.data.ElasticIp];
+                }
+                reqParams.cfn['Hostname'] = obj.data.Hostname;
+                reqParams.cfn['InstallUpdatesOnBoot'] = obj.data.InstallUpdatesOnBoot;
+                reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.cfn['LayerIds'] = obj.data.LayerIds;
+                reqParams.cfn['Os'] = obj.data.Os;
+                reqParams.cfn['RootDeviceType'] = obj.data.RootDeviceType;
+                reqParams.cfn['SshKeyName'] = obj.data.SshKeyName;
+                reqParams.cfn['StackId'] = obj.data.StackId;
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.cfn['Tenancy'] = obj.data.Tenancy;
+                reqParams.cfn['VirtualizationType'] = obj.data.VirtualizationType;
+
+                /*
+                TODO:
+                TimeBasedAutoScaling:
+                    TimeBasedAutoScaling
+                Volumes: 
+                - String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::Instance',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.elasticip") {
+                reqParams.cfn['Domain'] = obj.data.Domain;
+                reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.cfn['PublicIpv4Pool'] = obj.data.PublicIpv4Pool;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::EIP',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.networkinterface") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Ipv6Addresses'] = obj.data.Ipv6Addresses;
+                reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+                if (obj.data.PrivateIpAddresses) {
+                    reqParams.cfn['PrivateIpAddresses'] = [];
+                    obj.data.PrivateIpAddresses.forEach(privateIpAddresses => {
+                        reqParams.cfn['PrivateIpAddresses'].push({
+                            'PrivateIpAddress': privateIpAddresses.PrivateIpAddress,
+                            'Primary': privateIpAddresses.Primary
+                        });
+                    }); 
+                }
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
+                reqParams.cfn['Tags'] = obj.data.TagSet;
+                if (obj.data.Groups) {
+                    reqParams.cfn['GroupSet'] = [];
+                    obj.data.Groups.forEach(group => {
+                        reqParams.cfn['GroupSet'].push(group.GroupId);
+                    }); 
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::NetworkInterface',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
