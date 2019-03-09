@@ -603,6 +603,25 @@ $(document).ready(function(){
         $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
         $('#section-networkingandcontentdelivery-apigateway-resources-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
         $('#section-networkingandcontentdelivery-apigateway-methods-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-models-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-routes-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-account-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
 
         $('#section-managementandgovernance-cloudwatch-alarms-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudWatch);
 

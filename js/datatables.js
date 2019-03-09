@@ -5181,23 +5181,259 @@ sections.push({
 
 function updateDatatableNetworkingAndContentDeliveryApiGateway() {
     var svc_apigateway = new AWS.APIGateway({region: region});
+    var svc_apigatewayv2 = new AWS.ApiGatewayV2({region: region});
 
     blockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-usageplans-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
+
+    $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('removeAll');
+
+    // V1
+    sdkcall(svc_apigateway.getAccount, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('append', [{
+            f2id: data.cloudwatchRoleArn,
+            f2type: 'apigateway.account',
+            f2data: data,
+            f2region: region,
+            cloudwatchrolearn: data.cloudwatchRoleArn
+        }]);
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
+    });
+
+    sdkcall(svc_apigateway.getDomainNames, {
+        // no params
+    }, true).then((data) => {
+        data.items.forEach(domainName => {
+            sdkcall(svc_apigateway.getBasePathMappings, {
+                domainName: domainName.domainName
+            }, true).then((data) => {
+                data.items.forEach(basePathMapping => {
+                    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').bootstrapTable('append', [{
+                        f2id: basePathMapping.basePath,
+                        f2type: 'apigateway.basepathmapping',
+                        f2data: basePathMapping,
+                        f2region: region,
+                        basepath: basePathMapping.basePath
+                    }]);
+                });
+            });
+
+            $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('append', [{
+                f2id: domainName.domainName,
+                f2type: 'apigateway.domainname',
+                f2data: domainName,
+                f2region: region,
+                domainname: domainName.domainName
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
+    });
+
+    sdkcall(svc_apigateway.getClientCertificates, {
+        // no params
+    }, true).then((data) => {
+        data.items.forEach(clientCertificate => {
+            $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').bootstrapTable('append', [{
+                f2id: clientCertificate.clientCertificateId,
+                f2type: 'apigateway.clientcertificate',
+                f2data: clientCertificate,
+                f2region: region,
+                id: clientCertificate.clientCertificateId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable');
+    });
+
+    sdkcall(svc_apigateway.getApiKeys, {
+        // no params
+    }, true).then((data) => {
+        data.items.forEach(apiKey => {
+            $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').bootstrapTable('append', [{
+                f2id: apiKey.id,
+                f2type: 'apigateway.apikey',
+                f2data: apiKey,
+                f2region: region,
+                name: apiKey.name
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
+    });
+
+    sdkcall(svc_apigateway.getVpcLinks, {
+        // no params
+    }, true).then((data) => {
+        data.items.forEach(vpcLink => {
+            $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').bootstrapTable('append', [{
+                f2id: vpcLink.id,
+                f2type: 'apigateway.vpclink',
+                f2data: vpcLink,
+                f2region: region,
+                name: vpcLink.name
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable');
+    });
+
+    sdkcall(svc_apigateway.getUsagePlans, {
+        // no params
+    }, true).then((data) => {
+        data.items.forEach(usagePlan => {
+            sdkcall(svc_apigateway.getUsagePlanKeys, {
+                usagePlanId: usagePlan.id
+            }, true).then((data) => {
+                data.items.forEach(usagePlanKey => {
+                    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').bootstrapTable('append', [{
+                        f2id: usagePlanKey.id,
+                        f2type: 'apigateway.usageplankey',
+                        f2data: usagePlanKey,
+                        f2region: region,
+                        name: usagePlanKey.name
+                    }]);
+                });
+            });
+
+            $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').bootstrapTable('append', [{
+                f2id: usagePlan.id,
+                f2type: 'apigateway.usageplan',
+                f2data: usagePlan,
+                f2region: region,
+                name: usagePlan.name
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-usageplans-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable');
+    });
 
     sdkcall(svc_apigateway.getRestApis, {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('removeAll');
-
         data.items.forEach(api => {
+            sdkcall(svc_apigateway.getRequestValidators, {
+                restApiId: api.id
+            }, true).then((data) => {
+                if (data.item) {
+                    data.item.forEach(requestValidator => {
+                        $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').bootstrapTable('append', [{
+                            f2id: requestValidator.id,
+                            f2type: 'apigateway.requestvalidator',
+                            f2data: requestValidator,
+                            f2region: region,
+                            name: requestValidator.name
+                        }]);
+                    });
+                }
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable');
+            });
+
+            sdkcall(svc_apigateway.getDocumentationParts, {
+                restApiId: api.id
+            }, true).then((data) => {
+                if (data.item) {
+                    data.item.forEach(documentationPart => {
+                        $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').bootstrapTable('append', [{
+                            f2id: documentationPart.id,
+                            f2type: 'apigateway.documentationpart',
+                            f2data: documentationPart,
+                            f2region: region,
+                            id: documentationPart.id
+                        }]);
+                    });
+                }
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable');
+            });
+
+            sdkcall(svc_apigateway.getDocumentationVersions, {
+                restApiId: api.id
+            }, true).then((data) => {
+                if (data.item) {
+                    data.item.forEach(documentationVersion => {
+                        $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').bootstrapTable('append', [{
+                            f2id: documentationVersion.version,
+                            f2type: 'apigateway.documentationversion',
+                            f2data: documentationVersion,
+                            f2region: region,
+                            version: documentationVersion.version
+                        }]);
+                    });
+                }
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable');
+            });
+
+            sdkcall(svc_apigateway.getGatewayResponses, {
+                restApiId: api.id
+            }, true).then((data) => {
+                if (data.item) {
+                    data.item.forEach(gatewayResponse => {
+                        $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').bootstrapTable('append', [{
+                            f2id: gatewayResponse.responseType,
+                            f2type: 'apigateway.gatewayresponse',
+                            f2data: gatewayResponse,
+                            f2region: region,
+                            responsetype: gatewayResponse.responseType
+                        }]);
+                    });
+                }
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable');
+            });
+
             sdkcall(svc_apigateway.getStages, {
                 restApiId: api.id
             }, true).then((data) => {
@@ -5235,7 +5471,6 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
             }, true).then((data) => {
                 data.items.forEach(resource => {
                     Object.keys(resource.resourceMethods).forEach(resourceMethod => {
-                        console.log("Checking method " + resourceMethod + " for " + resource.id);
                         sdkcall(svc_apigateway.getMethod, {
                             httpMethod: resourceMethod,
                             resourceId: resource.id,
@@ -5264,6 +5499,38 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
             });
 
+            sdkcall(svc_apigateway.getModels, {
+                restApiId: api.id
+            }, true).then((data) => {
+                data.items.forEach(model => {
+                    $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
+                        f2id: model.id,
+                        f2type: 'apigateway.model',
+                        f2data: model,
+                        f2region: region,
+                        name: model.name
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
+            });
+
+            sdkcall(svc_apigateway.getAuthorizers, {
+                restApiId: api.id
+            }, true).then((data) => {
+                data.items.forEach(authorizer => {
+                    $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
+                        f2id: authorizer.id,
+                        f2type: 'apigateway.authorizer',
+                        f2data: authorizer,
+                        f2region: region,
+                        name: authorizer.name
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
+            });
+
             $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('append', [{
                 f2id: api.id,
                 f2type: 'apigateway.restapi',
@@ -5274,6 +5541,151 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
+    });
+
+    // V2
+    sdkcall(svc_apigatewayv2.getApis, {
+        // no params
+    }, true).then((data) => {
+        data.Items.forEach(api => {
+            sdkcall(svc_apigatewayv2.getStages, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(stage => {
+                    $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
+                        f2id: stage.StageName,
+                        f2type: 'apigatewayv2.stage',
+                        f2data: stage,
+                        f2region: region,
+                        name: stage.StageName
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+            });
+
+            sdkcall(svc_apigatewayv2.getDeployments, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(deployment => {
+                    $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
+                        f2id: deployment.DeploymentId,
+                        f2type: 'apigatewayv2.stage',
+                        f2data: deployment,
+                        f2region: region,
+                        id: deployment.DeploymentId
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+            });
+
+            sdkcall(svc_apigatewayv2.getModels, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(model => {
+                    $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
+                        f2id: model.ModelId,
+                        f2type: 'apigatewayv2.model',
+                        f2data: model,
+                        f2region: region,
+                        name: model.Name
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
+            });
+
+            sdkcall(svc_apigatewayv2.getAuthorizers, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(authorizer => {
+                    $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
+                        f2id: authorizer.AuthorizerId,
+                        f2type: 'apigatewayv2.authorizer',
+                        f2data: authorizer,
+                        f2region: region,
+                        name: authorizer.Name
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
+            });
+
+            sdkcall(svc_apigatewayv2.getRoutes, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(route => {
+                    sdkcall(svc_apigatewayv2.getRouteResponses, {
+                        ApiId: api.ApiId,
+                        RouteId: route.RouteId
+                    }, true).then((data) => {
+                        data.Items.forEach(routeResponse => {
+                            $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
+                                f2id: routeResponse.RouteResponseId,
+                                f2type: 'apigatewayv2.routeresponse',
+                                f2data: routeResponse,
+                                f2region: region,
+                                key: routeResponse.RouteResponseKey
+                            }]);
+                        });
+                    });
+
+                    $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
+                        f2id: route.RouteId,
+                        f2type: 'apigatewayv2.route',
+                        f2data: route,
+                        f2region: region,
+                        key: route.RouteKey
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
+                unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
+            });
+
+            sdkcall(svc_apigatewayv2.getIntegrations, {
+                ApiId: api.ApiId
+            }, true).then((data) => {
+                data.Items.forEach(integration => {
+                    sdkcall(svc_apigatewayv2.getIntegrationResponses, {
+                        ApiId: api.ApiId,
+                        IntegrationId: integration.IntegrationId
+                    }, true).then((data) => {
+                        data.Items.forEach(integrationResponse => {
+                            $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
+                                f2id: integrationResponse.IntegrationResponseId,
+                                f2type: 'apigatewayv2.integrationresponse',
+                                f2data: integrationResponse,
+                                f2region: region,
+                                key: integrationResponse.IntegrationResponseKey
+                            }]);
+                        });
+                    });
+
+                    $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
+                        f2id: integration.IntegrationId,
+                        f2type: 'apigatewayv2.integration',
+                        f2data: integration,
+                        f2region: region,
+                        key: integration.IntegrationKey
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
+                unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+            });
+
+            $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('append', [{
+                f2id: api.ApiId,
+                f2type: 'apigatewayv2.api',
+                f2data: api,
+                f2region: region,
+                name: api.Name
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
     });
 }
 
