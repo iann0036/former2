@@ -3063,7 +3063,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "ec2.elasticip") {
                 reqParams.cfn['Domain'] = obj.data.Domain;
                 reqParams.cfn['InstanceId'] = obj.data.InstanceId;
-                reqParams.cfn['PublicIpv4Pool'] = obj.data.PublicIpv4Pool;
+                reqParams.cfn['PublicIpv4Pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
@@ -3866,6 +3866,38 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'cloudwatch',
                     'type': 'AWS::CloudWatch::Alarm',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.launchtemplate") {
+                reqParams.cfn['LaunchTemplateName'] = obj.data.LaunchTemplateName;
+                reqParams.cfn['LaunchTemplateData'] = {
+                    'SecurityGroups': obj.data.LaunchTemplateData.SecurityGroups,
+                    'TagSpecifications': obj.data.LaunchTemplateData.TagSpecifications,
+                    'UserData': obj.data.LaunchTemplateData.UserData,
+                    'InstanceInitiatedShutdownBehavior': obj.data.LaunchTemplateData.InstanceInitiatedShutdownBehavior,
+                    'BlockDeviceMappings': obj.data.LaunchTemplateData.BlockDeviceMappings,
+                    'IamInstanceProfile': obj.data.LaunchTemplateData.IamInstanceProfile,
+                    'KernelId': obj.data.LaunchTemplateData.KernelId,
+                    'SecurityGroupIds': obj.data.LaunchTemplateData.SecurityGroupIds,
+                    'EbsOptimized': obj.data.LaunchTemplateData.EbsOptimized,
+                    'KeyName': obj.data.LaunchTemplateData.KeyName,
+                    'DisableApiTermination': obj.data.LaunchTemplateData.DisableApiTermination,
+                    'ElasticGpuSpecifications': obj.data.LaunchTemplateData.ElasticGpuSpecifications,
+                    'Placement': obj.data.LaunchTemplateData.Placement,
+                    'InstanceMarketOptions': obj.data.LaunchTemplateData.InstanceMarketOptions,
+                    'NetworkInterfaces': obj.data.LaunchTemplateData.NetworkInterfaces,
+                    'ImageId': obj.data.LaunchTemplateData.ImageId,
+                    'InstanceType': obj.data.LaunchTemplateData.InstanceType,
+                    'RamDiskId': obj.data.LaunchTemplateData.RamDiskId,
+                    'Monitoring': obj.data.LaunchTemplateData.Monitoring,
+                    'CreditSpecification': obj.data.LaunchTemplateData.CreditSpecification
+                };
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::LaunchTemplate',
                     'options': reqParams
                 });
             } else {

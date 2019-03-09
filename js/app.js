@@ -514,6 +514,7 @@ $(document).ready(function(){
             updateDatatableNetworkingAndContentDeliveryVPC();
             updateDatatableNetworkingAndContentDeliveryCloudFront();
             updateDatatableNetworkingAndContentDeliveryRoute53();
+            updateDatatableNetworkingAndContentDeliveryApiGateway();
             updateDatatableManagementAndGovernanceCloudWatch();
             updateDatatableManagementAndGovernanceCloudTrail();
             updateDatatableManagementAndGovernanceOpsWorks();
@@ -596,6 +597,12 @@ $(document).ready(function(){
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
         $('#section-networkingandcontentdelivery-route53-records-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
         $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
+
+        $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
+        $('#section-networkingandcontentdelivery-apigateway-methods-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
 
         $('#section-managementandgovernance-cloudwatch-alarms-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudWatch);
 

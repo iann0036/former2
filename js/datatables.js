@@ -91,14 +91,14 @@ function sdkcall(method, params, alert_on_errors) { // TODO: Add auto NextToken,
 }
 
 /* ========================================================================== */
-// Lambda
+// VPC
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Compute',
-    'service': 'Lambda',
+    'category': 'Networking &amp; Content Delivery',
+    'service': 'VPC',
     'resourcetypes': {
-        'Functions': {
+        'VPCs': {
             'columns': [
                 [
                     {
@@ -109,183 +109,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Function Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'runtime',
-                        title: 'Runtime',
-                        sortable: true,
-                        align: 'center',
-                        formatter: lambdaRuntimeFormatter,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        field: 'codesize',
-                        title: 'Code Size',
-                        sortable: true,
-                        align: 'center',
-                        formatter: byteSizeFormatter,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        field: 'lastmodified',
-                        title: 'Last Modified',
-                        sortable: true,
-                        align: 'center',
-                        formatter: timeAgoFormatter,
-                        footerFormatter: textFormatter
-                    }
-                ]
-            ]
-        },
-        'Aliases': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Alias Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'functionname',
-                        title: 'Function Name',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'functionversion',
-                        title: 'Function Version',
-                        sortable: true,
-                        align: 'center',
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        align: 'center',
-                        footerFormatter: textFormatter
-                    }
-                ]
-            ]
-        }
-    }
-});
-
-function updateDatatableComputeLambda() {
-    var svc_lambda = new AWS.Lambda({region: region});
-
-    blockUI('#section-compute-lambda-functions-datatable');
-    blockUI('#section-compute-lambda-aliases-datatable');
-
-    sdkcall(svc_lambda.listFunctions, {
-        MaxItems: 100
-    }, true).then((data) => {
-        $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
-
-        data.Functions.forEach(lambdaFunction => {
-            sdkcall(svc_lambda.getFunction, {
-                FunctionName: lambdaFunction.FunctionArn
-            }, true).then((data) => {
-                $('#section-compute-lambda-functions-datatable').bootstrapTable('append', [{
-                    f2id: data.Configuration.FunctionArn,
-                    f2type: 'lambda.function',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Configuration.FunctionName,
-                    description: data.Configuration.Description,
-                    lastmodified: data.Configuration.LastModified,
-                    runtime: data.Configuration.Runtime,
-                    codesize: data.Configuration.CodeSize
-                }]);
-            });
-
-            sdkcall(svc_lambda.listAliasess, {
-                FunctionName: lambdaFunction.FunctionArn
-            }, true).then((data) => {
-                data.Aliases.forEach(alias => {
-                    $('#section-compute-lambda-aliases-datatable').bootstrapTable('append', [{
-                        f2id: alias.AliasArn,
-                        f2type: 'lambda.alias',
-                        f2data: alias,
-                        f2region: region,
-                        name: alias.Name,
-                        functionname: lambdaFunction.FunctionName,
-                        functionversion: alias.FunctionVersion,
-                        description: data.Description
-                    }]);
-                });
-            });
-        });
-
-        unblockUI('#section-compute-lambda-functions-datatable');
-        unblockUI('#section-compute-lambda-aliases-datatable');
-    });
-}
-
-/* ========================================================================== */
-// S3
-/* ========================================================================== */
-
-sections.push({
-    'category': 'Storage',
-    'service': 'S3',
-    'resourcetypes': {
-        'Buckets': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Bucket Name',
-                        field: 'name',
+                        title: 'VPC ID',
+                        field: 'vpcid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -311,7 +136,7 @@ sections.push({
                 ]
             ]
         },
-        'Bucket Policies': {
+        'Subnets': {
             'columns': [
                 [
                     {
@@ -322,8 +147,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Bucket Name',
-                        field: 'bucketname',
+                        title: 'Subnet ID',
+                        field: 'subnetid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -338,11 +163,343 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'policylength',
-                        title: 'Policy Length',
+                        field: 'xxx',
+                        title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Internet Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Gateway ID',
+                        field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Customer Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Gateway ID',
+                        field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Virtual Private Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Gateway ID',
+                        field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Elastic IPs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'IP',
+                        field: 'ip',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'DHCP Options': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'DHCP Options ID',
+                        field: 'dhcpoptionsid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPN Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Connection ID',
+                        field: 'connectionid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Peering Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Connection ID',
+                        field: 'connectionid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network ACLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Network ACL ID',
+                        field: 'networkaclid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Route Tables': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Route Table ID',
+                        field: 'routetableid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -352,46 +509,408 @@ sections.push({
     }
 });
 
-function updateDatatableStorageS3() {
-    var svc_s3 = new AWS.S3({region: region});
+function updateDatatableNetworkingAndContentDeliveryVPC() {
+    var svc_ec2 = new AWS.EC2({region: region});
 
-    blockUI('#section-storage-s3-buckets-datatable');
-    blockUI('#section-storage-s3-bucketpolicies-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
 
-    sdkcall(svc_s3.listBuckets, {
+    sdkcall(svc_ec2.describeVpcs, {
         // no params
     }, true).then((data) => {
-        $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
-        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
 
-        data.Buckets.forEach(bucket => {
-            $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
-                f2id: bucket.Name,
-                f2type: 's3.bucket',
-                f2data: bucket,
-                f2region: region,
-                name: bucket.Name,
-                creationdate: bucket.CreationDate
-            }]);
+        data.Vpcs.forEach(vpc => {
+            sdkcall(svc_ec2.describeVpcAttribute, {
+                Attribute: "enableDnsSupport", 
+                VpcId: vpc.VpcId
+            }, true).then((dnsSupport) => {
+                sdkcall(svc_ec2.describeVpcAttribute, {
+                    Attribute: "enableDnsHostnames", 
+                    VpcId: vpc.VpcId
+                }, true).then((dnsHostnames) => {
+                    vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
+                    vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
 
-            sdkcall(svc_s3.getBucketPolicy, {
-                Bucket: bucket.Name
-            }, false).then((data) => {
-                data['Bucket'] = bucket.Name;
-                $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
-                    f2id: bucket.Name + "_Policy",
-                    f2type: 's3.bucketpolicy',
-                    f2data: data,
-                    f2region: region,
-                    bucketname: bucket.Name,
-                    policy: data.Policy,
-                    policylength: data.Policy.length
-                }]);
-            }).catch(() => {});
+                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('append', [{
+                        f2id: vpc.VpcId,
+                        f2type: 'ec2.vpc',
+                        f2data: vpc,
+                        f2region: region,
+                        vpcid: vpc.VpcId
+                    }]);
+                });
+            });
         });
 
-        unblockUI('#section-storage-s3-buckets-datatable');
-        unblockUI('#section-storage-s3-bucketpolicies-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
+    });
+
+    sdkcall(svc_ec2.describeSubnets, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
+
+        data.Subnets.forEach(subnet => {
+            $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('append', [{
+                f2id: subnet.SubnetId,
+                f2type: 'ec2.subnet',
+                f2data: subnet,
+                f2region: region,
+                subnetid: subnet.SubnetId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
+    });
+
+    sdkcall(svc_ec2.describeInternetGateways, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
+
+        data.InternetGateways.forEach(internetGateway => {
+            $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('append', [{
+                f2id: internetGateway.InternetGatewayId,
+                f2type: 'ec2.internetgateway',
+                f2data: internetGateway,
+                f2region: region,
+                gatewayid: internetGateway.InternetGatewayId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
+    });
+
+    sdkcall(svc_ec2.describeCustomerGateways, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
+
+        data.CustomerGateways.forEach(customerGateway => {
+            $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('append', [{
+                f2id: customerGateway.CustomerGatewayId,
+                f2type: 'ec2.customergateway',
+                f2data: customerGateway,
+                f2region: region,
+                gatewayid: customerGateway.CustomerGatewayId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
+    });
+
+    sdkcall(svc_ec2.describeVpnGateways, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
+
+        data.VpnGateways.forEach(vpnGateway => {
+            $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('append', [{
+                f2id: vpnGateway.VpnGatewayId,
+                f2type: 'ec2.virtualprivategateway',
+                f2data: vpnGateway,
+                f2region: region,
+                gatewayid: vpnGateway.VpnGatewayId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
+    });
+
+    sdkcall(svc_ec2.describeAddresses, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
+
+        data.Addresses.forEach(address => {
+            $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
+                f2id: address.AllocationId,
+                f2type: 'ec2.elasticip',
+                f2data: address,
+                f2region: region,
+                ip: address.PublicIp
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
+    });
+
+    sdkcall(svc_ec2.describeDhcpOptions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
+
+        data.DhcpOptions.forEach(dhcpOptions => {
+            $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('append', [{
+                f2id: dhcpOptions.DhcpOptionsId,
+                f2type: 'ec2.dhcpoptions',
+                f2data: dhcpOptions,
+                f2region: region,
+                dhcpoptionsid: dhcpOptions.DhcpOptionsId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
+    });
+
+    sdkcall(svc_ec2.describeVpnConnections, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
+
+        data.VpnConnections.forEach(vpnConnection => {
+            $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('append', [{
+                f2id: vpnConnection.VpnConnectionId,
+                f2type: 'ec2.vpnconnection',
+                f2data: vpnConnection,
+                f2region: region,
+                connectionid: vpnConnection.VpnConnectionId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
+    });
+
+    sdkcall(svc_ec2.describeVpcPeeringConnections, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
+
+        data.VpcPeeringConnections.forEach(peeringConnection => {
+            $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('append', [{
+                f2id: peeringConnection.PeeringConnectionId,
+                f2type: 'ec2.peeringconnection',
+                f2data: peeringConnection,
+                f2region: region,
+                connectionid: peeringConnection.PeeringConnectionId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
+    });
+
+    sdkcall(svc_ec2.describeNetworkAcls, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
+
+        data.NetworkAcls.forEach(networkAcl => {
+            $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('append', [{
+                f2id: networkAcl.NetworkAclId,
+                f2type: 'ec2.networkacl',
+                f2data: networkAcl,
+                f2region: region,
+                networkaclid: networkAcl.NetworkAclId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
+    });
+
+    sdkcall(svc_ec2.describeRouteTables, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
+
+        data.RouteTables.forEach(routeTable => {
+            $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
+                f2id: routeTable.RouteTableId,
+                f2type: 'ec2.routetable',
+                f2data: routeTable,
+                f2region: region,
+                routetableid: routeTable.RouteTableId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Route 53
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Networking &amp; Content Delivery',
+    'service': 'Route 53',
+    'resourcetypes': {
+        'Hosted Zones': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Hosted Zone ID',
+                        field: 'hostedzoneid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Records': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Health Checks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableNetworkingAndContentDeliveryRoute53() {
+    var svc_route53 = new AWS.Route53({region: region});
+
+    blockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-records-datatable');
+    blockUI('#section-networkingandcontentdelivery-healthchecks-records-datatable');
+
+    sdkcall(svc_route53.listHostedZones, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
+
+        data.HostedZones.forEach(hostedZone => {
+            sdkcall(svc_route53.listResourceRecordSets, {
+                HostedZoneId: hostedZone.Id.split("/").pop()
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
+        
+                data.ResourceRecordSets.forEach(resourceRecordSet => {
+                    resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
+
+                    $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
+                        f2id: resourceRecordSet.Name,
+                        f2type: 'route53.record',
+                        f2data: resourceRecordSet,
+                        f2region: region,
+                        name: resourceRecordSet.Name,
+                        type: resourceRecordSet.Type
+                    }]);
+                });
+        
+                unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
+            });
+
+            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('append', [{
+                f2id: hostedZone.Id.split("/").pop(),
+                f2type: 'route53.hostedzone',
+                f2data: hostedZone,
+                f2region: region,
+                hostedzoneid: hostedZone.Id.split("/").pop()
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
+    });
+
+    sdkcall(svc_route53.listHealthChecks, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
+
+        data.HealthChecks.forEach(healthCheck => {
+            $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('append', [{
+                f2id: healthCheck.Id,
+                f2type: 'route53.healthcheck',
+                f2data: healthCheck,
+                f2region: region,
+                id: healthCheck.Id
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-healthchecks-datatable');
     });
 }
 
@@ -1074,15 +1593,23 @@ function updateDatatableComputeEC2() {
     }, true).then((data) => {
         $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('removeAll');
 
-        data.LaunchTemplates.forEach(launchTemplate => {
-            $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('append', [{
-                f2id: launchTemplate.LaunchTemplateName,
-                f2type: 'ec2.launchtemplate',
-                f2data: launchTemplate,
-                f2region: region,
-                name: launchTemplate.LaunchTemplateName
-            }]);
-        });
+        if (data.LaunchTemplates) {
+            data.LaunchTemplates.forEach(launchTemplate => {
+                sdkcall(svc_ec2.describeLaunchTemplateVersions, {
+                    LaunchTemplateId: launchTemplate.LaunchTemplateId,
+                    Versions: [launchTemplate.LatestVersionNumber.toString()]
+                }, true).then((data) => {
+                    launchTemplate = data.LaunchTemplateVersions[0];
+                    $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('append', [{
+                        f2id: launchTemplate.LaunchTemplateName,
+                        f2type: 'ec2.launchtemplate',
+                        f2data: launchTemplate,
+                        f2region: region,
+                        name: launchTemplate.LaunchTemplateName
+                    }]);
+                });
+            });
+        }
 
         unblockUI('#section-compute-ec2-launchtemplates-datatable');
     });
@@ -1235,14 +1762,14 @@ function updateDatatableComputeEC2() {
 }
 
 /* ========================================================================== */
-// VPC
+// Lambda
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Networking &amp; Content Delivery',
-    'service': 'VPC',
+    'category': 'Compute',
+    'service': 'Lambda',
     'resourcetypes': {
-        'VPCs': {
+        'Functions': {
             'columns': [
                 [
                     {
@@ -1253,8 +1780,183 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'VPC ID',
-                        field: 'vpcid',
+                        title: 'Function Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'runtime',
+                        title: 'Runtime',
+                        sortable: true,
+                        align: 'center',
+                        formatter: lambdaRuntimeFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'codesize',
+                        title: 'Code Size',
+                        sortable: true,
+                        align: 'center',
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'lastmodified',
+                        title: 'Last Modified',
+                        sortable: true,
+                        align: 'center',
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ]
+            ]
+        },
+        'Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Alias Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'functionname',
+                        title: 'Function Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'functionversion',
+                        title: 'Function Version',
+                        sortable: true,
+                        align: 'center',
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        align: 'center',
+                        footerFormatter: textFormatter
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeLambda() {
+    var svc_lambda = new AWS.Lambda({region: region});
+
+    blockUI('#section-compute-lambda-functions-datatable');
+    blockUI('#section-compute-lambda-aliases-datatable');
+
+    sdkcall(svc_lambda.listFunctions, {
+        MaxItems: 100
+    }, true).then((data) => {
+        $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
+
+        data.Functions.forEach(lambdaFunction => {
+            sdkcall(svc_lambda.getFunction, {
+                FunctionName: lambdaFunction.FunctionArn
+            }, true).then((data) => {
+                $('#section-compute-lambda-functions-datatable').bootstrapTable('append', [{
+                    f2id: data.Configuration.FunctionArn,
+                    f2type: 'lambda.function',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Configuration.FunctionName,
+                    description: data.Configuration.Description,
+                    lastmodified: data.Configuration.LastModified,
+                    runtime: data.Configuration.Runtime,
+                    codesize: data.Configuration.CodeSize
+                }]);
+            });
+
+            sdkcall(svc_lambda.listAliasess, {
+                FunctionName: lambdaFunction.FunctionArn
+            }, true).then((data) => {
+                data.Aliases.forEach(alias => {
+                    $('#section-compute-lambda-aliases-datatable').bootstrapTable('append', [{
+                        f2id: alias.AliasArn,
+                        f2type: 'lambda.alias',
+                        f2data: alias,
+                        f2region: region,
+                        name: alias.Name,
+                        functionname: lambdaFunction.FunctionName,
+                        functionversion: alias.FunctionVersion,
+                        description: data.Description
+                    }]);
+                });
+            });
+        });
+
+        unblockUI('#section-compute-lambda-functions-datatable');
+        unblockUI('#section-compute-lambda-aliases-datatable');
+    });
+}
+
+/* ========================================================================== */
+// S3
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Storage',
+    'service': 'S3',
+    'resourcetypes': {
+        'Buckets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Bucket Name',
+                        field: 'name',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1280,7 +1982,7 @@ sections.push({
                 ]
             ]
         },
-        'Subnets': {
+        'Bucket Policies': {
             'columns': [
                 [
                     {
@@ -1291,8 +1993,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Subnet ID',
-                        field: 'subnetid',
+                        title: 'Bucket Name',
+                        field: 'bucketname',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1307,343 +2009,11 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'policylength',
+                        title: 'Policy Length',
                         sortable: true,
                         editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Internet Gateways': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Gateway ID',
-                        field: 'gatewayid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Customer Gateways': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Gateway ID',
-                        field: 'gatewayid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Virtual Private Gateways': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Gateway ID',
-                        field: 'gatewayid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Elastic IPs': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'IP',
-                        field: 'ip',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'DHCP Options': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'DHCP Options ID',
-                        field: 'dhcpoptionsid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'VPN Connections': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Connection ID',
-                        field: 'connectionid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Peering Connections': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Connection ID',
-                        field: 'connectionid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Network ACLs': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Network ACL ID',
-                        field: 'networkaclid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Route Tables': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Route Table ID',
-                        field: 'routetableid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
+                        formatter: byteSizeFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -1653,221 +2023,46 @@ sections.push({
     }
 });
 
-function updateDatatableNetworkingAndContentDeliveryVPC() {
-    var svc_ec2 = new AWS.EC2({region: region});
+function updateDatatableStorageS3() {
+    var svc_s3 = new AWS.S3({region: region});
 
-    blockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
-    blockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
+    blockUI('#section-storage-s3-buckets-datatable');
+    blockUI('#section-storage-s3-bucketpolicies-datatable');
 
-    sdkcall(svc_ec2.describeVpcs, {
+    sdkcall(svc_s3.listBuckets, {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
+        $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
+        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
 
-        data.Vpcs.forEach(vpc => {
-            sdkcall(svc_ec2.describeVpcAttribute, {
-                Attribute: "enableDnsSupport", 
-                VpcId: vpc.VpcId
-            }, true).then((dnsSupport) => {
-                sdkcall(svc_ec2.describeVpcAttribute, {
-                    Attribute: "enableDnsHostnames", 
-                    VpcId: vpc.VpcId
-                }, true).then((dnsHostnames) => {
-                    vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
-                    vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
-
-                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('append', [{
-                        f2id: vpc.VpcId,
-                        f2type: 'ec2.vpc',
-                        f2data: vpc,
-                        f2region: region,
-                        vpcid: vpc.VpcId
-                    }]);
-                });
-            });
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
-    });
-
-    sdkcall(svc_ec2.describeSubnets, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
-
-        data.Subnets.forEach(subnet => {
-            $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('append', [{
-                f2id: subnet.SubnetId,
-                f2type: 'ec2.subnet',
-                f2data: subnet,
+        data.Buckets.forEach(bucket => {
+            $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
+                f2id: bucket.Name,
+                f2type: 's3.bucket',
+                f2data: bucket,
                 f2region: region,
-                subnetid: subnet.SubnetId
+                name: bucket.Name,
+                creationdate: bucket.CreationDate
             }]);
+
+            sdkcall(svc_s3.getBucketPolicy, {
+                Bucket: bucket.Name
+            }, false).then((data) => {
+                data['Bucket'] = bucket.Name;
+                $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+                    f2id: bucket.Name + "_Policy",
+                    f2type: 's3.bucketpolicy',
+                    f2data: data,
+                    f2region: region,
+                    bucketname: bucket.Name,
+                    policy: data.Policy,
+                    policylength: data.Policy.length
+                }]);
+            }).catch(() => {});
         });
 
-        unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
-    });
-
-    sdkcall(svc_ec2.describeInternetGateways, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
-
-        data.InternetGateways.forEach(internetGateway => {
-            $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('append', [{
-                f2id: internetGateway.InternetGatewayId,
-                f2type: 'ec2.internetgateway',
-                f2data: internetGateway,
-                f2region: region,
-                gatewayid: internetGateway.InternetGatewayId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
-    });
-
-    sdkcall(svc_ec2.describeCustomerGateways, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
-
-        data.CustomerGateways.forEach(customerGateway => {
-            $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('append', [{
-                f2id: customerGateway.CustomerGatewayId,
-                f2type: 'ec2.customergateway',
-                f2data: customerGateway,
-                f2region: region,
-                gatewayid: customerGateway.CustomerGatewayId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
-    });
-
-    sdkcall(svc_ec2.describeVpnGateways, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
-
-        data.VpnGateways.forEach(vpnGateway => {
-            $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('append', [{
-                f2id: vpnGateway.VpnGatewayId,
-                f2type: 'ec2.virtualprivategateway',
-                f2data: vpnGateway,
-                f2region: region,
-                gatewayid: vpnGateway.VpnGatewayId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
-    });
-
-    sdkcall(svc_ec2.describeAddresses, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
-
-        data.Addresses.forEach(address => {
-            $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
-                f2id: address.AllocationId,
-                f2type: 'ec2.elasticip',
-                f2data: address,
-                f2region: region,
-                ip: address.PublicIp
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
-    });
-
-    sdkcall(svc_ec2.describeDhcpOptions, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
-
-        data.DhcpOptions.forEach(dhcpOptions => {
-            $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('append', [{
-                f2id: dhcpOptions.DhcpOptionsId,
-                f2type: 'ec2.dhcpoptions',
-                f2data: dhcpOptions,
-                f2region: region,
-                dhcpoptionsid: dhcpOptions.DhcpOptionsId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
-    });
-
-    sdkcall(svc_ec2.describeVpnConnections, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
-
-        data.VpnConnections.forEach(vpnConnection => {
-            $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('append', [{
-                f2id: vpnConnection.VpnConnectionId,
-                f2type: 'ec2.vpnconnection',
-                f2data: vpnConnection,
-                f2region: region,
-                connectionid: vpnConnection.VpnConnectionId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
-    });
-
-    sdkcall(svc_ec2.describeVpcPeeringConnections, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
-
-        data.VpcPeeringConnections.forEach(peeringConnection => {
-            $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('append', [{
-                f2id: peeringConnection.PeeringConnectionId,
-                f2type: 'ec2.peeringconnection',
-                f2data: peeringConnection,
-                f2region: region,
-                connectionid: peeringConnection.PeeringConnectionId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
-    });
-
-    sdkcall(svc_ec2.describeNetworkAcls, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
-
-        data.NetworkAcls.forEach(networkAcl => {
-            $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('append', [{
-                f2id: networkAcl.NetworkAclId,
-                f2type: 'ec2.networkacl',
-                f2data: networkAcl,
-                f2region: region,
-                networkaclid: networkAcl.NetworkAclId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
-    });
-
-    sdkcall(svc_ec2.describeRouteTables, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
-
-        data.RouteTables.forEach(routeTable => {
-            $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
-                f2id: routeTable.RouteTableId,
-                f2type: 'ec2.routetable',
-                f2data: routeTable,
-                f2region: region,
-                routetableid: routeTable.RouteTableId
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
+        unblockUI('#section-storage-s3-buckets-datatable');
+        unblockUI('#section-storage-s3-bucketpolicies-datatable');
     });
 }
 
@@ -2349,193 +2544,6 @@ function updateDatatableDatabaseElastiCache() {
         });
 
         unblockUI('#section-database-elasticache-securitygroups-datatable');
-    });
-}
-
-/* ========================================================================== */
-// Route 53
-/* ========================================================================== */
-
-sections.push({
-    'category': 'Networking &amp; Content Delivery',
-    'service': 'Route 53',
-    'resourcetypes': {
-        'Hosted Zones': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Hosted Zone ID',
-                        field: 'hostedzoneid',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Records': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Health Checks': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'ID',
-                        field: 'id',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        }
-    }
-});
-
-function updateDatatableNetworkingAndContentDeliveryRoute53() {
-    var svc_route53 = new AWS.Route53({region: region});
-
-    blockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
-    blockUI('#section-networkingandcontentdelivery-route53-records-datatable');
-    blockUI('#section-networkingandcontentdelivery-healthchecks-records-datatable');
-
-    sdkcall(svc_route53.listHostedZones, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
-
-        data.HostedZones.forEach(hostedZone => {
-            sdkcall(svc_route53.listResourceRecordSets, {
-                HostedZoneId: hostedZone.Id.split("/").pop()
-            }, true).then((data) => {
-                $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
-        
-                data.ResourceRecordSets.forEach(resourceRecordSet => {
-                    resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
-
-                    $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
-                        f2id: resourceRecordSet.Name,
-                        f2type: 'route53.record',
-                        f2data: resourceRecordSet,
-                        f2region: region,
-                        name: resourceRecordSet.Name,
-                        type: resourceRecordSet.Type
-                    }]);
-                });
-        
-                unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
-            });
-
-            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('append', [{
-                f2id: hostedZone.Id.split("/").pop(),
-                f2type: 'route53.hostedzone',
-                f2data: hostedZone,
-                f2region: region,
-                hostedzoneid: hostedZone.Id.split("/").pop()
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
-    });
-
-    sdkcall(svc_route53.listHealthChecks, {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
-
-        data.HealthChecks.forEach(healthCheck => {
-            $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('append', [{
-                f2id: healthCheck.Id,
-                f2type: 'route53.healthcheck',
-                f2data: healthCheck,
-                f2region: region,
-                id: healthCheck.Id
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-route53-healthchecks-datatable');
     });
 }
 
@@ -4283,6 +4291,989 @@ function updateDatatableComputeECS() {
         });
 
         unblockUI('#section-compute-ecs-taskdefinitions-datatable');
+    });
+}
+
+/* ========================================================================== */
+// API Gateway
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Networking &amp; Content Delivery',
+    'service': 'API Gateway',
+    'resourcetypes': {
+        'REST APIs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'WebSocket APIs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Stages': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Deployments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resources': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Methods': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Routes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Route Responses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Integrations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Integration Responses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Account': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'CloudWatch Role ARN',
+                        field: 'rolearn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                []
+            ]
+        },
+        'API Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Key ID',
+                        field: 'keyid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Authorizers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Base Path Mappings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Client Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Documentation Parts': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Documentation Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Domain Names': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Gateway Responses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Models': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Request Validators': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Usage Plans': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Usage Plan Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPC Links': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableNetworkingAndContentDeliveryApiGateway() {
+    var svc_apigateway = new AWS.APIGateway({region: region});
+
+    blockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
+
+    sdkcall(svc_apigateway.getRestApis, {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('removeAll');
+
+        data.items.forEach(api => {
+            sdkcall(svc_apigateway.getStages, {
+                restApiId: api.id
+            }, true).then((data) => {
+                data.item.forEach(stage => {
+                    $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
+                        f2id: stage.stageName,
+                        f2type: 'apigateway.stage',
+                        f2data: stage,
+                        f2region: region,
+                        name: stage.stageName
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+            });
+
+            sdkcall(svc_apigateway.getDeployments, {
+                restApiId: api.id
+            }, true).then((data) => {
+                data.items.forEach(deployment => {
+                    $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
+                        f2id: deployment.id,
+                        f2type: 'apigateway.deployment',
+                        f2data: deployment,
+                        f2region: region,
+                        id: deployment.id
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
+            });
+
+            sdkcall(svc_apigateway.getResources, {
+                restApiId: api.id
+            }, true).then((data) => {
+                data.items.forEach(resource => {
+                    Object.keys(resource.resourceMethods).forEach(resourceMethod => {
+                        console.log("Checking method " + resourceMethod + " for " + resource.id);
+                        sdkcall(svc_apigateway.getMethod, {
+                            httpMethod: resourceMethod,
+                            resourceId: resource.id,
+                            restApiId: api.id
+                        }, true).then((data) => {
+                            $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('append', [{
+                                f2id: resource.id + "-" + data.httpMethod,
+                                f2type: 'apigateway.method',
+                                f2data: data,
+                                f2region: region,
+                                httpmethod: data.httpMethod
+                            }]);
+                        });
+                    });
+
+                    $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('append', [{
+                        f2id: resource.id,
+                        f2type: 'apigateway.resource',
+                        f2data: resource,
+                        f2region: region,
+                        id: resource.id
+                    }]);
+                });
+
+                unblockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
+                unblockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
+            });
+
+            $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('append', [{
+                f2id: api.id,
+                f2type: 'apigateway.restapi',
+                f2data: api,
+                f2region: region,
+                name: api.name
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
     });
 }
 
