@@ -2062,11 +2062,11 @@ function updateDatatableDatabaseRDS() {
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-rds-subnetgroups-datatable').bootstrapTable('append', [{
-                f2id: subnetGroup.Name,
+                f2id: subnetGroup.DBSubnetGroupArn,
                 f2type: 'rds.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.Name
+                name: subnetGroup.DBSubnetGroupName
             }]);
         });
 
@@ -2080,11 +2080,12 @@ function updateDatatableDatabaseRDS() {
 
         data.DBParameterGroups.forEach(parameterGroup => {
             $('#section-database-rds-parametergroups-datatable').bootstrapTable('append', [{
-                f2id: parameterGroup.Name,
+                f2id: parameterGroup.DBParameterGroupArn,
                 f2type: 'rds.parametergroup',
                 f2data: parameterGroup,
                 f2region: region,
-                name: parameterGroup.Name
+                name: parameterGroup.DBParameterGroupName,
+                family: parameterGroup.DBParameterGroupFamily
             }]);
         });
 
@@ -2319,11 +2320,13 @@ function updateDatatableDatabaseElastiCache() {
 
         data.CacheParameterGroups.forEach(parameterGroup => {
             $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('append', [{
-                f2id: parameterGroup.Name,
+                f2id: parameterGroup.CacheParameterGroupName,
                 f2type: 'elasticache.parametergroup',
                 f2data: parameterGroup,
                 f2region: region,
-                name: parameterGroup.Name
+                name: parameterGroup.CacheParameterGroupName,
+                family: parameterGroup.CacheParameterGroupFamily,
+                description: parameterGroup.Description
             }]);
         });
 

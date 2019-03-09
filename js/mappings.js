@@ -3208,7 +3208,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
                 reqParams.cfn['SubnetIds'] = [];
-                obj.data.Description.forEach(subnet => {
+                obj.data.Subnets.forEach(subnet => {
                     reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
                 });
                 reqParams.cfn['Tags'] = obj.data.Tags;
@@ -3304,18 +3304,26 @@ function performF2Mappings(objects) {
                 reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
                 reqParams.cfn.DistributionConfig['Origins'] = [];
                 obj.data.Origins.Items.forEach(origin => {
-                    reqParams.cfn.DistributionConfig['Origins'].push({
-                        'CustomOriginConfig': {
+                    var customOriginConfig = null;
+                    var customHeaders = null;
+                    if (origin.CustomOriginConfig) {
+                        customOriginConfig = {
                             'HTTPPort': origin.CustomOriginConfig.HTTPPort,
                             'HTTPSPort': origin.CustomOriginConfig.HTTPSPort,
                             'OriginKeepaliveTimeout': origin.CustomOriginConfig.OriginKeepaliveTimeout,
                             'OriginProtocolPolicy': origin.CustomOriginConfig.OriginProtocolPolicy,
                             'OriginReadTimeout': origin.CustomOriginConfig.OriginReadTimeout,
                             'OriginSSLProtocols': origin.CustomOriginConfig.OriginSslProtocols.Items
-                        },
+                        };
+                    }
+                    if (origin.CustomHeaders) {
+                        customHeaders = origin.CustomHeaders.Items;
+                    }
+                    reqParams.cfn.DistributionConfig['Origins'].push({
+                        'CustomOriginConfig': customOriginConfig,
                         'DomainName': origin.DomainName,
                         'Id': origin.Id,
-                        'OriginCustomHeaders': origin.CustomHeaders.Items,
+                        'OriginCustomHeaders': customHeaders,
                         'OriginPath': origin.OriginPath,
                         'S3OriginConfig': origin.S3OriginConfig
                     });
@@ -3329,6 +3337,14 @@ function performF2Mappings(objects) {
                         });
                     });
                 }
+                var cookiesWhitelistedNames = null;
+                if (obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames) {
+                    cookiesWhitelistedNames = obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items;
+                }
+                var queryStringCacheKeys = null;
+                if (obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys) {
+                    queryStringCacheKeys = obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items;
+                }
                 reqParams.cfn.DistributionConfig['DefaultCacheBehavior'] = {
                     'AllowedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.Items,
                     'CachedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
@@ -3338,11 +3354,11 @@ function performF2Mappings(objects) {
                     'ForwardedValues': {
                         'Cookies': {
                             'Forward': obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward,
-                            'WhitelistedNames': obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items
+                            'WhitelistedNames': cookiesWhitelistedNames
                         },
                         'Headers': obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items,
                         'QueryString': obj.data.DefaultCacheBehavior.ForwardedValues.QueryString,
-                        'QueryStringCacheKeys': obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items
+                        'QueryStringCacheKeys': queryStringCacheKeys
                     },
                     'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
                     'MaxTTL': obj.data.DefaultCacheBehavior.MaxTTL,
@@ -3364,6 +3380,14 @@ function performF2Mappings(objects) {
                                 });
                             });
                         }
+                        var cookiesWhitelistedNames = null;
+                        if (cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames) {
+                            cookiesWhitelistedNames = cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames.Items;
+                        }
+                        var queryStringCacheKeys = null;
+                        if (cacheBehaviour.ForwardedValues.QueryStringCacheKeys) {
+                            queryStringCacheKeys = cacheBehaviour.ForwardedValues.QueryStringCacheKeys.Items;
+                        }
                         reqParams.cfn.DistributionConfig['CacheBehaviors'].push({
                             'AllowedMethods': cacheBehaviour.AllowedMethods.Items,
                             'CachedMethods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
@@ -3373,11 +3397,11 @@ function performF2Mappings(objects) {
                             'ForwardedValues': {
                                 'Cookies': {
                                     'Forward': cacheBehaviour.ForwardedValues.Cookies.Forward,
-                                    'WhitelistedNames': cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames.Items
+                                    'WhitelistedNames': cookiesWhitelistedNames
                                 },
                                 'Headers': cacheBehaviour.ForwardedValues.Headers.Items,
                                 'QueryString': cacheBehaviour.ForwardedValues.QueryString,
-                                'QueryStringCacheKeys': cacheBehaviour.ForwardedValues.QueryStringCacheKeys.Items
+                                'QueryStringCacheKeys': queryStringCacheKeys
                             },
                             'LambdaFunctionAssociations': cacheLambdaFunctionAssociations,
                             'MaxTTL': cacheBehaviour.MaxTTL,
@@ -3563,7 +3587,9 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TrailName'] = obj.data.Name;
                 reqParams.cfn['S3BucketName'] = obj.data.S3BucketName;
                 reqParams.cfn['S3KeyPrefix'] = obj.data.S3KeyPrefix;
-                reqParams.cfn['SnsTopicName'] = obj.data.SnsTopicARN.split(":").pop();
+                if (obj.data.SnsTopicARN) {
+                    reqParams.cfn['SnsTopicName'] = obj.data.SnsTopicARN.split(":").pop();
+                }
                 reqParams.cfn['IncludeGlobalServiceEvents'] = obj.data.IncludeGlobalServiceEvents;
                 reqParams.cfn['IsMultiRegionTrail'] = obj.data.IsMultiRegionTrail;
                 reqParams.cfn['EnableLogFileValidation'] = obj.data.LogFileValidationEnabled;

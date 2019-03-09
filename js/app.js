@@ -75,6 +75,24 @@ $(document).ready(function(){
         }
     };
 
+    function addAllTableRowsToTemplate(selector) {
+        var ids = $.map($(selector).bootstrapTable('getData'), function (row) {
+            output_objects.push({
+                'id': row.f2id,
+                'type': row.f2type,
+                'data': row.f2data,
+                'region': row.f2region
+            });
+
+            return row.f2id;
+        });
+
+        $('#generate-outputs').text("Generate (" + output_objects.length + ")");
+        $('#generate-outputs').removeAttr('disabled');
+
+        return ids;
+    }
+
     function addSelectedRowsToTemplate(selector) {
         var ids = $.map($(selector).bootstrapTable('getSelections'), function (row) {
             output_objects.push({
@@ -241,32 +259,37 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     $("#generate-outputs").on('click', () => {
-        regenerateOutputs();
-        window.location.href = "#section-outputs-cloudformation";
+        regenerateOutputs().then(() => {
+            window.location.href = "#section-outputs-cloudformation";
+        });
     });
 
     function regenerateOutputs() {
-        var mapped_outputs = performF2Mappings(output_objects);
+        return new Promise(function(resolve, reject) {
+            var mapped_outputs = performF2Mappings(output_objects);
 
-        cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
-        setTimeout(function(){
-            cfn_editor.refresh();
-        }, 1);
+            cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
+            setTimeout(function(){
+                cfn_editor.refresh();
+            }, 1);
 
-        troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
-        setTimeout(function(){
-            troposphere_editor.refresh();
-        }, 1);
+            troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
+            setTimeout(function(){
+                troposphere_editor.refresh();
+            }, 1);
 
-        cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
-        setTimeout(function(){
-            cdkts_editor.refresh();
-        }, 1);
+            cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
+            setTimeout(function(){
+                cdkts_editor.refresh();
+            }, 1);
 
-        raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
-        setTimeout(function(){
-            raw_editor.refresh();
-        }, 1);
+            raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
+            setTimeout(function(){
+                raw_editor.refresh();
+            }, 1);
+
+            resolve();
+        });
     }
 
     /* ========================================================================== */
@@ -497,6 +520,12 @@ $(document).ready(function(){
             updateDatatableAnalyticsKinesis();
             updateDatatableApplicationIntegrationSNS();
             updateDatatableApplicationIntegrationSQS();
+        });
+
+        $('#add-all-resources').on('click', () => {
+            $('.f2datatable').each(function() {
+                addAllTableRowsToTemplate("#" + this.id);
+            });
         });
 
         $('#section-compute-ec2-instances-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
