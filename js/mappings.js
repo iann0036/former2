@@ -3451,6 +3451,397 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Kinesis::Stream',
                     'options': reqParams
                 });
+            } else if (obj.type == "elasticache.cluster") {
+                reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+                reqParams.cfn['Engine'] = obj.data.Engine;
+                reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.cfn['NumCacheNodes'] = obj.data.NumCacheNodes;
+                reqParams.cfn['PreferredAvailabilityZone'] = obj.data.PreferredAvailabilityZone;
+                reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.cfn['NotificationTopicArn'] = obj.data.NotificationConfiguration.TopicArn;
+                if (obj.data.CacheSecurityGroups) {
+                    reqParams.cfn['CacheSecurityGroupNames'] = [];
+                    obj.data.CacheSecurityGroups.forEach(securityGroup => {
+                        reqParams.cfn['CacheSecurityGroupNames'].push(securityGroup.CacheSecurityGroupName)
+                    });
+                }
+                reqParams.cfn['CacheParameterGroupName'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
+                reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+                reqParams.cfn['Port'] = obj.data.CacheNodes[0].Endpoint.Port;
+                reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+                if (obj.data.SecurityGroups) {
+                    reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    obj.data.SecurityGroups.forEach(securityGroup => {
+                        reqParams.cfn['VpcSecurityGroupIds'].push(securityGroup.SecurityGroupId)
+                    });
+                }
+                reqParams.cfn['SnapshotRetentionLimit'] = obj.data.SnapshotRetentionLimit;
+                reqParams.cfn['SnapshotWindow'] = obj.data.SnapshotWindow;
+                reqParams.cfn['ClusterName'] = obj.data.CacheClusterId;
+                
+                /*
+                TODO:
+                AZMode: String
+                PreferredAvailabilityZones:
+                    - String
+                SnapshotArns:
+                    - String
+                SnapshotName: String
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', obj.id),
+                    'region': obj.region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::CacheCluster',
+                    'options': reqParams
+                });
+            } else if (obj.type == "dynamodb.table") {
+                reqParams.cfn['AttributeDefinitions'] = obj.data.AttributeDefinitions;
+                reqParams.cfn['BillingMode'] = obj.data.BillingMode;
+                reqParams.cfn['TableName'] = obj.data.TableName;
+                reqParams.cfn['KeySchema'] = obj.data.KeySchema;
+                reqParams.cfn['ProvisionedThroughput'] = {
+                    'ReadCapacityUnits': obj.data.ProvisionedThroughput.ReadCapacityUnits,
+                    'WriteCapacityUnits': obj.data.ProvisionedThroughput.WriteCapacityUnits
+                };
+                if (obj.data.LocalSecondaryIndexes) {
+                    reqParams.cfn['LocalSecondaryIndexes'] = [];
+                    obj.data.LocalSecondaryIndexes.forEach(index => {
+                        reqParams.cfn['LocalSecondaryIndexes'].push({
+                            'IndexName': index.IndexName,
+                            'KeySchema': index.KeySchema,
+                            'Projection': index.Projection
+                        });
+                    });
+                }
+                if (obj.data.GlobalSecondaryIndexes) {
+                    reqParams.cfn['GlobalSecondaryIndexes'] = [];
+                    obj.data.GlobalSecondaryIndexes.forEach(index => {
+                        reqParams.cfn['GlobalSecondaryIndexes'].push({
+                            'IndexName': index.IndexName,
+                            'KeySchema': index.KeySchema,
+                            'Projection': index.Projection,
+                            'ProvisionedThroughput': {
+                                'ReadCapacityUnits': index.ProvisionedThroughput.ReadCapacityUnits,
+                                'WriteCapacityUnits': index.ProvisionedThroughput.WriteCapacityUnits
+                            }
+                        });
+                    });
+                }
+                if (obj.data.StreamSpecification) {
+                    reqParams.cfn['StreamSpecification'] = {
+                        'StreamViewType': obj.data.StreamSpecification.StreamViewType
+                    };
+                }
+                if (obj.data.SSEDescription) {
+                    reqParams.cfn['SSESpecification'] = {
+                        'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E")
+                    };
+                }
+
+                /*
+                TODO:
+                PointInTimeRecoverySpecification: 
+                    PointInTimeRecoverySpecification
+                Tags: 
+                    - Resource Tag
+                TimeToLiveSpecification: 
+                    TimeToLiveSpecification
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('dynamodb', obj.id),
+                    'region': obj.region,
+                    'service': 'dynamodb',
+                    'type': 'AWS::DynamoDB::Table',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudtrail.trail") {
+                reqParams.cfn['TrailName'] = obj.data.Name;
+                reqParams.cfn['S3BucketName'] = obj.data.S3BucketName;
+                reqParams.cfn['S3KeyPrefix'] = obj.data.S3KeyPrefix;
+                reqParams.cfn['SnsTopicName'] = obj.data.SnsTopicARN.split(":").pop();
+                reqParams.cfn['IncludeGlobalServiceEvents'] = obj.data.IncludeGlobalServiceEvents;
+                reqParams.cfn['IsMultiRegionTrail'] = obj.data.IsMultiRegionTrail;
+                reqParams.cfn['EnableLogFileValidation'] = obj.data.LogFileValidationEnabled;
+                reqParams.cfn['CloudWatchLogsLogGroupArn'] = obj.data.CloudWatchLogsLogGroupArn;
+                reqParams.cfn['CloudWatchLogsRoleArn'] = obj.data.CloudWatchLogsRoleArn;
+                reqParams.cfn['KMSKeyId'] = obj.data.KmsKeyId;
+                
+                /*
+                TODO:
+                EventSelectors:
+                    - EventSelector
+                IsLogging: Boolean
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudtrail', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudtrail',
+                    'type': 'AWS::CloudTrail::Trail',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.policy") {
+                reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.cfn['PolicyType'] = obj.data.PolicyType;
+                reqParams.cfn['AdjustmentType'] = obj.data.AdjustmentType;
+                reqParams.cfn['MinAdjustmentMagnitude'] = obj.data.MinAdjustmentMagnitude;
+                reqParams.cfn['ScalingAdjustment'] = obj.data.ScalingAdjustment;
+                reqParams.cfn['Cooldown'] = obj.data.Cooldown;
+                reqParams.cfn['StepAdjustments'] = obj.data.StepAdjustments;
+                reqParams.cfn['MetricAggregationType'] = obj.data.MetricAggregationType;
+                reqParams.cfn['EstimatedInstanceWarmup'] = obj.data.EstimatedInstanceWarmup;
+                reqParams.cfn['TargetTrackingConfiguration'] = obj.data.TargetTrackingConfiguration;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScaling::ScalingPolicy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.scheduledaction") {
+                reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.cfn['StartTime'] = obj.data.StartTime.toISOString();
+                reqParams.cfn['EndTime'] = obj.data.EndTime.toISOString();
+                reqParams.cfn['Recurrence'] = obj.data.Recurrence;
+                reqParams.cfn['MaxSize'] = obj.data.MaxSize;
+                reqParams.cfn['MinSize'] = obj.data.MinSize;
+                reqParams.cfn['DesiredCapacity'] = obj.data.DesiredCapacity;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScaling::ScheduledAction',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.autoscalinggroup") {
+                reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.cfn['LaunchConfigurationName'] = obj.data.LaunchConfigurationName;
+                reqParams.cfn['LaunchTemplate'] = obj.data.LaunchTemplate;
+                reqParams.cfn['MixedInstancesPolicy'] = obj.data.MixedInstancesPolicy;
+                reqParams.cfn['MinSize'] = obj.data.MinSize;
+                reqParams.cfn['MaxSize'] = obj.data.MaxSize;
+                reqParams.cfn['DesiredCapacity'] = obj.data.DesiredCapacity;
+                reqParams.cfn['Cooldown'] = obj.data.DefaultCooldown;
+                reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.cfn['LoadBalancerNames'] = obj.data.LoadBalancerNames;
+                reqParams.cfn['TargetGroupARNs'] = obj.data.TargetGroupARNs;
+                reqParams.cfn['HealthCheckType'] = obj.data.HealthCheckType;
+                reqParams.cfn['HealthCheckGracePeriod'] = obj.data.HealthCheckGracePeriod;
+                reqParams.cfn['PlacementGroup'] = obj.data.PlacementGroup;
+                reqParams.cfn['VPCZoneIdentifier'] = obj.data.VPCZoneIdentifier.split(",");
+                if (obj.data.EnabledMetrics) {
+                    reqParams.cfn['MetricsCollection'] = {
+                        'Granularity': obj.data.EnabledMetrics[0].Granularity,
+                        'Metrics': []
+                    };
+                    obj.data.EnabledMetrics.forEach(metric => {
+                        reqParams.cfn.MetricsCollection.Metrics.push(metric.Metric);
+                    });
+                }
+                if (obj.data.Tags) {
+                    reqParams.cfn['Tags'] = [];
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tag.Key,
+                            'Value': tag.Value,
+                            'PropagateAtLaunch': tag.PropagateAtLaunch
+                        });
+                    });
+                }
+                reqParams.cfn['TerminationPolicies'] = obj.data.TerminationPolicies;
+                reqParams.cfn['ServiceLinkedRoleARN'] = obj.data.ServiceLinkedRoleARN;
+                
+                /*
+                TODO:
+                HealthCheckGracePeriod: Integer
+                InstanceId: String
+                LifecycleHookSpecificationList: 
+                    - LifecycleHookSpecification
+                NotificationConfigurations:
+                    - NotificationConfiguration
+                */
+                
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScaling::AutoScalingGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.launchconfiguration") {
+                reqParams.cfn['LaunchConfigurationName'] = obj.data.LaunchConfigurationName;
+                reqParams.cfn['ImageId'] = obj.data.ImageId;
+                reqParams.cfn['KeyName'] = obj.data.KeyName;
+                reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.cfn['ClassicLinkVPCId'] = obj.data.ClassicLinkVPCId;
+                reqParams.cfn['ClassicLinkVPCSecurityGroups'] = obj.data.ClassicLinkVPCSecurityGroups;
+                reqParams.cfn['UserData'] = obj.data.UserData;
+                reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.cfn['KernelId'] = obj.data.KernelId;
+                reqParams.cfn['RamDiskId'] = obj.data.RamdiskId;
+                reqParams.cfn['BlockDeviceMappings'] = obj.data.BlockDeviceMappings;
+                reqParams.cfn['InstanceMonitoring'] = obj.data.InstanceMonitoring.Enabled;
+                reqParams.cfn['SpotPrice'] = obj.data.SpotPrice;
+                reqParams.cfn['IamInstanceProfile'] = obj.data.IamInstanceProfile;
+                reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                reqParams.cfn['AssociatePublicIpAddress'] = obj.data.AssociatePublicIpAddress;
+                reqParams.cfn['PlacementTenancy'] = obj.data.PlacementTenancy;
+                
+                /*
+                TODO:
+                InstanceId: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScaling::LaunchConfiguration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.securitygroup") {
+                reqParams.cfn['GroupDescription'] = obj.data.Description;
+                reqParams.cfn['GroupName'] = obj.data.GroupName;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+                
+                /*
+                TODO:
+                SecurityGroupEgress:
+                    - Security Group Rule // its in the request, check to see if use this with SecurityGroup*gress
+                SecurityGroupIngress:
+                    - Security Group Rule
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::SecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "route53.healthcheck") {
+                reqParams.cfn['HealthCheckConfig'] = {
+                    'AlarmIdentifier': obj.data.HealthCheckConfig.AlarmIdentifier,
+                    'ChildHealthChecks': obj.data.HealthCheckConfig.ChildHealthChecks,
+                    'EnableSNI': obj.data.HealthCheckConfig.EnableSNI,
+                    'FailureThreshold': obj.data.HealthCheckConfig.FailureThreshold,
+                    'FullyQualifiedDomainName': obj.data.HealthCheckConfig.FullyQualifiedDomainName,
+                    'HealthThreshold': obj.data.HealthCheckConfig.HealthThreshold,
+                    'InsufficientDataHealthStatus': obj.data.HealthCheckConfig.InsufficientDataHealthStatus,
+                    'Inverted': obj.data.HealthCheckConfig.Inverted,
+                    'IPAddress': obj.data.HealthCheckConfig.IPAddress,
+                    'MeasureLatency': obj.data.HealthCheckConfig.MeasureLatency,
+                    'Port': obj.data.HealthCheckConfig.Port,
+                    'Regions': obj.data.HealthCheckConfig.Regions,
+                    'RequestInterval': obj.data.HealthCheckConfig.RequestInterval,
+                    'ResourcePath': obj.data.HealthCheckConfig.ResourcePath,
+                    'SearchString': obj.data.HealthCheckConfig.SearchString,
+                    'Type': obj.data.HealthCheckConfig.Type
+                };
+
+                /*
+                TODO:
+                HealthCheckTags:
+                    - HealthCheckTags 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('route53', obj.id),
+                    'region': obj.region,
+                    'service': 'route53',
+                    'type': 'AWS::RDS::DBSecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "elb.loadbalancer") {
+                reqParams.cfn['LoadBalancerName'] = obj.data.LoadBalancerName;
+                if (obj.data.ListenerDescriptions) {
+                    reqParams.cfn['Listeners'] = [];
+                    obj.data.ListenerDescriptions.forEach(listener => {
+                        reqParams.cfn['Listeners'].push({
+                            'InstancePort': listener.Listener.InstanceProtocol,
+                            'InstanceProtocol': listener.Listener.InstancePort,
+                            'LoadBalancerPort': listener.Listener.LoadBalancerPort,
+                            'PolicyNames': listener.PolicyNames,
+                            'Protocol': listener.Listener.Protocol,
+                            'SSLCertificateId': listener.Listener.SSLCertificateId
+                        });
+                    });
+                }
+                reqParams.cfn['AppCookieStickinessPolicy'] = obj.data.Policies.AppCookieStickinessPolicies;
+                reqParams.cfn['LBCookieStickinessPolicy'] = obj.data.Policies.LBCookieStickinessPolicies;
+                reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.cfn['Subnets'] = obj.data.Subnets;
+                if (obj.data.Instances) {
+                    reqParams.cfn['Instances'] = [];
+                    obj.data.Instances.forEach(instance => {
+                        reqParams.cfn['Instances'].push(instance.InstanceId);
+                    });
+                }
+                reqParams.cfn['HealthCheck'] = obj.data.HealthCheck;
+                reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.cfn['Scheme'] = obj.data.Scheme;
+
+                /*
+                TODO:
+                AccessLoggingPolicy:
+                    AccessLoggingPolicy
+                ConnectionDrainingPolicy:
+                    ConnectionDrainingPolicy
+                ConnectionSettings:
+                    ConnectionSettings
+                CrossZone: Boolean
+                Policies:
+                    - ElasticLoadBalancing Policy
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elb', obj.id),
+                    'region': obj.region,
+                    'service': 'elb',
+                    'type': 'AWS::ElasticLoadBalancing::LoadBalancer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.alarm") {
+                reqParams.cfn['AlarmName'] = obj.data.AlarmName;
+                reqParams.cfn['AlarmDescription'] = obj.data.AlarmDescription;
+                reqParams.cfn['ActionsEnabled'] = obj.data.ActionsEnabled;
+                reqParams.cfn['OKActions'] = obj.data.OKActions;
+                reqParams.cfn['AlarmActions'] = obj.data.AlarmActions;
+                reqParams.cfn['InsufficientDataActions'] = obj.data.InsufficientDataActions;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['Namespace'] = obj.data.Namespace;
+                reqParams.cfn['Statistic'] = obj.data.Statistic;
+                reqParams.cfn['ExtendedStatistic'] = obj.data.ExtendedStatistic;
+                reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+                reqParams.cfn['Period'] = obj.data.Period;
+                reqParams.cfn['Unit'] = obj.data.Unit;
+                reqParams.cfn['EvaluationPeriods'] = obj.data.EvaluationPeriods;
+                reqParams.cfn['DatapointsToAlarm'] = obj.data.DatapointsToAlarm;
+                reqParams.cfn['Threshold'] = obj.data.Threshold;
+                reqParams.cfn['ComparisonOperator'] = obj.data.ComparisonOperator;
+                reqParams.cfn['TreatMissingData'] = obj.data.TreatMissingData;
+                reqParams.cfn['EvaluateLowSampleCountPercentile'] = obj.data.EvaluateLowSampleCountPercentile;
+                reqParams.cfn['Metrics'] = obj.data.Metrics;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::CloudWatch::Alarm',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

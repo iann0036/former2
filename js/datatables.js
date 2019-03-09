@@ -3846,7 +3846,7 @@ function updateDatatableDatabaseDynamoDB() {
         $('#section-database-dynamodb-tables-datatable').bootstrapTable('removeAll');
 
         data.TableNames.forEach(tableName => {
-            sdkcall(svc_dynamodb.listTables, {
+            sdkcall(svc_dynamodb.describeTable, {
                 TableName: tableName
             }, true).then((data) => {
                 $('#section-database-dynamodb-tables-datatable').bootstrapTable('append', [{
