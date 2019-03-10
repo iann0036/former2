@@ -3900,6 +3900,29 @@ function performF2Mappings(objects) {
                     'type': 'AWS::EC2::LaunchTemplate',
                     'options': reqParams
                 });
+            } else if (obj.type == "cloud9.environment") {
+                if (obj.data.type == "ec2") {
+                    reqParams.cfn['Name'] = obj.data.name;
+                    reqParams.cfn['Description'] = obj.data.description;
+                    reqParams.cfn['OwnerArn'] = obj.data.ownerArn;
+
+                    /*
+                    TODO:
+                    Repositories: 
+                        - Repository
+                    AutomaticStopTimeMinutes: Integer
+                    InstanceType: String
+                    SubnetId: String
+                    */
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('cloud9', obj.id),
+                        'region': obj.region,
+                        'service': 'cloud9',
+                        'type': 'AWS::Cloud9::EnvironmentEC2',
+                        'options': reqParams
+                    });
+                }
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

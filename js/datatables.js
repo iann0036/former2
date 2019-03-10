@@ -2477,15 +2477,17 @@ function updateDatatableDatabaseElastiCache() {
     }, true).then((data) => {
         $('#section-database-elasticache-clusters-datatable').bootstrapTable('removeAll');
 
-        data.Clusters.forEach(cluster => {
-            $('#section-database-elasticache-clusters-datatable').bootstrapTable('append', [{
-                f2id: cluster.DBInstanceIdentifier,
-                f2type: 'elasticache.cluster',
-                f2data: cluster,
-                f2region: region,
-                instanceid: cluster.DBInstanceIdentifier
-            }]);
-        });
+        if (data.Clusters) {
+            data.Clusters.forEach(cluster => {
+                $('#section-database-elasticache-clusters-datatable').bootstrapTable('append', [{
+                    f2id: cluster.CacheClusterId,
+                    f2type: 'elasticache.cluster',
+                    f2data: cluster,
+                    f2region: region,
+                    id: cluster.CacheClusterId
+                }]);
+            });
+        }
 
         unblockUI('#section-database-elasticache-clusters-datatable');
     });
@@ -2543,6 +2545,9 @@ function updateDatatableDatabaseElastiCache() {
             }]);
         });
 
+        unblockUI('#section-database-elasticache-securitygroups-datatable');
+    }).catch((err) => {
+        // Ignoring...most accounts won't have this enabled
         unblockUI('#section-database-elasticache-securitygroups-datatable');
     });
 }
@@ -3079,6 +3084,9 @@ function updateDatatableDatabaseRedshift() {
             }]);
         });
 
+        unblockUI('#section-database-redshift-securitygroups-datatable');
+    }).catch((err) => {
+        // Ignoring...most accounts won't have this enabled
         unblockUI('#section-database-redshift-securitygroups-datatable');
     });
 }
@@ -5686,6 +5694,1352 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Batch
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Compute',
+    'service': 'Batch',
+    'resourcetypes': {
+        'Compute Environments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Job Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Job Queues': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableComputeBatch() {
+    var svc_batch = new AWS.Batch({region: region});
+
+    blockUI('#section-compute-batch-computeenvironments-datatable');
+    blockUI('#section-compute-batch-jobdefinitions-datatable');
+    blockUI('#section-compute-batch-jobqueues-datatable');
+
+    sdkcall(svc_batch.describeComputeEnvironments, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('removeAll');
+
+        data.computeEnvironments.forEach(computeEnvironment => {
+            $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('append', [{
+                f2id: computeEnvironment.computeEnvironmentArn,
+                f2type: 'batch.computeenvironment',
+                f2data: computeEnvironment,
+                f2region: region,
+                name: computeEnvironment.computeEnvironmentName
+            }]);
+        });
+
+        unblockUI('#section-compute-batch-computeenvironments-datatable');
+    });
+
+    sdkcall(svc_batch.describeJobDefinitions, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('removeAll');
+
+        data.jobDefinitions.forEach(jobDefinition => {
+            $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('append', [{
+                f2id: jobDefinition.jobDefinitionArn,
+                f2type: 'batch.jobdefinition',
+                f2data: jobDefinition,
+                f2region: region,
+                name: jobDefinition.jobDefinitionName
+            }]);
+        });
+
+        unblockUI('#section-compute-batch-jobdefinitions-datatable');
+    });
+
+    sdkcall(svc_batch.describeJobQueues, {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-batch-jobqueues-datatable').bootstrapTable('removeAll');
+
+        data.jobQueues.forEach(jobQueue => {
+            $('#section-compute-batch-jobqueues-datatable').bootstrapTable('append', [{
+                f2id: jobQueue.jobQueueArn,
+                f2type: 'batch.jobqueue',
+                f2data: jobQueue,
+                f2region: region,
+                name: jobQueue.jobQueueName
+            }]);
+        });
+
+        unblockUI('#section-compute-batch-jobqueues-datatable');
+    });
+}
+
+/* ========================================================================== */
+// EFS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Storage',
+    'service': 'EFS',
+    'resourcetypes': {
+        'File Systems': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Mount Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableStorageEFS() {
+    var svc_efs = new AWS.EFS({region: region});
+
+    blockUI('#section-storage-efs-filesystems-datatable');
+    blockUI('#section-storage-efs-mounttargets-datatable');
+
+    sdkcall(svc_efs.describeFileSystems, {
+        // no params
+    }, true).then((data) => {
+        $('#section-storage-efs-filesystems-datatable').bootstrapTable('removeAll');
+
+        data.FileSystems.forEach(fileSystem => {
+            sdkcall(svc_efs.describeMountTargets, {
+                FileSystemId: fileSystem.FileSystemId
+            }, true).then((data) => {
+                $('#section-storage-efs-mounttargets-datatable').bootstrapTable('removeAll');
+        
+                data.MountTargets.forEach(mountTarget => {
+                    $('#section-storage-efs-mounttargets-datatable').bootstrapTable('append', [{
+                        f2id: mountTarget.MountTargetId,
+                        f2type: 'efs.mounttarget',
+                        f2data: mountTarget,
+                        f2region: region,
+                        name: mountTarget.MountTargetId
+                    }]);
+                });
+            });
+
+            $('#section-storage-efs-filesystems-datatable').bootstrapTable('append', [{
+                f2id: fileSystem.FileSystemId,
+                f2type: 'efs.filesystem',
+                f2data: fileSystem,
+                f2region: region,
+                id: fileSystem.FileSystemId
+            }]);
+        });
+
+        unblockUI('#section-storage-efs-filesystems-datatable');
+        unblockUI('#section-storage-efs-mounttargets-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Cloud9
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Developer Tools',
+    'service': 'Cloud9',
+    'resourcetypes': {
+        'Environments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDeveloperToolsCloud9() {
+    var svc_cloud9 = new AWS.Cloud9({region: region});
+
+    blockUI('#section-developertools-cloud9-environments-datatable');
+
+    sdkcall(svc_cloud9.listEnvironments, {
+        // no params
+    }, true).then((data) => {
+        $('#section-developertools-cloud9-environments-datatable').bootstrapTable('removeAll');
+
+        data.environmentIds.forEach(environmentId => {
+            sdkcall(svc_cloud9.describeEnvironments, {
+                environmentIds: [environmentId]
+            }, true).then((data) => {
+                data.environments.forEach(environment => {
+                    $('#section-developertools-cloud9-environments-datatable').bootstrapTable('append', [{
+                        f2id: environment.arn,
+                        f2type: 'cloud9.environment',
+                        f2data: environment,
+                        f2region: region,
+                        name: environment.name
+                    }]);
+                });
+            });
+        });
+
+        unblockUI('#section-developertools-cloud9-environments-datatable');
+    });
+}
+
+/* ========================================================================== */
+// FSx
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Storage',
+    'service': 'FSx',
+    'resourcetypes': {
+        'File Systems': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableStorageFSx() {
+    var svc_fsx = new AWS.FSx({region: region});
+
+    blockUI('#section-storage-fsx-filesystems-datatable');
+
+    sdkcall(svc_fsx.describeFileSystems, {
+        // no params
+    }, true).then((data) => {
+        $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
+        
+        data.FileSystems.forEach(fileSystem => {
+            $('#section-storage-fsx-filesystems-datatable').bootstrapTable('append', [{
+                f2id: fileSystem.ResourceARN,
+                f2type: 'fsx.filesystem',
+                f2data: fileSystem,
+                f2region: region,
+                dnsname: fileSystem.DNSName
+            }]);
+        });
+
+        unblockUI('#section-storage-fsx-filesystems-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Neptune
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Databases',
+    'service': 'Neptune',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Instances': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Cluster Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDatabasesNeptune() {
+    var svc_neptune = new AWS.Neptune({region: region});
+
+    blockUI('#section-databases-neptune-clusters-datatable');
+    blockUI('#section-databases-neptune-instances-datatable');
+    blockUI('#section-databases-neptune-clusterparametergroups-datatable');
+    blockUI('#section-databases-neptune-parametergroups-datatable');
+    blockUI('#section-databases-neptune-subnetgroups-datatable');
+
+    sdkcall(svc_neptune.describeDBClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-neptune-clusters-datatable').bootstrapTable('removeAll');
+        
+        data.DBClusters.forEach(cluster => {
+            $('#section-databases-neptune-clusters-datatable').bootstrapTable('append', [{
+                f2id: cluster.DBClusterIdentifier,
+                f2type: 'neptune.cluster',
+                f2data: cluster,
+                f2region: region,
+                id: cluster.DBClusterIdentifier
+            }]);
+        });
+
+        unblockUI('#section-databases-neptune-clusters-datatable');
+    });
+
+    sdkcall(svc_neptune.describeDBInstances, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-neptune-instances-datatable').bootstrapTable('removeAll');
+        
+        data.DBInstances.forEach(instance => {
+            $('#section-databases-neptune-instances-datatable').bootstrapTable('append', [{
+                f2id: instance.DBInstanceIdentifier,
+                f2type: 'neptune.instance',
+                f2data: instance,
+                f2region: region,
+                id: instance.DBInstanceIdentifier
+            }]);
+        });
+
+        unblockUI('#section-databases-neptune-instances-datatable');
+    });
+
+    sdkcall(svc_neptune.describeDBClusterParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
+        
+        data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
+            $('#section-databases-neptune-clusterparametergroups-datatable').bootstrapTable('append', [{
+                f2id: clusterParameterGroup.DBClusterParameterGroupArn,
+                f2type: 'neptune.clusterparametergroup',
+                f2data: clusterParameterGroup,
+                f2region: region,
+                name: clusterParameterGroup.DBClusterParameterGroupName
+            }]);
+        });
+
+        unblockUI('#section-databases-neptune-clusterparametergroups-datatable');
+    });
+
+    sdkcall(svc_neptune.describeDBParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-neptune-parametergroups-datatable').bootstrapTable('removeAll');
+        
+        data.DBParameterGroups.forEach(parameterGroup => {
+            $('#section-databases-neptune-parametergroups-datatable').bootstrapTable('append', [{
+                f2id: parameterGroup.DBParameterGroupArn,
+                f2type: 'neptune.parametergroup',
+                f2data: parameterGroup,
+                f2region: region,
+                name: parameterGroup.DBParameterGroupName
+            }]);
+        });
+
+        unblockUI('#section-databases-neptune-parametergroups-datatable');
+    });
+
+    sdkcall(svc_neptune.describeDBSubnetGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
+        
+        data.DBSubnetGroups.forEach(subnetGroup => {
+            $('#section-databases-neptune-subnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.DBSubnetGroupArn,
+                f2type: 'neptune.subnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.DBSubnetGroupName
+            }]);
+        });
+
+        unblockUI('#section-databases-neptune-subnetgroups-datatable');
+    });
+}
+
+/* ========================================================================== */
+// DocumentDB
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Databases',
+    'service': 'DocumentDB',
+    'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Instances': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Cluster Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDatabasesDocumentDB() {
+    var svc_documentdb = new AWS.DocumentDB({region: region});
+
+    blockUI('#section-databases-documentdb-clusters-datatable');
+    blockUI('#section-databases-documentdb-instances-datatable');
+    blockUI('#section-databases-documentdb-clusterparametergroups-datatable');
+    blockUI('#section-databases-documentdb-parametergroups-datatable');
+    blockUI('#section-databases-documentdb-subnetgroups-datatable');
+
+    sdkcall(svc_documentdb.describeDBClusters, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-documentdb-clusters-datatable').bootstrapTable('removeAll');
+        
+        data.DBClusters.forEach(cluster => {
+            $('#section-databases-documentdb-clusters-datatable').bootstrapTable('append', [{
+                f2id: cluster.DBClusterIdentifier,
+                f2type: 'documentdb.cluster',
+                f2data: cluster,
+                f2region: region,
+                id: cluster.DBClusterIdentifier
+            }]);
+        });
+
+        unblockUI('#section-databases-documentdb-clusters-datatable');
+    });
+
+    sdkcall(svc_documentdb.describeDBInstances, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-documentdb-instances-datatable').bootstrapTable('removeAll');
+        
+        data.DBInstances.forEach(instance => {
+            $('#section-databases-documentdb-instances-datatable').bootstrapTable('append', [{
+                f2id: instance.DBInstanceIdentifier,
+                f2type: 'documentdb.instance',
+                f2data: instance,
+                f2region: region,
+                id: instance.DBInstanceIdentifier
+            }]);
+        });
+
+        unblockUI('#section-databases-documentdb-instances-datatable');
+    });
+
+    sdkcall(svc_documentdb.describeDBClusterParameterGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
+        
+        data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
+            $('#section-databases-documentdb-clusterparametergroups-datatable').bootstrapTable('append', [{
+                f2id: clusterParameterGroup.DBClusterParameterGroupArn,
+                f2type: 'documentdb.clusterparametergroup',
+                f2data: clusterParameterGroup,
+                f2region: region,
+                name: clusterParameterGroup.DBClusterParameterGroupName
+            }]);
+        });
+
+        unblockUI('#section-databases-documentdb-clusterparametergroups-datatable');
+    });
+
+    sdkcall(svc_documentdb.describeDBSubnetGroups, {
+        // no params
+    }, true).then((data) => {
+        $('#section-databases-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
+        
+        data.DBSubnetGroups.forEach(subnetGroup => {
+            $('#section-databases-documentdb-subnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.DBSubnetGroupArn,
+                f2type: 'documentdb.subnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.DBSubnetGroupName
+            }]);
+        });
+
+        unblockUI('#section-databases-documentdb-subnetgroups-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CodeCommit
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Developer Tools',
+    'service': 'CodeCommit',
+    'resourcetypes': {
+        'Repositories': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDeveloperToolsCodeCommit() {
+    var svc_codecommit = new AWS.CodeCommit({region: region});
+
+    blockUI('#section-developertools-codecommit-repository-datatable');
+
+    sdkcall(svc_codecommit.listRepositories, {
+        // no params
+    }, true).then((data) => {
+        $('#section-developertools-codecommit-repository-datatable').bootstrapTable('removeAll');
+        
+        data.repositories.forEach(repository => {
+            $('#section-developertools-codecommit-repository-datatable').bootstrapTable('append', [{
+                f2id: repository.repositoryId,
+                f2type: 'codecommit.repository',
+                f2data: repository,
+                f2region: region,
+                name: repository.repositoryName
+            }]);
+        });
+
+        unblockUI('#section-developertools-codecommit-repository-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CodeBuild
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Developer Tools',
+    'service': 'CodeBuild',
+    'resourcetypes': {
+        'Projects': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDeveloperToolsCodeBuild() {
+    var svc_codebuild = new AWS.CodeBuild({region: region});
+
+    blockUI('#section-developertools-codebuild-projects-datatable');
+
+    sdkcall(svc_codebuild.listProjects, {
+        // no params
+    }, true).then((data) => {
+        $('#section-developertools-codebuild-projects-datatable').bootstrapTable('removeAll');
+        
+        data.projects.forEach(project => {
+            $('#section-developertools-codebuild-projects-datatable').bootstrapTable('append', [{
+                f2id: project,
+                f2type: 'codebuild.project',
+                f2data: project,
+                f2region: region,
+                name: project
+            }]);
+        });
+
+        unblockUI('#section-developertools-codebuild-projects-datatable');
+    });
+}
+
+/* ========================================================================== */
+// CodeDeploy
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Developer Tools',
+    'service': 'CodeDeploy',
+    'resourcetypes': {
+        'Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Deployment Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Deployment Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableDeveloperToolsCodeDeploy() {
+    var svc_codedeploy = new AWS.CodeDeploy({region: region});
+
+    blockUI('#section-developertools-codedeploy-applications-datatable');
+    blockUI('#section-developertools-codedeploy-deploymentconfigurations-datatable');
+    blockUI('#section-developertools-codedeploy-deploymentgroups-datatable');
+
+    sdkcall(svc_codedeploy.listApplications, {
+        // no params
+    }, true).then((data) => {
+        $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('removeAll');
+        
+        data.applications.forEach(application => {
+            sdkcall(svc_codedeploy.listDeploymentGroups, {
+                applicationName: application
+            }, true).then((data) => {
+                $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('removeAll');
+                
+                data.deploymentGroups.forEach(deploymentGroup => {
+                    $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('append', [{
+                        f2id: deploymentGroup,
+                        f2type: 'codedeploy.deploymentgroup',
+                        f2data: deploymentGroup,
+                        f2region: region,
+                        name: deploymentGroup
+                    }]);
+                });
+            });
+
+            $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('append', [{
+                f2id: application,
+                f2type: 'codedeploy.application',
+                f2data: application,
+                f2region: region,
+                name: application
+            }]);
+        });
+
+        unblockUI('#section-developertools-codedeploy-applications-datatable');
+        unblockUI('#section-developertools-codedeploy-deploymentgroups-datatable');
+    });
+
+    sdkcall(svc_codedeploy.listDeploymentConfigs, {
+        // no params
+    }, true).then((data) => {
+        $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('removeAll');
+        
+        data.deploymentConfigsList.forEach(deploymentConfiguration => {
+            $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('append', [{
+                f2id: deploymentConfiguration,
+                f2type: 'codedeploy.deploymentconfiguration',
+                f2data: deploymentConfiguration,
+                f2region: region,
+                name: deploymentConfiguration
+            }]);
+        });
+
+        unblockUI('#section-developertools-codedeploy-deploymentconfigurations-datatable');
     });
 }
 

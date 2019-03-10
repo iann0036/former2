@@ -1,10 +1,15 @@
 var extension_available = false;
 var region = 'us-east-1';
+var _AWS = AWS;
 
 $(document).ready(function(){
     /* ========================================================================== */
     // Section Templating
     /* ========================================================================== */
+
+    function nav(str) {
+        return str.replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "and");
+    }
 
     function navlower(str) {
         return str.toLowerCase().replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "and");
@@ -60,8 +65,14 @@ $(document).ready(function(){
             </section>
             </div>
         `;
+
         $('#templated-section-container').append(html);
+        
+        Object.keys(section.resourcetypes).forEach(resourcetype => {
+            $(`#section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable`).on('refresh.bs.table', window[`updateDatatable${nav(section.category)}${nav(section.service)}`]);
+        });
     });
+
 
     /* ========================================================================== */
     // DataTable Pre-Config
@@ -403,6 +414,7 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi";
+    HELPER_EXTENSION_ID = "lngkngjniaedfadbbkkpmkeggaokkjce";
 
     class AWSConfigClass {
         static update(obj) {
@@ -505,16 +517,25 @@ $(document).ready(function(){
             updateDatatableComputeECS();
             updateDatatableComputeEKS();
             updateDatatableComputeLambda();
+            updateDatatableComputeBatch();
             updateDatatableComputeElasticBeanstalk();
             updateDatatableStorageS3();
+            updateDatatableStorageEFS();
+            updateDatatableStorageFSx();
             updateDatatableDatabaseRDS();
             updateDatatableDatabaseDynamoDB();
             updateDatatableDatabaseElastiCache();
+            updateDatatableDatabasesNeptune();
             updateDatatableDatabaseRedshift();
+            updateDatatableDatabaseDocumentDB();
             updateDatatableNetworkingAndContentDeliveryVPC();
             updateDatatableNetworkingAndContentDeliveryCloudFront();
             updateDatatableNetworkingAndContentDeliveryRoute53();
             updateDatatableNetworkingAndContentDeliveryApiGateway();
+            updateDatatableDeveloperToolsCodeCommit();
+            updateDatatableDeveloperToolsCodeBuild();
+            updateDatatableDeveloperToolsCodeDeploy();
+            updateDatatableDeveloperToolsCloud9();
             updateDatatableManagementAndGovernanceCloudWatch();
             updateDatatableManagementAndGovernanceCloudTrail();
             updateDatatableManagementAndGovernanceOpsWorks();
@@ -528,118 +549,6 @@ $(document).ready(function(){
                 addAllTableRowsToTemplate("#" + this.id);
             });
         });
-
-        $('#section-compute-ec2-instances-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-hosts-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-loadbalancers-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-autoscalinggroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-autoscalingpolicies-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-autoscalingscheduledactions-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-securitygroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-launchconfigurations-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-launchtemplates-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-targetgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-volumes-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-networkinterfaces-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-spotrequests-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-        $('#section-compute-ec2-placementgroups-datatable').on('refresh.bs.table', updateDatatableComputeEC2);
-
-        $('#section-compute-ecr-repositories-datatable').on('refresh.bs.table', updateDatatableComputeECR);
-
-        $('#section-compute-ecs-clusters-datatable').on('refresh.bs.table', updateDatatableComputeECS);
-        $('#section-compute-ecs-services-datatable').on('refresh.bs.table', updateDatatableComputeECS);
-        $('#section-compute-ecs-taskdefinitions-datatable').on('refresh.bs.table', updateDatatableComputeECS);
-
-        $('#section-compute-eks-clusters-datatable').on('refresh.bs.table', updateDatatableComputeEKS);
-        
-        $('#section-compute-lambda-functions-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
-        $('#section-compute-lambda-aliases-datatable').on('refresh.bs.table', updateDatatableComputeLambda);
-        
-        $('#section-compute-elasticbeanstalk-applications-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
-        $('#section-compute-elasticbeanstalk-applicationversions-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
-        $('#section-compute-elasticbeanstalk-environments-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
-        $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').on('refresh.bs.table', updateDatatableComputeElasticBeanstalk);
-
-        $('#section-storage-s3-buckets-datatable').on('refresh.bs.table', updateDatatableStorageS3);
-        $('#section-storage-s3-bucketpolicies-datatable').on('refresh.bs.table', updateDatatableStorageS3);
-
-        $('#section-databases-rds-instances-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
-        $('#section-databases-rds-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
-        $('#section-databases-rds-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
-        $('#section-databases-rds-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRDS);
-
-        $('#section-databases-dynamodb-tables-datatable').on('refresh.bs.table', updateDatatableDatabaseDynamoDB);
-
-        $('#section-databases-elasticache-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-        $('#section-databases-elasticache-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-        $('#section-databases-elasticache-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-        $('#section-databases-elasticache-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseElastiCache);
-
-        $('#section-databases-redshift-clusters-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
-        $('#section-databases-redshift-subnetgroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
-        $('#section-databases-redshift-parametergroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
-        $('#section-databases-redshift-securitygroups-datatable').on('refresh.bs.table', updateDatatableDatabaseRedshift);
-
-        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryVPC);
-
-        $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryCloudFront);
-
-        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
-        $('#section-networkingandcontentdelivery-route53-records-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
-        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryRoute53);
-
-        $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-methods-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-models-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-routes-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-        $('#section-networkingandcontentdelivery-apigateway-account-datatable').on('refresh.bs.table', updateDatatableNetworkingAndContentDeliveryApiGateway);
-
-        $('#section-managementandgovernance-cloudwatch-alarms-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudWatch);
-
-        $('#section-managementandgovernance-cloudtrail-trails-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceCloudTrail);
-
-        $('#section-managementandgovernance-opsworks-stacks-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
-        $('#section-managementandgovernance-opsworks-apps-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
-        $('#section-managementandgovernance-opsworks-layers-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
-        $('#section-managementandgovernance-opsworks-elbattachments-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
-        $('#section-managementandgovernance-opsworks-instances-datatable').on('refresh.bs.table', updateDatatableManagementAndGovernanceOpsWorks);
-
-        $('#section-analytics-kinesis-streams-datatable').on('refresh.bs.table', updateDatatableAnalyticsKinesis);
-
-        $('#section-applicationintegration-sns-topics-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);
-        $('#section-applicationintegration-sns-topicpolicies-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSNS);
-        
-        $('#section-applicationintegration-sqs-queues-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSQS);
-        $('#section-applicationintegration-sqs-queuepolicies-datatable').on('refresh.bs.table', updateDatatableApplicationIntegrationSQS);
     }
 
 }); // <-- End of documentReady
