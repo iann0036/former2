@@ -414,7 +414,6 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi";
-    HELPER_EXTENSION_ID = "lngkngjniaedfadbbkkpmkeggaokkjce";
 
     class AWSConfigClass {
         static update(obj) {
@@ -471,7 +470,9 @@ $(document).ready(function(){
                                                     params: params
                                                 },
                                                 function(response) {
-                                                    if (!response.success) {
+                                                    if (!response) {
+                                                        callback(response.error, null);
+                                                    } else if (!response.success) {
                                                         callback(response.error, response.data);
                                                     } else {
                                                         callback(null, response.data);

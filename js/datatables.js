@@ -8,6 +8,65 @@ function textFormatter(data) {
     return data;
 }
 
+function detailFormatter(row, data) {
+    var ret = recursivePrettyPrintMap(data['f2data'], 0).substring(6);
+    return `<div class="f2detailformatter">${ret}</div>`;
+}
+
+function recursivePrettyPrintMap(param, spacing) {
+    var paramitems = [];
+
+    if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
+        return undefined;
+    if (typeof param == "boolean") {
+        if (param)
+            return 'true';
+        return 'false';
+    }
+    if (typeof param == "number") {
+        return param;
+    }
+    if (typeof param == "string") {
+        if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
+            return undefined;
+        }
+        
+        return param;
+    }
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            paramitems.push(recursivePrettyPrintMap(paramitem, spacing + 4));
+        });
+
+        return `<br />
+` + '&nbsp;'.repeat(spacing + 4) + "<b>-</b> " + paramitems.join(`,<br />
+` + '&nbsp;'.repeat(spacing + 4) + "<b>-</b> ");
+    }
+    if (typeof param == "object") {
+        if (Object.keys(param).length === 0 && param.constructor === Object) {
+            return "&lt;empty object&gt;";
+        }
+
+        Object.keys(param).forEach(function (key) {
+            var subvalue = recursivePrettyPrintMap(param[key], spacing + 4);
+
+            if (subvalue !== undefined) {
+                paramitems.push(`<b>${key}:</b> ${subvalue}`);
+            }
+        });
+
+        return `<br />
+` + '&nbsp;'.repeat(spacing + 4) + paramitems.join(`<br />
+` + '&nbsp;'.repeat(spacing + 4));
+    }
+    
+    return undefined;
+}
+
 function byteSizeFormatter(data) {
     var bytes = parseInt(data);
 
@@ -67,9 +126,11 @@ function lambdaRuntimeFormatter(data) {
 // SDK Helpers
 /* ========================================================================== */
 
-function sdkcall(method, params, alert_on_errors) { // TODO: Add auto NextToken, NextMarker etc. detection
+function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextToken, NextMarker etc. detection
     return new Promise(function(resolve, reject) {
-        method.call(null, params, function(err, data) {
+        var service = new AWS[svc]({region: region});
+
+        service[method].call(service, params, function(err, data) {
             if (err) {
                 if (alert_on_errors) {
                     console.log(err, err.stack);
@@ -510,22 +571,20 @@ sections.push({
 });
 
 function updateDatatableNetworkingAndContentDeliveryVPC() {
-    var svc_ec2 = new AWS.EC2({region: region});
-
     blockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
 
-    sdkcall(svc_ec2.describeVpcs, {
+    sdkcall("EC2", "describeVpcs", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
 
         data.Vpcs.forEach(vpc => {
-            sdkcall(svc_ec2.describeVpcAttribute, {
+            sdkcall("EC2", "describeVpcAttribute", {
                 Attribute: "enableDnsSupport", 
                 VpcId: vpc.VpcId
             }, true).then((dnsSupport) => {
-                sdkcall(svc_ec2.describeVpcAttribute, {
+                sdkcall("EC2", "describeVpcAttribute", {
                     Attribute: "enableDnsHostnames", 
                     VpcId: vpc.VpcId
                 }, true).then((dnsHostnames) => {
@@ -546,7 +605,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     });
 
-    sdkcall(svc_ec2.describeSubnets, {
+    sdkcall("EC2", "describeSubnets", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
@@ -564,7 +623,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
     });
 
-    sdkcall(svc_ec2.describeInternetGateways, {
+    sdkcall("EC2", "describeInternetGateways", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
@@ -582,7 +641,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
     });
 
-    sdkcall(svc_ec2.describeCustomerGateways, {
+    sdkcall("EC2", "describeCustomerGateways", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
@@ -600,7 +659,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
     });
 
-    sdkcall(svc_ec2.describeVpnGateways, {
+    sdkcall("EC2", "describeVpnGateways", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
@@ -618,7 +677,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
     });
 
-    sdkcall(svc_ec2.describeAddresses, {
+    sdkcall("EC2", "describeAddresses", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
@@ -636,7 +695,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
     });
 
-    sdkcall(svc_ec2.describeDhcpOptions, {
+    sdkcall("EC2", "describeDhcpOptions", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
@@ -654,7 +713,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
     });
 
-    sdkcall(svc_ec2.describeVpnConnections, {
+    sdkcall("EC2", "describeVpnConnections", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
@@ -672,7 +731,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
     });
 
-    sdkcall(svc_ec2.describeVpcPeeringConnections, {
+    sdkcall("EC2", "describeVpcPeeringConnections", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
@@ -690,7 +749,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
     });
 
-    sdkcall(svc_ec2.describeNetworkAcls, {
+    sdkcall("EC2", "describeNetworkAcls", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
@@ -708,7 +767,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
     });
 
-    sdkcall(svc_ec2.describeRouteTables, {
+    sdkcall("EC2", "describeRouteTables", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
@@ -850,19 +909,17 @@ sections.push({
 });
 
 function updateDatatableNetworkingAndContentDeliveryRoute53() {
-    var svc_route53 = new AWS.Route53({region: region});
-
     blockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-records-datatable');
     blockUI('#section-networkingandcontentdelivery-healthchecks-records-datatable');
 
-    sdkcall(svc_route53.listHostedZones, {
+    sdkcall("Route53", "listHostedZones", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
 
         data.HostedZones.forEach(hostedZone => {
-            sdkcall(svc_route53.listResourceRecordSets, {
+            sdkcall("Route53", "listResourceRecordSets", {
                 HostedZoneId: hostedZone.Id.split("/").pop()
             }, true).then((data) => {
                 $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
@@ -895,7 +952,7 @@ function updateDatatableNetworkingAndContentDeliveryRoute53() {
         unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
     });
 
-    sdkcall(svc_route53.listHealthChecks, {
+    sdkcall("Route53", "listHealthChecks", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
@@ -1476,15 +1533,10 @@ sections.push({
 });
 
 function updateDatatableComputeEC2() {
-    var svc_ec2 = new AWS.EC2({region: region});
-    var svc_elb = new AWS.ELB({region: region});
-    var svc_elbv2 = new AWS.ELBv2({region: region});
-    var svc_autoscaling = new AWS.AutoScaling({region: region});
-
     blockUI('#section-compute-ec2-instances-datatable');
     blockUI('#section-compute-ec2-hosts-datatable');
 
-    sdkcall(svc_ec2.describeInstances, {
+    sdkcall("EC2", "describeInstances", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-instances-datatable').bootstrapTable('removeAll');
@@ -1516,7 +1568,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-instances-datatable');
     });
 
-    sdkcall(svc_ec2.describeHosts, {
+    sdkcall("EC2", "describeHosts", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-hosts-datatable').bootstrapTable('removeAll');
@@ -1534,7 +1586,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-hosts-datatable');
     });
 
-    sdkcall(svc_elb.describeLoadBalancers, {
+    sdkcall("ELB", "describeLoadBalancers", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('removeAll');
@@ -1552,7 +1604,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-loadbalancers-datatable');
     });
 
-    sdkcall(svc_autoscaling.describeAutoScalingGroups, {
+    sdkcall("AutoScaling", "describeAutoScalingGroups", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-autoscalinggroups-datatable').bootstrapTable('removeAll');
@@ -1570,7 +1622,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-autoscalinggroups-datatable');
     });
 
-    sdkcall(svc_autoscaling.describeLaunchConfigurations, {
+    sdkcall("AutoScaling", "describeLaunchConfigurations", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-launchconfigurations-datatable').bootstrapTable('removeAll');
@@ -1588,14 +1640,14 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-launchconfigurations-datatable');
     });
 
-    sdkcall(svc_ec2.describeLaunchTemplates, {
+    sdkcall("EC2", "describeLaunchTemplates", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('removeAll');
 
         if (data.LaunchTemplates) {
             data.LaunchTemplates.forEach(launchTemplate => {
-                sdkcall(svc_ec2.describeLaunchTemplateVersions, {
+                sdkcall("EC2", "describeLaunchTemplateVersions", {
                     LaunchTemplateId: launchTemplate.LaunchTemplateId,
                     Versions: [launchTemplate.LatestVersionNumber.toString()]
                 }, true).then((data) => {
@@ -1614,7 +1666,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-launchtemplates-datatable');
     });
 
-    sdkcall(svc_elbv2.describeTargetGroups, {
+    sdkcall("ELBv2", "describeTargetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-targetgroups-datatable').bootstrapTable('removeAll');
@@ -1632,7 +1684,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-targetgroups-datatable');
     });
 
-    sdkcall(svc_ec2.describeVolumes, {
+    sdkcall("EC2", "describeVolumes", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-volumes-datatable').bootstrapTable('removeAll');
@@ -1650,7 +1702,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-volumes-datatable');
     });
 
-    sdkcall(svc_ec2.describeNetworkInterfaces, {
+    sdkcall("EC2", "describeNetworkInterfaces", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('removeAll');
@@ -1668,7 +1720,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-networkinterfaces-datatable');
     });
 
-    sdkcall(svc_ec2.describeSpotFleetRequests, {
+    sdkcall("EC2", "describeSpotFleetRequests", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-spotrequests-datatable').bootstrapTable('removeAll');
@@ -1686,7 +1738,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-spotrequests-datatable');
     });
 
-    sdkcall(svc_ec2.describePlacementGroups, {
+    sdkcall("EC2", "describePlacementGroups", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('removeAll');
@@ -1706,7 +1758,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-placementgroups-datatable');
     });
 
-    sdkcall(svc_autoscaling.describePolicies, {
+    sdkcall("AutoScaling", "describePolicies", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('removeAll');
@@ -1724,7 +1776,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-autoscalingpolicies-datatable');
     });
 
-    sdkcall(svc_autoscaling.describeScheduledActions, {
+    sdkcall("AutoScaling", "describeScheduledActions", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('removeAll');
@@ -1742,7 +1794,7 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
     });
 
-    sdkcall(svc_ec2.describeSecurityGroups, {
+    sdkcall("EC2", "describeSecurityGroups", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('removeAll');
@@ -1885,19 +1937,17 @@ sections.push({
 });
 
 function updateDatatableComputeLambda() {
-    var svc_lambda = new AWS.Lambda({region: region});
-
     blockUI('#section-compute-lambda-functions-datatable');
     blockUI('#section-compute-lambda-aliases-datatable');
 
-    sdkcall(svc_lambda.listFunctions, {
+    sdkcall("Lambda", "listFunctions", {
         MaxItems: 100
     }, true).then((data) => {
         $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
 
         data.Functions.forEach(lambdaFunction => {
-            sdkcall(svc_lambda.getFunction, {
+            sdkcall("Lambda", "getFunction", {
                 FunctionName: lambdaFunction.FunctionArn
             }, true).then((data) => {
                 $('#section-compute-lambda-functions-datatable').bootstrapTable('append', [{
@@ -1913,7 +1963,7 @@ function updateDatatableComputeLambda() {
                 }]);
             });
 
-            sdkcall(svc_lambda.listAliasess, {
+            sdkcall("Lambda", "listAliases", {
                 FunctionName: lambdaFunction.FunctionArn
             }, true).then((data) => {
                 data.Aliases.forEach(alias => {
@@ -2024,12 +2074,10 @@ sections.push({
 });
 
 function updateDatatableStorageS3() {
-    var svc_s3 = new AWS.S3({region: region});
-
     blockUI('#section-storage-s3-buckets-datatable');
     blockUI('#section-storage-s3-bucketpolicies-datatable');
 
-    sdkcall(svc_s3.listBuckets, {
+    sdkcall("S3", "listBuckets", {
         // no params
     }, true).then((data) => {
         $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
@@ -2045,7 +2093,7 @@ function updateDatatableStorageS3() {
                 creationdate: bucket.CreationDate
             }]);
 
-            sdkcall(svc_s3.getBucketPolicy, {
+            sdkcall("S3", "getBucketPolicy", {
                 Bucket: bucket.Name
             }, false).then((data) => {
                 data['Bucket'] = bucket.Name;
@@ -2226,13 +2274,11 @@ sections.push({
 });
 
 function updateDatatableDatabaseRDS() {
-    var svc_rds = new AWS.RDS({region: region});
-
     blockUI('#section-database-rds-instances-datatable');
     blockUI('#section-database-rds-subnetgroups-datatable');
     blockUI('#section-database-rds-parametergroups-datatable');
 
-    sdkcall(svc_rds.describeDBInstances, {
+    sdkcall("RDS", "describeDBInstances", {
         // no params
     }, true).then((data) => {
         $('#section-database-rds-instances-datatable').bootstrapTable('removeAll');
@@ -2250,7 +2296,7 @@ function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-instances-datatable');
     });
 
-    sdkcall(svc_rds.describeDBSubnetGroups, {
+    sdkcall("RDS", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
@@ -2268,7 +2314,7 @@ function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-subnetgroups-datatable');
     });
 
-    sdkcall(svc_rds.describeDBParameterGroups, {
+    sdkcall("RDS", "describeDBParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
@@ -2287,7 +2333,7 @@ function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-parametergroups-datatable');
     });
 
-    sdkcall(svc_rds.describeDBSecurityGroups, {
+    sdkcall("RDS", "describeDBSecurityGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-rds-securitygroups-datatable').bootstrapTable('removeAll');
@@ -2466,13 +2512,11 @@ sections.push({
 });
 
 function updateDatatableDatabaseElastiCache() {
-    var svc_elasticache = new AWS.ElastiCache({region: region});
-
     blockUI('#section-database-elasticache-clusters-datatable');
     blockUI('#section-database-elasticache-subnetgroups-datatable');
     blockUI('#section-database-elasticache-parametergroups-datatable');
 
-    sdkcall(svc_elasticache.describeCacheClusters, {
+    sdkcall("ElastiCache", "describeCacheClusters", {
         // no params
     }, true).then((data) => {
         $('#section-database-elasticache-clusters-datatable').bootstrapTable('removeAll');
@@ -2492,7 +2536,7 @@ function updateDatatableDatabaseElastiCache() {
         unblockUI('#section-database-elasticache-clusters-datatable');
     });
 
-    sdkcall(svc_elasticache.describeCacheSubnetGroups, {
+    sdkcall("ElastiCache", "describeCacheSubnetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('removeAll');
@@ -2510,7 +2554,7 @@ function updateDatatableDatabaseElastiCache() {
         unblockUI('#section-database-elasticache-subnetgroups-datatable');
     });
 
-    sdkcall(svc_elasticache.describeCacheParameterGroups, {
+    sdkcall("ElastiCache", "describeCacheParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('removeAll');
@@ -2530,7 +2574,7 @@ function updateDatatableDatabaseElastiCache() {
         unblockUI('#section-database-elasticache-parametergroups-datatable');
     });
 
-    sdkcall(svc_elasticache.describeCacheSecurityGroups, {
+    sdkcall("ElastiCache", "describeCacheSecurityGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-elasticache-securitygroups-datatable').bootstrapTable('removeAll');
@@ -2749,15 +2793,13 @@ sections.push({
 });
 
 function updateDatatableManagementAndGovernanceOpsWorks() {
-    var svc_opsworks = new AWS.OpsWorks({region: region});
-
     blockUI('#section-managementandgovernance-opsworks-stacks-datatable');
     blockUI('#section-managementandgovernance-opsworks-apps-datatable');
     blockUI('#section-managementandgovernance-opsworks-layers-datatable');
     blockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
     blockUI('#section-managementandgovernance-opsworks-instances-datatable');
 
-    sdkcall(svc_opsworks.describeStacks, {
+    sdkcall("OpsWorks", "describeStacks", {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('removeAll');
@@ -2771,7 +2813,7 @@ function updateDatatableManagementAndGovernanceOpsWorks() {
                 stackid: stack.StackId
             }]);
 
-            sdkcall(svc_opsworks.describeLayers, {
+            sdkcall("OpsWorks", "describeLayers", {
                 StackId: stack.StackId
             }, true).then((data) => {
                 $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
@@ -2789,7 +2831,7 @@ function updateDatatableManagementAndGovernanceOpsWorks() {
                 unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
             });
 
-            sdkcall(svc_opsworks.describeApps, {
+            sdkcall("OpsWorks", "describeApps", {
                 StackId: stack.StackId
             }, true).then((data) => {
                 $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
@@ -2807,7 +2849,7 @@ function updateDatatableManagementAndGovernanceOpsWorks() {
                 unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
             });
         
-            sdkcall(svc_opsworks.describeElasticLoadBalancers, {
+            sdkcall("OpsWorks", "describeElasticLoadBalancers", {
                 StackId: stack.StackId
             }, true).then((data) => {
                 $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
@@ -2825,7 +2867,7 @@ function updateDatatableManagementAndGovernanceOpsWorks() {
                 unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
             });
 
-            sdkcall(svc_opsworks.describeInstances, {
+            sdkcall("OpsWorks", "describeInstances", {
                 StackId: stack.StackId
             }, true).then((data) => {
                 $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
@@ -3008,14 +3050,12 @@ sections.push({
 });
 
 function updateDatatableDatabaseRedshift() {
-    var svc_redshift = new AWS.Redshift({region: region});
-
     blockUI('#section-database-redshift-clusters-datatable');
     blockUI('#section-database-redshift-subnetgroups-datatable');
     blockUI('#section-database-redshift-parametergroups-datatable');
     blockUI('#section-database-redshift-securitygroups-datatable');
 
-    sdkcall(svc_redshift.describeClusters, {
+    sdkcall("Redshift", "describeClusters", {
         // no params
     }, true).then((data) => {
         $('#section-database-redshift-clusters-datatable').bootstrapTable('removeAll');
@@ -3033,7 +3073,7 @@ function updateDatatableDatabaseRedshift() {
         unblockUI('#section-database-redshift-clusters-datatable');
     });
 
-    sdkcall(svc_redshift.describeClusterSubnetGroups, {
+    sdkcall("Redshift", "describeClusterSubnetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('removeAll');
@@ -3051,7 +3091,7 @@ function updateDatatableDatabaseRedshift() {
         unblockUI('#section-database-redshift-subnetgroups-datatable');
     });
 
-    sdkcall(svc_redshift.describeClusterParameterGroups, {
+    sdkcall("Redshift", "describeClusterParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-redshift-parametergroups-datatable').bootstrapTable('removeAll');
@@ -3069,7 +3109,7 @@ function updateDatatableDatabaseRedshift() {
         unblockUI('#section-database-redshift-parametergroups-datatable');
     });
 
-    sdkcall(svc_redshift.describeClusterSecurityGroups, {
+    sdkcall("Redshift", "describeClusterSecurityGroups", {
         // no params
     }, true).then((data) => {
         $('#section-database-redshift-securitygroups-datatable').bootstrapTable('removeAll');
@@ -3177,20 +3217,17 @@ sections.push({
 });
 
 function updateDatatableApplicationIntegrationSNS() {
-
-    var svc_sns = new AWS.SNS({region: region});
-
     blockUI('#section-applicationintegration-sns-topics-datatable');
     blockUI('#section-applicationintegration-sns-topicpolicies-datatable');
 
-    sdkcall(svc_sns.listTopics, {
+    sdkcall("SNS", "listTopics", {
         // no params
     }, true).then((data) => {
         $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('removeAll');
 
         data.Topics.forEach(topic => {
-            sdkcall(svc_sns.getTopicAttributes, {
+            sdkcall("SNS", "getTopicAttributes", {
                 TopicArn: topic.TopicArn
             }, true).then((data) => {
                 $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('append', [{
@@ -3307,19 +3344,17 @@ sections.push({
 });
 
 function updateDatatableApplicationIntegrationSQS() {
-    var svc_sqs = new AWS.SQS({region: region});
-
     blockUI('#section-applicationintegration-sqs-queues-datatable');
     blockUI('#section-applicationintegration-sqs-queuepolicies-datatable');
 
-    sdkcall(svc_sqs.listQueues, {
+    sdkcall("SQS", "listQueues", {
         // no params
     }, true).then((data) => {
         $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
 
         data.QueueUrls.forEach(queueUrl => {
-            sdkcall(svc_sqs.getQueueAttributes, {
+            sdkcall("SQS", "getQueueAttributes", {
                 QueueUrl: queueUrl,
                 AttributeNames: ['All']
             }, true).then((data) => {
@@ -3510,14 +3545,12 @@ sections.push({
 });
 
 function updateDatatableComputeElasticBeanstalk() {
-    var svc_elasticbeanstalk = new AWS.ElasticBeanstalk({region: region});
-
     blockUI('#section-compute-elasticbeanstalk-applications-datatable');
     blockUI('#section-compute-elasticbeanstalk-applicationversions-datatable');
     blockUI('#section-compute-elasticbeanstalk-environments-datatable');
     blockUI('#section-compute-elasticbeanstalk-configurationtemplates-datatable');
 
-    sdkcall(svc_elasticbeanstalk.describeApplications, {
+    sdkcall("ElasticBeanstalk", "describeApplications", {
         // no params
     }, true).then((data) => {
         $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
@@ -3531,7 +3564,7 @@ function updateDatatableComputeElasticBeanstalk() {
                 name: application.ApplicationName
             }]);
 
-            sdkcall(svc_elasticbeanstalk.describeConfigurationSettings, {
+            sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
                 ApplicationName: application.ApplicationName
             }, true).then((data) => {
                 $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
@@ -3553,7 +3586,7 @@ function updateDatatableComputeElasticBeanstalk() {
         unblockUI('#section-compute-elasticbeanstalk-applications-datatable');
     });
 
-    sdkcall(svc_elasticbeanstalk.describeApplicationVersions, {
+    sdkcall("ElasticBeanstalk", "describeApplicationVersions", {
         // no params
     }, true).then((data) => {
         $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('removeAll');
@@ -3571,7 +3604,7 @@ function updateDatatableComputeElasticBeanstalk() {
         unblockUI('#section-compute-elasticbeanstalk-applicationversions-datatable');
     });
 
-    sdkcall(svc_elasticbeanstalk.describeEnvironments, {
+    sdkcall("ElasticBeanstalk", "describeEnvironments", {
         // no params
     }, true).then((data) => {
         $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('removeAll');
@@ -3639,11 +3672,9 @@ sections.push({
 });
 
 function updateDatatableManagementAndGovernanceCloudWatch() {
-    var svc_cloudwatch = new AWS.CloudWatch({region: region});
-
     blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
 
-    sdkcall(svc_cloudwatch.describeAlarms, {
+    sdkcall("CloudWatch", "describeAlarms", {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('removeAll');
@@ -3711,11 +3742,9 @@ sections.push({
 });
 
 function updateDatatableManagementAndGovernanceCloudTrail() {
-    var svc_cloudtrail = new AWS.CloudTrail({region: region});
-
     blockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
 
-    sdkcall(svc_cloudtrail.describeTrails, {
+    sdkcall("CloudTrail", "describeTrails", {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('removeAll');
@@ -3783,11 +3812,9 @@ sections.push({
 });
 
 function updateDatatableNetworkingAndContentDeliveryCloudFront() {
-    var svc_cloudfront = new AWS.CloudFront({region: region});
-
     blockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
 
-    sdkcall(svc_cloudfront.listDistributions, {
+    sdkcall("CloudFront", "listDistributions", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('removeAll');
@@ -3855,17 +3882,15 @@ sections.push({
 });
 
 function updateDatatableDatabaseDynamoDB() {
-    var svc_dynamodb = new AWS.DynamoDB({region: region});
-
     blockUI('#section-database-dynamodb-tables-datatable');
 
-    sdkcall(svc_dynamodb.listTables, {
+    sdkcall("DynamoDB", "listTables", {
         // no params
     }, true).then((data) => {
         $('#section-database-dynamodb-tables-datatable').bootstrapTable('removeAll');
 
         data.TableNames.forEach(tableName => {
-            sdkcall(svc_dynamodb.describeTable, {
+            sdkcall("DynamoDB", "describeTable", {
                 TableName: tableName
             }, true).then((data) => {
                 $('#section-database-dynamodb-tables-datatable').bootstrapTable('append', [{
@@ -3931,17 +3956,15 @@ sections.push({
 });
 
 function updateDatatableAnalyticsKinesis() {
-    var svc_kinesis = new AWS.Kinesis({region: region});
-
     blockUI('#section-analytics-kinesis-tables-datatable');
 
-    sdkcall(svc_kinesis.listStreams, {
+    sdkcall("Kinesis", "listStreams", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-kinesis-tables-datatable').bootstrapTable('removeAll');
 
         data.StreamNames.forEach(streamName => {
-            sdkcall(svc_kinesis.describeStream, {
+            sdkcall("Kinesis", "describeStream", {
                 StreamName: streamName
             }, true).then((data) => {
                 $('#section-analytics-kinesis-tables-datatable').bootstrapTable('append', [{
@@ -4007,11 +4030,9 @@ sections.push({
 });
 
 function updateDatatableComputeECR() {
-    var svc_ecr = new AWS.ECR({region: region});
-
     blockUI('#section-compute-ecr-repositories-datatable');
 
-    sdkcall(svc_ecr.describeRepositories, {
+    sdkcall("ECR", "describeRepositories", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
@@ -4079,17 +4100,15 @@ sections.push({
 });
 
 function updateDatatableComputeEKS() {
-    var svc_eks = new AWS.EKS({region: region});
-
     blockUI('#section-compute-eks-clusters-datatable');
 
-    sdkcall(svc_eks.listClusters, {
+    sdkcall("EKS", "listClusters", {
         // no params
     }, true).then((data) => {
         $('#section-compute-eks-clusters-datatable').bootstrapTable('removeAll');
 
         data.clusters.forEach(cluster => {
-            sdkcall(svc_eks.describeCluster, {
+            sdkcall("EKS", "describeCluster", {
                 name: cluster
             }, true).then((data) => {
                 $('#section-compute-eks-clusters-datatable').bootstrapTable('append', [{
@@ -4229,19 +4248,17 @@ sections.push({
 });
 
 function updateDatatableComputeECS() {
-    var svc_ecs = new AWS.ECS({region: region});
-
     blockUI('#section-compute-ecs-clusters-datatable');
     blockUI('#section-compute-ecs-services-datatable');
     blockUI('#section-compute-ecs-taskdefinitions-datatable');
 
-    sdkcall(svc_ecs.listClusters, {
+    sdkcall("ECS", "listClusters", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
 
         data.clusterArns.forEach(clusterArn => {
-            sdkcall(svc_ecs.describeClusters, {
+            sdkcall("ECS", "describeClusters", {
                 clusters: [clusterArn]
             }, true).then((data) => {
                 $('#section-compute-ecs-clusters-datatable').bootstrapTable('append', [{
@@ -4253,13 +4270,13 @@ function updateDatatableComputeECS() {
                 }]);
             });
 
-            sdkcall(svc_ecs.listServices, {
+            sdkcall("ECS", "listServices", {
                 cluster: clusterArn
             }, true).then((data) => {
                 $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
         
                 data.serviceArns.forEach(serviceArn => {
-                    sdkcall(svc_ecs.describeServices, {
+                    sdkcall("ECS", "describeServices", {
                         services: [serviceArn]
                     }, true).then((data) => {
                         $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
@@ -4279,13 +4296,13 @@ function updateDatatableComputeECS() {
         unblockUI('#section-compute-ecs-clusters-datatable');
     });
 
-    sdkcall(svc_ecs.listTaskDefinitions, {
+    sdkcall("ECS", "listTaskDefinitions", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
 
         data.taskDefinitionArns.forEach(taskDefinitionArn => {
-            sdkcall(svc_ecs.describeTaskDefinitions, {
+            sdkcall("ECS", "describeTaskDefinitions", {
                 taskDefinition: taskDefinitionArn
             }, true).then((data) => {
                 $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
@@ -5188,9 +5205,6 @@ sections.push({
 });
 
 function updateDatatableNetworkingAndContentDeliveryApiGateway() {
-    var svc_apigateway = new AWS.APIGateway({region: region});
-    var svc_apigatewayv2 = new AWS.ApiGatewayV2({region: region});
-
     blockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
@@ -5242,7 +5256,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
     $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('removeAll');
 
     // V1
-    sdkcall(svc_apigateway.getAccount, {
+    sdkcall("APIGateway", "getAccount", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('append', [{
@@ -5256,11 +5270,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
     });
 
-    sdkcall(svc_apigateway.getDomainNames, {
+    sdkcall("APIGateway", "getDomainNames", {
         // no params
     }, true).then((data) => {
         data.items.forEach(domainName => {
-            sdkcall(svc_apigateway.getBasePathMappings, {
+            sdkcall("APIGateway", "getBasePathMappings", {
                 domainName: domainName.domainName
             }, true).then((data) => {
                 data.items.forEach(basePathMapping => {
@@ -5287,7 +5301,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
     });
 
-    sdkcall(svc_apigateway.getClientCertificates, {
+    sdkcall("APIGateway", "getClientCertificates", {
         // no params
     }, true).then((data) => {
         data.items.forEach(clientCertificate => {
@@ -5303,7 +5317,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable');
     });
 
-    sdkcall(svc_apigateway.getApiKeys, {
+    sdkcall("APIGateway", "getApiKeys", {
         // no params
     }, true).then((data) => {
         data.items.forEach(apiKey => {
@@ -5319,7 +5333,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
     });
 
-    sdkcall(svc_apigateway.getVpcLinks, {
+    sdkcall("APIGateway", "getVpcLinks", {
         // no params
     }, true).then((data) => {
         data.items.forEach(vpcLink => {
@@ -5335,11 +5349,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable');
     });
 
-    sdkcall(svc_apigateway.getUsagePlans, {
+    sdkcall("APIGateway", "getUsagePlans", {
         // no params
     }, true).then((data) => {
         data.items.forEach(usagePlan => {
-            sdkcall(svc_apigateway.getUsagePlanKeys, {
+            sdkcall("APIGateway", "getUsagePlanKeys", {
                 usagePlanId: usagePlan.id
             }, true).then((data) => {
                 data.items.forEach(usagePlanKey => {
@@ -5366,15 +5380,16 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable');
     });
 
-    sdkcall(svc_apigateway.getRestApis, {
+    sdkcall("APIGateway", "getRestApis", {
         // no params
     }, true).then((data) => {
         data.items.forEach(api => {
-            sdkcall(svc_apigateway.getRequestValidators, {
+            sdkcall("APIGateway", "getRequestValidators", {
                 restApiId: api.id
             }, true).then((data) => {
                 if (data.item) {
                     data.item.forEach(requestValidator => {
+                        requestValidator['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').bootstrapTable('append', [{
                             f2id: requestValidator.id,
                             f2type: 'apigateway.requestvalidator',
@@ -5388,11 +5403,12 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable');
             });
 
-            sdkcall(svc_apigateway.getDocumentationParts, {
+            sdkcall("APIGateway", "getDocumentationParts", {
                 restApiId: api.id
             }, true).then((data) => {
                 if (data.item) {
                     data.item.forEach(documentationPart => {
+                        documentationPart['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').bootstrapTable('append', [{
                             f2id: documentationPart.id,
                             f2type: 'apigateway.documentationpart',
@@ -5406,11 +5422,12 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable');
             });
 
-            sdkcall(svc_apigateway.getDocumentationVersions, {
+            sdkcall("APIGateway", "getDocumentationVersions", {
                 restApiId: api.id
             }, true).then((data) => {
                 if (data.item) {
                     data.item.forEach(documentationVersion => {
+                        documentationVersion['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').bootstrapTable('append', [{
                             f2id: documentationVersion.version,
                             f2type: 'apigateway.documentationversion',
@@ -5424,11 +5441,12 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable');
             });
 
-            sdkcall(svc_apigateway.getGatewayResponses, {
+            sdkcall("APIGateway", "getGatewayResponses", {
                 restApiId: api.id
             }, true).then((data) => {
                 if (data.item) {
                     data.item.forEach(gatewayResponse => {
+                        gatewayResponse['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').bootstrapTable('append', [{
                             f2id: gatewayResponse.responseType,
                             f2type: 'apigateway.gatewayresponse',
@@ -5442,10 +5460,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable');
             });
 
-            sdkcall(svc_apigateway.getStages, {
+            sdkcall("APIGateway", "getStages", {
                 restApiId: api.id
             }, true).then((data) => {
                 data.item.forEach(stage => {
+                    stage['restApiId'] = api.id;
                     $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
                         f2id: stage.stageName,
                         f2type: 'apigateway.stage',
@@ -5458,10 +5477,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
             });
 
-            sdkcall(svc_apigateway.getDeployments, {
+            sdkcall("APIGateway", "getDeployments", {
                 restApiId: api.id
             }, true).then((data) => {
                 data.items.forEach(deployment => {
+                    deployment['restApiId'] = api.id;
                     $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
                         f2id: deployment.id,
                         f2type: 'apigateway.deployment',
@@ -5474,16 +5494,18 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
             });
 
-            sdkcall(svc_apigateway.getResources, {
+            sdkcall("APIGateway", "getResources", {
                 restApiId: api.id
             }, true).then((data) => {
                 data.items.forEach(resource => {
                     Object.keys(resource.resourceMethods).forEach(resourceMethod => {
-                        sdkcall(svc_apigateway.getMethod, {
+                        sdkcall("APIGateway", "getMethod", {
                             httpMethod: resourceMethod,
                             resourceId: resource.id,
                             restApiId: api.id
                         }, true).then((data) => {
+                            data['restApiId'] = api.id;
+                            data['resourceId'] = resource.id;
                             $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('append', [{
                                 f2id: resource.id + "-" + data.httpMethod,
                                 f2type: 'apigateway.method',
@@ -5494,6 +5516,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                         });
                     });
 
+                    resource['restApiId'] = api.id;
                     $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('append', [{
                         f2id: resource.id,
                         f2type: 'apigateway.resource',
@@ -5507,10 +5530,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
             });
 
-            sdkcall(svc_apigateway.getModels, {
+            sdkcall("APIGateway", "getModels", {
                 restApiId: api.id
             }, true).then((data) => {
                 data.items.forEach(model => {
+                    model['restApiId'] = api.id;
                     $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
                         f2id: model.id,
                         f2type: 'apigateway.model',
@@ -5523,10 +5547,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
             });
 
-            sdkcall(svc_apigateway.getAuthorizers, {
+            sdkcall("APIGateway", "getAuthorizers", {
                 restApiId: api.id
             }, true).then((data) => {
                 data.items.forEach(authorizer => {
+                    authorizer['restApiId'] = api.id;
                     $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
                         f2id: authorizer.id,
                         f2type: 'apigateway.authorizer',
@@ -5552,14 +5577,15 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
     });
 
     // V2
-    sdkcall(svc_apigatewayv2.getApis, {
+    sdkcall("ApiGatewayV2", "getApis", {
         // no params
     }, true).then((data) => {
         data.Items.forEach(api => {
-            sdkcall(svc_apigatewayv2.getStages, {
+            sdkcall("ApiGatewayV2", "getStages", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(stage => {
+                    stage['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
                         f2id: stage.StageName,
                         f2type: 'apigatewayv2.stage',
@@ -5572,13 +5598,14 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
             });
 
-            sdkcall(svc_apigatewayv2.getDeployments, {
+            sdkcall("ApiGatewayV2", "getDeployments", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(deployment => {
+                    deployment['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
                         f2id: deployment.DeploymentId,
-                        f2type: 'apigatewayv2.stage',
+                        f2type: 'apigatewayv2.deployment',
                         f2data: deployment,
                         f2region: region,
                         id: deployment.DeploymentId
@@ -5588,10 +5615,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
             });
 
-            sdkcall(svc_apigatewayv2.getModels, {
+            sdkcall("ApiGatewayV2", "getModels", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(model => {
+                    model['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
                         f2id: model.ModelId,
                         f2type: 'apigatewayv2.model',
@@ -5604,10 +5632,11 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
             });
 
-            sdkcall(svc_apigatewayv2.getAuthorizers, {
+            sdkcall("ApiGatewayV2", "getAuthorizers", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(authorizer => {
+                    authorizer['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
                         f2id: authorizer.AuthorizerId,
                         f2type: 'apigatewayv2.authorizer',
@@ -5620,15 +5649,17 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
             });
 
-            sdkcall(svc_apigatewayv2.getRoutes, {
+            sdkcall("ApiGatewayV2", "getRoutes", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(route => {
-                    sdkcall(svc_apigatewayv2.getRouteResponses, {
+                    sdkcall("ApiGatewayV2", "getRouteResponses", {
                         ApiId: api.ApiId,
                         RouteId: route.RouteId
                     }, true).then((data) => {
                         data.Items.forEach(routeResponse => {
+                            routeResponse['ApiId'] = api.ApiId;
+                            routeResponse['RouteId'] = route.RouteId;
                             $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
                                 f2id: routeResponse.RouteResponseId,
                                 f2type: 'apigatewayv2.routeresponse',
@@ -5639,6 +5670,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                         });
                     });
 
+                    route['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
                         f2id: route.RouteId,
                         f2type: 'apigatewayv2.route',
@@ -5652,15 +5684,17 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
             });
 
-            sdkcall(svc_apigatewayv2.getIntegrations, {
+            sdkcall("ApiGatewayV2", "getIntegrations", {
                 ApiId: api.ApiId
             }, true).then((data) => {
                 data.Items.forEach(integration => {
-                    sdkcall(svc_apigatewayv2.getIntegrationResponses, {
+                    sdkcall("ApiGatewayV2", "getIntegrationResponses", {
                         ApiId: api.ApiId,
                         IntegrationId: integration.IntegrationId
                     }, true).then((data) => {
                         data.Items.forEach(integrationResponse => {
+                            integrationResponse['ApiId'] = api.ApiId;
+                            integrationResponse['IntegrationId'] = integration.IntegrationId;
                             $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
                                 f2id: integrationResponse.IntegrationResponseId,
                                 f2type: 'apigatewayv2.integrationresponse',
@@ -5671,6 +5705,7 @@ function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                         });
                     });
 
+                    integration['ApiId'] = api.ApiId;
                     $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
                         f2id: integration.IntegrationId,
                         f2type: 'apigatewayv2.integration',
@@ -5823,13 +5858,11 @@ sections.push({
 });
 
 function updateDatatableComputeBatch() {
-    var svc_batch = new AWS.Batch({region: region});
-
     blockUI('#section-compute-batch-computeenvironments-datatable');
     blockUI('#section-compute-batch-jobdefinitions-datatable');
     blockUI('#section-compute-batch-jobqueues-datatable');
 
-    sdkcall(svc_batch.describeComputeEnvironments, {
+    sdkcall("Batch", "describeComputeEnvironments", {
         // no params
     }, true).then((data) => {
         $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('removeAll');
@@ -5847,7 +5880,7 @@ function updateDatatableComputeBatch() {
         unblockUI('#section-compute-batch-computeenvironments-datatable');
     });
 
-    sdkcall(svc_batch.describeJobDefinitions, {
+    sdkcall("Batch", "describeJobDefinitions", {
         // no params
     }, true).then((data) => {
         $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('removeAll');
@@ -5865,7 +5898,7 @@ function updateDatatableComputeBatch() {
         unblockUI('#section-compute-batch-jobdefinitions-datatable');
     });
 
-    sdkcall(svc_batch.describeJobQueues, {
+    sdkcall("Batch", "describeJobQueues", {
         // no params
     }, true).then((data) => {
         $('#section-compute-batch-jobqueues-datatable').bootstrapTable('removeAll');
@@ -5972,30 +6005,37 @@ sections.push({
 });
 
 function updateDatatableStorageEFS() {
-    var svc_efs = new AWS.EFS({region: region});
-
     blockUI('#section-storage-efs-filesystems-datatable');
     blockUI('#section-storage-efs-mounttargets-datatable');
 
-    sdkcall(svc_efs.describeFileSystems, {
+    sdkcall("EFS", "describeFileSystems", {
         // no params
     }, true).then((data) => {
         $('#section-storage-efs-filesystems-datatable').bootstrapTable('removeAll');
 
         data.FileSystems.forEach(fileSystem => {
-            sdkcall(svc_efs.describeMountTargets, {
+            sdkcall("EFS", "describeMountTargets", {
                 FileSystemId: fileSystem.FileSystemId
             }, true).then((data) => {
                 $('#section-storage-efs-mounttargets-datatable').bootstrapTable('removeAll');
         
                 data.MountTargets.forEach(mountTarget => {
-                    $('#section-storage-efs-mounttargets-datatable').bootstrapTable('append', [{
-                        f2id: mountTarget.MountTargetId,
-                        f2type: 'efs.mounttarget',
-                        f2data: mountTarget,
-                        f2region: region,
-                        name: mountTarget.MountTargetId
-                    }]);
+                    sdkcall("EC2", "describeNetworkInterfaces", {
+                        NetworkInterfaceIds: [mountTarget.NetworkInterfaceId]
+                    }, true).then((nicdata) => {
+                        mountTarget['SecurityGroups'] = [];
+                        nicdata.NetworkInterfaces[0].Groups.forEach(group => {
+                            mountTarget['SecurityGroups'].push(group.GroupId);
+                        });
+
+                        $('#section-storage-efs-mounttargets-datatable').bootstrapTable('append', [{
+                            f2id: mountTarget.MountTargetId,
+                            f2type: 'efs.mounttarget',
+                            f2data: mountTarget,
+                            f2region: region,
+                            name: mountTarget.MountTargetId
+                        }]);
+                    });
                 });
             });
 
@@ -6063,17 +6103,15 @@ sections.push({
 });
 
 function updateDatatableDeveloperToolsCloud9() {
-    var svc_cloud9 = new AWS.Cloud9({region: region});
-
     blockUI('#section-developertools-cloud9-environments-datatable');
 
-    sdkcall(svc_cloud9.listEnvironments, {
+    sdkcall("Cloud9", "listEnvironments", {
         // no params
     }, true).then((data) => {
         $('#section-developertools-cloud9-environments-datatable').bootstrapTable('removeAll');
 
         data.environmentIds.forEach(environmentId => {
-            sdkcall(svc_cloud9.describeEnvironments, {
+            sdkcall("Cloud9", "describeEnvironments", {
                 environmentIds: [environmentId]
             }, true).then((data) => {
                 data.environments.forEach(environment => {
@@ -6142,11 +6180,9 @@ sections.push({
 });
 
 function updateDatatableStorageFSx() {
-    var svc_fsx = new AWS.FSx({region: region});
-
     blockUI('#section-storage-fsx-filesystems-datatable');
 
-    sdkcall(svc_fsx.describeFileSystems, {
+    sdkcall("FSx", ".describeFileSystems", {
         // no params
     }, true).then((data) => {
         $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
@@ -6367,15 +6403,13 @@ sections.push({
 });
 
 function updateDatatableDatabasesNeptune() {
-    var svc_neptune = new AWS.Neptune({region: region});
-
     blockUI('#section-databases-neptune-clusters-datatable');
     blockUI('#section-databases-neptune-instances-datatable');
     blockUI('#section-databases-neptune-clusterparametergroups-datatable');
     blockUI('#section-databases-neptune-parametergroups-datatable');
     blockUI('#section-databases-neptune-subnetgroups-datatable');
 
-    sdkcall(svc_neptune.describeDBClusters, {
+    sdkcall("Neptune", "describeDBClusters", {
         // no params
     }, true).then((data) => {
         $('#section-databases-neptune-clusters-datatable').bootstrapTable('removeAll');
@@ -6393,7 +6427,7 @@ function updateDatatableDatabasesNeptune() {
         unblockUI('#section-databases-neptune-clusters-datatable');
     });
 
-    sdkcall(svc_neptune.describeDBInstances, {
+    sdkcall("Neptune", "describeDBInstances", {
         // no params
     }, true).then((data) => {
         $('#section-databases-neptune-instances-datatable').bootstrapTable('removeAll');
@@ -6411,7 +6445,7 @@ function updateDatatableDatabasesNeptune() {
         unblockUI('#section-databases-neptune-instances-datatable');
     });
 
-    sdkcall(svc_neptune.describeDBClusterParameterGroups, {
+    sdkcall("Neptune", "describeDBClusterParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-databases-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
@@ -6429,7 +6463,7 @@ function updateDatatableDatabasesNeptune() {
         unblockUI('#section-databases-neptune-clusterparametergroups-datatable');
     });
 
-    sdkcall(svc_neptune.describeDBParameterGroups, {
+    sdkcall("Neptune", "describeDBParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-databases-neptune-parametergroups-datatable').bootstrapTable('removeAll');
@@ -6447,7 +6481,7 @@ function updateDatatableDatabasesNeptune() {
         unblockUI('#section-databases-neptune-parametergroups-datatable');
     });
 
-    sdkcall(svc_neptune.describeDBSubnetGroups, {
+    sdkcall("Neptune", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-databases-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
@@ -6629,16 +6663,14 @@ sections.push({
     }
 });
 
-function updateDatatableDatabasesDocumentDB() {
-    var svc_documentdb = new AWS.DocumentDB({region: region});
-
+function updateDatatableDatabaseDocumentDB() {
     blockUI('#section-databases-documentdb-clusters-datatable');
     blockUI('#section-databases-documentdb-instances-datatable');
     blockUI('#section-databases-documentdb-clusterparametergroups-datatable');
     blockUI('#section-databases-documentdb-parametergroups-datatable');
     blockUI('#section-databases-documentdb-subnetgroups-datatable');
 
-    sdkcall(svc_documentdb.describeDBClusters, {
+    sdkcall("DocDB", "describeDBClusters", {
         // no params
     }, true).then((data) => {
         $('#section-databases-documentdb-clusters-datatable').bootstrapTable('removeAll');
@@ -6656,7 +6688,7 @@ function updateDatatableDatabasesDocumentDB() {
         unblockUI('#section-databases-documentdb-clusters-datatable');
     });
 
-    sdkcall(svc_documentdb.describeDBInstances, {
+    sdkcall("DocDB", "describeDBInstances", {
         // no params
     }, true).then((data) => {
         $('#section-databases-documentdb-instances-datatable').bootstrapTable('removeAll');
@@ -6674,7 +6706,7 @@ function updateDatatableDatabasesDocumentDB() {
         unblockUI('#section-databases-documentdb-instances-datatable');
     });
 
-    sdkcall(svc_documentdb.describeDBClusterParameterGroups, {
+    sdkcall("DocDB", "describeDBClusterParameterGroups", {
         // no params
     }, true).then((data) => {
         $('#section-databases-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
@@ -6692,7 +6724,7 @@ function updateDatatableDatabasesDocumentDB() {
         unblockUI('#section-databases-documentdb-clusterparametergroups-datatable');
     });
 
-    sdkcall(svc_documentdb.describeDBSubnetGroups, {
+    sdkcall("DocDB", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
         $('#section-databases-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
@@ -6761,11 +6793,9 @@ sections.push({
 });
 
 function updateDatatableDeveloperToolsCodeCommit() {
-    var svc_codecommit = new AWS.CodeCommit({region: region});
-
     blockUI('#section-developertools-codecommit-repository-datatable');
 
-    sdkcall(svc_codecommit.listRepositories, {
+    sdkcall("CodeCommit", "listRepositories", {
         // no params
     }, true).then((data) => {
         $('#section-developertools-codecommit-repository-datatable').bootstrapTable('removeAll');
@@ -6834,11 +6864,9 @@ sections.push({
 });
 
 function updateDatatableDeveloperToolsCodeBuild() {
-    var svc_codebuild = new AWS.CodeBuild({region: region});
-
     blockUI('#section-developertools-codebuild-projects-datatable');
 
-    sdkcall(svc_codebuild.listProjects, {
+    sdkcall("CodeBuild", "listProjects", {
         // no params
     }, true).then((data) => {
         $('#section-developertools-codebuild-projects-datatable').bootstrapTable('removeAll');
@@ -6983,19 +7011,17 @@ sections.push({
 });
 
 function updateDatatableDeveloperToolsCodeDeploy() {
-    var svc_codedeploy = new AWS.CodeDeploy({region: region});
-
     blockUI('#section-developertools-codedeploy-applications-datatable');
     blockUI('#section-developertools-codedeploy-deploymentconfigurations-datatable');
     blockUI('#section-developertools-codedeploy-deploymentgroups-datatable');
 
-    sdkcall(svc_codedeploy.listApplications, {
+    sdkcall("CodeDeploy", "listApplications", {
         // no params
     }, true).then((data) => {
         $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('removeAll');
         
         data.applications.forEach(application => {
-            sdkcall(svc_codedeploy.listDeploymentGroups, {
+            sdkcall("CodeDeploy", "listDeploymentGroups", {
                 applicationName: application
             }, true).then((data) => {
                 $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('removeAll');
@@ -7024,7 +7050,7 @@ function updateDatatableDeveloperToolsCodeDeploy() {
         unblockUI('#section-developertools-codedeploy-deploymentgroups-datatable');
     });
 
-    sdkcall(svc_codedeploy.listDeploymentConfigs, {
+    sdkcall("CodeDeploy", "listDeploymentConfigs", {
         // no params
     }, true).then((data) => {
         $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('removeAll');
@@ -7040,6 +7066,1999 @@ function updateDatatableDeveloperToolsCodeDeploy() {
         });
 
         unblockUI('#section-developertools-codedeploy-deploymentconfigurations-datatable');
+    });
+}
+
+/* ========================================================================== */
+// GameLift
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Game Development',
+    'service': 'GameLift',
+    'resourcetypes': {
+        'Fleets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Builds': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableGameDevelopmentGameLift() {
+    blockUI('#section-gamedevelopment-gamelift-fleets-datatable');
+    blockUI('#section-gamedevelopment-gamelift-builds-datatable');
+    blockUI('#section-gamedevelopment-gamelift-aliases-datatable');
+
+    sdkcall("GameLift", "describeFleetAttributes", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('removeAll');
+        
+        data.FleetAttributes.forEach(fleet => {
+            $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('append', [{
+                f2id: fleet.FleetArn,
+                f2type: 'gamelift.fleet',
+                f2data: fleet,
+                f2region: region,
+                id: fleet.FleetId
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-fleets-datatable');
+    });
+
+    sdkcall("GameLift", "listBuilds", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('removeAll');
+        
+        data.Builds.forEach(build => {
+            $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('append', [{
+                f2id: build.BuildId,
+                f2type: 'gamelift.build',
+                f2data: build,
+                f2region: region,
+                name: build.Name
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-builds-datatable');
+    });
+
+    sdkcall("GameLift", "listAliases", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('removeAll');
+        
+        data.Aliases.forEach(alias => {
+            $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('append', [{
+                f2id: alias.AliasArn,
+                f2type: 'gamelift.alias',
+                f2data: alias,
+                f2region: region,
+                name: alias.Name
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-aliases-datatable');
+    });
+}
+
+/* ========================================================================== */
+// SES
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Customer Engagement',
+    'service': 'SES',
+    'resourcetypes': {
+        'Configuration Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Receipt Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Receipt Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Receipt Rule Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableCustomerEngagementSES() {
+    blockUI('#section-customerengagement-ses-configurationsets-datatable');
+    blockUI('#section-customerengagement-ses-eventdestinations-datatable');
+    blockUI('#section-customerengagement-ses-receiptfilters-datatable');
+    blockUI('#section-customerengagement-ses-receiptrules-datatable');
+    blockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+    blockUI('#section-customerengagement-ses-templates-datatable');
+
+    sdkcall("SES", "listConfigurationSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
+        
+        data.ConfigurationSets.forEach(configurationSet => {
+            sdkcall("SES", "describeConfigurationSet", {
+                ConfigurationSetName: configurationSet.Name
+            }, true).then((data) => {
+                data.EventDestinations.forEach(eventDestination => {
+                    $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('append', [{
+                        f2id: eventDestination.Name,
+                        f2type: 'ses.eventdestination',
+                        f2data: eventDestination,
+                        f2region: region,
+                        name: eventDestination.Name
+                    }]);
+                });
+
+                $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('append', [{
+                    f2id: data.ConfigurationSet.Name,
+                    f2type: 'ses.configurationset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ConfigurationSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-customerengagement-ses-configurationsets-datatable');
+        unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
+    });
+
+    sdkcall("SES", "listReceiptFilters", {
+        // no params
+    }, true).then((data) => {
+        $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
+        
+        data.Filters.forEach(filter => {
+            $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('append', [{
+                f2id: filter.Name,
+                f2type: 'ses.receiptfilter',
+                f2data: filter,
+                f2region: region,
+                name: filter.Name
+            }]);
+        });
+
+        unblockUI('#section-customerengagement-ses-receiptfilters-datatable');
+    });
+
+    sdkcall("SES", "listReceiptRuleSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
+        
+        data.RuleSets.forEach(ruleSet => {
+            sdkcall("SES", "describeReceiptRuleSet", {
+                RuleSetName: ruleSet.Name
+            }, true).then((data) => {
+                data.Rules.forEach(rule => {
+                    $('#section-customerengagement-ses-receiptrules-datatable').bootstrapTable('append', [{
+                        f2id: rule.Name,
+                        f2type: 'ses.receiptrule',
+                        f2data: rule,
+                        f2region: region,
+                        name: rule.Name
+                    }]);
+                });
+            });
+
+            $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('append', [{
+                f2id: ruleSet.Name,
+                f2type: 'ses.receiptruleset',
+                f2data: ruleSet,
+                f2region: region,
+                name: ruleSet.Name
+            }]);
+        });
+
+        unblockUI('#section-customerengagement-ses-receiptrules-datatable');
+        unblockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+    });
+
+    sdkcall("SES", "listTemplates", {
+        // no params
+    }, true).then((data) => {
+        $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
+        
+        data.TemplatesMetadata.forEach(template => {
+            sdkcall("SES", "getTemplate", {
+                TemplateName: template.Name
+            }, true).then((data) => {
+                $('#section-customerengagement-ses-templates-datatable').bootstrapTable('append', [{
+                    f2id: data.Template.TemplateName,
+                    f2type: 'ses.template',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Template.TemplateName
+                }]);
+            });
+        });
+
+        unblockUI('#section-customerengagement-ses-templates-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Budgets
+/* ========================================================================== */
+
+sections.push({
+    'category': 'AWS Cost Management',
+    'service': 'Budgets',
+    'resourcetypes': {
+        'Budgets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableAWSCostManagementBudgets() {
+    blockUI('#section-awscostmanagement-budgets-budgets-datatable');
+
+    sdkcall("STS", "getCallerIdentity", {
+        // no params
+    }, true).then((data) => {
+        sdkcall("Budgets", "describeBudgets", {
+            AccountId: data.Account
+        }, true).then((data) => {
+            $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
+            
+            data.Budgets.forEach(budget => {
+                $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('append', [{
+                    f2id: budget.BudgetName,
+                    f2type: 'budgets.budget',
+                    f2data: budget,
+                    f2region: region,
+                    name: budget.BudgetName
+                }]);
+            });
+
+            unblockUI('#section-awscostmanagement-budgets-budgets-datatable');
+        });
+    });
+}
+
+/* ========================================================================== */
+// IAM
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'IAM',
+    'resourcetypes': {
+        'Users': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Roles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Managed Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Instance Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Access Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceIAM() {
+    blockUI('#section-securityidentityandcompliance-iam-users-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-groups-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-managedpolices-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+
+    $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
+
+    sdkcall("IAM", "listUsers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
+        
+        data.Users.forEach(user => {
+            sdkcall("IAM", "listAccessKeys", {
+                UserName: user.UserName
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
+                
+                data.AccessKeyMetadata.forEach(accessKey => {
+                    $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
+                        f2id: accessKey.AccessKeyId,
+                        f2type: 'iam.accesskey',
+                        f2data: accessKey,
+                        f2region: region,
+                        id: accessKey.AccessKeyId
+                    }]);
+                });
+            });
+
+            sdkcall("IAM", "listAttachedUserPolicies", {
+                UserName: user.UserName
+            }, true).then((data) => {
+                data.AttachedPolicies.forEach(policy => {
+                    sdkcall("IAM", "getPolicy", {
+                        PolicyArn: policy.PolicyArn
+                    }, true).then((data) => {
+                        sdkcall("IAM", "getPolicyVersion", {
+                            PolicyArn: policy.PolicyArn,
+                            VersionId: data.DefaultVersionId
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: policy.PolicyArn,
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'user',
+                                    'policy': policy,
+                                    'document': data.PolicyVersion.Document
+                                },
+                                f2region: region,
+                                name: policy.PolicyName,
+                                document: data.PolicyVersion.Document
+                            }]);
+                        });
+                    });
+                });
+            });
+
+            $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
+                f2id: user.Arn,
+                f2type: 'iam.user',
+                f2data: user,
+                f2region: region,
+                name: user.UserName
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    sdkcall("IAM", "listGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
+        
+        data.Groups.forEach(group => {
+            sdkcall("IAM", "listAttachedGroupPolicies", {
+                GroupName: group.GroupName
+            }, true).then((data) => {
+                data.AttachedPolicies.forEach(policy => {
+                    sdkcall("IAM", "getPolicy", {
+                        PolicyArn: policy.PolicyArn
+                    }, true).then((data) => {
+                        sdkcall("IAM", "getPolicyVersion", {
+                            PolicyArn: policy.PolicyArn,
+                            VersionId: data.DefaultVersionId
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: policy.PolicyArn,
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'group',
+                                    'policy': policy,
+                                    'document': data.PolicyVersion.Document
+                                },
+                                f2region: region,
+                                name: policy.PolicyName,
+                                document: data.PolicyVersion.Document
+                            }]);
+                        });
+                    });
+                });
+            });
+
+            $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
+                f2id: group.Arn,
+                f2type: 'iam.group',
+                f2data: group,
+                f2region: region,
+                name: group.GroupName
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-groups-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    sdkcall("IAM", "listRoles", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
+        
+        data.Roles.forEach(role => {
+            sdkcall("IAM", "listAttachedRolePolicies", {
+                RoleName: role.RoleName
+            }, true).then((data) => {
+                data.AttachedPolicies.forEach(policy => {
+                    sdkcall("IAM", "getPolicy", {
+                        PolicyArn: policy.PolicyArn
+                    }, true).then((data) => {
+                        sdkcall("IAM", "getPolicyVersion", {
+                            PolicyArn: policy.PolicyArn,
+                            VersionId: data.DefaultVersionId
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: policy.PolicyArn,
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'role',
+                                    'policy': policy,
+                                    'document': data.PolicyVersion.Document
+                                },
+                                f2region: region,
+                                name: policy.PolicyName,
+                                document: data.PolicyVersion.Document
+                            }]);
+                        });
+                    });
+                });
+            });
+
+            $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
+                f2id: role.Arn,
+                f2type: 'iam.role',
+                f2data: role,
+                f2region: region,
+                name: role.RoleName
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    sdkcall("IAM", "listPolicies", {
+        Scope: 'Local'
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
+        
+        data.Policies.forEach(managedPolicy => {
+            $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
+                f2id: managedPolicy.Arn,
+                f2type: 'iam.managedpolicy',
+                f2data: managedPolicy,
+                f2region: region,
+                name: managedPolicy.PolicyName
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
+    });
+
+    sdkcall("IAM", "listInstanceProfiles", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
+        
+        data.InstanceProfiles.forEach(instanceProfile => {
+            $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('append', [{
+                f2id: instanceProfile.Arn,
+                f2type: 'iam.instanceprofile',
+                f2data: instanceProfile,
+                f2region: region,
+                name: instanceProfile.InstanceProfileName
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
+    });
+}
+
+/* ========================================================================== */
+// WAF & Shield
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'WAF &amp; Shield',
+    'resourcetypes': {
+        'Web ACLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'XSS Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'IP Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Size Constraint Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'SQL Injection Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Byte Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Web ACLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Web ACL Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional XSS Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional IP Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Size Constraint Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional SQL Injection Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Byte Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
+    blockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
+
+    sdkcall("WAF", "listWebACLs", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('removeAll');
+        
+        data.WebACLs.forEach(webAcl => {
+            sdkcall("WAF", "getWebACL", {
+                WebACLId: webAcl.WebACLId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('append', [{
+                    f2id: data.WebACL.WebACLId,
+                    f2type: 'waf.webacl',
+                    f2data: data,
+                    f2region: region,
+                    name: data.WebACL.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
+    });
+
+    sdkcall("WAF", "listRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
+        
+        data.Rules.forEach(rule => {
+            sdkcall("WAF", "getRule", {
+                RuleId: rule.RuleId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('append', [{
+                    f2id: data.Rule.RuleId,
+                    f2type: 'waf.rule',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Rule.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
+    });
+
+    sdkcall("WAF", "listXssMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('removeAll');
+        
+        data.XssMatchSets.forEach(xssMatchSet => {
+            sdkcall("WAF", "getXssMatchSet", {
+                XssMatchSetId: xssMatchSet.XssMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.XssMatchSet.XssMatchSetId,
+                    f2type: 'waf.xssmatchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.XssMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
+    });
+
+    sdkcall("WAF", "listIpSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
+        
+        data.IPSets.forEach(ipSet => {
+            sdkcall("WAF", "getIPSet", {
+                IPSetId: ipSet.IPSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('append', [{
+                    f2id: data.IPSet.IPSetId,
+                    f2type: 'waf.ipset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.IPSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-ipsets-datatable');
+    });
+
+    sdkcall("WAF", "listSizeConstraintSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('removeAll');
+        
+        data.SizeConstraintSets.forEach(sizeConstraintSet => {
+            sdkcall("WAF", "getSizeConstraintSet", {
+                SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('append', [{
+                    f2id: data.SizeConstraintSet.SizeConstraintSetId,
+                    f2type: 'waf.sizeconstraintset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.SizeConstraintSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable');
+    });
+
+    sdkcall("WAF", "listSqlInjectionMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
+        
+        data.SqlInjectionMatchSets.forEach(sqlInjectionMatchSet => {
+            sdkcall("WAF", "getSqlInjectionMatchSet", {
+                SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
+                    f2type: 'waf.sqlinjectionmatchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.SqlInjectionMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable');
+    });
+
+    sdkcall("WAF", "listByteMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('removeAll');
+        
+        data.ByteMatchSets.forEach(byteMatchSet => {
+            sdkcall("WAF", "getByteMatchSet", {
+                ByteMatchSetId: byteMatchSet.ByteMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.ByteMatchSet.ByteMatchSetId,
+                    f2type: 'waf.bytematchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.BytenMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable');
+    });
+
+    // Regional
+
+    sdkcall("WAFRegional", "listWebACLs", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
+        
+        data.WebACLs.forEach(webAcl => {
+            sdkcall("WAFRegional", "getWebACL", {
+                WebACLId: webAcl.WebACLId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('append', [{
+                    f2id: data.WebACL.WebACLId,
+                    f2type: 'wafregional.webacl',
+                    f2data: data,
+                    f2region: region,
+                    name: data.WebACL.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable');
+    });
+
+    sdkcall("WAFRegional", "listRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('removeAll');
+        
+        data.Rules.forEach(rule => {
+            sdkcall("WAFRegional", "getRule", {
+                RuleId: rule.RuleId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('append', [{
+                    f2id: data.Rule.RuleId,
+                    f2type: 'wafregional.rule',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Rule.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable');
+    });
+
+    sdkcall("WAFRegional", "listXssMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('removeAll');
+        
+        data.XssMatchSets.forEach(xssMatchSet => {
+            sdkcall("WAFRegional", "getXssMatchSet", {
+                XssMatchSetId: xssMatchSet.XssMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.XssMatchSet.XssMatchSetId,
+                    f2type: 'wafregional.xssmatchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.XssMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable');
+    });
+
+    sdkcall("WAFRegional", "listIpSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
+        
+        data.IPSets.forEach(ipSet => {
+            sdkcall("WAFRegional", "getIPSet", {
+                IPSetId: ipSet.IPSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('append', [{
+                    f2id: data.IPSet.IPSetId,
+                    f2type: 'wafregional.ipset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.IPSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable');
+    });
+
+    sdkcall("WAFRegional", "listSizeConstraintSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('removeAll');
+        
+        data.SizeConstraintSets.forEach(sizeConstraintSet => {
+            sdkcall("WAFRegional", "getSizeConstraintSet", {
+                SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('append', [{
+                    f2id: data.SizeConstraintSet.SizeConstraintSetId,
+                    f2type: 'wafregional.sizeconstraintset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.SizeConstraintSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable');
+    });
+
+    sdkcall("WAFRegional", "listSqlInjectionMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
+        
+        data.SqlInjectionMatchSets.forEach(sqlInjectionMatchSet => {
+            sdkcall("WAFRegional", "getSqlInjectionMatchSet", {
+                SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
+                    f2type: 'wafregional.sqlinjectionmatchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.SqlInjectionMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable');
+    });
+
+    sdkcall("WAFRegional", "listByteMatchSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('removeAll');
+        
+        data.ByteMatchSets.forEach(byteMatchSet => {
+            sdkcall("WAFRegional", "getByteMatchSet", {
+                ByteMatchSetId: byteMatchSet.ByteMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.ByteMatchSet.ByteMatchSetId,
+                    f2type: 'wafregional.bytematchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.BytenMatchSet.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
     });
 }
 

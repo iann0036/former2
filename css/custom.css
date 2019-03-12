@@ -29,3 +29,10 @@
 .credentials-field {
     max-width: 420px !important;
 }
+
+.f2detailformatter {
+    max-width: 1000px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

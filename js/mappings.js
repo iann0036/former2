@@ -3923,6 +3923,704 @@ function performF2Mappings(objects) {
                         'options': reqParams
                     });
                 }
+            } else if (obj.type == "apigateway.restapi") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['MinimumCompressionSize'] = obj.data.minimumCompressionSize;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['ApiKeySourceType'] = obj.data.apiKeySource;
+                reqParams.cfn['Policy'] = obj.data.policy;
+                reqParams.cfn['BinaryMediaTypes'] = obj.data.binaryMediaTypes;
+                if (obj.data.endpointConfiguration) {
+                    reqParams.cfn['EndpointConfiguration'] = {
+                        'Types': obj.data.endpointConfiguration.types
+                    };
+                }
+
+                /*
+                TODO:
+                Body: JSON object
+                BodyS3Location:
+                    S3Location
+                CloneFrom: String
+                FailOnWarnings: Boolean
+                Parameters:
+                    String: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::RestApi',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.stage") {
+                reqParams.cfn['StageName'] = obj.data.stageName;
+                reqParams.cfn['DeploymentId'] = obj.data.deploymentId;
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['CacheClusterEnabled'] = obj.data.cacheClusterEnabled;
+                reqParams.cfn['CacheClusterSize'] = obj.data.cacheClusterSize;
+                if (obj.data.methodSettings) {
+                    reqParams.cfn['MethodSettings'] = [];
+                    Object.keys(obj.data.methodSettings).forEach(fullpath => {
+                        var methodSetting = obj.data.methodSettings[fullpath];
+                        var httpMethod = fullpath.split("/").pop();
+                        var resourcePath = fullpath.split("/").slice(0, -1).join("/");
+
+                        reqParams.cfn['MethodSettings'].push({
+                            'CacheDataEncrypted': methodSetting.cacheDataEncrypted,
+                            'CacheTtlInSeconds': methodSetting.cacheTtlInSeconds,
+                            'CachingEnabled': methodSetting.cachingEnabled,
+                            'DataTraceEnabled': methodSetting.dataTraceEnabled,
+                            'HttpMethod': httpMethod,
+                            'LoggingLevel': methodSetting.loggingLevel,
+                            'MetricsEnabled': methodSetting.metricsEnabled,
+                            'ResourcePath': resourcePath,
+                            'ThrottlingBurstLimit': methodSetting.throttlingBurstLimit,
+                            'ThrottlingRateLimit': methodSetting.throttlingRateLimit
+                        });
+                    });
+                }
+                reqParams.cfn['Variables'] = obj.data.variables;
+                reqParams.cfn['DocumentationVersion'] = obj.data.documentationVersion;
+                if (obj.data.accessLogSettings) {
+                    reqParams.cfn['AccessLogSetting'] = {
+                        'Format': obj.data.format,
+                        'DestinationArn': obj.data.destinationArn
+                    };
+                }
+                if (obj.data.canarySettings) {
+                    reqParams.cfn['CanarySetting'] = {
+                        'DeploymentId': obj.data.canarySettings.deploymentId,
+                        'PercentTraffic': obj.data.canarySettings.percentTraffic,
+                        'StageVariableOverrides': obj.data.canarySettings.stageVariableOverrides,
+                        'UseStageCache': obj.data.canarySettings.useStageCache
+                    };
+                }
+                reqParams.cfn['TracingEnabled'] = obj.data.tracingEnabled;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    Object.keys(obj.data.tags).forEach(tagKey => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tagKey,
+                            'Value': obj.data.tags[tagKey]
+                        });
+                    });
+                }
+                reqParams.cfn['ClientCertificateId'] = obj.data.clientCertificateId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Stage',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.deployment") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Description'] = obj.data.description;
+
+                /*
+                TODO:
+                DeploymentCanarySettings: DeploymentCanarySettings
+                StageDescription: StageDescription
+                StageName: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Deployment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.resource") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['PathPart'] = obj.data.pathPart;
+                reqParams.cfn['ParentId'] = obj.data.parentId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Resource',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.model") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['Schema'] = obj.data.schema;
+                reqParams.cfn['ContentType'] = obj.data.contentType;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Model',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.authorizer") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Type'] = obj.data.type;
+                reqParams.cfn['ProviderARNs'] = obj.data.providerARNs;
+                reqParams.cfn['AuthType'] = obj.data.authType;
+                reqParams.cfn['AuthorizerUri'] = obj.data.authorizerUri;
+                reqParams.cfn['AuthorizerCredentials'] = obj.data.authorizerCredentials;
+                reqParams.cfn['IdentitySource'] = obj.data.identitySource;
+                reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression;
+                reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.authorizerResultTtlInSeconds;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Authorizer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.method") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['ResourceId'] = obj.data.resourceId;
+                reqParams.cfn['HttpMethod'] = obj.data.httpMethod;
+                reqParams.cfn['AuthorizationType'] = obj.data.authorizationType;
+                reqParams.cfn['AuthorizerId'] = obj.data.authorizerId;
+                reqParams.cfn['ApiKeyRequired'] = obj.data.apiKeyRequired;
+                reqParams.cfn['RequestValidatorId'] = obj.data.requestValidatorId;
+                reqParams.cfn['OperationName'] = obj.data.operationName;
+                reqParams.cfn['RequestParameters'] = obj.data.requestParameters;
+                reqParams.cfn['RequestModels'] = obj.data.requestModels;
+                if (obj.data.methodResponses) {
+                    reqParams.cfn['MethodResponses'] = [];
+                    Object.values(obj.data.methodResponses).forEach(methodResponse => {
+                        reqParams.cfn['MethodResponses'].push({
+                            'ResponseModels': methodResponse.responseModels,
+                            'ResponseParameters': methodResponse.responseParameters,
+                            'StatusCode': methodResponse.statusCode
+                        });
+                    });
+                }
+                if (obj.data.methodIntegration) {
+                    var integrationResponses = null;
+                    if (obj.data.methodIntegration.integrationResponses) {
+                        integrationResponses = [];
+                        Object.values(obj.data.methodIntegration.integrationResponses).forEach(integrationResponse => {
+                            integrationResponses.push({
+                                'ContentHandling': integrationResponse.contentHandling,
+                                'ResponseParameters': integrationResponse.responseParameters,
+                                'ResponseTemplates': integrationResponse.responseTemplates,
+                                'SelectionPattern': integrationResponse.selectionPattern,
+                                'StatusCode': integrationResponse.statusCode
+                            })
+                        });
+                    }
+                    reqParams.cfn['Integration'] = {
+                        'CacheKeyParameters': obj.data.methodIntegration.cacheKeyParameters,
+                        'CacheNamespace': obj.data.methodIntegration.cacheNamespace,
+                        'ConnectionId': obj.data.methodIntegration.connectionId,
+                        'ConnectionType': obj.data.methodIntegration.connectionType,
+                        'ContentHandling': obj.data.methodIntegration.contentHandling,
+                        'Credentials': obj.data.methodIntegration.credentials,
+                        'IntegrationHttpMethod': obj.data.methodIntegration.httpMethod,
+                        'IntegrationResponses': integrationResponses,
+                        'PassthroughBehavior': obj.data.methodIntegration.passthroughBehavior,
+                        'RequestParameters': obj.data.requestParameters,
+                        'RequestTemplates': obj.data.requestTemplates,
+                        'TimeoutInMillis': obj.data.methodIntegration.timeoutInMillis,
+                        'Type': obj.data.methodIntegration.type,
+                        'Uri': obj.data.methodIntegration.uri
+                    }                      
+                }
+                reqParams.cfn['AuthorizationScopes'] = obj.data.authorizationScopes;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::Authorizer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.gatewayresponse") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['ResponseType'] = obj.data.responseType;
+                reqParams.cfn['StatusCode'] = obj.data.statusCode;
+                reqParams.cfn['ResponseParameters'] = obj.data.responseParameters;
+                reqParams.cfn['ResponseTemplates'] = obj.data.responseTemplates;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::GatewayResponse',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.documentationversion") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['DocumentationVersion'] = obj.data.version;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::DocumentationVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.documentationpart") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                if (obj.data.location) {
+                    reqParams.cfn['Location'] = {
+                        'Method': obj.data.location.method,
+                        'Name': obj.data.location.name,
+                        'Path': obj.data.location.path,
+                        'StatusCode': obj.data.location.statusCode,
+                        'Type': obj.data.location.type
+                    };
+                }
+                reqParams.cfn['Properties'] = obj.data.properties;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::DocumentationPart',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.requestvalidator") {
+                reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['ValidateRequestBody'] = obj.data.validateRequestBody;
+                reqParams.cfn['ValidateRequestParameters'] = obj.data.validateRequestParameters;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::DocumentationVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.api") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['ApiKeySelectionExpression'] = obj.data.ApiKeySelectionExpression;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DisableSchemaValidation'] = obj.data.DisableSchemaValidation;
+                reqParams.cfn['ProtocolType'] = obj.data.ProtocolType;
+                reqParams.cfn['RouteSelectionExpression'] = obj.data.RouteSelectionExpression;
+                reqParams.cfn['Version'] = obj.data.Version;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Api',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.stage") {
+                reqParams.cfn['StageName'] = obj.data.StageName;
+                reqParams.cfn['StageVariables'] = obj.data.StageVariables;
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['ClientCertificateId'] = obj.data.ClientCertificateId;
+                reqParams.cfn['DeploymentId'] = obj.data.DeploymentId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['RouteSettings'] = obj.data.RouteSettings;
+                reqParams.cfn['DefaultRouteSettings'] = obj.data.DefaultRouteSettings;
+                reqParams.cfn['AccessLogSettings'] = obj.data.AccessLogSettings;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Stage',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.deployment") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['Description'] = obj.data.Description;
+
+                /*
+                TODO:
+                StageName: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Deployment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.model") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['ContentType'] = obj.data.ContentType;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Schema'] = obj.data.Schema;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Model',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.authorizer") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['AuthorizerCredentialsArn'] = obj.data.AuthorizerCredentialsArn;
+                reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.AuthorizerResultTtlInSeconds;
+                reqParams.cfn['AuthorizerType'] = obj.data.AuthorizerType;
+                reqParams.cfn['AuthorizerUri'] = obj.data.AuthorizerUri;
+                reqParams.cfn['IdentitySource'] = obj.data.IdentitySource;
+                reqParams.cfn['IdentityValidationExpression'] = obj.data.IdentityValidationExpression;
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Authorizer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.routeresponse") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['ModelSelectionExpression'] = obj.data.ModelSelectionExpression;
+                reqParams.cfn['ResponseModels'] = obj.data.ResponseModels;
+                reqParams.cfn['ResponseParameters'] = obj.data.ResponseParameters;
+                reqParams.cfn['RouteResponseKey'] = obj.data.RouteResponseKey;
+                reqParams.cfn['RouteId'] = obj.data.RouteId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::RouteResponse',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.route") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['ApiKeyRequired'] = obj.data.ApiKeyRequired;
+                reqParams.cfn['AuthorizationScopes'] = obj.data.AuthorizationScopes;
+                reqParams.cfn['AuthorizationType'] = obj.data.AuthorizationType;
+                reqParams.cfn['AuthorizerId'] = obj.data.AuthorizerId;
+                reqParams.cfn['ModelSelectionExpression'] = obj.data.ModelSelectionExpression;
+                reqParams.cfn['OperationName'] = obj.data.OperationName;
+                reqParams.cfn['RequestModels'] = obj.data.RequestModels;
+                reqParams.cfn['RequestParameters'] = obj.data.RequestParameters;
+                reqParams.cfn['RouteKey'] = obj.data.RouteKey;
+                reqParams.cfn['RouteResponseSelectionExpression'] = obj.data.RouteResponseSelectionExpression;
+                reqParams.cfn['Target'] = obj.data.Target;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Route',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.integrationresponse") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['IntegrationId'] = obj.data.IntegrationId;
+                reqParams.cfn['ContentHandlingStrategy'] = obj.data.ContentHandlingStrategy;
+                reqParams.cfn['IntegrationResponseKey'] = obj.data.IntegrationResponseKey;
+                reqParams.cfn['ResponseParameters'] = obj.data.ResponseParameters;
+                reqParams.cfn['ResponseTemplates'] = obj.data.ResponseTemplates;
+                reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::IntegrationResponse',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.integration") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['ConnectionType'] = obj.data.ConnectionType;
+                reqParams.cfn['ContentHandlingStrategy'] = obj.data.ContentHandlingStrategy;
+                reqParams.cfn['CredentialsArn'] = obj.data.CredentialsArn;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['IntegrationMethod'] = obj.data.IntegrationMethod;
+                reqParams.cfn['IntegrationType'] = obj.data.IntegrationType;
+                reqParams.cfn['IntegrationUri'] = obj.data.IntegrationUri;
+                reqParams.cfn['PassthroughBehavior'] = obj.data.PassthroughBehavior;
+                reqParams.cfn['RequestParameters'] = obj.data.RequestParameters;
+                reqParams.cfn['RequestTemplates'] = obj.data.RequestTemplates;
+                reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
+                reqParams.cfn['TimeoutInMillis'] = obj.data.TimeoutInMillis;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::Integration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "batch.computeenvironment") {
+                reqParams.cfn['ComputeEnvironmentName'] = obj.data.computeEnvironmentName;
+                reqParams.cfn['Type'] = obj.data.type;
+                reqParams.cfn['State'] = obj.data.state;
+                reqParams.cfn['ServiceRole'] = obj.data.serviceRole;
+                if (obj.data.computeResources) {
+                    reqParams.cfn['ComputeResources'] = [];
+
+                    var launchTemplate = null;
+                    if (computeResource.launchTemplate) {
+                        launchTemplate = {
+                            'LaunchTemplateId': computeResource.launchTemplate.launchTemplateId,
+                            'LaunchTemplateName': computeResource.launchTemplate.launchTemplateName,
+                            'Version': computeResource.launchTemplate.version
+                        };
+                    }
+
+                    obj.data.computeResources.forEach(computeResource => {
+                        reqParams.cfn['ComputeResources'].push({
+                            'Type': computeResource.type,
+                            'MinvCpus': computeResource.minvCpus,
+                            'MaxvCpus': computeResource.maxvCpus,
+                            'DesiredvCpus': computeResource.desiredvCpus,
+                            'InstanceTypes': computeResource.instanceTypes,
+                            'ImageId': computeResource.imageId,
+                            'Subnets': computeResource.subnets,
+                            'SecurityGroupIds': computeResource.securityGroupIds,
+                            'Ec2KeyPair': computeResource.ec2KeyPair,
+                            'InstanceRole': computeResource.instanceRole,
+                            'Tags': computeResource.tags,
+                            'PlacementGroup': computeResource.placementGroup,
+                            'BidPercentage': computeResource.bidPercentage,
+                            'SpotIamFleetRole': computeResource.spotIamFleetRole,
+                            'LaunchTemplate': launchTemplate,
+                            
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('batch', obj.id),
+                    'region': obj.region,
+                    'service': 'batch',
+                    'type': 'AWS::Batch::ComputeEnvironment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "batch.jobqueue") {
+                reqParams.cfn['ComputeEnvironmentOrder'] = [];
+                obj.data.computeEnvironmentOrder.forEach(computeEnvironmentOrder => {
+                    reqParams.cfn['ComputeEnvironmentOrder'].push({
+                        'ComputeEnvironment': computeEnvironmentOrder.computeEnvironment,
+                        'Order': computeEnvironmentOrder.order
+                    });
+                });
+                reqParams.cfn['Priority'] = obj.data.priority;
+                reqParams.cfn['State'] = obj.data.state;
+                reqParams.cfn['JobQueueName'] = obj.data.jobQueueName;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('batch', obj.id),
+                    'region': obj.region,
+                    'service': 'batch',
+                    'type': 'AWS::Batch::JobQueue',
+                    'options': reqParams
+                });
+            } else if (obj.type == "batch.jobdefinition") {
+                reqParams.cfn['JobDefinitionName'] = obj.data.jobDefinitionName;
+                reqParams.cfn['Type'] = obj.data.type;
+                reqParams.cfn['Parameters'] = obj.data.parameters;
+                if (obj.data.retryStrategy) {
+                    reqParams.cfn['RetryStrategy'] = {
+                        'Attempts': obj.data.retryStrategy.attempts
+                    };
+                }
+                if (obj.data.timeout) {
+                    reqParams.cfn['Timeout'] = {
+                        'AttemptDurationSeconds': obj.data.timeout.attemptDurationSeconds
+                    };
+                }
+                if (obj.data.containerProperties) {
+                    var volumes = null;
+                    if (obj.data.containerProperties.volumes) {
+                        volumes = [];
+                        obj.data.containerProperties.volumes.forEach(volume => {
+                            var host = null;
+                            if (volume.host) {
+                                host = {
+                                    'SourcePath': volume.host.sourcePath
+                                };
+                            }
+                            volumes.push({
+                                'Host': host,
+                                'Name': volume.name
+                            });
+                        });
+                    }
+
+                    var environment = null;
+                    if (obj.data.containerProperties.environment) {
+                        environment = [];
+                        obj.data.containerProperties.environment.forEach(environmentItem => {
+                            environment.push({
+                                'Name': environmentItem.name,
+                                'Value': environmentItem.value
+                            });
+                        });
+                    }
+
+                    var mountPoints = null;
+                    if (obj.data.containerProperties.mountPoints) {
+                        mountPoints = [];
+                        obj.data.containerProperties.mountPoints.forEach(mountPoint => {
+                            mountPoints.push({
+                                'ReadOnly': mountPoint.readOnly,
+                                'SourceVolume': mountPoint.sourceVolume,
+                                'ContainerPath': mountPoint.containerPath
+                            });
+                        });
+                    }
+
+                    var ulimits = null;
+                    if (obj.data.containerProperties.ulimits) {
+                        ulimits = [];
+                        obj.data.containerProperties.ulimits.forEach(ulimit => {
+                            ulimit.push({
+                                'SoftLimit': ulimit.softLimit,
+                                'HardLimit': ulimit.hardLimit,
+                                'Name': ulimit.name
+                            });
+                        });
+                    }
+
+                    reqParams.cfn['ContainerProperties'] = {
+                        'MountPoints': mountPoints,
+                        'User': obj.data.containerProperties.user,
+                        'Volumes': volumes,
+                        'Command': obj.data.containerProperties.command,
+                        'Memory': obj.data.containerProperties.memory,
+                        'Privileged': obj.data.containerProperties.privileged,
+                        'Environment': environment,
+                        'JobRoleArn': obj.data.containerProperties.jobRoleArn,
+                        'ReadonlyRootFilesystem': obj.data.containerProperties.readonlyRootFilesystem,
+                        'Ulimits': ulimits,
+                        'Vcpus': obj.data.containerProperties.vcpus,
+                        'Image': obj.data.containerProperties.image
+                    };
+                }
+                if (obj.data.nodeProperties) {
+                    var nodeRangeProperties = [];
+                    obj.data.nodeProperties.nodeRangeProperties.forEach(nodeRangeProperty => {
+                        var container = null;
+                        if (nodeRangeProperty.container) {
+                            var volumes = null;
+                            if (nodeRangeProperty.container.volumes) {
+                                volumes = [];
+                                nodeRangeProperty.container.volumes.forEach(volume => {
+                                    var host = null;
+                                    if (volume.host) {
+                                        host = {
+                                            'SourcePath': volume.host.sourcePath
+                                        };
+                                    }
+                                    volumes.push({
+                                        'Host': host,
+                                        'Name': volume.name
+                                    });
+                                });
+                            }
+
+                            var environment = null;
+                            if (nodeRangeProperty.container.environment) {
+                                environment = [];
+                                nodeRangeProperty.container.environment.forEach(environmentItem => {
+                                    environment.push({
+                                        'Name': environmentItem.name,
+                                        'Value': environmentItem.value
+                                    });
+                                });
+                            }
+
+                            var mountPoints = null;
+                            if (nodeRangeProperty.container.mountPoints) {
+                                mountPoints = [];
+                                nodeRangeProperty.container.mountPoints.forEach(mountPoint => {
+                                    mountPoints.push({
+                                        'ReadOnly': mountPoint.readOnly,
+                                        'SourceVolume': mountPoint.sourceVolume,
+                                        'ContainerPath': mountPoint.containerPath
+                                    });
+                                });
+                            }
+
+                            var ulimits = null;
+                            if (nodeRangeProperty.container.ulimits) {
+                                ulimits = [];
+                                nodeRangeProperty.container.ulimits.forEach(ulimit => {
+                                    ulimit.push({
+                                        'SoftLimit': ulimit.softLimit,
+                                        'HardLimit': ulimit.hardLimit,
+                                        'Name': ulimit.name
+                                    });
+                                });
+                            }
+
+                            container = {
+                                'MountPoints': mountPoints,
+                                'User': nodeRangeProperty.container.user,
+                                'Volumes': volumes,
+                                'Command': nodeRangeProperty.container.command,
+                                'Memory': nodeRangeProperty.container.memory,
+                                'Privileged': nodeRangeProperty.container.privileged,
+                                'Environment': environment,
+                                'JobRoleArn': nodeRangeProperty.container.jobRoleArn,
+                                'ReadonlyRootFilesystem': nodeRangeProperty.container.readonlyRootFilesystem,
+                                'Ulimits': ulimits,
+                                'Vcpus': nodeRangeProperty.container.vcpus,
+                                'Image': nodeRangeProperty.container.image
+                            };
+                        }
+                        nodeRangeProperties.push({
+                            'Container': container,
+                            'TargetNodes': nodeRangeProperty.targetNodes
+                        });
+                    });
+                    reqParams.cfn['NodeProperties'] = {
+                        'MainNode': obj.data.nodeProperties.mainNode,
+                        'NumNodes': obj.data.nodeProperties.numNodes,
+                        'NodeRangeProperties': nodeRangeProperties
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('batch', obj.id),
+                    'region': obj.region,
+                    'service': 'batch',
+                    'type': 'AWS::Batch::JobDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "efs.filesystem") {
+                reqParams.cfn['PerformanceMode'] = obj.data.PerformanceMode;
+                reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+                reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.cfn['ThroughputMode'] = obj.data.ThroughputMode;
+                reqParams.cfn['ProvisionedThroughputInMibps'] = obj.data.ProvisionedThroughputInMibps;
+                reqParams.cfn['FileSystemTags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('efs', obj.id),
+                    'region': obj.region,
+                    'service': 'efs',
+                    'type': 'AWS::EFS::FileSystem',
+                    'options': reqParams
+                });
+            } else if (obj.type == "efs.mounttarget") {
+                reqParams.cfn['FileSystemId'] = obj.data.FileSystemId;
+                reqParams.cfn['IpAddress'] = obj.data.IpAddress;
+                reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('efs', obj.id),
+                    'region': obj.region,
+                    'service': 'efs',
+                    'type': 'AWS::EFS::MountTarget',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
