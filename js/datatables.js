@@ -9062,3 +9062,314 @@ function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     });
 }
 
+/* ========================================================================== */
+// RAM
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'RAM',
+    'resourcetypes': {
+        'Resource Shares': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceRAM() {
+    blockUI('#section-securityidentityandcompliance-ram-resourceshares-datatable');
+
+    sdkcall("RAM", "getResourceShares", {
+        resourceOwner: 'SELF'
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-ram-resourceshares-datatable').bootstrapTable('removeAll');
+        
+        data.resourceShares.forEach(resourceShare => {
+            resourceShare['principals'] = [];
+            resourceShare['resourceArns'] = [];
+
+            sdkcall("RAM", "listPrincipals", {
+                resourceOwner: 'SELF',
+                resourceShareArns: [resourceShare.resourceShareArn]
+            }, true).then((data) => {
+                data.principals.forEach(principal => {
+                    resourceShare['principals'].push(principal.id);
+                });
+
+                sdkcall("RAM", "listResources", {
+                    resourceOwner: 'SELF',
+                    resourceShareArns: [resourceShare.resourceShareArn]
+                }, true).then((data) => {
+                    data.resources.forEach(resource => {
+                        resourceShare['resourceArns'].push(resource.arn);
+                    });
+
+                    $('#section-securityidentityandcompliance-ram-resourceshares-datatable').bootstrapTable('append', [{
+                        f2id: resourceShare.resourceShareArn,
+                        f2type: 'ram.resourceshare',
+                        f2data: resourceShare,
+                        f2region: region,
+                        name: resourceShare.name
+                    }]);
+                });
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-ram-resourceshares-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Certificate Manager
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'Certificate Manager',
+    'resourcetypes': {
+        'Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain Name',
+                        field: 'domainname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceCertificateManager() {
+    blockUI('#section-securityidentityandcompliance-certificatemanager-certificates-datatable');
+
+    sdkcall("ACM", "listCertificates", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('removeAll');
+        
+        data.CertificateSummaryList.forEach(certificate => {
+            sdkcall("ACM", "describeCertificate", {
+                CertificateArn: certificate.CertificateArn
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('append', [{
+                    f2id: data.CertificateArn,
+                    f2type: 'acm.certificate',
+                    f2data: data,
+                    f2region: region,
+                    domainname: data.DomainName
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-certificatemanager-certificates-datatable');
+    });
+}
+
+/* ========================================================================== */
+// KMS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'KMS',
+    'resourcetypes': {
+        'Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Alias',
+                        field: 'alias',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceKMS() {
+    blockUI('#section-securityidentityandcompliance-kms-keys-datatable');
+    blockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
+
+    sdkcall("KMS", "listKeys", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
+        
+        data.Keys.forEach(key => {
+            sdkcall("KMS", "describeKey", {
+                KeyId: key.KeyId
+            }, true).then((keydata) => {
+                sdkcall("KMS", "getKeyPolicy", {
+                    KeyId: key.KeyId,
+                    PolicyName: "default"
+                }, true).then((data) => {
+                    keydata['Policy'] = data.Policy;
+                    sdkcall("KMS", "getKeyRotationStatus", {
+                        KeyId: key.KeyId
+                    }, true).then((data) => {
+                        keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
+                        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
+                            f2id: keydata.KeyMetadata.Arn,
+                            f2type: 'kms.key',
+                            f2data: keydata.KeyMetadata,
+                            f2region: region,
+                            id: keydata.KeyMetadata.KeyId
+                        }]);
+                    });
+                });
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-kms-keys-datatable');
+    });
+
+    sdkcall("KMS", "listAliases", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('removeAll');
+        
+        data.Aliases.forEach(alias => {
+            $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('append', [{
+                f2id: alias.AliasArn,
+                f2type: 'kms.alias',
+                f2data: alias,
+                f2region: region,
+                name: alias.AliasName,
+                key: alias.TargetKeyId
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
+    });
+}
+

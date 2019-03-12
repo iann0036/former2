@@ -4621,6 +4621,123 @@ function performF2Mappings(objects) {
                     'type': 'AWS::EFS::MountTarget',
                     'options': reqParams
                 });
+            } else if (obj.type == "fsx.filesystem") {
+                reqParams.cfn['FileSystemType'] = obj.data.FileSystemType;
+                reqParams.cfn['StorageCapacity'] = obj.data.StorageCapacity;
+                reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+                reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.WindowsConfiguration) {
+                    reqParams.cfn['WindowsConfiguration'] = {
+                        'ActiveDirectoryId': obj.data.WindowsConfiguration.ActiveDirectoryId,
+                        'AutomaticBackupRetentionDays': obj.data.WindowsConfiguration.AutomaticBackupRetentionDays,
+                        'CopyTagsToBackups': obj.data.WindowsConfiguration.CopyTagsToBackups,
+                        'DailyAutomaticBackupStartTime': obj.data.WindowsConfiguration.DailyAutomaticBackupStartTime,
+                        'ThroughputCapacity': obj.data.WindowsConfiguration.ThroughputCapacity,
+                        'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime
+                    };
+                }
+                if (obj.data.LustreConfiguration) {
+                    reqParams.cfn['LustreConfiguration'] = {
+                        'ExportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath,
+                        'ImportedFileChunkSize': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize,
+                        'ImportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath,
+                        'WeeklyMaintenanceStartTime': obj.data.LustreConfiguration.WeeklyMaintenanceStartTime
+                    };
+                }
+
+                /*
+                TODO:
+                BackupId: String
+                SecurityGroupIds: 
+                    - String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('fsx', obj.id),
+                    'region': obj.region,
+                    'service': 'fsx',
+                    'type': 'AWS::FSx::FileSystem',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ram.resourceshare") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['AllowExternalPrincipals'] = obj.data.allowExternalPrincipals;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    obj.data.tags.forEach(tag => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tag.key,
+                            'Value': tag.value
+                        })
+                    });
+                }
+                reqParams.cfn['Principals'] = obj.data.principals;
+                reqParams.cfn['ResourceArns'] = obj.data.resourceArns;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ram', obj.id),
+                    'region': obj.region,
+                    'service': 'ram',
+                    'type': 'AWS::RAM::ResourceShare',
+                    'options': reqParams
+                });
+            } else if (obj.type == "acm.certificate") {
+                reqParams.cfn['DomainName'] = obj.data.DomainName;
+                reqParams.cfn['SubjectAlternativeNames'] = obj.data.SubjectAlternativeNames;
+                if (obj.data.DomainValidationOptions) {
+                    reqParams.cfn['DomainValidationOptions'] = {
+                        'DomainName': obj.data.DomainValidationOptions.DomainName,
+                        'ValidationDomain': obj.data.DomainValidationOptions.ValidationDomain
+                    };
+                }
+
+                /*
+                TODO:
+                Tags:
+                    - Resource Tag
+                ValidationMethod: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('acm', obj.id),
+                    'region': obj.region,
+                    'service': 'acm',
+                    'type': 'AWS::CertificateManager::Certificate',
+                    'options': reqParams
+                });
+            } else if (obj.type == "kms.key") {
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['KeyUsage'] = obj.data.KeyUsage;
+                reqParams.cfn['EnableKeyRotation'] = obj.data.KeyRotationEnabled;
+                reqParams.cfn['KeyPolicy'] = obj.data.Policy;
+
+                /*
+                TODO:
+                PendingWindowInDays: Integer
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('kms', obj.id),
+                    'region': obj.region,
+                    'service': 'kms',
+                    'type': 'AWS::KMS::Key',
+                    'options': reqParams
+                });
+            } else if (obj.type == "kms.alias") {
+                reqParams.cfn['AliasName'] = obj.data.AliasArn;
+                reqParams.cfn['TargetKeyId'] = obj.data.TargetKeyId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('kms', obj.id),
+                    'region': obj.region,
+                    'service': 'kms',
+                    'type': 'AWS::KMS::Alias',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
