@@ -4738,6 +4738,53 @@ function performF2Mappings(objects) {
                     'type': 'AWS::KMS::Alias',
                     'options': reqParams
                 });
+            } else if (obj.type == "stepfunctions.statemachine") {
+                reqParams.cfn['StateMachineName'] = obj.data.name;
+                reqParams.cfn['DefinitionString'] = obj.data.definition;
+                reqParams.cfn['RoleArn'] = obj.data.roleArn;
+
+                /*
+                TODO:
+                Tags: 
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('stepfunctions', obj.id),
+                    'region': obj.region,
+                    'service': 'stepfunctions',
+                    'type': 'AWS::StepFunctions::StateMachine',
+                    'options': reqParams
+                });
+            } else if (obj.type == "stepfunctions.activity") {
+                reqParams.cfn['Name'] = obj.data.name;
+
+                /*
+                TODO:
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('stepfunctions', obj.id),
+                    'region': obj.region,
+                    'service': 'stepfunctions',
+                    'type': 'AWS::StepFunctions::Activity',
+                    'options': reqParams
+                });
+            } else if (obj.type == "athena.namedquery") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Database'] = obj.data.Database;
+                reqParams.cfn['QueryString'] = obj.data.QueryString;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('athena', obj.id),
+                    'region': obj.region,
+                    'service': 'athena',
+                    'type': 'AWS::Athena::NamedQuery',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

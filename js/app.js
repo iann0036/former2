@@ -8,7 +8,7 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     function nav(str) {
-        return str.replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "and");
+        return str.replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "And");
     }
 
     function navlower(str) {
