@@ -209,6 +209,11 @@ $(document).ready(function(){
     /* ========================================================================== */
 
     function doNavigation() {
+        $('#header-button-copy-cfn').attr('style', 'display: none;');
+        $('#header-button-copy-troposphere').attr('style', 'display: none;');
+        $('#header-button-copy-cdkts').attr('style', 'display: none;');
+        $('#header-button-copy-raw').attr('style', 'display: none;');
+
         if ($(location.hash).length) {
             $('.former2-section').attr('style', 'display: none;');
             $(location.hash).attr('style', 'display: block;');
@@ -228,6 +233,19 @@ $(document).ready(function(){
             );
 
             window.scrollTo({ top: 0 });
+
+            if (location.hash == "#section-outputs-cloudformation") {
+                $('#header-button-copy-cfn').attr('style', '');
+            }
+            if (location.hash == "#section-outputs-troposphere") {
+                $('#header-button-copy-troposphere').attr('style', '');
+            }
+            if (location.hash == "#section-outputs-cdkts") {
+                $('#header-button-copy-cdkts').attr('style', '');
+            }
+            if (location.hash == "#section-outputs-raw") {
+                $('#header-button-copy-raw').attr('style', '');
+            }
         } else if (location.hash != "") {
             $.notify({
                 icon: 'font-icon font-icon-warning',
@@ -349,6 +367,35 @@ $(document).ready(function(){
     // CodeMirror Init
     /* ========================================================================== */
 
+    function copyStringToClipboard(str) {
+        var el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        const selected = document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false;
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        if (selected) {
+            document.getSelection().removeAllRanges();
+            document.getSelection().addRange(selected);
+        }
+    }
+
+    function setCopyEvent(selector, editor) {
+        $(selector).bind('click', () => {
+            $(selector).attr('disabled', 'disabled');
+            copyStringToClipboard(editor.getDoc().getValue());
+            $(selector).html("<i class=\"fa fa-files-o\"></i>&nbsp;&nbsp;Copied");
+            setTimeout(() => {
+                $(selector).removeAttr('disabled');
+                $(selector).html("<i class=\"fa fa-files-o\"></i>&nbsp;&nbsp;Copy");
+            }, 4000);
+        });
+    }
+
     cfn_editor = CodeMirror.fromTextArea(document.getElementById('cfn'), {
         lineNumbers: true,
         lineWrapping: true,
@@ -359,10 +406,11 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    cfn_editor.getDoc().setValue("# No resources created");
+    cfn_editor.getDoc().setValue("# No resources generated");
     setTimeout(function(){
         cfn_editor.refresh();
     }, 1);
+    setCopyEvent('#header-button-copy-cfn', cfn_editor);
 
     troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
         lineNumbers: true,
@@ -374,10 +422,11 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    troposphere_editor.getDoc().setValue("# No resources created");
+    troposphere_editor.getDoc().setValue("# No resources generated");
     setTimeout(function(){
         troposphere_editor.refresh();
     }, 1);
+    setCopyEvent('#header-button-copy-troposphere', troposphere_editor);
 
     cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
         lineNumbers: true,
@@ -389,10 +438,11 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    cdkts_editor.getDoc().setValue("// No resources created");
+    cdkts_editor.getDoc().setValue("// No resources generated");
     setTimeout(function(){
         cdkts_editor.refresh();
     }, 1);
+    setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,
@@ -404,10 +454,11 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    raw_editor.getDoc().setValue("// No resources created");
+    raw_editor.getDoc().setValue("// No resources generated");
     setTimeout(function(){
         raw_editor.refresh();
     }, 1);
+    setCopyEvent('#header-button-copy-raw', raw_editor);
 
     /* ========================================================================== */
     // AWS SDK Proxy for Extension (must be before Account Scan)

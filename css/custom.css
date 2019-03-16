@@ -36,3 +36,9 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.f2-header-button {
+    margin-top: 18px;
+    float: right;
+    vertical-align: center;
+}
