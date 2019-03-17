@@ -215,6 +215,12 @@ $(document).ready(function(){
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
+            if (location.hash == "#section-dashboard") {
+                $('.section-header').attr('style', 'display: none;');
+            } else {
+                $('.section-header').removeAttr('style');
+            }
+
             $('.former2-section').attr('style', 'display: none;');
             $(location.hash).attr('style', 'display: block;');
 

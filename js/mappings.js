@@ -6071,6 +6071,192 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Budgets::Budget',
                     'options': reqParams
                 });
+            } else if (obj.type == "waf.webacl") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['DefaultAction'] = obj.data.DefaultAction;
+                reqParams.cfn['Rules'] = [];
+                obj.data.Rules.forEach(rule => {
+                    reqParams.cfn['Rules'].push({
+                        'Priority': rule.Priority,
+                        'RuleId': rule.RuleId,
+                        'Action': rule.Action
+                    })
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::WebACL',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.rule") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['Predicates'] = obj.data.Predicates;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::Rule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.xssmatchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['XssMatchTuples'] = obj.data.XssMatchTuples;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::XssMatchSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.ipset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['IPSetDescriptors'] = obj.data.IPSetDescriptors;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::IPSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.sizeconstraintset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SizeConstraints'] = obj.data.SizeConstraints;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::SizeConstraintSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.sqlinjectionmatchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SqlInjectionMatchTuples'] = obj.data.SqlInjectionMatchTuples;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::SqlInjectionMatchSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.bytematchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['ByteMatchTuples'] = obj.data.ByteMatchTuples;
+
+                /*
+                SKIPPED:
+                ByteMatchTuples:
+                - TargetStringBase64
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAF::ByteMatchSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.webacl") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['DefaultAction'] = obj.data.DefaultAction;
+                reqParams.cfn['Rules'] = [];
+                obj.data.Rules.forEach(rule => {
+                    reqParams.cfn['Rules'].push({
+                        'Priority': rule.Priority,
+                        'RuleId': rule.RuleId,
+                        'Action': rule.Action
+                    })
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::WebACL',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.rule") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['Predicates'] = obj.data.Predicates;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::Rule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.xssmatchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['XssMatchTuples'] = obj.data.XssMatchTuples;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::XssMatchSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.ipset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['IPSetDescriptors'] = obj.data.IPSetDescriptors;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::IPSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.sizeconstraintset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SizeConstraints'] = obj.data.SizeConstraints;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::SizeConstraintSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.sqlinjectionmatchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SqlInjectionMatchTuples'] = obj.data.SqlInjectionMatchTuples;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::SqlInjectionMatchSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.bytematchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['ByteMatchTuples'] = obj.data.ByteMatchTuples;
+
+                /*
+                SKIPPED:
+                ByteMatchTuples:
+                - TargetStringBase64
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::ByteMatchSet',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
