@@ -174,12 +174,12 @@
         <nav class="side-menu">
             <ul class="side-menu-list">
                 <li class="gold">
-                    <a href="#section-dashboard">
+                    <a href="#section-dashboard" data-category="dashboard">
                         <i class="font-icon font-icon-dashboard"></i>
                         <span class="lbl">Dashboard</span>
                     </a>
                 </li>
-                <li class="grey with-sub">
+                <li class="grey with-sub" data-category="setup">
                     <span>
                         <i class="font-icon glyphicon glyphicon-cog"></i>
                         <span class="lbl">Setup</span>
@@ -190,7 +190,7 @@
                         <li><a href="#section-setup-accountscan"><span class="lbl">Account Scan</span></a></li>
                     </ul>
                 </li>
-                <li class="aquamarine with-sub">
+                <li class="aquamarine with-sub" data-category="outputs">
                     <span>
                         <i class="font-icon glyphicon glyphicon-list-alt"></i>
                         <span class="lbl">Outputs</span>
@@ -644,6 +644,18 @@
                                 </section>
                             </a>
                         </div>
+                        <div class="col-md-2">
+                            <a href="#section-setup-introduction">
+                                <section class="widget widget-simple-sm">
+                                    <div class="widget-simple-sm-icon">
+                                        <i class="font-icon fa fa-cogs" style="width: 64px; height: 64px; color: #adb7be;"></i>
+                                    </div>
+                                    <div class="widget-simple-sm-bottom">
+                                        <a href="#section-setup-introduction">Setup</a>
+                                    </div>
+                                </section>
+                            </a>
+                        </div>
                     </div>
                 </section>
 
@@ -692,6 +704,9 @@
                         </div>
                         <div class="form-group">
                             <input id="credentials-sessiontoken" type="text" class="form-control credentials-field" placeholder="Session Token (optional)"/>
+                        </div>
+                        <div class="form-group">
+                            <strong>Logged in as: </strong><span id="user-id"></span>
                         </div>
                     </div>
 

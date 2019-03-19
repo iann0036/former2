@@ -191,7 +191,7 @@ function processTfParameter(param, spacing, index) {
 
         Object.keys(param).forEach(function (key) {
             var subvalue = processTfParameter(param[key], spacing + 4, index);
-            if (subvalue !== undefined) {
+            if (typeof subvalue !== "undefined") {
                 if (subvalue[0] == '{') {
                     paramitems.push(key + " " + subvalue);
                 } else {
@@ -321,7 +321,7 @@ function processCfnParameter(param, spacing, index) {
 
         Object.keys(param).forEach(function (key) {
             var subvalue = processCfnParameter(param[key], spacing + 4, index);
-            if (subvalue !== undefined) {
+            if (typeof subvalue !== "undefined") {
                 paramitems.push(key + ": " + subvalue);
             }
         });
@@ -388,7 +388,7 @@ function processCdktsParameter(param, spacing, index) {
 
         param.forEach(paramitem => {
             var item = processCdktsParameter(paramitem, spacing + 4, index);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
         });
@@ -401,7 +401,7 @@ function processCdktsParameter(param, spacing, index) {
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
             var item = processCdktsParameter(param[key], spacing + 4, index);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(lcfirststr(key) + ": " + item);
             }
         });
@@ -484,7 +484,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
 
         param.forEach(paramitem => {
             var item = processTroposphereParameter(paramitem, spacing + 4, keyname, index);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
         });
@@ -500,7 +500,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
         if (!propertyname) {
             Object.keys(param).forEach(function (key) {
                 var item = processBoto3Parameter(param[key], spacing + 4); // intentional, to do raw array stuff
-                if (item !== undefined) {
+                if (typeof item !== "undefined") {
                     paramitems.push("\"" + key + "\": " + item);
                 }
             });
@@ -513,7 +513,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
 
         Object.keys(param).forEach(function (key) {
             var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key, index);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(key + "=" + item);
             }
         });
@@ -1159,7 +1159,7 @@ function processJsParameter(param, spacing) {
 
         param.forEach(paramitem => {
             var item = processJsParameter(paramitem, spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
         });
@@ -1172,7 +1172,7 @@ function processJsParameter(param, spacing) {
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
             var item = processJsParameter(param[key], spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(key + ": " + processJsParameter(param[key], spacing + 4));
             }
         });
@@ -1217,7 +1217,7 @@ function processBoto3Parameter(param, spacing) {
 
         param.forEach(paramitem => {
             var item = processBoto3Parameter(paramitem, spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
         });
@@ -1230,7 +1230,7 @@ function processBoto3Parameter(param, spacing) {
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
             var item = processBoto3Parameter(param[key], spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push("'" + key + "': " + processBoto3Parameter(param[key], spacing + 4));
             }
         });
@@ -1293,7 +1293,7 @@ function processGoParameter(service, paramkey, param, spacing) {
 
         param.forEach(paramitem => {
             var item = processGoParameter(service, paramkey, paramitem, spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
         });
@@ -1319,7 +1319,7 @@ function processGoParameter(service, paramkey, param, spacing) {
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
             var item = processGoParameter(service, key, param[key], spacing + 4);
-            if (item !== undefined) {
+            if (typeof item !== "undefined") {
                 paramitems.push(key + ": " + processGoParameter(service, key, param[key], spacing + 4));
             }
         });
@@ -1339,10 +1339,12 @@ function outputMapBoto3(service, method, options, region, was_blocked) {
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processBoto3Parameter(options[option], 4);
-                params += `
+                if (typeof optionvalue !== "undefined") {
+                    params += `
     ${option}=${optionvalue},`;
+                }
             }
         }
         params = params.substring(0, params.length - 1) + `
@@ -1362,10 +1364,12 @@ function outputMapGo(service, method, options, region, was_blocked) {
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processGoParameter(mappedservice, option, options[option], 8);
-                params += `
+                if (typeof optionvalue !== "undefined") {
+                    params += `
         ${option}: ${optionvalue},`;
+                }
             }
         }
         params += `
@@ -1386,10 +1390,12 @@ function outputMapJs(service, method, options, region, was_blocked) {
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processJsParameter(options[option], 4);
-                params += `
+                if (typeof optionvalue !== "undefined") {
+                    params += `
     ${option}: ${optionvalue},`;
+                }
             }
         }
         params = "{" + params.substring(0, params.length - 1) + `
@@ -1467,10 +1473,12 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option, index);
-                params += `,
+                if (typeof optionvalue !== "undefined") {
+                    params += `,
     ${option}=${optionvalue}`;
+                }
             }
         }
     }
@@ -1490,10 +1498,12 @@ function outputMapCdkts(index, service, type, options, region, was_blocked, logi
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processCdktsParameter(options[option], 12, index);
-                params += `
+                if (typeof optionvalue !== "undefined") {
+                    params += `
             ${lcfirststr(option)}: ${optionvalue},`;
+                }
             }
         }
         params = "{" + params.substring(0, params.length - 1) + `
@@ -1625,10 +1635,10 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processCfnParameter(options[option], 12, index);
 
-                if (optionvalue !== undefined) {
+                if (typeof optionvalue !== "undefined") {
                     params += `
             ${option}: ${optionvalue}`;
                 }
@@ -1661,10 +1671,25 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (options[option] !== undefined && options[option] !== null) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
                 if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
                     for (var i=0; i<options[option].length; i++) {
                         var optionvalue = processTfParameter(options[option][i], 4, index);
+                        if (typeof optionvalue !== "undefined") {
+                            if (optionvalue[0] == '{') {
+                                params += `
+    ${option} ${optionvalue}
+`;
+                            } else {
+                                params += `
+    ${option} = ${optionvalue}`;
+                            }
+                        }
+
+                    }
+                } else {
+                    var optionvalue = processTfParameter(options[option], 4, index);
+                    if (typeof optionvalue !== "undefined") {
                         if (optionvalue[0] == '{') {
                             params += `
     ${option} ${optionvalue}
@@ -1673,17 +1698,6 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
                             params += `
     ${option} = ${optionvalue}`;
                         }
-
-                    }
-                } else {
-                    var optionvalue = processTfParameter(options[option], 4, index);
-                    if (optionvalue[0] == '{') {
-                        params += `
-    ${option} ${optionvalue}
-`;
-                    } else {
-                        params += `
-    ${option} = ${optionvalue}`;
                     }
                 }
             }
@@ -1714,7 +1728,7 @@ function outputMapCli(service, method, options, region, was_blocked) {
             delete options['_cli_service'];
         }
         for (option in options) {
-            if (options[option] !== undefined) {
+            if (typeof options[option] !== "undefined") {
                 if (options[option] === null) {
                     params += ` ${option}`
                 } else if (typeof options[option] == "boolean") {
@@ -6527,8 +6541,6 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SupportUrl'] = obj.data.ProductViewDetail.ProductViewSummary.SupportUrl;
                 reqParams.cfn['AcceptLanguage'] = 'en'; // TODO: Check for others
                 reqParams.cfn['Tags'] = obj.data.Tags;
-                reqParams.cfn[''] = obj.data.;
-                reqParams.cfn[''] = obj.data.;
 
                 /*
                 TODO:
@@ -6672,9 +6684,6 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ProductId'] = obj.data.ProvisionedProductDetail.ProductId;
                 reqParams.cfn['ProvisioningArtifactId'] = obj.data.ProvisionedProductDetail.ProvisioningArtifactId;
                 reqParams.cfn['ProductName'] = obj.data.Product.Name;
-                reqParams.cfn[''] = obj.data.;
-                reqParams.cfn[''] = obj.data.;
-                reqParams.cfn[''] = obj.data.;
 
                 /*
                 TODO:
@@ -7041,6 +7050,141 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'servicediscovery',
                     'type': 'AWS::ServiceDiscovery::Instance',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.model") {
+                reqParams.cfn['ModelName'] = obj.data.ModelName;
+                if (obj.data.PrimaryContainer) {
+                    reqParams.cfn['PrimaryContainer'] = {
+                        'ContainerHostname': obj.data.PrimaryContainer.ContainerHostname,
+                        'Environment': obj.data.PrimaryContainer.Environment,
+                        'ModelDataUrl': obj.data.PrimaryContainer.ModelDataUrl,
+                        'Image': obj.data.PrimaryContainer.Image
+                    };
+                }
+                if (obj.data.Containers) {
+                    reqParams.cfn['Containers'] = [];
+                    obj.data.Containers.forEach(container => {
+                        reqParams.cfn['Containers'] = {
+                            'ContainerHostname': container.ContainerHostname,
+                            'Environment': container.Environment,
+                            'ModelDataUrl': container.ModelDataUrl,
+                            'Image': container.Image
+                        };
+                    });
+                }
+                reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+                reqParams.cfn['VpcConfig'] = obj.data.VpcConfig;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tag 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::Model',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.endpoint") {
+                reqParams.cfn['EndpointName'] = obj.data.EndpointName;
+                reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::Endpoint',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.endpointconfig") {
+                reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+                reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                if (obj.data.ProductionVariants) {
+                    reqParams.cfn['ProductionVariants'] = [];
+                    obj.data.ProductionVariants.forEach(productionVariant => {
+                        reqParams.cfn['ProductionVariants'].push({
+                            'VariantName': productionVariant.VariantName,
+                            'ModelName': productionVariant.ModelName,
+                            'InitialInstanceCount': productionVariant.InitialInstanceCount,
+                            'InstanceType': productionVariant.InstanceType,
+                            'InitialVariantWeight': productionVariant.InitialVariantWeight
+                        });
+                    });
+                }
+
+                /*
+                TODO:
+                Tags: 
+                    - Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::EndpointConfig',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.notebookinstance") {
+                reqParams.cfn['NotebookInstanceName'] = obj.data.NotebookInstanceName;
+                reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroups;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.cfn['LifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+                reqParams.cfn['DirectInternetAccess'] = obj.data.DirectInternetAccess;
+                reqParams.cfn['VolumeSizeInGB'] = obj.data.VolumeSizeInGB;
+                reqParams.cfn['RootAccess'] = obj.data.RootAccess;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tag 
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::NotebookInstance',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.notebookinstancelifecycleconfig") {
+                reqParams.cfn['NotebookInstanceLifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+                reqParams.cfn['OnCreate'] = obj.data.OnCreate;
+                reqParams.cfn['OnStart'] = obj.data.OnStart;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::NotebookInstanceLifecycleConfig',
+                    'options': reqParams
+                });
+            } else if (obj.type == ".") {
+                reqParams.cfn[''] = obj.data;
+
+                /*
+                TODO:
+                
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('', obj.id),
+                    'region': obj.region,
+                    'service': '',
+                    'type': '',
                     'options': reqParams
                 });
             } else if (obj.type == ".") {

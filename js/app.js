@@ -183,12 +183,15 @@ $(document).ready(function(){
 
     $('#credentials-accesskey').on('change', () => {
         window.localStorage.setItem('credentials-accesskey', $('#credentials-accesskey').val().trim());
+        updateIdentity();
     });
     $('#credentials-secretkey').on('change', () => {
         window.localStorage.setItem('credentials-secretkey', $('#credentials-secretkey').val().trim());
+        updateIdentity();
     });
     $('#credentials-sessiontoken').on('change', () => {
         window.localStorage.setItem('credentials-sessiontoken', $('#credentials-sessiontoken').val().trim());
+        updateIdentity();
     });
 
     var accesskey = window.localStorage.getItem('credentials-accesskey');
@@ -255,7 +258,7 @@ $(document).ready(function(){
             if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
             }
-        } else if (location.hash != "") {
+        } else if (location.hash != "" && location.hash != "#") {
             $.notify({
                 icon: 'font-icon font-icon-warning',
                 title: '<strong>Not Yet Implemented</strong>',
@@ -265,24 +268,32 @@ $(document).ready(function(){
             });
         } else {
             $('li.opened').removeClass('opened');
-            $('li[data-category=\'setup\']').addClass('opened');
 
-            $('.former2-section').attr('style', 'display: none;');
-            $('#section-setup-introduction').attr('style', 'display: block;');
+            if (window.localStorage.getItem('credentials-accesskey')) { // load dashboard
+                $('li[data-category=\'dashboard\']').addClass('opened');
 
-            $('#header-title').html(
-                $('#section-setup-introduction').attr('data-section-title')
-            );
-            $('#header-breadcrumb1').text(
-                $('#section-setup-introduction').attr('data-section-breadcrumb1-title')
-            );
-            $('#header-breadcrumb1').attr(
-                'href',
-                $('#section-setup-introduction').attr('data-section-breadcrumb1-link')
-            );
-            $('#header-breadcrumb2').text(
-                $('#section-setup-introduction').attr('data-section-title')
-            );
+                $('.former2-section').attr('style', 'display: none;');
+                $('#section-dashboard').attr('style', 'display: block;');
+
+                $('.section-header').attr('style', 'display: none;');
+            } else { // load setup
+                $('li[data-category=\'setup\']').addClass('opened');
+                $('#section-setup-introduction').attr('style', 'display: block;');
+
+                $('#header-title').html(
+                    $('#section-setup-introduction').attr('data-section-title')
+                );
+                $('#header-breadcrumb1').text(
+                    $('#section-setup-introduction').attr('data-section-breadcrumb1-title')
+                );
+                $('#header-breadcrumb1').attr(
+                    'href',
+                    $('#section-setup-introduction').attr('data-section-breadcrumb1-link')
+                );
+                $('#header-breadcrumb2').text(
+                    $('#section-setup-introduction').attr('data-section-title')
+                );
+            }
 
             window.scrollTo({ top: 0 });
         }
@@ -418,10 +429,6 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    cfn_editor.getDoc().setValue("# No resources generated");
-    setTimeout(function(){
-        cfn_editor.refresh();
-    }, 1);
     setCopyEvent('#header-button-copy-cfn', cfn_editor);
 
     troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
@@ -434,10 +441,6 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    troposphere_editor.getDoc().setValue("# No resources generated");
-    setTimeout(function(){
-        troposphere_editor.refresh();
-    }, 1);
     setCopyEvent('#header-button-copy-troposphere', troposphere_editor);
 
     cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
@@ -450,10 +453,6 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    cdkts_editor.getDoc().setValue("// No resources generated");
-    setTimeout(function(){
-        cdkts_editor.refresh();
-    }, 1);
     setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
@@ -466,11 +465,9 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    raw_editor.getDoc().setValue("// No resources generated");
-    setTimeout(function(){
-        raw_editor.refresh();
-    }, 1);
     setCopyEvent('#header-button-copy-raw', raw_editor);
+
+    regenerateOutputs();
 
     /* ========================================================================== */
     // AWS SDK Proxy for Extension (must be before Account Scan)
@@ -568,8 +565,14 @@ $(document).ready(function(){
                 window.localStorage.getItem('credentials-secretkey'),
                 window.localStorage.getItem('credentials-sessiontoken')
             ),
-            region: 'us-east-1'
+            region: region
         });
+
+        /* ========================================================================== */
+        // Update Identity
+        /* ========================================================================== */
+
+        updateIdentity();
 
         /* ========================================================================== */
         // Account Scan
@@ -641,3 +644,41 @@ function unblockUI(selector) {
 }
 
 /* ========================================================================== */
+
+function updateIdentity() {
+    $('#user-id').html("...");
+
+    AWS.config.update({
+        credentials: new AWS.Credentials(
+            window.localStorage.getItem('credentials-accesskey'),
+            window.localStorage.getItem('credentials-secretkey'),
+            window.localStorage.getItem('credentials-sessiontoken')
+        ),
+        region: region
+    });
+
+    if (window.localStorage.getItem('credentials-accesskey')) {
+        var account = "unknown-account";
+        var user = "unknown-user";
+        sdkcall("STS", "getCallerIdentity", {
+            // no params
+        }, false).then((callerid) => {
+            account = callerid.Account;
+            user = callerid.Arn.split("/").pop();
+            sdkcall("IAM", "listAccountAliases", {
+                // no params
+            }, false).then((accountAliases) => {
+                if (accountAliases.AccountAliases && accountAliases.AccountAliases.length) {
+                    account = accountAliases.AccountAliases[0];
+                }
+                $('#user-id').html(user + " @ " + account);
+            }).catch(err => {
+                $('#user-id').html("");
+            });
+        }).catch(err => {
+            $('#user-id').html("");
+        });
+    } else {
+        $('#user-id').html("");
+    }
+}
