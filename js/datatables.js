@@ -12473,16 +12473,22 @@ function updateDatatableManagementAndGovernanceSystemsManager() {
         $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
         
         data.DocumentIdentifiers.forEach(document => {
-            sdkcall("SSM", "describeDocument", {
+            sdkcall("SSM", "getDocument", {
                 Name: document.Name
             }, true).then((data) => {
-                $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
-                    f2id: data.Document.Name,
-                    f2type: 'ssm.document',
-                    f2data: data.Document,
-                    f2region: region,
-                    name: data.Document.Name
-                }]);
+                sdkcall("SSM", "getDocument", {
+                    Name: document.Name,
+                    DocumentFormat: 'JSON'
+                }, true).then((document) => {
+                    data.Document['Content'] = document.Content;
+                    $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
+                        f2id: data.Document.Name,
+                        f2type: 'ssm.document',
+                        f2data: data.Document,
+                        f2region: region,
+                        name: data.Document.Name
+                    }]);
+                });
             });
         });
 
@@ -13122,9 +13128,6 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
     }, true).then((data) => {
         $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('removeAll');
         
         data.PortfolioDetails.forEach(portfolio => {
             sdkcall("ServiceCatalog", "listPrincipalsForPortfolio", {
@@ -13144,38 +13147,6 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
                 });
             });
 
-            sdkcall("ServiceCatalog", "listConstraintsForPortfolio", {
-                PortfolioId: portfolio.Id
-            }, true).then((data) => {
-                data.ConstraintDetails.forEach(constraint => {
-                    if (constraint.Type == "NOTIFICATION") {
-                        $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('append', [{
-                            f2id: constraint.ConstraintId,
-                            f2type: 'servicecatalog.launchnotificationconstraint',
-                            f2data: constraint,
-                            f2region: region,
-                            id: constraint.ConstraintId
-                        }]);
-                    } else if (constraint.Type == "LAUNCH") {
-                        $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('append', [{
-                            f2id: constraint.ConstraintId,
-                            f2type: 'servicecatalog.launchroleconstraint',
-                            f2data: constraint,
-                            f2region: region,
-                            id: constraint.ConstraintId
-                        }]);
-                    } else if (constraint.Type == "TEMPLATE") {
-                        $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('append', [{
-                            f2id: constraint.ConstraintId,
-                            f2type: 'servicecatalog.launchtemplateconstraint',
-                            f2data: constraint,
-                            f2region: region,
-                            id: constraint.ConstraintId
-                        }]);
-                    }
-                });
-            });
-
             sdkcall("ServiceCatalog", "describePortfolio", {
                 Id: portfolio.Id
             }, true).then((data) => {
@@ -13191,9 +13162,6 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
 
         unblockUI('#section-managementandgovernance-servicecatalog-portfolios-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable');
-        unblockUI('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable');
-        unblockUI('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable');
-        unblockUI('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable');
     });
 
     sdkcall("ServiceCatalog", "searchProductsAsAdmin", {
@@ -13205,7 +13173,7 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
             sdkcall("ServiceCatalog", "describeProductAsAdmin", {
                 Id: productView.ProductViewSummary.Id
             }, true).then((data) => {
-                if (data.ProductViewSummary.Type == "CLOUD_FORMATION_TEMPLATE") {
+                if (data.ProductViewDetail.ProductViewSummary.Type == "CLOUD_FORMATION_TEMPLATE") {
                     $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').bootstrapTable('append', [{
                         f2id: data.ProductViewDetail.ProductViewSummary.Id,
                         f2type: 'servicecatalog.cloudformationproduct',
@@ -13243,12 +13211,54 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
     }, true).then((data) => {
         $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('removeAll');
         
         data.ProvisionedProducts.forEach(provisionedProduct => {
             sdkcall("ServiceCatalog", "listPortfoliosForProduct", {
                 ProductId: provisionedProduct.Id
             }, true).then((data) => {
                 data.PortfolioDetails.forEach(portfolio => {
+                    sdkcall("ServiceCatalog", "listConstraintsForPortfolio", {
+                        PortfolioId: portfolio.Id
+                    }, true).then((data) => {
+                        data.ConstraintDetails.forEach(constraint => {
+                            sdkcall("ServiceCatalog", "describeConstraint", {
+                                Id: constraint.ConstraintId
+                            }, true).then((data) => {
+                                data['PortfolioId'] = portfolio.Id;
+                                data['ProductId'] = provisionedProduct.Id;
+                                
+                                if (data.ConstraintDetail.Type == "NOTIFICATION") {
+                                    $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('append', [{
+                                        f2id: data.ConstraintDetail.ConstraintId,
+                                        f2type: 'servicecatalog.launchnotificationconstraint',
+                                        f2data: data,
+                                        f2region: region,
+                                        id: data.ConstraintDetail.ConstraintId
+                                    }]);
+                                } else if (data.ConstraintDetail.Type == "LAUNCH") {
+                                    $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('append', [{
+                                        f2id: data.ConstraintDetail.ConstraintId,
+                                        f2type: 'servicecatalog.launchroleconstraint',
+                                        f2data: data,
+                                        f2region: region,
+                                        id: data.ConstraintDetail.ConstraintId
+                                    }]);
+                                } else if (data.ConstraintDetail.Type == "TEMPLATE") {
+                                    $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('append', [{
+                                        f2id: data.ConstraintDetail.ConstraintId,
+                                        f2type: 'servicecatalog.launchtemplateconstraint',
+                                        f2data: data,
+                                        f2region: region,
+                                        id: data.ConstraintDetail.ConstraintId
+                                    }]);
+                                }
+                            });
+                        });
+                    });
+
                     $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').bootstrapTable('append', [{
                         f2id: portfolio.ARN,
                         f2type: 'servicecatalog.portfolioproductassociation',
@@ -13266,6 +13276,8 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
                 Id: provisionedProduct.Id
             }, true).then((data) => {
                 if (data.ProvisionedProductDetail.Type == "CFN_STACK") {
+                    data['Product'] = provisionedProduct;
+
                     $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').bootstrapTable('append', [{
                         f2id: data.ProvisionedProductDetail.Arn,
                         f2type: 'servicecatalog.cloudformationprovisionedproduct',
@@ -13279,6 +13291,9 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
 
         unblockUI('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable');
     });
 
     sdkcall("ServiceCatalog", "listTagOptions", {
@@ -13300,7 +13315,7 @@ function updateDatatableManagementAndGovernanceServiceCatalog() {
                             'tagoption': tagOption
                         },
                         f2region: region,
-                        name: resource.name
+                        name: resource.Name
                     }]);
                 });
             });
@@ -13845,10 +13860,11 @@ function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                 $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('removeAll');
                 
                 data.Instances.forEach(instance => {
-                    sdkcall("ServiceDiscovery", "getService", {
+                    sdkcall("ServiceDiscovery", "getInstance", {
                         InstanceId: instance.Id,
                         ServiceId: service.Id
                     }, true).then((data) => {
+                        data.Instance['ServiceId'] = service.Id;
                         $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('append', [{
                             f2id: data.Instance.Id,
                             f2type: 'servicediscovery.instance',

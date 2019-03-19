@@ -221,6 +221,9 @@ $(document).ready(function(){
                 $('.section-header').removeAttr('style');
             }
 
+            $('li.opened').removeClass('opened');
+            $('li[data-category=\'' + location.hash.split("-")[1] + '\']').addClass('opened');
+
             $('.former2-section').attr('style', 'display: none;');
             $(location.hash).attr('style', 'display: block;');
 
@@ -261,6 +264,9 @@ $(document).ready(function(){
                 type: 'warning'
             });
         } else {
+            $('li.opened').removeClass('opened');
+            $('li[data-category=\'setup\']').addClass('opened');
+
             $('.former2-section').attr('style', 'display: none;');
             $('#section-setup-introduction').attr('style', 'display: block;');
 
