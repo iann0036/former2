@@ -14435,6 +14435,7 @@ function updateDatatableAnalyticsEMR() {
                 ClusterId: cluster.Id
             }, true).then((data) => {
                 data.Steps.forEach(step => {
+                    step['ClusterId'] = cluster.Id;
                     $('#section-analytics-emr-steps-datatable').bootstrapTable('append', [{
                         f2id: step.Id,
                         f2type: 'emr.step',
@@ -14449,6 +14450,7 @@ function updateDatatableAnalyticsEMR() {
                 ClusterId: cluster.Id
             }, true).then((data) => {
                 data.InstanceFleets.forEach(instanceFleet => {
+                    step['ClusterId'] = cluster.Id;
                     $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('append', [{
                         f2id: instanceFleet.Id,
                         f2type: 'emr.instancefleetconfig',
@@ -14463,6 +14465,7 @@ function updateDatatableAnalyticsEMR() {
                 ClusterId: cluster.Id
             }, true).then((data) => {
                 data.InstanceGroups.forEach(instanceGroup => {
+                    step['ClusterId'] = cluster.Id;
                     $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('append', [{
                         f2id: instanceGroup.Id,
                         f2type: 'emr.instancegroupconfig',
@@ -14707,26 +14710,997 @@ function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
             sdkcall("SecretsManager", "describeSecret", {
                 SecretId: secret.ARN
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
-                    f2id: data.ARN,
-                    f2type: 'secretsmanager.secret',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Name
-                }]);
+                sdkcall("SecretsManager", "getSecretValue", {
+                    SecretId: secret.ARN
+                }, true).then((secretvalue) => {
+                    data['SecretString'] = secretvalue.SecretString;
 
-                $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
-                    f2id: data.ARN,
-                    f2type: 'secretsmanager.rotationschedule',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Name
-                }]);
+                    $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
+                        f2id: data.ARN,
+                        f2type: 'secretsmanager.secret',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name
+                    }]);
+                });
+
+                if (data.RotationEnabled) {
+                    $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
+                        f2id: data.ARN,
+                        f2type: 'secretsmanager.rotationschedule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name
+                    }]);
+                }
             });
         });
 
         unblockUI('#section-securityidentityandcompliance-secretsmanager-secrets-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Glue
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Analytics',
+    'service': 'Glue',
+    'resourcetypes': {
+        'Databases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Tables': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Partitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Crawlers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Classifiers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Jobs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Triggers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Dev Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableAnalyticsGlue() {
+    blockUI('#section-analytics-glue-databases-datatable');
+    blockUI('#section-analytics-glue-tables-datatable');
+    blockUI('#section-analytics-glue-partitions-datatable');
+    blockUI('#section-analytics-glue-crawlers-datatable');
+    blockUI('#section-analytics-glue-classifiers-datatable');
+    blockUI('#section-analytics-glue-jobs-datatable');
+    blockUI('#section-analytics-glue-triggers-datatable');
+    blockUI('#section-analytics-glue-connections-datatable');
+    blockUI('#section-analytics-glue-devendpoints-datatable');
+
+    sdkcall("Glue", "getDatabases", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-databases-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-glue-tables-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-glue-partitions-datatable').bootstrapTable('removeAll');
+        
+        data.DatabaseList.forEach(database => {
+            sdkcall("Glue", "getTables", {
+                DatabaseName: database.Name
+            }, true).then((data) => {
+                data.TableList.forEach(table => {
+                    sdkcall("Glue", "getPartitions", {
+                        DatabaseName: database.Name,
+                        TableName: table.Name
+                    }, true).then((data) => {
+                        data.Partitions.forEach(partition => {
+                            $('#section-analytics-glue-partitions-datatable').bootstrapTable('append', [{
+                                f2id: JSON.stringify(partition), // TODO: Better id?
+                                f2type: 'glue.partition',
+                                f2data: partition,
+                                f2region: region,
+                                tablename: partition.TableName
+                            }]);
+                        });
+                    });
+
+                    $('#section-analytics-glue-tables-datatable').bootstrapTable('append', [{
+                        f2id: table.Name,
+                        f2type: 'glue.table',
+                        f2data: table,
+                        f2region: region,
+                        name: table.Name
+                    }]);
+                });
+            });
+
+            $('#section-analytics-glue-databases-datatable').bootstrapTable('append', [{
+                f2id: database.Name,
+                f2type: 'glue.database',
+                f2data: database,
+                f2region: region,
+                name: database.Name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-databases-datatable');
+        unblockUI('#section-analytics-glue-tables-datatable');
+        unblockUI('#section-analytics-glue-partitions-datatable');
+    });
+
+    sdkcall("Glue", "getCrawlers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-crawlers-datatable').bootstrapTable('removeAll');
+        
+        data.Crawlers.forEach(crawler => {
+            $('#section-analytics-glue-crawlers-datatable').bootstrapTable('append', [{
+                f2id: crawler.Name,
+                f2type: 'glue.crawler',
+                f2data: crawler,
+                f2region: region,
+                name: crawler.Name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-crawlers-datatable');
+    });
+
+    sdkcall("Glue", "getClassifiers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-classifiers-datatable').bootstrapTable('removeAll');
+        
+        data.Classifiers.forEach(classifier => {
+            var name = null;
+            if (classifier.GrokClassifier) {
+                name = classifier.GrokClassifier.Name;
+            }
+            if (classifier.XMLClassifier) {
+                name = classifier.XMLClassifier.Name;
+            }
+            if (classifier.JsonClassifier) {
+                name = classifier.JsonClassifier.Name;
+            }
+            $('#section-analytics-glue-classifiers-datatable').bootstrapTable('append', [{
+                f2id: name,
+                f2type: 'glue.classifier',
+                f2data: classifier,
+                f2region: region,
+                name: name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-classifiers-datatable');
+    });
+
+    sdkcall("Glue", "getJobs", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-jobs-datatable').bootstrapTable('removeAll');
+        
+        data.Jobs.forEach(job => {
+            $('#section-analytics-glue-jobs-datatable').bootstrapTable('append', [{
+                f2id: job.Name,
+                f2type: 'glue.job',
+                f2data: job,
+                f2region: region,
+                name: job.Name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-jobs-datatable');
+    });
+
+    sdkcall("Glue", "getTriggers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-triggers-datatable').bootstrapTable('removeAll');
+        
+        data.Triggers.forEach(trigger => {
+            $('#section-analytics-glue-triggers-datatable').bootstrapTable('append', [{
+                f2id: trigger.Name,
+                f2type: 'glue.trigger',
+                f2data: trigger,
+                f2region: region,
+                name: trigger.Name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-triggers-datatable');
+    });
+
+    sdkcall("Glue", "getConnections", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-connections-datatable').bootstrapTable('removeAll');
+        
+        data.ConnectionList.forEach(connection => {
+            $('#section-analytics-glue-connections-datatable').bootstrapTable('append', [{
+                f2id: connection.Name,
+                f2type: 'glue.connection',
+                f2data: connection,
+                f2region: region,
+                name: connection.Name
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-connections-datatable');
+    });
+
+    sdkcall("Glue", "getDevEndpoints", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('removeAll');
+        
+        data.DevEndpoints.forEach(devEndpoint => {
+            $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('append', [{
+                f2id: devEndpoint.EndpointName,
+                f2type: 'glue.devendpoint',
+                f2data: devEndpoint,
+                f2region: region,
+                name: devEndpoint.EndpointName
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-devendpoints-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Cognito
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'Cognito',
+    'resourcetypes': {
+        'Identity Pools': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Identity Pool Role Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pools': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Clients': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Users': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool User To Group Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceCognito() {
+    blockUI('#section-securityidentityandcompliance-cognito-identitypools-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpools-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolclients-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolusers-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable');
+
+    sdkcall("CognitoIdentity", "listIdentityPools", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('removeAll');
+        
+        data.IdentityPools.forEach(identityPool => {
+            sdkcall("CognitoIdentity", "getIdentityPoolRoles", {
+                IdentityPoolId: identityPool.IdentityPoolId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('append', [{
+                    f2id: data.IdentityPoolId,
+                    f2type: 'cognito.identitypoolroleattachment',
+                    f2data: data,
+                    f2region: region,
+                    id: data.IdentityPoolId
+                }]);
+            });
+
+            sdkcall("CognitoIdentity", "describeIdentityPool", {
+                IdentityPoolId: identityPool.IdentityPoolId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('append', [{
+                    f2id: data.IdentityPoolId,
+                    f2type: 'cognito.identitypool',
+                    f2data: data,
+                    f2region: region,
+                    name: data.IdentityPoolName
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-cognito-identitypools-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable');
+    });
+
+    sdkcall("CognitoIdentityServiceProvider", "listUserPools", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').bootstrapTable('removeAll');
+        
+        data.UserPools.forEach(userPool => {
+            sdkcall("CognitoIdentityServiceProvider", "listUserPoolClients", {
+                UserPoolId: userPool.Id
+            }, true).then((data) => {
+                data.UserPoolClients.forEach(userPoolClient => {
+                    sdkcall("CognitoIdentityServiceProvider", "describeUserPoolClient", {
+                        UserPoolId: userPool.Id,
+                        ClientId: userPoolClient.ClientId
+                    }, true).then((data) => {
+                        $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('append', [{
+                            f2id: data.UserPoolClient.ClientId,
+                            f2type: 'cognito.userpoolclient',
+                            f2data: data.UserPoolClient,
+                            f2region: region,
+                            name: data.UserPoolClient.ClientName
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("CognitoIdentityServiceProvider", "listUsers", {
+                UserPoolId: userPool.Id
+            }, true).then((data) => {
+                data.Users.forEach(user => {
+                    sdkcall("CognitoIdentityServiceProvider", "adminListGroupsForUser", {
+                        UserPoolId: userPool.Id,
+                        Username: user.Username
+                    }, true).then((data) => {
+                        data.Groups.forEach(group => {
+                            $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').bootstrapTable('append', [{
+                                f2id: user.Username + group.GroupName,
+                                f2type: 'cognito.userpoolusertogroupattachment',
+                                f2data: {
+                                    'user': user,
+                                    'group': group
+                                },
+                                f2region: region,
+                                username: user.Username,
+                                groupname: group.GroupName
+                            }]);
+                        });
+                    });
+
+                    sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
+                        UserPoolId: userPool.Id,
+                        Username: user.Username
+                    }, true).then((data) => {
+                        $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('append', [{
+                            f2id: data.Username,
+                            f2type: 'cognito.userpooluser',
+                            f2data: data,
+                            f2region: region,
+                            name: data.Username
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("CognitoIdentityServiceProvider", "listGroups", {
+                UserPoolId: userPool.Id
+            }, true).then((data) => {
+                data.Groups.forEach(group => {
+                    sdkcall("CognitoIdentityServiceProvider", "getGroup", {
+                        UserPoolId: userPool.Id,
+                        GroupName: group.GroupName
+                    }, true).then((data) => {
+                        $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('append', [{
+                            f2id: data.Group.GroupName,
+                            f2type: 'cognito.userpoolgroup',
+                            f2data: data.Group,
+                            f2region: region,
+                            name: data.Group.GroupName
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("CognitoIdentityServiceProvider", "describeUserPool", {
+                UserPoolId: userPool.Id
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('append', [{
+                    f2id: data.UserPool.Arn,
+                    f2type: 'cognito.userpool',
+                    f2data: data.UserPool,
+                    f2region: region,
+                    name: data.UserPool.Name
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-cognito-userpools-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolclients-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolusers-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable');
     });
 }
