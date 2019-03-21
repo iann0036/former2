@@ -15641,7 +15641,8 @@ function updateDatatableSecurityIdentityAndComplianceCognito() {
                                 f2type: 'cognito.userpoolusertogroupattachment',
                                 f2data: {
                                     'user': user,
-                                    'group': group
+                                    'group': group,
+                                    'userpoolid': userPool.Id
                                 },
                                 f2region: region,
                                 username: user.Username,
@@ -15650,6 +15651,7 @@ function updateDatatableSecurityIdentityAndComplianceCognito() {
                         });
                     });
 
+                    /*
                     sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
                         UserPoolId: userPool.Id,
                         Username: user.Username
@@ -15662,6 +15664,7 @@ function updateDatatableSecurityIdentityAndComplianceCognito() {
                             name: data.Username
                         }]);
                     });
+                    */
                 });
             });
 
@@ -15702,5 +15705,779 @@ function updateDatatableSecurityIdentityAndComplianceCognito() {
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolusers-datatable');
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable');
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable');
+    });
+}
+
+/* ========================================================================== */
+// GuardDuty
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'GuardDuty',
+    'resourcetypes': {
+        'Master': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Detectors': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Members': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'IP Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Threat Intel Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
+    blockUI('#section-securityidentityandcompliance-guardduty-master-datatable');
+    blockUI('#section-securityidentityandcompliance-guardduty-detectors-datatable');
+    blockUI('#section-securityidentityandcompliance-guardduty-members-datatable');
+    blockUI('#section-securityidentityandcompliance-guardduty-filters-datatable');
+    blockUI('#section-securityidentityandcompliance-guardduty-ipsets-datatable');
+    blockUI('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable');
+
+    sdkcall("GuardDuty", "listDetectors", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-members-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-filters-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('removeAll');
+        
+        data.DetectorIds.forEach(detectorId => {
+            sdkcall("GuardDuty", "listMembers", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                data.Members.forEach(member => {
+                    $('#section-securityidentityandcompliance-guardduty-members-datatable').bootstrapTable('append', [{
+                        f2id: member.AccountId,
+                        f2type: 'guardduty.member',
+                        f2data: member,
+                        f2region: region,
+                        accountid: member.AccountId
+                    }]);
+                });
+            });
+
+            sdkcall("GuardDuty", "listFilters", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                data.FilterNames.forEach(filterName => {
+                    sdkcall("GuardDuty", "getFilter", {
+                        DetectorId: detectorId,
+                        FilterName: filterName
+                    }, true).then((data) => {
+                        data['DetectorId'] = detectorId;
+                        $('#section-securityidentityandcompliance-guardduty-filters-datatable').bootstrapTable('append', [{
+                            f2id: data.Name,
+                            f2type: 'guardduty.filter',
+                            f2data: data,
+                            f2region: region,
+                            name: data.Name
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("GuardDuty", "listIPSets", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                data.IpSetIds.forEach(ipSetId => {
+                    sdkcall("GuardDuty", "getIPSet", {
+                        DetectorId: detectorId,
+                        IpSetId: ipSetId
+                    }, true).then((data) => {
+                        data['DetectorId'] = detectorId;
+                        $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('append', [{
+                            f2id: data.Name,
+                            f2type: 'guardduty.ipset',
+                            f2data: data,
+                            f2region: region,
+                            name: data.Name
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("GuardDuty", "listThreatIntelSets", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                data.ThreatIntelSetIds.forEach(threatIntelSetId => {
+                    sdkcall("GuardDuty", "getThreatIntelSet", {
+                        DetectorId: detectorId,
+                        ThreatIntelSetId: threatIntelSetId
+                    }, true).then((data) => {
+                        data['DetectorId'] = detectorId;
+                        $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('append', [{
+                            f2id: data.Name,
+                            f2type: 'guardduty.threatintelset',
+                            f2data: data,
+                            f2region: region,
+                            name: data.Name
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("DataPipeline", "getMasterAccount", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                data['DetectorId'] = detectorId;
+                $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('append', [{
+                    f2id: data.Master.AccountId,
+                    f2type: 'guardduty.master',
+                    f2data: data.Master,
+                    f2region: region,
+                    accountid: data.Master.AccountId
+                }]);
+            });
+
+            sdkcall("DataPipeline", "getDetector", {
+                DetectorId: detectorId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('append', [{
+                    f2id: data.CreatedAt,
+                    f2type: 'guardduty.detector',
+                    f2data: data,
+                    f2region: region,
+                    status: data.Status
+                }]);
+            });
+        });
+
+        unblockUI('#section-securityidentityandcompliance-guardduty-detectors-datatable');
+        unblockUI('#section-securityidentityandcompliance-guardduty-members-datatable');
+        unblockUI('#section-securityidentityandcompliance-guardduty-filters-datatable');
+        unblockUI('#section-securityidentityandcompliance-guardduty-ipsets-datatable');
+        unblockUI('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable');
+        unblockUI('#section-securityidentityandcompliance-guardduty-master-datatable');
+    });
+}
+
+/* ========================================================================== */
+// AppStream
+/* ========================================================================== */
+
+sections.push({
+    'category': 'End User Computing',
+    'service': 'AppStream',
+    'resourcetypes': {
+        'Fleets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Users': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Stacks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Stack User Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Stack Fleet Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Image Builders': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Directory Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableEndUserComputingAppStream() {
+    blockUI('#section-endusercomputing-appstream-fleets-datatable');
+    blockUI('#section-endusercomputing-appstream-users-datatable');
+    blockUI('#section-endusercomputing-appstream-stacks-datatable');
+    blockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
+    blockUI('#section-endusercomputing-appstream-stackfleetassociations-datatable');
+    blockUI('#section-endusercomputing-appstream-imagebuilders-datatable');
+    blockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
+
+    sdkcall("AppStream", "describeFleets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('removeAll');
+
+        data.Fleets.forEach(fleet => {
+            sdkcall("AppStream", "listAssociatedStacks", {
+                FleetName: fleet.Name
+            }, true).then((data) => {
+                data.Names.forEach(stackName => {
+                    $('#section-endusercomputing-appstream-stackfleetassociations-datatable').bootstrapTable('append', [{
+                        f2id: fleet.Name + stackName,
+                        f2type: 'appstream.stackfleetassociation',
+                        f2data: {
+                            'fleetname': fleet.Name,
+                            'stackname': stackName
+                        },
+                        f2region: region,
+                        fleetname: fleet.Name,
+                        stackname: stackName
+                    }]);
+                });
+            });
+
+            $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('append', [{
+                f2id: fleet.Arn,
+                f2type: 'appstream.fleet',
+                f2data: fleet,
+                f2region: region,
+                name: fleet.Name
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-fleets-datatable');
+    });
+
+    sdkcall("AppStream", "describeUsers", {
+        AuthenticationType: 'USERPOOL'
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-users-datatable').bootstrapTable('removeAll');
+
+        data.Users.forEach(user => {
+            $('#section-endusercomputing-appstream-users-datatable').bootstrapTable('append', [{
+                f2id: user.Arn,
+                f2type: 'appstream.user',
+                f2data: user,
+                f2region: region,
+                username: user.UserName
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-users-datatable');
+    });
+
+    sdkcall("AppStream", "describeStacks", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('removeAll');
+
+        data.Stacks.forEach(stack => {
+            $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('append', [{
+                f2id: stack.Arn,
+                f2type: 'appstream.stack',
+                f2data: stack,
+                f2region: region,
+                name: stack.Name
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-stacks-datatable');
+    });
+
+    sdkcall("AppStream", "describeImageBuilders", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-imagebuilders-datatable').bootstrapTable('removeAll');
+
+        data.ImageBuilders.forEach(imageBuilder => {
+            $('#section-endusercomputing-appstream-imagebuilders-datatable').bootstrapTable('append', [{
+                f2id: imageBuilder.Arn,
+                f2type: 'appstream.imagebuilder',
+                f2data: imageBuilder,
+                f2region: region,
+                name: imageBuilder.Name
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-imagebuilders-datatable');
+    });
+
+    sdkcall("AppStream", "describeDirectoryConfigs", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-directoryconfigs-datatable').bootstrapTable('removeAll');
+
+        data.DirectoryConfigs.forEach(directoryConfig => {
+            $('#section-endusercomputing-appstream-directoryconfigs-datatable').bootstrapTable('append', [{
+                f2id: directoryConfig.DirectoryName,
+                f2type: 'appstream.directoryconfig',
+                f2data: directoryConfig,
+                f2region: region,
+                name: directoryConfig.DirectoryName
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
+    });
+
+    sdkcall("AppStream", "describeUserStackAssociations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('removeAll');
+
+        data.UserStackAssociations.forEach(userStackAssociation => {
+            $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('append', [{
+                f2id: userStackAssociation.StackName + userStackAssociation.UserName,
+                f2type: 'appstream.stackuserassociation',
+                f2data: userStackAssociation,
+                f2region: region,
+                stackname: userStackAssociation.StackName,
+                username: userStackAssociation.UserName
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
     });
 }
