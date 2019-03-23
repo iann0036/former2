@@ -3212,6 +3212,43 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Subscriptions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Topic ARN',
+                        field: 'topicarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -3219,6 +3256,7 @@ sections.push({
 function updateDatatableApplicationIntegrationSNS() {
     blockUI('#section-applicationintegration-sns-topics-datatable');
     blockUI('#section-applicationintegration-sns-topicpolicies-datatable');
+    blockUI('#section-applicationintegration-sns-subscriptions-datatable');
 
     sdkcall("SNS", "listTopics", {
         // no params
@@ -3249,12 +3287,31 @@ function updateDatatableApplicationIntegrationSNS() {
                     topicarn: topic.TopicArn,
                     policy: data.Attributes.Policy
                 }]);
-        
-                unblockUI('#section-applicationintegration-sns-topicpolicies-datatable');
+            });
+
+            sdkcall("SNS", "listSubscriptionsByTopic", {
+                TopicArn: topic.TopicArn
+            }, true).then((data) => {
+                data.Subscriptions.forEach(subscription => {
+                    sdkcall("SNS", "getSubscriptionAttributes", {
+                        SubscriptionArn: subscription.SubscriptionArn
+                    }, true).then((data) => {
+                        subscription['Attributes'] = data.Attributes;
+                        $('#section-applicationintegration-sns-subscriptions-datatable').bootstrapTable('append', [{
+                            f2id: subscription.SubscriptionArn,
+                            f2type: 'sns.subscription',
+                            f2data: subscription,
+                            f2region: region,
+                            topicarn: topic.TopicArn
+                        }]);
+                    });
+                });
             });
         });
 
         unblockUI('#section-applicationintegration-sns-topics-datatable');
+        unblockUI('#section-applicationintegration-sns-topicpolicies-datatable');
+        unblockUI('#section-applicationintegration-sns-subscriptions-datatable');
     });
 }
 
@@ -3667,12 +3724,316 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Dashboards': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Bus Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Log Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Log Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Metric Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subscription Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-rules-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-metricfilters-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
 
     sdkcall("CloudWatch", "describeAlarms", {
         // no params
@@ -3690,6 +4051,163 @@ function updateDatatableManagementAndGovernanceCloudWatch() {
         });
 
         unblockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    });
+
+    sdkcall("CloudWatch", "listDashboards", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('removeAll');
+
+        data.DashboardEntries.forEach(dashboard => {
+            sdkcall("CloudWatch", "getDashboard", {
+                DashboardName: dashboard.DashboardName
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('append', [{
+                    f2id: dashboard.DashboardArn,
+                    f2type: 'cloudwatch.dashboard',
+                    f2data: data,
+                    f2region: region,
+                    name: dashboard.DashboardName
+                }]);
+            });
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
+    });
+
+    sdkcall("CloudWatchEvents", "listRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-rules-datatable').bootstrapTable('removeAll');
+
+        data.Rules.forEach(rule => {
+            sdkcall("CloudWatchEvents", "describeRule", {
+                Name: rule.Name
+            }, true).then((data) => {
+                sdkcall("CloudWatchEvents", "listTargetsByRule", {
+                    Rule: data.Name
+                }, true).then((targets) => {
+                    data['Targets'] = targets.Targets;
+                    $('#section-managementandgovernance-cloudwatch-rules-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'cloudwatch.rule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name
+                    }]);
+                });
+            });
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-rules-datatable');
+    });
+
+    sdkcall("CloudWatchEvents", "describeEventBus", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable').bootstrapTable('removeAll');
+
+        var policyobj = JSON.parse(data.Policy);
+
+        policyobj.Statement.forEach(statement => {
+            $('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable').bootstrapTable('append', [{
+                f2id: data.Arn,
+                f2type: 'cloudwatch.eventbuspolicy',
+                f2data: statement,
+                f2region: region,
+                name: data.Name // TODO: much better datatable keys
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable');
+    });
+
+    sdkcall("CloudWatchLogs", "describeDestinations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-destinations-datatable').bootstrapTable('removeAll');
+
+        data.destinations.forEach(destination => {
+            $('#section-managementandgovernance-cloudwatch-destinations-datatable').bootstrapTable('append', [{
+                f2id: destination.destinationName,
+                f2type: 'cloudwatch.destination',
+                f2data: destination,
+                f2region: region,
+                name: destination.destinationName
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
+    });
+
+    sdkcall("CloudWatchLogs", "describeLogGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-loggroups-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-logstreams-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').bootstrapTable('removeAll');
+
+        data.logGroups.forEach(logGroup => {
+            sdkcall("CloudWatchLogs", "describeLogStreams", {
+                logGroupName: logGroup.logGroupName
+            }, true).then((data) => {
+                data.logStreams.forEach(logStream => {
+                    logStream['logGroupName'] = logGroup.logGroupName;
+                    $('#section-managementandgovernance-cloudwatch-logstreams-datatable').bootstrapTable('append', [{
+                        f2id: logStream.logStreamName,
+                        f2type: 'cloudwatch.logstream',
+                        f2data: logStream,
+                        f2region: region,
+                        name: logStream.logStreamName
+                    }]);
+                });
+            });
+
+            sdkcall("CloudWatchLogs", "describeSubscriptionFilters", {
+                logGroupName: logGroup.logGroupName
+            }, true).then((data) => {
+                data.subscriptionFilters.forEach(subscriptionFilter => {
+                    subscriptionFilter['logGroupName'] = logGroup.logGroupName;
+                    $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').bootstrapTable('append', [{
+                        f2id: subscriptionFilter.filterName,
+                        f2type: 'cloudwatch.subscriptionfilter',
+                        f2data: subscriptionFilter,
+                        f2region: region,
+                        name: subscriptionFilter.filterName
+                    }]);
+                });
+            });
+
+            $('#section-managementandgovernance-cloudwatch-loggroups-datatable').bootstrapTable('append', [{
+                f2id: logGroup.logGroupName,
+                f2type: 'cloudwatch.loggroup',
+                f2data: logGroup,
+                f2region: region,
+                name: logGroup.logGroupName
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
+        unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
+        unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
+    });
+
+    sdkcall("CloudWatchLogs", "describeMetricFilters", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').bootstrapTable('removeAll');
+
+        data.metricFilters.forEach(metricFilter => {
+            $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').bootstrapTable('append', [{
+                f2id: metricFilter.filterName,
+                f2type: 'cloudwatch.metricfilter',
+                f2data: metricFilter,
+                f2region: region,
+                name: metricFilter.filterName
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-metricfilters-datatable');
     });
 }
 
@@ -4038,13 +4556,24 @@ function updateDatatableComputeECR() {
         $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
 
         data.repositories.forEach(repository => {
-            $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
-                f2id: repository.repositoryArn,
-                f2type: 'ecr.repository',
-                f2data: repository,
-                f2region: region,
-                name: repository.repositoryName
-            }]);
+            sdkcall("ECR", "getLifecyclePolicy", {
+                repositoryName: repository.repositoryName
+            }, true).then((data) => {
+                repository['lifecyclePolicyText'] = data.lifecyclePolicyText;
+                repository['registryId'] = data.registryId;
+                sdkcall("ECR", "getRepositoryPolicy", {
+                    repositoryName: repository.repositoryName
+                }, true).then((data) => {
+                    repository['policy'] = data.policyText;
+                    $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
+                        f2id: repository.repositoryArn,
+                        f2type: 'ecr.repository',
+                        f2data: repository,
+                        f2region: region,
+                        name: repository.repositoryName
+                    }]);
+                });
+            });
         });
 
         unblockUI('#section-compute-ecr-repositories-datatable');
@@ -6184,7 +6713,7 @@ sections.push({
 function updateDatatableStorageFSx() {
     blockUI('#section-storage-fsx-filesystems-datatable');
 
-    sdkcall("FSx", ".describeFileSystems", {
+    sdkcall("FSx", "describeFileSystems", {
         // no params
     }, true).then((data) => {
         $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
@@ -7531,6 +8060,7 @@ function updateDatatableCustomerEngagementSES() {
                 ConfigurationSetName: configurationSet.Name
             }, true).then((data) => {
                 data.EventDestinations.forEach(eventDestination => {
+                    eventDestination['ConfigurationSetName'] = configurationSet.Name;
                     $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('append', [{
                         f2id: eventDestination.Name,
                         f2type: 'ses.eventdestination',
@@ -7581,7 +8111,11 @@ function updateDatatableCustomerEngagementSES() {
             sdkcall("SES", "describeReceiptRuleSet", {
                 RuleSetName: ruleSet.Name
             }, true).then((data) => {
+                var previousRuleName = null;
                 data.Rules.forEach(rule => {
+                    rule['After'] = previousRuleName;
+                    previousRuleName = rule.Name;
+                    rule['RuleSetName'] = ruleSet.Name;
                     $('#section-customerengagement-ses-receiptrules-datatable').bootstrapTable('append', [{
                         f2id: rule.Name,
                         f2type: 'ses.receiptrule',
@@ -8034,17 +8568,18 @@ function updateDatatableSecurityIdentityAndComplianceIAM() {
                 data.AttachedPolicies.forEach(policy => {
                     sdkcall("IAM", "getPolicy", {
                         PolicyArn: policy.PolicyArn
-                    }, true).then((data) => {
+                    }, true).then((policydata) => {
                         sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
-                            VersionId: data.DefaultVersionId
+                            VersionId: policydata.DefaultVersionId
                         }, true).then((data) => {
                             $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
                                 f2id: policy.PolicyArn,
                                 f2type: 'iam.policy',
                                 f2data: {
                                     'type': 'user',
-                                    'policy': policy,
+                                    'username': user.UserName,
+                                    'policy': policydata,
                                     'document': data.PolicyVersion.Document
                                 },
                                 f2region: region,
@@ -8082,17 +8617,18 @@ function updateDatatableSecurityIdentityAndComplianceIAM() {
                 data.AttachedPolicies.forEach(policy => {
                     sdkcall("IAM", "getPolicy", {
                         PolicyArn: policy.PolicyArn
-                    }, true).then((data) => {
+                    }, true).then((policydata) => {
                         sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
-                            VersionId: data.DefaultVersionId
+                            VersionId: policydata.DefaultVersionId
                         }, true).then((data) => {
                             $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
                                 f2id: policy.PolicyArn,
                                 f2type: 'iam.policy',
                                 f2data: {
                                     'type': 'group',
-                                    'policy': policy,
+                                    'groupname': group.GroupName,
+                                    'policy': policydata,
                                     'document': data.PolicyVersion.Document
                                 },
                                 f2region: region,
@@ -8129,17 +8665,18 @@ function updateDatatableSecurityIdentityAndComplianceIAM() {
                 data.AttachedPolicies.forEach(policy => {
                     sdkcall("IAM", "getPolicy", {
                         PolicyArn: policy.PolicyArn
-                    }, true).then((data) => {
+                    }, true).then((policydata) => {
                         sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
-                            VersionId: data.DefaultVersionId
+                            VersionId: policydata.DefaultVersionId
                         }, true).then((data) => {
                             $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
                                 f2id: policy.PolicyArn,
                                 f2type: 'iam.policy',
                                 f2data: {
                                     'type': 'role',
-                                    'policy': policy,
+                                    'rolename': role.RoleName,
+                                    'policy': policydata,
                                     'document': data.PolicyVersion.Document
                                 },
                                 f2region: region,
@@ -8170,13 +8707,23 @@ function updateDatatableSecurityIdentityAndComplianceIAM() {
         $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
         
         data.Policies.forEach(managedPolicy => {
-            $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
-                f2id: managedPolicy.Arn,
-                f2type: 'iam.managedpolicy',
-                f2data: managedPolicy,
-                f2region: region,
-                name: managedPolicy.PolicyName
-            }]);
+            sdkcall("IAM", "getPolicy", {
+                PolicyArn: policy.PolicyArn
+            }, true).then((policydata) => {
+                sdkcall("IAM", "getPolicyVersion", {
+                    PolicyArn: policy.PolicyArn,
+                    VersionId: policydata.DefaultVersionId
+                }, true).then((data) => {
+                    managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
+                    $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
+                        f2id: managedPolicy.Arn,
+                        f2type: 'iam.managedpolicy',
+                        f2data: managedPolicy,
+                        f2region: region,
+                        name: managedPolicy.PolicyName
+                    }]);
+                });
+            });
         });
 
         unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
@@ -16479,5 +17026,1351 @@ function updateDatatableEndUserComputingAppStream() {
         });
 
         unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Database Migration Service
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Migration &amp; Transfer',
+    'service': 'Database Migration Service',
+    'resourcetypes': {
+        'Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Replication Instances': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Replication Tasks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Replication Subnet Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Subscriptions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableMigrationAndTransferDatabaseMigrationService() {
+    blockUI('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable');
+    blockUI('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable');
+    blockUI('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable');
+    blockUI('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable');
+    blockUI('#section-migrationandtransfer-databasemigrationservice-certificates-datatable');
+    blockUI('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable');
+
+    sdkcall("DMS", "describeEndpoints", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('removeAll');
+        
+        data.Endpoints.forEach(endpoint => {
+            $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('append', [{
+                f2id: endpoint.EndpointIdentifier,
+                f2type: 'databasemigrationservice.endpoint',
+                f2data: endpoint,
+                f2region: region,
+                id: endpoint.EndpointIdentifier
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable');
+    });
+
+    sdkcall("DMS", "describeReplicationInstances", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('removeAll');
+        
+        data.ReplicationInstances.forEach(replicationInstance => {
+            $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('append', [{
+                f2id: replicationInstance.ReplicationInstanceIdentifier,
+                f2type: 'databasemigrationservice.replicationinstance',
+                f2data: replicationInstance,
+                f2region: region,
+                id: replicationInstance.ReplicationInstanceIdentifier
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable');
+    });
+
+    sdkcall("DMS", "describeReplicationTasks", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('removeAll');
+        
+        data.ReplicationTasks.forEach(replicationTask => {
+            $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('append', [{
+                f2id: replicationTask.ReplicationTaskIdentifier,
+                f2type: 'databasemigrationservice.replicationtask',
+                f2data: replicationTask,
+                f2region: region,
+                id: replicationTask.ReplicationTaskIdentifier
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable');
+    });
+
+    sdkcall("DMS", "describeReplicationSubnetGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('removeAll');
+        
+        data.ReplicationSubnetGroups.forEach(replicationSubnetGroup => {
+            $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('append', [{
+                f2id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier,
+                f2type: 'databasemigrationservice.replicationsubnetgroup',
+                f2data: replicationSubnetGroup,
+                f2region: region,
+                id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable');
+    });
+
+    sdkcall("DMS", "describeCertificates", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('removeAll');
+        
+        data.Certificates.forEach(certificate => {
+            $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('append', [{
+                f2id: certificate.CertificateIdentifier,
+                f2type: 'databasemigrationservice.certificate',
+                f2data: certificate,
+                f2region: region,
+                id: certificate.CertificateIdentifier
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-certificates-datatable');
+    });
+
+    sdkcall("DMS", "describeEventSubscriptions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('removeAll');
+        
+        data.EventSubscriptionsList.forEach(eventSubscriptions => {
+            $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('append', [{
+                f2id: eventSubscriptions.CustSubscriptionId,
+                f2type: 'databasemigrationservice.eventsubscription',
+                f2data: eventSubscriptions,
+                f2region: region,
+                id: eventSubscriptions.CustSubscriptionId
+            }]);
+        });
+
+        unblockUI('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable');
+    });
+}
+
+/* ========================================================================== */
+// IoT Greengrass
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Internet of Things',
+    'service': 'Greengrass',
+    'resourcetypes': {
+        'Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Group Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Connector Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Connector Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Core Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Core Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Device Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Device Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Function Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Function Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Logger Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Logger Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resource Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resource Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subscription Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subscription Definition Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+function updateDatatableInternetofThingsGreengrass() {
+    blockUI('#section-internetofthings-greengrass-connectordefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-connectordefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-coredefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-coredefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-devicedefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-devicedefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-functiondefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-functiondefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-groups-datatable');
+    blockUI('#section-internetofthings-greengrass-groupversions-datatable');
+    blockUI('#section-internetofthings-greengrass-loggerdefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-loggerdefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-resourcedefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-resourcedefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-subscriptiondefinitions-datatable');
+    blockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
+
+    sdkcall("Greengrass", "listConnectorDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listConnectorDefinitionVersions", {
+                ConnectorDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getConnectorDefinitionVersion", {
+                        ConnectorDefinitionId: definition.Id,
+                        ConnectorDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['ConnectorDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.connectordefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getConnectorDefinition", {
+                ConnectorDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.connectordefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-connectordefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-connectordefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listCoreDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listCoreDefinitionVersions", {
+                CoreDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getCoreDefinitionVersion", {
+                        CoreDefinitionId: definition.Id,
+                        CoreDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['CoreDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.coredefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getCoreDefinition", {
+                CoreDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.coredefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-coredefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-coredefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listDeviceDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listDeviceDefinitionVersions", {
+                DeviceDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getDeviceDefinitionVersion", {
+                        DeviceDefinitionId: definition.Id,
+                        DeviceDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['DeviceDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.devicedefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getDeviceDefinition", {
+                DeviceDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.devicedefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-devicedefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-devicedefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listFunctionDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listFunctionDefinitionVersions", {
+                FunctionDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getFunctionDefinitionVersion", {
+                        FunctionDefinitionId: definition.Id,
+                        FunctionDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['FunctionDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.functiondefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getFunctionDefinition", {
+                FunctionDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.functiondefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-functiondefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-functiondefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listGroupVersions", {
+                GroupId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getGroupVersion", {
+                        GroupId: definition.Id,
+                        GroupVersionId: version.Id
+                    }, true).then((data) => {
+                        data['GroupId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.groupversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getGroup", {
+                GroupId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.group',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-groups-datatable');
+        unblockUI('#section-internetofthings-greengrass-groupversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listLoggerDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listLoggerDefinitionVersions", {
+                LoggerDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getLoggerDefinitionVersion", {
+                        LoggerDefinitionId: definition.Id,
+                        LoggerDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['LoggerDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.loggerdefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getLoggerDefinition", {
+                LoggerDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.loggerdefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-loggerdefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-loggerdefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listResourceDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listResourceDefinitionVersions", {
+                ResourceDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getResourceDefinitionVersion", {
+                        ResourceDefinitionId: definition.Id,
+                        ResourceDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['ResourceDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.resourcedefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getResourceDefinition", {
+                ResourceDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.resourcedefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-resourcedefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-resourcedefinitionversions-datatable');
+    });
+
+    sdkcall("Greengrass", "listSubscriptionDefinitions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('removeAll');
+        
+        data.Definitions.forEach(definition => {
+            sdkcall("Greengrass", "listSubscriptionDefinitionVersions", {
+                SubscriptionDefinitionId: definition.Id
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    sdkcall("Greengrass", "getSubscriptionDefinitionVersion", {
+                        SubscriptionDefinitionId: definition.Id,
+                        SubscriptionDefinitionVersionId: version.Id
+                    }, true).then((data) => {
+                        data['SubscriptionDefinitionId'] = definition.Id;
+                        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.subscriptiondefinitionversion',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id
+                        }]);
+                    });
+                });
+            });
+
+            sdkcall("Greengrass", "getSubscriptionDefinition", {
+                SubscriptionDefinitionId: definition.Id
+            }, true).then((data) => {
+                $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('append', [{
+                    f2id: definition.Arn,
+                    f2type: 'greengrass.subscriptiondefinition',
+                    f2data: definition,
+                    f2region: region,
+                    id: definition.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-internetofthings-greengrass-subscriptiondefinitions-datatable');
+        unblockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
     });
 }

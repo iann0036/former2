@@ -2868,7 +2868,7 @@ function performF2Mappings(objects) {
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
-                    'type': 'AWS::ElasticBeanstalk::ApplicationVersion',
+                    'type': 'AWS::ElasticBeanstalk::Environment',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticbeanstalk.configurationtemplate") {
@@ -4123,7 +4123,7 @@ function performF2Mappings(objects) {
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
-                    'type': 'AWS::ApiGateway::Authorizer',
+                    'type': 'AWS::ApiGateway::Method',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.gatewayresponse") {
@@ -4182,7 +4182,7 @@ function performF2Mappings(objects) {
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
-                    'type': 'AWS::ApiGateway::DocumentationVersion',
+                    'type': 'AWS::ApiGateway::RequestValidator',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.account") {
@@ -7975,12 +7975,883 @@ function performF2Mappings(objects) {
                     'type': 'AWS::AppStream::StackUserAssociation',
                     'options': reqParams
                 });
+            } else if (obj.type == "ses.eventdestination") {
+                reqParams.cfn['ConfigurationSetName'] = obj.data.ConfigurationSetName;
+                reqParams.cfn['EventDestination'] = {
+                    'CloudWatchDestination': obj.data.CloudWatchDestination,
+                    'Enabled': obj.data.Enabled,
+                    'MatchingEventTypes': obj.data.MatchingEventTypes,
+                    'Name': obj.data.Name,
+                    'KinesisFirehoseDestination': obj.data.KinesisFirehoseDestination,
+                };
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::ConfigurationSetEventDestination',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ses.configurationset") {
+                reqParams.cfn['Name'] = obj.data.ConfigurationSet.Name;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::ConfigurationSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ses.receiptfilter") {
+                reqParams.cfn['Filter'] = obj.data;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::ReceiptFilter',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ses.receiptrule") {
+                reqParams.cfn['After'] = obj.data.After;
+                reqParams.cfn['Rule'] = {
+                    'ScanEnabled': obj.data.ScanEnabled,
+                    'Recipients': obj.data.Recipients,
+                    'Actions': obj.data.Actions,
+                    'Enabled': obj.data.Enabled,
+                    'Name': obj.data.Name,
+                    'TlsPolicy': obj.data.TlsPolicy
+                }
+                reqParams.cfn['RuleSetName'] = obj.data.RuleSetName;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::ReceiptRule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ses.receiptruleset") {
+                reqParams.cfn['RuleSetName'] = obj.data.Name;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::ReceiptRuleSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ses.template") {
+                reqParams.cfn['Template'] = obj.data.Template;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ses', obj.id),
+                    'region': obj.region,
+                    'service': 'ses',
+                    'type': 'AWS::SES::Template',
+                    'options': reqParams
+                });
+            } else if (obj.type == "eks.cluster") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['RoleArn'] = obj.data.roleArn;
+                reqParams.cfn['Version'] = obj.data.version;
+                if (obj.data.resourcesVpcConfig) {
+                    reqParams.cfn['ResourcesVpcConfig'] = {
+                        'SecurityGroupIds': obj.data.resourcesVpcConfig.securityGroupIds,
+                        'SubnetIds': obj.data.resourcesVpcConfig.subnetIds
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('eks', obj.id),
+                    'region': obj.region,
+                    'service': 'eks',
+                    'type': 'AWS::EKS::Cluster',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.accesskey") {
+                reqParams.cfn['Status'] = obj.data.Status;
+                reqParams.cfn['UserName'] = obj.data.UserName;
+
+                /*
+                SKIPPED:
+                Serial
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::AccessKey',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.policy") {
+                reqParams.cfn['PolicyDocument'] = obj.data.document;
+                if (obj.data.type == "user") {
+                    reqParams.cfn['Users'] = [obj.data.username];
+                } else if (obj.data.type == "group") {
+                    reqParams.cfn['Groups'] = [obj.data.groupname];
+                } else if (obj.data.type == "role") {
+                    reqParams.cfn['Roles'] = [obj.data.rolename];
+                }
+                reqParams.cfn['PolicyName'] = obj.data.policy.PolicyName;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::Policy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.user") {
+                reqParams.cfn['Path'] = obj.data.Path;
+                reqParams.cfn['UserName'] = obj.data.UserName;
+                if (obj.data.PermissionsBoundary) {
+                    reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
+                }
+
+                /*
+                TODO:
+                Groups:
+                    - String
+                LoginProfile:
+                    LoginProfile Type
+                ManagedPolicyArns:
+                    - String
+                Policies:
+                    - Policies
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::User',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.group") {
+                reqParams.cfn['Path'] = obj.data.Path;
+                reqParams.cfn['GroupName'] = obj.data.GroupName;
+
+                /*
+                TODO:
+                ManagedPolicyArns: [ String, ... ]
+                Policies:
+                    - Policies
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::Group',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.role") {
+                reqParams.cfn['Path'] = obj.data.Path;
+                reqParams.cfn['RoleName'] = obj.data.RoleName;
+                reqParams.cfn['AssumeRolePolicyDocument'] = obj.data.AssumeRolePolicyDocument;
+                reqParams.cfn['MaxSessionDuration'] = obj.data.MaxSessionDuration;
+                if (obj.data.PermissionsBoundary) {
+                    reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
+                }
+
+                /*
+                TODO:
+                ManagedPolicyArns:
+                    - String
+                Policies:
+                    - Policies
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::Role',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.managedpolicy") {
+                reqParams.cfn['ManagedPolicyName'] = obj.data.PolicyName;
+                reqParams.cfn['Path'] = obj.data.Path;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['PolicyDocument'] = obj.data.PolicyDocument;
+
+                /*
+                TODO:
+                Groups:
+                    - String
+                Roles:
+                    - String
+                Users:
+                    - String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::ManagedPolicy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iam.instanceprofile") {
+                reqParams.cfn['Path'] = obj.data.Path;
+                reqParams.cfn['InstanceProfileName'] = obj.data.InstanceProfileName;
+                if (obj.data.Roles) {
+                    reqParams.cfn['Roles'] = [];
+                    obj.data.Roles.forEach(role => {
+                        reqParams.cfn['Roles'].push(role.Arn);
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::InstanceProfile',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.rule") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['EventPattern'] = obj.data.EventPattern;
+                reqParams.cfn['ScheduleExpression'] = obj.data.ScheduleExpression;
+                reqParams.cfn['State'] = obj.data.State;
+                if (obj.data.Targets) {
+                    reqParams.cfn['Targets'] = [];
+                    obj.data.Targets.forEach(target => {
+                        var ecsParameters = null;
+                        if (target.EcsParameters) {
+                            ecsParameters = {
+                                'TaskDefinitionArn': target.EcsParameters.TaskDefinitionArn,
+                                'TaskCount': target.EcsParameters.TaskCount
+                            };
+                        }
+                        reqParams.cfn['Targets'].push({
+                            'Arn': target.Arn,
+                            'EcsParameters': ecsParameters,
+                            'Id': target.Id,
+                            'Input': target.Input,
+                            'InputPath': target.InputPath,
+                            'InputTransformer': target.InputTransformer,
+                            'KinesisParameters': target.KinesisParameters,
+                            'RoleArn': target.RoleArn,
+                            'RunCommandParameters': target.RunCommandParameters,
+                            'SqsParameters': target.SqsParameters
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Events::Rule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.eventbuspolicy") {
+                reqParams.cfn['Action'] = obj.data.Action;
+                if (obj.data.Condition && obj.data.Condition.StringEquals && obj.data.Condition.StringEquals['aws:PrincipalOrgID']) {
+                    reqParams.cfn['Condition'] = {
+                        'Key': 'aws:PrincipalOrgID',
+                        'Type': 'StringEquals',
+                        'Value': obj.data.Condition.StringEquals['aws:PrincipalOrgID']
+                    };
+                }
+                reqParams.cfn['Principal'] = "*";
+                if (obj.data.Principal && obj.data.Principal.AWS) {
+                    reqParams.cfn['Principal'] = obj.data.Principal.AWS;
+                }
+                reqParams.cfn['StatementId'] = obj.data.Sid;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Events::EventBusPolicy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.destination") {
+                reqParams.cfn['DestinationName'] = obj.data.destinationName;
+                reqParams.cfn['RoleArn'] = obj.data.roleArn;
+                reqParams.cfn['TargetArn'] = obj.data.targetArn;
+                reqParams.cfn['DestinationPolicy'] = obj.data.accessPolicy;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Logs::Destination',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.logstream") {
+                reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+                reqParams.cfn['LogStreamName'] = obj.data.logStreamName;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Logs::LogStream',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.subscriptionfilter") {
+                reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+                reqParams.cfn['FilterPattern'] = obj.data.filterPattern;
+                reqParams.cfn['DestinationArn'] = obj.data.destinationArn;
+                reqParams.cfn['RoleArn'] = obj.data.roleArn;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Logs::SubscriptionFilter',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.loggroup") {
+                reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+                reqParams.cfn['RetentionInDays'] = obj.data.retentionInDays;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Logs::LogGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.metricfilter") {
+                reqParams.cfn['FilterPattern'] = obj.data.filterPattern;
+                reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+                if (obj.data.metricTransformations) {
+                    reqParams.cfn['MetricTransformations'] = [];
+                    obj.data.metricTransformations.forEach(metricTransformation => {
+                        reqParams.cfn['MetricTransformations'].push({
+                            'MetricName': metricTransformation.metricName,
+                            'MetricNamespace': metricTransformation.metricNamespace,
+                            'MetricValue': metricTransformation.metricValue,
+                            'DefaultValue': metricTransformation.defaultValue,
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::Logs::MetricFilter',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudwatch.dashboard") {
+                reqParams.cfn['DashboardName'] = obj.data.DashboardName;
+                reqParams.cfn['DashboardBody'] = obj.data.DashboardBody;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::CloudWatch::Dashboard',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecr.repository") {
+                reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
+                reqParams.cfn['LifecyclePolicy'] = {
+                    'LifecyclePolicyText': obj.data.lifecyclePolicyText,
+                    'RegistryId': obj.data.registryId
+                };
+                reqParams.cfn['RepositoryPolicyText'] = obj.data.policy;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ecr', obj.id),
+                    'region': obj.region,
+                    'service': 'ecr',
+                    'type': 'AWS::ECR::Repository',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sns.subscription") {
+                reqParams.cfn['TopicArn'] = obj.data.TopicArn;
+                reqParams.cfn['DeliveryPolicy'] = obj.data.Attributes.DeliveryPolicy;
+                reqParams.cfn['FilterPolicy'] = obj.data.Attributes.FilterPolicy;
+                reqParams.cfn['Endpoint'] = obj.data.Endpoint;
+                reqParams.cfn['Protocol'] = obj.data.Protocol;
+                reqParams.cfn['RawMessageDelivery'] = obj.data.Attributes.RawMessageDelivery;
+                reqParams.cfn['Region'] = obj.data.TopicArn.split(":")[3];
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('sns', obj.id),
+                    'region': obj.region,
+                    'service': 'sns',
+                    'type': 'AWS::SNS::Subscription',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.connectordefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::ConnectorDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.connectordefinitionversion") {
+                reqParams.cfn['ConnectorDefinitionId'] = obj.data.ConnectorDefinitionId;
+                reqParams.cfn['Connectors'] = obj.data.Definition.Connectors;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::ConnectorDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.coredefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::CoreDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.coredefinitionversion") {
+                reqParams.cfn['CoreDefinitionId'] = obj.data.CoreDefinitionId;
+                reqParams.cfn['Cores'] = obj.data.Definition.Cores;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::CoreDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.devicedefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::DeviceDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.devicedefinitionversion") {
+                reqParams.cfn['DeviceDefinitionId'] = obj.data.DeviceDefinitionId;
+                reqParams.cfn['Devices'] = obj.data.Definition.Devices;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::DeviceDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.functiondefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::FunctionDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.functiondefinitionversion") {
+                reqParams.cfn['DefaultConfig'] = obj.data.DefaultConfig;
+                reqParams.cfn['FunctionDefinitionId'] = obj.data.FunctionDefinitionId;
+                reqParams.cfn['Functions'] = obj.data.Definition.Functions;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::FunctionDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.group") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                RoleArn
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::Group',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.groupversion") {
+                reqParams.cfn['GroupId'] = obj.data.Id;
+                reqParams.cfn['LoggerDefinitionVersionArn'] = obj.data.Definition.LoggerDefinitionVersionArn;
+                reqParams.cfn['DeviceDefinitionVersionArn'] = obj.data.Definition.DeviceDefinitionVersionArn;
+                reqParams.cfn['FunctionDefinitionVersionArn'] = obj.data.Definition.FunctionDefinitionVersionArn;
+                reqParams.cfn['CoreDefinitionVersionArn'] = obj.data.Definition.CoreDefinitionVersionArn;
+                reqParams.cfn['ResourceDefinitionVersionArn'] = obj.data.Definition.ResourceDefinitionVersionArn;
+                reqParams.cfn['ConnectorDefinitionVersionArn'] = obj.data.Definition.ConnectorDefinitionVersionArn;
+                reqParams.cfn['SubscriptionDefinitionVersionArn'] = obj.data.Definition.SubscriptionDefinitionVersionArn;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::GroupVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.loggerdefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::LoggerDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.loggerdefinitionversion") {
+                reqParams.cfn['LoggerDefinitionId'] = obj.data.LoggerDefinitionId;
+                reqParams.cfn['Loggers'] = obj.data.Definition.Loggers;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::LoggerDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.resourcedefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::ResourceDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.resourcedefinitionversion") {
+                reqParams.cfn['ResourceDefinitionId'] = obj.data.ResourceDefinitionId;
+                reqParams.cfn['Resources'] = obj.data.Definition.Resources;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::ResourceDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.subscriptiondefinition") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                InitialVersion
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::SubscriptionDefinition',
+                    'options': reqParams
+                });
+            } else if (obj.type == "greengrass.subscriptiondefinitionversion") {
+                reqParams.cfn['SubscriptionDefinitionId'] = obj.data.SubscriptionDefinitionId;
+                reqParams.cfn['Subscriptions'] = obj.data.Definition.Subscriptions;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('greengrass', obj.id),
+                    'region': obj.region,
+                    'service': 'greengrass',
+                    'type': 'AWS::Greengrass::SubscriptionDefinitionVersion',
+                    'options': reqParams
+                });
+            } else if (obj.type == "codepipeline.pipeline") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['RoleArn'] = obj.data.roleArn;
+                if (obj.data.artifactStore) {
+                    var encryptionKey = null;
+                    if (obj.data.artifactStore.encryptionKey) {
+                        encryptionKey = {
+                            'Id': obj.data.artifactStore.encryptionKey.id,
+                            'Type': obj.data.artifactStore.encryptionKey.type
+                        };
+                    }
+                    reqParams.cfn['ArtifactStore'] = {
+                        'EncryptionKey': encryptionKey,
+                        'Location': obj.data.artifactStore.location,
+                        'Type': obj.data.artifactStore.type
+                    };
+                }
+                if (obj.data.artifactStores) {
+                    reqParams.cfn['ArtifactStores'] = [];
+                    array.forEach(element => {
+                        var encryptionKey = null;
+                        if (element.encryptionKey) {
+                            encryptionKey = {
+                                'Id': element.encryptionKey.id,
+                                'Type': element.encryptionKey.type
+                            };
+                        }
+                        reqParams.cfn['ArtifactStores'].push({
+                            'ArtifactStore': {
+                                'EncryptionKey': encryptionKey,
+                                'Location': element.location,
+                                'Type': element.type
+                            },
+                            'Region': region // May not be accurate
+                        });
+                    });
+                }
+                if (obj.data.stages) {
+                    reqParams.cfn['Stages'] = [];
+                    obj.data.stages.forEach(stage => {
+                        var blockers = null;
+                        if (stage.blockers) {
+                            blockers = [];
+                            stage.blockers.forEach(blocker => {
+                                blockets.push({
+                                    'Name': blocker.name,
+                                    'Type': blocker.type
+                                });
+                            });
+                        }
+                        var actions = null;
+                        if (stage.actions) {
+                            actions = [];
+                            stage.actions.forEach(action => {
+                                var actionTypeId = null;
+                                if (action.actionTypeId) {
+                                    actionTypeId = {
+                                        'Category': action.actionTypeId.category,
+                                        'Owner': action.actionTypeId.owner,
+                                        'Provider': action.actionTypeId.provider,
+                                        'Version': action.actionTypeId.version
+                                    };
+                                }
+                                var outputArtifacts = null;
+                                if (action.outputArtifacts) {
+                                    outputArtifacts = [];
+                                    outputArtifacts.push({
+                                        'Name': action.actionTypeId.name
+                                    });
+                                }
+                                var inputArtifacts = null;
+                                if (action.inputArtifacts) {
+                                    inputArtifacts = [];
+                                    inputArtifacts.push({
+                                        'Name': action.actionTypeId.name
+                                    });
+                                }
+                                actions.push({
+                                    'ActionTypeId': actionTypeId,
+                                    'Configuration': action.configuration,
+                                    'InputArtifacts': inputArtifacts,
+                                    'Name': action.name,
+                                    'OutputArtifacts': outputArtifacts,
+                                    'Region': action.region,
+                                    'RoleArn': action.roleArn,
+                                    'RunOrder': action.runOrder
+                                });
+                            });
+                        }
+                        reqParams.cfn['Stages'].push({
+                            'Actions': actions,
+                            'Blockers': blockers,
+                            'Name': stage.name
+                        });
+                    });
+                }
+
+                /*
+                TODO:
+                ArtifactStores:
+                    - Region
+                DisableInboundStageTransitions:
+                    - DisableInboundStageTransitions
+                RestartExecutionOnUpdate: Boolean
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('codepipeline', obj.id),
+                    'region': obj.region,
+                    'service': 'codepipeline',
+                    'type': 'AWS::CodePipeline::Pipeline',
+                    'options': reqParams
+                });
+            } else if (obj.type == "codepipeline.webhook") {
+                var filters = null;
+                if (obj.data.filters) {
+                    filters = [];
+                    obj.data.filters.forEach(filter => {
+                        filters.push({
+                            'JsonPath': filter.jsonPath,
+                            'MatchEquals': filter.matchEquals
+                        });
+                    });
+                }
+                var authenticationConfiguration = null;
+                if (obj.data.authenticationConfiguration) {
+                    authenticationConfiguration = {
+                        'AllowedIPRange': obj.data.authenticationConfiguration.AllowedIPRange,
+                        'SecretToken': obj.data.authenticationConfiguration.SecretToken
+                    };
+                }
+                reqParams.cfn['Name'] = obj.data.definition.name;
+                reqParams.cfn['TargetPipeline'] = obj.data.definition.targetPipeline;
+                reqParams.cfn['TargetAction'] = obj.data.definition.targetAction;
+                reqParams.cfn['Filters'] = filters;
+                reqParams.cfn['Authentication'] = obj.data.authentication;
+
+                /*
+                TODO:
+                TargetPipelineVersion: Integer
+                RegisterWithThirdParty: Boolean
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('codepipeline', obj.id),
+                    'region': obj.region,
+                    'service': 'codepipeline',
+                    'type': 'AWS::CodePipeline::Webhook',
+                    'options': reqParams
+                });
+            } else if (obj.type == "codepipeline.customactiontype") {
+                reqParams.cfn['Category'] = obj.data.id.category;
+                reqParams.cfn['Provider'] = obj.data.id.provider;
+                reqParams.cfn['Version'] = obj.data.id.version;
+                if (obj.data.settings) {
+                    reqParams.cfn['Settings'] = {
+                        'EntityUrlTemplate': obj.data.settings.entityUrlTemplate,
+                        'ExecutionUrlTemplate': obj.data.settings.executionUrlTemplate,
+                        'RevisionUrlTemplate': obj.data.settings.revisionUrlTemplate,
+                        'ThirdPartyConfigurationUrl': obj.data.settings.thirdPartyConfigurationUrl
+                    };
+                }
+                if (obj.data.actionConfigurationProperties) {
+                    reqParams.cfn['ConfigurationProperties'] = [];
+                    obj.data.actionConfigurationProperties.forEach(actionConfigurationProperty => {
+                        reqParams.cfn['ConfigurationProperties'].push({
+                            'Description': actionConfigurationProperty.description,
+                            'Key': actionConfigurationProperty.key,
+                            'Name': actionConfigurationProperty.name,
+                            'Queryable': actionConfigurationProperty.queryable,
+                            'Required': actionConfigurationProperty.required,
+                            'Secret': actionConfigurationProperty.secret,
+                            'Type': actionConfigurationProperty.type
+                        });
+                    });
+                }
+                if (obj.data.inputArtifactDetails) {
+                    reqParams.cfn['InputArtifactDetails'] = {
+                        'MinimumCount': obj.data.inputArtifactDetails.minimumCount,
+                        'MaximumCount': obj.data.inputArtifactDetails.maximumCount
+                    };
+                }
+                if (obj.data.outputArtifactDetails) {
+                    reqParams.cfn['OutputArtifactDetails'] = {
+                        'MinimumCount': obj.data.outputArtifactDetails.minimumCount,
+                        'MaximumCount': obj.data.outputArtifactDetails.maximumCount
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('codepipeline', obj.id),
+                    'region': obj.region,
+                    'service': 'codepipeline',
+                    'type': 'AWS::CodePipeline::CustomActionType',
+                    'options': reqParams
+                });
+            } else if (obj.type == "inspector.resourcegroup") {
+                if (obj.data.tags) {
+                    reqParams.cfn['ResourceGroupTags'] = [];
+                    obj.data.tags.forEach(tag => {
+                        reqParams.cfn['ResourceGroupTags'].push({
+                            'Key': tag.key,
+                            'Value': tag.value
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('inspector', obj.id),
+                    'region': obj.region,
+                    'service': 'inspector',
+                    'type': 'AWS::Inspector::ResourceGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "inspector.assessmenttarget") {
+                reqParams.cfn['AssessmentTargetName'] = obj.data.name;
+                reqParams.cfn['ResourceGroupArn'] = obj.data.resourceGroupArn;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('inspector', obj.id),
+                    'region': obj.region,
+                    'service': 'inspector',
+                    'type': 'AWS::Inspector::AssessmentTarget',
+                    'options': reqParams
+                });
+            } else if (obj.type == "inspector.assessmenttemplate") {
+                reqParams.cfn['AssessmentTemplateName'] = obj.data.name;
+                reqParams.cfn['AssessmentTargetArn'] = obj.data.assessmentTargetArn;
+                reqParams.cfn['DurationInSeconds'] = obj.data.durationInSeconds;
+                reqParams.cfn['RulesPackageArns'] = obj.data.rulesPackageArns;
+                if (obj.data.userAttributesForFindings) {
+                    reqParams.cfn['UserAttributesForFindings'] = [];
+                    obj.data.userAttributesForFindings.forEach(userAttributesForFindings => {
+                        reqParams.cfn['UserAttributesForFindings'].push({
+                            'Key': userAttributesForFindings.key,
+                            'Value': userAttributesForFindings.value
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('inspector', obj.id),
+                    'region': obj.region,
+                    'service': 'inspector',
+                    'type': 'AWS::Inspector::AssessmentTemplate',
+                    'options': reqParams
+                });
             } else if (obj.type == ".") {
                 reqParams.cfn[''] = obj.data;
 
                 /*
                 TODO:
-                
+
                 */
 
                 tracked_resources.push({

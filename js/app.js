@@ -579,36 +579,11 @@ $(document).ready(function(){
         /* ========================================================================== */
 
         $('#scan-account').on('click', () => {
-            updateDatatableComputeEC2();
-            updateDatatableComputeECR();
-            updateDatatableComputeECS();
-            updateDatatableComputeEKS();
-            updateDatatableComputeLambda();
-            updateDatatableComputeBatch();
-            updateDatatableComputeElasticBeanstalk();
-            updateDatatableStorageS3();
-            updateDatatableStorageEFS();
-            updateDatatableStorageFSx();
-            updateDatatableDatabaseRDS();
-            updateDatatableDatabaseDynamoDB();
-            updateDatatableDatabaseElastiCache();
-            updateDatatableDatabasesNeptune();
-            updateDatatableDatabaseRedshift();
-            updateDatatableDatabaseDocumentDB();
-            updateDatatableNetworkingAndContentDeliveryVPC();
-            updateDatatableNetworkingAndContentDeliveryCloudFront();
-            updateDatatableNetworkingAndContentDeliveryRoute53();
-            updateDatatableNetworkingAndContentDeliveryApiGateway();
-            updateDatatableDeveloperToolsCodeCommit();
-            updateDatatableDeveloperToolsCodeBuild();
-            updateDatatableDeveloperToolsCodeDeploy();
-            updateDatatableDeveloperToolsCloud9();
-            updateDatatableManagementAndGovernanceCloudWatch();
-            updateDatatableManagementAndGovernanceCloudTrail();
-            updateDatatableManagementAndGovernanceOpsWorks();
-            updateDatatableAnalyticsKinesis();
-            updateDatatableApplicationIntegrationSNS();
-            updateDatatableApplicationIntegrationSQS();
+            Object.getOwnPropertyNames(window).forEach(prop => {
+                if (prop.startsWith("updateDatatable")) {
+                    window[prop]();
+                }
+            });
         });
 
         $('#add-all-resources').on('click', () => {
