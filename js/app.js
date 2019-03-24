@@ -218,7 +218,7 @@ $(document).ready(function(){
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
-            if (location.hash == "#section-dashboard") {
+            if (location.hash == "#section-dashboard" || location.hash == "#section-search") {
                 $('.section-header').attr('style', 'display: none;');
             } else {
                 $('.section-header').removeAttr('style');

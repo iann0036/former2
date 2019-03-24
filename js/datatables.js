@@ -566,6 +566,265 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Routes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Destination',
+                        field: 'destination',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Routes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Route Tables': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Route Table Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Route Table Propogations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -573,6 +832,22 @@ sections.push({
 function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
 
     sdkcall("EC2", "describeVpcs", {
         // no params
@@ -771,8 +1046,20 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
+            routeTable.Routes.forEach(route => {
+                route['RouteTableId'] = routeTable.RouteTableId;
+                $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('append', [{
+                    f2id: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
+                    f2type: 'ec2.route',
+                    f2data: route,
+                    f2region: region,
+                    destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId
+                }]);
+            });
+            
             $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
                 f2id: routeTable.RouteTableId,
                 f2type: 'ec2.routetable',
@@ -783,6 +1070,112 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
+    });
+
+    sdkcall("EC2", "describeTransitGateways", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('removeAll');
+
+        data.TransitGateways.forEach(transitGateway => {
+            $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('append', [{
+                f2id: transitGateway.TransitGatewayId,
+                f2type: 'ec2.transitgateway',
+                f2data: transitGateway,
+                f2region: region,
+                id: transitGateway.TransitGatewayId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgateways-datatable');
+    });
+
+    sdkcall("EC2", "describeTransitGatewayRouteTables", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('removeAll');
+
+        data.TransitGatewayRouteTables.forEach(transitGatewayRouteTable => {
+            sdkcall("EC2", "searchTransitGatewayRoutes", {
+                TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId
+            }, true).then((data) => {
+                data.Routes.forEach(route => {
+                    route['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
+                    $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('append', [{
+                        f2id: route.DestinationCidrBlock,
+                        f2type: 'ec2.transitgatewayroute',
+                        f2data: route,
+                        f2region: region,
+                        destination: route.DestinationCidrBlock
+                    }]);
+                });
+            });
+
+            sdkcall("EC2", "getTransitGatewayRouteTableAssociations", {
+                TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId
+            }, true).then((data) => {
+                data.Associations.forEach(association => {
+                    association['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
+                    $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('append', [{
+                        f2id: association.TransitGatewayAttachmentId,
+                        f2type: 'ec2.transitgatewayroutetableassociation',
+                        f2data: association,
+                        f2region: region,
+                        id: association.TransitGatewayAttachmentId
+                    }]);
+                });
+            });
+
+            sdkcall("EC2", "getTransitGatewayRouteTablePropagations", {
+                TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId
+            }, true).then((data) => {
+                data.TransitGatewayRouteTablePropagations.forEach(transitGatewayRouteTablePropagation => {
+                    transitGatewayRouteTablePropagation['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
+                    $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('append', [{
+                        f2id: transitGatewayRouteTablePropagation.TransitGatewayAttachmentId,
+                        f2type: 'ec2.transitgatewayroutetablepropogation',
+                        f2data: transitGatewayRouteTablePropagation,
+                        f2region: region,
+                        id: transitGatewayRouteTablePropagation.TransitGatewayAttachmentId
+                    }]);
+                });
+            });
+
+            $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('append', [{
+                f2id: transitGatewayRouteTable.TransitGatewayRouteTableId,
+                f2type: 'ec2.transitgatewayroutetable',
+                f2data: transitGatewayRouteTable,
+                f2region: region,
+                id: transitGatewayRouteTable.TransitGatewayRouteTableId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable');
+    });
+
+    sdkcall("EC2", "describeTransitGatewayVpcAttachments", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('removeAll');
+
+        data.TransitGatewayVpcAttachments.forEach(transitGatewayVpcAttachment => {
+            $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('append', [{
+                f2id: transitGatewayVpcAttachment.TransitGatewayAttachmentId,
+                f2type: 'ec2.transitgatewayattachment',
+                f2data: transitGatewayVpcAttachment,
+                f2region: region,
+                id: transitGatewayVpcAttachment.TransitGatewayAttachmentId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
     });
 }
 
@@ -17284,7 +17677,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.Endpoints.forEach(endpoint => {
             $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('append', [{
                 f2id: endpoint.EndpointIdentifier,
-                f2type: 'databasemigrationservice.endpoint',
+                f2type: 'dms.endpoint',
                 f2data: endpoint,
                 f2region: region,
                 id: endpoint.EndpointIdentifier
@@ -17302,7 +17695,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.ReplicationInstances.forEach(replicationInstance => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('append', [{
                 f2id: replicationInstance.ReplicationInstanceIdentifier,
-                f2type: 'databasemigrationservice.replicationinstance',
+                f2type: 'dms.replicationinstance',
                 f2data: replicationInstance,
                 f2region: region,
                 id: replicationInstance.ReplicationInstanceIdentifier
@@ -17320,7 +17713,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.ReplicationTasks.forEach(replicationTask => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('append', [{
                 f2id: replicationTask.ReplicationTaskIdentifier,
-                f2type: 'databasemigrationservice.replicationtask',
+                f2type: 'dms.replicationtask',
                 f2data: replicationTask,
                 f2region: region,
                 id: replicationTask.ReplicationTaskIdentifier
@@ -17338,7 +17731,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.ReplicationSubnetGroups.forEach(replicationSubnetGroup => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('append', [{
                 f2id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier,
-                f2type: 'databasemigrationservice.replicationsubnetgroup',
+                f2type: 'dms.replicationsubnetgroup',
                 f2data: replicationSubnetGroup,
                 f2region: region,
                 id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier
@@ -17356,7 +17749,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.Certificates.forEach(certificate => {
             $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('append', [{
                 f2id: certificate.CertificateIdentifier,
-                f2type: 'databasemigrationservice.certificate',
+                f2type: 'dms.certificate',
                 f2data: certificate,
                 f2region: region,
                 id: certificate.CertificateIdentifier
@@ -17374,7 +17767,7 @@ function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
             $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('append', [{
                 f2id: eventSubscriptions.CustSubscriptionId,
-                f2type: 'databasemigrationservice.eventsubscription',
+                f2type: 'dms.eventsubscription',
                 f2data: eventSubscriptions,
                 f2region: region,
                 id: eventSubscriptions.CustSubscriptionId

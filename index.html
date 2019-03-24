@@ -27,6 +27,7 @@
 
         <link rel="stylesheet" href="css/separate/vendor/blockui.min.css">
         <link rel="stylesheet" href="css/separate/pages/widgets.min.css">
+        <link rel="stylesheet" href="css/separate/pages/others.min.css">
 
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/custom.css">
@@ -151,8 +152,6 @@
                                         <a class="dropdown-item region-item" data-region="sa-east-1">South America (S&#227;o Paulo)</a>
                                     </div>
                                 </div>
-
-                                <!--
                                 <div class="site-header-search-container">
                                     <form class="site-header-search closed">
                                         <input type="text" placeholder="Search"/>
@@ -162,7 +161,6 @@
                                         <div class="overlay"></div>
                                     </form>
                                 </div>
-                                -->
                             </div>
                         </div>
                     </div>
@@ -179,6 +177,12 @@
                         <span class="lbl">Dashboard</span>
                     </a>
                 </li>
+                <li class="aquamarine">
+                    <a href="#section-search" data-category="search">
+                        <i class="font-icon glyphicon glyphicon-search"></i>
+                        <span class="lbl">Search</span>
+                    </a>
+                </li>
                 <li class="grey with-sub" data-category="setup">
                     <span>
                         <i class="font-icon glyphicon glyphicon-cog"></i>
@@ -190,7 +194,7 @@
                         <li><a href="#section-setup-accountscan"><span class="lbl">Account Scan</span></a></li>
                     </ul>
                 </li>
-                <li class="aquamarine with-sub" data-category="outputs">
+                <li class="purple with-sub" data-category="outputs">
                     <span>
                         <i class="font-icon glyphicon glyphicon-list-alt"></i>
                         <span class="lbl">Outputs</span>
@@ -219,7 +223,7 @@
                             <li><a href="#section-compute-ecr"><span class="lbl">ECR</span></a></li>
                             <li><a href="#section-compute-ecs"><span class="lbl">ECS</span></a></li>
                             <li><a href="#section-compute-eks"><span class="lbl">EKS</span></a></li>
-                            <li><a href="#section-compute-lambda"><span class="lbl">Lambda</span><span class="label label-custom label-pill label-danger">6</span></a></li>
+                            <li><a href="#section-compute-lambda"><span class="lbl">Lambda</span></a></li>
                             <li><a href="#section-compute-batch"><span class="lbl">Batch</span></a></li>
                             <li><a href="#section-compute-elasticbeanstalk"><span class="lbl">Elastic Beanstalk</span></a></li>
                         </ul>
@@ -420,7 +424,6 @@
                         </ul>
                     </li>
                 </ul>
-                xyz
             </section>
         </nav>
 
@@ -767,6 +770,38 @@
                             <a href="#section-dashboard" class="tbl-cell color-green">Finish →</a>
                         </div>
                     </div>
+                </section>
+
+                <section id="section-search" data-section-breadcrumb1-title="Search" data-section-breadcrumb1-link="#section-search" data-section-title="Search Results" class="former2-section box-typical faq-page" style="display: none;">
+                    <form class="faq-page-header-search" style="background: #1873d2;">
+                        <div class="search">
+                            <input type="text" class="form-control form-control-rounded" placeholder="Search for keywords, values, tags etc."/>
+                            <button type="submit" class="find">
+                                <i class="font-icon font-icon-search"></i>
+                            </button>
+                        </div>
+                    </form>
+    
+                    <section class="faq-page-cats">
+                        <div class="row">
+                            <div class="col-md-4">
+                                ...
+                            </div>
+                            <div class="col-md-4">
+                                ...
+                            </div>
+                            <div class="col-md-4">
+                                ...
+                            </div>
+                        </div>
+                    </section>
+    
+                    <section class="faq-page-questions">
+                        <h3>Search Results</h3>
+                        <div class="table-responsive">
+                            ...
+                        </div>
+                    </section>
                 </section>
 
                 <div id="templated-section-container"></div>
