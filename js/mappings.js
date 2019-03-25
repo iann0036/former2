@@ -9126,6 +9126,548 @@ function performF2Mappings(objects) {
                     'type': 'AWS::WorkSpaces::Workspace',
                     'options': reqParams
                 });
+            } else if (obj.type == "appsync.resolver") {
+                reqParams.cfn['TypeName'] = obj.data.typeName;
+                reqParams.cfn['FieldName'] = obj.data.fieldName;
+                reqParams.cfn['DataSourceName'] = obj.data.dataSourceName;
+                reqParams.cfn['RequestMappingTemplate'] = obj.data.requestMappingTemplate;
+                reqParams.cfn['ResponseMappingTemplate'] = obj.data.responseMappingTemplate;
+                reqParams.cfn['Kind'] = obj.data.kind;
+                if (obj.data.pipelineConfig) {
+                    reqParams.cfn['PipelineConfig'] = {
+                        'Functions': obj.data.pipelineConfig.functions
+                    };
+                }
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+
+                /*
+                TODO:
+                ResponseMappingTemplateS3Location: String
+                RequestMappingTemplateS3Location: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::Resolver',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appsync.datasource") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['Type'] = obj.data.type;
+                reqParams.cfn['ServiceRoleArn'] = obj.data.serviceRoleArn;
+                if (obj.data.dynamodbConfig) {
+                    reqParams.cfn['DynamoDBConfig'] = {
+                        'TableName': obj.data.dynamodbConfig.tableName,
+                        'AwsRegion': obj.data.dynamodbConfig.awsRegion,
+                        'UseCallerCredentials': obj.data.dynamodbConfig.useCallerCredentials
+                    };
+                }
+                if (obj.data.lambdaConfig) {
+                    reqParams.cfn['LambdaConfig'] = {
+                        'LambdaFunctionArn': obj.data.lambdaConfig.lambdaFunctionArn
+                    };
+                }
+                if (obj.data.elasticsearchConfig) {
+                    reqParams.cfn['ElasticsearchConfig'] = {
+                        'Endpoint': obj.data.elasticsearchConfig.endpoint,
+                        'AwsRegion': obj.data.elasticsearchConfig.awsRegion
+                    };
+                }
+                if (obj.data.httpConfig) {
+                    var authorizationConfig = null;
+                    if (obj.data.httpConfig.authorizationConfig) {
+                        var awsIamConfig = null;
+                        if (obj.data.httpConfig.authorizationConfig.awsIamConfig) {
+                            awsIamConfig = {
+                                'SigningRegion': obj.data.httpConfig.authorizationConfig.awsIamConfig.signingRegion,
+                                'SigningServiceName': obj.data.httpConfig.authorizationConfig.awsIamConfig.signingServiceName
+                            };
+                        }
+                        authorizationConfig = {
+                            'AuthorizationType': obj.data.httpConfig.authorizationType,
+                            'AwsIamConfig': awsIamConfig
+                        };
+                    }
+                    reqParams.cfn['HttpConfig'] = {
+                        'AuthorizationConfig': authorizationConfig,
+                        'Endpoint': obj.data.httpConfig.endpoint
+                    };
+                }
+                if (obj.data.relationalDatabaseConfig) {
+                    var rdsHttpEndpointConfig = null;
+                    if (obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig) {
+                        rdsHttpEndpointConfig = {
+                            'AwsRegion': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.awsRegion,
+                            'DbClusterIdentifier': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.dbClusterIdentifier,
+                            'DatabaseName': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.databaseName,
+                            'Schema': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.schema,
+                            'AwsSecretStoreArn': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.awsSecretStoreArn
+                        };
+                    }
+                    reqParams.cfn['RelationalDatabaseConfig'] = {
+                        'RelationalDatabaseSourceType': obj.data.relationalDatabaseConfig.relationalDatabaseSourceType,
+                        'RdsHttpEndpointConfig': rdsHttpEndpointConfig
+                    };
+                }
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::DataSource',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appsync.functionconfiguration") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['DataSourceName'] = obj.data.dataSourceName;
+                reqParams.cfn['RequestMappingTemplate'] = obj.data.requestMappingTemplate;
+                reqParams.cfn['ResponseMappingTemplate'] = obj.data.responseMappingTemplate;
+                reqParams.cfn['FunctionVersion'] = obj.data.functionVersion;
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+
+                /*
+                TODO:
+                RequestMappingTemplateS3Location: String
+                ResponseMappingTemplateS3Location: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::FunctionConfiguration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appsync.apikey") {
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['Expires'] = obj.data.expires;
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::ApiKey',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appsync.graphqlapi") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['AuthenticationType'] = obj.data.authenticationType;
+                if (obj.data.logConfig) {
+                    reqParams.cfn['LogConfig'] = {
+                        'FieldLogLevel': obj.data.logConfig.fieldLogLevel,
+                        'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn
+                    };
+                }
+                if (obj.data.userPoolConfig) {
+                    reqParams.cfn['UserPoolConfig'] = {
+                        'AppIdClientRegex': obj.data.userPoolConfig.appIdClientRegex,
+                        'UserPoolId': obj.data.userPoolConfig.userPoolId,
+                        'AwsRegion': obj.data.userPoolConfig.awsRegion,
+                        'DefaultAction': obj.data.userPoolConfig.defaultAction
+                    };
+                }
+                if (obj.data.openIDConnectConfig) {
+                    reqParams.cfn['OpenIDConnectConfig'] = {
+                        'Issuer': obj.data.openIDConnectConfig.issuer,
+                        'ClientId': obj.data.openIDConnectConfig.clientId,
+                        'IatTTL': obj.data.openIDConnectConfig.iatTTL,
+                        'AuthTTL': obj.data.openIDConnectConfig.authTTL
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::GraphQLApi',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.host") {
+                reqParams.cfn['AutoPlacement'] = obj.data.AutoPlacement;
+                reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                if (obj.data.HostProperties) {
+                    reqParams.cfn['InstanceType'] = obj.data.HostProperties.InstanceType;
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::Host',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.vpcendpoint") {
+                reqParams.cfn['VpcEndpointType'] = obj.data.VpcEndpointType;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.cfn['ServiceName'] = obj.data.ServiceName;
+                reqParams.cfn['PolicyDocument'] = obj.data.PolicyDocument;
+                reqParams.cfn['RouteTableIds'] = obj.data.RouteTableIds;
+                reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+                reqParams.cfn['PrivateDnsEnabled'] = obj.data.PrivateDnsEnabled;
+                if (obj.data.Groups) {
+                    reqParams.cfn['SecurityGroupIds'] = [];
+                    obj.data.Groups.forEach(group => {
+                        reqParams.cfn['SecurityGroupIds'].push(group.GroupId);
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCEndpoint',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.vpcendpointconnectionnotification") {
+                reqParams.cfn['ServiceId'] = obj.data.ServiceId;
+                reqParams.cfn['VPCEndpointId'] = obj.data.VpcEndpointId;
+                reqParams.cfn['ConnectionNotificationArn'] = obj.data.ConnectionNotificationArn;
+                reqParams.cfn['ConnectionEvents'] = obj.data.ConnectionEvents;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCEndpointConnectionNotification',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.vpcendpointservicepermission") {
+                reqParams.cfn['AllowedPrincipals'] = [];
+                obj.data.AllowedPrincipals.forEach(allowedPrincipal => {
+                    reqParams.cfn['AllowedPrincipals'].push(allowedPrincipal.Principal);
+                });
+                reqParams.cfn['ServiceId'] = obj.data.ServiceId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCEndpointServicePermissions',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.vpcendpointservice") {
+                if (obj.data.ServiceType.ServiceType == "Interface") {
+                    reqParams.cfn['NetworkLoadBalancerArns'] = [obj.data.ServiceName];
+                    reqParams.cfn['AcceptanceRequired'] = obj.data.AcceptanceRequired;
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('ec2', obj.id),
+                        'region': obj.region,
+                        'service': 'ec2',
+                        'type': 'AWS::EC2::VPCEndpointService',
+                        'options': reqParams
+                    });
+                }
+            } else if (obj.type == "ec2.natgateway") {
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.NatGatewayAddresses && obj.data.NatGatewayAddresses.length == 1) {
+                    reqParams.cfn['AllocationId'] = obj.data.NatGatewayAddresses[0].AllocationId;
+                }
+
+                /*
+                TODO:
+                AllocationId // multiple
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::NatGateway',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecs.cluster") {
+                reqParams.cfn['ClusterName'] = obj.data.clusterName;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ecs', obj.id),
+                    'region': obj.region,
+                    'service': 'ecs',
+                    'type': 'AWS::ECS::Cluster',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecs.service") {
+                reqParams.cfn['ServiceName'] = obj.data.serviceName;
+                reqParams.cfn['Cluster'] = obj.data.clusterArn;
+                if (obj.data.loadBalancers) {
+                    reqParams.cfn['LoadBalancers'] = [];
+                    obj.data.loadBalancers.forEach(loadBalancer => {
+                        reqParams.cfn['LoadBalancers'].push({
+                            'TargetGroupArn': loadBalancer.targetGroupArn,
+                            'LoadBalancerName': loadBalancer.loadBalancerName,
+                            'ContainerName': loadBalancer.containerName,
+                            'ContainerPort': loadBalancer.containerPort
+                        });
+                    });
+                }
+                if (obj.data.serviceRegistries) {
+                    reqParams.cfn['ServiceRegistries'] = [];
+                    obj.data.serviceRegistries.forEach(serviceRegistry => {
+                        reqParams.cfn['ServiceRegistries'].push({
+                            'RegistryArn': serviceRegistry.registryArn,
+                            'Port': serviceRegistry.port,
+                            'ContainerName': serviceRegistry.containerName,
+                            'ContainerPort': serviceRegistry.containerPort
+                        });
+                    });
+                }
+                reqParams.cfn['DesiredCount'] = obj.data.desiredCount;
+                reqParams.cfn['LaunchType'] = obj.data.launchType;
+                reqParams.cfn['PlatformVersion'] = obj.data.platformVersion;
+                reqParams.cfn['TaskDefinition'] = obj.data.taskDefinition;
+                if (obj.data.deploymentConfiguration) {
+                    reqParams.cfn['DeploymentConfiguration'] = {
+                        'MaximumPercent': obj.data.deploymentConfiguration.maximumPercent,
+                        'MinimumHealthyPercent': obj.data.deploymentConfiguration.minimumHealthyPercent
+                    };
+                }
+                reqParams.cfn['Role'] = obj.data.roleArn;
+                if (obj.data.placementConstraints) {
+                    reqParams.cfn['PlacementConstraints'] = [];
+                    obj.data.placementConstraints.forEach(placementConstraint => {
+                        reqParams.cfn['PlacementConstraints'].push({
+                            'Type': placementConstraint.type,
+                            'Expression': placementConstraint.expression
+                        });
+                    });
+                }
+                if (obj.data.placementStrategy) {
+                    reqParams.cfn['PlacementStrategies'] = [];
+                    obj.data.placementStrategy.forEach(placementStrategy => {
+                        reqParams.cfn['PlacementStrategies'].push({
+                            'Type': placementStrategy.type,
+                            'Field': placementStrategy.field
+                        });
+                    });
+                }
+                if (obj.data.networkConfiguration && obj.data.networkConfiguration.awsvpcConfiguration) {
+                    reqParams.cfn['NetworkConfiguration'] = {
+                        'AwsvpcConfiguration': {
+                            'AssignPublicIp': obj.data.networkConfiguration.awsvpcConfiguration.assignPublicIp,
+                            'SecurityGroups': obj.data.networkConfiguration.awsvpcConfiguration.securityGroups,
+                            'Subnets': obj.data.networkConfiguration.awsvpcConfiguration.subnets
+                        }
+                    };
+                }
+                reqParams.cfn['HealthCheckGracePeriodSeconds'] = obj.data.healthCheckGracePeriodSeconds;
+                reqParams.cfn['SchedulingStrategy'] = obj.data.schedulingStrategy;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ecs', obj.id),
+                    'region': obj.region,
+                    'service': 'ecs',
+                    'type': 'AWS::ECS::Service',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecs.taskdefinition") {
+                if (obj.data.containerDefinitions) {
+                    reqParams.cfn['ContainerDefinitions'] = [];
+                    obj.data.containerDefinitions.forEach(containerDefinition => {
+                        var repositoryCredentials = null;
+                        if (containerDefinition.repositoryCredentials) {
+                            repositoryCredentials = {
+                                'CredentialsParameter': containerDefinition.repositoryCredentials.credentialsParameter
+                            };
+                        }
+                        var portMappings = null;
+                        if (containerDefinition.portMappings) {
+                            portMappings = {
+                                'ContainerPort': containerDefinition.portMappings.containerPort,
+                                'HostPort': containerDefinition.portMappings.hostPort,
+                                'Protocol': containerDefinition.portMappings.protocol
+                            };
+                        }
+                        var environment = null;
+                        if (containerDefinition.environment) {
+                            environment = {
+                                'Name': containerDefinition.environment.name,
+                                'Value': containerDefinition.environment.value
+                            };
+                        }
+                        var mountPoints = null;
+                        if (containerDefinition.mountPoints) {
+                            mountPoints = {
+                                'SourceVolume': containerDefinition.mountPoints.sourceVolume,
+                                'ContainerPath': containerDefinition.mountPoints.containerPath,
+                                'ReadOnly': containerDefinition.mountPoints.readOnly
+                            };
+                        }
+                        var volumesFrom = null;
+                        if (containerDefinition.volumesFrom) {
+                            volumesFrom = {
+                                'SourceContainer': containerDefinition.volumesFrom.sourceContainer,
+                                'ReadOnly': containerDefinition.volumesFrom.readOnly
+                            };
+                        }
+                        var linuxParameters = null;
+                        if (containerDefinition.linuxParameters) {
+                            var capabilities = null;
+                            if (containerDefinition.linuxParameters.capabilities) {
+                                capabilities = {
+                                    'Add': containerDefinition.linuxParameters.capabilities.add,
+                                    'Drop': containerDefinition.linuxParameters.capabilities.drop
+                                };
+                            }
+                            var devices = null;
+                            if (containerDefinition.linuxParameters.devices) {
+                                devices = {
+                                    'HostPath': containerDefinition.linuxParameters.devices.hostPath,
+                                    'ContainerPath': containerDefinition.linuxParameters.devices.containerPath,
+                                    'Permissions': containerDefinition.linuxParameters.devices.permissions
+                                };
+                            }
+                            var tmpfs = null;
+                            if (containerDefinition.linuxParameters.tmpfs) {
+                                tmpfs = {
+                                    'ContainerPath': containerDefinition.linuxParameters.tmpfs.containerPath,
+                                    'Size': containerDefinition.linuxParameters.tmpfs.size,
+                                    'MountOptions': containerDefinition.linuxParameters.tmpfs.mountOptions
+                                };
+                            }
+                            linuxParameters = {
+                                'Capabilities': capabilities,
+                                'Devices': devices,
+                                'InitProcessEnabled': containerDefinition.linuxParameters.initProcessEnabled,
+                                'SharedMemorySize': containerDefinition.linuxParameters.sharedMemorySize,
+                                'Tmpfs': tmpfs
+                            }
+                        }
+                        var secrets = null; // not yet implemented in CFN!
+                        if (obj.data.secrets) {
+                            secrets = {
+                                '': obj.data.secrets.name,
+                                '': obj.data.secrets.valueFrom
+                            };
+                        }
+                        var dependsOn = null; // not used
+                        if (obj.data.dependsOn) {
+                            dependsOn = {
+                                '': obj.data.dependsOn.containerName,
+                                '': obj.data.dependsOn.condition
+                            };
+                        }
+                        var extraHosts = null;
+                        if (obj.data.extraHosts) {
+                            extraHosts = {
+                                'Hostname': obj.data.extraHosts.hostname,
+                                'IpAddress': obj.data.extraHosts.ipAddress
+                            };
+                        }
+                        var ulimits = null;
+                        if (obj.data.ulimits) {
+                            ulimits = {
+                                'Name': obj.data.ulimits.name,
+                                'SoftLimit': obj.data.ulimits.softLimit,
+                                'HardLimit': obj.data.ulimits.hardLimit
+                            };
+                        }
+                        var logConfiguration = null;
+                        if (obj.data.logConfiguration) {
+                            logConfiguration = {
+                                'LogDriver': obj.data.logConfiguration.logDriver,
+                                'Options': obj.data.logConfiguration.options
+                            };
+                        }
+                        var healthCheck = null;
+                        if (obj.data.healthCheck) {
+                            healthCheck = {
+                                'Command': obj.data.healthCheck.command,
+                                'Interval': obj.data.healthCheck.interval,
+                                'Timeout': obj.data.healthCheck.timeout,
+                                'Retries': obj.data.healthCheck.retries,
+                                'StartPeriod': obj.data.healthCheck.startPeriod
+                            };
+                        }
+                        reqParams.cfn['ContainerDefinitions'].push({
+                            'Command': containerDefinition.command,
+                            'Cpu': containerDefinition.cpu,
+                            'DisableNetworking': containerDefinition.disableNetworking,
+                            'DnsSearchDomains': containerDefinition.dnsSearchDomains,
+                            'DnsServers': containerDefinition.dnsServers,
+                            'DockerLabels': containerDefinition.dockerLabels,
+                            'DockerSecurityOptions': containerDefinition.dockerSecurityOptions,
+                            'EntryPoint': containerDefinition.entryPoint,
+                            'Environment': environment,
+                            'Essential': containerDefinition.essential,
+                            'ExtraHosts': extraHosts,
+                            'HealthCheck': healthCheck,
+                            'Hostname': containerDefinition.hostname,
+                            'Image': containerDefinition.image,
+                            'Links': containerDefinition.links,
+                            'LinuxParameters': linuxParameters,
+                            'LogConfiguration': logConfiguration,
+                            'Memory': containerDefinition.memory,
+                            'MemoryReservation': containerDefinition.memoryReservation,
+                            'MountPoints': mountPoints,
+                            'Name': containerDefinition.name,
+                            'PortMappings': portMappings,
+                            'Privileged': containerDefinition.privileged,
+                            'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
+                            'RepositoryCredentials': repositoryCredentials,      
+                            'Ulimits': ulimits,
+                            'User': containerDefinition.user,
+                            'VolumesFrom': volumesFrom,
+                            'WorkingDirectory': containerDefinition.workingDirectory
+                        });
+                    });
+                }
+                reqParams.cfn['Family'] = obj.data.family;
+                reqParams.cfn['TaskRoleArn'] = obj.data.taskRoleArn;
+                reqParams.cfn['ExecutionRoleArn'] = obj.data.executionRoleArn;
+                reqParams.cfn['NetworkMode'] = obj.data.networkMode;
+                if (obj.data.volumes) {
+                    reqParams.cfn['Volumes'] = [];
+                    obj.data.volumes.forEach(volume => {
+                        var host = null;
+                        if (volume.host) {
+                            host = {
+                                'SourcePath': volume.host.sourcePath
+                            };
+                        }
+                        var dockerVolumeConfiguration = null;
+                        if (volume.dockerVolumeConfiguration) {
+                            dockerVolumeConfiguration = {
+                                'Scope': volume.dockerVolumeConfiguration.scope,
+                                'Autoprovision': volume.dockerVolumeConfiguration.autoprovision,
+                                'Driver': volume.dockerVolumeConfiguration.driver,
+                                'DriverOpts': volume.dockerVolumeConfiguration.driverOpts,
+                                'Labels': volume.dockerVolumeConfiguration.labels
+                            };
+                        }
+                        reqParams.cfn['Volumes'].push({
+                            'Name': volume.name,
+                            'Host': host,
+                            'DockerVolumeConfiguration': dockerVolumeConfiguration
+                        });
+                    });
+                }
+                reqParams.cfn['RequiresCompatibilities'] = obj.data.requiresCompatibilities;
+                reqParams.cfn['Cpu'] = obj.data.cpu;
+                reqParams.cfn['Memory'] = obj.data.memory;
+                if (obj.data.placementConstraints) {
+                    reqParams.cfn['PlacementConstraints'] = [];
+                    obj.data.placementConstraints.forEach(placementConstraint => {
+                        reqParams.cfn['PlacementConstraints'].push({
+                            'Type': placementConstraint.type,
+                            'Expression': placementConstraint.expression
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ecs', obj.id),
+                    'region': obj.region,
+                    'service': 'ecs',
+                    'type': 'AWS::ECS::TaskDefinition',
+                    'options': reqParams
+                });
             } else if (obj.type == ".") {
                 reqParams.cfn[''] = obj.data;
 

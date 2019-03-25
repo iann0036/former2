@@ -8,6 +8,21 @@ function textFormatter(data) {
     return data;
 }
 
+function primaryTextFormatter(data, row) {
+    var exists = false;
+    output_objects.forEach(output_object => { // check if already added
+        if (output_object.id == row.f2id && output_object.region == row.f2region && output_object.type == row.f2type) {
+            exists = true;
+        }
+    });
+
+    if (exists) {
+        return data + "&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-sm btn-default-outline\">Added <i class=\"fa fa-times\"></i></button>";
+    }
+
+    return data;
+}
+
 function detailFormatter(row, data) {
     var ret = recursivePrettyPrintMap(data['f2data'], 0).substring(6);
     return `<div class="f2detailformatter">${ret}</div>`;
@@ -825,6 +840,191 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'VPC Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPC Endpoint Connection Notifications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPC Endpoint Services': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPC Endpoint Service Permissions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'NAT Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -848,6 +1048,11 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-natgateways-datatable');
 
     sdkcall("EC2", "describeVpcs", {
         // no params
@@ -1177,6 +1382,97 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
     });
+
+    sdkcall("EC2", "describeVpcEndpoints", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('removeAll');
+
+        data.VpcEndpoints.forEach(vpcEndpoint => {
+            $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('append', [{
+                f2id: vpcEndpoint.VpcEndpointId,
+                f2type: 'ec2.vpcendpoint',
+                f2data: vpcEndpoint,
+                f2region: region,
+                id: vpcEndpoint.VpcEndpointId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable');
+    });
+
+    sdkcall("EC2", "describeVpcEndpointConnectionNotifications", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('removeAll');
+
+        data.ConnectionNotificationSet.forEach(connectionNotification => {
+            $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('append', [{
+                f2id: connectionNotification.ConnectionNotificationId,
+                f2type: 'ec2.vpcendpointconnectionnotification',
+                f2data: connectionNotification,
+                f2region: region,
+                id: connectionNotification.ConnectionNotificationId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable');
+    });
+
+    sdkcall("EC2", "describeVpcEndpointServices", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
+
+        data.ServiceDetails.forEach(serviceDetail => {
+            sdkcall("EC2", "describeVpcEndpointServicePermissions", {
+                ServiceId: serviceDetail.ServiceName
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
+
+                $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('append', [{
+                    f2id: allowedPrincipal.Principal,
+                    f2type: 'ec2.vpcendpointservicepermission',
+                    f2data: {
+                        'ServiceId': serviceDetail.ServiceName,
+                        'AllowedPrincipals': data.AllowedPrincipals
+                    },
+                    f2region: region,
+                    principal: allowedPrincipal.Principal
+                }]);
+
+                unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
+            });
+
+            $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('append', [{
+                f2id: serviceDetail.ServiceName,
+                f2type: 'ec2.vpcendpointservice',
+                f2data: serviceDetail,
+                f2region: region,
+                name: serviceDetail.ServiceName
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable');
+    });
+
+    sdkcall("EC2", "describeNatGateways", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('removeAll');
+
+        data.NatGateways.forEach(natGateway => {
+            $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('append', [{
+                f2id: natGateway.NatGatewayId,
+                f2type: 'ec2.natgateway',
+                f2data: natGateway,
+                f2region: region,
+                id: natGateway.NatGatewayId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-natgateways-datatable');
+    });
 }
 
 /* ========================================================================== */
@@ -1297,6 +1593,117 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Resolver Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resolver Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resolver Rule Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1304,7 +1711,10 @@ sections.push({
 function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-records-datatable');
-    blockUI('#section-networkingandcontentdelivery-healthchecks-records-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-healthchecks-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverrules-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
 
     sdkcall("Route53", "listHostedZones", {
         // no params
@@ -1361,6 +1771,72 @@ function updateDatatableNetworkingAndContentDeliveryRoute53() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-route53-healthchecks-datatable');
+    });
+
+    sdkcall("Route53Resolver", "listResolverEndpoints", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('removeAll');
+
+        data.ResolverEndpoints.forEach(resolverEndpoint => {
+            sdkcall("Route53Resolver", "getResolverEndpoint", {
+                ResolverEndpointId: resolverEndpoint.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('append', [{
+                    f2id: data.ResolverEndpoint.Arn,
+                    f2type: 'route53.resolverendpoint',
+                    f2data: data.ResolverEndpoint,
+                    f2region: region,
+                    id: data.ResolverEndpoint.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable');
+    });
+
+    sdkcall("Route53Resolver", "listResolverRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').bootstrapTable('removeAll');
+
+        data.ResolverRules.forEach(resolverRule => {
+            sdkcall("Route53Resolver", "getResolverRule", {
+                ResolverRuleId: resolverRule.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').bootstrapTable('append', [{
+                    f2id: data.ResolverRule.Arn,
+                    f2type: 'route53.resolverrule',
+                    f2data: data.ResolverRule,
+                    f2region: region,
+                    id: data.ResolverRule.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverrules-datatable');
+    });
+
+    sdkcall("Route53Resolver", "listResolverRuleAssociations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').bootstrapTable('removeAll');
+
+        data.ResolverRuleAssociations.forEach(resolverRuleAssociation => {
+            sdkcall("Route53Resolver", "getResolverRuleAssociation", {
+                ResolverRuleAssociationId: resolverRuleAssociation.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').bootstrapTable('append', [{
+                    f2id: data.ResolverRuleAssociation.Id,
+                    f2type: 'route53.resolverruleassociation',
+                    f2data: data.ResolverRuleAssociation,
+                    f2region: region,
+                    id: data.ResolverRuleAssociation.Id
+                }]);
+            });
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
     });
 }
 
@@ -1672,6 +2148,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryTextFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2491,7 +2968,7 @@ function updateDatatableStorageS3() {
             }, false).then((data) => {
                 data['Bucket'] = bucket.Name;
                 $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
-                    f2id: bucket.Name + "_Policy",
+                    f2id: bucket.Name,
                     f2type: 's3.bucketpolicy',
                     f2data: data,
                     f2region: region,
@@ -2670,6 +3147,7 @@ function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-instances-datatable');
     blockUI('#section-database-rds-subnetgroups-datatable');
     blockUI('#section-database-rds-parametergroups-datatable');
+    blockUI('#section-database-rds-securitygroups-datatable');
 
     sdkcall("RDS", "describeDBInstances", {
         // no params
@@ -5224,7 +5702,7 @@ function updateDatatableComputeECS() {
         $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
 
         data.taskDefinitionArns.forEach(taskDefinitionArn => {
-            sdkcall("ECS", "describeTaskDefinitions", {
+            sdkcall("ECS", "describeTaskDefinition", {
                 taskDefinition: taskDefinitionArn
             }, true).then((data) => {
                 $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
@@ -11646,6 +12124,9 @@ function updateDatatableMobileAppSync() {
     }, true).then((data) => {
         $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-appsync-datasources-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('removeAll');
         
         data.graphqlApis.forEach(graphqlApi => {
             sdkcall("AppSync", "listTypes", {
@@ -11658,6 +12139,7 @@ function updateDatatableMobileAppSync() {
                         typeName: type.name
                     }, true).then((data) => {
                         data.resolvers.forEach(resolver => {
+                            resolver['apiId'] = graphqlApi.apiId;
                             $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('append', [{
                                 f2id: data.resolverArn,
                                 f2type: 'appsync.resolver',
@@ -11678,6 +12160,7 @@ function updateDatatableMobileAppSync() {
                         apiId: graphqlApi.apiId,
                         name: dataSource.name
                     }, true).then((data) => {
+                        data['apiId'] = graphqlApi.apiId;
                         $('#section-mobile-appsync-datasources-datatable').bootstrapTable('append', [{
                             f2id: data.dataSourceArn,
                             f2type: 'appsync.datasource',
@@ -11697,6 +12180,7 @@ function updateDatatableMobileAppSync() {
                         apiId: graphqlApi.apiId,
                         functionId: appSyncFunction.functionId
                     }, true).then((data) => {
+                        data['apiId'] = graphqlApi.apiId;
                         $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('append', [{
                             f2id: data.functionArn,
                             f2type: 'appsync.functionconfiguration',
@@ -11712,12 +12196,13 @@ function updateDatatableMobileAppSync() {
                 apiId: graphqlApi.apiId
             }, true).then((data) => {
                 data.apiKeys.forEach(apiKey => {
+                    apiKey['apiId'] = graphqlApi.apiId;
                     $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('append', [{
-                        f2id: data.id,
+                        f2id: apiKey.id,
                         f2type: 'appsync.apikey',
-                        f2data: data,
+                        f2data: apiKey,
                         f2region: region,
-                        id: data.id
+                        id: apiKey.id
                     }]);
                 });
             });
@@ -11737,30 +12222,9 @@ function updateDatatableMobileAppSync() {
 
         unblockUI('#section-mobile-appsync-graphqlapis-datatable');
         unblockUI('#section-mobile-appsync-resolvers-datatable');
+        unblockUI('#section-mobile-appsync-apikeys-datatable');
         unblockUI('#section-mobile-appsync-datasources-datatable');
         unblockUI('#section-mobile-appsync-functionconfigurations-datatable');
-    });
-
-    sdkcall("AppSync", "listTypes", {
-        // no params
-    }, true).then((data) => {
-        $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('removeAll');
-        
-        data.graphqlApis.forEach(graphqlApi => {
-            sdkcall("AppSync", "getGraphqlApi", {
-                apiId: graphqlApi.apiId
-            }, true).then((data) => {
-                $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('append', [{
-                    f2id: data.apiId,
-                    f2type: 'appsync.graphqlapi',
-                    f2data: data,
-                    f2region: region,
-                    domainname: data.name
-                }]);
-            });
-        });
-
-        unblockUI('#section-mobile-appsync-graphqlapis-datatable');
     });
 }
 

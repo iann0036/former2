@@ -42,3 +42,7 @@
     float: right;
     vertical-align: center;
 }
+
+.faq-page-questions {
+    padding: 15px !important;
+}

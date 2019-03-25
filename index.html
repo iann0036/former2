@@ -153,8 +153,8 @@
                                     </div>
                                 </div>
                                 <div class="site-header-search-container">
-                                    <form class="site-header-search closed">
-                                        <input type="text" placeholder="Search"/>
+                                    <form id="minisearch-form" class="site-header-search closed">
+                                        <input id="minisearch-input" type="text" placeholder="Search"/>
                                         <button type="submit">
                                             <span class="font-icon-search"></span>
                                         </button>
@@ -439,6 +439,7 @@
                                     <li id="header-breadcrumb2" class="active"></li>
                                 </ol>
                             </div>
+                            <button id="header-button-clear-outputs" type="button" class="f2-header-button btn btn-danger-outline" style="margin-left: 16px;"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Clear All</button>
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-cdkts" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
@@ -449,7 +450,7 @@
 
                 <section id="section-dashboard" data-section-breadcrumb1-title="Dashboard" data-section-breadcrumb1-link="#section-dashboard" data-section-title="Dashboard" class="former2-section" style="display: none;">
                     <div class="row">
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-compute-ec2">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -461,7 +462,7 @@
                                 </section>
                             </a>
 						</div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-storage-s3">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -473,7 +474,7 @@
                                 </section>
                             </a>
                         </div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-database-rds">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -485,7 +486,7 @@
                                 </section>
                             </a>
                         </div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-migrationandtransfer-databasemigrationservice">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -497,7 +498,7 @@
                                 </section>
                             </a>
                         </div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-networkingandcontentdelivery-vpc">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -509,7 +510,7 @@
                                 </section>
                             </a>
                         </div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-developertools-codecommit">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -521,7 +522,7 @@
                                 </section>
                             </a>
                         </div>
-						<div class="col-sm-2">
+						<div class="col-md-2">
                             <a href="#section-robotics-robomaker">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -533,7 +534,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-managementandgovernance-cloudwatch">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -545,7 +546,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-machinelearning-sagemaker">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -557,7 +558,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-analytics-athena">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -569,7 +570,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-securityidentityandcompliance-iam">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -581,7 +582,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-mobile-appsync">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -593,7 +594,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-applicationintegration-stepfunctions">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -605,7 +606,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-awscostmanagement-budgets">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -617,7 +618,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-customerengagement-ses">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -629,7 +630,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-endusercomputing-workspaces">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -641,7 +642,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-internetofthings-core">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -653,7 +654,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-gamedevelopment-gamelift">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -665,7 +666,7 @@
                                 </section>
                             </a>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-md-2">
                             <a href="#section-setup-introduction">
                                 <section class="widget widget-simple-sm">
                                     <div class="widget-simple-sm-icon">
@@ -773,16 +774,16 @@
                 </section>
 
                 <section id="section-search" data-section-breadcrumb1-title="Search" data-section-breadcrumb1-link="#section-search" data-section-title="Search Results" class="former2-section box-typical faq-page" style="display: none;">
-                    <form class="faq-page-header-search" style="background: #1873d2;">
+                    <form id="search-form" class="faq-page-header-search" style="background: #1873d2;" action="#section-search">
                         <div class="search">
-                            <input type="text" class="form-control form-control-rounded" placeholder="Search for keywords, values, tags etc."/>
+                            <input id="search-input" type="text" class="form-control form-control-rounded" placeholder="Search for keywords, values, tags etc."/>
                             <button type="submit" class="find">
                                 <i class="font-icon font-icon-search"></i>
                             </button>
                         </div>
                     </form>
     
-                    <section class="faq-page-cats">
+                    <!--<section class="faq-page-cats">
                         <div class="row">
                             <div class="col-md-4">
                                 ...
@@ -794,13 +795,37 @@
                                 ...
                             </div>
                         </div>
-                    </section>
+                    </section>-->
     
                     <section class="faq-page-questions">
                         <h3>Search Results</h3>
-                        <div class="table-responsive">
-                            ...
+                        
+                        <div id="section-search-toolbar" class="f2toolbar">
+                            <button class="additems btn btn-primary" data-datatable="section-search-datatable" disabled>
+                                <i class="font-icon font-icon-plus"></i> Add Selected
+                            </button>
                         </div>
+                        <div class="table-responsive">
+                            <table id="section-search-datatable"
+                                class="table table-striped f2datatable"
+                                data-toolbar="#section-search-toolbar"
+                                data-search="false"
+                                data-show-refresh="true"
+                                data-show-toggle="true"
+                                data-show-columns="true"
+                                data-show-export="true"
+                                data-detail-view="true"
+                                data-detail-formatter="detailFormatter"
+                                data-minimum-count-columns="2"
+                                data-show-pagination-switch="true"
+                                data-pagination="true"
+                                data-id-field="id"
+                                data-page-list="[10, 25, 50, 100, ALL]"
+                                data-show-footer="false"
+                                data-response-handler="responseHandler">
+                            </table>
+                        </div>
+
                     </section>
                 </section>
 

@@ -1,5 +1,6 @@
 var extension_available = false;
 var region = 'us-east-1';
+var output_objects = [];
 var _AWS = AWS;
 
 $(document).ready(function(){
@@ -78,7 +79,7 @@ $(document).ready(function(){
     // DataTable Pre-Config
     /* ========================================================================== */
 
-    var output_objects = [];
+    output_objects = [];
 
     window.operateEvents = {
         'click .like': function (e, value, row, index) {
@@ -106,12 +107,22 @@ $(document).ready(function(){
 
     function addSelectedRowsToTemplate(selector) {
         var ids = $.map($(selector).bootstrapTable('getSelections'), function (row) {
+            var exists = false;
+            output_objects.forEach(output_object => { // check if already added
+                if (output_object.id == row.f2id && output_object.region == row.f2region && output_object.type == row.f2type) {
+                    exists = true;
+                }
+            });
+            if (exists) return null;
+            
             output_objects.push({
                 'id': row.f2id,
                 'type': row.f2type,
                 'data': row.f2data,
                 'region': row.f2region
             });
+
+            $(selector).bootstrapTable('refresh');
 
             return row.f2id;
         });
@@ -154,6 +165,35 @@ $(document).ready(function(){
         });
     });
 
+    initDatatableWithColumns('#section-search-datatable', [
+        [
+            {
+                field: 'state',
+                checkbox: true,
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle'
+            },
+            {
+                title: 'Primary ID',
+                field: 'f2id',
+                rowspan: 2,
+                align: 'center',
+                valign: 'middle',
+                sortable: true,
+                footerFormatter: textFormatter
+            },
+            {
+                title: 'Type',
+                field: 'f2type',
+                sortable: true,
+                footerFormatter: textFormatter,
+                align: 'center'
+            }
+        ],
+        []
+    ]);
+
     /* ========================================================================== */
     // DataTable Post-Config
     /* ========================================================================== */
@@ -175,6 +215,40 @@ $(document).ready(function(){
         $(this).bootstrapTable('refreshOptions', {
             exportDataType: $(this).val()
         });
+    });
+
+    /* ========================================================================== */
+    // Search
+    /* ========================================================================== */
+
+    $('#minisearch-form').on('submit', function () {
+        window.location.href = "#section-search";
+
+        $('#search-input').val($('#minisearch-input').val());
+
+        $('#search-form').submit();
+
+        return false;
+    });
+
+    $('#search-form').on('submit', function () {
+        $(this).bootstrapTable('removeAll');
+
+        $('.f2datatable').each(function(index) {
+            if (this.id != "section-search-datatable") {
+                var rows = $(this).bootstrapTable('getData');
+                rows.forEach(row => {
+                    var searchterm = $('#search-input').val();
+                    if (JSON.stringify(row).includes(searchterm)) {
+                        console.log("Adding row:");
+                        console.log(row);
+                        $('#section-search-datatable').bootstrapTable('append', [row]);
+                    }
+                });
+            }
+        });
+
+        return false;
     });
 
     /* ========================================================================== */
