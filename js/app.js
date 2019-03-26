@@ -122,7 +122,7 @@ $(document).ready(function(){
                 'region': row.f2region
             });
 
-            $(selector).bootstrapTable('refresh');
+            //$(selector).bootstrapTable('refresh');
 
             return row.f2id;
         });
@@ -319,18 +319,23 @@ $(document).ready(function(){
             );
 
             window.scrollTo({ top: 0 });
-
+            
+            $('#header-button-clear-outputs').attr('style', 'margin-left: 16px; display: none;');
             if (location.hash == "#section-outputs-cloudformation") {
                 $('#header-button-copy-cfn').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             }
             if (location.hash == "#section-outputs-troposphere") {
                 $('#header-button-copy-troposphere').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             }
             if (location.hash == "#section-outputs-cdkts") {
                 $('#header-button-copy-cdkts').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             }
             if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             }
         } else if (location.hash != "" && location.hash != "#") {
             $.notify({
@@ -540,6 +545,11 @@ $(document).ready(function(){
         scrollbarStyle: "null"
     });
     setCopyEvent('#header-button-copy-raw', raw_editor);
+
+    $('#header-button-clear-outputs').click(function() {
+        output_objects = [];
+        regenerateOutputs();
+    });
 
     regenerateOutputs();
 

@@ -2230,15 +2230,19 @@ function performF2Mappings(objects) {
                 reqParams.cfn['InstanceTenancy'] = obj.data.InstanceTenancy;
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
+                /*
                 var attrCidrBlockAssociations = [];
                 obj.data.CidrBlockAssociationSet.forEach(cidrBlockAssociation => {
-                    attrCidrBlockAssociations.push(cidrBlockAssociation.AssociationId);
+                    if (obj.data.CidrBlock != cidrBlockAssociation.CidrBlock) {
+                        attrCidrBlockAssociations.push(cidrBlockAssociation.AssociationId);
+                    }
                 });
 
                 var attrIpv6CidrBlockAssociations = [];
                 obj.data.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
                     attrIpv6CidrBlockAssociations.push(ipv6CidrBlockAssociation.Ipv6CidrBlock);
                 });
+                */
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
@@ -2254,6 +2258,33 @@ function performF2Mappings(objects) {
                             'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
                         }
                     }
+                });
+            } else if (obj.type == "ec2.vpccidrblock") {
+                reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+
+                /*
+                TODO:
+                AmazonProvidedIpv6CidrBlock: Boolean
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCCidrBlock',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.dhcpoptionsassociation") {
+                reqParams.cfn['DhcpOptionsId'] = obj.data.DhcpOptionsId;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCDHCPOptionsAssociation',
+                    'options': reqParams
                 });
             } else if (obj.type == "s3.bucket") {
                 reqParams.cfn['BucketName'] = obj.data.Name;
@@ -2299,6 +2330,20 @@ function performF2Mappings(objects) {
                     'type': 'AWS::S3::Bucket',
                     'options': reqParams
                 });
+            } else if (obj.type == "ec2.egressonlyinternetgateway") {
+                if (obj.data.Attachments && obj.data.Attachments.length == 1) {
+                    reqParams.cfn['VpcId'] = obj.data.Attachments[0].VpcId;
+                }
+
+                // TODO: Check for multiple
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::EgressOnlyInternetGateway',
+                    'options': reqParams
+                });
             } else if (obj.type == "ec2.internetgateway") {
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
@@ -2307,6 +2352,18 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::InternetGateway',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.gatewayattachment") {
+                reqParams.cfn['InternetGatewayId'] = obj.data.InternetGatewayId;
+                reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VPCGatewayAttachment',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.dhcpoptions") {
@@ -2401,6 +2458,24 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::NetworkAcl',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.networkaclentry") {
+                reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.cfn['Egress'] = obj.data.Egress;
+                reqParams.cfn['Icmp'] = obj.data.IcmpTypeCode;
+                reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlock;
+                reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;
+                reqParams.cfn['PortRange'] = obj.data.PortRange;
+                reqParams.cfn['Protocol'] = obj.data.Protocol;
+                reqParams.cfn['RuleAction'] = obj.data.RuleAction;
+                reqParams.cfn['RuleNumber'] = obj.data.RuleNumber;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::NetworkAclEntry',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.vpngateway") {
@@ -2612,6 +2687,18 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::Volume',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.volumeattachment") {
+                reqParams.cfn['VolumeId'] = obj.data.VolumeId;
+                reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.cfn['Device'] = obj.data.Device;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::VolumeAttachment',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.instance") {
@@ -3053,6 +3140,19 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::EIP',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.elasticipassociation") {
+                reqParams.cfn['AllocationId'] = obj.data.AllocationId;
+                reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::EIPAssociation',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.networkinterface") {
@@ -9668,12 +9768,217 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ECS::TaskDefinition',
                     'options': reqParams
                 });
+            } else if (obj.type == "route53.resolverendpoint") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+                reqParams.cfn['Direction'] = obj.data.Direction;
+
+                /*
+                TODO:
+                IpAddresses: 
+                    - IpAddressRequest
+                Tags: 
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('route53', obj.id),
+                    'region': obj.region,
+                    'service': 'route53',
+                    'type': 'AWS::Route53Resolver::ResolverEndpoint',
+                    'options': reqParams
+                });
+            } else if (obj.type == "route53.resolverrule") {
+                reqParams.cfn['DomainName'] = obj.data.DomainName;
+                reqParams.cfn['RuleType'] = obj.data.RuleType;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['TargetIps'] = obj.data.TargetIps;
+                reqParams.cfn['ResolverEndpointId'] = obj.data.ResolverEndpointId;
+
+                /*
+                TODO:
+                Tags: 
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('route53', obj.id),
+                    'region': obj.region,
+                    'service': 'route53',
+                    'type': 'AWS::Route53Resolver::ResolverRule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "route53.resolverruleassociation") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['ResolverRuleId'] = obj.data.ResolverRuleId;
+                reqParams.cfn['VPCId'] = obj.data.VPCId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('route53', obj.id),
+                    'region': obj.region,
+                    'service': 'route53',
+                    'type': 'AWS::Route53Resolver::ResolverRuleAssociation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "datapipeline.pipeline") {
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Description'] = obj.data.description;
+                if (obj.data.tags) {
+                    reqParams.cfn['PipelineTags'] = [];
+                    obj.data.tags.forEach(tag => {
+                        reqParams.cfn['PipelineTags'].push({
+                            'Key': tag.key,
+                            'Value': tag.value
+                        });
+                    });
+                }
+
+                /*
+                TODO:
+                Activate: Boolean
+                ParameterObjects:
+                    - Parameter object
+                ParameterValues:
+                    - Parameter value
+                PipelineObjects:
+                    - Pipeline object
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('datapipeline', obj.id),
+                    'region': obj.region,
+                    'service': 'datapipeline',
+                    'type': 'AWS::DataPipeline::Pipeline',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.networkinterfacepermission") {
+                reqParams.cfn['AwsAccountId'] = obj.data.AwsAccountId;
+                reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.cfn['Permission'] = obj.data.Permission;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::NetworkInterfacePermission',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.flowlog") {
+                reqParams.cfn['DeliverLogsPermissionArn'] = obj.data.DeliverLogsPermissionArn;
+                reqParams.cfn['LogGroupName'] = obj.data.LogGroupName;
+                reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+                reqParams.cfn['TrafficType'] = obj.data.TrafficType;
+                reqParams.cfn['LogDestinationType'] = obj.data.LogDestinationType;
+                reqParams.cfn['LogDestination'] = obj.data.LogDestination;
+                if (obj.data.ResourceId.startsWith("vpc-")) {
+                    reqParams.cfn['ResourceType'] = "VPC";
+                } else if (obj.data.ResourceId.startsWith("subnet-")) {
+                    reqParams.cfn['ResourceType'] = "Subnet";
+                } else if (obj.data.ResourceId.startsWith("eni-")) {
+                    reqParams.cfn['ResourceType'] = "NetworkInterface";
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::FlowLog',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.spotrequest") {
+                var launchSpecifications = null;
+                if (obj.data.LaunchSpecifications) {
+                    launchSpecifications = [];
+                    obj.data.LaunchSpecifications.forEach(launchSpecification => {
+                        var securityGroups = null;
+                        if (launchSpecification.SecurityGroups) {
+                            securityGroups = [];
+                            launchSpecification.SecurityGroups.forEach(securityGroup => {
+                                securityGroups.push({
+                                    'GroupId': securityGroup.GroupId
+                                });
+                            });
+                        }
+                        var iamInstanceProfile = null;
+                        if (launchSpecification.IamInstanceProfile) {
+                            iamInstanceProfile = {
+                                'Arn': launchSpecification.IamInstanceProfile.Arn
+                            };
+                        }
+                        launchSpecifications.push({
+                            'SecurityGroups': securityGroups,
+                            'BlockDeviceMappings': launchSpecification.BlockDeviceMappings,
+                            'EbsOptimized': launchSpecification.EbsOptimized,
+                            'IamInstanceProfile': iamInstanceProfile,
+                            'ImageId': launchSpecification.ImageId,
+                            'InstanceType': launchSpecification.InstanceType,
+                            'KernelId': launchSpecification.KernelId,
+                            'KeyName': launchSpecification.KeyName,
+                            'Monitoring': launchSpecification.Monitoring,
+                            'NetworkInterfaces': launchSpecification.NetworkInterfaces,
+                            'Placement': launchSpecification.Placement,
+                            'RamdiskId': launchSpecification.RamdiskId,
+                            'SpotPrice': launchSpecification.SpotPrice,
+                            'SubnetId': launchSpecification.SubnetId,
+                            'TagSpecifications': launchSpecification.TagSpecifications,
+                            'UserData': launchSpecification.UserData,
+                            'WeightedCapacity': launchSpecification.WeightedCapacity
+                        });
+                    });
+                }
+                var launchTemplateConfigs = null;
+                if (obj.data.LaunchTemplateConfigs) {
+                    launchTemplateConfigs = [];
+                    obj.data.LaunchTemplateConfigs.forEach(launchTemplateConfig => {
+                        var overrides = null;
+                        if (launchTemplateConfig.Overrides) {
+                            overrides = [];
+                            launchTemplateConfig.Overrides.forEach(override => {
+                                overrides.push({
+                                    'AvailabilityZone': override.AvailabilityZone,
+                                    'InstanceType': override.InstanceType,
+                                    'SpotPrice': override.SpotPrice,
+                                    'SubnetId': override.SubnetId,
+                                    'WeightedCapacity': override.WeightedCapacity
+                                });
+                            });
+                        }
+                        launchTemplateConfigs.push({
+                            'LaunchTemplateSpecification': launchTemplateConfig.LaunchTemplateSpecification,
+                            'Overrides': overrides
+                        });
+                    });
+                }
+                reqParams.cfn['SpotFleetRequestConfigData'] = {
+                    'AllocationStrategy': obj.data.SpotFleetRequestConfig.AllocationStrategy,
+                    'ExcessCapacityTerminationPolicy': obj.data.SpotFleetRequestConfig.ExcessCapacityTerminationPolicy,
+                    'IamFleetRole': obj.data.SpotFleetRequestConfig.IamFleetRole,
+                    'InstanceInterruptionBehavior': obj.data.SpotFleetRequestConfig.InstanceInterruptionBehavior,
+                    'LaunchSpecifications': launchSpecifications,
+                    'LaunchTemplateConfigs': launchTemplateConfigs,
+                    'LoadBalancersConfig': obj.data.SpotFleetRequestConfig.LoadBalancersConfig,
+                    'ReplaceUnhealthyInstances': obj.data.SpotFleetRequestConfig.ReplaceUnhealthyInstances,
+                    'SpotPrice': obj.data.SpotFleetRequestConfig.SpotPrice,
+                    'TargetCapacity': obj.data.SpotFleetRequestConfig.TargetCapacity,
+                    'TerminateInstancesWithExpiration': obj.data.SpotFleetRequestConfig.TerminateInstancesWithExpiration,
+                    'Type': obj.data.SpotFleetRequestConfig.Type,
+                    'ValidFrom': obj.data.SpotFleetRequestConfig.ValidFrom, // TODO: Check date handling
+                    'ValidUntil': obj.data.SpotFleetRequestConfig.ValidUntil // TODO: Check date handling
+                };
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::SpotFleet',
+                    'options': reqParams
+                });
             } else if (obj.type == ".") {
                 reqParams.cfn[''] = obj.data;
 
                 /*
                 TODO:
-
+                
                 */
 
                 tracked_resources.push({

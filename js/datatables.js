@@ -212,6 +212,44 @@ sections.push({
                 ]
             ]
         },
+        'VPC CIDR Blocks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'VPC ID',
+                        field: 'vpcid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'cidrblock',
+                        title: 'CIDR Block',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Subnets': {
             'columns': [
                 [
@@ -250,6 +288,43 @@ sections.push({
             ]
         },
         'Internet Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Gateway ID',
+                        field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Egress Only Internet Gateways': {
             'columns': [
                 [
                     {
@@ -397,7 +472,81 @@ sections.push({
                 ]
             ]
         },
+        'Elastic IP Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'IP',
+                        field: 'ip',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'DHCP Options': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'DHCP Options ID',
+                        field: 'dhcpoptionsid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'DHCP Options Associations': {
             'columns': [
                 [
                     {
@@ -509,6 +658,43 @@ sections.push({
             ]
         },
         'Network ACLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Network ACL ID',
+                        field: 'networkaclid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network ACL Entries': {
             'columns': [
                 [
                     {
@@ -1025,21 +1211,63 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Gateway Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgateways-datatable');
@@ -1053,13 +1281,44 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-natgateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable');
 
     sdkcall("EC2", "describeVpcs", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('removeAll');
 
         data.Vpcs.forEach(vpc => {
+            if (vpc.DhcpOptionsId) {
+                $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('append', [{
+                    f2id: cidrBlock.AssociationId,
+                    f2type: 'ec2.dhcpoptionsassociation',
+                    f2data: {
+                        'VpcId': vpc.VpcId,
+                        'DhcpOptionsId': vpc.DhcpOptionsId
+                    },
+                    f2region: region,
+                    vpcid: vpc.VpcId,
+                    dhcpoptionsid: vpc.DhcpOptionsId
+                }]);
+            }
+
+            vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
+                if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
+                    cidrBlock['VpcId'] = vpc.VpcId;
+                    $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('append', [{
+                        f2id: cidrBlock.AssociationId,
+                        f2type: 'ec2.vpccidrblock',
+                        f2data: cidrBlock,
+                        f2region: region,
+                        vpcid: vpc.VpcId,
+                        cidrblock: cidrBlock.CidrBlock
+                    }]);
+                }
+            });
+
             sdkcall("EC2", "describeVpcAttribute", {
                 Attribute: "enableDnsSupport", 
                 VpcId: vpc.VpcId
@@ -1083,6 +1342,8 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable');
     });
 
     sdkcall("EC2", "describeSubnets", {
@@ -1103,22 +1364,22 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
     });
 
-    sdkcall("EC2", "describeInternetGateways", {
+    sdkcall("EC2", "describeEgressOnlyInternetGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('removeAll');
 
-        data.InternetGateways.forEach(internetGateway => {
-            $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('append', [{
-                f2id: internetGateway.InternetGatewayId,
-                f2type: 'ec2.internetgateway',
-                f2data: internetGateway,
+        data.EgressOnlyInternetGateways.forEach(egressOnlyInternetGateway => {
+            $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('append', [{
+                f2id: egressOnlyInternetGateway.EgressOnlyInternetGatewayId,
+                f2type: 'ec2.egressonlyinternetgateway',
+                f2data: egressOnlyInternetGateway,
                 f2region: region,
-                gatewayid: internetGateway.InternetGatewayId
+                gatewayid: egressOnlyInternetGateway.EgressOnlyInternetGatewayId
             }]);
         });
 
-        unblockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable');
     });
 
     sdkcall("EC2", "describeCustomerGateways", {
@@ -1143,8 +1404,25 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('removeAll');
 
         data.VpnGateways.forEach(vpnGateway => {
+            if (vpnGateway.VpcAttachments) {
+                vpnGateway.VpcAttachments.forEach(attachment => {
+                    $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
+                        f2id: attachment.VpcId + "_" + vpnGateway.VpnGatewayId,
+                        f2type: 'ec2.gatewayattachment',
+                        f2data: {
+                            'VpcId': attachment.VpcId,
+                            'VpnGatewayId': vpnGateway.VpnGatewayId
+                        },
+                        f2region: region,
+                        vpcid: attachment.VpcId
+                    }]);
+                });
+            }
+
             $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('append', [{
                 f2id: vpnGateway.VpnGatewayId,
                 f2type: 'ec2.virtualprivategateway',
@@ -1154,13 +1432,45 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
         });
 
+        sdkcall("EC2", "describeInternetGateways", {
+            // no params
+        }, true).then((data) => {
+            data.InternetGateways.forEach(internetGateway => {
+                if (internetGateway.Attachments) {
+                    internetGateway.Attachments.forEach(attachment => {
+                        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
+                            f2id: attachment.VpcId + "_" + internetGateway.InternetGatewayId,
+                            f2type: 'ec2.gatewayattachment',
+                            f2data: {
+                                'VpcId': attachment.VpcId,
+                                'InternetGatewayId': internetGateway.InternetGatewayId
+                            },
+                            f2region: region,
+                            vpcid: attachment.VpcId
+                        }]);
+                    });
+                }
+
+                $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('append', [{
+                    f2id: internetGateway.InternetGatewayId,
+                    f2type: 'ec2.internetgateway',
+                    f2data: internetGateway,
+                    f2region: region,
+                    gatewayid: internetGateway.InternetGatewayId
+                }]);
+            });
+        });
+
         unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-internetgateways-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable');
     });
 
     sdkcall("EC2", "describeAddresses", {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').bootstrapTable('removeAll');
 
         data.Addresses.forEach(address => {
             $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
@@ -1170,9 +1480,20 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2region: region,
                 ip: address.PublicIp
             }]);
+
+            if (address.AssociationId) {
+                $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
+                    f2id: address.AssociationId,
+                    f2type: 'ec2.elasticipassociation',
+                    f2data: address,
+                    f2region: region,
+                    ip: address.PublicIp
+                }]);
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable');
     });
 
     sdkcall("EC2", "describeDhcpOptions", {
@@ -1233,8 +1554,21 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
+            if (networkAcl.Entries) {
+                networkAcl.Entries.forEach(entry => {
+                    entry['NetworkAclId'] = networkAcl.NetworkAclId;
+                    $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
+                        f2id: entry.NetworkAclId,
+                        f2type: 'ec2.networkaclentry',
+                        f2data: entry,
+                        f2region: region,
+                        networkaclid: networkAcl.NetworkAclId
+                    }]);
+                });
+            }
             $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('append', [{
                 f2id: networkAcl.NetworkAclId,
                 f2type: 'ec2.networkacl',
@@ -1245,6 +1579,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable');
     });
 
     sdkcall("EC2", "describeRouteTables", {
@@ -2280,7 +2615,81 @@ sections.push({
                 ]
             ]
         },
+        'Volume Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Volume ID',
+                        field: 'volumeid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Network Interfaces': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Interface ID',
+                        field: 'interfaceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Interface Permissions': {
             'columns': [
                 [
                     {
@@ -2398,6 +2807,43 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Flow Logs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2405,6 +2851,21 @@ sections.push({
 function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-instances-datatable');
     blockUI('#section-compute-ec2-hosts-datatable');
+    blockUI('#section-compute-ec2-loadbalancers-datatable');
+    blockUI('#section-compute-ec2-autoscalinggroups-datatable');
+    blockUI('#section-compute-ec2-autoscalingpolicies-datatable');
+    blockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
+    blockUI('#section-compute-ec2-securitygroups-datatable');
+    blockUI('#section-compute-ec2-launchconfigurations-datatable');
+    blockUI('#section-compute-ec2-launchtemplates-datatable');
+    blockUI('#section-compute-ec2-targetgroups-datatable');
+    blockUI('#section-compute-ec2-volumes-datatable');
+    blockUI('#section-compute-ec2-volumeattachments-datatable');
+    blockUI('#section-compute-ec2-networkinterfaces-datatable');
+    blockUI('#section-compute-ec2-networkinterfacepermissions-datatable');
+    blockUI('#section-compute-ec2-spotrequests-datatable');
+    blockUI('#section-compute-ec2-placementgroups-datatable');
+    blockUI('#section-compute-ec2-flowlogs-datatable');
 
     sdkcall("EC2", "describeInstances", {
         // no params
@@ -2558,8 +3019,20 @@ function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-volumes-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('removeAll');
 
         data.Volumes.forEach(volume => {
+            if (volume.Attachments) {
+                volume.Attachments.forEach(attachment => {
+                    $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('append', [{
+                        f2id: attachment.VolumeId + "_" + attachment.InstanceId,
+                        f2type: 'ec2.volumeattachment',
+                        f2data: attachment,
+                        f2region: region,
+                        volumeid: attachment.VolumeId
+                    }]);
+                });
+            }
             $('#section-compute-ec2-volumes-datatable').bootstrapTable('append', [{
                 f2id: volume.VolumeId,
                 f2type: 'ec2.volume',
@@ -2570,6 +3043,7 @@ function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-volumes-datatable');
+        unblockUI('#section-compute-ec2-volumeattachments-datatable');
     });
 
     sdkcall("EC2", "describeNetworkInterfaces", {
@@ -2588,6 +3062,24 @@ function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-networkinterfaces-datatable');
+    });
+    
+    sdkcall("EC2", "describeNetworkInterfacePermissions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-networkinterfacepermissions-datatable').bootstrapTable('removeAll');
+
+        data.NetworkInterfacePermissions.forEach(networkInterfacePermission => {
+            $('#section-compute-ec2-networkinterfacepermissions-datatable').bootstrapTable('append', [{
+                f2id: networkInterfacePermission.NetworkInterfacePermissionId,
+                f2type: 'ec2.networkinterfacepermission',
+                f2data: networkInterfacePermission,
+                f2region: region,
+                id: networkInterfacePermission.NetworkInterfacePermissionId
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-networkinterfacepermissions-datatable');
     });
 
     sdkcall("EC2", "describeSpotFleetRequests", {
@@ -2680,6 +3172,24 @@ function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-securitygroups-datatable');
+    });
+
+    sdkcall("EC2", "describePlacementGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('removeAll');
+
+        data.FlowLogs.forEach(flowLog => {
+            $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('append', [{
+                f2id: flowLog.FlowLogId,
+                f2type: 'ec2.flowlog',
+                f2data: flowLog,
+                f2region: region,
+                id: flowLog.FlowLogId
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-flowlogs-datatable');
     });
 }
 
