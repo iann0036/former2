@@ -450,6 +450,282 @@
 
                 <section id="section-dashboard" data-section-breadcrumb1-title="Dashboard" data-section-breadcrumb1-link="#section-dashboard" data-section-title="Dashboard" class="former2-section" style="display: none;">
                     <div class="row">
+                        <div class="col-md-12">
+                            <section class="box-typical box-typical-padding" style="padding: 40px 40px 30px 40px;">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Compute_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Compute</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-compute-ec2" style="font-weight: 600;">EC2</a><br />
+                                                    <a href="#section-compute-ecr" style="font-weight: 600;">ECR</a><br />
+                                                    <a href="#section-compute-ecs" style="font-weight: 600;">ECS</a><br />
+                                                    <a href="#section-compute-eks" style="font-weight: 600;">EKS</a><br />
+                                                    <a href="#section-compute-lambda" style="font-weight: 600;">Lambda</a><br />
+                                                    <a href="#section-compute-batch" style="font-weight: 600;">Batch</a><br />
+                                                    <a href="#section-compute-elasticbeanstalk" style="font-weight: 600;">Elastic Beanstalk</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Storage_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Storage</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-storage-s3" style="font-weight: 600;">S3</a><br />
+                                                    <a href="#section-storage-efs" style="font-weight: 600;">EFS</a><br />
+                                                    <a href="#section-storage-fsx" style="font-weight: 600;">FSx</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Database_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Database</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-database-rds" style="font-weight: 600;">RDS</a><br />
+                                                    <a href="#section-database-dynamodb" style="font-weight: 600;">DynamoDB</a><br />
+                                                    <a href="#section-database-elasticache" style="font-weight: 600;">ElastiCache</a><br />
+                                                    <a href="#section-database-neptune" style="font-weight: 600;">Neptune</a><br />
+                                                    <a href="#section-database-redshift" style="font-weight: 600;">Redshift</a><br />
+                                                    <a href="#section-database-documentdb" style="font-weight: 600;">DocumentDB</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Migration-and-Transfer_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Migration &amp; Transfer</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-migrationandtransfer-databasemigrationservice" style="font-weight: 600;">Database Migration Service</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Networking-and-Content-Delivery_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Networking &amp; Content Delivery</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-networkingandcontentdelivery-vpc" style="font-weight: 600;">VPC</a><br />
+                                                    <a href="#section-networkingandcontentdelivery-cloudfront" style="font-weight: 600;">CloudFront</a><br />
+                                                    <a href="#section-networkingandcontentdelivery-route53" style="font-weight: 600;">Route 53</a><br />
+                                                    <a href="#section-networkingandcontentdelivery-apigateway" style="font-weight: 600;">API Gateway</a><br />
+                                                    <a href="#section-networkingandcontentdelivery-cloudmap" style="font-weight: 600;">Cloud Map</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Developer-Tools_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Developer Tools</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-developertools-codecommit" style="font-weight: 600;">CodeCommit</a><br />
+                                                    <a href="#section-developertools-codebuild" style="font-weight: 600;">CodeBuild</a><br />
+                                                    <a href="#section-developertools-codedeploy" style="font-weight: 600;">CodeDeploy</a><br />
+                                                    <a href="#section-developertools-codepipeline" style="font-weight: 600;">CodePipeline</a><br />
+                                                    <a href="#section-developertools-cloud9" style="font-weight: 600;">Cloud9</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Robotics_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Robotics</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-robotics-robomaker" style="font-weight: 600;">RoboMaker</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Management-and-Governance_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Management &amp; Governance</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-managementandgovernance-cloudwatch" style="font-weight: 600;">CloudWatch</a><br />
+                                                    <a href="#section-managementandgovernance-autoscaling" style="font-weight: 600;">Auto Scaling</a><br />
+                                                    <a href="#section-managementandgovernance-cloudtrail" style="font-weight: 600;">CloudTrail</a><br />
+                                                    <a href="#section-managementandgovernance-config" style="font-weight: 600;">Config</a><br />
+                                                    <a href="#section-managementandgovernance-opsworks" style="font-weight: 600;">OpsWorks</a><br />
+                                                    <a href="#section-managementandgovernance-servicecatalog" style="font-weight: 600;">Service Catalog</a><br />
+                                                    <a href="#section-managementandgovernance-systemsmanager" style="font-weight: 600;">Systems Manager</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Machine-Learning_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Machine Learning</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-machinelearning-sagemaker" style="font-weight: 600;">SageMaker</a><br />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Analytics_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Analytics</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-analytics-athena" style="font-weight: 600;">Athena</a><br />
+                                                    <a href="#section-analytics-emr" style="font-weight: 600;">EMR</a><br />
+                                                    <a href="#section-analytics-elasticsearch" style="font-weight: 600;">Elasticsearch</a><br />
+                                                    <a href="#section-analytics-kinesis" style="font-weight: 600;">Kinesis</a><br />
+                                                    <a href="#section-analytics-datapipeline" style="font-weight: 600;">Data Pipeline</a><br />
+                                                    <a href="#section-analytics-glue" style="font-weight: 600;">Glue</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Security-Identity-and-Compliance_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Security, Identity &amp; Compliance</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-securityidentityandcompliance-iam" style="font-weight: 600;">IAM</a><br />
+                                                    <a href="#section-securityidentityandcompliance-resourceaccessmanager" style="font-weight: 600;">Resource Access Manager</a><br />
+                                                    <a href="#section-securityidentityandcompliance-cognito" style="font-weight: 600;">Cognito</a><br />
+                                                    <a href="#section-securityidentityandcompliance-secretsmanager" style="font-weight: 600;">Secrets Manager</a><br />
+                                                    <a href="#section-securityidentityandcompliance-guardduty" style="font-weight: 600;">GuardDuty</a><br />
+                                                    <a href="#section-securityidentityandcompliance-inspector" style="font-weight: 600;">Inspector</a><br />
+                                                    <a href="#section-securityidentityandcompliance-certificatemanager" style="font-weight: 600;">Certificate Manager</a><br />
+                                                    <a href="#section-securityidentityandcompliance-kms" style="font-weight: 600;">KMS</a><br />
+                                                    <a href="#section-securityidentityandcompliance-directoryservice" style="font-weight: 600;">Directory Service</a><br />
+                                                    <a href="#section-securityidentityandcompliance-wafandshield" style="font-weight: 600;">WAF &amp; Shield</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Mobile_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Mobile</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-mobile-appsync" style="font-weight: 600;">AppSync</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Application-Integration_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Application Integration</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-applicationintegration-stepfunctions" style="font-weight: 600;">Step Functions</a><br />
+                                                    <a href="#section-applicationintegration-amazonmq" style="font-weight: 600;">Amazon MQ</a><br />
+                                                    <a href="#section-applicationintegration-sns" style="font-weight: 600;">SNS</a><br />
+                                                    <a href="#section-applicationintegration-sqs" style="font-weight: 600;">SQS</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/AWS-Cost-Management_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">AWS Cost Management</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-awscostmanagement-budgets" style="font-weight: 600;">Budgets</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Customer-Engagement_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Customer Engagement</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-customerengagement-ses" style="font-weight: 600;">SES</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Business-Application_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">End User Computing</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-endusercomputing-workspaces" style="font-weight: 600;">WorkSpaces</a><br />
+                                                    <a href="#section-endusercomputing-appstream" style="font-weight: 600;">AppStream</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Internet-of-Things_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Internet of Things</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-internetofthings-core" style="font-weight: 600;">Core</a><br />
+                                                    <a href="#section-internetofthings-1click" style="font-weight: 600;">1-Click</a><br />
+                                                    <a href="#section-internetofthings-analytics" style="font-weight: 600;">Analytics</a><br />
+                                                    <a href="#section-internetofthings-greengrass" style="font-weight: 600;">Greengrass</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table style="border: none; margin-bottom: 16px;">
+                                            <tr>
+                                                <td><img src="img/aws/Game-Tech_light-bg.png" style="width: 48px; height: 48px;" /></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Game Development</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td style="padding-left: 12px;">
+                                                    <a href="#section-gamedevelopment-gamelift" style="font-weight: 600;">GameLift</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+                        <!--
 						<div class="col-md-2">
                             <a href="#section-compute-ec2">
                                 <section class="widget widget-simple-sm">
@@ -678,6 +954,8 @@
                                 </section>
                             </a>
                         </div>
+                        -->
+                        </div>
                     </div>
                 </section>
 
@@ -774,7 +1052,7 @@
                 </section>
 
                 <section id="section-search" data-section-breadcrumb1-title="Search" data-section-breadcrumb1-link="#section-search" data-section-title="Search Results" class="former2-section box-typical faq-page" style="display: none;">
-                    <form id="search-form" class="faq-page-header-search" style="background: #1873d2;" action="#section-search">
+                    <form id="search-form" class="faq-page-header-search" style="background: #1873d2; border-radius: .25rem .25rem .25rem .25rem;" action="#section-search">
                         <div class="search">
                             <input id="search-input" type="text" class="form-control form-control-rounded" placeholder="Search for keywords, values, tags etc."/>
                             <button type="submit" class="find">
@@ -797,9 +1075,7 @@
                         </div>
                     </section>-->
     
-                    <section class="faq-page-questions">
-                        <h3>Search Results</h3>
-                        
+                    <section id="search-results" class="faq-page-questions" style="display: none;">
                         <div id="section-search-toolbar" class="f2toolbar">
                             <button class="additems btn btn-primary" data-datatable="section-search-datatable" disabled>
                                 <i class="font-icon font-icon-plus"></i> Add Selected

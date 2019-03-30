@@ -435,6 +435,43 @@ sections.push({
                 ]
             ]
         },
+        'Virtual Private Gateway Route Propogations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Gateway ID',
+                        field: 'gatewayid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Elastic IPs': {
             'columns': [
                 [
@@ -584,6 +621,43 @@ sections.push({
             ]
         },
         'VPN Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Connection ID',
+                        field: 'connectionid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'VPN Connection Routes': {
             'columns': [
                 [
                     {
@@ -1260,11 +1334,13 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-customergateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-elasticips-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable');
@@ -1518,6 +1594,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('removeAll');
 
         data.VpnConnections.forEach(vpnConnection => {
             $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('append', [{
@@ -1527,9 +1604,23 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2region: region,
                 connectionid: vpnConnection.VpnConnectionId
             }]);
+
+            if (vpnConnection.Routes) {
+                vpnConnection.Routes.forEach(route => {
+                    route['VpnConnectionId'] = vpnConnection.VpnConnectionId;
+                    $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('append', [{
+                        f2id: route.VpnConnectionId + "_" + route.DestinationCidrBlock,
+                        f2type: 'ec2.vpnconnectionroute',
+                        f2data: route,
+                        f2region: region,
+                        connectionid: route.VpnConnectionId
+                    }]);
+                });
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable');
     });
 
     sdkcall("EC2", "describeVpcPeeringConnections", {
@@ -1587,18 +1678,36 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
             routeTable.Routes.forEach(route => {
-                route['RouteTableId'] = routeTable.RouteTableId;
-                $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('append', [{
-                    f2id: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
-                    f2type: 'ec2.route',
-                    f2data: route,
-                    f2region: region,
-                    destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId
-                }]);
+                if (route.Origin == "CreateRoute") {
+                    route['RouteTableId'] = routeTable.RouteTableId;
+                    $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('append', [{
+                        f2id: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
+                        f2type: 'ec2.route',
+                        f2data: route,
+                        f2region: region,
+                        destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId
+                    }]);
+                }
             });
+
+            if (routeTable.PropagatingVgws) {
+                routeTable.PropagatingVgws.forEach(propagatingVgw => {
+                    $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('append', [{
+                        f2id: routeTable.RouteTableId + "_" + propagatingVgw.GatewayId,
+                        f2type: 'ec2.virtualprivategatewayroutepropagation',
+                        f2data: {
+                            'VpnGatewayId': propagatingVgw.GatewayId,
+                            'RouteTableId': routeTable.RouteTableId
+                        },
+                        f2region: region,
+                        routetable: routeTable.RouteTableId
+                    }]);
+                });
+            }
             
             $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
                 f2id: routeTable.RouteTableId,
@@ -1611,6 +1720,7 @@ function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable');
     });
 
     sdkcall("EC2", "describeTransitGateways", {
@@ -2318,6 +2428,154 @@ sections.push({
                 ]
             ]
         },
+        'V2 Load Balancers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Load Balancer Listeners': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Load Balancer Listener Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Load Balancer Listener Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Auto Scaling Groups': {
             'columns': [
                 [
@@ -2542,6 +2800,43 @@ sections.push({
             ]
         },
         'Target Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Target Groups': {
             'columns': [
                 [
                     {
@@ -2852,6 +3147,10 @@ function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-instances-datatable');
     blockUI('#section-compute-ec2-hosts-datatable');
     blockUI('#section-compute-ec2-loadbalancers-datatable');
+    blockUI('#section-compute-ec2-v2loadbalancers-datatable');
+    blockUI('#section-compute-ec2-v2loadbalancerlisteners-datatable');
+    blockUI('#section-compute-ec2-v2loadbalancerlistenerrules-datatable');
+    blockUI('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable');
     blockUI('#section-compute-ec2-autoscalinggroups-datatable');
     blockUI('#section-compute-ec2-autoscalingpolicies-datatable');
     blockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
@@ -2859,6 +3158,7 @@ function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-launchconfigurations-datatable');
     blockUI('#section-compute-ec2-launchtemplates-datatable');
     blockUI('#section-compute-ec2-targetgroups-datatable');
+    blockUI('#section-compute-ec2-v2targetgroups-datatable');
     blockUI('#section-compute-ec2-volumes-datatable');
     blockUI('#section-compute-ec2-volumeattachments-datatable');
     blockUI('#section-compute-ec2-networkinterfaces-datatable');
@@ -2935,6 +3235,81 @@ function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-loadbalancers-datatable');
     });
 
+    sdkcall("ELBv2", "describeLoadBalancers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-v2loadbalancers-datatable').bootstrapTable('removeAll');
+
+        data.LoadBalancers.forEach(loadBalancer => {
+            sdkcall("ELBv2", "describeLoadBalancerAttributes", {
+                LoadBalancerArn: loadBalancer.LoadBalancerArn
+            }, true).then((data) => {
+                loadBalancer['Attributes'] = data.Attributes;
+                $('#section-compute-ec2-v2loadbalancers-datatable').bootstrapTable('append', [{
+                    f2id: loadBalancer.LoadBalancerArn,
+                    f2type: 'elbv2.loadbalancer',
+                    f2data: loadBalancer,
+                    f2region: region,
+                    name: loadBalancer.LoadBalancerName
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-ec2-v2loadbalancers-datatable');
+    });
+
+    sdkcall("ELBv2", "describeListeners", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('removeAll');
+
+        data.Listeners.forEach(listener => {
+            sdkcall("ELBv2", "describeListenerCertificates", {
+                ListenerArn: listener.ListenerArn
+            }, true).then((data) => {
+                data.Certificates.forEach(certificate => {
+                    certificate['ListenerArn'] = listener.ListenerArn;
+                    $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('append', [{
+                        f2id: certificate.CertificateArn,
+                        f2type: 'elbv2.loadbalancerlistenercertificate',
+                        f2data: certificate,
+                        f2region: region,
+                        arn: certificate.CertificateArn
+                    }]);
+                });
+            });
+
+            sdkcall("ELBv2", "describeRules", {
+                ListenerArn: listener.ListenerArn
+            }, true).then((data) => {
+                data.Rules.forEach(rule => {
+                    rule['ListenerArn'] = listener.ListenerArn;
+                    $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('append', [{
+                        f2id: rule.RuleArn,
+                        f2type: 'elbv2.loadbalancerlistenerrule',
+                        f2data: rule,
+                        f2region: region,
+                        arn: rule.RuleArn
+                    }]);
+                });
+            });
+
+            $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('append', [{
+                f2id: listener.ListenerArn,
+                f2type: 'elbv2.loadbalancerlistener',
+                f2data: listener,
+                f2region: region,
+                arn: listener.ListenerArn
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-v2loadbalancerlisteners-datatable');
+        unblockUI('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable');
+        unblockUI('#section-compute-ec2-v2loadbalancerlistenerrules-datatable');
+    });
+
     sdkcall("AutoScaling", "describeAutoScalingGroups", {
         // no params
     }, true).then((data) => {
@@ -3000,10 +3375,10 @@ function updateDatatableComputeEC2() {
     sdkcall("ELBv2", "describeTargetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-targetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('removeAll');
 
         data.TargetGroups.forEach(targetGroup => {
-            $('#section-compute-ec2-targetgroups-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('append', [{
                 f2id: targetGroup.TargetGroupName,
                 f2type: 'elbv2.targetgroup',
                 f2data: targetGroup,
@@ -3012,7 +3387,7 @@ function updateDatatableComputeEC2() {
             }]);
         });
 
-        unblockUI('#section-compute-ec2-targetgroups-datatable');
+        unblockUI('#section-compute-ec2-v2targetgroups-datatable');
     });
 
     sdkcall("EC2", "describeVolumes", {
@@ -3312,6 +3687,191 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Permissions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Layer Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Layer Version Permissions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Source Mappings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -3319,12 +3879,19 @@ sections.push({
 function updateDatatableComputeLambda() {
     blockUI('#section-compute-lambda-functions-datatable');
     blockUI('#section-compute-lambda-aliases-datatable');
+    blockUI('#section-compute-lambda-versions-datatable');
+    blockUI('#section-compute-lambda-permissions-datatable');
+    blockUI('#section-compute-lambda-layerversions-datatable');
+    blockUI('#section-compute-lambda-layerversionpermissions-datatable');
+    blockUI('#section-compute-lambda-eventsourcemappings-datatable');
 
     sdkcall("Lambda", "listFunctions", {
-        MaxItems: 100
+        // no params
     }, true).then((data) => {
         $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-versions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-permissions-datatable').bootstrapTable('removeAll');
 
         data.Functions.forEach(lambdaFunction => {
             sdkcall("Lambda", "getFunction", {
@@ -3343,6 +3910,23 @@ function updateDatatableComputeLambda() {
                 }]);
             });
 
+            sdkcall("Lambda", "getPolicy", {
+                FunctionName: lambdaFunction.FunctionArn
+            }, true).then((data) => {
+                var policy = JSON.parse(data.Policy);
+
+                policy.Statement.forEach(statement => {
+                    statement['FunctionName'] = lambdaFunction.FunctionArn;
+                    $('#section-compute-lambda-permissions-datatable').bootstrapTable('append', [{
+                        f2id: statement.FunctionName,
+                        f2type: 'lambda.permission',
+                        f2data: statement,
+                        f2region: region,
+                        functionname: statement.FunctionName
+                    }]);
+                });
+            });
+
             sdkcall("Lambda", "listAliases", {
                 FunctionName: lambdaFunction.FunctionArn
             }, true).then((data) => {
@@ -3359,10 +3943,99 @@ function updateDatatableComputeLambda() {
                     }]);
                 });
             });
+
+            sdkcall("Lambda", "listVersionsByFunction", {
+                FunctionName: lambdaFunction.FunctionArn
+            }, true).then((data) => {
+                data.Versions.forEach(version => {
+                    $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
+                        f2id: version.FunctionArn + "_" + version.Version,
+                        f2type: 'lambda.version',
+                        f2data: version,
+                        f2region: region,
+                        version: version.Version,
+                        functionname: version.FunctionName
+                    }]);
+                });
+            });
         });
 
         unblockUI('#section-compute-lambda-functions-datatable');
         unblockUI('#section-compute-lambda-aliases-datatable');
+        unblockUI('#section-compute-lambda-versions-datatable');
+        unblockUI('#section-compute-lambda-permissions-datatable');
+    });
+
+    sdkcall("Lambda", "listLayers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-lambda-layerversions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('removeAll');
+
+        data.Layers.forEach(layer => {
+            sdkcall("Lambda", "listLayerVersions", {
+                LayerName: layer.LayerName
+            }, true).then((data) => {
+                data.LayerVersions.forEach(layerVersion => {
+                    sdkcall("Lambda", "getLayerVersion", {
+                        LayerName: layer.LayerName,
+                        VersionNumber: layerVersion.Version
+                    }, true).then((data) => {
+                        data['LayerName'] = layer.LayerName;
+                        $('#section-compute-lambda-layerversions-datatable').bootstrapTable('append', [{
+                            f2id: data.LayerVersionArn,
+                            f2type: 'lambda.layerversion',
+                            f2data: data,
+                            f2region: region,
+                            arn: data.LayerVersionArn
+                        }]);
+                    });
+
+                    sdkcall("Lambda", "getLayerVersionPolicy", {
+                        LayerName: layer.LayerName,
+                        VersionNumber: layerVersion.Version
+                    }, false).then((data) => {
+                        var policy = JSON.parse(data.Policy);
+
+                        policy.Statement.forEach(statement => {
+                            statement['LayerVersionArn'] = layerVersion.LayerVersionArn;
+                            $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('append', [{
+                                f2id: statement.LayerVersionArn,
+                                f2type: 'lambda.layerversionpermission',
+                                f2data: statement,
+                                f2region: region,
+                                layerversion: statement.LayerVersionArn
+                            }]);
+                        });
+                    }).catch(err => {});
+                });
+            });
+        });
+
+        unblockUI('#section-compute-lambda-layerversions-datatable');
+        unblockUI('#section-compute-lambda-layerversionpermissions-datatable');
+    });
+
+    sdkcall("Lambda", "listEventSourceMappings", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-lambda-eventsourcemappings-datatable').bootstrapTable('removeAll');
+
+        data.EventSourceMappings.forEach(eventSourceMapping => {
+            sdkcall("Lambda", "getEventSourceMapping", {
+                UUID: eventSourceMapping.UUID
+            }, true).then((data) => {
+                $('#section-compute-lambda-eventsourcemappings-datatable').bootstrapTable('append', [{
+                    f2id: data.UUID,
+                    f2type: 'lambda.eventsourcemapping',
+                    f2data: data,
+                    f2region: region,
+                    uuid: data.UUID
+                }]);
+            });
+        });
+
+        unblockUI('#section-compute-lambda-eventsourcemappings-datatable');
     });
 }
 
@@ -3502,6 +4175,43 @@ sections.push({
     'category': 'Database',
     'service': 'RDS',
     'resourcetypes': {
+        'Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Cluster ID',
+                        field: 'clusterid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Instances': {
             'columns': [
                 [
@@ -3576,7 +4286,81 @@ sections.push({
                 ]
             ]
         },
+        'Cluster Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Option Groups': {
             'columns': [
                 [
                     {
@@ -3649,15 +4433,74 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Event Subscriptions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableDatabaseRDS() {
+    blockUI('#section-database-rds-clusters-datatable');
     blockUI('#section-database-rds-instances-datatable');
     blockUI('#section-database-rds-subnetgroups-datatable');
+    blockUI('#section-database-rds-clusterparametergroups-datatable');
     blockUI('#section-database-rds-parametergroups-datatable');
+    blockUI('#section-database-rds-optiongroups-datatable');
     blockUI('#section-database-rds-securitygroups-datatable');
+    blockUI('#section-database-rds-eventsubscriptions-datatable');
+
+    sdkcall("RDS", "describeDBClusters", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-clusters-datatable').bootstrapTable('removeAll');
+
+        data.DBClusters.forEach(dbCluster => {
+            $('#section-database-rds-clusters-datatable').bootstrapTable('append', [{
+                f2id: dbCluster.DBClusterIdentifier,
+                f2type: 'rds.cluster',
+                f2data: dbCluster,
+                f2region: region,
+                clusterid: dbCluster.DBClusterIdentifier
+            }]);
+        });
+
+        unblockUI('#section-database-rds-clusters-datatable');
+    });
 
     sdkcall("RDS", "describeDBInstances", {
         // no params
@@ -3714,6 +4557,43 @@ function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-parametergroups-datatable');
     });
 
+    sdkcall("RDS", "describeDBClusterParameterGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('removeAll');
+
+        data.DBClusterParameterGroups.forEach(parameterGroup => {
+            $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('append', [{
+                f2id: parameterGroup.DBClusterParameterGroupName,
+                f2type: 'rds.clusterparametergroup',
+                f2data: parameterGroup,
+                f2region: region,
+                name: parameterGroup.DBClusterParameterGroupName,
+                family: parameterGroup.DBParameterGroupFamily
+            }]);
+        });
+
+        unblockUI('#section-database-rds-clusterparametergroups-datatable');
+    });
+
+    sdkcall("RDS", "describeOptionGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-optiongroups-datatable').bootstrapTable('removeAll');
+
+        data.OptionGroupsList.forEach(optionGroup => {
+            $('#section-database-rds-optiongroups-datatable').bootstrapTable('append', [{
+                f2id: optionGroup.OptionGroupName,
+                f2type: 'rds.optiongroup',
+                f2data: optionGroup,
+                f2region: region,
+                name: optionGroup.OptionGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-rds-optiongroups-datatable');
+    });
+
     sdkcall("RDS", "describeDBSecurityGroups", {
         // no params
     }, true).then((data) => {
@@ -3730,6 +4610,24 @@ function updateDatatableDatabaseRDS() {
         });
 
         unblockUI('#section-database-rds-securitygroups-datatable');
+    });
+
+    sdkcall("RDS", "describeEventSubscriptions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('removeAll');
+
+        data.EventSubscriptionsList.forEach(eventSubscriptions => {
+            $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('append', [{
+                f2id: eventSubscriptions.EventSubscriptionArn,
+                f2type: 'rds.eventsubscription',
+                f2data: eventSubscriptions,
+                f2region: region,
+                arn: eventSubscriptions.EventSubscriptionArn
+            }]);
+        });
+
+        unblockUI('#section-database-rds-eventsubscriptions-datatable');
     });
 }
 
@@ -5706,12 +6604,88 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Streaming Distributions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain Name',
+                        field: 'domainname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Origin Access Identities': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
 
     sdkcall("CloudFront", "listDistributions", {
         // no params
@@ -5729,6 +6703,42 @@ function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
+    });
+
+    sdkcall("CloudFront", "listStreamingDistributions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').bootstrapTable('removeAll');
+
+        data.StreamingDistributionList.Items.forEach(distribution => {
+            $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').bootstrapTable('append', [{
+                f2id: distribution.ARN,
+                f2type: 'cloudfront.streamingdistribution',
+                f2data: distribution,
+                f2region: region,
+                domainname: distribution.DomainName
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
+    });
+
+    sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('removeAll');
+
+        data.CloudFrontOriginAccessIdentityList.Items.forEach(oai => {
+            $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('append', [{
+                f2id: oai.Id,
+                f2type: 'cloudfront.originaccessidentity',
+                f2data: oai,
+                f2region: region,
+                id: oai.Id
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
     });
 }
 
@@ -5776,12 +6786,126 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Accelerator Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Accelerator Parameter Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Accelerator Cluster Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableDatabaseDynamoDB() {
     blockUI('#section-database-dynamodb-tables-datatable');
+    blockUI('#section-database-dynamodb-acceleratorclusters-datatable');
+    blockUI('#section-database-dynamodb-acceleratorparametergroups-datatable');
+    blockUI('#section-database-dynamodb-acceleratorsubnetgroups-datatable');
 
     sdkcall("DynamoDB", "listTables", {
         // no params
@@ -5803,6 +6927,65 @@ function updateDatatableDatabaseDynamoDB() {
         });
 
         unblockUI('#section-database-dynamodb-tables-datatable');
+    });
+
+    sdkcall("DAX", "describeClusters", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-dynamodb-acceleratorclusters-datatable').bootstrapTable('removeAll');
+
+        data.Clusters.forEach(cluster => {
+            $('#section-database-dynamodb-acceleratorclusters-datatable').bootstrapTable('append', [{
+                f2id: cluster.ClusterArn,
+                f2type: 'dynamodb.acceleratorcluster',
+                f2data: cluster,
+                f2region: region,
+                name: cluster.ClusterName
+            }]);
+        });
+
+        unblockUI('#section-database-dynamodb-acceleratorclusters-datatable');
+    });
+
+    sdkcall("DAX", "describeParameterGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-dynamodb-acceleratorparametergroups-datatable').bootstrapTable('removeAll');
+
+        data.ParameterGroups.forEach(parameterGroup => {
+            sdkcall("DAX", "describeParameters", {
+                ParameterGroupName: parameterGroup.ParameterGroupName
+            }, true).then((data) => {
+                parameterGroup['Parameters'] = data.Parameters;
+                $('#section-database-dynamodb-acceleratorparametergroups-datatable').bootstrapTable('append', [{
+                    f2id: parameterGroup.ParameterGroupName,
+                    f2type: 'dynamodb.acceleratorparametergroup',
+                    f2data: parameterGroup,
+                    f2region: region,
+                    name: parameterGroup.ParameterGroupName
+                }]);
+            });
+        });
+
+        unblockUI('#section-database-dynamodb-acceleratorparametergroups-datatable');
+    });
+
+    sdkcall("DAX", "describeSubnetGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').bootstrapTable('removeAll');
+
+        data.SubnetGroups.forEach(subnetGroup => {
+            $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').bootstrapTable('append', [{
+                f2id: subnetGroup.SubnetGroupName,
+                f2type: 'dynamodb.acceleratorsubnetgroup',
+                f2data: subnetGroup,
+                f2region: region,
+                name: subnetGroup.SubnetGroupName
+            }]);
+        });
+
+        unblockUI('#section-database-dynamodb-acceleratorsubnetgroups-datatable');
     });
 }
 
@@ -5850,25 +7033,388 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Stream Consumers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Firehose Delivery Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics Application Outputs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics Application Reference Data Sources': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics V2 Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics V2 Application Outputs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics V2 Application Reference Data Sources': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Analytics V2 Application CloudWatch Logging Options': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 function updateDatatableAnalyticsKinesis() {
-    blockUI('#section-analytics-kinesis-tables-datatable');
+    blockUI('#section-analytics-kinesis-streams-datatable');
+    blockUI('#section-analytics-kinesis-streamconsumers-datatable');
+    blockUI('#section-analytics-kinesis-firehosedeliverystreams-datatable');
+    blockUI('#section-analytics-kinesis-analyticsapplications-datatable');
+    blockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
+    blockUI('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable');
+    blockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
+    blockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
+    blockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
+    blockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
 
     sdkcall("Kinesis", "listStreams", {
         // no params
     }, true).then((data) => {
-        $('#section-analytics-kinesis-tables-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-streams-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-streamconsumers-datatable').bootstrapTable('removeAll');
 
         data.StreamNames.forEach(streamName => {
             sdkcall("Kinesis", "describeStream", {
                 StreamName: streamName
             }, true).then((data) => {
-                $('#section-analytics-kinesis-tables-datatable').bootstrapTable('append', [{
+                sdkcall("Kinesis", "listStreamConsumers", {
+                    StreamARN: data.StreamDescription.StreamARN
+                }, true).then((data) => {
+                    data.Consumers.forEach(consumer => {
+                        sdkcall("Kinesis", "describeStreamConsumer", {
+                            StreamARN: data.StreamDescription.StreamARN,
+                            ConsumerARN: consumer.ConsumerARN,
+                            ConsumerName: consumer.ConsumerName
+                        }, true).then((data) => {
+                            $('#section-analytics-kinesis-streamconsumers-datatable').bootstrapTable('append', [{
+                                f2id: data.ConsumerDescription.ConsumerARN,
+                                f2type: 'kinesis.streamconsumer',
+                                f2data: data.ConsumerDescription,
+                                f2region: region,
+                                name: data.ConsumerDescription.ConsumerName
+                            }]);
+                        });
+                    });
+                });
+
+                $('#section-analytics-kinesis-streams-datatable').bootstrapTable('append', [{
                     f2id: data.StreamDescription.StreamARN,
-                    f2type: 'kinesis.table',
+                    f2type: 'kinesis.stream',
                     f2data: data.StreamDescription,
                     f2region: region,
                     name: data.StreamDescription.StreamName
@@ -5876,7 +7422,151 @@ function updateDatatableAnalyticsKinesis() {
             });
         });
 
-        unblockUI('#section-analytics-kinesis-tables-datatable');
+        unblockUI('#section-analytics-kinesis-streams-datatable');
+        unblockUI('#section-analytics-kinesis-streamconsumers-datatable');
+    });
+
+    sdkcall("Firehose", "listDeliveryStreams", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-kinesis-firehosedeliverystreams-datatable').bootstrapTable('removeAll');
+
+        data.DeliveryStreamNames.forEach(deliveryStreamName => {
+            sdkcall("Firehose", "describeDeliveryStream", {
+                DeliveryStreamName: deliveryStreamName
+            }, true).then((data) => {
+                $('#section-analytics-kinesis-firehosedeliverystreams-datatable').bootstrapTable('append', [{
+                    f2id: data.DeliveryStreamDescription.DeliveryStreamARN,
+                    f2type: 'kinesis.firehosedeliverystream',
+                    f2data: data.DeliveryStreamDescription,
+                    f2region: region,
+                    name: data.DeliveryStreamDescription.DeliveryStreamName
+                }]);
+            });
+        });
+
+        unblockUI('#section-analytics-kinesis-firehosedeliverystreams-datatable');
+    });
+
+    sdkcall("KinesisAnalytics", "listApplications", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-kinesis-analyticsapplications-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').bootstrapTable('removeAll');
+
+        data.ApplicationSummaries.forEach(applicationSummary => {
+            sdkcall("KinesisAnalytics", "describeApplication", {
+                ApplicationName: applicationSummary.ApplicationName
+            }, true).then((data) => {
+                if (data.ApplicationDetail.OutputDescriptions) {
+                    data.ApplicationDetail.OutputDescriptions.forEach(output => {
+                        output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
+                        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').bootstrapTable('append', [{
+                            f2id: output.OutputId,
+                            f2type: 'kinesis.analyticsapplicationoutput',
+                            f2data: output,
+                            f2region: region,
+                            name: output.Name
+                        }]);
+                    });
+                }
+
+                if (data.ApplicationDetail.ReferenceDataSourceDescriptions) {
+                    data.ApplicationDetail.ReferenceDataSourceDescriptions.forEach(referenceDataSource => {
+                        output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
+                        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').bootstrapTable('append', [{
+                            f2id: referenceDataSource.ReferenceId,
+                            f2type: 'kinesis.analyticsapplicationreferencedatasource',
+                            f2data: referenceDataSource,
+                            f2region: region,
+                            tablename: referenceDataSource.TableName
+                        }]);
+                    });
+                }
+
+                $('#section-analytics-kinesis-analyticsapplications-datatable').bootstrapTable('append', [{
+                    f2id: data.ApplicationDetail.ApplicationARN,
+                    f2type: 'kinesis.analyticsapplication',
+                    f2data: data.ApplicationDetail,
+                    f2region: region,
+                    name: data.ApplicationDetail.ApplicationName
+                }]);
+            });
+        });
+
+        unblockUI('#section-analytics-kinesis-analyticsapplications-datatable');
+        unblockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
+        unblockUI('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable');
+    });
+
+    sdkcall("KinesisAnalyticsV2", "listApplications", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-kinesis-analyticsv2applications-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').bootstrapTable('removeAll');
+
+        data.ApplicationSummaries.forEach(applicationSummary => {
+            sdkcall("KinesisAnalyticsV2", "describeApplication", {
+                ApplicationName: applicationSummary.ApplicationName
+            }, true).then((data) => {
+                if (data.ApplicationDetail.ApplicationConfigurationDescription && data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription) {
+                    if (data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.OutputDescriptions) {
+                        data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.OutputDescriptions.forEach(output => {
+                            output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
+                            $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').bootstrapTable('append', [{
+                                f2id: output.OutputId,
+                                f2type: 'kinesis.analyticsv2applicationoutput',
+                                f2data: output,
+                                f2region: region,
+                                name: output.Name
+                            }]);
+                        });
+                    }
+
+                    if (data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.ReferenceDataSourceDescriptions) {
+                        data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.ReferenceDataSourceDescriptions.forEach(referenceDataSource => {
+                            output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
+                            $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').bootstrapTable('append', [{
+                                f2id: referenceDataSource.ReferenceId,
+                                f2type: 'kinesis.analyticsv2applicationreferencedatasource',
+                                f2data: referenceDataSource,
+                                f2region: region,
+                                tablename: referenceDataSource.TableName
+                            }]);
+                        });
+                    }
+                }
+
+                if (data.ApplicationDetail.CloudWatchLoggingOptionDescriptions) {
+                    data.ApplicationDetail.CloudWatchLoggingOptionDescriptions.forEach(cloudWatchLoggingOption => {
+                        cloudWatchLoggingOption['ApplicationName'] = data.ApplicationDetail.ApplicationName;
+                        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').bootstrapTable('append', [{
+                            f2id: cloudWatchLoggingOption.CloudWatchLoggingOptionId,
+                            f2type: 'kinesis.analyticsv2applicationcloudwatchloggingoption',
+                            f2data: cloudWatchLoggingOption,
+                            f2region: region,
+                            id: cloudWatchLoggingOption.CloudWatchLoggingOptionId
+                        }]);
+                    });
+                }
+
+                $('#section-analytics-kinesis-analyticsv2applications-datatable').bootstrapTable('append', [{
+                    f2id: data.ApplicationDetail.ApplicationARN,
+                    f2type: 'kinesis.analyticsv2application',
+                    f2data: data.ApplicationDetail,
+                    f2region: region,
+                    name: data.ApplicationDetail.ApplicationName
+                }]);
+            });
+        });
+
+        unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
+        unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
+        unblockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
+        unblockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
     });
 }
 
