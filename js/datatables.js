@@ -1739,7 +1739,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeTransitGatewayRouteTables", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('removeAll');
@@ -1862,7 +1862,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeVpcEndpointServices", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
@@ -2163,7 +2163,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
     await sdkcall("Route53", "listHostedZones", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.HostedZones.map(hostedZone => {
@@ -2220,7 +2220,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
     await sdkcall("Route53Resolver", "listResolverEndpoints", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ResolverEndpoints.map(resolverEndpoint => {
@@ -2242,7 +2242,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
     await sdkcall("Route53Resolver", "listResolverRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ResolverRules.map(resolverRule => {
@@ -2264,7 +2264,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
     await sdkcall("Route53Resolver", "listResolverRuleAssociations", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ResolverRuleAssociations.map(resolverRuleAssociation => {
@@ -3260,7 +3260,7 @@ async function updateDatatableComputeEC2() {
 
     await sdkcall("ELBv2", "describeListeners", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('removeAll');
         $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('removeAll');
         $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('removeAll');
@@ -3349,7 +3349,7 @@ async function updateDatatableComputeEC2() {
 
     await sdkcall("EC2", "describeLaunchTemplates", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('removeAll');
 
         if (data.LaunchTemplates) {
@@ -3888,7 +3888,7 @@ async function updateDatatableComputeLambda() {
 
     await sdkcall("Lambda", "listFunctions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-versions-datatable').bootstrapTable('removeAll');
@@ -3968,14 +3968,14 @@ async function updateDatatableComputeLambda() {
 
     await sdkcall("Lambda", "listLayers", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-lambda-layerversions-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Layers.map(layer => {
             return sdkcall("Lambda", "listLayerVersions", {
                 LayerName: layer.LayerName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await Promise.all(data.LayerVersions.map(layerVersion => {
                     return Promise.all([
                         sdkcall("Lambda", "getLayerVersion", {
@@ -4019,7 +4019,7 @@ async function updateDatatableComputeLambda() {
 
     await sdkcall("Lambda", "listEventSourceMappings", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-lambda-eventsourcemappings-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.EventSourceMappings.map(eventSourceMapping => {
@@ -4133,7 +4133,7 @@ async function updateDatatableStorageS3() {
 
     await sdkcall("S3", "listBuckets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
         $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
 
@@ -5081,7 +5081,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
 
     await sdkcall("OpsWorks", "describeStacks", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Stacks.map(stack => {
@@ -5539,7 +5539,7 @@ async function updateDatatableApplicationIntegrationSNS() {
 
     await sdkcall("SNS", "listTopics", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('removeAll');
 
@@ -5713,8 +5713,6 @@ async function updateDatatableApplicationIntegrationSQS() {
                     f2region: region,
                     policy: data.Attributes.Policy
                 }]);
-
-                console.warn("TEST2");
             });
         }));
     });
@@ -5890,7 +5888,7 @@ async function updateDatatableComputeElasticBeanstalk() {
 
     await sdkcall("ElasticBeanstalk", "describeApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Applications.map(application => {
@@ -6336,7 +6334,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
     await sdkcall("CloudWatch", "listDashboards", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.DashboardEntries.forEach(dashboard => {
@@ -6358,13 +6356,13 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
     await sdkcall("CloudWatchEvents", "listRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudwatch-rules-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("CloudWatchEvents", "describeRule", {
                 Name: rule.Name
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await sdkcall("CloudWatchEvents", "listTargetsByRule", {
                     Rule: data.Name
                 }, true).then((targets) => {
@@ -6423,7 +6421,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
     await sdkcall("CloudWatchLogs", "describeLogGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudwatch-loggroups-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-cloudwatch-logstreams-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').bootstrapTable('removeAll');
@@ -6912,7 +6910,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
     await sdkcall("DynamoDB", "listTables", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-database-dynamodb-tables-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.TableNames.map(tableName => {
@@ -6952,7 +6950,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
     await sdkcall("DAX", "describeParameterGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-database-dynamodb-acceleratorparametergroups-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ParameterGroups.map(parameterGroup => {
@@ -7387,14 +7385,14 @@ async function updateDatatableAnalyticsKinesis() {
 
     await sdkcall("Kinesis", "listStreams", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-kinesis-streams-datatable').bootstrapTable('removeAll');
         $('#section-analytics-kinesis-streamconsumers-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.StreamNames.map(streamName => {
             return sdkcall("Kinesis", "describeStream", {
                 StreamName: streamName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 $('#section-analytics-kinesis-streams-datatable').bootstrapTable('append', [{
                     f2id: data.StreamDescription.StreamARN,
                     f2type: 'kinesis.stream',
@@ -7405,7 +7403,7 @@ async function updateDatatableAnalyticsKinesis() {
 
                 await sdkcall("Kinesis", "listStreamConsumers", {
                     StreamARN: data.StreamDescription.StreamARN
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Consumers.map(consumer => {
                         return sdkcall("Kinesis", "describeStreamConsumer", {
                             StreamARN: data.StreamDescription.StreamARN,
@@ -7431,7 +7429,7 @@ async function updateDatatableAnalyticsKinesis() {
 
     await sdkcall("Firehose", "listDeliveryStreams", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-kinesis-firehosedeliverystreams-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.DeliveryStreamNames.map(deliveryStreamName => {
@@ -7453,7 +7451,7 @@ async function updateDatatableAnalyticsKinesis() {
 
     await sdkcall("KinesisAnalytics", "listApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-kinesis-analyticsapplications-datatable').bootstrapTable('removeAll');
         $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').bootstrapTable('removeAll');
         $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').bootstrapTable('removeAll');
@@ -7505,7 +7503,7 @@ async function updateDatatableAnalyticsKinesis() {
 
     await sdkcall("KinesisAnalyticsV2", "listApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-kinesis-analyticsv2applications-datatable').bootstrapTable('removeAll');
         $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').bootstrapTable('removeAll');
         $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').bootstrapTable('removeAll');
@@ -7626,13 +7624,13 @@ async function updateDatatableComputeECR() {
 
     await sdkcall("ECR", "describeRepositories", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.repositories.map(repository => {
             return sdkcall("ECR", "getLifecyclePolicy", {
                 repositoryName: repository.repositoryName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 repository['lifecyclePolicyText'] = data.lifecyclePolicyText;
                 repository['registryId'] = data.registryId;
                 await sdkcall("ECR", "getRepositoryPolicy", {
@@ -7707,7 +7705,7 @@ async function updateDatatableComputeEKS() {
 
     await sdkcall("EKS", "listClusters", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-eks-clusters-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(cluster => {
@@ -7857,7 +7855,7 @@ async function updateDatatableComputeECS() {
 
     await sdkcall("ECS", "listClusters", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
@@ -7902,7 +7900,7 @@ async function updateDatatableComputeECS() {
 
     await sdkcall("ECS", "listTaskDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.taskDefinitionArns.map(taskDefinitionArn => {
@@ -8876,7 +8874,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
 
     await sdkcall("APIGateway", "getDomainNames", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         await Promise.all(data.items.map(domainName => {
             $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('append', [{
                 f2id: domainName.domainName,
@@ -8957,7 +8955,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
 
     await sdkcall("APIGateway", "getUsagePlans", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         await Promise.all(data.items.map(usagePlan => {
             $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').bootstrapTable('append', [{
                 f2id: usagePlan.id,
@@ -8988,7 +8986,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
 
     await sdkcall("APIGateway", "getRestApis", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         await Promise.all(data.items.map(api => {
             $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('append', [{
                 f2id: api.id,
@@ -9106,7 +9104,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 sdkcall("APIGateway", "getResources", {
                     restApiId: api.id
                 }, true).then((data) => {
-                    data.items.forEach(resource => {
+                    data.items.forEach(async (resource) => {
                         await Promise.all(Object.keys(resource.resourceMethods).map(resourceMethod => {
                             return sdkcall("APIGateway", "getMethod", {
                                 httpMethod: resourceMethod,
@@ -9179,7 +9177,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
     // V2
     await sdkcall("ApiGatewayV2", "getApis", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         await Promise.all(data.Items.map(api => {
             $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('append', [{
                 f2id: api.ApiId,
@@ -9256,7 +9254,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 }),
                 sdkcall("ApiGatewayV2", "getRoutes", {
                     ApiId: api.ApiId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Items.map(route => {
                         route['ApiId'] = api.ApiId;
                         $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
@@ -9290,7 +9288,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 }),
                 sdkcall("ApiGatewayV2", "getIntegrations", {
                     ApiId: api.ApiId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Items.map(integration => {
                         integration['ApiId'] = api.ApiId;
                         $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
@@ -9607,7 +9605,7 @@ async function updateDatatableStorageEFS() {
 
     await sdkcall("EFS", "describeFileSystems", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-storage-efs-filesystems-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.FileSystems.map(fileSystem => {
@@ -9621,7 +9619,7 @@ async function updateDatatableStorageEFS() {
 
             return sdkcall("EFS", "describeMountTargets", {
                 FileSystemId: fileSystem.FileSystemId
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 $('#section-storage-efs-mounttargets-datatable').bootstrapTable('removeAll');
         
                 await Promise.all(data.MountTargets.map(mountTarget => {
@@ -9704,7 +9702,7 @@ async function updateDatatableDeveloperToolsCloud9() {
 
     await sdkcall("Cloud9", "listEnvironments", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-cloud9-environments-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.environmentIds.map(environmentId => {
@@ -10465,7 +10463,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
 
     await sdkcall("CodeBuild", "listProjects", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-codebuild-projects-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.projects.map(project => {
@@ -10618,7 +10616,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
 
     await sdkcall("CodeDeploy", "listApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.applications.map(application => {
@@ -10663,7 +10661,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
 
     await sdkcall("CodeDeploy", "listDeploymentConfigs", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.deploymentConfigsList.map(deploymentConfiguration => {
@@ -11118,7 +11116,7 @@ async function updateDatatableCustomerEngagementSES() {
 
     await sdkcall("SES", "listConfigurationSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
         
@@ -11171,7 +11169,7 @@ async function updateDatatableCustomerEngagementSES() {
 
     await sdkcall("SES", "listReceiptRuleSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.RuleSets.map(ruleSet => {
@@ -11208,7 +11206,7 @@ async function updateDatatableCustomerEngagementSES() {
 
     await sdkcall("SES", "listTemplates", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.TemplatesMetadata.map(template => {
@@ -11283,17 +11281,17 @@ async function updateDatatableAWSCostManagementBudgets() {
 
     await sdkcall("STS", "getCallerIdentity", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         await sdkcall("Budgets", "describeBudgets", {
             AccountId: data.Account
-        }, true).then((data) => {
+        }, true).then(async (data) => {
             $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
             
             await Promise.all(data.Budgets.map(budget => {
                 return sdkcall("Budgets", "describeNotificationsForBudget", {
                     AccountId: data.Account,
                     BudgetName: budget.BudgetName
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Notifications.map(notification => {
                         return sdkcall("Budgets", "describeNotificationsForBudget", {
                             AccountId: data.Account,
@@ -11609,7 +11607,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     await sdkcall("IAM", "listUsers", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Users.map(user => {
@@ -11639,11 +11637,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }),
                 sdkcall("IAM", "listAttachedUserPolicies", {
                     UserName: user.UserName
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.AttachedPolicies.map(policy => {
                         return sdkcall("IAM", "getPolicy", {
                             PolicyArn: policy.PolicyArn
-                        }, true).then((policydata) => {
+                        }, true).then(async (policydata) => {
                             await sdkcall("IAM", "getPolicyVersion", {
                                 PolicyArn: policy.PolicyArn,
                                 VersionId: policydata.Policy.DefaultVersionId
@@ -11675,7 +11673,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     await sdkcall("IAM", "listGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Groups.map(group => {
@@ -11689,11 +11687,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
             return sdkcall("IAM", "listAttachedGroupPolicies", {
                 GroupName: group.GroupName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await Promise.all(data.AttachedPolicies.map(policy => {
                     return sdkcall("IAM", "getPolicy", {
                         PolicyArn: policy.PolicyArn
-                    }, true).then((policydata) => {
+                    }, true).then(async (policydata) => {
                         await sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
                             VersionId: policydata.DefaultVersionId
@@ -11723,7 +11721,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     await sdkcall("IAM", "listRoles", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Roles.map(role => {
@@ -11737,11 +11735,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
             return sdkcall("IAM", "listAttachedRolePolicies", {
                 RoleName: role.RoleName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await Promise.all(data.AttachedPolicies.map(policy => {
                     return sdkcall("IAM", "getPolicy", {
                         PolicyArn: policy.PolicyArn
-                    }, true).then((policydata) => {
+                    }, true).then(async (policydata) => {
                         await sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
                             VersionId: policydata.DefaultVersionId
@@ -11771,13 +11769,13 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     await sdkcall("IAM", "listPolicies", {
         Scope: 'Local'
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Policies.map(managedPolicy => {
             return sdkcall("IAM", "getPolicy", {
                 PolicyArn: policy.PolicyArn
-            }, true).then((policydata) => {
+            }, true).then(async (policydata) => {
                 await sdkcall("IAM", "getPolicyVersion", {
                     PolicyArn: policy.PolicyArn,
                     VersionId: policydata.DefaultVersionId
@@ -12402,7 +12400,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listWebACLs", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.WebACLs.map(webAcl => {
@@ -12424,7 +12422,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Rules.forEach(rule => {
@@ -12446,7 +12444,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listXssMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
@@ -12468,7 +12466,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listIpSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.IPSets.map(ipSet => {
@@ -12490,7 +12488,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listSizeConstraintSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
@@ -12512,7 +12510,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listSqlInjectionMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
@@ -12534,7 +12532,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAF", "listByteMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
@@ -12558,7 +12556,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listWebACLs", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.WebACLs.forEach(webAcl => {
@@ -12580,7 +12578,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Rules.map(rule => {
@@ -12602,7 +12600,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listXssMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
@@ -12624,7 +12622,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listIpSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.IPSets.map(ipSet => {
@@ -12646,7 +12644,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listSizeConstraintSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
@@ -12668,7 +12666,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listSqlInjectionMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
@@ -12690,7 +12688,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFRegional", "listByteMatchSets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
@@ -12765,7 +12763,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
 
     await sdkcall("RAM", "getResourceShares", {
         resourceOwner: 'SELF'
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.resourceShares.map(resourceShare => {
@@ -12775,7 +12773,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
             return sdkcall("RAM", "listPrincipals", {
                 resourceOwner: 'SELF',
                 resourceShareArns: [resourceShare.resourceShareArn]
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 data.principals.forEach(principal => {
                     resourceShare['principals'].push(principal.id);
                 });
@@ -12857,7 +12855,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
 
     await sdkcall("ACM", "listCertificates", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.CertificateSummaryList.map(certificate => {
@@ -12971,17 +12969,17 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
 
     await sdkcall("KMS", "listKeys", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Keys.map(key => {
             return sdkcall("KMS", "describeKey", {
                 KeyId: key.KeyId
-            }, true).then((keydata) => {
+            }, true).then(async (keydata) => {
                 await sdkcall("KMS", "getKeyPolicy", {
                     KeyId: key.KeyId,
                     PolicyName: "default"
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     keydata['Policy'] = data.Policy;
                     await sdkcall("KMS", "getKeyRotationStatus", {
                         KeyId: key.KeyId
@@ -13115,7 +13113,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
 
     await sdkcall("StepFunctions", "listStateMachines", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.stateMachines.map(stateMachine => {
@@ -13137,7 +13135,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
 
     await sdkcall("StepFunctions", "listActivities", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.activities.forEach(activity => {
@@ -13290,7 +13288,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
 
     await sdkcall("MQ", "listBrokers", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-amazonmq-configurationassociations-datatable').bootstrapTable('removeAll');
         
@@ -13327,13 +13325,13 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
 
     await sdkcall("MQ", "listConfigurations", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Configurations.map(configuration => {
             return sdkcall("MQ", "describeConfiguration", {
                 ConfigurationId: configuration.Id
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await sdkcall("MQ", "describeConfigurationRevision", {
                     ConfigurationId: configuration.Id,
                     ConfigurationRevision: configuration.LatestRevision.Revision
@@ -13487,7 +13485,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
 
     await sdkcall("Inspector", "listAssessmentTargets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').bootstrapTable('removeAll');
@@ -13496,7 +13494,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
             return Promise.all([
                 sdkcall("Inspector", "describeAssessmentTargets", {
                     assessmentTargetArns: [assessmentTargetArn]
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').bootstrapTable('append', [{
                         f2id: data.assessmentTargets[0].arn,
                         f2type: 'inspector.assessmenttarget',
@@ -13519,7 +13517,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
                 }),
                 sdkcall("Inspector", "listAssessmentTemplates", {
                     assessmentTargetArns: [assessmentTargetArn]
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.assessmentTemplateArns.map(assessmentTemplateArn => {
                         return sdkcall("Inspector", "describeAssessmentTemplates", {
                             assessmentTemplateArns: [assessmentTemplateArn]
@@ -13675,7 +13673,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
 
     await sdkcall("CodePipeline", "listPipelines", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-codepipeline-pipelines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.pipelines.map(pipeline => {
@@ -13983,7 +13981,7 @@ async function updateDatatableRoboticsRoboMaker() {
 
     await sdkcall("RoboMaker", "listFleets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-robotics-robomaker-fleets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.fleetDetails.map(fleet => {
@@ -14005,7 +14003,7 @@ async function updateDatatableRoboticsRoboMaker() {
 
     await sdkcall("RoboMaker", "listRobots", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-robotics-robomaker-robots-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.robots.map(robot => {
@@ -14027,7 +14025,7 @@ async function updateDatatableRoboticsRoboMaker() {
 
     await sdkcall("RoboMaker", "listRobotApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.robotApplicationSummaries.map(robotApplication => {
@@ -14049,7 +14047,7 @@ async function updateDatatableRoboticsRoboMaker() {
 
     await sdkcall("RoboMaker", "listSimulationApplications", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.simulationApplicationSummaries.map(simulationApplication => {
@@ -14319,7 +14317,7 @@ async function updateDatatableMobileAppSync() {
 
     await sdkcall("AppSync", "listGraphqlApis", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('removeAll');
@@ -14331,7 +14329,7 @@ async function updateDatatableMobileAppSync() {
                 sdkcall("AppSync", "listTypes", {
                     apiId: graphqlApi.apiId,
                     format: 'JSON'
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.types.map(type => {
                         return sdkcall("AppSync", "listResolvers", {
                             apiId: graphqlApi.apiId,
@@ -14352,7 +14350,7 @@ async function updateDatatableMobileAppSync() {
                 }),
                 sdkcall("AppSync", "listDataSources", {
                     apiId: graphqlApi.apiId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.dataSources.map(dataSource => {
                         return sdkcall("AppSync", "getDataSource", {
                             apiId: graphqlApi.apiId,
@@ -14371,7 +14369,7 @@ async function updateDatatableMobileAppSync() {
                 }),
                 sdkcall("AppSync", "listFunctions", {
                     apiId: graphqlApi.apiId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.functions.map(appSyncFunction => {
                         return sdkcall("AppSync", "getFunction", {
                             apiId: graphqlApi.apiId,
@@ -14559,7 +14557,7 @@ async function updateDatatableAnalyticsAthena() {
 
     await sdkcall("Athena", "listNamedQueries", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-athena-namedqueries-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.NamedQueryIds.map(namedQuery => {
@@ -14634,7 +14632,7 @@ async function updateDatatableAnalyticsElasticsearch() {
 
     await sdkcall("ES", "listDomainNames", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-elasticsearch-domains-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.DomainNames.map(domainName => {
@@ -14904,7 +14902,7 @@ async function updateDatatableInternetofThingsCore() {
 
     await sdkcall("Iot", "listThings", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-core-things-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('removeAll');
         
@@ -14946,7 +14944,7 @@ async function updateDatatableInternetofThingsCore() {
 
     await sdkcall("Iot", "listPolicies", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-core-policies-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-core-policyprincipalattachments-datatable').bootstrapTable('removeAll');
         
@@ -14988,7 +14986,7 @@ async function updateDatatableInternetofThingsCore() {
 
     await sdkcall("Iot", "listCertificates", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-core-certificates-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.certificates.map(certificate => {
@@ -15010,7 +15008,7 @@ async function updateDatatableInternetofThingsCore() {
 
     await sdkcall("Iot", "listTopicRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-core-topicrules-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.rules.map(rule => {
@@ -15163,7 +15161,7 @@ async function updateDatatableInternetofThings1Click() {
 
     await sdkcall("IoT1ClickProjects", "listProjects", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-1click-projects-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-1click-placements-datatable').bootstrapTable('removeAll');
         
@@ -15208,7 +15206,7 @@ async function updateDatatableInternetofThings1Click() {
 
     await sdkcall("IoT1ClickDevicesService", "listDevices", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-1click-devices-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Devices.map(device => {
@@ -15653,7 +15651,7 @@ async function updateDatatableAnalyticsDataPipeline() {
 
     await sdkcall("DataPipeline", "listPipelines", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-datapipeline-pipelines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.pipelineIdList.map(pipeline => {
@@ -16072,13 +16070,13 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
 
     await sdkcall("SSM", "listDocuments", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.DocumentIdentifiers.map(document => {
             return sdkcall("SSM", "getDocument", {
                 Name: document.Name
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await sdkcall("SSM", "getDocument", {
                     Name: document.Name,
                     DocumentFormat: 'JSON'
@@ -16100,7 +16098,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
 
     await sdkcall("SSM", "describeParameters", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-parameters-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Parameters.map(parameter => {
@@ -16122,7 +16120,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
 
     await sdkcall("SSM", "describePatchBaselines", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.BaselineIdentities.map(baseline => {
@@ -16144,7 +16142,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
 
     await sdkcall("SSM", "listAssociations", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Associations.forEach(association => {
@@ -16169,7 +16167,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
 
     await sdkcall("SSM", "describeMaintenanceWindows", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').bootstrapTable('removeAll');
@@ -16178,7 +16176,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             return Promise.all([
                 sdkcall("SSM", "describeMaintenanceWindowTasks", {
                     WindowId: window.WindowId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Tasks.map(task => {
                         return sdkcall("SSM", "getMaintenanceWindowTask", {
                             WindowId: window.WindowId,
@@ -16728,7 +16726,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
     await sdkcall("ServiceCatalog", "listPortfolios", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
         
@@ -16770,7 +16768,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
     await sdkcall("ServiceCatalog", "searchProductsAsAdmin", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ProductViewDetails.map(productView => {
@@ -16812,7 +16810,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
     await sdkcall("ServiceCatalog", "searchProvisionedProducts", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('removeAll');
@@ -16823,7 +16821,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
             return Promise.all([
                 sdkcall("ServiceCatalog", "listPortfoliosForProduct", {
                     ProductId: provisionedProduct.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.PortfolioDetails.map(portfolio => {
                         $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').bootstrapTable('append', [{
                             f2id: portfolio.ARN,
@@ -16838,7 +16836,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
                         return sdkcall("ServiceCatalog", "listConstraintsForPortfolio", {
                             PortfolioId: portfolio.Id
-                        }, true).then((data) => {
+                        }, true).then(async (data) => {
                             await Promise.all(data.ConstraintDetails.map(constraint => {
                                 return sdkcall("ServiceCatalog", "describeConstraint", {
                                     Id: constraint.ConstraintId
@@ -16903,7 +16901,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
     await sdkcall("ServiceCatalog", "listTagOptions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-tagoptions-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable').bootstrapTable('removeAll');
         
@@ -17115,7 +17113,7 @@ async function updateDatatableInternetofThingsAnalytics() {
 
     await sdkcall("IoTAnalytics", "listChannels", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-analytics-channels-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.channelSummaries.map(channel => {
@@ -17137,7 +17135,7 @@ async function updateDatatableInternetofThingsAnalytics() {
 
     await sdkcall("IoTAnalytics", "listPipelines", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-analytics-pipelines-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.pipelineSummaries.map(pipeline => {
@@ -17159,7 +17157,7 @@ async function updateDatatableInternetofThingsAnalytics() {
 
     await sdkcall("IoTAnalytics", "listDatastores", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-analytics-datastores-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.datastoreSummaries.map(pipeline => {
@@ -17181,7 +17179,7 @@ async function updateDatatableInternetofThingsAnalytics() {
 
     await sdkcall("IoTAnalytics", "listDatasets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-analytics-datasets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.datasetSummaries.map(dataset => {
@@ -17412,7 +17410,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
 
     await sdkcall("ServiceDiscovery", "listNamespaces", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').bootstrapTable('removeAll');
@@ -17456,7 +17454,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
 
     await sdkcall("ServiceDiscovery", "listServices", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudmap-services-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Services.map(service => {
@@ -17712,7 +17710,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listModels", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-models-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Models.map(model => {
@@ -17734,7 +17732,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listEndpoints", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-endpoints-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Endpoints.map(endpoint => {
@@ -17756,7 +17754,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listEndpointConfigs", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-endpointconfigs-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.EndpointConfigs.map(endpointConfig => {
@@ -17778,7 +17776,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listNotebookInstances", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-notebookinstances-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.NotebookInstances.map(notebookInstance => {
@@ -17800,7 +17798,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listNotebookInstanceLifecycleConfigs", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.NotebookInstanceLifecycleConfigs.map(notebookInstanceLifecycleConfig => {
@@ -18031,7 +18029,7 @@ async function updateDatatableAnalyticsEMR() {
 
     await sdkcall("EMR", "listClusters", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-emr-clusters-datatable').bootstrapTable('removeAll');
         $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('removeAll');
         $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('removeAll');
@@ -18103,7 +18101,7 @@ async function updateDatatableAnalyticsEMR() {
 
     await sdkcall("EMR", "listSecurityConfigurations", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-emr-securityconfigurations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SecurityConfigurations.map(securityConfiguration => {
@@ -18295,7 +18293,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
 
     await sdkcall("SecretsManager", "listSecrets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
@@ -18315,7 +18313,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                 }),
                 sdkcall("SecretsManager", "describeSecret", {
                     SecretId: secret.ARN
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await sdkcall("SecretsManager", "getSecretValue", {
                         SecretId: secret.ARN
                     }, true).then((secretvalue) => {
@@ -18715,7 +18713,7 @@ async function updateDatatableAnalyticsGlue() {
 
     await sdkcall("Glue", "getDatabases", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-analytics-glue-databases-datatable').bootstrapTable('removeAll');
         $('#section-analytics-glue-tables-datatable').bootstrapTable('removeAll');
         $('#section-analytics-glue-partitions-datatable').bootstrapTable('removeAll');
@@ -18731,7 +18729,7 @@ async function updateDatatableAnalyticsGlue() {
 
             return sdkcall("Glue", "getTables", {
                 DatabaseName: database.Name
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 await Promise.all(data.TableList.map(table => {
                     $('#section-analytics-glue-tables-datatable').bootstrapTable('append', [{
                         f2id: table.Name,
@@ -19171,7 +19169,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
 
     await sdkcall("CognitoIdentity", "listIdentityPools", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('removeAll');
         
@@ -19208,7 +19206,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
 
     await sdkcall("CognitoIdentityServiceProvider", "listUserPools", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('removeAll');
@@ -19219,7 +19217,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
             return Promise.all([
                 sdkcall("CognitoIdentityServiceProvider", "listUserPoolClients", {
                     UserPoolId: userPool.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.UserPoolClients.map(userPoolClient => {
                         return sdkcall("CognitoIdentityServiceProvider", "describeUserPoolClient", {
                             UserPoolId: userPool.Id,
@@ -19237,7 +19235,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 }),
                 sdkcall("CognitoIdentityServiceProvider", "listUsers", {
                     UserPoolId: userPool.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Users.map(user => {
                         return sdkcall("CognitoIdentityServiceProvider", "adminListGroupsForUser", {
                             UserPoolId: userPool.Id,
@@ -19277,7 +19275,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 }),
                 sdkcall("CognitoIdentityServiceProvider", "listGroups", {
                     UserPoolId: userPool.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Groups.map(group => {
                         return sdkcall("CognitoIdentityServiceProvider", "getGroup", {
                             UserPoolId: userPool.Id,
@@ -19564,7 +19562,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
 
     await sdkcall("GuardDuty", "listDetectors", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-guardduty-members-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-guardduty-filters-datatable').bootstrapTable('removeAll');
@@ -19589,7 +19587,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                 }),
                 sdkcall("GuardDuty", "listFilters", {
                     DetectorId: detectorId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.FilterNames.map(filterName => {
                         return sdkcall("GuardDuty", "getFilter", {
                             DetectorId: detectorId,
@@ -19608,7 +19606,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                 }),
                 sdkcall("GuardDuty", "listIPSets", {
                     DetectorId: detectorId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.IpSetIds.map(ipSetId => {
                         return sdkcall("GuardDuty", "getIPSet", {
                             DetectorId: detectorId,
@@ -19627,7 +19625,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                 }),
                 sdkcall("GuardDuty", "listThreatIntelSets", {
                     DetectorId: detectorId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.ThreatIntelSetIds.map(threatIntelSetId => {
                         return sdkcall("GuardDuty", "getThreatIntelSet", {
                             DetectorId: detectorId,
@@ -19960,7 +19958,7 @@ async function updateDatatableEndUserComputingAppStream() {
 
     await sdkcall("AppStream", "describeFleets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Fleets.map(fleet => {
@@ -21081,7 +21079,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listConnectorDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21126,7 +21124,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listCoreDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21134,7 +21132,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listCoreDefinitionVersions", {
                     CoreDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getCoreDefinitionVersion", {
                             CoreDefinitionId: definition.Id,
@@ -21171,7 +21169,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listDeviceDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21179,7 +21177,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listDeviceDefinitionVersions", {
                     DeviceDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getDeviceDefinitionVersion", {
                             DeviceDefinitionId: definition.Id,
@@ -21216,7 +21214,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listFunctionDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21224,7 +21222,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listFunctionDefinitionVersions", {
                     FunctionDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getFunctionDefinitionVersion", {
                             FunctionDefinitionId: definition.Id,
@@ -21261,15 +21259,15 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.Definitions.map(definition => {
+        await Promise.all(data.Groups.map(group => {
             return Promise.all([
                 sdkcall("Greengrass", "listGroupVersions", {
-                    GroupId: definition.Id
-                }, true).then((data) => {
+                    GroupId: group.Id
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getGroupVersion", {
                             GroupId: definition.Id,
@@ -21306,7 +21304,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listLoggerDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21314,7 +21312,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listLoggerDefinitionVersions", {
                     LoggerDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getLoggerDefinitionVersion", {
                             LoggerDefinitionId: definition.Id,
@@ -21351,7 +21349,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listResourceDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21359,7 +21357,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listResourceDefinitionVersions", {
                     ResourceDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getResourceDefinitionVersion", {
                             ResourceDefinitionId: definition.Id,
@@ -21396,7 +21394,7 @@ async function updateDatatableInternetofThingsGreengrass() {
 
     await sdkcall("Greengrass", "listSubscriptionDefinitions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('removeAll');
         
@@ -21404,7 +21402,7 @@ async function updateDatatableInternetofThingsGreengrass() {
             return Promise.all([
                 sdkcall("Greengrass", "listSubscriptionDefinitionVersions", {
                     SubscriptionDefinitionId: definition.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getSubscriptionDefinitionVersion", {
                             SubscriptionDefinitionId: definition.Id,
