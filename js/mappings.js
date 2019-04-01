@@ -5757,12 +5757,14 @@ function performF2Mappings(objects) {
                     'type': 'AWS::CodeDeploy::DeploymentGroup',
                     'options': reqParams
                 });
-            } else if (obj.type == "codedeploy.deploymentconfig") {
+            } else if (obj.type == "codedeploy.deploymentconfiguration") {
                 reqParams.cfn['DeploymentConfigName'] = obj.data.deploymentConfigName;
-                reqParams.cfn['MinimumHealthyHosts'] = {
-                    'Type': obj.data.minimumHealthyHosts.type,
-                    'Value': obj.data.minimumHealthyHosts.value
-                };
+                if (obj.data.minimumHealthyHosts) {
+                    reqParams.cfn['MinimumHealthyHosts'] = {
+                        'Type': obj.data.minimumHealthyHosts.type,
+                        'Value': obj.data.minimumHealthyHosts.value
+                    };
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('codedeploy', obj.id),
@@ -8341,7 +8343,7 @@ function performF2Mappings(objects) {
                     'options': reqParams
                 });
             } else if (obj.type == "iam.policy") {
-                reqParams.cfn['PolicyDocument'] = obj.data.document;
+                reqParams.cfn['PolicyDocument'] = unescape(obj.data.document);
                 if (obj.data.type == "user") {
                     reqParams.cfn['Users'] = [obj.data.username];
                 } else if (obj.data.type == "group") {
@@ -8405,7 +8407,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "iam.role") {
                 reqParams.cfn['Path'] = obj.data.Path;
                 reqParams.cfn['RoleName'] = obj.data.RoleName;
-                reqParams.cfn['AssumeRolePolicyDocument'] = obj.data.AssumeRolePolicyDocument;
+                reqParams.cfn['AssumeRolePolicyDocument'] = unescape(obj.data.AssumeRolePolicyDocument);
                 reqParams.cfn['MaxSessionDuration'] = obj.data.MaxSessionDuration;
                 if (obj.data.PermissionsBoundary) {
                     reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;

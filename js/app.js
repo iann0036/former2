@@ -643,7 +643,7 @@ $(document).ready(function(){
         postExtensionPing();
     }
 
-    function postExtensionPing() {
+    async function postExtensionPing() {
         /* ========================================================================== */
         // AWS Base Config (must be before Account Scan and after SDK Proxy)
         /* ========================================================================== */
@@ -668,14 +668,32 @@ $(document).ready(function(){
         /* ========================================================================== */
 
         $('#scan-account').on('click', () => {
+            var completeddatatablecalls = 0;
+            var datatablefuncs = [];
+
+            $('#scan-account').attr('disabled', 'disabled');
+
             Object.getOwnPropertyNames(window).forEach(prop => {
                 if (prop.startsWith("updateDatatable")) {
-                    window[prop]();
+                    datatablefuncs.push(prop);
+                }
+            });
+
+            $('#scan-account').html('Scanning... (0/' + datatablefuncs.length + ')');
+
+            datatablefuncs.forEach(async func => {
+                await window[func]();
+                completeddatatablecalls += 1;
+                $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
+                if (completeddatatablecalls == datatablefuncs.length) {
+                    $('#scan-account').removeAttr('disabled');
+                    $('#scan-account').html('Scan Account');
                 }
             });
         });
 
         $('#add-all-resources').on('click', () => {
+            output_objects = [];
             $('.f2datatable').each(function() {
                 addAllTableRowsToTemplate("#" + this.id);
             });
