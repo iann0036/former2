@@ -147,7 +147,14 @@ function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextT
 
         service[method].call(service, params, function(err, data) {
             if (err) {
-                if (alert_on_errors) {
+                if (err.code == "NetworkingError") {
+                    console.log("Skipping " + svc + "." + method + " NetworkingError");
+                } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
+                    console.log("Skipping " + svc + "." + method + " ForbiddenException");
+                } else if (err.code == "AccessDeniedException" && svc == "FSx") {
+                    console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                } else if (alert_on_errors) {
+                    console.log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
                     console.trace(err);
                     $.notify({
                         icon: 'font-icon font-icon-warning',
@@ -1369,7 +1376,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         return Promise.all(data.Vpcs.map(vpc => {
             if (vpc.DhcpOptionsId) {
                 $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('append', [{
-                    f2id: cidrBlock.AssociationId,
+                    f2id: vpc.DhcpOptionsId,
                     f2type: 'ec2.dhcpoptionsassociation',
                     f2data: {
                         'VpcId': vpc.VpcId,
@@ -1866,32 +1873,36 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
-            $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('append', [{
-                f2id: serviceDetail.ServiceName,
-                f2type: 'ec2.vpcendpointservice',
-                f2data: serviceDetail,
-                f2region: region,
-                name: serviceDetail.ServiceName
-            }]);
-
-            return sdkcall("EC2", "describeVpcEndpointServicePermissions", {
-                ServiceId: serviceDetail.ServiceName
-            }, true).then((data) => {
-                $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
-
-                $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('append', [{
-                    f2id: allowedPrincipal.Principal,
-                    f2type: 'ec2.vpcendpointservicepermission',
-                    f2data: {
-                        'ServiceId': serviceDetail.ServiceName,
-                        'AllowedPrincipals': data.AllowedPrincipals
-                    },
+            if (serviceDetail.ServiceName.startsWith("vpce-svc-")) {
+                $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('append', [{
+                    f2id: serviceDetail.ServiceName,
+                    f2type: 'ec2.vpcendpointservice',
+                    f2data: serviceDetail,
                     f2region: region,
-                    principal: allowedPrincipal.Principal
+                    name: serviceDetail.ServiceName
                 }]);
 
-                unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
-            });
+                return sdkcall("EC2", "describeVpcEndpointServicePermissions", {
+                    ServiceId: serviceDetail.ServiceName
+                }, true).then((data) => {
+                    $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
+
+                    $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('append', [{
+                        f2id: allowedPrincipal.Principal,
+                        f2type: 'ec2.vpcendpointservicepermission',
+                        f2data: {
+                            'ServiceId': serviceDetail.ServiceName,
+                            'AllowedPrincipals': data.AllowedPrincipals
+                        },
+                        f2region: region,
+                        principal: allowedPrincipal.Principal
+                    }]);
+
+                    unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
+                });
+            }
+
+            return Promise.resolve();
         }));
 
         unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable');
@@ -3239,9 +3250,12 @@ async function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-v2loadbalancers-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('removeAll');
 
-        data.LoadBalancers.forEach(loadBalancer => {
-            sdkcall("ELBv2", "describeLoadBalancerAttributes", {
+        data.LoadBalancers.forEach(async (loadBalancer) => {
+            await sdkcall("ELBv2", "describeLoadBalancerAttributes", {
                 LoadBalancerArn: loadBalancer.LoadBalancerArn
             }, true).then((data) => {
                 loadBalancer['Attributes'] = data.Attributes;
@@ -3253,59 +3267,54 @@ async function updateDatatableComputeEC2() {
                     name: loadBalancer.LoadBalancerName
                 }]);
             });
+
+            await sdkcall("ELBv2", "describeListeners", {
+                LoadBalancerArn: loadBalancer.LoadBalancerArn
+            }, true).then(async (data) => {
+                await Promise.all(data.Listeners.map(listener => {
+                    $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('append', [{
+                        f2id: listener.ListenerArn,
+                        f2type: 'elbv2.loadbalancerlistener',
+                        f2data: listener,
+                        f2region: region,
+                        arn: listener.ListenerArn
+                    }]);
+        
+                    return Promise.all([
+                        sdkcall("ELBv2", "describeListenerCertificates", {
+                            ListenerArn: listener.ListenerArn
+                        }, true).then((data) => {
+                            data.Certificates.forEach(certificate => {
+                                certificate['ListenerArn'] = listener.ListenerArn;
+                                $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('append', [{
+                                    f2id: certificate.CertificateArn,
+                                    f2type: 'elbv2.loadbalancerlistenercertificate',
+                                    f2data: certificate,
+                                    f2region: region,
+                                    arn: certificate.CertificateArn
+                                }]);
+                            });
+                        }),
+                        sdkcall("ELBv2", "describeRules", {
+                            ListenerArn: listener.ListenerArn
+                        }, true).then((data) => {
+                            data.Rules.forEach(rule => {
+                                rule['ListenerArn'] = listener.ListenerArn;
+                                $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('append', [{
+                                    f2id: rule.RuleArn,
+                                    f2type: 'elbv2.loadbalancerlistenerrule',
+                                    f2data: rule,
+                                    f2region: region,
+                                    arn: rule.RuleArn
+                                }]);
+                            });
+                        })
+                    ]);
+                }));
+            });
         });
 
         unblockUI('#section-compute-ec2-v2loadbalancers-datatable');
-    });
-
-    await sdkcall("ELBv2", "describeListeners", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Listeners.map(listener => {
-            $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('append', [{
-                f2id: listener.ListenerArn,
-                f2type: 'elbv2.loadbalancerlistener',
-                f2data: listener,
-                f2region: region,
-                arn: listener.ListenerArn
-            }]);
-
-            return Promise.all([
-                sdkcall("ELBv2", "describeListenerCertificates", {
-                    ListenerArn: listener.ListenerArn
-                }, true).then((data) => {
-                    data.Certificates.forEach(certificate => {
-                        certificate['ListenerArn'] = listener.ListenerArn;
-                        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('append', [{
-                            f2id: certificate.CertificateArn,
-                            f2type: 'elbv2.loadbalancerlistenercertificate',
-                            f2data: certificate,
-                            f2region: region,
-                            arn: certificate.CertificateArn
-                        }]);
-                    });
-                }),
-                sdkcall("ELBv2", "describeRules", {
-                    ListenerArn: listener.ListenerArn
-                }, true).then((data) => {
-                    data.Rules.forEach(rule => {
-                        rule['ListenerArn'] = listener.ListenerArn;
-                        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('append', [{
-                            f2id: rule.RuleArn,
-                            f2type: 'elbv2.loadbalancerlistenerrule',
-                            f2data: rule,
-                            f2region: region,
-                            arn: rule.RuleArn
-                        }]);
-                    });
-                })
-            ]);
-        }));
-
         unblockUI('#section-compute-ec2-v2loadbalancerlisteners-datatable');
         unblockUI('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable');
         unblockUI('#section-compute-ec2-v2loadbalancerlistenerrules-datatable');
@@ -3555,15 +3564,17 @@ async function updateDatatableComputeEC2() {
     }, true).then((data) => {
         $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('removeAll');
 
-        data.FlowLogs.forEach(flowLog => {
-            $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('append', [{
-                f2id: flowLog.FlowLogId,
-                f2type: 'ec2.flowlog',
-                f2data: flowLog,
-                f2region: region,
-                id: flowLog.FlowLogId
-            }]);
-        });
+        if (data.FlowLogs) {
+            data.FlowLogs.forEach(flowLog => {
+                $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('append', [{
+                    f2id: flowLog.FlowLogId,
+                    f2type: 'ec2.flowlog',
+                    f2data: flowLog,
+                    f2region: region,
+                    id: flowLog.FlowLogId
+                }]);
+            });
+        }
 
         unblockUI('#section-compute-ec2-flowlogs-datatable');
     });
@@ -3913,7 +3924,7 @@ async function updateDatatableComputeLambda() {
                 }),
                 sdkcall("Lambda", "getPolicy", {
                     FunctionName: lambdaFunction.FunctionArn
-                }, true).then((data) => {
+                }, false).then((data) => {
                     var policy = JSON.parse(data.Policy);
     
                     policy.Statement.forEach(statement => {
@@ -3926,7 +3937,7 @@ async function updateDatatableComputeLambda() {
                             functionname: statement.FunctionName
                         }]);
                     });
-                }),
+                }).catch(err => {}),
                 sdkcall("Lambda", "listAliases", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, true).then((data) => {
@@ -4856,7 +4867,7 @@ async function updateDatatableDatabaseElastiCache() {
 
     await sdkcall("ElastiCache", "describeCacheSecurityGroups", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-database-elasticache-securitygroups-datatable').bootstrapTable('removeAll');
 
         data.CacheSecurityGroups.forEach(securityGroup => {
@@ -4868,12 +4879,11 @@ async function updateDatatableDatabaseElastiCache() {
                 name: securityGroup.CacheSecurityGroupName
             }]);
         });
-
-        unblockUI('#section-database-elasticache-securitygroups-datatable');
     }).catch((err) => {
         // Ignoring...most accounts won't have this enabled
-        unblockUI('#section-database-elasticache-securitygroups-datatable');
     });
+
+    unblockUI('#section-database-elasticache-securitygroups-datatable');
 }
 
 /* ========================================================================== */
@@ -5390,7 +5400,7 @@ async function updateDatatableDatabaseRedshift() {
 
     await sdkcall("Redshift", "describeClusterSecurityGroups", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-database-redshift-securitygroups-datatable').bootstrapTable('removeAll');
 
         data.ClusterSecurityGroups.forEach(securityGroup => {
@@ -5402,12 +5412,9 @@ async function updateDatatableDatabaseRedshift() {
                 name: securityGroup.ClusterSecurityGroupName
             }]);
         });
+    }).catch(err => {});
 
-        unblockUI('#section-database-redshift-securitygroups-datatable');
-    }).catch((err) => {
-        // Ignoring...most accounts won't have this enabled
-        unblockUI('#section-database-redshift-securitygroups-datatable');
-    });
+    unblockUI('#section-database-redshift-securitygroups-datatable');
 }
 
 /* ========================================================================== */
@@ -6337,19 +6344,21 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.DashboardEntries.forEach(dashboard => {
-            return sdkcall("CloudWatch", "getDashboard", {
-                DashboardName: dashboard.DashboardName
-            }, true).then((data) => {
-                $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('append', [{
-                    f2id: dashboard.DashboardArn,
-                    f2type: 'cloudwatch.dashboard',
-                    f2data: data,
-                    f2region: region,
-                    name: dashboard.DashboardName
-                }]);
-            });
-        }));
+        if (data.DashboardEntries) {
+            await Promise.all(data.DashboardEntries.map(dashboard => {
+                return sdkcall("CloudWatch", "getDashboard", {
+                    DashboardName: dashboard.DashboardName
+                }, true).then((data) => {
+                    $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('append', [{
+                        f2id: dashboard.DashboardArn,
+                        f2type: 'cloudwatch.dashboard',
+                        f2data: data,
+                        f2region: region,
+                        name: dashboard.DashboardName
+                    }]);
+                });
+            }));
+        }
 
         unblockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
     });
@@ -6419,6 +6428,9 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         unblockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     });
 
+    /*
+    TODO: Make a setting to enable this
+
     await sdkcall("CloudWatchLogs", "describeLogGroups", {
         // no params
     }, true).then(async (data) => {
@@ -6466,11 +6478,12 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 })
             ]);
         }));
-
-        unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
-        unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
-        unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     });
+    */
+
+   unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
+   unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
+   unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
 
     await sdkcall("CloudWatchLogs", "describeMetricFilters", {
         // no params
@@ -7495,11 +7508,11 @@ async function updateDatatableAnalyticsKinesis() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-analytics-kinesis-analyticsapplications-datatable');
-        unblockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
-        unblockUI('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable');
-    });
+    unblockUI('#section-analytics-kinesis-analyticsapplications-datatable');
+    unblockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
+    unblockUI('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable');
 
     await sdkcall("KinesisAnalyticsV2", "listApplications", {
         // no params
@@ -7563,12 +7576,12 @@ async function updateDatatableAnalyticsKinesis() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
-        unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
-        unblockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
-        unblockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
-    });
+    unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
+    unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
+    unblockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
+    unblockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
 }
 
 /* ========================================================================== */
@@ -9720,9 +9733,9 @@ async function updateDatatableDeveloperToolsCloud9() {
                 });
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-developertools-cloud9-environments-datatable');
-    });
+    unblockUI('#section-developertools-cloud9-environments-datatable');
 }
 
 /* ========================================================================== */
@@ -9791,9 +9804,9 @@ async function updateDatatableStorageFSx() {
                 dnsname: fileSystem.DNSName
             }]);
         });
+    }).catch(err => {});
 
-        unblockUI('#section-storage-fsx-filesystems-datatable');
-    });
+    unblockUI('#section-storage-fsx-filesystems-datatable');
 }
 
 /* ========================================================================== */
@@ -11107,124 +11120,126 @@ sections.push({
 });
 
 async function updateDatatableCustomerEngagementSES() {
-    blockUI('#section-customerengagement-ses-configurationsets-datatable');
-    blockUI('#section-customerengagement-ses-eventdestinations-datatable');
-    blockUI('#section-customerengagement-ses-receiptfilters-datatable');
-    blockUI('#section-customerengagement-ses-receiptrules-datatable');
-    blockUI('#section-customerengagement-ses-receiptrulesets-datatable');
-    blockUI('#section-customerengagement-ses-templates-datatable');
+    if (["us-east-1", "us-west-2", "eu-west-1"].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
+        blockUI('#section-customerengagement-ses-configurationsets-datatable');
+        blockUI('#section-customerengagement-ses-eventdestinations-datatable');
+        blockUI('#section-customerengagement-ses-receiptfilters-datatable');
+        blockUI('#section-customerengagement-ses-receiptrules-datatable');
+        blockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+        blockUI('#section-customerengagement-ses-templates-datatable');
 
-    await sdkcall("SES", "listConfigurationSets", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.ConfigurationSets.map(configurationSet => {
-            return sdkcall("SES", "describeConfigurationSet", {
-                ConfigurationSetName: configurationSet.Name
-            }, true).then((data) => {
-                data.EventDestinations.forEach(eventDestination => {
-                    eventDestination['ConfigurationSetName'] = configurationSet.Name;
-                    $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('append', [{
-                        f2id: eventDestination.Name,
-                        f2type: 'ses.eventdestination',
-                        f2data: eventDestination,
+        await sdkcall("SES", "listConfigurationSets", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
+            $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
+            
+            await Promise.all(data.ConfigurationSets.map(configurationSet => {
+                return sdkcall("SES", "describeConfigurationSet", {
+                    ConfigurationSetName: configurationSet.Name
+                }, true).then((data) => {
+                    data.EventDestinations.forEach(eventDestination => {
+                        eventDestination['ConfigurationSetName'] = configurationSet.Name;
+                        $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('append', [{
+                            f2id: eventDestination.Name,
+                            f2type: 'ses.eventdestination',
+                            f2data: eventDestination,
+                            f2region: region,
+                            name: eventDestination.Name
+                        }]);
+                    });
+
+                    $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('append', [{
+                        f2id: data.ConfigurationSet.Name,
+                        f2type: 'ses.configurationset',
+                        f2data: data,
                         f2region: region,
-                        name: eventDestination.Name
+                        name: data.ConfigurationSet.Name
                     }]);
                 });
+            }));
 
-                $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('append', [{
-                    f2id: data.ConfigurationSet.Name,
-                    f2type: 'ses.configurationset',
-                    f2data: data,
-                    f2region: region,
-                    name: data.ConfigurationSet.Name
-                }]);
-            });
-        }));
-
-        unblockUI('#section-customerengagement-ses-configurationsets-datatable');
-        unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
-    });
-
-    await sdkcall("SES", "listReceiptFilters", {
-        // no params
-    }, true).then((data) => {
-        $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
-        
-        data.Filters.forEach(filter => {
-            $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('append', [{
-                f2id: filter.Name,
-                f2type: 'ses.receiptfilter',
-                f2data: filter,
-                f2region: region,
-                name: filter.Name
-            }]);
+            unblockUI('#section-customerengagement-ses-configurationsets-datatable');
+            unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
         });
 
-        unblockUI('#section-customerengagement-ses-receiptfilters-datatable');
-    });
-
-    await sdkcall("SES", "listReceiptRuleSets", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.RuleSets.map(ruleSet => {
-            $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('append', [{
-                f2id: ruleSet.Name,
-                f2type: 'ses.receiptruleset',
-                f2data: ruleSet,
-                f2region: region,
-                name: ruleSet.Name
-            }]);
-
-            return sdkcall("SES", "describeReceiptRuleSet", {
-                RuleSetName: ruleSet.Name
-            }, true).then((data) => {
-                var previousRuleName = null;
-                data.Rules.forEach(rule => {
-                    rule['After'] = previousRuleName;
-                    previousRuleName = rule.Name;
-                    rule['RuleSetName'] = ruleSet.Name;
-                    $('#section-customerengagement-ses-receiptrules-datatable').bootstrapTable('append', [{
-                        f2id: rule.Name,
-                        f2type: 'ses.receiptrule',
-                        f2data: rule,
-                        f2region: region,
-                        name: rule.Name
-                    }]);
-                });
-            });
-        }));
-
-        unblockUI('#section-customerengagement-ses-receiptrules-datatable');
-        unblockUI('#section-customerengagement-ses-receiptrulesets-datatable');
-    });
-
-    await sdkcall("SES", "listTemplates", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.TemplatesMetadata.map(template => {
-            return sdkcall("SES", "getTemplate", {
-                TemplateName: template.Name
-            }, true).then((data) => {
-                $('#section-customerengagement-ses-templates-datatable').bootstrapTable('append', [{
-                    f2id: data.Template.TemplateName,
-                    f2type: 'ses.template',
-                    f2data: data,
+        await sdkcall("SES", "listReceiptFilters", {
+            // no params
+        }, true).then((data) => {
+            $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
+            
+            data.Filters.forEach(filter => {
+                $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('append', [{
+                    f2id: filter.Name,
+                    f2type: 'ses.receiptfilter',
+                    f2data: filter,
                     f2region: region,
-                    name: data.Template.TemplateName
+                    name: filter.Name
                 }]);
             });
-        }));
 
-        unblockUI('#section-customerengagement-ses-templates-datatable');
-    });
+            unblockUI('#section-customerengagement-ses-receiptfilters-datatable');
+        });
+
+        await sdkcall("SES", "listReceiptRuleSets", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
+            
+            await Promise.all(data.RuleSets.map(ruleSet => {
+                $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('append', [{
+                    f2id: ruleSet.Name,
+                    f2type: 'ses.receiptruleset',
+                    f2data: ruleSet,
+                    f2region: region,
+                    name: ruleSet.Name
+                }]);
+
+                return sdkcall("SES", "describeReceiptRuleSet", {
+                    RuleSetName: ruleSet.Name
+                }, true).then((data) => {
+                    var previousRuleName = null;
+                    data.Rules.forEach(rule => {
+                        rule['After'] = previousRuleName;
+                        previousRuleName = rule.Name;
+                        rule['RuleSetName'] = ruleSet.Name;
+                        $('#section-customerengagement-ses-receiptrules-datatable').bootstrapTable('append', [{
+                            f2id: rule.Name,
+                            f2type: 'ses.receiptrule',
+                            f2data: rule,
+                            f2region: region,
+                            name: rule.Name
+                        }]);
+                    });
+                });
+            }));
+
+            unblockUI('#section-customerengagement-ses-receiptrules-datatable');
+            unblockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+        });
+
+        await sdkcall("SES", "listTemplates", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
+            
+            await Promise.all(data.TemplatesMetadata.map(template => {
+                return sdkcall("SES", "getTemplate", {
+                    TemplateName: template.Name
+                }, true).then((data) => {
+                    $('#section-customerengagement-ses-templates-datatable').bootstrapTable('append', [{
+                        f2id: data.Template.TemplateName,
+                        f2type: 'ses.template',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Template.TemplateName
+                    }]);
+                });
+            }));
+
+            unblockUI('#section-customerengagement-ses-templates-datatable');
+        });
+    }
 }
 
 /* ========================================================================== */
@@ -11282,25 +11297,19 @@ async function updateDatatableAWSCostManagementBudgets() {
     await sdkcall("STS", "getCallerIdentity", {
         // no params
     }, true).then(async (data) => {
+        var accountId = data.Account;
+
         await sdkcall("Budgets", "describeBudgets", {
-            AccountId: data.Account
+            AccountId: accountId
         }, true).then(async (data) => {
             $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
             
             await Promise.all(data.Budgets.map(budget => {
                 return sdkcall("Budgets", "describeNotificationsForBudget", {
-                    AccountId: data.Account,
+                    AccountId: accountId,
                     BudgetName: budget.BudgetName
                 }, true).then(async (data) => {
-                    await Promise.all(data.Notifications.map(notification => {
-                        return sdkcall("Budgets", "describeNotificationsForBudget", {
-                            AccountId: data.Account,
-                            BudgetName: budget.BudgetName,
-                            Notification: notification
-                        }, true).then((data) => {
-                            ; // TODO
-                        });
-                    }));
+                    // TODO: map data
 
                     $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('append', [{
                         f2id: budget.BudgetName,
@@ -11694,7 +11703,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     }, true).then(async (policydata) => {
                         await sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
-                            VersionId: policydata.DefaultVersionId
+                            VersionId: policydata.Policy.DefaultVersionId
                         }, true).then((data) => {
                             $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
                                 f2id: policy.PolicyArn,
@@ -11742,7 +11751,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     }, true).then(async (policydata) => {
                         await sdkcall("IAM", "getPolicyVersion", {
                             PolicyArn: policy.PolicyArn,
-                            VersionId: policydata.DefaultVersionId
+                            VersionId: policydata.Policy.DefaultVersionId
                         }, true).then((data) => {
                             $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
                                 f2id: policy.PolicyArn,
@@ -11774,11 +11783,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         
         await Promise.all(data.Policies.map(managedPolicy => {
             return sdkcall("IAM", "getPolicy", {
-                PolicyArn: policy.PolicyArn
+                PolicyArn: managedPolicy.Arn
             }, true).then(async (policydata) => {
                 await sdkcall("IAM", "getPolicyVersion", {
-                    PolicyArn: policy.PolicyArn,
-                    VersionId: policydata.DefaultVersionId
+                    PolicyArn: managedPolicy.Arn,
+                    VersionId: policydata.Policy.DefaultVersionId
                 }, true).then((data) => {
                     managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
                     $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
@@ -12425,19 +12434,21 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.Rules.forEach(rule => {
-            return sdkcall("WAF", "getRule", {
-                RuleId: rule.RuleId
-            }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('append', [{
-                    f2id: data.Rule.RuleId,
-                    f2type: 'waf.rule',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Rule.Name
-                }]);
-            });
-        }));
+        if (data.Rules) {
+            await Promise.all(data.Rules.map(rule => {
+                return sdkcall("WAF", "getRule", {
+                    RuleId: rule.RuleId
+                }, true).then((data) => {
+                    $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('append', [{
+                        f2id: data.Rule.RuleId,
+                        f2type: 'waf.rule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Rule.Name
+                    }]);
+                });
+            }));
+        }
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
     });
@@ -12464,7 +12475,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         unblockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
     });
 
-    await sdkcall("WAF", "listIpSets", {
+    await sdkcall("WAF", "listIPSets", {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
@@ -12559,7 +12570,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.WebACLs.forEach(webAcl => {
+        await Promise.all(data.WebACLs.map(webAcl => {
             return sdkcall("WAFRegional", "getWebACL", {
                 WebACLId: webAcl.WebACLId
             }, true).then((data) => {
@@ -12620,7 +12631,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable');
     });
 
-    await sdkcall("WAFRegional", "listIpSets", {
+    await sdkcall("WAFRegional", "listIPSets", {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
@@ -12981,18 +12992,20 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
                     PolicyName: "default"
                 }, true).then(async (data) => {
                     keydata['Policy'] = data.Policy;
-                    await sdkcall("KMS", "getKeyRotationStatus", {
-                        KeyId: key.KeyId
-                    }, true).then((data) => {
-                        keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
-                        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
-                            f2id: keydata.KeyMetadata.Arn,
-                            f2type: 'kms.key',
-                            f2data: keydata.KeyMetadata,
-                            f2region: region,
-                            id: keydata.KeyMetadata.KeyId
-                        }]);
-                    });
+                    if (keydata.KeyMetadata.KeyManager == "CUSTOMER") {
+                        await sdkcall("KMS", "getKeyRotationStatus", {
+                            KeyId: key.KeyId
+                        }, true).then((data) => {
+                            keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
+                        });
+                    }
+                    $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
+                        f2id: keydata.KeyMetadata.Arn,
+                        f2type: 'kms.key',
+                        f2data: keydata.KeyMetadata,
+                        f2region: region,
+                        id: keydata.KeyMetadata.KeyId
+                    }]);
                 });
             });
         }));
@@ -13138,19 +13151,21 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
     }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.activities.forEach(activity => {
-            return sdkcall("StepFunctions", "describeActivity", {
-                activityArn: activity.activityArn
-            }, true).then((data) => {
-                $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('append', [{
-                    f2id: data.activityArn,
-                    f2type: 'stepfunctions.activity',
-                    f2data: data,
-                    f2region: region,
-                    name: data.name
-                }]);
-            });
-        }));
+        if (data.activities) {
+            await Promise.all(data.activities.map(activity => {
+                return sdkcall("StepFunctions", "describeActivity", {
+                    activityArn: activity.activityArn
+                }, true).then((data) => {
+                    $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('append', [{
+                        f2id: data.activityArn,
+                        f2type: 'stepfunctions.activity',
+                        f2data: data,
+                        f2region: region,
+                        name: data.name
+                    }]);
+                });
+            }));
+        }
 
         unblockUI('#section-applicationintegration-stepfunctions-statemachines-datatable');
     });
@@ -13712,7 +13727,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     });
 
     await sdkcall("CodePipeline", "listActionTypes", {
-        actionOwnerFilter: "CUSTOM"
+        actionOwnerFilter: "Custom"
     }, true).then((data) => {
         $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('removeAll');
         
@@ -13997,9 +14012,9 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-robotics-robomaker-fleets-datatable');
-    });
+    unblockUI('#section-robotics-robomaker-fleets-datatable');
 
     await sdkcall("RoboMaker", "listRobots", {
         // no params
@@ -14019,9 +14034,9 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-robotics-robomaker-robots-datatable');
-    });
+    unblockUI('#section-robotics-robomaker-robots-datatable');
 
     await sdkcall("RoboMaker", "listRobotApplications", {
         // no params
@@ -14041,9 +14056,9 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-robotics-robomaker-robotapplications-datatable');
-    });
+    unblockUI('#section-robotics-robomaker-robotapplications-datatable');
 
     await sdkcall("RoboMaker", "listSimulationApplications", {
         // no params
@@ -14063,9 +14078,9 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-robotics-robomaker-simulationapplications-datatable');
-    });
+    unblockUI('#section-robotics-robomaker-simulationapplications-datatable');
 }
 
 /* ========================================================================== */
@@ -15199,10 +15214,10 @@ async function updateDatatableInternetofThings1Click() {
                 })
             ]);
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-1click-projects-datatable');
-        unblockUI('#section-internetofthings-1click-placements-datatable');
-    });
+    unblockUI('#section-internetofthings-1click-projects-datatable');
+    unblockUI('#section-internetofthings-1click-placements-datatable');
 
     await sdkcall("IoT1ClickDevicesService", "listDevices", {
         // no params
@@ -15222,9 +15237,9 @@ async function updateDatatableInternetofThings1Click() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-1click-devices-datatable');
-    });
+    unblockUI('#section-internetofthings-1click-devices-datatable');
 }
 
 /* ========================================================================== */
@@ -16075,21 +16090,17 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         
         await Promise.all(data.DocumentIdentifiers.map(document => {
             return sdkcall("SSM", "getDocument", {
-                Name: document.Name
-            }, true).then(async (data) => {
-                await sdkcall("SSM", "getDocument", {
-                    Name: document.Name,
-                    DocumentFormat: 'JSON'
-                }, true).then((document) => {
-                    data.Document['Content'] = document.Content;
-                    $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
-                        f2id: data.Document.Name,
-                        f2type: 'ssm.document',
-                        f2data: data.Document,
-                        f2region: region,
-                        name: data.Document.Name
-                    }]);
-                });
+                Name: document.Name,
+                DocumentFormat: 'JSON'
+            }, true).then((documentcontent) => {
+                document['Content'] = documentcontent.Content;
+                $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
+                    f2id: document.Name,
+                    f2type: 'ssm.document',
+                    f2data: document,
+                    f2region: region,
+                    name: document.Name
+                }]);
             });
         }));
 
@@ -16145,7 +16156,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.Associations.forEach(association => {
+        await Promise.all(data.Associations.map(association => {
             return sdkcall("SSM", "describeAssociation", {
                 Name: association.Name,
                 InstanceId: association.InstanceId,
@@ -16901,7 +16912,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 
     await sdkcall("ServiceCatalog", "listTagOptions", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-tagoptions-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable').bootstrapTable('removeAll');
         
@@ -16936,10 +16947,10 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                 })
             ]);
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
-        unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
-    });
+    unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
 }
 
 /* ========================================================================== */
@@ -17129,9 +17140,9 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-analytics-channels-datatable');
-    });
+    unblockUI('#section-internetofthings-analytics-channels-datatable');
 
     await sdkcall("IoTAnalytics", "listPipelines", {
         // no params
@@ -17151,9 +17162,9 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-analytics-pipelines-datatable');
-    });
+    unblockUI('#section-internetofthings-analytics-pipelines-datatable');
 
     await sdkcall("IoTAnalytics", "listDatastores", {
         // no params
@@ -17173,9 +17184,9 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-analytics-datastores-datatable');
-    });
+    unblockUI('#section-internetofthings-analytics-datastores-datatable');
 
     await sdkcall("IoTAnalytics", "listDatasets", {
         // no params
@@ -17195,9 +17206,9 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
+    }).catch(err => {});
 
-        unblockUI('#section-internetofthings-analytics-datasets-datatable');
-    });
+    unblockUI('#section-internetofthings-analytics-datasets-datatable');
 }
 
 /* ========================================================================== */
@@ -18298,48 +18309,50 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
         
-        await Promise.all(data.SecretList.forEach(secret => {
-            return Promise.all([
-                sdkcall("SecretsManager", "getResourcePolicy", {
-                    SecretId: secret.ARN
-                }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('append', [{
-                        f2id: data.ARN,
-                        f2type: 'secretsmanager.resourcepolicy',
-                        f2data: data,
-                        f2region: region,
-                        name: data.Name
-                    }]);
-                }),
-                sdkcall("SecretsManager", "describeSecret", {
-                    SecretId: secret.ARN
-                }, true).then(async (data) => {
-                    await sdkcall("SecretsManager", "getSecretValue", {
+        if (data.SecretList) {
+            await Promise.all(data.SecretList.map(secret => {
+                return Promise.all([
+                    sdkcall("SecretsManager", "getResourcePolicy", {
                         SecretId: secret.ARN
-                    }, true).then((secretvalue) => {
-                        data['SecretString'] = secretvalue.SecretString;
-    
-                        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
+                    }, true).then((data) => {
+                        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('append', [{
                             f2id: data.ARN,
-                            f2type: 'secretsmanager.secret',
+                            f2type: 'secretsmanager.resourcepolicy',
                             f2data: data,
                             f2region: region,
                             name: data.Name
                         }]);
-                    });
-    
-                    if (data.RotationEnabled) {
-                        $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
-                            f2id: data.ARN,
-                            f2type: 'secretsmanager.rotationschedule',
-                            f2data: data,
-                            f2region: region,
-                            name: data.Name
-                        }]);
-                    }
-                })
-            ]);
-        }));
+                    }),
+                    sdkcall("SecretsManager", "describeSecret", {
+                        SecretId: secret.ARN
+                    }, true).then(async (data) => {
+                        await sdkcall("SecretsManager", "getSecretValue", {
+                            SecretId: secret.ARN
+                        }, true).then((secretvalue) => {
+                            data['SecretString'] = secretvalue.SecretString;
+        
+                            $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
+                                f2id: data.ARN,
+                                f2type: 'secretsmanager.secret',
+                                f2data: data,
+                                f2region: region,
+                                name: data.Name
+                            }]);
+                        });
+        
+                        if (data.RotationEnabled) {
+                            $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
+                                f2id: data.ARN,
+                                f2type: 'secretsmanager.rotationschedule',
+                                f2data: data,
+                                f2region: region,
+                                name: data.Name
+                            }]);
+                        }
+                    })
+                ]);
+            }));
+        }
 
         unblockUI('#section-securityidentityandcompliance-secretsmanager-secrets-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable');
@@ -19168,7 +19181,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     blockUI('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable');
 
     await sdkcall("CognitoIdentity", "listIdentityPools", {
-        // no params
+        MaxResults: 60 // WTF, required!
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('removeAll');
@@ -19205,7 +19218,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     });
 
     await sdkcall("CognitoIdentityServiceProvider", "listUserPools", {
-        // no params
+        MaxResults: 60 // WTF? required!
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('removeAll');
@@ -19642,19 +19655,21 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                         });
                     }));
                 }),
-                sdkcall("DataPipeline", "getMasterAccount", {
+                sdkcall("GuardDuty", "getMasterAccount", {
                     DetectorId: detectorId
                 }, true).then((data) => {
-                    data['DetectorId'] = detectorId;
-                    $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('append', [{
-                        f2id: data.Master.AccountId,
-                        f2type: 'guardduty.master',
-                        f2data: data.Master,
-                        f2region: region,
-                        accountid: data.Master.AccountId
-                    }]);
+                    if (data.Master) {
+                        data.Master['DetectorId'] = detectorId;
+                        $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('append', [{
+                            f2id: data.Master.AccountId,
+                            f2type: 'guardduty.master',
+                            f2data: data,
+                            f2region: region,
+                            accountid: data.Master.AccountId
+                        }]);
+                    }
                 }),
-                sdkcall("DataPipeline", "getDetector", {
+                sdkcall("GuardDuty", "getDetector", {
                     DetectorId: detectorId
                 }, true).then((data) => {
                     $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('append', [{
@@ -20014,8 +20029,9 @@ async function updateDatatableEndUserComputingAppStream() {
         // no params
     }, true).then((data) => {
         $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('removeAll');
 
-        data.Stacks.forEach(stack => {
+        data.Stacks.forEach(async (stack) => {
             $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('append', [{
                 f2id: stack.Arn,
                 f2type: 'appstream.stack',
@@ -20023,9 +20039,25 @@ async function updateDatatableEndUserComputingAppStream() {
                 f2region: region,
                 name: stack.Name
             }]);
+            
+            await sdkcall("AppStream", "describeUserStackAssociations", {
+                StackName: stack.Name
+            }, true).then((data) => {
+                data.UserStackAssociations.forEach(userStackAssociation => {
+                    $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('append', [{
+                        f2id: userStackAssociation.StackName + userStackAssociation.UserName,
+                        f2type: 'appstream.stackuserassociation',
+                        f2data: userStackAssociation,
+                        f2region: region,
+                        stackname: userStackAssociation.StackName,
+                        username: userStackAssociation.UserName
+                    }]);
+                });
+            });
         });
 
         unblockUI('#section-endusercomputing-appstream-stacks-datatable');
+        unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
     });
 
     await sdkcall("AppStream", "describeImageBuilders", {
@@ -20062,25 +20094,6 @@ async function updateDatatableEndUserComputingAppStream() {
         });
 
         unblockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
-    });
-
-    await sdkcall("AppStream", "describeUserStackAssociations", {
-        // no params
-    }, true).then((data) => {
-        $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('removeAll');
-
-        data.UserStackAssociations.forEach(userStackAssociation => {
-            $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('append', [{
-                f2id: userStackAssociation.StackName + userStackAssociation.UserName,
-                f2type: 'appstream.stackuserassociation',
-                f2data: userStackAssociation,
-                f2region: region,
-                stackname: userStackAssociation.StackName,
-                username: userStackAssociation.UserName
-            }]);
-        });
-
-        unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
     });
 }
 

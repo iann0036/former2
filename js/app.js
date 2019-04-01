@@ -620,7 +620,7 @@ $(document).ready(function(){
                                                 },
                                                 function(response) {
                                                     if (!response) {
-                                                        callback(response.error, null);
+                                                        callback("No response from extension", null);
                                                     } else if (!response.success) {
                                                         callback(response.error, response.data);
                                                     } else {
@@ -654,7 +654,10 @@ $(document).ready(function(){
                 window.localStorage.getItem('credentials-secretkey'),
                 window.localStorage.getItem('credentials-sessiontoken')
             ),
-            region: region
+            region: region,
+            httpOptions: {
+                timeout: 60000
+            }
         });
 
         /* ========================================================================== */
@@ -683,6 +686,7 @@ $(document).ready(function(){
 
             datatablefuncs.forEach(async func => {
                 await window[func]();
+                console.log("Completed " + func);
                 completeddatatablecalls += 1;
                 $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
                 if (completeddatatablecalls == datatablefuncs.length) {
