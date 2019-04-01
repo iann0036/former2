@@ -2230,6 +2230,8 @@ function performF2Mappings(objects) {
                 reqParams.cfn['InstanceTenancy'] = obj.data.InstanceTenancy;
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
+                var attrCidrBlockAssociations = null;
+                var attrIpv6CidrBlockAssociations = null;
                 /*
                 var attrCidrBlockAssociations = [];
                 obj.data.CidrBlockAssociationSet.forEach(cidrBlockAssociation => {
@@ -3762,7 +3764,9 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "dynamodb.table") {
                 reqParams.cfn['AttributeDefinitions'] = obj.data.AttributeDefinitions;
-                reqParams.cfn['BillingMode'] = obj.data.BillingModeSummary.BillingMode;
+                if (obj.data.BillingModeSummary) {
+                    reqParams.cfn['BillingMode'] = obj.data.BillingModeSummary.BillingMode;
+                }
                 reqParams.cfn['TableName'] = obj.data.TableName;
                 reqParams.cfn['KeySchema'] = obj.data.KeySchema;
                 if (obj.data.ProvisionedThroughput && obj.data.ProvisionedThroughput.ReadCapacityUnits > 0) {
@@ -6232,7 +6236,7 @@ function performF2Mappings(objects) {
                     'type': 'AWS::AmazonMQ::ConfigurationAssociation',
                     'options': reqParams
                 });
-            } else if (obj.type == "config.rule") {
+            } else if (obj.type == "config.configrule") {
                 reqParams.cfn['ConfigRuleName'] = obj.data.ConfigRuleName;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['Scope'] = obj.data.Scope;
@@ -8432,7 +8436,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ManagedPolicyName'] = obj.data.PolicyName;
                 reqParams.cfn['Path'] = obj.data.Path;
                 reqParams.cfn['Description'] = obj.data.Description;
-                reqParams.cfn['PolicyDocument'] = obj.data.PolicyDocument;
+                reqParams.cfn['PolicyDocument'] = unescape(obj.data.PolicyDocument);
 
                 /*
                 TODO:

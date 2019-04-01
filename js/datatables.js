@@ -8875,7 +8875,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('append', [{
-            f2id: data.cloudwatchRoleArn,
+            f2id: data.cloudwatchRoleArn || (region + "-account"),
             f2type: 'apigateway.account',
             f2data: data,
             f2region: region,
@@ -11304,22 +11304,24 @@ async function updateDatatableAWSCostManagementBudgets() {
         }, true).then(async (data) => {
             $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
             
-            await Promise.all(data.Budgets.map(budget => {
-                return sdkcall("Budgets", "describeNotificationsForBudget", {
-                    AccountId: accountId,
-                    BudgetName: budget.BudgetName
-                }, true).then(async (data) => {
-                    // TODO: map data
+            if (data.Budgets) {
+                await Promise.all(data.Budgets.map(budget => {
+                    return sdkcall("Budgets", "describeNotificationsForBudget", {
+                        AccountId: accountId,
+                        BudgetName: budget.BudgetName
+                    }, true).then(async (data) => {
+                        // TODO: map data
 
-                    $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('append', [{
-                        f2id: budget.BudgetName,
-                        f2type: 'budgets.budget',
-                        f2data: budget,
-                        f2region: region,
-                        name: budget.BudgetName
-                    }]);
-                });
-            }));
+                        $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('append', [{
+                            f2id: budget.BudgetName,
+                            f2type: 'budgets.budget',
+                            f2data: budget,
+                            f2region: region,
+                            name: budget.BudgetName
+                        }]);
+                    });
+                }));
+            }
 
             unblockUI('#section-awscostmanagement-budgets-budgets-datatable');
         });
@@ -12555,7 +12557,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     f2type: 'waf.bytematchset',
                     f2data: data,
                     f2region: region,
-                    name: data.BytenMatchSet.Name
+                    name: data.ByteMatchSet.Name
                 }]);
             });
         }));
@@ -12874,11 +12876,11 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
                 CertificateArn: certificate.CertificateArn
             }, true).then((data) => {
                 $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('append', [{
-                    f2id: data.CertificateArn,
+                    f2id: data.Certificate.CertificateArn,
                     f2type: 'acm.certificate',
-                    f2data: data,
+                    f2data: data.Certificate,
                     f2region: region,
-                    domainname: data.DomainName
+                    domainname: data.Certificate.DomainName
                 }]);
             });
         }));

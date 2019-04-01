@@ -685,8 +685,7 @@ $(document).ready(function(){
             $('#scan-account').html('Scanning... (0/' + datatablefuncs.length + ')');
 
             datatablefuncs.forEach(async func => {
-                await window[func]();
-                console.log("Completed " + func);
+                await window[func]().catch(err => {});
                 completeddatatablecalls += 1;
                 $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
                 if (completeddatatablecalls == datatablefuncs.length) {
