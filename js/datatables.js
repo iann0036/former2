@@ -8,6 +8,14 @@ function textFormatter(data) {
     return data;
 }
 
+function tickFormatter(data) {
+    if (data) {
+        return `<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>`
+    }
+
+    return "";
+}
+
 function primaryTextFormatter(data, row) {
     var exists = false;
     output_objects.forEach(output_object => { // check if already added
@@ -2570,8 +2578,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'hostid',
+                        title: 'Host ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'state',
+                        title: 'State',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2607,8 +2631,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scheme',
+                        title: 'Scheme',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2644,8 +2676,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'lbtype',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scheme',
+                        title: 'Scheme',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2665,8 +2713,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ARN',
+                        field: 'arn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2681,8 +2729,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'lbarn',
+                        title: 'Load Balancer ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'port',
+                        title: 'Port',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'protocol',
+                        title: 'Protocol',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2702,8 +2766,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ARN',
+                        field: 'arn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2718,10 +2782,19 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'priority',
+                        title: 'Priority',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'isdefault',
+                        title: 'Default',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -2739,8 +2812,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ARN',
+                        field: 'arn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2755,10 +2828,11 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'isdefault',
+                        title: 'Default',
                         sortable: true,
                         editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -2792,8 +2866,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'lcname',
+                        title: 'Launch Configuration Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'sizes',
+                        title: 'Min / Max / Desired',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'hctype',
+                        title: 'Health Check Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2829,8 +2919,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'asgname',
+                        title: 'Auto Scaling Group Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'metrigaggtype',
+                        title: 'Metric Aggregation Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalingadjustment',
+                        title: 'Scaling Adjustment',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2866,8 +2980,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'asgname',
+                        title: 'Auto Scaling Group Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'actionarn',
+                        title: 'Action ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'minmaxdesired',
+                        title: 'Min / Max / Desired',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2903,8 +3033,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'asgname',
+                        title: 'Auto Scaling Group Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'transition',
+                        title: 'Transition',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'notificationtargetarn',
+                        title: 'Notification Target ARN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2940,8 +3086,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2977,8 +3131,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'imageid',
+                        title: 'Image ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancetype',
+                        title: 'Instance Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'tenancy',
+                        title: 'Tenancy',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3014,45 +3184,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'lcid',
+                        title: 'Launch Template ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Target Groups': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'latestversion',
+                        title: 'Latest Version',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3088,8 +3229,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'targettype',
+                        title: 'Target Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'protocol',
+                        title: 'Protocol',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'port',
+                        title: 'Port',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3125,8 +3290,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'volumetype',
+                        title: 'Volume Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'iops',
+                        title: 'IOPS',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3168,6 +3357,22 @@ sections.push({
                         editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
+                    },
+                    {
+                        field: 'device',
+                        title: 'Device',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'state',
+                        title: 'State',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
                     }
                 ]
             ]
@@ -3193,14 +3398,46 @@ sections.push({
                     },
                     {
                         title: 'Properties',
-                        colspan: 4,
+                        colspan: 5,
                         align: 'center'
                     }
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'privateip',
+                        title: 'Private IP Address',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3220,8 +3457,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Interface ID',
-                        field: 'interfaceid',
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -3236,8 +3473,24 @@ sections.push({
                 ],
                 [
                     {
+                        field: 'interfaceid',
+                        title: 'Network Interface ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
                         field: 'instanceid',
                         title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deviceindex',
+                        title: 'Device Index',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3257,8 +3510,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Interface ID',
-                        field: 'interfaceid',
+                        title: 'Permission ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -3273,8 +3526,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'interfaceid',
+                        title: 'Interface ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'accountid',
+                        title: 'Account ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'service',
+                        title: 'Service',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'permission',
+                        title: 'Permission',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3310,8 +3587,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'instanceid',
-                        title: 'Instance ID',
+                        field: 'spotprice',
+                        title: 'Spot Price',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'srtype',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetcapacity',
+                        title: 'Target Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ondemandtargetcapacity',
+                        title: 'On-Demand Target Capacity',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3392,8 +3693,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'logdestination',
+                        title: 'Log Destination',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resourceid',
+                        title: 'Resource ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'traffictype',
+                        title: 'Traffic Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3429,8 +3746,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'datecreated',
+                        title: 'Date Created',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -3512,7 +3837,9 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.host',
                 f2data: host,
                 f2region: region,
-                hostid: host.HostId
+                hostid: host.HostId,
+                availabilityzone: host.AvailabilityZone,
+                state: host.State
             }]);
         });
 
@@ -3530,7 +3857,9 @@ async function updateDatatableComputeEC2() {
                 f2type: 'elb.loadbalancer',
                 f2data: loadBalancer,
                 f2region: region,
-                name: loadBalancer.LoadBalancerName
+                name: loadBalancer.LoadBalancerName,
+                vpcid: loadBalancer.VPCId,
+                scheme: loadBalancer.Scheme
             }]);
         });
 
@@ -3555,7 +3884,10 @@ async function updateDatatableComputeEC2() {
                     f2type: 'elbv2.loadbalancer',
                     f2data: loadBalancer,
                     f2region: region,
-                    name: loadBalancer.LoadBalancerName
+                    name: loadBalancer.LoadBalancerName,
+                    vpcid: loadBalancer.VPCId,
+                    scheme: loadBalancer.Scheme,
+                    lbtype: loadBalancer.Type
                 }]);
             });
 
@@ -3568,7 +3900,10 @@ async function updateDatatableComputeEC2() {
                         f2type: 'elbv2.loadbalancerlistener',
                         f2data: listener,
                         f2region: region,
-                        arn: listener.ListenerArn
+                        arn: listener.ListenerArn,
+                        lbarn: listener.LoadBalancerArn,
+                        port: listener.Port,
+                        protocol: listener.Protocol
                     }]);
         
                     return Promise.all([
@@ -3582,7 +3917,8 @@ async function updateDatatableComputeEC2() {
                                     f2type: 'elbv2.loadbalancerlistenercertificate',
                                     f2data: certificate,
                                     f2region: region,
-                                    arn: certificate.CertificateArn
+                                    arn: certificate.CertificateArn,
+                                    isdefault: certificate.IsDefault
                                 }]);
                             });
                         }),
@@ -3596,7 +3932,9 @@ async function updateDatatableComputeEC2() {
                                     f2type: 'elbv2.loadbalancerlistenerrule',
                                     f2data: rule,
                                     f2region: region,
-                                    arn: rule.RuleArn
+                                    arn: rule.RuleArn,
+                                    priority: rule.Priority,
+                                    isdefault: rule.IsDefault
                                 }]);
                             });
                         })
@@ -3623,7 +3961,10 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.autoscalinggroup',
                 f2data: autoScalingGroup,
                 f2region: region,
-                name: autoScalingGroup.AutoScalingGroupName
+                name: autoScalingGroup.AutoScalingGroupName,
+                lcname: autoScalingGroup.LaunchConfigurationName,
+                sizes: autoScalingGroup.MinSize + "/" + autoScalingGroup.MaxSize + "/" + autoScalingGroup.DesiredCapacity,
+                hctype: autoScalingGroup.HealthCheckType
             }]);
 
             return sdkcall("AutoScaling", "describeLifecycleHooks", {
@@ -3635,7 +3976,10 @@ async function updateDatatableComputeEC2() {
                         f2type: 'autoscaling.lifecyclehook',
                         f2data: lifecycleHook,
                         f2region: region,
-                        name: lifecycleHook.LifecycleHookName
+                        name: lifecycleHook.LifecycleHookName,
+                        asgname: lifecycleHook.AutoScalingGroupName,
+                        transition: lifecycleHook.LifecycleTransition,
+                        notificationtargetarn: lifecycleHook.NotificationTargetARN
                     }]);
                 });
             });
@@ -3656,7 +4000,10 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.launchconfiguration',
                 f2data: launchConfiguration,
                 f2region: region,
-                name: launchConfiguration.LaunchConfigurationName
+                name: launchConfiguration.LaunchConfigurationName,
+                imageid: launchConfiguration.ImageId,
+                instancetype: launchConfiguration.InstanceType,
+                tenancy: launchConfiguration.PlacementTenancy
             }]);
         });
 
@@ -3680,7 +4027,9 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.launchtemplate',
                         f2data: launchTemplate,
                         f2region: region,
-                        name: launchTemplate.LaunchTemplateName
+                        name: launchTemplate.LaunchTemplateName,
+                        latestversion: launchTemplate.LatestVersionNumber,
+                        lcid: launchTemplate.LaunchTemplateId
                     }]);
                 });
             }));
@@ -3700,7 +4049,11 @@ async function updateDatatableComputeEC2() {
                 f2type: 'elbv2.targetgroup',
                 f2data: targetGroup,
                 f2region: region,
-                name: targetGroup.TargetGroupName
+                name: targetGroup.TargetGroupName,
+                protocol: targetGroup.Protocol,
+                port: targetGroup.Port,
+                vpcid: targetGroup.VpcId,
+                targettype: targetGroup.targettype
             }]);
         });
 
@@ -3714,6 +4067,18 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('removeAll');
 
         data.Volumes.forEach(volume => {
+            $('#section-compute-ec2-volumes-datatable').bootstrapTable('append', [{
+                f2id: volume.VolumeId,
+                f2type: 'ec2.volume',
+                f2data: volume,
+                f2region: region,
+                volumeid: volume.VolumeId,
+                volumetype: volume.VolumeType,
+                availabilityzone: volume.AvailabilityZone,
+                size: volume.Size + " GB",
+                iops: volume.Iops
+            }]);
+
             if (volume.Attachments) {
                 volume.Attachments.forEach(attachment => {
                     $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('append', [{
@@ -3721,17 +4086,13 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.volumeattachment',
                         f2data: attachment,
                         f2region: region,
-                        volumeid: attachment.VolumeId
+                        volumeid: attachment.VolumeId,
+                        device: attachment.Device,
+                        instanceid: attachment.InstanceId,
+                        state: attachment.State
                     }]);
                 });
             }
-            $('#section-compute-ec2-volumes-datatable').bootstrapTable('append', [{
-                f2id: volume.VolumeId,
-                f2type: 'ec2.volume',
-                f2data: volume,
-                f2region: region,
-                volumeid: volume.VolumeId
-            }]);
         });
 
         unblockUI('#section-compute-ec2-volumes-datatable');
@@ -3750,17 +4111,25 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.networkinterface',
                 f2data: networkInterface,
                 f2region: region,
-                interfaceid: networkInterface.NetworkInterfaceId
+                interfaceid: networkInterface.NetworkInterfaceId,
+                availabilityzone: networkInterface.AvailabilityZone,
+                description: networkInterface.Description,
+                privateip: networkInterface.PrivateIpAddress,
+                subnetid: networkInterface.SubnetId,
+                vpcid: networkInterface.VpcId
             }]);
 
             if (networkInterface.Attachment) {
                 networkInterface.Attachment['NetworkInterfaceId'] = networkInterface.NetworkInterfaceId;
                 $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('append', [{
-                    f2id: networkInterface.NetworkInterfaceId,
+                    f2id: networkInterface.Attachment.AttachmentId,
                     f2type: 'ec2.networkinterfaceattachment',
                     f2data: networkInterface.Attachment,
                     f2region: region,
-                    interfaceid: networkInterface.NetworkInterfaceId
+                    interfaceid: networkInterface.NetworkInterfaceId,
+                    instanceid: networkInterface.Attachment.InstanceId,
+                    attachmentid: networkInterface.Attachment.AttachmentId,
+                    deviceindex: networkInterface.Attachment.DeviceIndex
                 }]);
             }
         });
@@ -3780,7 +4149,11 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.networkinterfacepermission',
                 f2data: networkInterfacePermission,
                 f2region: region,
-                id: networkInterfacePermission.NetworkInterfacePermissionId
+                id: networkInterfacePermission.NetworkInterfacePermissionId,
+                interfaceid: networkInterfacePermission.NetworkInterfaceId,
+                accountid: networkInterfacePermission.AwsAccountId,
+                service: networkInterfacePermission.AwsService,
+                permission: networkInterfacePermission.Permission
             }]);
         });
 
@@ -3798,7 +4171,11 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.spotrequest',
                 f2data: spotFleetRequestConfig,
                 f2region: region,
-                requestid: spotFleetRequestConfig.SpotFleetRequestId
+                requestid: spotFleetRequestConfig.SpotFleetRequestId,
+                spotprice: spotFleetRequestConfig.SpotFleetRequestConfig.SpotPrice,
+                targetcapacity: spotFleetRequestConfig.SpotFleetRequestConfig.TargetCapacity,
+                srtype: spotFleetRequestConfig.SpotFleetRequestConfig.Type,
+                ondemandtargetcapacity: spotFleetRequestConfig.SpotFleetRequestConfig.OnDemandTargetCapacity
             }]);
         });
 
@@ -3836,7 +4213,11 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.policy',
                 f2data: scalingPolicy,
                 f2region: region,
-                name: scalingPolicy.PolicyName
+                name: scalingPolicy.PolicyName,
+                asgname: scalingPolicy.AutoScalingGroupName,
+                policytype: scalingPolicy.PolicyType,
+                metrigaggtype: scalingPolicy.MetricAggregationType,
+                scalingadjustment: scalingPolicy.ScalingAdjustment
             }]);
         });
 
@@ -3854,7 +4235,10 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.scheduledaction',
                 f2data: scheduledAction,
                 f2region: region,
-                name: scheduledAction.ScheduledActionName
+                name: scheduledAction.ScheduledActionName,
+                asgname: scheduledAction.AutoScalingGroupName,
+                actionarn: scheduledAction.ScheduledActionARN,
+                minmaxdesired: scheduledAction.MinSize + "/" + scheduledAction.MaxSize + "/" + scheduledAction.DesiredCapacity
             }]);
         });
 
@@ -3872,14 +4256,16 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.securitygroup',
                 f2data: securityGroup,
                 f2region: region,
-                id: securityGroup.GroupId
+                id: securityGroup.GroupId,
+                description: securityGroup.Description,
+                vpcid: securityGroup.VpcId
             }]);
         });
 
         unblockUI('#section-compute-ec2-securitygroups-datatable');
     });
 
-    await sdkcall("EC2", "describePlacementGroups", {
+    await sdkcall("EC2", "describeFlowLogs", {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('removeAll');
@@ -3891,7 +4277,10 @@ async function updateDatatableComputeEC2() {
                     f2type: 'ec2.flowlog',
                     f2data: flowLog,
                     f2region: region,
-                    id: flowLog.FlowLogId
+                    id: flowLog.FlowLogId,
+                    logdestination: flowLog.LogDestination,
+                    resourceid: flowLog.ResourceId,
+                    traffictype: flowLog.TrafficType
                 }]);
             });
         }
@@ -3914,7 +4303,9 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.snapshotlifecyclepolicy',
                         f2data: policy.Policy,
                         f2region: region,
-                        id: policy.Policy.PolicyId
+                        id: policy.Policy.PolicyId,
+                        description: policy.Policy.Description,
+                        datecreated: policy.Policy.DateCreated.toString()
                     }]);
                 });
             }));
@@ -4055,8 +4446,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Function Name',
+                        field: 'functionname',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -4071,8 +4462,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -4092,29 +4483,17 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Function Name',
+                        field: 'functionname',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -4129,8 +4508,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Layer ARN',
+                        field: 'arn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -4145,8 +4524,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -4166,29 +4553,17 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Layer Version ARN',
+                        field: 'layerversion',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -4203,8 +4578,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'UUID',
+                        field: 'uuid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -4219,8 +4594,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'functionarn',
+                        title: 'Function ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'eventsourcearn',
+                        title: 'Event Source ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'batchsize',
+                        title: 'Batch Size',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -4343,7 +4734,9 @@ async function updateDatatableComputeLambda() {
                                 f2type: 'lambda.layerversion',
                                 f2data: data,
                                 f2region: region,
-                                arn: data.LayerVersionArn
+                                arn: data.LayerVersionArn,
+                                description: data.Description,
+                                version: data.Version
                             }]);
                         }),
                         sdkcall("Lambda", "getLayerVersionPolicy", {
@@ -4386,7 +4779,10 @@ async function updateDatatableComputeLambda() {
                     f2type: 'lambda.eventsourcemapping',
                     f2data: data,
                     f2region: region,
-                    uuid: data.UUID
+                    uuid: data.UUID,
+                    functionarn: data.FunctionArn,
+                    eventsourcearn: data.EventSourceArn,
+                    batchsize: data.BatchSize
                 }]);
             });
         }));
@@ -8182,8 +8578,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'uri',
+                        title: 'Repository URI',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'createdat',
+                        title: 'Created At',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -8218,7 +8622,9 @@ async function updateDatatableComputeECR() {
                         f2type: 'ecr.repository',
                         f2data: repository,
                         f2region: region,
-                        name: repository.repositoryName
+                        name: repository.repositoryName,
+                        uri: repository.repositoryUri,
+                        createdat: repository.createdAt.toString()
                     }]);
                 });
             });
@@ -8263,8 +8669,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'k8sversion',
+                        title: 'Kubernetes Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'platformversion',
+                        title: 'Platform Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -8293,7 +8715,10 @@ async function updateDatatableComputeEKS() {
                     f2type: 'eks.cluster',
                     f2data: data.cluster,
                     f2region: region,
-                    name: data.cluster.name
+                    name: data.cluster.name,
+                    k8sversion: data.cluster.version,
+                    platformversion: data.cluster.platformVersion,
+                    endpoint: data.cluster.endpoint
                 }]);
             });
         }));
@@ -8337,8 +8762,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'pendingtaskcount',
+                        title: 'Pending Task Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'runningtaskcount',
+                        title: 'Running Task Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'containerinstancecount',
+                        title: 'Container Instance Count',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -8374,8 +8815,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'clusterarn',
+                        title: 'Cluster ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'desiredpendingrunning',
+                        title: 'Desired / Pending / Running',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'launchtype',
+                        title: 'Launch Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'schedulingstrategy',
+                        title: 'Scheduling Strategy',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -8411,8 +8876,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'networkmode',
+                        title: 'Network Mode',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'cpu',
+                        title: 'CPU',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'memory',
+                        title: 'Memory',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -8433,6 +8914,7 @@ async function updateDatatableComputeECS() {
         // no params
     }, true).then(async (data) => {
         $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
             return Promise.all([
@@ -8444,14 +8926,15 @@ async function updateDatatableComputeECS() {
                         f2type: 'ecs.cluster',
                         f2data: data.clusters[0],
                         f2region: region,
-                        name: data.clusters[0].clusterName
+                        name: data.clusters[0].clusterName,
+                        pendingtaskcount: data.clusters[0].pendingTasksCount,
+                        runningtaskcount: data.clusters[0].runningTasksCount,
+                        containerinstancecount: data.clusters[0].registeredContainerInstancesCount
                     }]);
                 }),
                 sdkcall("ECS", "listServices", {
                     cluster: clusterArn
                 }, true).then((data) => {
-                    $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
-            
                     data.serviceArns.forEach(serviceArn => {
                         sdkcall("ECS", "describeServices", {
                             services: [serviceArn]
@@ -8461,17 +8944,20 @@ async function updateDatatableComputeECS() {
                                 f2type: 'ecs.service',
                                 f2data: data.services[0],
                                 f2region: region,
-                                name: data.services[0].serviceName
+                                name: data.services[0].serviceName,
+                                clusterarn: data.services[0].clusterArn,
+                                desiredpendingrunning: data.services[0].desiredCount + "/" + data.services[0].pendingCount + "/" + data.services[0].runningCount,
+                                launchtype: data.services[0].launchType,
+                                schedulingstrategy: data.services[0].schedulingStrategy
                             }]);
                         });
                     });
-            
-                    unblockUI('#section-compute-ecs-services-datatable');
                 })
             ]);
         }));
 
         unblockUI('#section-compute-ecs-clusters-datatable');
+        unblockUI('#section-compute-ecs-services-datatable');
     });
 
     await sdkcall("ECS", "listTaskDefinitions", {
@@ -8488,7 +8974,10 @@ async function updateDatatableComputeECS() {
                     f2type: 'ecs.taskdefinition',
                     f2data: data.taskDefinition,
                     f2region: region,
-                    name: data.taskDefinition.family
+                    name: data.taskDefinition.family,
+                    networkmode: data.taskDefinition.networkMode,
+                    cpu: data.taskDefinition.cpu,
+                    memory: data.taskDefinition.memory
                 }]);
             });
         }));
