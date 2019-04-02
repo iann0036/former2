@@ -3983,14 +3983,95 @@ function performF2Mappings(objects) {
                 reqParams.cfn['GroupName'] = obj.data.GroupName;
                 reqParams.cfn['Tags'] = obj.data.Tags;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
-                
-                /*
-                TODO:
-                SecurityGroupEgress:
-                    - Security Group Rule // its in the request, check to see if use this with SecurityGroup*gress
-                SecurityGroupIngress:
-                    - Security Group Rule
-                */
+                if (obj.data.IpPermissions) {
+                    reqParams.cfn['SecurityGroupIngress'] = [];
+                    obj.data.IpPermissions.forEach(ipPermission => {
+                        if (ipPermission.IpRanges) {
+                            ipPermission.IpRanges.forEach(ipRange => {
+                                reqParams.cfn['SecurityGroupIngress'].push({
+                                    'CidrIp': ipRange.CidrIp,
+                                    'Description': ipRange.Description,
+                                    'FromPort': ipPermission.FromPort,
+                                    'IpProtocol': ipPermission.IpProtocol,
+                                    'ToPort': ipPermission.ToPort
+                                });
+                            });
+                        }
+                        if (ipPermission.Ipv6Ranges) {
+                            ipPermission.Ipv6Ranges.forEach(ipv6Range => {
+                                reqParams.cfn['SecurityGroupIngress'].push({
+                                    'CidrIpv6': ipv6Range.CidrIpv6,
+                                    'Description': ipv6Range.Description,
+                                    'FromPort': ipPermission.FromPort,
+                                    'IpProtocol': ipPermission.IpProtocol,
+                                    'ToPort': ipPermission.ToPort
+                                });
+                            });
+                        }
+                        if (ipPermission.UserIdGroupPairs) {
+                            ipPermission.UserIdGroupPairs.forEach(userIdGroupPair => {
+                                reqParams.cfn['SecurityGroupIngress'].push({
+                                    'SourceSecurityGroupId': userIdGroupPair.GroupId,
+                                    'SourceSecurityGroupName': userIdGroupPair.GroupName,
+                                    'SourceSecurityGroupOwnerId': userIdGroupPair.UserId,
+                                    'Description': userIdGroupPair.Description,
+                                    'FromPort': ipPermission.FromPort,
+                                    'IpProtocol': ipPermission.IpProtocol,
+                                    'ToPort': ipPermission.ToPort
+                                });
+                            });
+                        }
+                    });
+                }
+                if (obj.data.IpPermissionsEgress) {
+                    reqParams.cfn['SecurityGroupEgress'] = [];
+                    obj.data.IpPermissionsEgress.forEach(ipPermissionsEgress => {
+                        if (ipPermissionsEgress.IpRanges) {
+                            ipPermissionsEgress.IpRanges.forEach(ipRange => {
+                                reqParams.cfn['SecurityGroupEgress'].push({
+                                    'CidrIp': ipRange.CidrIp,
+                                    'Description': ipRange.Description,
+                                    'FromPort': ipPermissionsEgress.FromPort,
+                                    'IpProtocol': ipPermissionsEgress.IpProtocol,
+                                    'ToPort': ipPermissionsEgress.ToPort
+                                });
+                            });
+                        }
+                        if (ipPermissionsEgress.Ipv6Ranges) {
+                            ipPermissionsEgress.Ipv6Ranges.forEach(ipv6Range => {
+                                reqParams.cfn['SecurityGroupEgress'].push({
+                                    'CidrIpv6': ipv6Range.CidrIpv6,
+                                    'Description': ipv6Range.Description,
+                                    'FromPort': ipPermissionsEgress.FromPort,
+                                    'IpProtocol': ipPermissionsEgress.IpProtocol,
+                                    'ToPort': ipPermissionsEgress.ToPort
+                                });
+                            });
+                        }
+                        if (ipPermissionsEgress.UserIdGroupPairs) {
+                            ipPermissionsEgress.UserIdGroupPairs.forEach(userIdGroupPair => {
+                                reqParams.cfn['SecurityGroupEgress'].push({
+                                    'DestinationSecurityGroupId': userIdGroupPair.GroupId,
+                                    'Description': ipv6Range.Description,
+                                    'FromPort': ipPermissionsEgress.FromPort,
+                                    'IpProtocol': ipPermissionsEgress.IpProtocol,
+                                    'ToPort': ipPermissionsEgress.ToPort
+                                });
+                            });
+                        }
+                        if (ipPermissionsEgress.PrefixListIds) {
+                            ipPermissionsEgress.PrefixListIds.forEach(prefixListId => {
+                                reqParams.cfn['SecurityGroupEgress'].push({
+                                    'DestinationPrefixListId': prefixListId.PrefixListId,
+                                    'Description': prefixListId.Description,
+                                    'FromPort': ipPermissionsEgress.FromPort,
+                                    'IpProtocol': ipPermissionsEgress.IpProtocol,
+                                    'ToPort': ipPermissionsEgress.ToPort
+                                });
+                            });
+                        }
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
@@ -6352,14 +6433,16 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.cfn['MetricName'] = obj.data.MetricName;
                 reqParams.cfn['DefaultAction'] = obj.data.DefaultAction;
-                reqParams.cfn['Rules'] = [];
-                obj.data.Rules.forEach(rule => {
-                    reqParams.cfn['Rules'].push({
-                        'Priority': rule.Priority,
-                        'RuleId': rule.RuleId,
-                        'Action': rule.Action
-                    })
-                });
+                if (obj.data.Rules) {
+                    reqParams.cfn['Rules'] = [];
+                    obj.data.Rules.forEach(rule => {
+                        reqParams.cfn['Rules'].push({
+                            'Priority': rule.Priority,
+                            'RuleId': rule.RuleId,
+                            'Action': rule.Action
+                        })
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('waf', obj.id),
@@ -6445,20 +6528,33 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.cfn['MetricName'] = obj.data.MetricName;
                 reqParams.cfn['DefaultAction'] = obj.data.DefaultAction;
-                reqParams.cfn['Rules'] = [];
-                obj.data.Rules.forEach(rule => {
-                    reqParams.cfn['Rules'].push({
-                        'Priority': rule.Priority,
-                        'RuleId': rule.RuleId,
-                        'Action': rule.Action
-                    })
-                });
+                if (obj.data.Rules) {
+                    reqParams.cfn['Rules'] = [];
+                    obj.data.Rules.forEach(rule => {
+                        reqParams.cfn['Rules'].push({
+                            'Priority': rule.Priority,
+                            'RuleId': rule.RuleId,
+                            'Action': rule.Action
+                        })
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
                     'type': 'AWS::WAFRegional::WebACL',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.webaclassociation") {
+                reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
+                reqParams.cfn['WebACLId'] = obj.data.WebACLId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::WebACLAssociation',
                     'options': reqParams
                 });
             } else if (obj.type == "wafregional.rule") {
@@ -10810,6 +10906,219 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'dynamodb',
                     'type': 'AWS::DAX::SubnetGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.subnetnetworkaclassociation") {
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::SubnetNetworkAclAssociation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.subnetroutetableassociation") {
+                reqParams.cfn['RouteTableId'] = obj.data.RouteTableId;
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::SubnetRouteTableAssociation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.subnetipv6cidrblock") {
+                reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlock;
+                reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::SubnetCidrBlock',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.volume") {
+                reqParams.cfn['Ec2VolumeId'] = obj.data.Ec2VolumeId;
+                reqParams.cfn['MountPoint'] = obj.data.MountPoint;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['StackId'] = obj.data.StackId;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::Volume',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.userprofile") {
+                reqParams.cfn['AllowSelfManagement'] = obj.data.AllowSelfManagement;
+                reqParams.cfn['IamUserArn'] = obj.data.IamUserArn;
+                reqParams.cfn['SshPublicKey'] = obj.data.SshPublicKey;
+                reqParams.cfn['SshUsername'] = obj.data.SshUsername;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorks::UserProfile',
+                    'options': reqParams
+                });
+            } else if (obj.type == "opsworks.configurationmanagementserver") {
+                reqParams.cfn['AssociatePublicIpAddress'] = obj.data.AssociatePublicIpAddress;
+                reqParams.cfn['BackupRetentionCount'] = obj.data.BackupRetentionCount;
+                reqParams.cfn['ServerName'] = obj.data.ServerName;
+                reqParams.cfn['DisableAutomatedBackup'] = obj.data.DisableAutomatedBackup;
+                reqParams.cfn['Engine'] = obj.data.Engine;
+                reqParams.cfn['EngineModel'] = obj.data.EngineModel;
+                reqParams.cfn['EngineAttributes'] = obj.data.EngineAttributes;
+                reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.cfn['InstanceProfileArn'] = obj.data.InstanceProfileArn;
+                reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.cfn['KeyPair'] = obj.data.KeyPair;
+                reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+                reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+                reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
+                reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+
+                /*
+                TODO:
+                BackupId: String
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('opsworks', obj.id),
+                    'region': obj.region,
+                    'service': 'opsworks',
+                    'type': 'AWS::OpsWorksCM::Server',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.scalingplan") {
+                reqParams.cfn['ApplicationSource'] = obj.data.ApplicationSource;
+                reqParams.cfn['ScalingInstructions'] = [];
+                obj.data.ScalingInstructions.forEach(scalingInstruction => {
+                    reqParams.cfn['ScalingInstructions'].push({
+                        'ServiceNamespace': scalingInstruction.ServiceNamespace,
+                        'ResourceId': scalingInstruction.ResourceId,
+                        'ScalableDimension': scalingInstruction.ScalableDimension,
+                        'MinCapacity': scalingInstruction.MinCapacity,
+                        'MaxCapacity': scalingInstruction.MaxCapacity,
+                        'TargetTrackingConfigurations': scalingInstruction.TargetTrackingConfigurations,
+                        'PredefinedLoadMetricSpecification': scalingInstruction.PredefinedLoadMetricSpecification,
+                        'CustomizedLoadMetricSpecification': scalingInstruction.CustomizedLoadMetricSpecification,
+                        'ScheduledActionBufferTime': scalingInstruction.ScheduledActionBufferTime,
+                        'PredictiveScalingMaxCapacityBehavior': scalingInstruction.PredictiveScalingMaxCapacityBehavior,
+                        'PredictiveScalingMaxCapacityBuffer': scalingInstruction.PredictiveScalingMaxCapacityBuffer,
+                        'PredictiveScalingMode': scalingInstruction.PredictiveScalingMode,
+                        'ScalingPolicyUpdateBehavior': scalingInstruction.ScalingPolicyUpdateBehavior,
+                        'DisableDynamicScaling': scalingInstruction.DisableDynamicScaling
+                    });
+                });
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScalingPlans::ScalingPlan',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.snapshotlifecyclepolicy") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+                reqParams.cfn['State'] = obj.data.State;
+                reqParams.cfn['PolicyDetails'] = obj.data.PolicyDetails;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::DLM::LifecyclePolicy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.networkinterfaceattachment") {
+                reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.cfn['DeviceIndex'] = obj.data.DeviceIndex;
+                reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.cfn['DeleteOnTermination'] = obj.data.DeleteOnTermination;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::NetworkInterfaceAttachment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "autoscaling.lifecyclehook") {
+                reqParams.cfn['LifecycleHookName'] = obj.data.LifecycleHookName;
+                reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.cfn['NotificationTargetARN'] = obj.data.NotificationTargetARN;
+                reqParams.cfn['NotificationMetadata'] = obj.data.NotificationMetadata;
+                reqParams.cfn['RoleARN'] = obj.data.RoleARN;
+                reqParams.cfn['HeartbeatTimeout'] = obj.data.HeartbeatTimeout;
+                reqParams.cfn['DefaultResult'] = obj.data.DefaultResult;
+                reqParams.cfn['LifecycleTransition'] = obj.data.LifecycleTransition;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('autoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'autoscaling',
+                    'type': 'AWS::AutoScaling::LifecycleHook',
+                    'options': reqParams
+                });
+            } else if (obj.type == "elasticache.replicationgroup") {
+                reqParams.cfn['ReplicationGroupId'] = obj.data.ReplicationGroupId;
+                reqParams.cfn['ReplicationGroupDescription'] = obj.data.Description;
+                if (obj.data.NodeGroups) {
+                    reqParams.cfn['NumNodeGroups'] = obj.data.NodeGroups.length;
+                }
+                reqParams.cfn['SnapshottingClusterId'] = obj.data.SnapshottingClusterId;
+                reqParams.cfn['AutomaticFailoverEnabled'] = (obj.data.AutomaticFailover == "enabled");
+                if (obj.data.ConfigurationEndpoint) {
+                    reqParams.cfn['Port'] = obj.data.ConfigurationEndpoint.Port;
+                }
+                reqParams.cfn['SnapshotRetentionLimit'] = obj.data.SnapshotRetentionLimit;
+                reqParams.cfn['SnapshotWindow'] = obj.data.SnapshotWindow;
+                reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+                reqParams.cfn['TransitEncryptionEnabled'] = obj.data.TransitEncryptionEnabled;
+                reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.AtRestEncryptionEnabled;
+
+                /*
+                TODO:
+                AuthToken: String
+                AutoMinorVersionUpgrade: Boolean
+                CacheParameterGroupName: String
+                CacheSecurityGroupNames:
+                    - String
+                CacheSubnetGroupName: String
+                Engine: String
+                EngineVersion: String
+                NodeGroupConfiguration:
+                    - NodeGroupConfiguration
+                NotificationTopicArn: String
+                NumCacheClusters: Integer
+                PreferredCacheClusterAZs:
+                    - String
+                PreferredMaintenanceWindow: String
+                PrimaryClusterId: String
+                ReplicasPerNodeGroup: Integer
+                SecurityGroupIds:
+                    - String
+                SnapshotArns:
+                    - String
+                SnapshotName: String
+                Tags:
+                    - Resource Tag
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elasticache', obj.id),
+                    'region': obj.region,
+                    'service': 'elasticache',
+                    'type': 'AWS::ElastiCache::ReplicationGroup',
                     'options': reqParams
                 });
             } else if (obj.type == ".") {

@@ -690,7 +690,7 @@ $(document).ready(function(){
                 $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
                 if (completeddatatablecalls == datatablefuncs.length) {
                     $('#scan-account').removeAttr('disabled');
-                    $('#scan-account').html('Scan Account');
+                    $('#scan-account').html('Scan Again');
                 }
             });
         });

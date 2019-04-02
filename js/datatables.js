@@ -141,7 +141,7 @@ function lambdaRuntimeFormatter(data) {
 // SDK Helpers
 /* ========================================================================== */
 
-function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextToken, NextMarker etc. detection
+function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextToken, Marker etc. detection
     return new Promise(function(resolve, reject) {
         var service = new AWS[svc]({region: region});
 
@@ -167,7 +167,27 @@ function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextT
                 
                 reject(data);
             } else {
-                resolve(data);
+                if (data.Marker) {
+                    params['Marker'] = data.Marker;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.NextToken) {
+                    params['NextToken'] = data.NextToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else {
+                    resolve(data);
+                }
             }
         });
     });
@@ -1329,6 +1349,117 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Subnet Network ACL Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet Route Table Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Subnet IPv6 CIDR Blocks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1365,6 +1496,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-natgateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -1429,8 +1563,22 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').bootstrapTable('removeAll');
 
         data.Subnets.forEach(subnet => {
+            if (subnet.Ipv6CidrBlockAssociationSet) {
+                subnet.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
+                    ipv6CidrBlockAssociation['SubnetId'] = subnet.SubnetId;
+                    $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').bootstrapTable('append', [{
+                        f2id: ipv6CidrBlockAssociation.AssociationId,
+                        f2type: 'ec2.subnetipv6cidrblock',
+                        f2data: ipv6CidrBlockAssociation,
+                        f2region: region,
+                        id: ipv6CidrBlockAssociation.AssociationId
+                    }]);
+                });
+            }
+
             $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('append', [{
                 f2id: subnet.SubnetId,
                 f2type: 'ec2.subnet',
@@ -1441,6 +1589,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable');
     });
 
     await sdkcall("EC2", "describeEgressOnlyInternetGateways", {
@@ -1649,8 +1798,21 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').bootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
+            if (networkAcl.Associations) {
+                networkAcl.Associations.forEach(association => {
+                    $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').bootstrapTable('append', [{
+                        f2id: association.NetworkAclAssociationId,
+                        f2type: 'ec2.subnetnetworkaclassociation',
+                        f2data: association,
+                        f2region: region,
+                        id: association.NetworkAclAssociationId
+                    }]);
+                });
+            }
+
             if (networkAcl.Entries) {
                 networkAcl.Entries.forEach(entry => {
                     entry['NetworkAclId'] = networkAcl.NetworkAclId;
@@ -1663,6 +1825,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }]);
                 });
             }
+
             $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('append', [{
                 f2id: networkAcl.NetworkAclId,
                 f2type: 'ec2.networkacl',
@@ -1674,6 +1837,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable');
     });
 
     await sdkcall("EC2", "describeRouteTables", {
@@ -1682,6 +1846,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
             routeTable.Routes.forEach(route => {
@@ -1696,6 +1861,18 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }]);
                 }
             });
+
+            if (routeTable.Associations) {
+                routeTable.Associations.forEach(association => {
+                    $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('append', [{
+                        f2id: association.RouteTableAssociationId,
+                        f2type: 'ec2.subnetroutetableassociation',
+                        f2data: association,
+                        f2region: region,
+                        destination: association.RouteTableAssociationId
+                    }]);
+                });
+            }
 
             if (routeTable.PropagatingVgws) {
                 routeTable.PropagatingVgws.forEach(propagatingVgw => {
@@ -1724,6 +1901,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable');
     });
 
     await sdkcall("EC2", "describeTransitGateways", {
@@ -2698,6 +2876,43 @@ sections.push({
                 ]
             ]
         },
+        'Auto Scaling Lifecycle Hooks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Security Groups': {
             'columns': [
                 [
@@ -2752,7 +2967,6 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
-                        formatter: primaryTextFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2995,6 +3209,43 @@ sections.push({
                 ]
             ]
         },
+        'Network Interface Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Interface ID',
+                        field: 'interfaceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Network Interface Permissions': {
             'columns': [
                 [
@@ -3150,6 +3401,43 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Snapshot Lifecycle Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -3165,6 +3453,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-autoscalinggroups-datatable');
     blockUI('#section-compute-ec2-autoscalingpolicies-datatable');
     blockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
+    blockUI('#section-compute-ec2-autoscalinglifecyclehooks-datatable');
     blockUI('#section-compute-ec2-securitygroups-datatable');
     blockUI('#section-compute-ec2-launchconfigurations-datatable');
     blockUI('#section-compute-ec2-launchtemplates-datatable');
@@ -3173,10 +3462,12 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-volumes-datatable');
     blockUI('#section-compute-ec2-volumeattachments-datatable');
     blockUI('#section-compute-ec2-networkinterfaces-datatable');
+    blockUI('#section-compute-ec2-networkinterfaceattachments-datatable');
     blockUI('#section-compute-ec2-networkinterfacepermissions-datatable');
     blockUI('#section-compute-ec2-spotrequests-datatable');
     blockUI('#section-compute-ec2-placementgroups-datatable');
     blockUI('#section-compute-ec2-flowlogs-datatable');
+    blockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
 
     await sdkcall("EC2", "describeInstances", {
         // no params
@@ -3322,10 +3613,11 @@ async function updateDatatableComputeEC2() {
 
     await sdkcall("AutoScaling", "describeAutoScalingGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ec2-autoscalinggroups-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').bootstrapTable('removeAll');
 
-        data.AutoScalingGroups.forEach(autoScalingGroup => {
+        await Promise.all(data.AutoScalingGroups.map(autoScalingGroup => {
             $('#section-compute-ec2-autoscalinggroups-datatable').bootstrapTable('append', [{
                 f2id: autoScalingGroup.AutoScalingGroupName,
                 f2type: 'autoscaling.autoscalinggroup',
@@ -3333,9 +3625,24 @@ async function updateDatatableComputeEC2() {
                 f2region: region,
                 name: autoScalingGroup.AutoScalingGroupName
             }]);
-        });
+
+            return sdkcall("AutoScaling", "describeLifecycleHooks", {
+                AutoScalingGroupName: autoScalingGroup.AutoScalingGroupName
+            }, true).then((data) => {
+                data.LifecycleHooks.forEach(lifecycleHook => {
+                    $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').bootstrapTable('append', [{
+                        f2id: lifecycleHook.LifecycleHookName,
+                        f2type: 'autoscaling.lifecyclehook',
+                        f2data: lifecycleHook,
+                        f2region: region,
+                        name: lifecycleHook.LifecycleHookName
+                    }]);
+                });
+            });
+        }));
 
         unblockUI('#section-compute-ec2-autoscalinggroups-datatable');
+        unblockUI('#section-compute-ec2-autoscalinglifecyclehooks-datatable');
     });
 
     await sdkcall("AutoScaling", "describeLaunchConfigurations", {
@@ -3435,6 +3742,7 @@ async function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('removeAll');
 
         data.NetworkInterfaces.forEach(networkInterface => {
             $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('append', [{
@@ -3444,9 +3752,21 @@ async function updateDatatableComputeEC2() {
                 f2region: region,
                 interfaceid: networkInterface.NetworkInterfaceId
             }]);
+
+            if (networkInterface.Attachment) {
+                networkInterface.Attachment['NetworkInterfaceId'] = networkInterface.NetworkInterfaceId;
+                $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('append', [{
+                    f2id: networkInterface.NetworkInterfaceId,
+                    f2type: 'ec2.networkinterfaceattachment',
+                    f2data: networkInterface.Attachment,
+                    f2region: region,
+                    interfaceid: networkInterface.NetworkInterfaceId
+                }]);
+            }
         });
 
         unblockUI('#section-compute-ec2-networkinterfaces-datatable');
+        unblockUI('#section-compute-ec2-networkinterfaceattachments-datatable');
     });
     
     sdkcall("EC2", "describeNetworkInterfacePermissions", {
@@ -3577,6 +3897,30 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-flowlogs-datatable');
+    });
+
+    await sdkcall("DLM", "getLifecyclePolicies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').bootstrapTable('removeAll');
+
+        if (data.Policies) {
+            await Promise.all(data.Policies.map(policy => {
+                return sdkcall("DLM", "getLifecyclePolicy", {
+                    PolicyId: policy.PolicyId
+                }, true).then((data) => {
+                    $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').bootstrapTable('append', [{
+                        f2id: policy.Policy.PolicyId,
+                        f2type: 'ec2.snapshotlifecyclepolicy',
+                        f2data: policy.Policy,
+                        f2region: region,
+                        id: policy.Policy.PolicyId
+                    }]);
+                });
+            }));
+        }
+
+        unblockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
     });
 }
 
@@ -4688,6 +5032,43 @@ sections.push({
                 ]
             ]
         },
+        'Replication Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Subnet Groups': {
             'columns': [
                 [
@@ -4804,8 +5185,10 @@ sections.push({
 
 async function updateDatatableDatabaseElastiCache() {
     blockUI('#section-database-elasticache-clusters-datatable');
+    blockUI('#section-database-elasticache-replicationgroups-datatable');
     blockUI('#section-database-elasticache-subnetgroups-datatable');
     blockUI('#section-database-elasticache-parametergroups-datatable');
+    blockUI('#section-database-elasticache-securitygroups-datatable');
 
     await sdkcall("ElastiCache", "describeCacheClusters", {
         // no params
@@ -4825,6 +5208,26 @@ async function updateDatatableDatabaseElastiCache() {
         }
 
         unblockUI('#section-database-elasticache-clusters-datatable');
+    });
+
+    await sdkcall("ElastiCache", "describeReplicationGroups", {
+        // no params
+    }, true).then((data) => {
+        $('#section-database-elasticache-replicationgroups-datatable').bootstrapTable('removeAll');
+
+        if (data.ReplicationGroups) {
+            data.ReplicationGroups.forEach(replicationGroup => {
+                $('#section-database-elasticache-replicationgroups-datatable').bootstrapTable('append', [{
+                    f2id: replicationGroup.ReplicationGroupId,
+                    f2type: 'elasticache.replicationgroup',
+                    f2data: replicationGroup,
+                    f2region: region,
+                    id: replicationGroup.ReplicationGroupId
+                }]);
+            });
+        }
+
+        unblockUI('#section-database-elasticache-replicationgroups-datatable');
     });
 
     await sdkcall("ElastiCache", "describeCacheSubnetGroups", {
@@ -5078,6 +5481,117 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Volumes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Configuration Management Servers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'xxx',
+                        title: 'XXX',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -5088,11 +5602,19 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
     blockUI('#section-managementandgovernance-opsworks-layers-datatable');
     blockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
     blockUI('#section-managementandgovernance-opsworks-instances-datatable');
+    blockUI('#section-managementandgovernance-opsworks-volumes-datatable');
+    blockUI('#section-managementandgovernance-opsworks-userprofiles-datatable');
+    blockUI('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable');
 
     await sdkcall("OpsWorks", "describeStacks", {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-volumes-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Stacks.map(stack => {
             $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('append', [{
@@ -5107,8 +5629,6 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                 sdkcall("OpsWorks", "describeLayers", {
                     StackId: stack.StackId
                 }, true).then((data) => {
-                    $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
-            
                     data.Layers.forEach(layer => {
                         $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('append', [{
                             f2id: layer.Arn,
@@ -5118,14 +5638,10 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                             layerid: layer.LayerId
                         }]);
                     });
-            
-                    unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
                 }),
                 sdkcall("OpsWorks", "describeApps", {
                     StackId: stack.StackId
                 }, true).then((data) => {
-                    $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
-            
                     data.Apps.forEach(app => {
                         $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('append', [{
                             f2id: app.AppId,
@@ -5135,14 +5651,10 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                             name: app.Name
                         }]);
                     });
-            
-                    unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
                 }),
                 sdkcall("OpsWorks", "describeElasticLoadBalancers", {
                     StackId: stack.StackId
                 }, true).then((data) => {
-                    $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
-            
                     data.ElasticLoadBalancers.forEach(elbAttachment => {
                         $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('append', [{
                             f2id: elbAttachment.ElasticLoadBalancerName,
@@ -5152,15 +5664,11 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                             name: elbAttachment.ElasticLoadBalancerName
                         }]);
                     });
-            
-                    unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
                 }),
                 sdkcall("OpsWorks", "describeInstances", {
                     StackId: stack.StackId
-                }, true).then((data) => {
-                    $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
-            
-                    data.Instances.forEach(instance => {
+                }, true).then(async (data) => {
+                    await Promise.all(data.Instances.map(instance => {
                         $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('append', [{
                             f2id: instance.Arn,
                             f2type: 'opsworks.instance',
@@ -5168,14 +5676,69 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                             f2region: region,
                             instanceid: instance.InstanceId
                         }]);
-                    });
-            
-                    unblockUI('#section-managementandgovernance-opsworks-instances-datatable');
+
+                        return sdkcall("OpsWorks", "describeVolumes", {
+                            StackId: stack.StackId,
+                            InstanceId: instance.InstanceId
+                        }, true).then((data) => {
+                            data.Volumes.forEach(volume => {
+                                volume['StackId'] = stack.StackId;
+                                $('#section-managementandgovernance-opsworks-volumes-datatable').bootstrapTable('append', [{
+                                    f2id: volume.VolumeId,
+                                    f2type: 'opsworks.volume',
+                                    f2data: volume,
+                                    f2region: region,
+                                    id: volume.VolumeId
+                                }]);
+                            });
+                        });
+                    }));
                 })
             ]);
         }));
 
         unblockUI('#section-managementandgovernance-opsworks-stacks-datatable');
+        unblockUI('#section-managementandgovernance-opsworks-layers-datatable');
+        unblockUI('#section-managementandgovernance-opsworks-apps-datatable');
+        unblockUI('#section-managementandgovernance-opsworks-elbattachments-datatable');
+        unblockUI('#section-managementandgovernance-opsworks-instances-datatable');
+        unblockUI('#section-managementandgovernance-opsworks-volumes-datatable');
+    });
+
+    await sdkcall("OpsWorks", "describeUserProfiles", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-userprofiles-datatable').bootstrapTable('removeAll');
+
+        data.UserProfiles.forEach(userProfile => {
+            $('#section-managementandgovernance-opsworks-userprofiles-datatable').bootstrapTable('append', [{
+                f2id: userProfile.IamUserArn,
+                f2type: 'opsworks.userprofile',
+                f2data: userProfile,
+                f2region: region,
+                iamuserarn: userProfile.IamUserArn
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-userprofiles-datatable');
+    });
+
+    await sdkcall("OpsWorksCM", "describeServers", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').bootstrapTable('removeAll');
+
+        data.Servers.forEach(server => {
+            $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').bootstrapTable('append', [{
+                f2id: server.ServerArn,
+                f2type: 'opsworks.configurationmanagementserver',
+                f2data: server,
+                f2region: region,
+                arn: server.ServerArn
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable');
     });
 }
 
@@ -12408,6 +12971,20 @@ sections.push({
 
 async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-ipsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
 
     await sdkcall("WAF", "listWebACLs", {
         // no params
@@ -12571,22 +13148,42 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.WebACLs.map(webAcl => {
-            return sdkcall("WAFRegional", "getWebACL", {
-                WebACLId: webAcl.WebACLId
-            }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('append', [{
-                    f2id: data.WebACL.WebACLId,
-                    f2type: 'wafregional.webacl',
-                    f2data: data,
-                    f2region: region,
-                    name: data.WebACL.Name
-                }]);
-            });
+            return Promise.all([
+                sdkcall("WAFRegional", "getWebACL", {
+                    WebACLId: webAcl.WebACLId
+                }, true).then((data) => {
+                    $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('append', [{
+                        f2id: data.WebACL.WebACLId,
+                        f2type: 'wafregional.webacl',
+                        f2data: data,
+                        f2region: region,
+                        name: data.WebACL.Name
+                    }]);
+                }),
+                sdkcall("WAFRegional", "listResourcesForWebACL", {
+                    WebACLId: webAcl.WebACLId
+                }, true).then((data) => {
+                    data.ResourceArns.forEach(resourceArn => {
+                        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('append', [{
+                            f2id: resourceArn,
+                            f2type: 'wafregional.webaclassociation',
+                            f2data: {
+                                'ResourceArn': resourceArn,
+                                'WebACLId': webAcl.WebACLId
+                            },
+                            f2region: region,
+                            arn: resourceArn
+                        }]);
+                    });
+                })
+            ]);
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable');
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable');
     });
 
     await sdkcall("WAFRegional", "listRules", {
@@ -13871,83 +14468,7 @@ sections.push({
                 ]
             ]
         },
-        'Robot Application Versions': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        formatter: timeAgoFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
         'Simulation Applications': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        formatter: timeAgoFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Simulation Application Versions': {
             'columns': [
                 [
                     {
@@ -13992,9 +14513,7 @@ async function updateDatatableRoboticsRoboMaker() {
     blockUI('#section-robotics-robomaker-fleets-datatable');
     blockUI('#section-robotics-robomaker-robots-datatable');
     blockUI('#section-robotics-robomaker-robotapplications-datatable');
-    blockUI('#section-robotics-robomaker-robotapplicationversions-datatable'); // TODO
     blockUI('#section-robotics-robomaker-simulationapplications-datatable');
-    blockUI('#section-robotics-robomaker-simulationapplicationversions-datatable'); // TODO
 
     await sdkcall("RoboMaker", "listFleets", {
         // no params
