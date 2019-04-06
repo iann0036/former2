@@ -1,6 +1,6 @@
 # Former2
 
-[![CloudFormation](https://img.shields.io/badge/CloudFormation-100%25-orange.svg)](https://github.com/iann0036/AWSConsoleRecorderGenerator/blob/master/coverage.md#cloudformation-resource-coverage)
+![CloudFormation](https://img.shields.io/badge/CloudFormation-100%25-orange.svg)
 
 > Convert your existing cloud resources into CloudFormation / Terraform / Troposphere etc.
 

@@ -236,11 +236,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'creationdate',
-                        title: 'Creation Date',
+                        field: 'cidrblock',
+                        title: 'Primary CIDR Block',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancetenancy',
+                        title: 'Instance Tenancy',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -278,7 +285,14 @@ sections.push({
                         title: 'CIDR Block',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'associationid',
+                        title: 'Association ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -312,8 +326,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'cidrblock',
+                        title: 'CIDR Block',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availableipaddresscount',
+                        title: 'Available IPv4 Addresses',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -340,22 +378,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -377,22 +403,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -423,8 +437,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'ipaddress',
+                        title: 'IP Address',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'bgpasn',
+                        title: 'BGP ASN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -460,8 +482,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'amazonsideasn',
+                        title: 'Amazon Side ASN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -481,8 +511,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Gateway ID',
-                        field: 'gatewayid',
+                        title: 'VPN Gateway ID',
+                        field: 'vpngatewayid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -497,8 +527,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'routetable',
+                        title: 'Route Table',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -518,7 +548,7 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'IP',
+                        title: 'Public IP Address',
                         field: 'ip',
                         rowspan: 2,
                         align: 'center',
@@ -534,8 +564,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'privateipaddress',
+                        title: 'Private IP Address',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instanceid',
+                        title: 'Instance ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'allocationid',
+                        title: 'Allocation ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'networkinterfaceid',
+                        title: 'Network Interface ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -571,8 +625,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'associationid',
+                        title: 'Association ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -599,22 +653,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -645,8 +687,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -682,8 +724,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'customergatewayid',
+                        title: 'Customer Gateway ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpngatewayid',
+                        title: 'VPN Gateway ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'transitgatewayid',
+                        title: 'Transit Gateway ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -719,8 +777,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'destinationcidrblock',
+                        title: 'Destination CIDR Block',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -747,22 +805,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -793,8 +839,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -824,14 +870,47 @@ sections.push({
                     },
                     {
                         title: 'Properties',
-                        colspan: 4,
+                        colspan: 5,
                         align: 'center'
                     }
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'cidrblocks',
+                        title: 'CIDR Blocks',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'egress',
+                        title: 'Egress',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'protocol',
+                        title: 'Protocol',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'range',
+                        title: 'Range',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'action',
+                        title: 'Action',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -867,8 +946,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -904,8 +983,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'routetableid',
+                        title: 'Route Table ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resource',
+                        title: 'Resource',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -925,8 +1012,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -941,8 +1028,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -962,8 +1057,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Destination',
+                        field: 'destination',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -978,10 +1073,19 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'type',
+                        title: 'Type',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'blackhole',
+                        title: 'Blackhole',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -999,8 +1103,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1015,8 +1119,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'transitgatewayid',
+                        title: 'Transit Gateway ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1036,8 +1148,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1052,8 +1164,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'resourceid',
+                        title: 'Resource ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resourcetype',
+                        title: 'Resource Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1073,8 +1193,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1089,8 +1209,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'resourceid',
+                        title: 'Resource ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resourcetype',
+                        title: 'Resource Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1110,8 +1238,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1126,8 +1254,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'transitgatewayid',
+                        title: 'Transit Gateway ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1147,8 +1283,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1163,8 +1299,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'endpointtype',
+                        title: 'Endpoint Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servicename',
+                        title: 'Service Name',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1184,8 +1336,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1200,8 +1352,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'serviceid',
+                        title: 'Service ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcendpointid',
+                        title: 'VPC Endpoint ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'topicarn',
+                        title: 'Topic ARN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1237,10 +1405,19 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'privatednsname',
+                        title: 'Private DNS Name',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'acceptancerequired',
+                        title: 'Acceptance Required',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -1258,8 +1435,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Service Name',
+                        field: 'servicename',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1274,8 +1451,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'allowedprincipals',
+                        title: 'Allowed Principals',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1295,8 +1472,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1311,8 +1488,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1332,8 +1525,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'VPC ID',
+                        field: 'vpcid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1348,8 +1541,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'gatewayid',
+                        title: 'Gateway ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1369,8 +1562,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Network ACL Association ID',
+                        field: 'networkaclassociationid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1385,8 +1578,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'networkaclid',
+                        title: 'Network ACL ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1406,8 +1607,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Route Table Association ID',
+                        field: 'routetableassociationid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1422,8 +1623,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'routetableid',
+                        title: 'Route Table ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1443,8 +1652,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'IPv6 CIDR Block',
+                        field: 'ipv6cidrblock',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -1459,8 +1668,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'associationid',
+                        title: 'Association ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -1539,7 +1756,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2data: cidrBlock,
                         f2region: region,
                         vpcid: vpc.VpcId,
-                        cidrblock: cidrBlock.CidrBlock
+                        cidrblock: cidrBlock.CidrBlock,
+                        associationid: cidrBlock.AssociationId
                     }]);
                 }
             });
@@ -1560,7 +1778,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.vpc',
                         f2data: vpc,
                         f2region: region,
-                        vpcid: vpc.VpcId
+                        vpcid: vpc.VpcId,
+                        instancetenancy: vpc.InstanceTenancy,
+                        cidrblock: vpc.CidrBlock
                     }]);
                 });
             });
@@ -1582,7 +1802,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.subnetipv6cidrblock',
                         f2data: ipv6CidrBlockAssociation,
                         f2region: region,
-                        id: ipv6CidrBlockAssociation.AssociationId
+                        subnetid: subnet.SubnetId,
+                        ipv6cidrblock: subnet.Ipv6CidrBlock,
+                        associationid: subnet.AssociationId
                     }]);
                 });
             }
@@ -1592,7 +1814,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.subnet',
                 f2data: subnet,
                 f2region: region,
-                subnetid: subnet.SubnetId
+                subnetid: subnet.SubnetId,
+                availabilityzone: subnet.AvailabilityZone,
+                cidrblock: subnet.CidrBlock,
+                vpcid: subnet.VpcId,
+                availableipaddresscount: subnet.AvailableIpAddressCount
             }]);
         });
 
@@ -1629,7 +1855,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.customergateway',
                 f2data: customerGateway,
                 f2region: region,
-                gatewayid: customerGateway.CustomerGatewayId
+                gatewayid: customerGateway.CustomerGatewayId,
+                bgpasn: customerGateway.BgpAsn,
+                ipaddress: customerGateway.IpAddress
             }]);
         });
 
@@ -1654,7 +1882,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             'VpnGatewayId': vpnGateway.VpnGatewayId
                         },
                         f2region: region,
-                        vpcid: attachment.VpcId
+                        vpcid: attachment.VpcId,
+                        gatewayid: vpnGateway.VpnGatewayId
                     }]);
                 });
             }
@@ -1664,7 +1893,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.virtualprivategateway',
                 f2data: vpnGateway,
                 f2region: region,
-                gatewayid: vpnGateway.VpnGatewayId
+                gatewayid: vpnGateway.VpnGatewayId,
+                availabilityzone: vpnGateway.AvailabilityZone,
+                amazonsideasn: vpnGateway.AmazonSideAsn
             }]);
         });
 
@@ -1682,7 +1913,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                                 'InternetGatewayId': internetGateway.InternetGatewayId
                             },
                             f2region: region,
-                            vpcid: attachment.VpcId
+                            vpcid: attachment.VpcId,
+                            gatewayid: attachment.InternetGatewayId
                         }]);
                     });
                 }
@@ -1714,7 +1946,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.elasticip',
                 f2data: address,
                 f2region: region,
-                ip: address.PublicIp
+                ip: address.PublicIp,
+                instanceid: address.InstanceId,
+                allocationid: address.AllocationId,
+                privateipaddress: address.PrivateIpAddress,
+                networkinterfaceid: address.NetworkInterfaceId
             }]);
 
             if (address.AssociationId) {
@@ -1723,7 +1959,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     f2type: 'ec2.elasticipassociation',
                     f2data: address,
                     f2region: region,
-                    ip: address.PublicIp
+                    ip: address.PublicIp,
+                    associationid: address.AssociationId
                 }]);
             }
         });
@@ -1762,7 +1999,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.vpnconnection',
                 f2data: vpnConnection,
                 f2region: region,
-                connectionid: vpnConnection.VpnConnectionId
+                connectionid: vpnConnection.VpnConnectionId,
+                customergatewayid: vpnConnection.CustomerGatewayId,
+                vpngatewayid: vpnConnection.VpnGatewayId,
+                transitgatewayid: vpnConnection.TransitGatewayId
             }]);
 
             if (vpnConnection.Routes) {
@@ -1773,7 +2013,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.vpnconnectionroute',
                         f2data: route,
                         f2region: region,
-                        connectionid: route.VpnConnectionId
+                        connectionid: route.VpnConnectionId,
+                        destinationcidrblock: route.DestinationCidrBlock
                     }]);
                 });
             }
@@ -1816,7 +2057,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.subnetnetworkaclassociation',
                         f2data: association,
                         f2region: region,
-                        id: association.NetworkAclAssociationId
+                        networkaclassociationid: association.NetworkAclAssociationId,
+                        networkaclid: association.NetworkAclId,
+                        subnetid: association.SubnetId
                     }]);
                 });
             }
@@ -1824,12 +2067,24 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (networkAcl.Entries) {
                 networkAcl.Entries.forEach(entry => {
                     entry['NetworkAclId'] = networkAcl.NetworkAclId;
+                    var range = "";
+                    if (networkAcl.PortRange) {
+                        range = networkAcl.PortRange.From;
+                        if (networkAcl.PortRange.From != networkAcl.PortRange.To) {
+                            range = networkAcl.PortRange.From + "-" + networkAcl.PortRange.To;
+                        }
+                    }
                     $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
                         f2id: entry.NetworkAclId,
                         f2type: 'ec2.networkaclentry',
                         f2data: entry,
                         f2region: region,
-                        networkaclid: networkAcl.NetworkAclId
+                        networkaclid: networkAcl.NetworkAclId,
+                        cidrblocks: networkAcl.CidrBlock + " " + networkAcl.Ipv6CidrBlock,
+                        egress: networkAcl.Egress,
+                        protocol: networkAcl.Protocol,
+                        action: networkAcl.RuleAction,
+                        range: range
                     }]);
                 });
             }
@@ -1839,7 +2094,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.networkacl',
                 f2data: networkAcl,
                 f2region: region,
-                networkaclid: networkAcl.NetworkAclId
+                networkaclid: networkAcl.NetworkAclId,
+                vpcid: networkAcl.VpcId
             }]);
         });
 
@@ -1865,7 +2121,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.route',
                         f2data: route,
                         f2region: region,
-                        destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId
+                        destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
+                        routetableid: routeTable.RouteTableId,
+                        resource: route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId
                     }]);
                 }
             });
@@ -1877,7 +2135,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.subnetroutetableassociation',
                         f2data: association,
                         f2region: region,
-                        destination: association.RouteTableAssociationId
+                        routetableassociationid: association.RouteTableAssociationId,
+                        routetableid: association.RouteTableId,
+                        subnetid: association.SubnetId
                     }]);
                 });
             }
@@ -1892,7 +2152,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             'RouteTableId': routeTable.RouteTableId
                         },
                         f2region: region,
-                        routetable: routeTable.RouteTableId
+                        routetable: routeTable.RouteTableId,
+                        vpngatewayid: propagatingVgw.GatewayId
                     }]);
                 });
             }
@@ -1902,7 +2163,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.routetable',
                 f2data: routeTable,
                 f2region: region,
-                routetableid: routeTable.RouteTableId
+                routetableid: routeTable.RouteTableId,
+                vpcid: routeTable.VpcId
             }]);
         });
 
@@ -1923,7 +2185,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.transitgateway',
                 f2data: transitGateway,
                 f2region: region,
-                id: transitGateway.TransitGatewayId
+                id: transitGateway.TransitGatewayId,
+                description: transitGateway.Description,
+                creationtime: transitGateway.CreationTime.toString()
             }]);
         });
 
@@ -1944,7 +2208,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.transitgatewayroutetable',
                 f2data: transitGatewayRouteTable,
                 f2region: region,
-                id: transitGatewayRouteTable.TransitGatewayRouteTableId
+                id: transitGatewayRouteTable.TransitGatewayRouteTableId,
+                transitgatewayid: transitGatewayRouteTable.TransitGatewayId,
+                creationtime: transitGatewayRouteTable.CreationTime.toString()
             }]);
 
             return Promise.all([
@@ -1958,7 +2224,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             f2type: 'ec2.transitgatewayroute',
                             f2data: route,
                             f2region: region,
-                            destination: route.DestinationCidrBlock
+                            destination: route.DestinationCidrBlock,
+                            type: route.Type,
+                            blackhole: (route.State == "blackhole")
                         }]);
                     });
                 }),
@@ -1972,7 +2240,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             f2type: 'ec2.transitgatewayroutetableassociation',
                             f2data: association,
                             f2region: region,
-                            id: association.TransitGatewayAttachmentId
+                            attachmentid: association.TransitGatewayAttachmentId,
+                            resourceid: association.ResourceId,
+                            resourcetype: association.ResourceType
                         }]);
                     });
                 }),
@@ -1986,7 +2256,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             f2type: 'ec2.transitgatewayroutetablepropogation',
                             f2data: transitGatewayRouteTablePropagation,
                             f2region: region,
-                            id: transitGatewayRouteTablePropagation.TransitGatewayAttachmentId
+                            attachmentid: transitGatewayRouteTablePropagation.TransitGatewayAttachmentId,
+                            resourceid: transitGatewayRouteTablePropagation.ResourceId,
+                            resourcetype: transitGatewayRouteTablePropagation.ResourceType
                         }]);
                     });
                 })
@@ -2010,7 +2282,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.transitgatewayattachment',
                 f2data: transitGatewayVpcAttachment,
                 f2region: region,
-                id: transitGatewayVpcAttachment.TransitGatewayAttachmentId
+                attachmentid: transitGatewayVpcAttachment.TransitGatewayAttachmentId,
+                transitgatewayid: transitGatewayVpcAttachment.TransitGatewayId,
+                vpcid: transitGatewayVpcAttachment.VpcId
             }]);
         });
 
@@ -2028,7 +2302,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.vpcendpoint',
                 f2data: vpcEndpoint,
                 f2region: region,
-                id: vpcEndpoint.VpcEndpointId
+                id: vpcEndpoint.VpcEndpointId,
+                endpointtype: vpcEndpoint.VpcEndpointType,
+                vpcid: vpcEndpoint.VpcId,
+                servicename: vpcEndpoint.ServiceName
             }]);
         });
 
@@ -2046,7 +2323,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.vpcendpointconnectionnotification',
                 f2data: connectionNotification,
                 f2region: region,
-                id: connectionNotification.ConnectionNotificationId
+                id: connectionNotification.ConnectionNotificationId,
+                serviceid: connectionNotification.ServiceId,
+                vpcendpointid: connectionNotification.VpcEndpointId,
+                topicarn: connectionNotification.ConnectionNotificationArn
             }]);
         });
 
@@ -2057,6 +2337,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
             if (serviceDetail.ServiceName.startsWith("vpce-svc-")) {
@@ -2065,26 +2346,25 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     f2type: 'ec2.vpcendpointservice',
                     f2data: serviceDetail,
                     f2region: region,
-                    name: serviceDetail.ServiceName
+                    name: serviceDetail.ServiceName,
+                    privatednsname: serviceDetail.PrivateDnsName,
+                    acceptancerequired: serviceDetail.AcceptanceRequired
                 }]);
 
                 return sdkcall("EC2", "describeVpcEndpointServicePermissions", {
                     ServiceId: serviceDetail.ServiceName
                 }, true).then((data) => {
-                    $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
-
                     $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('append', [{
-                        f2id: allowedPrincipal.Principal,
+                        f2id: serviceDetail.ServiceName,
                         f2type: 'ec2.vpcendpointservicepermission',
                         f2data: {
                             'ServiceId': serviceDetail.ServiceName,
                             'AllowedPrincipals': data.AllowedPrincipals
                         },
                         f2region: region,
-                        principal: allowedPrincipal.Principal
+                        servicename: serviceDetail.ServiceName,
+                        allowedprincipals: data.AllowedPrincipals.join(",")
                     }]);
-
-                    unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
                 });
             }
 
@@ -2092,6 +2372,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         }));
 
         unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable');
     });
 
     await sdkcall("EC2", "describeNatGateways", {
@@ -2105,7 +2386,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.natgateway',
                 f2data: natGateway,
                 f2region: region,
-                id: natGateway.NatGatewayId
+                id: natGateway.NatGatewayId,
+                creationtime: natGateway.CreateTime.toString(),
+                subnetid: natGateway.SubnetId,
+                vpcid: natGateway.VpcId
             }]);
         });
 
@@ -2152,8 +2436,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'domainname',
+                        title: 'Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'recordscount',
+                        title: 'Records Count',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2189,8 +2481,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ttl',
+                        title: 'TTL',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2226,8 +2526,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'target',
+                        title: 'Target',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'port',
+                        title: 'Port',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2247,8 +2563,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2263,8 +2579,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'direction',
+                        title: 'Direction',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ipaddresscount',
+                        title: 'IP Address Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'hostvpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2284,8 +2624,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2300,8 +2640,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'domainname',
+                        title: 'Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resolverendpointid',
+                        title: 'Resolver Endpoint ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2321,8 +2677,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -2337,8 +2693,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resolverruleid',
+                        title: 'Resolver Rule ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -2369,7 +2741,9 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 f2type: 'route53.hostedzone',
                 f2data: hostedZone,
                 f2region: region,
-                hostedzoneid: hostedZone.Id.split("/").pop()
+                hostedzoneid: hostedZone.Id.split("/").pop(),
+                domainname: hostedZone.Name,
+                recordscount: hostedZone.ResourceRecordSetCount
             }]);
 
             return sdkcall("Route53", "listResourceRecordSets", {
@@ -2386,7 +2760,8 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                         f2data: resourceRecordSet,
                         f2region: region,
                         name: resourceRecordSet.Name,
-                        type: resourceRecordSet.Type
+                        type: resourceRecordSet.Type,
+                        ttl: resourceRecordSet.TTL
                     }]);
                 });
         
@@ -2408,7 +2783,10 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 f2type: 'route53.healthcheck',
                 f2data: healthCheck,
                 f2region: region,
-                id: healthCheck.Id
+                id: healthCheck.Id,
+                target: healthCheck.HealthCheckConfig.IPAddress || healthCheck.HealthCheckConfig.FullyQualifiedDomainName,
+                port: healthCheck.HealthCheckConfig.Port,
+                type: healthCheck.HealthCheckConfig.Type
             }]);
         });
 
@@ -2429,7 +2807,11 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     f2type: 'route53.resolverendpoint',
                     f2data: data.ResolverEndpoint,
                     f2region: region,
-                    id: data.ResolverEndpoint.Id
+                    id: data.ResolverEndpoint.Id,
+                    name: data.ResolverEndpoint.Name,
+                    direction: data.ResolverEndpoint.Direction,
+                    ipaddresscount: data.ResolverEndpoint.IpAddressCount,
+                    hostvpcid: data.ResolverEndpoint.HostVPCId
                 }]);
             });
         }));
@@ -2451,7 +2833,10 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     f2type: 'route53.resolverrule',
                     f2data: data.ResolverRule,
                     f2region: region,
-                    id: data.ResolverRule.Id
+                    id: data.ResolverRule.Id,
+                    domainname: data.ResolverRule.DomainName,
+                    name: data.ResolverRule.Name,
+                    resolverendpointid: data.ResolverRule.ResolverEndpointId
                 }]);
             });
         }));
@@ -2473,7 +2858,10 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     f2type: 'route53.resolverruleassociation',
                     f2data: data.ResolverRuleAssociation,
                     f2region: region,
-                    id: data.ResolverRuleAssociation.Id
+                    id: data.ResolverRuleAssociation.Id,
+                    resolverruleid: data.ResolverRuleAssociation.ResolverRuleId,
+                    name: data.ResolverRuleAssociation.Name,
+                    vpcid: data.ResolverRuleAssociation.VPCId
                 }]);
             });
         }));
@@ -4954,8 +5342,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'databasename',
+                        title: 'Database Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enginemode',
+                        title: 'Engine Mode',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'allocatedstorage',
+                        title: 'Allocated Storage',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -4991,8 +5403,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instanceclass',
+                        title: 'Instance Class',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'dbname',
+                        title: 'Database Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'allocatedstorage',
+                        title: 'Allocated Storage',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5028,8 +5464,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5065,8 +5509,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5102,8 +5554,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5139,8 +5599,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enginename',
+                        title: 'Engine Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'majorengineversion',
+                        title: 'Major Engine Version',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5176,8 +5652,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5197,8 +5681,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ARN',
+                        field: 'arn',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -5213,8 +5697,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'snstopicarn',
+                        title: 'SNS Topic ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'sourcetype',
+                        title: 'Source Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5247,7 +5747,11 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.cluster',
                 f2data: dbCluster,
                 f2region: region,
-                clusterid: dbCluster.DBClusterIdentifier
+                clusterid: dbCluster.DBClusterIdentifier,
+                databasename: dbCluster.DatabaseName,
+                engine: dbCluster.Engine,
+                enginemode: dbCluster.EngineMode,
+                allocatedstorage: (dbCluster.AllocatedStorage == 1) ? "&infin;" : dbCluster.AllocatedStorage + " GB"
             }]);
         });
 
@@ -5265,7 +5769,11 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.instance',
                 f2data: dbInstance,
                 f2region: region,
-                instanceid: dbInstance.DBInstanceIdentifier
+                instanceid: dbInstance.DBInstanceIdentifier,
+                engine: dbInstance.Engine,
+                instanceclass: dbInstance.DBInstanceClass,
+                dbname: dbInstance.DBName,
+                allocatedstorage: (dbInstance.AllocatedStorage == 1) ? "&infin;" : dbInstance.AllocatedStorage + " GB"
             }]);
         });
 
@@ -5283,7 +5791,9 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.DBSubnetGroupName
+                name: subnetGroup.DBSubnetGroupName,
+                description: subnetGroup.DBSubnetGroupDescription,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -5302,7 +5812,8 @@ async function updateDatatableDatabaseRDS() {
                 f2data: parameterGroup,
                 f2region: region,
                 name: parameterGroup.DBParameterGroupName,
-                family: parameterGroup.DBParameterGroupFamily
+                family: parameterGroup.DBParameterGroupFamily,
+                description: parameterGroup.Description
             }]);
         });
 
@@ -5321,7 +5832,8 @@ async function updateDatatableDatabaseRDS() {
                 f2data: parameterGroup,
                 f2region: region,
                 name: parameterGroup.DBClusterParameterGroupName,
-                family: parameterGroup.DBParameterGroupFamily
+                family: parameterGroup.DBParameterGroupFamily,
+                description: parameterGroup.Description
             }]);
         });
 
@@ -5339,7 +5851,10 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.optiongroup',
                 f2data: optionGroup,
                 f2region: region,
-                name: optionGroup.OptionGroupName
+                name: optionGroup.OptionGroupName,
+                description: optionGroup.OptionGroupDescription,
+                enginename: optionGroup.EngineName,
+                majorengineversion: optionGroup.MajorEngineVersion
             }]);
         });
 
@@ -5357,7 +5872,9 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.securitygroup',
                 f2data: securityGroup,
                 f2region: region,
-                name: securityGroup.DBSecurityGroupName
+                name: securityGroup.DBSecurityGroupName,
+                description: securityGroup.DBSecurityGroupDescription,
+                vpcid: securityGroup.VpcId
             }]);
         });
 
@@ -5375,7 +5892,10 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.eventsubscription',
                 f2data: eventSubscriptions,
                 f2region: region,
-                arn: eventSubscriptions.EventSubscriptionArn
+                arn: eventSubscriptions.EventSubscriptionArn,
+                snstopicarn: eventSubscriptions.SnsTopicArn,
+                sourcetype: eventSubscriptions.SourceType,
+                creationtime: eventSubscriptions.SubscriptionCreationTime
             }]);
         });
 
@@ -5402,8 +5922,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -5418,8 +5938,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'cachenodetype',
+                        title: 'Cache Node Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'engineversion',
+                        title: 'Engine Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'cachenodecount',
+                        title: 'Cache Node Count',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5439,8 +5983,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -5455,8 +5999,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'snapshottingclusterid',
+                        title: 'Snapshotting Cluster ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5492,8 +6044,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5529,8 +6089,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5566,8 +6134,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -5598,7 +6166,11 @@ async function updateDatatableDatabaseElastiCache() {
                     f2type: 'elasticache.cluster',
                     f2data: cluster,
                     f2region: region,
-                    id: cluster.CacheClusterId
+                    id: cluster.CacheClusterId,
+                    cachenodetype: cluster.CacheNodeType,
+                    engine: cluster.Engine,
+                    engineversion: cluster.EngineVersion,
+                    cachenodecount: cluster.NumCacheNodes
                 }]);
             });
         }
@@ -5618,7 +6190,9 @@ async function updateDatatableDatabaseElastiCache() {
                     f2type: 'elasticache.replicationgroup',
                     f2data: replicationGroup,
                     f2region: region,
-                    id: replicationGroup.ReplicationGroupId
+                    id: replicationGroup.ReplicationGroupId,
+                    description: replicationGroup.Description,
+                    snapshottingclusterid: replicationGroup.SnapshottingClusterId
                 }]);
             });
         }
@@ -5637,7 +6211,9 @@ async function updateDatatableDatabaseElastiCache() {
                 f2type: 'elasticache.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.CacheSubnetGroupName
+                name: subnetGroup.CacheSubnetGroupName,
+                description: subnetGroup.CacheSubnetGroupDescription,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -5675,7 +6251,8 @@ async function updateDatatableDatabaseElastiCache() {
                 f2type: 'elasticache.securitygroup',
                 f2data: securityGroup,
                 f2region: region,
-                name: securityGroup.CacheSecurityGroupName
+                name: securityGroup.CacheSecurityGroupName,
+                description: securityGroup.Description
             }]);
         });
     }).catch((err) => {
@@ -6157,8 +6734,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Cluster ID',
+                        field: 'clusterid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -6173,8 +6750,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'nodetype',
+                        title: 'Node Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'databasename',
+                        title: 'Database Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6210,8 +6811,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6247,8 +6856,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6268,8 +6885,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Group ID',
-                        field: 'groupid',
+                        title: 'Name',
+                        field: 'name',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -6284,8 +6901,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6314,7 +6931,11 @@ async function updateDatatableDatabaseRedshift() {
                 f2type: 'redshift.cluster',
                 f2data: cluster,
                 f2region: region,
-                clusterid: cluster.ClusterIdentifier
+                clusterid: cluster.ClusterIdentifier,
+                nodetype: cluster.NodeType,
+                databasename: cluster.DBName,
+                availabilityzone: cluster.AvailabilityZone,
+                vpcid: cluster.VpcId
             }]);
         });
 
@@ -6332,7 +6953,9 @@ async function updateDatatableDatabaseRedshift() {
                 f2type: 'redshift.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.ClusterSubnetGroupName
+                name: subnetGroup.ClusterSubnetGroupName,
+                description: subnetGroup.Description,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -6350,7 +6973,9 @@ async function updateDatatableDatabaseRedshift() {
                 f2type: 'redshift.parametergroup',
                 f2data: parameterGroup,
                 f2region: region,
-                name: parameterGroup.ParameterGroupName
+                name: parameterGroup.ParameterGroupName,
+                family: parameterGroup.ParameterGroupFamily,
+                description: parameterGroup.Description
             }]);
         });
 
@@ -6368,7 +6993,8 @@ async function updateDatatableDatabaseRedshift() {
                 f2type: 'redshift.securitygroup',
                 f2data: securityGroup,
                 f2region: region,
-                name: securityGroup.ClusterSecurityGroupName
+                name: securityGroup.ClusterSecurityGroupName,
+                description: securityGroup.Description
             }]);
         });
     }).catch(err => {});
@@ -6722,8 +7348,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'datecreated',
+                        title: 'Date Created',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6759,8 +7393,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'applicationname',
+                        title: 'Application Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'datecreated',
+                        title: 'Date Created',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6796,8 +7446,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'applicationname',
+                        title: 'Application Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'templatename',
+                        title: 'Template Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'platformarn',
+                        title: 'Platform ARN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6833,8 +7507,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'platformarn',
+                        title: 'Platform ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'environmentname',
+                        title: 'Environment Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'datecreated',
+                        title: 'Date Created',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6863,7 +7561,9 @@ async function updateDatatableComputeElasticBeanstalk() {
                 f2type: 'elasticbeanstalk.application',
                 f2data: application,
                 f2region: region,
-                name: application.ApplicationName
+                name: application.ApplicationName,
+                description: application.Description,
+                datecreated: application.DateCreated.toString()
             }]);
 
             return sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
@@ -6877,7 +7577,11 @@ async function updateDatatableComputeElasticBeanstalk() {
                         f2type: 'elasticbeanstalk.configurationtemplate',
                         f2data: configurationTemplate,
                         f2region: region,
-                        name: configurationTemplate.TemplateName
+                        name: configurationTemplate.TemplateName,
+                        description: configurationTemplate.Description,
+                        platformarn: configurationTemplate.PlatformArn,
+                        environmentname: configurationTemplate.EnvironmentName,
+                        datecreated: configurationTemplate.DateCreated.toString()
                     }]);
                 });
         
@@ -6899,7 +7603,10 @@ async function updateDatatableComputeElasticBeanstalk() {
                 f2type: 'elasticbeanstalk.applicationversion',
                 f2data: applicationVersion,
                 f2region: region,
-                name: applicationVersion.VersionLabel
+                name: applicationVersion.VersionLabel,
+                applicationname: applicationVersion.ApplicationName,
+                description: applicationVersion.Description,
+                datecreated: applicationVersion.DateCreated.toString()
             }]);
         });
 
@@ -6917,7 +7624,11 @@ async function updateDatatableComputeElasticBeanstalk() {
                 f2type: 'elasticbeanstalk.environment',
                 f2data: environment,
                 f2region: region,
-                name: environment.EnvironmentName
+                name: environment.EnvironmentName,
+                applicationname: environment.ApplicationName,
+                platformarn: environment.PlatformArn,
+                templatename: environment.TemplateName,
+                description: environment.Description
             }]);
         });
 
@@ -6960,8 +7671,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'metric',
+                        title: 'Metric',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'threshold',
+                        title: 'Threshold',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'unit',
+                        title: 'Unit',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -6988,22 +7723,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -7034,8 +7757,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'eventpattern',
+                        title: 'Event Pattern',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scheduleexpression',
+                        title: 'Schedule Expression',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7062,22 +7809,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -7108,8 +7843,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'targetarn',
+                        title: 'Target ARN',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7118,7 +7853,7 @@ sections.push({
                 ]
             ]
         },
-        'Log Groups': {
+        'Log Groups (disabled)': {
             'columns': [
                 [
                     {
@@ -7145,17 +7880,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'retention',
+                        title: 'Retention',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'amountstored',
+                        title: 'Amount Stored',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
                 ]
             ]
         },
-        'Log Streams': {
+        'Log Streams (disabled)': {
             'columns': [
                 [
                     {
@@ -7182,10 +7926,11 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'amountstored',
+                        title: 'Amount Stored',
                         sortable: true,
                         editable: true,
+                        formatter: byteSizeFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -7219,8 +7964,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'loggroupname',
+                        title: 'Log Group Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'filterpattern',
+                        title: 'Filter Pattern',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7229,7 +7982,7 @@ sections.push({
                 ]
             ]
         },
-        'Subscription Filters': {
+        'Subscription Filters (disabled)': {
             'columns': [
                 [
                     {
@@ -7256,8 +8009,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'loggroupname',
+                        title: 'Log Group Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'filterpattern',
+                        title: 'Filter Pattern',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'distribution',
+                        title: 'Distribution',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7291,7 +8060,11 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.alarm',
                 f2data: metricAlarm,
                 f2region: region,
-                name: metricAlarm.AlarmName
+                name: metricAlarm.AlarmName,
+                description: metricAlarm.AlarmDescription,
+                metric: metricAlarm.Statistic + " for " + metricAlarm.Namespace + "/" + metricAlarm.MetricName,
+                threshold: metricAlarm.Threshold,
+                unit: metricAlarm.Unit
             }]);
         });
 
@@ -7340,7 +8113,11 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                         f2type: 'cloudwatch.rule',
                         f2data: data,
                         f2region: region,
-                        name: data.Name
+                        name: data.Name,
+                        description: data.Description,
+                        eventpattern: data.EventPattern,
+                        scheduleexpression: data.ScheduleExpression,
+                        enabled: (data.State == "ENABLED")
                     }]);
                 });
             });
@@ -7380,7 +8157,8 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.destination',
                 f2data: destination,
                 f2region: region,
-                name: destination.destinationName
+                name: destination.destinationName,
+                targetarn: destination.targetArn
             }]);
         });
 
@@ -7403,7 +8181,9 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.loggroup',
                 f2data: logGroup,
                 f2region: region,
-                name: logGroup.logGroupName
+                name: logGroup.logGroupName,
+                retention: logGroup.retentionInDays + " days",
+                amountstored: logGroup.storedBytes
             }]);
 
             return Promise.all([
@@ -7417,7 +8197,8 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                             f2type: 'cloudwatch.logstream',
                             f2data: logStream,
                             f2region: region,
-                            name: logStream.logStreamName
+                            name: logStream.logStreamName,
+                            amountstored: logGroup.storedBytes
                         }]);
                     });
                 }),
@@ -7431,7 +8212,10 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                             f2type: 'cloudwatch.subscriptionfilter',
                             f2data: subscriptionFilter,
                             f2region: region,
-                            name: subscriptionFilter.filterName
+                            name: subscriptionFilter.filterName,
+                            loggroupname: logGroup.logGroupName,
+                            filterpattern: subscriptionFilter.filterPattern,
+                            distribution: subscriptionFilter.distribution
                         }]);
                     });
                 })
@@ -7455,7 +8239,9 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.metricfilter',
                 f2data: metricFilter,
                 f2region: region,
-                name: metricFilter.filterName
+                name: metricFilter.filterName,
+                loggroupname: metricFilter.logGroupName,
+                filterpattern: metricFilter.filterPattern
             }]);
         });
 
@@ -7498,8 +8284,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'homeregion',
+                        title: 'Home Region',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'multiregion',
+                        title: 'Multi Region',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'organization',
+                        title: 'Organization',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'bucketname',
+                        title: 'Bucket Name',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7525,7 +8337,11 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
                 f2type: 'cloudtrail.trail',
                 f2data: trail,
                 f2region: region,
-                name: trail.Name
+                name: trail.Name,
+                multiregion: trail.IsMultiRegionTrail,
+                organization: trail.IsOrganizationTrail,
+                homeregion: trail.HomeRegion,
+                bucketname: trail.S3BucketName
             }]);
         });
 
@@ -7568,8 +8384,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'httpversion',
+                        title: 'HTTP Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'priceclass',
+                        title: 'Price Class',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7605,8 +8445,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'priceclass',
+                        title: 'Price Class',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7642,8 +8498,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 's3canonicaluserid',
+                        title: 'S3 Canonical User ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7671,7 +8535,11 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
                 f2type: 'cloudfront.distribution',
                 f2data: distribution,
                 f2region: region,
-                domainname: distribution.DomainName
+                domainname: distribution.DomainName,
+                id: distribution.Id,
+                httpversion: distribution.HttpVersion,
+                comment: distribution.Comment,
+                priceclass: distribution.PriceClass // TODO: Make readable
             }]);
         });
 
@@ -7689,7 +8557,10 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
                 f2type: 'cloudfront.streamingdistribution',
                 f2data: distribution,
                 f2region: region,
-                domainname: distribution.DomainName
+                domainname: distribution.DomainName,
+                id: distribution.Id,
+                comment: distribution.Comment,
+                priceclass: distribution.PriceClass // TODO: Make readable
             }]);
         });
 
@@ -7707,7 +8578,9 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
                 f2type: 'cloudfront.originaccessidentity',
                 f2data: oai,
                 f2region: region,
-                id: oai.Id
+                id: oai.Id,
+                s3canonicaluserid: oai.S3CanonicalUserId,
+                comment: oai.Comment
             }]);
         });
 
@@ -7750,8 +8623,25 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'itemcount',
+                        title: 'Item Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7787,8 +8677,32 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'totalnodes',
+                        title: 'Total Nodes',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'nodetype',
+                        title: 'Node Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetgroup',
+                        title: 'Subnet Group',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7824,8 +8738,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7834,7 +8748,7 @@ sections.push({
                 ]
             ]
         },
-        'Accelerator Cluster Groups': {
+        'Accelerator Subnet Groups': {
             'columns': [
                 [
                     {
@@ -7861,8 +8775,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -7894,7 +8816,10 @@ async function updateDatatableDatabaseDynamoDB() {
                     f2type: 'dynamodb.table',
                     f2data: data.Table,
                     f2region: region,
-                    name: data.Table.TableName
+                    name: data.Table.TableName,
+                    creationtime: data.Table.CreationDateTime.toString(),
+                    size: data.Table.TableSizeBytes,
+                    itemcount: data.Table.ItemCount
                 }]);
             });
         }));
@@ -7913,7 +8838,11 @@ async function updateDatatableDatabaseDynamoDB() {
                 f2type: 'dynamodb.acceleratorcluster',
                 f2data: cluster,
                 f2region: region,
-                name: cluster.ClusterName
+                name: cluster.ClusterName,
+                description: cluster.Description,
+                totalnodes: cluster.TotalNodes,
+                nodetype: cluster.NodeType,
+                subnetgroup: cluster.SubnetGroup
             }]);
         });
 
@@ -7935,7 +8864,8 @@ async function updateDatatableDatabaseDynamoDB() {
                     f2type: 'dynamodb.acceleratorparametergroup',
                     f2data: parameterGroup,
                     f2region: region,
-                    name: parameterGroup.ParameterGroupName
+                    name: parameterGroup.ParameterGroupName,
+                    description: parameterGroup.Description
                 }]);
             });
         }));
@@ -7954,7 +8884,9 @@ async function updateDatatableDatabaseDynamoDB() {
                 f2type: 'dynamodb.acceleratorsubnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.SubnetGroupName
+                name: subnetGroup.SubnetGroupName,
+                description: subnetGroup.Description,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -9005,8 +9937,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9021,8 +9953,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9032,43 +9980,6 @@ sections.push({
             ]
         },
         'WebSocket APIs': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Stages': {
             'columns': [
                 [
                     {
@@ -9095,8 +10006,85 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Stages': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deploymentid',
+                        title: 'Deployment ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9132,8 +10120,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9169,8 +10173,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'parentid',
+                        title: 'Parent ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9190,8 +10210,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'ID',
-                        field: 'id',
+                        title: 'HTTP Method',
+                        field: 'httpmethod',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9206,8 +10226,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resourceid',
+                        title: 'Resource ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'operationname',
+                        title: 'Operation Name',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9243,8 +10279,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'key',
+                        title: 'Route Key',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'target',
+                        title: 'Target',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9280,8 +10332,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'routeid',
+                        title: 'Route ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'key',
+                        title: 'Key',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9311,14 +10379,46 @@ sections.push({
                     },
                     {
                         title: 'Properties',
-                        colspan: 4,
+                        colspan: 5,
                         align: 'center'
                     }
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'key',
+                        title: 'Key',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'method',
+                        title: 'Method',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'apiid',
+                        title: 'API ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9354,8 +10454,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'integrationid',
+                        title: 'Integration ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'key',
+                        title: 'Key',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9398,8 +10514,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Key ID',
-                        field: 'keyid',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9414,10 +10530,27 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -9451,8 +10584,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9472,8 +10621,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'ID',
-                        field: 'id',
+                        title: 'Base Path',
+                        field: 'basepath',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9488,8 +10637,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'restapiid',
+                        title: 'REST API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'stage',
+                        title: 'Stage',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9525,8 +10682,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9562,8 +10719,8 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9583,8 +10740,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'ID',
-                        field: 'id',
+                        title: 'REST API ID',
+                        field: 'restapiid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9599,8 +10756,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9620,8 +10785,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'ID',
-                        field: 'id',
+                        title: 'Domain Name',
+                        field: 'domainname',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -9636,8 +10801,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'certificatename',
+                        title: 'Certificate Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'regionaldomainname',
+                        title: 'Regional Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'regionalcertificatename',
+                        title: 'Regional Certificate Name',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9673,8 +10854,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'statuscode',
+                        title: 'Status Code',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9710,8 +10899,24 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'contenttype',
+                        title: 'Content Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9747,10 +10952,36 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'apiid',
+                        title: 'API ID',
                         sortable: true,
                         editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'validaterequestbody',
+                        title: 'Validate Request Body',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'validaterequestparameters',
+                        title: 'Validate Request Parameters',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -9784,8 +11015,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9821,8 +11060,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9858,8 +11105,16 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -9946,7 +11201,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.domainname',
                 f2data: domainName,
                 f2region: region,
-                domainname: domainName.domainName
+                domainname: domainName.domainName,
+                certificatename: domainName.certificateName,
+                regionaldomainname: domainName.regionalDomainName,
+                regionalcertificatename: domainName.regionalCertificateName
             }]);
 
             return sdkcall("APIGateway", "getBasePathMappings", {
@@ -9960,7 +11218,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                         f2type: 'apigateway.basepathmapping',
                         f2data: basePathMapping,
                         f2region: region,
-                        basepath: basePathMapping.basePath
+                        basepath: basePathMapping.basePath,
+                        restapiid: basePathMapping.restApiId,
+                        stage: basePathMapping.stage
                     }]);
                 });
             });
@@ -9979,7 +11239,8 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.clientcertificate',
                 f2data: clientCertificate,
                 f2region: region,
-                id: clientCertificate.clientCertificateId
+                id: clientCertificate.clientCertificateId,
+                description: clientCertificate.description
             }]);
         });
 
@@ -9995,7 +11256,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.apikey',
                 f2data: apiKey,
                 f2region: region,
-                name: apiKey.name
+                name: apiKey.name,
+                id: apiKey.id,
+                description: apiKey.description,
+                enabled: apiKey.enabled
             }]);
         });
 
@@ -10011,7 +11275,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.vpclink',
                 f2data: vpcLink,
                 f2region: region,
-                name: vpcLink.name
+                name: vpcLink.name,
+                id: vpcLink.id,
+                description: vpcLink.description
             }]);
         });
 
@@ -10027,7 +11293,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.usageplan',
                 f2data: usagePlan,
                 f2region: region,
-                name: usagePlan.name
+                name: usagePlan.name,
+                id: usagePlan.id,
+                description: usagePlan.description
             }]);
 
             return sdkcall("APIGateway", "getUsagePlanKeys", {
@@ -10039,7 +11307,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                         f2type: 'apigateway.usageplankey',
                         f2data: usagePlanKey,
                         f2region: region,
-                        name: usagePlanKey.name
+                        name: usagePlanKey.name,
+                        id: usagePlanKey.id,
+                        type: usagePlanKey.type
                     }]);
                 });
             });
@@ -10058,7 +11328,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigateway.restapi',
                 f2data: api,
                 f2region: region,
-                name: api.name
+                name: api.name,
+                id: api.id,
+                description: api.description,
+                version: api.version
             }]);
 
             return Promise.all([
@@ -10073,7 +11346,11 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                 f2type: 'apigateway.requestvalidator',
                                 f2data: requestValidator,
                                 f2region: region,
-                                name: requestValidator.name
+                                apiid: api.ApiId,
+                                id: requestValidator.id,
+                                name: requestValidator.name,
+                                validaterequestbody: requestValidator.validateRequestBody,
+                                validaterequestparameters: requestValidator.validateRequestParameters
                             }]);
                         });
                     }
@@ -10091,6 +11368,7 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                 f2type: 'apigateway.documentationpart',
                                 f2data: documentationPart,
                                 f2region: region,
+                                apiid: api.ApiId,
                                 id: documentationPart.id
                             }]);
                         });
@@ -10109,7 +11387,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                 f2type: 'apigateway.documentationversion',
                                 f2data: documentationVersion,
                                 f2region: region,
-                                version: documentationVersion.version
+                                restapiid: api.id,
+                                version: documentationVersion.version,
+                                description: documentationVersion.description
                             }]);
                         });
                     }
@@ -10127,7 +11407,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                 f2type: 'apigateway.gatewayresponse',
                                 f2data: gatewayResponse,
                                 f2region: region,
-                                responsetype: gatewayResponse.responseType
+                                apiid: api.ApiId,
+                                responsetype: gatewayResponse.responseType,
+                                statuscode: gatewayResponse.statusCode
                             }]);
                         });
                     }
@@ -10144,7 +11426,12 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigateway.stage',
                             f2data: stage,
                             f2region: region,
-                            name: stage.stageName
+                            name: stage.stageName,
+                            apiid: api.ApiId,
+                            deploymentid: stage.deploymentId,
+                            description: stage.description,
+                            tracingenabled: stage.tracingEnabled,
+                            creationtime: stage.createdDate.toString()
                         }]);
                     });
     
@@ -10160,7 +11447,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigateway.deployment',
                             f2data: deployment,
                             f2region: region,
-                            id: deployment.id
+                            id: deployment.id,
+                            apiid: api.ApiId,
+                            description: deployment.description,
+                            creationtime: deployment.createdDate.toString()
                         }]);
                     });
     
@@ -10183,7 +11473,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                     f2type: 'apigateway.method',
                                     f2data: data,
                                     f2region: region,
-                                    httpmethod: data.httpMethod
+                                    apiid: api.ApiId,
+                                    resourceid: resource.id,
+                                    httpmethod: data.httpMethod,
+                                    operationname: data.operationName
                                 }]);
                             });
                         }));
@@ -10194,7 +11487,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigateway.resource',
                             f2data: resource,
                             f2region: region,
-                            id: resource.id
+                            apiid: api.ApiId,
+                            id: resource.id,
+                            parentid: resource.parentId,
+                            path: resource.path
                         }]);
                     });
     
@@ -10211,7 +11507,11 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigateway.model',
                             f2data: model,
                             f2region: region,
-                            name: model.name
+                            id: model.id,
+                            apiid: api.ApiId,
+                            name: model.name,
+                            description: model.description,
+                            contenttype: model.contentType
                         }]);
                     });
     
@@ -10227,7 +11527,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigateway.authorizer',
                             f2data: authorizer,
                             f2region: region,
-                            name: authorizer.name
+                            name: authorizer.name,
+                            id: authorizer.id,
+                            apiid: api.ApiId,
+                            type: authorizer.type
                         }]);
                     });
     
@@ -10249,7 +11552,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                 f2type: 'apigatewayv2.api',
                 f2data: api,
                 f2region: region,
-                name: api.Name
+                name: api.Name,
+                id: api.ApiId,
+                description: api.Description,
+                version: api.Version
             }]);
 
             return Promise.all([
@@ -10263,7 +11569,11 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.stage',
                             f2data: stage,
                             f2region: region,
-                            name: stage.StageName
+                            name: stage.StageName,
+                            apiid: api.ApiId,
+                            deploymentid: api.DeploymentId,
+                            description: api.Description,
+                            creationtime: api.CreatedDate.toString()
                         }]);
                     });
     
@@ -10279,7 +11589,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.deployment',
                             f2data: deployment,
                             f2region: region,
-                            id: deployment.DeploymentId
+                            id: deployment.DeploymentId,
+                            apiid: api.ApiId,
+                            description: deployment.Description,
+                            creationtime: deployment.CreatedDate.toString()
                         }]);
                     });
     
@@ -10295,7 +11608,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.model',
                             f2data: model,
                             f2region: region,
-                            name: model.Name
+                            name: model.Name,
+                            id: model.ModelId,
+                            description: model.Description,
+                            contenttype: model.ContentType
                         }]);
                     });
     
@@ -10311,7 +11627,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.authorizer',
                             f2data: authorizer,
                             f2region: region,
-                            name: authorizer.Name
+                            name: authorizer.Name,
+                            apiid: api.ApiId,
+                            id: authorizer.AuthorizerId,
+                            type: authorizer.AuthorizerType
                         }]);
                     });
     
@@ -10327,7 +11646,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.route',
                             f2data: route,
                             f2region: region,
-                            key: route.RouteKey
+                            key: route.RouteKey,
+                            id: route.RouteId,
+                            apiid: api.ApiId,
+                            target: route.Target
                         }]);
 
                         return sdkcall("ApiGatewayV2", "getRouteResponses", {
@@ -10342,7 +11664,10 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                     f2type: 'apigatewayv2.routeresponse',
                                     f2data: routeResponse,
                                     f2region: region,
-                                    key: routeResponse.RouteResponseKey
+                                    key: routeResponse.RouteResponseKey,
+                                    id: routeResponse.RouteResponseId,
+                                    apiid: api.ApiId,
+                                    routeid: route.RouteId
                                 }]);
                             });
                         });
@@ -10361,7 +11686,12 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                             f2type: 'apigatewayv2.integration',
                             f2data: integration,
                             f2region: region,
-                            key: integration.IntegrationKey
+                            key: integration.IntegrationKey,
+                            apiid: api.ApiId,
+                            description: integration.Description,
+                            id: integration.IntegrationId,
+                            method: integration.IntegrationMethod,
+                            type: integration.IntegrationType
                         }]);
 
                         return sdkcall("ApiGatewayV2", "getIntegrationResponses", {
@@ -10376,6 +11706,9 @@ async function updateDatatableNetworkingAndContentDeliveryApiGateway() {
                                     f2type: 'apigatewayv2.integrationresponse',
                                     f2data: integrationResponse,
                                     f2region: region,
+                                    id: integrationResponse.IntegrationResponseId,
+                                    apiid: api.ApiId,
+                                    integrationid: integration.IntegrationId,
                                     key: integrationResponse.IntegrationResponseKey
                                 }]);
                             });
@@ -10427,11 +11760,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'ecsclusterarn',
+                        title: 'ECS Cluster ARN',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10465,11 +11805,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'type',
+                        title: 'Type',
                         sortable: true,
                         editable: true,
-                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'revision',
+                        title: 'Revision',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10503,11 +11850,19 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'priority',
+                        title: 'Priority',
                         sortable: true,
                         editable: true,
-                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10533,7 +11888,9 @@ async function updateDatatableComputeBatch() {
                 f2type: 'batch.computeenvironment',
                 f2data: computeEnvironment,
                 f2region: region,
-                name: computeEnvironment.computeEnvironmentName
+                name: computeEnvironment.computeEnvironmentName,
+                ecsclusterarn: computeEnvironment.ecsClusterArn,
+                type: computeEnvironment.type
             }]);
         });
 
@@ -10551,7 +11908,9 @@ async function updateDatatableComputeBatch() {
                 f2type: 'batch.jobdefinition',
                 f2data: jobDefinition,
                 f2region: region,
-                name: jobDefinition.jobDefinitionName
+                name: jobDefinition.jobDefinitionName,
+                type: jobDefinition.type,
+                revision: jobDefinition.revision
             }]);
         });
 
@@ -10569,7 +11928,9 @@ async function updateDatatableComputeBatch() {
                 f2type: 'batch.jobqueue',
                 f2data: jobQueue,
                 f2region: region,
-                name: jobQueue.jobQueueName
+                name: jobQueue.jobQueueName,
+                enabled: (jobQueue.state == "ENABLED"),
+                priority: jobQueue.priority
             }]);
         });
 
@@ -10596,8 +11957,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Filesystem ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -10612,11 +11973,27 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'name',
+                        title: 'Name',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10634,8 +12011,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Mount Target ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -10650,11 +12027,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'filesystemid',
+                        title: 'File System ID',
                         sortable: true,
                         editable: true,
-                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ipaddress',
+                        title: 'IP Address',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10679,7 +12071,10 @@ async function updateDatatableStorageEFS() {
                 f2type: 'efs.filesystem',
                 f2data: fileSystem,
                 f2region: region,
-                id: fileSystem.FileSystemId
+                id: fileSystem.FileSystemId,
+                creationtime: fileSystem.CreationTime.toString(),
+                name: fileSystem.Name,
+                size: fileSystem.SizeInBytes.Value
             }]);
 
             return sdkcall("EFS", "describeMountTargets", {
@@ -10701,7 +12096,10 @@ async function updateDatatableStorageEFS() {
                             f2type: 'efs.mounttarget',
                             f2data: mountTarget,
                             f2region: region,
-                            name: mountTarget.MountTargetId
+                            id: mountTarget.MountTargetId,
+                            filesystemid: mountTarget.FileSystemId,
+                            subnetid: mountTarget.SubnetId,
+                            ipaddress: mountTarget.IpAddress
                         }]);
                     });
                 }));
@@ -10748,11 +12146,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10780,7 +12185,9 @@ async function updateDatatableDeveloperToolsCloud9() {
                         f2type: 'cloud9.environment',
                         f2data: environment,
                         f2region: region,
-                        name: environment.name
+                        name: environment.name,
+                        id: environment.id,
+                        description: environment.description
                     }]);
                 });
             });
@@ -10809,8 +12216,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'File System ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -10825,11 +12232,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'dnsname',
+                        title: 'DNS Name',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'filesystemtype',
+                        title: 'File System Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'storagecapacity',
+                        title: 'Storage Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10853,7 +12283,11 @@ async function updateDatatableStorageFSx() {
                 f2type: 'fsx.filesystem',
                 f2data: fileSystem,
                 f2region: region,
-                dnsname: fileSystem.DNSName
+                id: fileSystem.FileSystemId,
+                dnsname: fileSystem.DNSName,
+                storagecapacity: fileSystem.StorageCapacity + " GB",
+                vpcid: fileSystem.VpcId,
+                filesystemtype: fileSystem.FileSystemType
             }]);
         });
     }).catch(err => {});
@@ -10880,8 +12314,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -10896,11 +12330,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'databasename',
+                        title: 'Database Name',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'port',
+                        title: 'Port',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10918,8 +12367,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -10934,11 +12383,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'instanceclass',
+                        title: 'Instance Class',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10972,11 +12436,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11010,11 +12481,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11048,11 +12526,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11080,7 +12565,10 @@ async function updateDatatableDatabasesNeptune() {
                 f2type: 'neptune.cluster',
                 f2data: cluster,
                 f2region: region,
-                id: cluster.DBClusterIdentifier
+                id: cluster.DBClusterIdentifier,
+                databasename: cluster.DatabaseName,
+                endpoint: cluster.Endpoint,
+                port: cluster.Port
             }]);
         });
 
@@ -11098,7 +12586,10 @@ async function updateDatatableDatabasesNeptune() {
                 f2type: 'neptune.instance',
                 f2data: instance,
                 f2region: region,
-                id: instance.DBInstanceIdentifier
+                id: instance.DBInstanceIdentifier,
+                instanceclass: instance.DBInstanceClass,
+                creationtime: instance.InstanceCreateTime.toString(),
+                availabilityzone: instance.AvailabilityZone
             }]);
         });
 
@@ -11116,7 +12607,9 @@ async function updateDatatableDatabasesNeptune() {
                 f2type: 'neptune.clusterparametergroup',
                 f2data: clusterParameterGroup,
                 f2region: region,
-                name: clusterParameterGroup.DBClusterParameterGroupName
+                name: clusterParameterGroup.DBClusterParameterGroupName,
+                family: clusterParameterGroup.DBParameterGroupFamily,
+                description: clusterParameterGroup.Description
             }]);
         });
 
@@ -11134,7 +12627,9 @@ async function updateDatatableDatabasesNeptune() {
                 f2type: 'neptune.parametergroup',
                 f2data: parameterGroup,
                 f2region: region,
-                name: parameterGroup.DBParameterGroupName
+                name: parameterGroup.DBParameterGroupName,
+                family: parameterGroup.DBParameterGroupFamily,
+                description: parameterGroup.Description
             }]);
         });
 
@@ -11152,7 +12647,9 @@ async function updateDatatableDatabasesNeptune() {
                 f2type: 'neptune.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.DBSubnetGroupName
+                name: subnetGroup.DBSubnetGroupName,
+                description: subnetGroup.DBSubnetGroupDescription,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -11179,8 +12676,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -11195,11 +12692,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'engineversion',
+                        title: 'Engine Version',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11217,8 +12729,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -11233,11 +12745,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'instanceclass',
+                        title: 'Instance Class',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'engineversion',
+                        title: 'Engine Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11271,11 +12806,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'family',
+                        title: 'Family',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11309,11 +12851,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11341,7 +12890,10 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2type: 'documentdb.cluster',
                 f2data: cluster,
                 f2region: region,
-                id: cluster.DBClusterIdentifier
+                id: cluster.DBClusterIdentifier,
+                engineversion: cluster.EngineVersion,
+                endpoint: cluster.Endpoint,
+                creationtime: cluster.ClusterCreateTime.toString()
             }]);
         });
 
@@ -11359,7 +12911,11 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2type: 'documentdb.instance',
                 f2data: instance,
                 f2region: region,
-                id: instance.DBInstanceIdentifier
+                id: instance.DBInstanceIdentifier,
+                instanceclass: instance.DBInstanceClass,
+                creationtime: instance.InstanceCreateTime.toString(),
+                availabilityzone: instance.AvailabilityZone,
+                engineversion: instance.EngineVersion
             }]);
         });
 
@@ -11377,7 +12933,9 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2type: 'documentdb.clusterparametergroup',
                 f2data: clusterParameterGroup,
                 f2region: region,
-                name: clusterParameterGroup.DBClusterParameterGroupName
+                name: clusterParameterGroup.DBClusterParameterGroupName,
+                family: clusterParameterGroup.DBParameterGroupFamily,
+                description: clusterParameterGroup.Description
             }]);
         });
 
@@ -11395,7 +12953,9 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2type: 'documentdb.subnetgroup',
                 f2data: subnetGroup,
                 f2region: region,
-                name: subnetGroup.DBSubnetGroupName
+                name: subnetGroup.DBSubnetGroupName,
+                description: subnetGroup.DBSubnetGroupDescription,
+                vpcid: subnetGroup.VpcId
             }]);
         });
 
@@ -11438,11 +12998,10 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11466,7 +13025,8 @@ async function updateDatatableDeveloperToolsCodeCommit() {
                 f2type: 'codecommit.repository',
                 f2data: repository,
                 f2region: region,
-                name: repository.repositoryName
+                name: repository.repositoryName,
+                id: repository.repositoryId
             }]);
         });
 
@@ -11509,11 +13069,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'timeout',
+                        title: 'Timeout',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11540,7 +13115,10 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                     f2type: 'codebuild.project',
                     f2data: data.projects[0],
                     f2region: region,
-                    name: data.projects[0].name
+                    name: data.projects[0].name,
+                    description: data.projects[0].description,
+                    timeout: data.projects[0].timeoutInMinutes + " minutes",
+                    creationtime: data.projects[0].created.toString()
                 }]);
             });
         }));
@@ -11584,11 +13162,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'computeplatform',
+                        title: 'Compute Platform',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11622,11 +13215,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'computeplatform',
+                        title: 'Compute Platform',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11660,11 +13268,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'application',
+                        title: 'Application',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deploymentgroup',
+                        title: 'Deployment Group',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deploymentconfig',
+                        title: 'Deployment Config',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11701,7 +13332,11 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                                 f2type: 'codedeploy.deploymentgroup',
                                 f2data: data.deploymentGroupInfo,
                                 f2region: region,
-                                name: data.deploymentGroupInfo.deploymentGroupName
+                                name: data.deploymentGroupInfo.deploymentGroupName,
+                                id: data.deploymentGroupInfo.deploymentGroupId,
+                                application: application,
+                                deploymentgroup: deploymentGroup,
+                                deploymentconfig: data.deploymentGroupInfo.deploymentConfigName
                             }]);
                         });
                     });
@@ -11714,7 +13349,10 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                         f2type: 'codedeploy.application',
                         f2data: data.application,
                         f2region: region,
-                        name: data.application.applicationName
+                        id: data.application.applicationId,
+                        name: data.application.applicationName,
+                        computeplatform: data.application.computePlatform,
+                        creationtime: data.application.createTime.toString()
                     }]);
                 })
             ]);
@@ -11738,7 +13376,10 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                     f2type: 'codedeploy.deploymentconfiguration',
                     f2data: data.deploymentConfigInfo,
                     f2region: region,
-                    name: data.deploymentConfigInfo.deploymentConfigName
+                    id: data.deploymentConfigInfo.deploymentConfigId,
+                    name: data.deploymentConfigInfo.deploymentConfigName,
+                    computeplatform: data.deploymentConfigInfo.computePlatform,
+                    creationtime: data.deploymentConfigInfo.createTime.toString()
                 }]);
             });
         }));
@@ -11782,11 +13423,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'fleettype',
+                        title: 'Fleet Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancetype',
+                        title: 'Instance Type',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11820,11 +13476,35 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'os',
+                        title: 'OS',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11858,11 +13538,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'aliasid',
+                        title: 'Alias ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11888,7 +13575,10 @@ async function updateDatatableGameDevelopmentGameLift() {
                 f2type: 'gamelift.fleet',
                 f2data: fleet,
                 f2region: region,
-                id: fleet.FleetId
+                id: fleet.FleetId,
+                fleettype: fleet.FleetType,
+                instancetype: fleet.InstanceType,
+                name: fleet.Name
             }]);
         });
 
@@ -11906,7 +13596,11 @@ async function updateDatatableGameDevelopmentGameLift() {
                 f2type: 'gamelift.build',
                 f2data: build,
                 f2region: region,
-                name: build.Name
+                name: build.Name,
+                id: build.BuildId,
+                version: build.Version,
+                size: build.SizeOnDisk,
+                os: build.OperatingSystem
             }]);
         });
 
@@ -11924,7 +13618,9 @@ async function updateDatatableGameDevelopmentGameLift() {
                 f2type: 'gamelift.alias',
                 f2data: alias,
                 f2region: region,
-                name: alias.Name
+                name: alias.Name,
+                aliasid: alias.AliasId,
+                description: alias.Description
             }]);
         });
 
@@ -11971,7 +13667,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12009,7 +13704,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12047,7 +13741,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12085,7 +13778,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12123,7 +13815,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12161,7 +13852,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12333,7 +14023,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12419,7 +14108,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12457,7 +14145,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12495,7 +14182,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12533,7 +14219,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12571,7 +14256,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12609,7 +14293,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12647,7 +14330,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12916,7 +14598,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12954,7 +14635,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12992,7 +14672,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13030,7 +14709,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13068,7 +14746,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13106,7 +14783,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13144,7 +14820,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13182,7 +14857,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13220,7 +14894,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13258,7 +14931,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13296,7 +14968,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13334,7 +15005,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13372,7 +15042,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13410,7 +15079,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13448,7 +15116,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13847,7 +15514,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13939,7 +15605,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14014,7 +15679,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14052,7 +15716,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14160,7 +15823,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14198,7 +15860,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14298,7 +15959,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14336,7 +15996,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14374,7 +16033,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14495,7 +16153,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14533,7 +16190,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14571,7 +16227,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14679,11 +16334,10 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14717,11 +16371,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'targetpipeline',
+                        title: 'Target Pipeline',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetaction',
+                        title: 'Target Action',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'authentication',
+                        title: 'Authentication',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14739,8 +16408,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'Category',
+                        field: 'category',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -14755,11 +16424,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'provider',
+                        title: 'Provider',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14788,7 +16464,8 @@ async function updateDatatableDeveloperToolsCodePipeline() {
                     f2type: 'codepipeline.pipeline',
                     f2data: data.pipeline,
                     f2region: region,
-                    name: data.pipeline.name
+                    name: data.pipeline.name,
+                    version: data.pipeline.version
                 }]);
             });
         }));
@@ -14807,7 +16484,10 @@ async function updateDatatableDeveloperToolsCodePipeline() {
                 f2type: 'codepipeline.webhook',
                 f2data: webhook,
                 f2region: region,
-                name: webhook.definition.name
+                name: webhook.definition.name,
+                targetpipeline: webhook.definition.targetPipeline,
+                targetaction: webhook.definition.targetAction,
+                authentication: webhook.definition.authentication
             }]);
         });
 
@@ -14870,11 +16550,10 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'creationtime',
+                        title: 'Creation Time',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14908,11 +16587,26 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'fleetarn',
+                        title: 'Fleet ARN',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'architecture',
+                        title: 'Architecture',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14946,11 +16640,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'revisionid',
+                        title: 'Revision ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14984,11 +16685,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'revisionid',
+                        title: 'Revision ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15018,7 +16726,8 @@ async function updateDatatableRoboticsRoboMaker() {
                     f2type: 'robomaker.fleet',
                     f2data: data,
                     f2region: region,
-                    name: data.name
+                    name: data.name,
+                    creationtime: data.createdAt.toString()
                 }]);
             });
         }));
@@ -15040,7 +16749,10 @@ async function updateDatatableRoboticsRoboMaker() {
                     f2type: 'robomaker.robot',
                     f2data: data,
                     f2region: region,
-                    name: data.name
+                    name: data.name,
+                    fleetarn: data.fleetArn,
+                    architecture: data.architecture,
+                    creationtime: data.createdAt.toString()
                 }]);
             });
         }));
@@ -15054,7 +16766,7 @@ async function updateDatatableRoboticsRoboMaker() {
         $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.robotApplicationSummaries.map(robotApplication => {
-            return sdkcall("RoboMaker", "describeRobot", {
+            return sdkcall("RoboMaker", "describeRobotApplication", {
                 application: robotApplication.arn
             }, true).then((data) => {
                 $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('append', [{
@@ -15062,7 +16774,9 @@ async function updateDatatableRoboticsRoboMaker() {
                     f2type: 'robomaker.robotapplication',
                     f2data: data,
                     f2region: region,
-                    name: data.name
+                    name: data.name,
+                    version: data.version,
+                    revisionid: data.revisionId
                 }]);
             });
         }));
@@ -15076,7 +16790,7 @@ async function updateDatatableRoboticsRoboMaker() {
         $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.simulationApplicationSummaries.map(simulationApplication => {
-            return sdkcall("RoboMaker", "describeRobot", {
+            return sdkcall("RoboMaker", "describeSimulationApplication", {
                 application: simulationApplication.arn
             }, true).then((data) => {
                 $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('append', [{
@@ -15084,7 +16798,9 @@ async function updateDatatableRoboticsRoboMaker() {
                     f2type: 'robomaker.simulationapplication',
                     f2data: data,
                     f2region: region,
-                    name: data.name
+                    name: data.name,
+                    version: data.version,
+                    revisionid: data.revisionId
                 }]);
             });
         }));
@@ -15132,7 +16848,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15170,7 +16885,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15208,7 +16922,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15246,7 +16959,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15284,7 +16996,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15322,7 +17033,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15486,7 +17196,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15567,7 +17276,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15642,7 +17350,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15717,7 +17424,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15755,7 +17461,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15793,7 +17498,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15831,7 +17535,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15869,7 +17572,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -15907,7 +17609,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16093,7 +17794,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16131,7 +17831,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16169,7 +17868,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16287,11 +17985,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'version',
+                        title: 'Version',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16315,7 +18020,9 @@ async function updateDatatableManagementAndGovernanceAutoScaling() {
                 f2type: 'autoscaling.scalingplan',
                 f2data: scalingPlan,
                 f2region: region,
-                name: scalingPlan.ScalingPlanName
+                name: scalingPlan.ScalingPlanName,
+                version: scalingPlan.ScalingPlanVersion,
+                creationtime: scalingPlan.CreationTime.toString()
             }]);
         });
 
@@ -16362,7 +18069,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16400,7 +18106,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16438,7 +18143,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16476,7 +18180,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16514,7 +18217,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16661,7 +18363,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16736,7 +18437,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16807,7 +18507,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16845,7 +18544,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16883,7 +18581,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16921,7 +18618,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16959,7 +18655,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16997,7 +18692,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17035,7 +18729,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17073,7 +18766,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17303,7 +18995,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17341,7 +19032,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17379,7 +19069,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17417,7 +19106,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17455,7 +19143,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17493,7 +19180,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17531,7 +19217,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17569,7 +19254,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17607,7 +19291,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17645,7 +19328,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17683,7 +19365,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17721,7 +19402,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18002,7 +19682,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18040,7 +19719,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18078,7 +19756,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18116,7 +19793,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18256,11 +19932,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servicecount',
+                        title: 'Service Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18294,11 +19993,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servicecount',
+                        title: 'Service Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18332,11 +20054,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servicecount',
+                        title: 'Service Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18370,11 +20115,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'id',
+                        title: 'ID',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'namespaceid',
+                        title: 'Namespace ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancecount',
+                        title: 'Instance Count',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18399,23 +20167,10 @@ sections.push({
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        formatter: timeAgoFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         }
@@ -18446,7 +20201,11 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         f2type: 'servicediscovery.httpnamespace',
                         f2data: data.Namespace,
                         f2region: region,
-                        name: data.Namespace.Name
+                        id: data.Namespace.Id,
+                        name: data.Namespace.Name,
+                        description: data.Namespace.Description,
+                        servicecount: data.Namespace.ServiceCount,
+                        creationtime: data.Namespace.CreateDate.toString()
                     }]);
                 } else if (data.Namespace.Type == "DNS_PUBLIC") {
                     $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('append', [{
@@ -18511,7 +20270,11 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         f2type: 'servicediscovery.service',
                         f2data: data.Service,
                         f2region: region,
-                        name: data.Service.Name
+                        id: data.Service.Id,
+                        name: data.Service.Name,
+                        namespaceid: data.Service.NamespaceId,
+                        description: data.Service.Description,
+                        instancecount: data.Service.InstanceCount
                     }]);
                 })
             ]);
@@ -18560,7 +20323,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18598,7 +20360,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18636,7 +20397,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18674,7 +20434,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18712,7 +20471,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18879,7 +20637,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18917,7 +20674,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18955,7 +20711,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -18993,7 +20748,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19031,7 +20785,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19182,7 +20935,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19220,7 +20972,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19258,7 +21009,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19296,7 +21046,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19409,7 +21158,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19447,7 +21195,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19485,7 +21232,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19523,7 +21269,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19561,7 +21306,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19599,7 +21343,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19637,7 +21380,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19675,7 +21417,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19713,7 +21454,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19943,7 +21683,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19981,7 +21720,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20019,7 +21757,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20057,7 +21794,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20095,7 +21831,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20133,7 +21868,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20171,7 +21905,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20375,7 +22108,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20413,7 +22145,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20451,7 +22182,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20489,7 +22219,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20527,7 +22256,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -20565,7 +22293,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21126,8 +22853,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21142,11 +22869,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'enginename',
+                        title: 'Engine Name',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servername',
+                        title: 'Server Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'databasename',
+                        title: 'Database Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpointtype',
+                        title: 'Endpoint Type',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21164,8 +22914,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21180,11 +22930,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'instanceclass',
+                        title: 'Instance Class',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'allocatedstorage',
+                        title: 'Allocated Storage',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21202,8 +22975,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21218,11 +22991,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'sourceendpointarn',
+                        title: 'Source Endpoint ARN',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetendpointarn',
+                        title: 'Target Endpoint ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'replicationinstancearn',
+                        title: 'Replication Instance ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'migrationtype',
+                        title: 'Migration Type',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21240,8 +23036,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21256,11 +23052,18 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'description',
+                        title: 'Description',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21278,8 +23081,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21294,11 +23097,34 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'validfrom',
+                        title: 'Valid From',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'validto',
+                        title: 'Valid To',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'keylength',
+                        title: 'Key Length',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'signingalgorithm',
+                        title: 'Signing Algorithm',
+                        sortable: true,
+                        editable: true,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21316,8 +23142,8 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'ID',
+                        field: 'id',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
@@ -21332,11 +23158,27 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'xxx',
-                        title: 'XXX',
+                        field: 'sourcetype',
+                        title: 'Source Type',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'snstopicarn',
+                        title: 'SNS Topic ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21365,7 +23207,11 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.endpoint',
                 f2data: endpoint,
                 f2region: region,
-                id: endpoint.EndpointIdentifier
+                id: endpoint.EndpointIdentifier,
+                endpointtype: endpoint.EndpointType,
+                enginename: endpoint.EngineDisplayName,
+                databasename: endpoint.DatabaseName,
+                servername: endpoint.ServerName
             }]);
         });
 
@@ -21383,7 +23229,11 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.replicationinstance',
                 f2data: replicationInstance,
                 f2region: region,
-                id: replicationInstance.ReplicationInstanceIdentifier
+                id: replicationInstance.ReplicationInstanceIdentifier,
+                instanceclass: replicationInstance.ReplicationInstanceClass,
+                allocatedstorage: replicationInstance.AllocatedStorage + " GB",
+                creationtime: replicationInstance.InstanceCreateTime.toString(),
+                availabilityzone: replicationInstance.AvailabilityZone
             }]);
         });
 
@@ -21401,7 +23251,11 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.replicationtask',
                 f2data: replicationTask,
                 f2region: region,
-                id: replicationTask.ReplicationTaskIdentifier
+                id: replicationTask.ReplicationTaskIdentifier,
+                sourceendpointarn: replicationTask.SourceEndpointArn,
+                targetendpointarn: replicationTask.TargetEndpointArn,
+                replicationinstancearn: replicationTask.ReplicationInstanceArn,
+                migrationtype: replicationTask.MigrationType
             }]);
         });
 
@@ -21419,7 +23273,9 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.replicationsubnetgroup',
                 f2data: replicationSubnetGroup,
                 f2region: region,
-                id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier
+                id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier,
+                description: replicationSubnetGroup.ReplicationSubnetGroupDescription,
+                vpcid: replicationSubnetGroup.VpcId
             }]);
         });
 
@@ -21437,7 +23293,11 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.certificate',
                 f2data: certificate,
                 f2region: region,
-                id: certificate.CertificateIdentifier
+                id: certificate.CertificateIdentifier,
+                validfrom: certificate.ValidFromDate.toString(),
+                validto: certificate.ValidToDate.toString(),
+                keylength: certificate.KeyLength,
+                signingalgorithm: certificate.SigningAlgorithm
             }]);
         });
 
@@ -21455,7 +23315,10 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 f2type: 'dms.eventsubscription',
                 f2data: eventSubscriptions,
                 f2region: region,
-                id: eventSubscriptions.CustSubscriptionId
+                id: eventSubscriptions.CustSubscriptionId,
+                snstopicarn: eventSubscriptions.SnsTopicArn,
+                sourcetype: eventSubscriptions.SourceType,
+                enabled: eventSubscriptions.Enabled
             }]);
         });
 
@@ -21502,7 +23365,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21540,7 +23402,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21578,7 +23439,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21616,7 +23476,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21654,7 +23513,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21692,7 +23550,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21730,7 +23587,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21768,7 +23624,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21806,7 +23661,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21844,7 +23698,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21882,7 +23735,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21920,7 +23772,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21958,7 +23809,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21996,7 +23846,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -22034,7 +23883,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -22072,7 +23920,6 @@ sections.push({
                         title: 'XXX',
                         sortable: true,
                         editable: true,
-                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
