@@ -11121,19 +11121,187 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ElastiCache::ReplicationGroup',
                     'options': reqParams
                 });
-            } else if (obj.type == ".") {
-                reqParams.cfn[''] = obj.data;
+            } else if (obj.type == "appsync.mesh") {
+                reqParams.cfn['MeshName'] = obj.data.meshName;
+                reqParams.cfn['Spec'] = {
+                    'EgressFilter': {
+                        'Type': obj.data.spec.egressFilter.type
+                    }
+                };
 
                 /*
                 TODO:
-                
+                Tags : 
+                - TagRef
                 */
 
                 tracked_resources.push({
-                    'logicalId': getResourceName('', obj.id),
+                    'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
-                    'service': '',
-                    'type': '',
+                    'service': 'appsync',
+                    'type': 'AWS::AppMesh::Mesh',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appmesh.virtualrouter") {
+                reqParams.cfn['MeshName'] = obj.data.meshName;
+                reqParams.cfn['VirtualRouterName'] = obj.data.virtualRouterName;
+                var listeners = [];
+                obj.data.spec.listeners.forEach(listener => {
+                    listener.push({
+                        'PortMapping': {
+                            'Port': listener.portMapping.port,
+                            'Protocol': listener.portMapping.protocol
+                        }
+                    });
+                });
+                reqParams.cfn['Spec'] = {
+                    'Listeners': listeners
+                };
+
+                /*
+                TODO:
+                Tags : 
+                    - TagRef
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appmesh', obj.id),
+                    'region': obj.region,
+                    'service': 'appmesh',
+                    'type': 'AWS::AppMesh::VirtualRouter',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appmesh.route") {
+                reqParams.cfn['MeshName'] = obj.data.meshName;
+                reqParams.cfn['RouteName'] = obj.data.routeName;
+                reqParams.cfn['VirtualRouterName'] = obj.data.virtualRouterName;
+                var httpRouteWeightedTargets = [];
+                obj.data.spec.httpRoute.action.weightedTargets.forEach(weightedTarget => {
+                    httpRouteWeightedTargets.push({
+                        'VirtualNode': weightedTarget.virtualNode,
+                        'Weight': weightedTarget.weight
+                    });
+                });
+                var tcpRouteWeightedTargets = [];
+                obj.data.spec.tcpRoute.action.weightedTargets.forEach(weightedTarget => {
+                    tcpRouteWeightedTargets.push({
+                        'VirtualNode': weightedTarget.virtualNode,
+                        'Weight': weightedTarget.weight
+                    });
+                });
+                reqParams.cfn['Spec'] = {
+                    'HttpRoute': {
+                        'Action': {
+                            'WeightedTargets': httpRouteWeightedTargets
+                        },
+                        'Match': {
+                            'Prefix': obj.data.spec.httpRoute.match.prefix
+                        }
+                    },
+                    'TcpRoute': {
+                        'Action': {
+                            'WeightedTargets': tcpRouteWeightedTargets
+                        }
+                    }
+                };
+
+                /*
+                TODO:
+                Tags : 
+                    - TagRef
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appmesh', obj.id),
+                    'region': obj.region,
+                    'service': 'appmesh',
+                    'type': 'AWS::AppMesh::Route',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appmesh.virtualservice") {
+                reqParams.cfn['MeshName'] = obj.data.meshName;
+                reqParams.cfn['VirtualServiceName'] = obj.data.virtualServiceName;
+                reqParams.cfn['Spec'] = {
+                    'Provider': {
+                        'VirtualNode': {
+                            'VirtualNodeName': obj.data.spec.virtualNode.virtualNodeName
+                        },
+                        'VirtualRouter': {
+                            'VirtualRouterName': obj.data.spec.virtualRouter.virtualRouterName
+                        }
+                    }
+                };
+
+                /*
+                TODO:
+                Tags : 
+                    - TagRef
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appmesh', obj.id),
+                    'region': obj.region,
+                    'service': 'appmesh',
+                    'type': 'AWS::AppMesh::VirtualService',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appmesh.virtualnode") {
+                reqParams.cfn['MeshName'] = obj.data.meshName;
+                reqParams.cfn['VirtualNodeName'] = obj.data.VirtualNodeName;
+                var backends = [];
+                obj.data.spec.backends.forEach(backend => {
+                    backends.push({
+                        'VirtualService': {
+                            'VirtualServiceName': backend.virtualService.virtualServiceName
+                        }
+                    });
+                });
+                var listeners = [];
+                obj.data.spec.listeners.forEach(listener => {
+                    listeners.push({
+                        'HealthCheck': {
+                            'HealthyThreshold': listener.healthCheck.healthyThreshold,
+                            'IntervalMillis': listener.healthCheck.intervalMillis,
+                            'Path': listener.healthCheck.path,
+                            'Port': listener.healthCheck.port,
+                            'Protocol': listener.healthCheck.protocol,
+                            'TimeoutMillis': listener.healthCheck.timeoutMillis,
+                            'UnhealthyThreshold': listener.healthCheck.unhealthyThreshold
+                        },
+                        'PortMapping': {
+                            'Port': listener.portMapping.port,
+                            'Protocol': listener.portMapping.protocol
+                        }
+                    });
+                });
+                reqParams.cfn['Spec'] = {
+                    'Backends': backends,
+                    'Listeners': listeners,
+                    'Logging': {
+                        'AccessLog': {
+                            'File': {
+                                'Path': obj.data.spec.logging.accessLog.file.path
+                            }
+                        }
+                    },
+                    'ServiceDiscovery': {
+                        'DNS': {
+                            'Hostname': obj.data.spec.serviceDiscovery.dns.hostname
+                        }
+                    }
+                };
+
+                /*
+                TODO:
+                Tags : 
+                    - TagRef
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('appmesh', obj.id),
+                    'region': obj.region,
+                    'service': 'appmesh',
+                    'type': 'AWS::AppMesh::VirtualNode',
                     'options': reqParams
                 });
             } else {

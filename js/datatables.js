@@ -26497,7 +26497,7 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
                                     return sdkcall("AppMesh", "describeRoute", {
                                         meshName: mesh.meshName,
                                         virtualRouterName: virtualrouter.virtualRouterName,
-                                        routeName: oute.routeName
+                                        routeName: route.routeName
                                     }, true).then((data) => {
                                         $('#section-networkingandcontentdelivery-appmesh-routes-datatable').bootstrapTable('append', [{
                                             f2id: data.route.virtualRouterName,
