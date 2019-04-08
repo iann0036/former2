@@ -327,18 +327,34 @@ $(document).ready(function(){
             if (location.hash == "#section-outputs-cloudformation") {
                 $('#header-button-copy-cfn').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+                
+                setTimeout(function(){
+                    cfn_editor.refresh();
+                }, 1);
             }
             if (location.hash == "#section-outputs-troposphere") {
                 $('#header-button-copy-troposphere').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    troposphere_editor.refresh();
+                }, 1);
             }
             if (location.hash == "#section-outputs-cdkts") {
                 $('#header-button-copy-cdkts').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    cdkts_editor.refresh();
+                }, 1);
             }
             if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    raw_editor.refresh();
+                }, 1);
             }
         } else if (location.hash != "" && location.hash != "#") {
             $.notify({
