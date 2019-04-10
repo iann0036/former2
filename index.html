@@ -28,7 +28,8 @@
         <link rel="stylesheet" href="css/separate/vendor/blockui.min.css">
         <link rel="stylesheet" href="css/separate/pages/widgets.min.css">
         <link rel="stylesheet" href="css/separate/pages/others.min.css">
-
+        <link rel="stylesheet" href="css/separate/vendor/select2.min.css">
+        
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/custom.css">
 
@@ -191,7 +192,7 @@
                     <ul>
                         <li><a href="#section-setup-introduction"><span class="lbl">Introduction</span></a></li>
                         <li><a href="#section-setup-credentials"><span class="lbl">Credentials</span></a></li>
-                        <li><a href="#section-setup-accountscan"><span class="lbl">Account Scan</span></a></li>
+                        <li><a href="#section-setup-settings"><span class="lbl">Settings</span></a></li>
                     </ul>
                 </li>
                 <li class="purple with-sub" data-category="outputs">
@@ -201,7 +202,7 @@
                     </span>
                     <ul>
                         <li><a href="#section-outputs-cloudformation"><span class="lbl">CloudFormation</span></a></li>
-                        <li><a href="#section-outputs-terraform"><span class="lbl">Terraform</span></a></li>
+                        <li><a href="#section-outputs-tf"><span class="lbl">Terraform</span></a></li>
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
                         <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
@@ -442,6 +443,7 @@
                             </div>
                             <button id="header-button-clear-outputs" type="button" class="f2-header-button btn btn-danger-outline" style="margin-left: 16px; display: none;"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Clear All</button>
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-cdkts" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-raw" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
@@ -737,28 +739,34 @@
                             <ul>
                                 <li class="active"><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li><div class="item"><span class="num">3</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="steps-numeric-inner">
-                        <p>Welcome to Former2!</p>
-                        <p>Former2 allows you to generate Infrastructure-as-Code outputs from your existing resources within your AWS account. By making the relevant calls using the AWS JavaScript SDK, Former2 will scan across your infrastructure and present you with the list of resources for you to choose which to generate outputs for.</p>
-                        <p>Though <a href="https://github.com/aws/aws-sdk-js/blob/master/SERVICES.md" target="_blank">some AWS services</a> do not require it, you will need to install the Former2 Helper browser extension in order to have support for all AWS services. The extension exists to bypass a lack of CORS on some services, such as S3 and IAM.</p>
-                        <p>
-                            <table style="border: none;">
-                                <tr>
-                                    <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank"><img src="img/ChromeWebStore_Badge_v2_206x58.png" /></a></td>
-                                    <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank" style="font-weight: 600;">Install Former2 Helper for Google Chrome</a></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank"><img src="img/AMO-button_1.png" /></a></td>
-                                    <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank" style="font-weight: 600;">Install Former2 Helper for Mozilla Firefox</a></td>
-                                </tr>
-                            </table>
-                        </p><br />
-                        <p>If you have any questions, bugs or feature requests please <a href="https://github.com/iann0036/former2/issues" target="_blank">raise an issue</a> via GitHub.</p>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                <p>Welcome to Former2!</p>
+                                <p>Former2 allows you to generate Infrastructure-as-Code outputs from your existing resources within your AWS account. By making the relevant calls using the AWS JavaScript SDK, Former2 will scan across your infrastructure and present you with the list of resources for you to choose which to generate outputs for.</p>
+                                <p>Though <a href="https://github.com/aws/aws-sdk-js/blob/master/SERVICES.md" target="_blank">some AWS services</a> do not require it, you will need to install the Former2 Helper browser extension in order to have support for all AWS services. The extension exists to bypass a lack of CORS on some services, such as S3 and IAM.</p>
+                                <p>
+                                    <table style="border: none;">
+                                        <tr>
+                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank"><img src="img/ChromeWebStore_Badge_v2_206x58.png" /></a></td>
+                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank" style="font-weight: 600;">Install Former2 Helper for Google Chrome</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank"><img src="img/AMO-button_1.png" /></a></td>
+                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank" style="font-weight: 600;">Install Former2 Helper for Mozilla Firefox</a></td>
+                                        </tr>
+                                    </table>
+                                </p><br />
+                                <p>If you have any questions, bugs or feature requests please <a href="https://github.com/iann0036/former2/issues" target="_blank">raise an issue</a> via GitHub.</p>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
                     </div>
 
                     <div class="tbl steps-numeric-footer">
@@ -774,13 +782,14 @@
                             <ul>
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li class="active"><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li><div class="item"><span class="num">3</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="steps-numeric-inner">
                         <div class="row">
+                            <div class="col-md-1"></div>
                             <div class="col-md-6">
                                 <header class="steps-numeric-title">Enter your IAM credentials:</header>
                                 <div class="form-group">
@@ -796,45 +805,65 @@
                                     <strong>Logged in as: </strong><span id="user-id"></span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <p style="text-align: center;">
                                     <br /><br /><br /><br />
                                     <i>More authentication options coming soon!</i>
                                 </p>
                             </div>
+                            <div class="col-md-1"></div>
                         </div>
                     </div>
 
                     <div class="tbl steps-numeric-footer">
                         <div class="tbl-row">
                             <a href="#section-setup-introduction" class="tbl-cell">← Return to Introduction</a>
-                            <a href="#section-setup-accountscan" class="tbl-cell color-green">Continue to Account Scan →</a>
+                            <a href="#section-setup-settings" class="tbl-cell color-green">Continue to Settings →</a>
                         </div>
                     </div>
                 </section>
 
-                <section id="section-setup-accountscan" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Account Scan" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                <section id="section-setup-settings" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Settings" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div class="steps-numeric-header">
                         <div class="steps-numeric-header-in">
                             <ul>
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li></li><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li class="active"><div class="item"><span class="num">3</span>Account Scan</div></li>
+                                <li class="active"><div class="item"><span class="num">3</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="steps-numeric-inner">
-                        <header class="steps-numeric-title">Start scanning:</header>
-                        <div class="form-group">
-                            <button id="scan-account" class="btn btn-success">
-                                <i class="font-icon font-icon-scanner"></i> Scan Account
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <button id="add-all-resources" class="btn btn-secondary">
-                                <i class="font-icon font-icon-scanner"></i> Add All Resources
-                            </button>
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <h5>CloudFormation Spacing</h5>
+                                    <p>Change your preference of the number of spaces for the CloudFormation output:</p>
+                                    <select id="cfnspacing" class="select2-arrow manual select2-no-search-arrow">
+                                        <option value="4">4 Spaces</option>
+                                        <option value="2">2 Spaces</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <h5>Account Scanning</h5>
+                                    <p>Use the below button to pre-populate all categories by triggering a scan for the entire account:</p>
+                                    <button id="scan-account" class="btn btn-sm btn-success">
+                                        <i class="font-icon font-icon-scanner"></i> Scan Entire Account
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <p>Use the below button to add all scanned resources to the outputs:</p>
+                                    <button id="add-all-resources" class="btn btn-sm btn-secondary">
+                                        <i class="font-icon font-icon-scanner"></i> Add All Resources
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
                         </div>
                     </div>
 
@@ -908,11 +937,12 @@
                     </div>
                 </section>
 
-                <section id="section-outputs-terraform" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Terraform" class="former2-section" style="display: none;">
+                <section id="section-outputs-tf" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Terraform" class="former2-section" style="display: none;">
                     <div class="alert alert-warning alert-fill fade show" role="alert">
-                        <i class="font-icon font-icon-inline font-icon-warning"></i>
-                        <strong>Not Yet Ready</strong><br>
-                        This feature is not yet ready (but I'm working on it!)
+                        <i class="font-icon font-icon-inline font-icon-warning"></i> Not all resources are available for Terraform (working on it!)
+                    </div>
+                    <div id='tf_container'>
+                        <textarea id='tf'></textarea>
                     </div>
                 </section>
 
@@ -953,6 +983,8 @@
         
         <script src="js/lib/bootstrap-table-updated/bootstrap-table.min.js"></script>
         <script src="js/lib/bootstrap-table-updated/bootstrap-table-export.min.js"></script>
+
+        <script src="js/lib/select2/select2.full.min.js"></script>
         
         <script src="js/lib/blockUI/jquery.blockUI.js"></script>
         <script src="js/lib/bootstrap-notify/bootstrap-notify.min.js"></script>

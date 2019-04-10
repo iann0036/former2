@@ -2,6 +2,7 @@ var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
 var _AWS = AWS;
+var visited_sections = [];
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -83,8 +84,8 @@ $(document).ready(function(){
 
     window.operateEvents = {
         'click .like': function (e, value, row, index) {
-            alert('You click like action, row: ' + JSON.stringify(row));
-        }
+            ;
+        } // just an example, use later
     };
 
     function addAllTableRowsToTemplate(selector) {
@@ -288,8 +289,20 @@ $(document).ready(function(){
     // Navigation
     /* ========================================================================== */
 
+    function refreshDatatableFirstVisit(urlpart) {
+        sections.forEach(section => {
+            if (urlpart == navlower(section.category) + "-" + navlower(section.service)) {
+                if (!visited_sections.includes("all") && !visited_sections.includes(urlpart)) {
+                    visited_sections.push(urlpart);
+                    window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                }
+            }
+        });
+    }
+
     function doNavigation() {
         $('#header-button-copy-cfn').attr('style', 'display: none;');
+        $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdkts').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
@@ -321,6 +334,8 @@ $(document).ready(function(){
                 $(location.hash).attr('data-section-title')
             );
 
+            $('#header-breadcrumb').attr('style', '');
+
             window.scrollTo({ top: 0 });
             
             $('#header-button-clear-outputs').attr('style', 'margin-left: 16px; display: none;');
@@ -331,30 +346,36 @@ $(document).ready(function(){
                 setTimeout(function(){
                     cfn_editor.refresh();
                 }, 1);
-            }
-            if (location.hash == "#section-outputs-troposphere") {
+            } else if (location.hash == "#section-outputs-tf") {
+                $('#header-button-copy-tf').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    tf_editor.refresh();
+                }, 1);
+            } else if (location.hash == "#section-outputs-troposphere") {
                 $('#header-button-copy-troposphere').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
                     troposphere_editor.refresh();
                 }, 1);
-            }
-            if (location.hash == "#section-outputs-cdkts") {
+            } else if (location.hash == "#section-outputs-cdkts") {
                 $('#header-button-copy-cdkts').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
                     cdkts_editor.refresh();
                 }, 1);
-            }
-            if (location.hash == "#section-outputs-raw") {
+            } else if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
                     raw_editor.refresh();
                 }, 1);
+            } else if (location.hash.startsWith("#section-")) {
+                refreshDatatableFirstVisit(location.hash.substring(9));
             }
         } else if (location.hash != "" && location.hash != "#") {
             $.notify({
@@ -391,6 +412,8 @@ $(document).ready(function(){
                 $('#header-breadcrumb2').text(
                     $('#section-setup-introduction').attr('data-section-title')
                 );
+
+                $('#header-breadcrumb').attr('style', '');
             }
 
             window.scrollTo({ top: 0 });
@@ -400,9 +423,6 @@ $(document).ready(function(){
     window.addEventListener("hashchange", () => {
        doNavigation();
     }, false);
-
-    doNavigation();
-    $('#header-breadcrumb').attr('style', '');
 
     /* ========================================================================== */
     // Outputs
@@ -421,6 +441,11 @@ $(document).ready(function(){
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
             setTimeout(function(){
                 cfn_editor.refresh();
+            }, 1);
+
+            tf_editor.getDoc().setValue(mapped_outputs['tf']);
+            setTimeout(function(){
+                tf_editor.refresh();
             }, 1);
 
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
@@ -528,6 +553,18 @@ $(document).ready(function(){
         scrollbarStyle: "null"
     });
     setCopyEvent('#header-button-copy-cfn', cfn_editor);
+
+    tf_editor = CodeMirror.fromTextArea(document.getElementById('tf'), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "ruby",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-tf', tf_editor);
 
     troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
         lineNumbers: true,
@@ -675,6 +712,34 @@ $(document).ready(function(){
                 timeout: 60000
             }
         });
+        
+        /* ========================================================================== */
+        // Misc
+        /* ========================================================================== */
+
+        doNavigation(); // initial navigation
+
+        $('.select2-no-search-arrow').select2({ // Selectors for settings
+			minimumResultsForSearch: "Infinity",
+			theme: "arrow"
+        });
+        
+        var spacingamount = window.localStorage.getItem('cfnspacing');
+        if (spacingamount && spacingamount == 2) {
+            cfnspacing = "  ";
+            //alert();
+            $('#cfnspacing').val("2").trigger('change');
+        } else {
+            cfnspacing = "    ";
+        }
+        $('#cfnspacing').change(function() {
+            window.localStorage.setItem('cfnspacing', $(this).val());
+            if ($(this).val() == "2") {
+                cfnspacing = "  ";
+            } else if ($(this).val() == "4") {
+                cfnspacing = "    ";
+            }
+        });
 
         /* ========================================================================== */
         // Update Identity
@@ -705,6 +770,7 @@ $(document).ready(function(){
                 completeddatatablecalls += 1;
                 $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
                 if (completeddatatablecalls == datatablefuncs.length) {
+                    visited_sections.push("all");
                     $('#scan-account').removeAttr('disabled');
                     $('#scan-account').html('Scan Again');
                 }

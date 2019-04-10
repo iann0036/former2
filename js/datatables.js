@@ -1884,7 +1884,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (vpnGateway.VpcAttachments) {
                 vpnGateway.VpcAttachments.forEach(attachment => {
                     $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
-                        f2id: attachment.VpcId + "_" + vpnGateway.VpnGatewayId,
+                        f2id: attachment.VpcId + " " + vpnGateway.VpnGatewayId,
                         f2type: 'ec2.gatewayattachment',
                         f2data: {
                             'VpcId': attachment.VpcId,
@@ -1899,7 +1899,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('append', [{
                 f2id: vpnGateway.VpnGatewayId,
-                f2type: 'ec2.virtualprivategateway',
+                f2type: 'ec2.vpngateway',
                 f2data: vpnGateway,
                 f2region: region,
                 gatewayid: vpnGateway.VpnGatewayId,
@@ -1915,7 +1915,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 if (internetGateway.Attachments) {
                     internetGateway.Attachments.forEach(attachment => {
                         $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
-                            f2id: attachment.VpcId + "_" + internetGateway.InternetGatewayId,
+                            f2id: attachment.VpcId + " " + internetGateway.InternetGatewayId,
                             f2type: 'ec2.gatewayattachment',
                             f2data: {
                                 'VpcId': attachment.VpcId,
@@ -2018,7 +2018,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 vpnConnection.Routes.forEach(route => {
                     route['VpnConnectionId'] = vpnConnection.VpnConnectionId;
                     $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('append', [{
-                        f2id: route.VpnConnectionId + "_" + route.DestinationCidrBlock,
+                        f2id: route.VpnConnectionId + " " + route.DestinationCidrBlock,
                         f2type: 'ec2.vpnconnectionroute',
                         f2data: route,
                         f2region: region,
@@ -2154,7 +2154,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (routeTable.PropagatingVgws) {
                 routeTable.PropagatingVgws.forEach(propagatingVgw => {
                     $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('append', [{
-                        f2id: routeTable.RouteTableId + "_" + propagatingVgw.GatewayId,
+                        f2id: routeTable.RouteTableId + " " + propagatingVgw.GatewayId,
                         f2type: 'ec2.virtualprivategatewayroutepropagation',
                         f2data: {
                             'VpnGatewayId': propagatingVgw.GatewayId,
@@ -2743,6 +2743,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.HostedZones.map(hostedZone => {
             $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('append', [{
@@ -2758,13 +2759,11 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
             return sdkcall("Route53", "listResourceRecordSets", {
                 HostedZoneId: hostedZone.Id.split("/").pop()
             }, true).then((data) => {
-                $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
-        
                 data.ResourceRecordSets.forEach(resourceRecordSet => {
                     resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
 
                     $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
-                        f2id: resourceRecordSet.Name,
+                        f2id: resourceRecordSet.Name + " " + resourceRecordSet.Type,
                         f2type: 'route53.record',
                         f2data: resourceRecordSet,
                         f2region: region,
@@ -2773,12 +2772,11 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                         ttl: resourceRecordSet.TTL
                     }]);
                 });
-        
-                unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
             });
         }));
 
         unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
+        unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
     });
 
     await sdkcall("Route53", "listHealthChecks", {
@@ -4479,7 +4477,7 @@ async function updateDatatableComputeEC2() {
             if (volume.Attachments) {
                 volume.Attachments.forEach(attachment => {
                     $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('append', [{
-                        f2id: attachment.VolumeId + "_" + attachment.InstanceId,
+                        f2id: attachment.VolumeId + " " + attachment.InstanceId,
                         f2type: 'ec2.volumeattachment',
                         f2data: attachment,
                         f2region: region,
@@ -5091,7 +5089,7 @@ async function updateDatatableComputeLambda() {
                 }, true).then((data) => {
                     data.Versions.forEach(version => {
                         $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
-                            f2id: version.FunctionArn + "_" + version.Version,
+                            f2id: version.FunctionArn + " " + version.Version,
                             f2type: 'lambda.version',
                             f2data: version,
                             f2region: region,
@@ -14777,6 +14775,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Users.map(user => {
             $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
@@ -14793,8 +14792,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 sdkcall("IAM", "listAccessKeys", {
                     UserName: user.UserName
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
-                    
                     data.AccessKeyMetadata.forEach(accessKey => {
                         $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
                             f2id: accessKey.AccessKeyId,
@@ -14958,26 +14955,29 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Policies.map(managedPolicy => {
-            return sdkcall("IAM", "getPolicy", {
-                PolicyArn: managedPolicy.Arn
-            }, true).then(async (policydata) => {
-                await sdkcall("IAM", "getPolicyVersion", {
-                    PolicyArn: managedPolicy.Arn,
-                    VersionId: policydata.Policy.DefaultVersionId
-                }, true).then((data) => {
-                    managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
-                    $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
-                        f2id: managedPolicy.Arn,
-                        f2type: 'iam.managedpolicy',
-                        f2data: managedPolicy,
-                        f2region: region,
-                        name: managedPolicy.PolicyName,
-                        id: managedPolicy.PolicyId,
-                        path: managedPolicy.Path,
-                        description: managedPolicy.Description
-                    }]);
+            if (!managedPolicy.Arn.startsWith("arn:aws:iam::aws")) {
+                return sdkcall("IAM", "getPolicy", {
+                    PolicyArn: managedPolicy.Arn
+                }, true).then(async (policydata) => {
+                    await sdkcall("IAM", "getPolicyVersion", {
+                        PolicyArn: managedPolicy.Arn,
+                        VersionId: policydata.Policy.DefaultVersionId
+                    }, true).then((data) => {
+                        managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
+                        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
+                            f2id: managedPolicy.Arn,
+                            f2type: 'iam.managedpolicy',
+                            f2data: managedPolicy,
+                            f2region: region,
+                            name: managedPolicy.PolicyName,
+                            id: managedPolicy.PolicyId,
+                            path: managedPolicy.Path,
+                            description: managedPolicy.Description
+                        }]);
+                    });
                 });
-            });
+            }
+            return Promise.resolve();
         }));
 
         unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
@@ -19836,7 +19836,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             return sdkcall("SSM", "getDocument", {
                 Name: document.Name,
                 DocumentFormat: 'JSON'
-            }, true).then((documentcontent) => {
+            }, false).then((documentcontent) => {
                 document['Content'] = documentcontent.Content;
                 $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
                     f2id: document.Name,
@@ -19849,7 +19849,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                     documentversion: document.DocumentVersion,
                     documenttype: document.DocumentType
                 }]);
-            });
+            }).catch(err => {});
         }));
 
         unblockUI('#section-managementandgovernance-systemsmanager-documents-datatable');
@@ -21424,14 +21424,13 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudmap-services-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Services.map(service => {
             return Promise.all([
                 sdkcall("ServiceDiscovery", "listInstances", {
                     ServiceId: service.Id
                 }, true).then((data) => {
-                    $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('removeAll');
-                    
                     data.Instances.forEach(instance => {
                         sdkcall("ServiceDiscovery", "getInstance", {
                             InstanceId: instance.Id,
@@ -21447,8 +21446,6 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                             }]);
                         });
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-cloudmap-instances-datatable');
                 }),
                 sdkcall("ServiceDiscovery", "getService", {
                     Id: service.Id
@@ -21469,6 +21466,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
         }));
 
         unblockUI('#section-networkingandcontentdelivery-cloudmap-services-datatable');
+        unblockUI('#section-networkingandcontentdelivery-cloudmap-instances-datatable');
     });
 }
 

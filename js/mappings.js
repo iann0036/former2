@@ -5,6 +5,7 @@
 var outputs = [];
 var tracked_resources = [];
 var global_used_refs = [];
+var cfnspacing = "    ";
 
 function MD5(e) {
     function h(a, b) {
@@ -310,9 +311,15 @@ function processCfnParameter(param, spacing, index) {
             paramitems.push(processCfnParameter(paramitem, spacing, index));
         });
 
-        return `
+        if (cfnspacing.length == 4) {
+            return `
 ` + ' '.repeat(spacing + 2) + "- " + paramitems.join(`
-` + ' '.repeat(spacing + 2) + "- ")
+` + ' '.repeat(spacing + 2) + "- ");
+        }
+        
+        return `
+` + ' '.repeat(spacing) + "- " + paramitems.join(`
+` + ' '.repeat(spacing) + "- ");
     }
     if (typeof param == "object") {
         if (Object.keys(param).length === 0 && param.constructor === Object) {
@@ -320,7 +327,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processCfnParameter(param[key], spacing + 4, index);
+            var subvalue = processCfnParameter(param[key], spacing + cfnspacing.length, index);
             if (typeof subvalue !== "undefined") {
                 paramitems.push(key + ": " + subvalue);
             }
@@ -331,8 +338,8 @@ function processCfnParameter(param, spacing, index) {
         }
 
         return `
-` + ' '.repeat(spacing + 4) + paramitems.join(`
-` + ' '.repeat(spacing + 4))
+` + ' '.repeat(spacing + cfnspacing.length) + paramitems.join(`
+` + ' '.repeat(spacing + cfnspacing.length));
     }
     
     return undefined;
@@ -1635,12 +1642,12 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
 
     if (Object.keys(options).length) {
         for (option in options) {
-            if (typeof options[option] !== "undefined" && options[option] !== null) {
-                var optionvalue = processCfnParameter(options[option], 12, index);
+            if (options[option] !== undefined && options[option] !== null) {
+                var optionvalue = processCfnParameter(options[option], (cfnspacing.length * 3), index);
 
-                if (typeof optionvalue !== "undefined") {
+                if (optionvalue !== undefined) {
                     params += `
-            ${option}: ${optionvalue}`;
+${cfnspacing}${cfnspacing}${cfnspacing}${option}: ${optionvalue}`;
                 }
             }
         }
@@ -1649,18 +1656,16 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
     }
 
     if (params.trim() == "") {
-        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
-        Type: "${type}"
+        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+        ${cfnspacing}${cfnspacing}Type: "${type}"
 
 `;
     } else {
-        output += `    ${logicalId}:${was_blocked ? ' # blocked' : ''}
-        Type: "${type}"
-        Properties:${params}
+        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+${cfnspacing}${cfnspacing}Type: "${type}"
+${cfnspacing}${cfnspacing}Properties:${params}
 `;
     }
-
-
 
     return output;
 }
@@ -1837,7 +1842,7 @@ func main() {
 `,
         'cfn': `${!has_cfn ? '# No resources generated' : `AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
-    Generator: "former2"
+${cfnspacing}Generator: "former2"
 Description: ""
 Resources:
 `}`,
@@ -2173,25 +2178,46 @@ function performF2Mappings(objects) {
             
             if (obj.type == "lambda.function") {
                 reqParams.cfn['Description'] = obj.data.Configuration.Description;
+                reqParams.tf['description'] = obj.data.Configuration.Description;
                 if (obj.data.Configuration.Environment && obj.data.Configuration.Environment.Variables) {
                     reqParams.cfn['Environment'] = {
                         'Variables': obj.data.Configuration.Environment.Variables
                     };
+                    reqParams.tf['environment'] = {
+                        'variables': obj.data.Configuration.Environment.Variables
+                    };
                 }
                 reqParams.cfn['FunctionName'] = obj.data.Configuration.FunctionName;
+                reqParams.tf['function_name'] = obj.data.Configuration.FunctionName;
                 reqParams.cfn['Handler'] = obj.data.Configuration.Handler;
+                reqParams.tf['handler'] = obj.data.Configuration.Handler;
                 reqParams.cfn['KmsKeyArn'] = obj.data.Configuration.KMSKeyArn;
+                reqParams.tf['kms_key_arn'] = obj.data.Configuration.KMSKeyArn;
                 reqParams.cfn['MemorySize'] = obj.data.Configuration.MemorySize;
+                reqParams.tf['memory_size'] = obj.data.Configuration.MemorySize;
                 reqParams.cfn['ReservedConcurrentExecutions'] = obj.data.Configuration.ReservedConcurrentExecutions;
+                reqParams.tf['reserved_concurrent_executions'] = obj.data.Configuration.ReservedConcurrentExecutions;
                 reqParams.cfn['Role'] = obj.data.Configuration.Role;
+                reqParams.tf['role'] = obj.data.Configuration.Role;
                 reqParams.cfn['Runtime'] = obj.data.Configuration.Runtime;
+                reqParams.tf['runtime'] = obj.data.Configuration.Runtime;
                 reqParams.cfn['Timeout'] = obj.data.Configuration.Timeout;
-                reqParams.cfn['TracingConfig'] = obj.data.Configuration.TracingConfig;
+                reqParams.cfn['timeout'] = obj.data.Configuration.Timeout;
+                if (obj.data.Configuration.TracingConfig) {
+                    reqParams.cfn['TracingConfig'] = obj.data.Configuration.TracingConfig;
+                    reqParams.tf['tracing_config'] = {
+                        'mode': obj.data.Configuration.TracingConfig.Mode
+                    };
+                }
 
                 if (obj.data.Configuration.VpcConfig && obj.data.Configuration.VpcConfig.SubnetIds && obj.data.Configuration.VpcConfig.SubnetIds.length > 0) {
                     reqParams.cfn['VpcConfig'] = {
                         'SubnetIds': obj.data.Configuration.VpcConfig.SubnetIds,
                         'SecurityGroupIds': obj.data.Configuration.VpcConfig.SecurityGroupIds
+                    };
+                    reqParams.tf['vpc_config'] = {
+                        'subnet_ids': obj.data.Configuration.VpcConfig.SubnetIds,
+                        'security_group_ids': obj.data.Configuration.VpcConfig.SecurityGroupIds
                     };
                 }
 
@@ -2199,12 +2225,17 @@ function performF2Mappings(objects) {
                     reqParams.cfn['DeadLetterConfig'] = {
                         'TargetArn': obj.data.Configuration.DeadLetterConfig.TargetArn
                     };
+                    reqParams.tf['dead_letter_config'] = {
+                        'target_arn': obj.data.Configuration.DeadLetterConfig.TargetArn
+                    };
                 }
 
                 if (obj.data.Configuration.Layers) {
                     reqParams.cfn['Layers'] = [];
+                    reqParams.tf['layers'] = [];
                     obj.data.Configuration.Layers.forEach(layer => {
                         reqParams.cfn['Layers'].push(layer.Arn);
+                        reqParams.tf['layers'].push(layer.Arn);
                     });
                 }
                 
@@ -2221,14 +2252,31 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'lambda',
                     'type': 'AWS::Lambda::Function',
-                    'options': reqParams
+                    'terraformType': 'aws_lambda_function',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Configuration.FunctionName,
+                        'GetAtt': {
+                            'Arn': obj.data.Configuration.FunctionArn
+                        }
+                    }
                 });
             } else if (obj.type == "ec2.vpc") {
                 reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.tf['cidr_block'] = obj.data.CidrBlock;
                 reqParams.cfn['EnableDnsSupport'] = obj.data.EnableDnsSupport;
+                reqParams.tf['enable_dns_support'] = obj.data.EnableDnsSupport;
                 reqParams.cfn['EnableDnsHostnames'] = obj.data.EnableDnsHostnames;
+                reqParams.tf['enable_dns_hostnames'] = obj.data.EnableDnsHostnames;
                 reqParams.cfn['InstanceTenancy'] = obj.data.InstanceTenancy;
+                reqParams.tf['instance_tenancy'] = obj.data.InstanceTenancy;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 var attrCidrBlockAssociations = null;
                 var attrIpv6CidrBlockAssociations = null;
@@ -2251,6 +2299,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPC',
+                    'terraformType': 'aws_vpc',
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.VpcId,
@@ -2258,12 +2307,19 @@ function performF2Mappings(objects) {
                             'CidrBlock': obj.data.CidrBlock,
                             'CidrBlockAssociations': attrCidrBlockAssociations,
                             'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
+                            /*
+                            TODO:
+                            DefaultNetworkAcl
+                            DefaultSecurityGroup
+                            */
                         }
                     }
                 });
             } else if (obj.type == "ec2.vpccidrblock") {
                 reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.tf['cidr_block'] = obj.data.CidrBlock;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
 
                 /*
                 TODO:
@@ -2275,21 +2331,26 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPCCidrBlock',
+                    'terraformType': 'aws_vpc_ipv4_cidr_block_association',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.dhcpoptionsassociation") {
                 reqParams.cfn['DhcpOptionsId'] = obj.data.DhcpOptionsId;
+                reqParams.tf['dhcp_options_id'] = obj.data.DhcpOptionsId;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPCDHCPOptionsAssociation',
+                    'terraformType': 'aws_vpc_dhcp_options_association',
                     'options': reqParams
                 });
             } else if (obj.type == "s3.bucket") {
                 reqParams.cfn['BucketName'] = obj.data.Name;
+                reqParams.tf['bucket'] = obj.data.Name;
 
                 /*
                 TODO:
@@ -2330,11 +2391,16 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 's3',
                     'type': 'AWS::S3::Bucket',
-                    'options': reqParams
+                    'terraformType': 'aws_s3_bucket',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Name
+                    }
                 });
             } else if (obj.type == "ec2.egressonlyinternetgateway") {
-                if (obj.data.Attachments && obj.data.Attachments.length == 1) {
+                if (obj.data.Attachments) {
                     reqParams.cfn['VpcId'] = obj.data.Attachments[0].VpcId;
+                    reqParams.tf['vpc_id'] = obj.data.Attachments[0].VpcId;
                 }
 
                 // TODO: Check for multiple
@@ -2344,44 +2410,85 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::EgressOnlyInternetGateway',
-                    'options': reqParams
+                    'terraformType': 'aws_egress_only_internet_gateway',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.EgressOnlyInternetGatewayId
+                    }
                 });
             } else if (obj.type == "ec2.internetgateway") {
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+                if (obj.data.Attachments) {
+                    reqParams.tf['vpc_id'] = obj.data.Attachments[0].VpcId;
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::InternetGateway',
-                    'options': reqParams
+                    'terraformType': 'aws_internet_gateway',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.InternetGatewayId
+                    }
                 });
             } else if (obj.type == "ec2.gatewayattachment") {
-                reqParams.cfn['InternetGatewayId'] = obj.data.InternetGatewayId;
-                reqParams.cfn['VpcId'] = obj.data.VpcId;
-                reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+                if (obj.data.InternetGatewayId) {
+                    reqParams.cfn['InternetGatewayId'] = obj.data.InternetGatewayId;
+                    reqParams.cfn['VpcId'] = obj.data.VpcId;
 
-                tracked_resources.push({
-                    'logicalId': getResourceName('ec2', obj.id),
-                    'region': obj.region,
-                    'service': 'ec2',
-                    'type': 'AWS::EC2::VPCGatewayAttachment',
-                    'options': reqParams
-                });
+                    tracked_resources.push({
+                        'logicalId': getResourceName('ec2', obj.id),
+                        'region': obj.region,
+                        'service': 'ec2',
+                        'type': 'AWS::EC2::VPCGatewayAttachment',
+                        'options': reqParams
+                    });
+                } else {
+                    reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+                    reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
+                    reqParams.cfn['VpcId'] = obj.data.VpcId;
+                    reqParams.tf['vpc_id'] = obj.data.VpcId;
+
+                    tracked_resources.push({
+                        'logicalId': getResourceName('ec2', obj.id),
+                        'region': obj.region,
+                        'service': 'ec2',
+                        'type': 'AWS::EC2::VPCGatewayAttachment',
+                        'terraformType': 'aws_vpn_gateway_attachment',
+                        'options': reqParams
+                    });
+                }
             } else if (obj.type == "ec2.dhcpoptions") {
                 obj.data.DhcpConfigurations.forEach(dhcpConfiguration => {
                     if (dhcpConfiguration.Key == "domain-name") {
                         reqParams.cfn['DomainName'] = dhcpConfiguration.Values[0].Value;
+                        reqParams.tf['domain_name'] = dhcpConfiguration.Values[0].Value;
                     } else if (dhcpConfiguration.Key == "domain-name-servers") {
                         reqParams.cfn['DomainNameServers'] = [];
+                        reqParams.tf['domain_name_servers'] = [];
                         if (dhcpConfiguration.Values[0].Value != "AmazonProvidedDNS") {
                             dhcpConfiguration.Values.forEach(dhcpConfigurationValue => {
                                 reqParams.cfn['DomainNameServers'].push(dhcpConfigurationValue['Value']);
+                                reqParams.tf['domain_name_servers'].push(dhcpConfigurationValue['Value']);
                             });
                         }
                     }
                 });
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 /*
                 TODO:
@@ -2397,16 +2504,30 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::DHCPOptions',
-                    'options': reqParams
+                    'terraformType': 'aws_vpc_dhcp_options',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.DhcpOptionsId
+                    }
                 });
             } else if (obj.type == "ec2.vpnconnection") {
                 reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.tf['type'] = obj.data.Type;
                 if (obj.data.Options) {
                     reqParams.cfn['StaticRoutesOnly'] = obj.data.Options.StaticRoutesOnly;
+                    reqParams.tf['static_routes_only'] = obj.data.Options.StaticRoutesOnly;
                 }
                 reqParams.cfn['CustomerGatewayId'] = obj.data.CustomerGatewayId;
+                reqParams.tf['customer_gateway_id'] = obj.data.CustomerGatewayId;
                 reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+                reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 /*
                 TODO:
@@ -2419,36 +2540,56 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPNConnection',
-                    'options': reqParams
+                    'terraformType': 'aws_vpn_connection',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.VpnConnectionId
+                    }
                 });
             } else if (obj.type == "ec2.vpnconnectionroute") {
                 reqParams.cfn['VpnConnectionId'] = obj.data.VpnConnectionId;
+                reqParams.tf['vpn_connection_id'] = obj.data.VpnConnectionId;
                 reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
+                reqParams.tf['destination_cidr_block'] = obj.data.DestinationCidrBlock;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPNConnectionRoute',
+                    'terraformType': 'aws_vpn_connection_route',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.virtualprivategatewayroutepropagation") {
                 reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+                reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
                 reqParams.cfn['RouteTableIds'] = [obj.data.RouteTableId];
+                reqParams.tf['route_table_id'] = obj.data.RouteTableId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPNGatewayRoutePropagation',
+                    'terraformType': 'aws_vpn_gateway_route_propagation',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.peeringconnection") {
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
                 reqParams.cfn['PeerVpcId'] = obj.data.AccepterVpcInfo.VpcId;
+                reqParams.tf['peer_vpc_id'] = obj.data.AccepterVpcInfo.VpcId;
                 reqParams.cfn['PeerOwnerId'] = obj.data.AccepterVpcInfo.OwnerId;
+                reqParams.tf['peer_owner_id'] = obj.data.AccepterVpcInfo.OwnerId;
                 reqParams.cfn['PeerRegion'] = obj.data.AccepterVpcInfo.Region;
+                reqParams.tf['peer_region'] = obj.data.AccepterVpcInfo.Region;
                 reqParams.cfn['VpcId'] = obj.data.RequesterVpcInfo.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.RequesterVpcInfo.VpcId;
 
                 /*
                 TODO:
@@ -2460,82 +2601,149 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPCPeeringConnection',
+                    'terraformType': 'aws_vpc_peering_connection',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.routetable") {
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::RouteTable',
-                    'options': reqParams
+                    'terraformType': 'aws_route_table',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.RouteTableId
+                    }
                 });
             } else if (obj.type == "ec2.networkacl") {
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::NetworkAcl',
-                    'options': reqParams
+                    'terraformType': 'aws_network_acl',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.NetworkAclId
+                    }
                 });
             } else if (obj.type == "ec2.networkaclentry") {
                 reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.tf['cidr_block'] = obj.data.CidrBlock;
                 reqParams.cfn['Egress'] = obj.data.Egress;
+                reqParams.tf['egress'] = obj.data.Egress;
                 reqParams.cfn['Icmp'] = obj.data.IcmpTypeCode;
+                reqParams.tf['icmp_type'] = obj.data.IcmpTypeCode;
+                reqParams.tf['icmp_code'] = obj.data.IcmpTypeCode;
                 reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlock;
+                reqParams.tf['ipv6_cidr_block'] = obj.data.Ipv6CidrBlock;
                 reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;
+                reqParams.tf['network_acl_id'] = obj.data.NetworkAclId;
                 reqParams.cfn['PortRange'] = obj.data.PortRange;
+                if (obj.data.PortRange) {
+                    reqParams.tf['from_port'] = obj.data.PortRange.FromPort;
+                    reqParams.tf['to_port'] = obj.data.PortRange.ToPort;
+                }
                 reqParams.cfn['Protocol'] = obj.data.Protocol;
+                reqParams.tf['protocol'] = obj.data.Protocol;
                 reqParams.cfn['RuleAction'] = obj.data.RuleAction;
+                reqParams.tf['rule_action'] = obj.data.RuleAction;
                 reqParams.cfn['RuleNumber'] = obj.data.RuleNumber;
+                reqParams.tf['rule_number'] = obj.data.RuleNumber;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::NetworkAclEntry',
+                    'terraformType': 'aws_network_acl_rule',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.vpngateway") {
                 reqParams.cfn['AmazonSideAsn'] = obj.data.AmazonSideAsn;
+                reqParams.tf['amazon_side_asn'] = obj.data.AmazonSideAsn;
                 reqParams.cfn['Type'] = obj.data.Type;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+                if (obj.data.VpcAttachments) {
+                    reqParams.tf['vpc_id'] = obj.data.VpcAttachments[0].VpcId
+                }
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VPNGateway',
-                    'options': reqParams
+                    'terraformType': 'aws_vpn_gateway',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.VpnGatewayId
+                    }
                 });
             } else if (obj.type == "ec2.customergateway") {
                 reqParams.cfn['BgpAsn'] = obj.data.BgpAsn;
+                reqParams.tf['bgp_asn'] = obj.data.BgpAsn;
                 reqParams.cfn['IpAddress'] = obj.data.IpAddress;
+                reqParams.tf['ip_address'] = obj.data.IpAddress;
                 reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.tf['type'] = obj.data.Type;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::CustomerGateway',
-                    'options': reqParams
+                    'terraformType': 'aws_customer_gateway',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.CustomerGatewayId
+                    }
                 });
             } else if (obj.type == "ec2.subnet") {
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+                reqParams.tf['cidr_block'] = obj.data.CidrBlock;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['MapPublicIpOnLaunch'] = obj.data.MapPublicIpOnLaunch;
+                reqParams.tf['map_public_ip_on_launch'] = obj.data.MapPublicIpOnLaunch;
                 reqParams.cfn['AssignIpv6AddressOnCreation'] = obj.data.AssignIpv6AddressOnCreation;
-                reqParams.cfn['BucketName'] = obj.data.Name;
-                reqParams.cfn['BucketName'] = obj.data.Name;
-                reqParams.cfn['BucketName'] = obj.data.Name;
+                reqParams.tf['assign_ipv6_address_on_creation'] = obj.data.AssignIpv6AddressOnCreation;
 
                 /* TODO:
                 Ipv6CidrBlock: String
@@ -2548,34 +2756,53 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::Subnet',
-                    'options': reqParams
+                    'terraformType': 'aws_subnet',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.SubnetId,
+                        'GetAtt': {
+                            'AvailabilityZone': obj.data.AvailabilityZone,
+                            'VpcId': obj.data.VpcId
+                        }
+                    }
                 });
             } else if (obj.type == "s3.bucketpolicy") {
                 reqParams.cfn['Bucket'] = obj.data.Bucket;
+                reqParams.tf['bucket'] = obj.data.Bucket;
                 reqParams.cfn['PolicyDocument'] = JSON.parse(obj.data.Policy);
+                reqParams.tf['policy'] = obj.data.Policy;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('s3', obj.id),
                     'region': obj.region,
                     'service': 's3',
                     'type': 'AWS::S3::BucketPolicy',
+                    'terraformType': 'aws_s3_bucket_policy',
                     'options': reqParams
                 });
             } else if (obj.type == "lambda.alias") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 var split = obj.data.AliasArn.split(":");
                 reqParams.cfn['FunctionName'] = split[split.length - 2];
+                reqParams.tf['function_name'] = split[split.length - 2];
                 reqParams.cfn['FunctionVersion'] = obj.data.FunctionVersion;
+                reqParams.tf['function_version'] = obj.data.FunctionVersion;
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 if (obj.data.RoutingConfig && obj.data.RoutingConfig.AdditionalVersionWeights) {
                     reqParams.cfn['RoutingConfig'] = {
                         'AdditionalVersionWeights': []
+                    };
+                    reqParams.tf['routing_config'] = {
+                        'additional_version_weights': {}
                     };
                     for (var func_version in obj.data.RoutingConfig.AdditionalVersionWeights) {
                         reqParams.cfn['RoutingConfig']['AdditionalVersionWeights'].push({
                             FunctionVersion: func_version,
                             FunctionWeight: obj.data.RoutingConfig.AdditionalVersionWeights[func_version]
                         });
+                        reqParams.tf['routing_config']['additional_version_weights'][func_version] = obj.data.RoutingConfig.AdditionalVersionWeights[func_version];
                     }
                 }
 
@@ -2584,37 +2811,76 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'lambda',
                     'type': 'AWS::Lambda::Alias',
-                    'options': reqParams
+                    'terraformType': 'aws_lambda_alias',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.AliasArn
+                    }
                 });
             } else if (obj.type == "ec2.placementgroup") {
                 reqParams.cfn['Strategy'] = obj.data.Strategy;
+                reqParams.tf['strategy'] = obj.data.Strategy;
+                reqParams.tf['name'] = obj.data.GroupName;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::PlacementGroup',
+                    'terraformType': 'aws_placement_group',
                     'options': reqParams
                 });
             } else if (obj.type == "route53.record") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.tf['type'] = obj.data.Type;
                 reqParams.cfn['SetIdentifier'] = obj.data.SetIdentifier;
+                reqParams.tf['set_identifier'] = obj.data.SetIdentifier;
                 reqParams.cfn['Weight'] = obj.data.Weight;
+                reqParams.tf['weighted_routing_policy'] = {
+                    'weight': obj.data.Weight
+                };
                 reqParams.cfn['Region'] = obj.data.Region;
+                reqParams.tf['latency_routing_policy'] = {
+                    'region': obj.data.Region
+                };
                 reqParams.cfn['Failover'] = obj.data.Failover;
+                reqParams.tf['failover_routing_policy'] = {
+                    'type': obj.data.Failover
+                };
                 reqParams.cfn['MultiValueAnswer'] = obj.data.MultiValueAnswer;
+                reqParams.tf['multivalue_answer_routing_policy'] = obj.data.MultiValueAnswer;
                 reqParams.cfn['TTL'] = obj.data.TTL;
+                reqParams.tf['ttl'] = obj.data.TTL;
                 reqParams.cfn['HealthCheckId'] = obj.data.HealthCheckId;
+                reqParams.tf['health_check_id'] = obj.data.HealthCheckId;
                 if (obj.data.ResourceRecords) {
                     reqParams.cfn['ResourceRecords'] = [];
+                    reqParams.tf['records'] = [];
                     obj.data.ResourceRecords.forEach(resourceRecord => {
                         reqParams.cfn['ResourceRecords'].push(resourceRecord['Value']);
+                        reqParams.tf['records'].push(resourceRecord['Value']);
                     });
                 }
                 reqParams.cfn['AliasTarget'] = obj.data.AliasTarget;
+                if (obj.data.AliasTarget) {
+                    reqParams.tf['alias'] = {
+                        'name': obj.data.AliasTarget.DNSName,
+                        'zone_id': obj.data.AliasTarget.HostedZoneId,
+                        'evaluate_target_health': obj.data.AliasTarget.EvaluateTargetHealth
+                    };
+                }
                 reqParams.cfn['HostedZoneId'] = obj.data.HostedZoneId;
+                reqParams.tf['zone_id'] = obj.data.HostedZoneId;
                 reqParams.cfn['GeoLocation'] = obj.data.GeoLocation;
+                if (obj.data.GeoLocation) {
+                    reqParams.tf['geolocation_routing_policy'] = {
+                        'continent': obj.data.GeoLocation.ContinentCode,
+                        'country': obj.data.GeoLocation.CountryCode,
+                        'subdivision': obj.data.GeoLocation.SubdivisionCode
+                    };
+                }
 
                 /*
                 TODO:
@@ -2626,6 +2892,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'route53',
                     'type': 'AWS::Route53::RecordSet',
+                    'terraformType': 'aws_route53_record',
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.Name
@@ -2633,10 +2900,12 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "route53.hostedzone") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 if (obj.data.Config && obj.data.Config.Comment) {
                     reqParams.cfn['HostedZoneConfig'] = {
                         'Comment': obj.data.Config.Comment
                     };
+                    reqParams.tf['comment'] = obj.data.Config.Comment;
                 }
 
                 /*
@@ -2654,28 +2923,52 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'route53',
                     'type': 'AWS::Route53::HostedZone',
+                    'terraformType': 'aws_route53_zone',
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.Id.split("/").pop()
+                        /*
+                        TODO:
+                        NameServers
+                        */
                     }
                 });
             } else if (obj.type == "elbv2.targetgroup") {
+                var matcherHttpCode = null;
+                if (obj.data.Matcher) {
+                    matcherHttpCode = obj.data.Matcher.HttpCode;
+                }
+                reqParams.tf['health_check'] = {
+                    'interval': obj.data.HealthCheckIntervalSeconds,
+                    'path': obj.data.HealthCheckPath,
+                    'port': obj.data.HealthCheckPort,
+                    'protocol': obj.data.HealthCheckProtocol,
+                    'timeout': obj.data.HealthCheckTimeoutSeconds,
+                    'unhealthy_threshold': obj.data.UnhealthyThresholdCount,
+                    'healthy_threshold': obj.data.HealthyThresholdCount,
+                    'matcher': matcherHttpCode
+                };
                 reqParams.cfn['HealthCheckIntervalSeconds'] = obj.data.HealthCheckIntervalSeconds;
                 reqParams.cfn['HealthCheckPath'] = obj.data.HealthCheckPath;
+                reqParams.cfn['Port'] = obj.data.Port;
+                reqParams.tf['port'] = obj.data.Port;
+                reqParams.cfn['Protocol'] = obj.data.Protocol;
+                reqParams.tf['protocol'] = obj.data.Protocol;
+                reqParams.cfn['HealthCheckPort'] = obj.data.HealthCheckPort;
+                reqParams.cfn['HealthCheckProtocol'] = obj.data.HealthCheckProtocol;
                 reqParams.cfn['HealthCheckTimeoutSeconds'] = obj.data.HealthCheckTimeoutSeconds;
                 reqParams.cfn['UnhealthyThresholdCount'] = obj.data.UnhealthyThresholdCount;
                 reqParams.cfn['TargetType'] = obj.data.TargetType;
+                reqParams.tf['target_type'] = obj.data.TargetType;
                 reqParams.cfn['Matcher'] = obj.data.Matcher;
                 reqParams.cfn['HealthyThresholdCount'] = obj.data.HealthyThresholdCount;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['Name'] = obj.data.LoadBalancerName;
+                reqParams.tf['name'] = obj.data.LoadBalancerName;
 
                 /*
                 TODO:
-                HealthCheckPort: String
-                HealthCheckProtocol: String
-                Port: Integer
-                Protocol: String
                 Tags:
                     - Resource Tag
                 TargetGroupAttributes:
@@ -2689,17 +2982,37 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elbv2',
                     'type': 'AWS::ElasticLoadBalancingV2::TargetGroup',
-                    'options': reqParams
+                    'terraformType': 'aws_lb_target_group',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TargetGroupArn,
+                        'GetAtt': {
+                            'TargetGroupName': obj.data.TargetGroupName
+                        }
+                    }
                 });
             } else if (obj.type == "ec2.volume") {
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+                reqParams.tf['encrypted'] = obj.data.Encrypted;
                 reqParams.cfn['Iops'] = obj.data.Iops;
+                reqParams.tf['iops'] = obj.data.Iops;
                 reqParams.cfn['Size'] = obj.data.Size;
+                reqParams.tf['size'] = obj.data.Size;
                 reqParams.cfn['VolumeType'] = obj.data.VolumeType;
+                reqParams.tf['type'] = obj.data.VolumeType;
                 reqParams.cfn['SnapshotId'] = obj.data.SnapshotId;
+                reqParams.tf['snapshot_id'] = obj.data.SnapshotId;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 /*
                 TODO:
@@ -2711,49 +3024,88 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::Volume',
-                    'options': reqParams
+                    'terraformType': 'aws_ebs_volume',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.VolumeId
+                    }
                 });
             } else if (obj.type == "ec2.volumeattachment") {
                 reqParams.cfn['VolumeId'] = obj.data.VolumeId;
+                reqParams.tf['volume_id'] = obj.data.VolumeId;
                 reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.tf['instance_id'] = obj.data.InstanceId;
                 reqParams.cfn['Device'] = obj.data.Device;
+                reqParams.tf['device_name'] = obj.data.Device;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::VolumeAttachment',
+                    'terraformType': 'aws_volume_attachment',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.cluster") {
                 reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+                reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
                 reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+                reqParams.tf['database_name'] = obj.data.DatabaseName;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
                 reqParams.cfn['DBClusterParameterGroup'] = obj.data.DBClusterParameterGroup;
+                reqParams.tf['db_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup;
+                reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup;
                 reqParams.cfn['Engine'] = obj.data.Engine;
+                reqParams.tf['engine'] = obj.data.Engine;
                 reqParams.cfn['Port'] = obj.data.Port;
+                reqParams.tf['port'] = obj.data.Port;
                 reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.tf['master_username'] = obj.data.MasterUsername;
                 reqParams.cfn['MasterUserPassword'] = "REPLACEME"; // TODO: Fix
+                reqParams.tf['master_password'] = "REPLACEME";
                 reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+                reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['ReplicationSourceIdentifier'] = obj.data.ReplicationSourceIdentifier;
+                reqParams.tf['replication_source_identifier'] = obj.data.ReplicationSourceIdentifier;
                 if (obj.data.VpcSecurityGroups) {
                     reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
                     obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
                         reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                        reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
                     });
                 }
                 reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+                reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.tf['engine_version'] = obj.data.EngineVersion;
                 reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
+                reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
                 reqParams.cfn['BacktrackWindow'] = obj.data.BacktrackWindow;
+                reqParams.tf['backtrack_window'] = obj.data.BacktrackWindow;
                 reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports; // TODO: WTF? Lol.
+                reqParams.tf['enabled_cloudwatch_logs_exports'] = obj.data.EnabledCloudwatchLogsExports;
                 reqParams.cfn['EngineMode'] = obj.data.EngineMode;
+                reqParams.tf['engine_mode'] = obj.data.EngineMode;
                 reqParams.cfn['ScalingConfiguration'] = obj.data.ScalingConfigurationInfo;
+                if (obj.data.ScalingConfigurationInfo) {
+                    reqParams.tf['scaling_configuration'] = {
+                        'min_capacity': obj.data.ScalingConfigurationInfo.MinCapacity,
+                        'max_capacity': obj.data.ScalingConfigurationInfo.MaxCapacity,
+                        'auto_pause': obj.data.ScalingConfigurationInfo.AutoPause,
+                        'seconds_until_auto_pause': obj.data.ScalingConfigurationInfo.SecondsUntilAutoPause
+                    };
+                }
                 reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+                reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
 
                 /*
                 TODO:
@@ -2768,52 +3120,86 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBCluster',
+                    'terraformType': 'aws_rds_cluster',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.instance") {
                 reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
+                reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
                 reqParams.cfn['AllocatedStorage'] = obj.data.AllocatedStorage;
+                reqParams.tf['allocated_storage'] = obj.data.AllocatedStorage;
                 reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
+                reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
                 reqParams.cfn['Engine'] = obj.data.Engine;
+                reqParams.tf['engine'] = obj.data.Engine;
                 reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.tf['username'] = obj.data.MasterUsername;
+                reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+                reqParams.tf['password'] = 'REPLACEME';
                 reqParams.cfn['DBName'] = obj.data.DBName;
+                reqParams.tf['name'] = obj.data.DBName;
                 reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+                reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
                 reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+                reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['MultiAZ'] = obj.data.MultiAZ;
+                reqParams.tf['multi_az'] = obj.data.MultiAZ;
                 reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.tf['engine_version'] = obj.data.EngineVersion;
                 reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+                reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
                 reqParams.cfn['LicenseModel'] = obj.data.LicenseModel;
+                reqParams.tf['license_model'] = obj.data.LicenseModel;
                 reqParams.cfn['Iops'] = obj.data.Iops;
+                reqParams.tf['iops'] = obj.data.Iops;
                 reqParams.cfn['CharacterSetName'] = obj.data.CharacterSetName;
+                reqParams.tf['character_set_name'] = obj.data.CharacterSetName;
                 reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+                reqParams.tf['publicly_accessible'] = obj.data.PubliclyAccessible;
                 reqParams.cfn['StorageType'] = obj.data.StorageType;
+                reqParams.tf['storage_type'] = obj.data.StorageType;
                 reqParams.cfn['Port'] = obj.data.Port;
+                reqParams.tf['port'] = obj.data.Port;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
                 reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+                reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 reqParams.cfn['CopyTagsToSnapshot'] = obj.data.CopyTagsToSnapshot;
+                reqParams.tf['copy_tags_to_snapshot'] = obj.data.CopyTagsToSnapshot;
                 reqParams.cfn['MonitoringInterval'] = obj.data.MonitoringInterval;
+                reqParams.tf['monitoring_interval'] = obj.data.MonitoringInterval;
                 reqParams.cfn['PromotionTier'] = obj.data.PromotionTier;
                 reqParams.cfn['Timezone'] = obj.data.Timezone;
+                reqParams.tf['timezone'] = obj.data.Timezone;
                 reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
+                reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
                 reqParams.cfn['EnablePerformanceInsights'] = obj.data.PerformanceInsightsEnabled;
                 reqParams.cfn['PerformanceInsightsKMSKeyId'] = obj.data.PerformanceInsightsKMSKeyId;
                 reqParams.cfn['PerformanceInsightsRetentionPeriod'] = obj.data.PerformanceInsightsRetentionPeriod;
                 reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+                reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
+                reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
                 reqParams.cfn['ProcessorFeatures'] = obj.data.ProcessorFeatures;
                 if (obj.data.DBSecurityGroups) {
                     reqParams.cfn['DBSecurityGroups'] = [];
+                    reqParams.tf['security_group_names'] = [];
                     obj.data.DBSecurityGroups.forEach(dbSecurityGroup => {
                         reqParams.cfn['DBSecurityGroups'].push(dbSecurityGroup.DBSecurityGroupName);
+                        reqParams.tf['security_group_names'].push(dbSecurityGroup.DBSecurityGroupName);
                     });
                 }
                 if (obj.data.VpcSecurityGroups) {
                     reqParams.cfn['VPCSecurityGroups'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
                     obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
                         reqParams.cfn['VPCSecurityGroups'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                        reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
                     });
                 }
 
@@ -2846,40 +3232,63 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "rds.eventsubscription") {
                 reqParams.cfn['SourceType'] = obj.data.SourceType;
+                reqParams.tf['source_type'] = obj.data.SourceType;
                 reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
+                reqParams.tf['sns_topic'] = obj.data.SnsTopicArn;
                 reqParams.cfn['SourceIds'] = obj.data.SourceIdsList;
+                reqParams.tf['source_ids'] = obj.data.SourceIdsList;
                 reqParams.cfn['EventCategories'] = obj.data.EventCategoriesList;
+                reqParams.tf['event_categories'] = obj.data.EventCategoriesList;
                 reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.tf['enabled'] = obj.data.Enabled;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::EventSubscription',
+                    'terraformType': 'aws_db_event_subscription',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.instance") {
                 reqParams.cfn['ImageId'] = obj.data.ImageId;
+                reqParams.tf['ami'] = obj.data.ImageId;
                 reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.tf['instance_type'] = obj.data.InstanceType;
                 reqParams.cfn['KernelId'] = obj.data.KernelId;
                 reqParams.cfn['KeyName'] = obj.data.KeyName;
+                reqParams.tf['key_name'] = obj.data.KeyName;
                 if (obj.data.Placement) {
                     reqParams.cfn['AvailabilityZone'] = obj.data.Placement.AvailabilityZone;
+                    reqParams.tf['availability_zone'] = obj.data.Placement.AvailabilityZone;
                     reqParams.cfn['Affinity'] = obj.data.Placement.Affinity;
                     reqParams.cfn['PlacementGroupName'] = obj.data.Placement.GroupName;
+                    reqParams.tf['placement_group'] = obj.data.Placement.GroupName;
                     reqParams.cfn['Tenancy'] = obj.data.Placement.Tenancy;
+                    reqParams.tf['tenancy'] = obj.data.Placement.Tenancy;
                 }
                 reqParams.cfn['RamdiskId'] = obj.data.RamdiskId;
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.tf['subnet_id'] = obj.data.SubnetId;
                 reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
                 if (obj.data.SecurityGroups) {
                     reqParams.cfn['SecurityGroups'] = [];
+                    reqParams.tf['security_groups'] = [];
                     obj.data.SecurityGroups.forEach(securityGroup => {
                         reqParams.cfn['SecurityGroups'].push(securityGroup.GroupName);
+                        reqParams.tf['security_groups'].push(securityGroup.GroupName);
                     });
                 }
                 reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
+                reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 /*
                 TODO:
@@ -2918,11 +3327,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::Instance',
+                    'terraformType': 'aws_instance',
                     'options': reqParams
                 });
             } else if (obj.type == "sns.topic") {
                 reqParams.cfn['DisplayName'] = obj.data.Attributes.DisplayName;
+                reqParams.tf['display_name'] = obj.data.Attributes.DisplayName;
                 reqParams.cfn['TopicName'] = obj.data.Attributes.TopicArn.split(':').pop();
+                reqParams.tf['name'] = obj.data.Attributes.TopicArn.split(':').pop();
 
                 /*
                 TODO:
@@ -2936,31 +3348,46 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'sns',
                     'type': 'AWS::SNS::Topic',
+                    'terraformType': 'aws_sns_topic',
                     'options': reqParams
                 });
             } else if (obj.type == "sns.topicpolicy") {
                 reqParams.cfn['PolicyDocument'] = obj.data.Policy;
+                reqParams.tf['policy'] = obj.data.Policy;
                 reqParams.cfn['Topics'] = [obj.data.Topic];
+                reqParams.tf['arn'] = obj.data.Topic;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('sns', obj.id),
                     'region': obj.region,
                     'service': 'sns',
                     'type': 'AWS::SNS::TopicPolicy',
+                    'terraformType': 'aws_sns_topic_policy',
                     'options': reqParams
                 });
             } else if (obj.type == "sqs.queue") {
                 reqParams.cfn['ContentBasedDeduplication'] = obj.data.Attributes.ContentBasedDeduplication;
+                reqParams.tf['content_based_deduplication'] = obj.data.Attributes.ContentBasedDeduplication;
                 reqParams.cfn['DelaySeconds'] = obj.data.Attributes.DelaySeconds;
+                reqParams.tf['delay_seconds'] = obj.data.Attributes.DelaySeconds;
                 reqParams.cfn['FifoQueue'] = obj.data.Attributes.FifoQueue;
+                reqParams.tf['fifo_queue'] = obj.data.Attributes.FifoQueue;
                 reqParams.cfn['KmsMasterKeyId'] = obj.data.Attributes.KmsMasterKeyId;
+                reqParams.tf['kms_master_key_id'] = obj.data.Attributes.KmsMasterKeyId;
                 reqParams.cfn['KmsDataKeyReusePeriodSeconds'] = obj.data.Attributes.KmsDataKeyReusePeriodSeconds;
+                reqParams.tf['kms_data_key_reuse_period_seconds'] = obj.data.Attributes.KmsDataKeyReusePeriodSeconds;
                 reqParams.cfn['MaximumMessageSize'] = obj.data.Attributes.MaximumMessageSize;
+                reqParams.tf['max_message_size'] = obj.data.Attributes.MaximumMessageSize;
                 reqParams.cfn['MessageRetentionPeriod'] = obj.data.Attributes.MessageRetentionPeriod;
+                reqParams.tf['message_retention_seconds'] = obj.data.Attributes.MessageRetentionPeriod;
                 reqParams.cfn['ReceiveMessageWaitTimeSeconds'] = obj.data.Attributes.ReceiveMessageWaitTimeSeconds;
+                reqParams.tf['receive_wait_time_seconds'] = obj.data.Attributes.ReceiveMessageWaitTimeSeconds;
                 reqParams.cfn['VisibilityTimeout'] = obj.data.Attributes.VisibilityTimeout;
+                reqParams.tf['visibility_timeout_seconds'] = obj.data.Attributes.VisibilityTimeout;
                 reqParams.cfn['QueueName'] = obj.data.Attributes.QueueArn.split(":").pop();
+                reqParams.tf['name'] = obj.data.Attributes.QueueArn.split(":").pop();
                 reqParams.cfn['RedrivePolicy'] = obj.data.Attributes.RedrivePolicy;
+                reqParams.tf['redrive_policy'] = obj.data.Attributes.RedrivePolicy;
 
                 /*
                 TODO:
@@ -2973,22 +3400,28 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'sqs',
                     'type': 'AWS::SQS::Queue',
+                    'terraformType': 'aws_sqs_queue',
                     'options': reqParams
                 });
             } else if (obj.type == "sqs.queuepolicy") {
                 reqParams.cfn['PolicyDocument'] = obj.data.Policy;
+                reqParams.tf['policy'] = obj.data.Policy;
                 reqParams.cfn['Queues'] = [obj.data.Queue];
+                reqParams.tf['queue_url'] = obj.data.Queue;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('sqs', obj.id),
                     'region': obj.region,
                     'service': 'sqs',
                     'type': 'AWS::SQS::QueuePolicy',
+                    'terraformType': 'aws_sqs_queue_policy',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticbeanstalk.application") {
                 reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+                reqParams.tf['name'] = obj.data.ApplicationName;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 /*
                 TODO:
@@ -3001,30 +3434,47 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
                     'type': 'AWS::ElasticBeanstalk::Application',
+                    'terraformType': 'aws_elastic_beanstalk_application',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticbeanstalk.applicationversion") {
                 reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+                reqParams.tf['name'] = obj.data.ApplicationName;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['SourceBundle'] = obj.data.SourceBundle;
+                if (obj.data.SourceBundle) {
+                    reqParams.tf['bucket'] = obj.data.SourceBundle.S3Bucket;
+                    reqParams.tf['key'] = obj.data.SourceBundle.S3Key;
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
                     'type': 'AWS::ElasticBeanstalk::ApplicationVersion',
+                    'terraformType': 'aws_elastic_beanstalk_application_version',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticbeanstalk.environment") {
                 reqParams.cfn['EnvironmentName'] = obj.data.EnvironmentName;
+                reqParams.tf['name'] = obj.data.EnvironmentName;
                 reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+                reqParams.tf['application'] = obj.data.ApplicationName;
                 reqParams.cfn['VersionLabel'] = obj.data.VersionLabel;
+                reqParams.tf['version_label'] = obj.data.VersionLabel;
                 reqParams.cfn['SolutionStackName'] = obj.data.SolutionStackName;
+                reqParams.tf['solution_stack_name'] = obj.data.SolutionStackName;
                 reqParams.cfn['PlatformArn'] = obj.data.PlatformArn;
+                reqParams.tf['platform_arn'] = obj.data.PlatformArn;
                 reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+                reqParams.tf['template_name'] = obj.data.TemplateName;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Tier'] = obj.data.Tier;
+                reqParams.tf['tier'] = obj.data.Tier;
                 reqParams.cfn['CNAMEPrefix'] = new URL(obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
+                reqParams.tf['cname_prefix'] = new URL(obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
 
                 /*
                 TODO:
@@ -3039,15 +3489,31 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
                     'type': 'AWS::ElasticBeanstalk::Environment',
+                    'terraformType': 'aws_elastic_beanstalk_environment',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticbeanstalk.configurationtemplate") {
                 reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+                reqParams.tf['application'] = obj.data.ApplicationName;
                 reqParams.cfn['SolutionStackName'] = obj.data.SolutionStackName;
+                reqParams.tf['solution_stack_name'] = obj.data.SolutionStackName;
                 reqParams.cfn['PlatformArn'] = obj.data.PlatformArn;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['EnvironmentId'] = obj.data.EnvironmentName;
+                reqParams.tf['environment_id'] = obj.data.EnvironmentName;
                 reqParams.cfn['OptionSettings'] = obj.data.OptionSettings;
+                if (obj.data.OptionSettings) {
+                    reqParams.tf['setting'] = [];
+                    obj.data.OptionSettings.forEach(setting => {
+                        reqParams.tf['setting'].push({
+                            'namespace': setting.Namespace,
+                            'name': setting.OptionName,
+                            'resource': setting.ResourceName,
+                            'value': setting.Value
+                        });
+                    });
+                }
 
                 /*
                 TODO:
@@ -3060,26 +3526,60 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
                     'type': 'AWS::ElasticBeanstalk::ConfigurationTemplate',
+                    'terraformType': 'aws_elastic_beanstalk_configuration_template',
                     'options': reqParams
                 });
             } else if (obj.type == "opsworks.stack") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.tf['region'] = obj.data.Region;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
+                reqParams.tf['service_role_arn'] = obj.data.ServiceRoleArn;
                 reqParams.cfn['DefaultInstanceProfileArn'] = obj.data.DefaultInstanceProfileArn;
+                reqParams.tf['default_instance_profile_arn'] = obj.data.DefaultInstanceProfileArn;
                 reqParams.cfn['DefaultOs'] = obj.data.DefaultOs;
+                reqParams.tf['default_os'] = obj.data.DefaultOs;
                 reqParams.cfn['HostnameTheme'] = obj.data.HostnameTheme;
+                reqParams.tf['hostname_theme'] = obj.data.HostnameTheme;
                 reqParams.cfn['DefaultAvailabilityZone'] = obj.data.DefaultAvailabilityZone;
+                reqParams.tf['default_availability_zone'] = obj.data.DefaultAvailabilityZone;
                 reqParams.cfn['DefaultSubnetId'] = obj.data.DefaultSubnetId;
+                reqParams.tf['default_subnet_id'] = obj.data.DefaultSubnetId;
                 reqParams.cfn['CustomJson'] = obj.data.CustomJson;
+                reqParams.tf['custom_json'] = obj.data.CustomJson;
                 reqParams.cfn['ConfigurationManager'] = obj.data.ConfigurationManager;
+                if (obj.data.ConfigurationManager) {
+                    reqParams.tf['configuration_manager_name'] = obj.data.ConfigurationManager.Name;
+                    reqParams.tf['configuration_manager_version'] = obj.data.ConfigurationManager.Version;
+                }
                 reqParams.cfn['ChefConfiguration'] = obj.data.ChefConfiguration;
+                if (obj.data.ChefConfiguration) {
+                    reqParams.tf['berkshelf_version'] = obj.data.ChefConfiguration.BerkshelfVersion;
+                    reqParams.tf['manage_berkshelf'] = obj.data.ChefConfiguration.ManageBerkshelf;
+                }
                 reqParams.cfn['UseCustomCookbooks'] = obj.data.UseCustomCookbooks;
+                reqParams.tf['use_custom_cookbooks'] = obj.data.UseCustomCookbooks;
                 reqParams.cfn['UseOpsworksSecurityGroups'] = obj.data.UseOpsworksSecurityGroups;
+                reqParams.tf['use_opsworks_security_groups'] = obj.data.UseOpsworksSecurityGroups;
                 reqParams.cfn['CustomCookbooksSource'] = obj.data.CustomCookbooksSource;
+                if (obj.data.CustomCookbooksSource) {
+                    reqParams.tf['custom_cookbooks_source'] = {
+                        'type': obj.data.CustomCookbooksSource.Type,
+                        'url': obj.data.CustomCookbooksSource.Url,
+                        'username': obj.data.CustomCookbooksSource.Username,
+                        'password': obj.data.CustomCookbooksSource.Password,
+                        'ssh_key': obj.data.CustomCookbooksSource.SshKey,
+                        'revision': obj.data.CustomCookbooksSource.Revision
+                    };
+                }
                 reqParams.cfn['DefaultSshKeyName'] = obj.data.DefaultSshKeyName;
+                reqParams.tf['default_ssh_key_name'] = obj.data.DefaultSshKeyName;
                 reqParams.cfn['DefaultRootDeviceType'] = obj.data.DefaultRootDeviceType;
+                reqParams.tf['default_root_device_type'] = obj.data.DefaultRootDeviceType;
                 reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+                reqParams.tf['agent_version'] = obj.data.AgentVersion;
                 reqParams.cfn['Attributes'] = obj.data.Attributes;
 
                 /*
@@ -3102,27 +3602,68 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'opsworks',
                     'type': 'AWS::OpsWorks::Stack',
+                    'terraformType': 'aws_opsworks_stack',
                     'options': reqParams
                 });
             } else if (obj.type == "opsworks.app") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Shortname'] = obj.data.Shortname;
+                reqParams.tf['short_name'] = obj.data.Shortname;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['DataSources'] = obj.data.DataSources;
+                if (obj.data.DataSources) { // TODO: more than one?
+                    reqParams.tf['data_source_type'] = obj.data.DataSources[0].Type;
+                    reqParams.tf['data_source_arn'] = obj.data.DataSources[0].Arn;
+                    reqParams.tf['data_source_database_name'] = obj.data.DataSources[0].DatabaseName;
+                }
                 reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.tf['type'] = obj.data.Type;
                 reqParams.cfn['StackId'] = obj.data.StackId;
+                reqParams.tf['stack_id'] = obj.data.StackId;
                 reqParams.cfn['AppSource'] = obj.data.AppSource;
+                if (obj.data.AppSource) {
+                    reqParams.tf['app_source'] = {
+                        'type': obj.data.AppSource.Type,
+                        'url': obj.data.AppSource.Url,
+                        'username': obj.data.AppSource.Username,
+                        'password': obj.data.AppSource.Password,
+                        'ssh_key': obj.data.AppSource.SshKey,
+                        'revision': obj.data.AppSource.Revision
+                    };
+                }
                 reqParams.cfn['Domains'] = obj.data.Domains;
+                reqParams.tf['domains'] = obj.data.Domains;
                 reqParams.cfn['EnableSsl'] = obj.data.EnableSsl;
+                reqParams.tf['enable_ssl'] = obj.data.EnableSsl;
                 reqParams.cfn['SslConfiguration'] = obj.data.SslConfiguration;
+                if (obj.data.SslConfiguration) {
+                    reqParams.tf['ssl_configuration'] = {
+                        'private_key': obj.data.SslConfiguration.PrivateKey,
+                        'certificate': obj.data.SslConfiguration.Certificate,
+                        'chain': obj.data.SslConfiguration.Chain
+                    };
+                }
                 reqParams.cfn['Attributes'] = obj.data.Attributes;
                 reqParams.cfn['Environment'] = obj.data.Environment;
+                if (obj.data.Environment) {
+                    reqParams.tf['environment'] = [];
+                    obj.data.Environment.forEach(environment => {
+                        reqParams.tf['environment'].push({
+                            'key': environment.Key,
+                            'value': environment.Value,
+                            'secure': environment.Secure
+                        });
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
                     'type': 'AWS::OpsWorks::App',
+                    'terraformType': 'aws_opsworks_application',
                     'options': reqParams
                 });
             } else if (obj.type == "opsworks.layer") {
@@ -3177,26 +3718,45 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "opsworks.instance") {
                 reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+                reqParams.tf['agent_version'] = obj.data.AgentVersion;
                 reqParams.cfn['AmiId'] = obj.data.AmiId;
+                reqParams.tf['ami_id'] = obj.data.AmiId;
                 reqParams.cfn['Architecture'] = obj.data.Architecture;
+                reqParams.tf['architecture'] = obj.data.Architecture;
                 reqParams.cfn['AutoScalingType'] = obj.data.AutoScalingType;
+                reqParams.tf['auto_scaling_type'] = obj.data.AutoScalingType;
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['BlockDeviceMappings'] = obj.data.BlockDeviceMappings;
+                //reqParams.tf[''] = obj.data.BlockDeviceMappings; TODO
                 reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
                 if (obj.data.ElasticIp) {
                     reqParams.cfn['ElasticIps'] = [obj.data.ElasticIp];
+                    reqParams.tf['ElasticIps'] = [obj.data.ElasticIp];
                 }
                 reqParams.cfn['Hostname'] = obj.data.Hostname;
+                reqParams.tf['hostname'] = obj.data.Hostname;
                 reqParams.cfn['InstallUpdatesOnBoot'] = obj.data.InstallUpdatesOnBoot;
+                reqParams.tf['install_updates_on_boot'] = obj.data.InstallUpdatesOnBoot;
                 reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.tf['instance_type'] = obj.data.InstanceType;
                 reqParams.cfn['LayerIds'] = obj.data.LayerIds;
+                reqParams.tf['layer_ids'] = obj.data.LayerIds;
                 reqParams.cfn['Os'] = obj.data.Os;
+                reqParams.tf['os'] = obj.data.Os;
                 reqParams.cfn['RootDeviceType'] = obj.data.RootDeviceType;
+                reqParams.tf['root_device_type'] = obj.data.RootDeviceType;
                 reqParams.cfn['SshKeyName'] = obj.data.SshKeyName;
+                reqParams.tf['ssh_key_name'] = obj.data.SshKeyName;
                 reqParams.cfn['StackId'] = obj.data.StackId;
+                reqParams.tf['stack_id'] = obj.data.StackId;
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.tf['subnet_id'] = obj.data.SubnetId;
                 reqParams.cfn['Tenancy'] = obj.data.Tenancy;
+                reqParams.tf['tenancy'] = obj.data.Tenancy;
                 reqParams.cfn['VirtualizationType'] = obj.data.VirtualizationType;
+                reqParams.tf['virtualization_type'] = obj.data.VirtualizationType;
 
                 /*
                 TODO:
@@ -3211,53 +3771,77 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'opsworks',
                     'type': 'AWS::OpsWorks::Instance',
+                    'terraformType': 'aws_opsworks_instance',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.elasticip") {
                 reqParams.cfn['Domain'] = obj.data.Domain;
+                reqParams.tf['vpc'] = (obj.data.Domain == "vpc");
                 reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.tf['instance'] = obj.data.InstanceId;
                 reqParams.cfn['PublicIpv4Pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
+                reqParams.tf['public_ipv4_pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::EIP',
+                    'terraformType': 'aws_eip',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.elasticipassociation") {
                 reqParams.cfn['AllocationId'] = obj.data.AllocationId;
+                reqParams.tf['allocation_id'] = obj.data.AllocationId;
                 reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+                reqParams.tf['instance_id'] = obj.data.InstanceId;
                 reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.tf['network_interface_id'] = obj.data.NetworkInterfaceId;
                 reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+                reqParams.tf['private_ip_address'] = obj.data.PrivateIpAddress;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::EIPAssociation',
+                    'terraformType': 'aws_eip_association',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.networkinterface") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Ipv6Addresses'] = obj.data.Ipv6Addresses;
                 reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+                reqParams.tf['private_ips'] = [obj.data.PrivateIpAddress];
                 if (obj.data.PrivateIpAddresses) {
                     reqParams.cfn['PrivateIpAddresses'] = [];
+                    reqParams.tf['private_ips'] = [];
                     obj.data.PrivateIpAddresses.forEach(privateIpAddresses => {
                         reqParams.cfn['PrivateIpAddresses'].push({
                             'PrivateIpAddress': privateIpAddresses.PrivateIpAddress,
                             'Primary': privateIpAddresses.Primary
                         });
+                        reqParams.tf['private_ips'].push(privateIpAddresses.PrivateIpAddress);
                     }); 
                 }
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.tf['subnet_id'] = obj.data.SubnetId;
                 reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
+                reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
                 reqParams.cfn['Tags'] = obj.data.TagSet;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
                 if (obj.data.Groups) {
                     reqParams.cfn['GroupSet'] = [];
+                    reqParams.tf['security_groups'] = [];
                     obj.data.Groups.forEach(group => {
                         reqParams.cfn['GroupSet'].push(group.GroupId);
+                        reqParams.tf['security_groups'].push(group.GroupId);
                     }); 
                 }
 
@@ -3266,44 +3850,78 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::NetworkInterface',
+                    'terraformType': 'aws_network_interface',
                     'options': reqParams
                 });
             } else if (obj.type == "redshift.cluster") {
                 reqParams.cfn['ClusterIdentifier'] = obj.data.ClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.ClusterIdentifier;
                 reqParams.cfn['NodeType'] = obj.data.NodeType;
+                reqParams.tf['node_type'] = obj.data.NodeType;
                 reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.tf['master_username'] = obj.data.MasterUsername;
+                reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+                reqParams.tf['master_password'] = 'REPLACEME';
                 reqParams.cfn['DBName'] = obj.data.DBName;
+                reqParams.tf['database_name'] = obj.data.DBName;
                 reqParams.cfn['Port'] = obj.data.Endpoint.Port;
+                reqParams.tf['port'] = obj.data.Endpoint.Port;
                 reqParams.cfn['AutomatedSnapshotRetentionPeriod'] = obj.data.AutomatedSnapshotRetentionPeriod;
+                reqParams.tf['automated_snapshot_retention_period'] = obj.data.AutomatedSnapshotRetentionPeriod;
                 if (obj.data.ClusterSecurityGroups) {
                     reqParams.cfn['ClusterSecurityGroups'] = [];
+                    reqParams.tf['cluster_security_groups'] = [];
                     obj.data.ClusterSecurityGroups.forEach(clusterSecurityGroup => {
-                        reqParams.cfn['ClusterSecurityGroups'].push(clusterSecurityGroup['ClusterSecurityGroupName'])
+                        reqParams.cfn['ClusterSecurityGroups'].push(clusterSecurityGroup['ClusterSecurityGroupName']);
+                        reqParams.tf['cluster_security_groups'].push(clusterSecurityGroup['ClusterSecurityGroupName']);
                     });
                 }
                 if (obj.data.VpcSecurityGroups) {
                     reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
                     obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
-                        reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup['VpcSecurityGroupId'])
+                        reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup['VpcSecurityGroupId']);
+                        reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup['VpcSecurityGroupId']);
                     });
                 }
                 reqParams.cfn['ClusterSubnetGroupName'] = obj.data.ClusterSubnetGroupName;
+                reqParams.tf['cluster_subnet_group_name'] = obj.data.ClusterSubnetGroupName;
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['ClusterVersion'] = obj.data.ClusterVersion;
+                reqParams.tf['cluster_version'] = obj.data.ClusterVersion;
                 reqParams.cfn['AllowVersionUpgrade'] = obj.data.AllowVersionUpgrade;
+                reqParams.tf['allow_version_upgrade'] = obj.data.AllowVersionUpgrade;
                 reqParams.cfn['NumberOfNodes'] = obj.data.NumberOfNodes;
+                reqParams.tf['number_of_nodes'] = obj.data.NumberOfNodes;
+                reqParams.tf['cluster_type'] = obj.data.NumberOfNodes > 1 ? 'multi-node' : 'single-node';
                 reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+                reqParams.tf['publicly_accessible'] = obj.data.PubliclyAccessible;
                 reqParams.cfn['Encrypted'] = obj.data.Encrypted;
-                reqParams.cfn['HsmClientCertificateIdentifier'] = obj.data.HsmStatus.HsmClientCertificateIdentifier;
-                reqParams.cfn['HsmConfigurationIdentifier'] = obj.data.HsmStatus.HsmConfigurationIdentifier;
+                reqParams.tf['encrypted'] = obj.data.Encrypted;
+                if (obj.data.HsmStatus) {
+                    reqParams.cfn['HsmClientCertificateIdentifier'] = obj.data.HsmStatus.HsmClientCertificateIdentifier;
+                    reqParams.cfn['HsmConfigurationIdentifier'] = obj.data.HsmStatus.HsmConfigurationIdentifier;
+                }
                 reqParams.cfn['ElasticIp'] = obj.data.ElasticIpStatus.ElasticIp;
+                reqParams.tf['elastic_ip'] = obj.data.ElasticIpStatus.ElasticIp;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 if (obj.data.IamRoles) {
                     reqParams.cfn['IamRoles'] = [];
+                    reqParams.tf['iam_roles'] = [];
                     obj.data.IamRoles.forEach(iamRole => {
-                        reqParams.cfn['IamRoles'].push(iamRole['IamRoleArn'])
+                        reqParams.cfn['IamRoles'].push(iamRole['IamRoleArn']);
+                        reqParams.tf['iam_roles'].push(iamRole['IamRoleArn']);
                     });
                 }
 
@@ -3324,26 +3942,39 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'redshift',
                     'type': 'AWS::Redshift::Cluster',
+                    'terraformType': 'aws_redshift_cluster',
                     'options': reqParams
                 });
             } else if (obj.type == "redshift.subnetgroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['SubnetIds'] = [];
+                reqParams.tf['subnet_ids'] = [];
                 obj.data.Subnets.forEach(subnet => {
                     reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                    reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
                 });
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('redshift', obj.id),
                     'region': obj.region,
                     'service': 'redshift',
                     'type': 'AWS::Redshift::ClusterSubnetGroup',
+                    'terraformType': 'aws_redshift_subnet_group',
                     'options': reqParams
                 });
             } else if (obj.type == "redshift.parametergroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['ParameterGroupFamily'] = obj.data.ParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.ParameterGroupFamily;
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
                 /*
@@ -3357,10 +3988,12 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'redshift',
                     'type': 'AWS::Redshift::ClusterParameterGroup',
+                    'terraformType': 'aws_redshift_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "redshift.securitygroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
@@ -3368,27 +4001,41 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'redshift',
                     'type': 'AWS::Redshift::ClusterSecurityGroup',
+                    'terraformType': 'aws_redshift_security_group',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.subnetgroup") {
                 reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+                reqParams.tf['description'] = obj.data.DBSubnetGroupDescription;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+                reqParams.tf['name'] = obj.data.DBSubnetGroupName;
                 reqParams.cfn['SubnetIds'] = [];
+                reqParams.tf['subnet_ids'] = [];
                 obj.data.Subnets.forEach(subnet => {
                     reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                    reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
                 });
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBSubnetGroup',
+                    'terraformType': 'aws_db_subnet_group',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.clusterparametergroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
 
                 /*
                 TODO:
@@ -3403,11 +4050,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBClusterParameterGroup',
+                    'terraformType': 'aws_rds_cluster_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.parametergroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
 
                 /*
                 TODO:
@@ -3422,22 +4072,33 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBParameterGroup',
+                    'terraformType': 'aws_db_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.optiongroup") {
                 reqParams.cfn['EngineName'] = obj.data.EngineName;
+                reqParams.tf['engine_name'] = obj.data.EngineName;
                 reqParams.cfn['MajorEngineVersion'] = obj.data.MajorEngineVersion;
+                reqParams.tf['major_engine_version'] = obj.data.MajorEngineVersion;
                 reqParams.cfn['OptionGroupDescription'] = obj.data.OptionGroupDescription;
+                reqParams.tf['option_group_description'] = obj.data.OptionGroupDescription;
                 if (obj.data.Options) {
                     reqParams.cfn['OptionConfigurations'] = [];
+                    reqParams.tf['option'] = [];
                     obj.data.Options.forEach(option => {
                         var optionSettings = null;
+                        var tfOptionSettings = null;
                         if (option.OptionSettings) {
                             optionSettings = [];
+                            tfOptionSettings = {};
                             option.OptionSettings.forEach(optionSetting => {
                                 optionSettings.push({
                                     'Name': optionSetting.Name,
                                     'Value': optionSetting.Value
+                                });
+                                tfOptionSettings.push({
+                                    'name': optionSetting.Name,
+                                    'value': optionSetting.Value
                                 });
                             });
                         }
@@ -3463,6 +4124,14 @@ function performF2Mappings(objects) {
                             'Port': option.Port,
                             'VpcSecurityGroupMemberships': vpcSecurityGroupMemberships
                         });
+                        reqParams.tf['option'].push({
+                            'db_security_group_memberships': dbSecurityGroupMemberships,
+                            'option_name': option.OptionName,
+                            'option_settings': optionSettings,
+                            'version': option.OptionVersion,
+                            'port': option.Port,
+                            'vpc_security_group_memberships': vpcSecurityGroupMemberships
+                        });
                     });
                 }
 
@@ -3477,10 +4146,12 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::OptionGroup',
+                    'terraformType': 'aws_db_option_group',
                     'options': reqParams
                 });
             } else if (obj.type == "rds.securitygroup") {
                 reqParams.cfn['GroupDescription'] = obj.data.DBSecurityGroupDescription;
+                reqParams.tf['description'] = obj.data.DBSecurityGroupDescription;
                 reqParams.cfn['EC2VpcId'] = obj.data.VpcId;
 
                 /*
@@ -3496,14 +4167,19 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBSecurityGroup',
+                    'terraformType': 'aws_db_security_group',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticache.subnetgroup") {
                 reqParams.cfn['Description'] = obj.data.CacheSubnetGroupDescription;
-                reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+                reqParams.tf['description'] = obj.data.CacheSubnetGroupDescription;
+                reqParams.cfn['name'] = obj.data.CacheSubnetGroupName;
+                reqParams.tf['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
                 reqParams.cfn['SubnetIds'] = [];
+                reqParams.tf['subnet_ids'] = [];
                 obj.data.Subnets.forEach(subnet => {
                     reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                    reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
                 });
 
                 tracked_resources.push({
@@ -3511,11 +4187,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::SubnetGroup',
+                    'terraformType': 'aws_elasticache_subnet_group',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticache.parametergroup") {
                 reqParams.cfn['CacheParameterGroupFamily'] = obj.data.CacheParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.CacheParameterGroupFamily;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 
                 /*
                 TODO:
@@ -3527,25 +4206,45 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::ParameterGroup',
+                    'terraformType': 'aws_elasticache_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticache.securitygroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['name'] = obj.data.CacheSecurityGroupName;
+                reqParams.tf['description'] = obj.data.Description;
+                if (obj.data.EC2SecurityGroups) {
+                    reqParams.tf['security_group_names'] = [];
+                    obj.data.EC2SecurityGroups.forEach(securitygroup => {
+                        reqParams.tf['security_group_names'].push(securitygroup.EC2SecurityGroupName);
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::SecurityGroup',
+                    'terraformType': 'aws_elasticache_security_group',
                     'options': reqParams
                 });
             } else if (obj.type == "cloudfront.distribution") {
                 reqParams.cfn['DistributionConfig'] = {};
                 reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
+                reqParams.tf['aliases'] = obj.data.Aliases.Items;
                 reqParams.cfn.DistributionConfig['Origins'] = [];
+                reqParams.tf['origin'] = [];
                 obj.data.Origins.Items.forEach(origin => {
                     var customOriginConfig = null;
+                    var tfCustomOriginConfig = null;
                     var customHeaders = null;
+                    var tfCustomHeaders = null;
+                    var tfS3OriginConfig = null;
+                    if (origin.S3OriginConfig) {
+                        tfS3OriginConfig = {
+                            'origin_access_identity': origin.S3OriginConfig.OriginAccessIdentity
+                        };
+                    }
                     if (origin.CustomOriginConfig) {
                         customOriginConfig = {
                             'HTTPPort': origin.CustomOriginConfig.HTTPPort,
@@ -3555,25 +4254,53 @@ function performF2Mappings(objects) {
                             'OriginReadTimeout': origin.CustomOriginConfig.OriginReadTimeout,
                             'OriginSSLProtocols': origin.CustomOriginConfig.OriginSslProtocols.Items
                         };
+                        tfCustomOriginConfig = {
+                            'http_port': origin.CustomOriginConfig.HTTPPort,
+                            'https_port': origin.CustomOriginConfig.HTTPSPort,
+                            'origin_keepalive_timeout': origin.CustomOriginConfig.OriginKeepaliveTimeout,
+                            'origin_protocol_policy': origin.CustomOriginConfig.OriginProtocolPolicy,
+                            'origin_read_timeout': origin.CustomOriginConfig.OriginReadTimeout,
+                            'origin_ssl_protocols': origin.CustomOriginConfig.OriginSslProtocols.Items
+                        };
                     }
                     if (origin.CustomHeaders) {
                         customHeaders = origin.CustomHeaders.Items;
+                        tfCustomHeaders = [];
+                        origin.CustomHeaders.Items.forEach(customheader => {
+                            tfCustomHeaders.push({
+                                'name': customheader.Name,
+                                'value': customheader.Value
+                            })
+                        });
                     }
                     reqParams.cfn.DistributionConfig['Origins'].push({
                         'CustomOriginConfig': customOriginConfig,
                         'DomainName': origin.DomainName,
                         'Id': origin.Id,
-                        'OriginCustomHeaders': customHeaders,
+                        'OriginCustomHeaders': tfCustomHeaders,
                         'OriginPath': origin.OriginPath,
                         'S3OriginConfig': origin.S3OriginConfig
                     });
+                    reqParams.tf['origin'].push({
+                        'custom_origin_config': customOriginConfig,
+                        'domain_name': origin.DomainName,
+                        'origin_id': origin.Id,
+                        'custom_header': customHeaders,
+                        'origin_path': origin.OriginPath,
+                        's3_origin_config': tfS3OriginConfig
+                    });
                 });
                 var defaultCacheLambdaFunctionAssociations = [];
+                var tfDefaultCacheLambdaFunctionAssociations = [];
                 if (obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items && obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.length) {
                     obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
                         defaultCacheLambdaFunctionAssociations.push({
                             'EventType': lambdaFunctionAssociation.EventType,
                             'LambdaFunctionARN': lambdaFunctionAssociation.LambdaFunctionARN
+                        });
+                        tfDefaultCacheLambdaFunctionAssociations.push({
+                            'event_type': lambdaFunctionAssociation.EventType,
+                            'lambda_arn': lambdaFunctionAssociation.LambdaFunctionARN
                         });
                     });
                 }
@@ -3608,15 +4335,44 @@ function performF2Mappings(objects) {
                     'TrustedSigners': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
                     'ViewerProtocolPolicy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
                 };
+                reqParams.tf['default_cache_behavior'] = {
+                    'allowed_methods': obj.data.DefaultCacheBehavior.AllowedMethods.Items,
+                    'cached_methods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
+                    'compress': obj.data.DefaultCacheBehavior.Compress,
+                    'default_ttl': obj.data.DefaultCacheBehavior.DefaultTTL,
+                    'field_level_encryption_id': obj.data.DefaultCacheBehavior.FieldLevelEncryptionId,
+                    'forwarded_values': {
+                        'cookies': {
+                            'forward': obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward,
+                            'whitelisted_names': cookiesWhitelistedNames
+                        },
+                        'headers': obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items,
+                        'query_string': obj.data.DefaultCacheBehavior.ForwardedValues.QueryString,
+                        'query_string_cache_keys': queryStringCacheKeys
+                    },
+                    'lambda_function_association': defaultCacheLambdaFunctionAssociations,
+                    'max_ttl': obj.data.DefaultCacheBehavior.MaxTTL,
+                    'min_ttl': obj.data.DefaultCacheBehavior.MinTTL,
+                    'smooth_streaming ': obj.data.DefaultCacheBehavior.SmoothStreaming,
+                    'target_origin_id': obj.data.DefaultCacheBehavior.TargetOriginId,
+                    'trusted_signers': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
+                    'viewer_protocol_policy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
+                };
                 if (obj.data.CacheBehaviors.Items && obj.data.CacheBehaviors.Items.length) {
                     reqParams.cfn.DistributionConfig['CacheBehaviors'] = [];
+                    reqParams.tf['ordered_cache_behavior'] = [];
                     obj.data.CacheBehaviors.Items.forEach(cacheBehaviour => {
                         var cacheLambdaFunctionAssociations = [];
+                        var tfCacheLambdaFunctionAssociations = [];
                         if (cacheBehaviour.LambdaFunctionAssociations.Items && cacheBehaviour.LambdaFunctionAssociations.Items.length) {
                             cacheBehaviour.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
                                 cacheLambdaFunctionAssociations.push({
                                     'EventType': lambdaFunctionAssociation.EventType,
                                     'LambdaFunctionARN': lambdaFunctionAssociation.LambdaFunctionARN
+                                });
+                                tfCacheLambdaFunctionAssociations.push({
+                                    'event_type': lambdaFunctionAssociation.EventType,
+                                    'lambda_arn': lambdaFunctionAssociation.LambdaFunctionARN
                                 });
                             });
                         }
@@ -3652,37 +4408,93 @@ function performF2Mappings(objects) {
                             'TrustedSigners': cacheBehaviour.TrustedSigners.Items,
                             'ViewerProtocolPolicy': cacheBehaviour.ViewerProtocolPolicy
                         });
+                        reqParams.tf['ordered_cache_behavior'].push({
+                            'allowed_methods': cacheBehaviour.AllowedMethods.Items,
+                            'cached_methods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
+                            'compress': cacheBehaviour.Compress,
+                            'default_ttl': cacheBehaviour.DefaultTTL,
+                            'field_level_encryption_id': cacheBehaviour.FieldLevelEncryptionId,
+                            'forwarded_values': {
+                                'cookies': {
+                                    'forward': cacheBehaviour.ForwardedValues.Cookies.Forward,
+                                    'whitelisted_names': cookiesWhitelistedNames
+                                },
+                                'headers': cacheBehaviour.ForwardedValues.Headers.Items,
+                                'query_string': cacheBehaviour.ForwardedValues.QueryString,
+                                'query_string_cache_keys': queryStringCacheKeys
+                            },
+                            'lambda_function_association': cacheLambdaFunctionAssociations,
+                            'max_ttl': cacheBehaviour.MaxTTL,
+                            'min_ttl': cacheBehaviour.MinTTL,
+                            'path_pattern': cacheBehaviour.PathPattern,
+                            'smooth_streaming': cacheBehaviour.SmoothStreaming,
+                            'target_origin_id': cacheBehaviour.TargetOriginId,
+                            'trusted_signers': cacheBehaviour.TrustedSigners.Items,
+                            'viewer_protocol_policy': cacheBehaviour.ViewerProtocolPolicy
+                        });
                     });
                 }
-                reqParams.cfn.DistributionConfig['CustomErrorResponses'] = obj.data.CustomErrorResponses.Items;
+                if (obj.data.CustomErrorResponses) {
+                    reqParams.cfn.DistributionConfig['CustomErrorResponses'] = obj.data.CustomErrorResponses.Items;
+                    reqParams.tf['custom_error_response'] = []; 
+                    obj.data.CustomErrorResponses.Items.forEach(customerrorresponse => {
+                        reqParams.tf['custom_error_response'].push({
+                            'error_caching_min_ttl': customerrorresponse.ErrorCachingMinTTL,
+                            'error_code': customerrorresponse.ErrorCode,
+                            'response_code': customerrorresponse.ResponseCode,
+                            'response_page_path': customerrorresponse.ResponsePagePath
+                        });
+                    });
+                }
                 reqParams.cfn.DistributionConfig['Comment'] = obj.data.Comment;
+                reqParams.tf['comment'] = obj.data.Comment;
                 reqParams.cfn.DistributionConfig['PriceClass'] = obj.data.PriceClass;
+                reqParams.tf['price_class'] = obj.data.PriceClass;
                 reqParams.cfn.DistributionConfig['Enabled'] = obj.data.Enabled;
-                reqParams.cfn.DistributionConfig['ViewerCertificate'] = {
-                    'AcmCertificateArn': obj.data.ViewerCertificate.ACMCertificateArn,
-                    'CloudFrontDefaultCertificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
-                    'IamCertificateId': obj.data.ViewerCertificate.IAMCertificateId,
-                    'MinimumProtocolVersion': obj.data.ViewerCertificate.MinimumProtocolVersion,
-                    'SslSupportMethod': obj.data.ViewerCertificate.SSLSupportMethod
-                };
-                reqParams.cfn.DistributionConfig['Restrictions'] = {
-                    'GeoRestriction': {
-                        'RestrictionType': obj.data.Restrictions.GeoRestriction.RestrictionType,
-                        'Locations': obj.data.Restrictions.GeoRestriction.Items
-                    }
-                };
+                reqParams.tf['enabled'] = obj.data.Enabled;
+                if (obj.data.ViewerCertificate) {
+                    reqParams.cfn.DistributionConfig['ViewerCertificate'] = {
+                        'AcmCertificateArn': obj.data.ViewerCertificate.ACMCertificateArn,
+                        'CloudFrontDefaultCertificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
+                        'IamCertificateId': obj.data.ViewerCertificate.IAMCertificateId,
+                        'MinimumProtocolVersion': obj.data.ViewerCertificate.MinimumProtocolVersion,
+                        'SslSupportMethod': obj.data.ViewerCertificate.SSLSupportMethod
+                    };
+                    reqParams.tf['viewer_certificate'] = {
+                        'acm_certificate_arn': obj.data.ViewerCertificate.ACMCertificateArn,
+                        'cloudfront_default_certificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
+                        'iam_certificate_id': obj.data.ViewerCertificate.IAMCertificateId,
+                        'minimum_protocol_version': obj.data.ViewerCertificate.MinimumProtocolVersion,
+                        'ssl_support_method': obj.data.ViewerCertificate.SSLSupportMethod
+                    };
+                }
+                if (obj.data.Restrictions && obj.data.Restrictions.GeoRestriction) {
+                    reqParams.cfn.DistributionConfig['Restrictions'] = {
+                        'GeoRestriction': {
+                            'RestrictionType': obj.data.Restrictions.GeoRestriction.RestrictionType,
+                            'Locations': obj.data.Restrictions.GeoRestriction.Items
+                        }
+                    };
+                    reqParams.tf['restrictions'] = {
+                        'geo_restriction': {
+                            'restriction_type': obj.data.Restrictions.GeoRestriction.RestrictionType,
+                            'locations': obj.data.Restrictions.GeoRestriction.Items
+                        }
+                    };
+                }
                 reqParams.cfn.DistributionConfig['WebACLId'] = obj.data.WebACLId;
+                reqParams.tf['web_acl_id'] = obj.data.WebACLId;
                 reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion;
+                reqParams.tf['http_version'] = obj.data.HttpVersion;
                 reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
+                reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
 
                 /*
                 TODO:
                 DistributionConfig:
                     DefaultRootObject: String
                     Logging:
-                    Logging
-                    Origins:
-                    - Origin
+                        Logging
                 Tags
                 */
 
@@ -3691,16 +4503,28 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'cloudfront',
                     'type': 'AWS::CloudFront::Distribution',
-                    'options': reqParams
+                    'terraformType': 'aws_cloudfront_distribution',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id,
+                        'GetAtt': {
+                            'DomainName': obj.data.DomainName
+                        }
+                    }
                 });
             } else if (obj.type == "kinesis.stream") {
                 reqParams.cfn['Name'] = obj.data.StreamName;
+                reqParams.tf['name'] = obj.data.StreamName;
                 reqParams.cfn['RetentionPeriodHours'] = obj.data.RetentionPeriodHours;
+                reqParams.tf['retention_period'] = obj.data.RetentionPeriodHours;
                 reqParams.cfn['StreamEncryption'] = {
                     'EncryptionType': obj.data.EncryptionType,
                     'KeyId': obj.data.KeyId
                 };
+                reqParams.tf['encryption_type'] = obj.data.EncryptionType;
+                reqParams.tf['kms_key_id'] = obj.data.KeyId;
                 reqParams.cfn['ShardCount'] = obj.data.Shards.length;
+                reqParams.tf['shard_count'] = obj.data.Shards.length;
 
                 /*
                 TODO:
@@ -3713,35 +4537,53 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'kinesis',
                     'type': 'AWS::Kinesis::Stream',
+                    'terraformType': 'aws_kinesis_stream',
                     'options': reqParams
                 });
             } else if (obj.type == "elasticache.cluster") {
                 reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+                reqParams.tf['node_type'] = obj.data.CacheNodeType;
                 reqParams.cfn['Engine'] = obj.data.Engine;
+                reqParams.tf['engine'] = obj.data.Engine;
                 reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.tf['engine_version'] = obj.data.EngineVersion;
                 reqParams.cfn['NumCacheNodes'] = obj.data.NumCacheNodes;
+                reqParams.tf['num_cache_nodes'] = obj.data.NumCacheNodes;
                 reqParams.cfn['PreferredAvailabilityZone'] = obj.data.PreferredAvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.PreferredAvailabilityZone;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['NotificationTopicArn'] = obj.data.NotificationConfiguration.TopicArn;
+                reqParams.tf['notification_topic_arn'] = obj.data.NotificationConfiguration.TopicArn;
                 if (obj.data.CacheSecurityGroups) {
                     reqParams.cfn['CacheSecurityGroupNames'] = [];
+                    reqParams.tf['security_group_names'] = [];
                     obj.data.CacheSecurityGroups.forEach(securityGroup => {
-                        reqParams.cfn['CacheSecurityGroupNames'].push(securityGroup.CacheSecurityGroupName)
+                        reqParams.cfn['CacheSecurityGroupNames'].push(securityGroup.CacheSecurityGroupName);
+                        reqParams.tf['security_group_names'].push(securityGroup.CacheSecurityGroupName);
                     });
                 }
                 reqParams.cfn['CacheParameterGroupName'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
+                reqParams.tf['parameter_group_name'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
                 reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+                reqParams.tf['subnet_group_name'] = obj.data.CacheSubnetGroupName;
                 reqParams.cfn['Port'] = obj.data.CacheNodes[0].Endpoint.Port;
+                reqParams.tf['port'] = obj.data.CacheNodes[0].Endpoint.Port;
                 reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
                 if (obj.data.SecurityGroups) {
                     reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    reqParams.tf['security_group_ids'] = [];
                     obj.data.SecurityGroups.forEach(securityGroup => {
-                        reqParams.cfn['VpcSecurityGroupIds'].push(securityGroup.SecurityGroupId)
+                        reqParams.cfn['VpcSecurityGroupIds'].push(securityGroup.SecurityGroupId);
+                        reqParams.tf['security_group_ids'].push(securityGroup.SecurityGroupId);
                     });
                 }
                 reqParams.cfn['SnapshotRetentionLimit'] = obj.data.SnapshotRetentionLimit;
+                reqParams.tf['snapshot_retention_limit'] = obj.data.SnapshotRetentionLimit;
                 reqParams.cfn['SnapshotWindow'] = obj.data.SnapshotWindow;
+                reqParams.tf['snapshot_window'] = obj.data.SnapshotWindow;
                 reqParams.cfn['ClusterName'] = obj.data.CacheClusterId;
+                reqParams.tf['cluster_id'] = obj.data.CacheClusterId;
                 
                 /*
                 TODO:
@@ -3760,33 +4602,70 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elasticache',
                     'type': 'AWS::ElastiCache::CacheCluster',
+                    'terraformType': 'aws_elasticache_cluster',
                     'options': reqParams
                 });
             } else if (obj.type == "dynamodb.table") {
                 reqParams.cfn['AttributeDefinitions'] = obj.data.AttributeDefinitions;
+                if (obj.data.AttributeDefinitions) {
+                    reqParams.tf['attribute'] = [];
+                    obj.data.AttributeDefinitions.forEach(attributedefinition => {
+                        reqParams.tf['attribute'].push({
+                            'name': attributedefinition.AttributeName,
+                            'type': attributedefinition.AttributeType
+                        });
+                    });
+                }
                 if (obj.data.BillingModeSummary) {
                     reqParams.cfn['BillingMode'] = obj.data.BillingModeSummary.BillingMode;
+                    reqParams.tf['billing_mode'] = obj.data.BillingModeSummary.BillingMode;
                 }
                 reqParams.cfn['TableName'] = obj.data.TableName;
+                reqParams.tf['name'] = obj.data.TableName;
                 reqParams.cfn['KeySchema'] = obj.data.KeySchema;
+                if (obj.data.KeySchema) {
+                    obj.data.KeySchema.forEach(keyschema => {
+                        if (keyschema.KeyType == "HASH") {
+                            reqParams.tf['hash_key'] = keyschema.AttributeName;
+                        } else if (keyschema.KeyType == "RANGE") {
+                            reqParams.tf['range_key'] = keyschema.AttributeName;
+                        }
+                    });
+                }
                 if (obj.data.ProvisionedThroughput && obj.data.ProvisionedThroughput.ReadCapacityUnits > 0) {
                     reqParams.cfn['ProvisionedThroughput'] = {
                         'ReadCapacityUnits': obj.data.ProvisionedThroughput.ReadCapacityUnits,
                         'WriteCapacityUnits': obj.data.ProvisionedThroughput.WriteCapacityUnits
                     };
+                    reqParams.tf['read_capacity'] = obj.data.ProvisionedThroughput.ReadCapacityUnits;
+                    reqParams.tf['write_capacity'] = obj.data.ProvisionedThroughput.WriteCapacityUnits;
                 }
                 if (obj.data.LocalSecondaryIndexes) {
                     reqParams.cfn['LocalSecondaryIndexes'] = [];
+                    reqParams.tf['local_secondary_index'] = [];
                     obj.data.LocalSecondaryIndexes.forEach(index => {
                         reqParams.cfn['LocalSecondaryIndexes'].push({
                             'IndexName': index.IndexName,
                             'KeySchema': index.KeySchema,
                             'Projection': index.Projection
                         });
+                        var rangekey = null;
+                        index.KeySchema.forEach(keyschema => {
+                            if (keyschema.KeyType == "RANGE") {
+                                rangekey = keyschema.AttributeName;
+                            }
+                        });
+                        reqParams.cfn['local_secondary_index'].push({
+                            'name': index.IndexName,
+                            'range_key': rangekey,
+                            'projection_type': index.Projection.ProjectionType,
+                            'non_key_attributes': index.Projection.NonKeyAttributes
+                        });
                     });
                 }
                 if (obj.data.GlobalSecondaryIndexes) {
                     reqParams.cfn['GlobalSecondaryIndexes'] = [];
+                    reqParams.tf['global_secondary_index'] = [];
                     obj.data.GlobalSecondaryIndexes.forEach(index => {
                         reqParams.cfn['GlobalSecondaryIndexes'].push({
                             'IndexName': index.IndexName,
@@ -3797,16 +4676,39 @@ function performF2Mappings(objects) {
                                 'WriteCapacityUnits': index.ProvisionedThroughput.WriteCapacityUnits
                             }
                         });
+                        var hashkey = null;
+                        var rangekey = null;
+                        index.KeySchema.forEach(keyschema => {
+                            if (keyschema.KeyType == "HASH") {
+                                hashkey = keyschema.AttributeName;
+                            } else if (keyschema.KeyType == "RANGE") {
+                                rangekey = keyschema.AttributeName;
+                            }
+                        });
+                        reqParams.tf['global_secondary_index'].push({
+                            'name': index.IndexName,
+                            'hash_key': hashkey,
+                            'range_key': rangekey,
+                            'projection_type': index.Projection.ProjectionType,
+                            'non_key_attributes': index.Projection.NonKeyAttributes,
+                            'read_capacity': index.ProvisionedThroughput.ReadCapacityUnits,
+                            'write_capacity': index.ProvisionedThroughput.WriteCapacityUnits
+                        });
                     });
                 }
                 if (obj.data.StreamSpecification) {
                     reqParams.cfn['StreamSpecification'] = {
                         'StreamViewType': obj.data.StreamSpecification.StreamViewType
                     };
+                    reqParams.tf['stream_enabled'] = true;
+                    reqParams.tf['stream_view_type'] = obj.data.StreamSpecification.StreamViewType;
                 }
                 if (obj.data.SSEDescription) {
                     reqParams.cfn['SSESpecification'] = {
                         'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E")
+                    };
+                    reqParams.tf['server_side_encryption'] = {
+                        'enabled': (obj.data.SSEDescription.Status[0] == "E")
                     };
                 }
 
@@ -3825,21 +4727,32 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'dynamodb',
                     'type': 'AWS::DynamoDB::Table',
+                    'terraformType': 'aws_dynamodb_table',
                     'options': reqParams
                 });
             } else if (obj.type == "cloudtrail.trail") {
                 reqParams.cfn['TrailName'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['S3BucketName'] = obj.data.S3BucketName;
+                reqParams.tf['s3_bucket_name'] = obj.data.S3BucketName;
                 reqParams.cfn['S3KeyPrefix'] = obj.data.S3KeyPrefix;
+                reqParams.tf['s3_key_prefix'] = obj.data.S3KeyPrefix;
                 if (obj.data.SnsTopicARN) {
                     reqParams.cfn['SnsTopicName'] = obj.data.SnsTopicARN.split(":").pop();
+                    reqParams.tf['sns_topic_name'] = obj.data.SnsTopicARN.split(":").pop();
                 }
                 reqParams.cfn['IncludeGlobalServiceEvents'] = obj.data.IncludeGlobalServiceEvents;
+                reqParams.tf['include_global_service_events'] = obj.data.IncludeGlobalServiceEvents;
                 reqParams.cfn['IsMultiRegionTrail'] = obj.data.IsMultiRegionTrail;
+                reqParams.tf['is_multi_region_trail'] = obj.data.IsMultiRegionTrail;
                 reqParams.cfn['EnableLogFileValidation'] = obj.data.LogFileValidationEnabled;
+                reqParams.tf['enable_log_file_validation'] = obj.data.LogFileValidationEnabled;
                 reqParams.cfn['CloudWatchLogsLogGroupArn'] = obj.data.CloudWatchLogsLogGroupArn;
+                reqParams.tf['cloud_watch_logs_group_arn'] = obj.data.CloudWatchLogsLogGroupArn;
                 reqParams.cfn['CloudWatchLogsRoleArn'] = obj.data.CloudWatchLogsRoleArn;
+                reqParams.tf['cloud_watch_logs_role_arn'] = obj.data.CloudWatchLogsRoleArn;
                 reqParams.cfn['KMSKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 
                 /*
                 TODO:
@@ -3855,80 +4768,204 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'cloudtrail',
                     'type': 'AWS::CloudTrail::Trail',
+                    'terraformType': 'aws_cloudtrail',
                     'options': reqParams
                 });
             } else if (obj.type == "autoscaling.policy") {
                 reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.tf['autoscaling_group_name'] = obj.data.AutoScalingGroupName;
                 reqParams.cfn['PolicyType'] = obj.data.PolicyType;
+                reqParams.tf['policy_type'] = obj.data.PolicyType;
                 reqParams.cfn['AdjustmentType'] = obj.data.AdjustmentType;
+                reqParams.tf['adjustment_type'] = obj.data.AdjustmentType;
                 reqParams.cfn['MinAdjustmentMagnitude'] = obj.data.MinAdjustmentMagnitude;
+                reqParams.tf['MinAdjustmentMagnitude'] = obj.data.MinAdjustmentMagnitude;
                 reqParams.cfn['ScalingAdjustment'] = obj.data.ScalingAdjustment;
+                reqParams.tf['scaling_adjustment'] = obj.data.ScalingAdjustment;
                 reqParams.cfn['Cooldown'] = obj.data.Cooldown;
+                reqParams.tf['cooldown'] = obj.data.Cooldown;
                 reqParams.cfn['StepAdjustments'] = obj.data.StepAdjustments;
+                if (obj.data.StepAdjustments) {
+                    reqParams.tf['step_adjustments'] = [];
+                    obj.data.StepAdjustments.forEach(stepadjustment => {
+                        reqParams.tf['step_adjustments'].push({
+                            'metric_interval_lower_bound': stepadjustment.MetricIntervalLowerBound,
+                            'metric_interval_upper_bound': stepadjustment.MetricIntervalUpperBound,
+                            'scaling_adjustment': stepadjustment.ScalingAdjustment
+                        });
+                    });
+                }
                 reqParams.cfn['MetricAggregationType'] = obj.data.MetricAggregationType;
+                reqParams.tf['metric_aggregation_type'] = obj.data.MetricAggregationType;
                 reqParams.cfn['EstimatedInstanceWarmup'] = obj.data.EstimatedInstanceWarmup;
+                reqParams.tf['estimated_instance_warmup'] = obj.data.EstimatedInstanceWarmup;
                 reqParams.cfn['TargetTrackingConfiguration'] = obj.data.TargetTrackingConfiguration;
+                if (obj.data.TargetTrackingConfiguration) {
+                    var customizedmetricspecification = null;
+                    if (obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification) {
+                        var dimensions = null;
+                        if (obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Dimensions) {
+                            dimensions = [];
+                            obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Dimensions.forEach(dimension => {
+                                dimensions.push({
+                                    'name': dimension.Name,
+                                    'value': dimension.Value
+                                });
+                            });
+                        }
+                        customizedmetricspecification = {
+                            'metric_dimension': dimensions,
+                            'metric_name': obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.MetricName,
+                            'namespace': obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Namespace,
+                            'statistic': obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Statistic,
+                            'unit': obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Unit
+                        };
+                    }
+                    var predefinedmetricspecification = null;
+                    if (obj.data.TargetTrackingConfiguration.PredefinedMetricSpecification) {
+                        predefinedmetricspecification = {
+                            'predefined_metric_type': obj.data.TargetTrackingConfiguration.PredefinedMetricSpecification.PredefinedMetricType,
+                            'resource_label': obj.data.TargetTrackingConfiguration.PredefinedMetricSpecification.ResourceLabel
+                        };
+                    }
+                    reqParams.tf['target_tracking_configuration'] = {
+                        'customized_metric_specification': customizedmetricspecification,
+                        'disable_scale_in': obj.data.TargetTrackingConfiguration.DisableScaleIn,
+                        'predefined_metric_specification': predefinedmetricspecification,
+                        'target_value': obj.data.TargetTrackingConfiguration.TargetValue
+                    };
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::ScalingPolicy',
+                    'terraformType': 'aws_autoscaling_policy',
                     'options': reqParams
                 });
             } else if (obj.type == "autoscaling.scheduledaction") {
                 reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.tf['autoscaling_group_name'] = obj.data.AutoScalingGroupName;
                 reqParams.cfn['StartTime'] = obj.data.StartTime.toISOString();
+                reqParams.tf['start_time'] = obj.data.StartTime.toISOString();
                 reqParams.cfn['EndTime'] = obj.data.EndTime.toISOString();
+                reqParams.tf['end_time'] = obj.data.EndTime.toISOString();
                 reqParams.cfn['Recurrence'] = obj.data.Recurrence;
+                reqParams.tf['recurrence'] = obj.data.Recurrence;
                 reqParams.cfn['MaxSize'] = obj.data.MaxSize;
+                reqParams.tf['max_size'] = obj.data.MaxSize;
                 reqParams.cfn['MinSize'] = obj.data.MinSize;
+                reqParams.tf['min_size'] = obj.data.MinSize;
                 reqParams.cfn['DesiredCapacity'] = obj.data.DesiredCapacity;
+                reqParams.tf['desired_capacity'] = obj.data.DesiredCapacity;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::ScheduledAction',
+                    'terraformType': 'aws_autoscaling_schedule',
                     'options': reqParams
                 });
             } else if (obj.type == "autoscaling.autoscalinggroup") {
                 reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+                reqParams.tf['name'] = obj.data.AutoScalingGroupName;
                 reqParams.cfn['LaunchConfigurationName'] = obj.data.LaunchConfigurationName;
+                reqParams.tf['launch_configuration'] = obj.data.LaunchConfigurationName;
                 reqParams.cfn['LaunchTemplate'] = obj.data.LaunchTemplate;
+                if (obj.data.LaunchTemplate) {
+                    reqParams.tf['launch_template'] = {
+                        'id': obj.data.LaunchTemplate.LaunchTemplateId,
+                        'name': obj.data.LaunchTemplate.LaunchTemplateName,
+                        'version': obj.data.LaunchTemplate.Version
+                    };
+                }
                 reqParams.cfn['MixedInstancesPolicy'] = obj.data.MixedInstancesPolicy;
+                if (obj.data.MixedInstancesPolicy) {
+                    var instancesdistribution = null;
+                    if (obj.data.MixedInstancesPolicy.InstancesDistribution) {
+                        instancesdistribution = {
+                            'on_demand_allocation_strategy': obj.data.MixedInstancesPolicy.InstancesDistribution.OnDemandAllocationStrategy,
+                            'on_demand_base_capacity': obj.data.MixedInstancesPolicy.InstancesDistribution.OnDemandBaseCapacity,
+                            'on_demand_percentage_above_base_capacity': obj.data.MixedInstancesPolicy.InstancesDistribution.OnDemandPercentageAboveBaseCapacity,
+                            'spot_allocation_strategy': obj.data.MixedInstancesPolicy.InstancesDistribution.SpotAllocationStrategy,
+                            'spot_instance_pools': obj.data.MixedInstancesPolicy.InstancesDistribution.SpotInstancePools,
+                            'spot_max_price': obj.data.MixedInstancesPolicy.InstancesDistribution.SpotMaxPrice
+                        };
+                    }
+                    var override = [];
+                    obj.data.MixedInstancesPolicy.LaunchTemplate.Overrides.forEach(launchtemplateoverride => {
+                        override.push({
+                            'instance_type': launchtemplateoverride.InstanceType
+                        });
+                    });
+                    reqParams.tf['mixed_instances_policy'] = {
+                        'instances_distribution': instancesdistribution,
+                        'launch_template': {
+                            'launch_template_specification': {
+                                'launch_template_id': obj.data.MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateId,
+                                'launch_template_name': obj.data.MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.LaunchTemplateName,
+                                'version': obj.data.MixedInstancesPolicy.LaunchTemplate.LaunchTemplateSpecification.Version
+                            },
+                            'override': override
+                        }
+                    };
+                }
                 reqParams.cfn['MinSize'] = obj.data.MinSize;
+                reqParams.tf['min_size'] = obj.data.MinSize;
                 reqParams.cfn['MaxSize'] = obj.data.MaxSize;
+                reqParams.tf['max_size'] = obj.data.MaxSize;
                 reqParams.cfn['DesiredCapacity'] = obj.data.DesiredCapacity;
+                reqParams.tf['desired_capacity'] = obj.data.DesiredCapacity;
                 reqParams.cfn['Cooldown'] = obj.data.DefaultCooldown;
+                reqParams.tf['default_cooldown'] = obj.data.DefaultCooldown;
                 reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['LoadBalancerNames'] = obj.data.LoadBalancerNames;
+                reqParams.tf['load_balancers'] = obj.data.LoadBalancerNames;
                 reqParams.cfn['TargetGroupARNs'] = obj.data.TargetGroupARNs;
+                reqParams.tf['target_group_arns'] = obj.data.TargetGroupARNs;
                 reqParams.cfn['HealthCheckType'] = obj.data.HealthCheckType;
+                reqParams.tf['health_check_type'] = obj.data.HealthCheckType;
                 reqParams.cfn['HealthCheckGracePeriod'] = obj.data.HealthCheckGracePeriod;
+                reqParams.tf['health_check_grace_period'] = obj.data.HealthCheckGracePeriod;
                 reqParams.cfn['PlacementGroup'] = obj.data.PlacementGroup;
+                reqParams.tf['placement_group'] = obj.data.PlacementGroup;
                 reqParams.cfn['VPCZoneIdentifier'] = obj.data.VPCZoneIdentifier.split(",");
+                reqParams.tf['vpc_zone_identifier'] = obj.data.VPCZoneIdentifier.split(",");
+                reqParams.cfn['TerminationPolicies'] = obj.data.TerminationPolicies;
+                reqParams.tf['termination_policies'] = obj.data.TerminationPolicies;
+                reqParams.cfn['ServiceLinkedRoleARN'] = obj.data.ServiceLinkedRoleARN;
+                reqParams.tf['service_linked_role_arn'] = obj.data.ServiceLinkedRoleARN;
                 if (obj.data.EnabledMetrics) {
+                    reqParams.tf['metrics_granularity'] = obj.data.EnabledMetrics[0].Granularity;
+                    reqParams.tf['enabled_metrics'] = [];
                     reqParams.cfn['MetricsCollection'] = {
                         'Granularity': obj.data.EnabledMetrics[0].Granularity,
                         'Metrics': []
                     };
                     obj.data.EnabledMetrics.forEach(metric => {
                         reqParams.cfn.MetricsCollection.Metrics.push(metric.Metric);
+                        reqParams.tf['enabled_metrics'].push(metric.Metric);
                     });
                 }
                 if (obj.data.Tags) {
                     reqParams.cfn['Tags'] = [];
+                    reqParams.tf['tag'] = [];
                     obj.data.Tags.forEach(tag => {
                         reqParams.cfn['Tags'].push({
                             'Key': tag.Key,
                             'Value': tag.Value,
                             'PropagateAtLaunch': tag.PropagateAtLaunch
                         });
+                        reqParams.tf['tag'].push({
+                            'key': tag.Key,
+                            'value': tag.Value,
+                            'propagate_at_launch': tag.PropagateAtLaunch
+                        });
                     });
                 }
-                reqParams.cfn['TerminationPolicies'] = obj.data.TerminationPolicies;
-                reqParams.cfn['ServiceLinkedRoleARN'] = obj.data.ServiceLinkedRoleARN;
                 
                 /*
                 TODO:
@@ -3945,26 +4982,44 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::AutoScalingGroup',
+                    'terraformType': 'aws_autoscaling_group',
                     'options': reqParams
                 });
             } else if (obj.type == "autoscaling.launchconfiguration") {
                 reqParams.cfn['LaunchConfigurationName'] = obj.data.LaunchConfigurationName;
+                reqParams.tf['name'] = obj.data.LaunchConfigurationName;
                 reqParams.cfn['ImageId'] = obj.data.ImageId;
+                reqParams.tf['image_id'] = obj.data.ImageId;
                 reqParams.cfn['KeyName'] = obj.data.KeyName;
+                reqParams.tf['key_name'] = obj.data.KeyName;
                 reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.tf['security_groups'] = obj.data.SecurityGroups;
                 reqParams.cfn['ClassicLinkVPCId'] = obj.data.ClassicLinkVPCId;
+                reqParams.tf['vpc_classic_link_id'] = obj.data.ClassicLinkVPCId;
                 reqParams.cfn['ClassicLinkVPCSecurityGroups'] = obj.data.ClassicLinkVPCSecurityGroups;
+                reqParams.tf['vpc_classic_link_security_groups'] = obj.data.ClassicLinkVPCSecurityGroups;
                 reqParams.cfn['UserData'] = (obj.data.UserData != "") ? obj.data.UserData : null;
+                reqParams.tf['user_data'] = (obj.data.UserData != "") ? obj.data.UserData : null;
                 reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.tf['instance_type'] = obj.data.InstanceType;
                 reqParams.cfn['KernelId'] = (obj.data.KernelId != "") ? obj.data.KernelId : null;
                 reqParams.cfn['RamDiskId'] = (obj.data.RamdiskId != "") ? obj.data.RamdiskId : null;
                 reqParams.cfn['BlockDeviceMappings'] = obj.data.BlockDeviceMappings;
-                reqParams.cfn['InstanceMonitoring'] = obj.data.InstanceMonitoring.Enabled;
+                //reqParams.tf['BlockDeviceMappings'] = obj.data.BlockDeviceMappings; TODO
+                if (obj.data.InstanceMonitoring) {
+                    reqParams.cfn['InstanceMonitoring'] = obj.data.InstanceMonitoring.Enabled;
+                    reqParams.tf['enable_monitoring'] = obj.data.InstanceMonitoring.Enabled;
+                }
                 reqParams.cfn['SpotPrice'] = obj.data.SpotPrice;
+                reqParams.tf['spot_price'] = obj.data.SpotPrice;
                 reqParams.cfn['IamInstanceProfile'] = obj.data.IamInstanceProfile;
+                reqParams.tf['iam_instance_profile'] = obj.data.IamInstanceProfile;
                 reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
                 reqParams.cfn['AssociatePublicIpAddress'] = obj.data.AssociatePublicIpAddress;
+                reqParams.tf['associate_public_ip_address'] = obj.data.AssociatePublicIpAddress;
                 reqParams.cfn['PlacementTenancy'] = obj.data.PlacementTenancy;
+                reqParams.tf['placement_tenancy'] = obj.data.PlacementTenancy;
                 
                 /*
                 TODO:
@@ -3976,15 +5031,26 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::LaunchConfiguration',
+                    'terraformType': 'aws_launch_configuration',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.securitygroup") {
                 reqParams.cfn['GroupDescription'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['GroupName'] = obj.data.GroupName;
+                reqParams.tf['name'] = obj.data.GroupName;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 if (obj.data.IpPermissions) {
                     reqParams.cfn['SecurityGroupIngress'] = [];
+                    reqParams.tf['ingress'] = [];
                     obj.data.IpPermissions.forEach(ipPermission => {
                         if (ipPermission.IpRanges) {
                             ipPermission.IpRanges.forEach(ipRange => {
@@ -3994,6 +5060,13 @@ function performF2Mappings(objects) {
                                     'FromPort': ipPermission.FromPort,
                                     'IpProtocol': ipPermission.IpProtocol,
                                     'ToPort': ipPermission.ToPort
+                                });
+                                reqParams.tf['ingress'].push({
+                                    'cidr_blocks': [ipRange.CidrIp],
+                                    'description': ipRange.Description,
+                                    'from_port': ipPermission.FromPort,
+                                    'protocol': ipPermission.IpProtocol,
+                                    'to_port': ipPermission.ToPort
                                 });
                             });
                         }
@@ -4005,6 +5078,13 @@ function performF2Mappings(objects) {
                                     'FromPort': ipPermission.FromPort,
                                     'IpProtocol': ipPermission.IpProtocol,
                                     'ToPort': ipPermission.ToPort
+                                });
+                                reqParams.tf['ingress'].push({
+                                    'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
+                                    'description': ipv6Range.Description,
+                                    'from_port': ipPermission.FromPort,
+                                    'protocol': ipPermission.IpProtocol,
+                                    'to_port': ipPermission.ToPort
                                 });
                             });
                         }
@@ -4019,12 +5099,20 @@ function performF2Mappings(objects) {
                                     'IpProtocol': ipPermission.IpProtocol,
                                     'ToPort': ipPermission.ToPort
                                 });
+                                reqParams.tf['ingress'].push({
+                                    'security_groups': [userIdGroupPair.GroupId || userIdGroupPair.GroupName],
+                                    'description': userIdGroupPair.Description,
+                                    'from_port': ipPermission.FromPort,
+                                    'protocol': ipPermission.IpProtocol,
+                                    'to_port': ipPermission.ToPort
+                                });
                             });
                         }
                     });
                 }
                 if (obj.data.IpPermissionsEgress) {
                     reqParams.cfn['SecurityGroupEgress'] = [];
+                    reqParams.tf['egress'] = [];
                     obj.data.IpPermissionsEgress.forEach(ipPermissionsEgress => {
                         if (ipPermissionsEgress.IpRanges) {
                             ipPermissionsEgress.IpRanges.forEach(ipRange => {
@@ -4034,6 +5122,13 @@ function performF2Mappings(objects) {
                                     'FromPort': ipPermissionsEgress.FromPort,
                                     'IpProtocol': ipPermissionsEgress.IpProtocol,
                                     'ToPort': ipPermissionsEgress.ToPort
+                                });
+                                reqParams.tf['egress'].push({
+                                    'cidr_blocks': [ipRange.CidrIp],
+                                    'description': ipRange.Description,
+                                    'from_port': ipPermissionsEgress.FromPort,
+                                    'protocol': ipPermissionsEgress.IpProtocol,
+                                    'to_port': ipPermissionsEgress.ToPort
                                 });
                             });
                         }
@@ -4046,6 +5141,13 @@ function performF2Mappings(objects) {
                                     'IpProtocol': ipPermissionsEgress.IpProtocol,
                                     'ToPort': ipPermissionsEgress.ToPort
                                 });
+                                reqParams.tf['egress'].push({
+                                    'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
+                                    'description': ipv6Range.Description,
+                                    'from_port': ipPermissionsEgress.FromPort,
+                                    'protocol': ipPermissionsEgress.IpProtocol,
+                                    'to_port': ipPermissionsEgress.ToPort
+                                });
                             });
                         }
                         if (ipPermissionsEgress.UserIdGroupPairs) {
@@ -4056,6 +5158,13 @@ function performF2Mappings(objects) {
                                     'FromPort': ipPermissionsEgress.FromPort,
                                     'IpProtocol': ipPermissionsEgress.IpProtocol,
                                     'ToPort': ipPermissionsEgress.ToPort
+                                });
+                                reqParams.tf['egress'].push({
+                                    'security_groups': [userIdGroupPair.GroupId],
+                                    'description': ipv6Range.Description,
+                                    'from_port': ipPermissionsEgress.FromPort,
+                                    'protocol': ipPermissionsEgress.IpProtocol,
+                                    'to_port': ipPermissionsEgress.ToPort
                                 });
                             });
                         }
@@ -4068,6 +5177,13 @@ function performF2Mappings(objects) {
                                     'IpProtocol': ipPermissionsEgress.IpProtocol,
                                     'ToPort': ipPermissionsEgress.ToPort
                                 });
+                                reqParams.tf['egress'].push({
+                                    'prefix_list_ids': [prefixListId.PrefixListId],
+                                    'description': prefixListId.Description,
+                                    'from_port': ipPermissionsEgress.FromPort,
+                                    'protocol': ipPermissionsEgress.IpProtocol,
+                                    'to_port': ipPermissionsEgress.ToPort
+                                });
                             });
                         }
                     });
@@ -4078,7 +5194,11 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::SecurityGroup',
-                    'options': reqParams
+                    'terraformType': 'aws_security_group',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.GroupId
+                    }
                 });
             } else if (obj.type == "route53.healthcheck") {
                 reqParams.cfn['HealthCheckConfig'] = {
@@ -4099,6 +5219,22 @@ function performF2Mappings(objects) {
                     'SearchString': obj.data.HealthCheckConfig.SearchString,
                     'Type': obj.data.HealthCheckConfig.Type
                 };
+                reqParams.tf['cloudwatch_alarm_name'] = obj.data.HealthCheckConfig.AlarmIdentifier;
+                reqParams.tf['child_healthchecks'] = obj.data.HealthCheckConfig.ChildHealthChecks;
+                reqParams.tf['enable_sni'] = obj.data.HealthCheckConfig.EnableSNI;
+                reqParams.tf['failure_threshold'] = obj.data.HealthCheckConfig.FailureThreshold;
+                reqParams.tf['fqdn'] = obj.data.HealthCheckConfig.FullyQualifiedDomainName;
+                reqParams.tf['child_health_threshold'] = obj.data.HealthCheckConfig.HealthThreshold;
+                reqParams.tf['insufficient_data_health_status'] = obj.data.HealthCheckConfig.InsufficientDataHealthStatus;
+                reqParams.tf['invert_healthcheck'] = obj.data.HealthCheckConfig.Inverted;
+                reqParams.tf['ip_address'] = obj.data.HealthCheckConfig.IPAddress;
+                reqParams.tf['measure_latency'] = obj.data.HealthCheckConfig.MeasureLatency;
+                reqParams.tf['port'] = obj.data.HealthCheckConfig.Port;
+                reqParams.tf['regions'] = obj.data.HealthCheckConfig.Regions;
+                reqParams.tf['request_interval'] = obj.data.HealthCheckConfig.RequestInterval;
+                reqParams.tf['resource_path'] = obj.data.HealthCheckConfig.ResourcePath;
+                reqParams.tf['search_string'] = obj.data.HealthCheckConfig.SearchString;
+                reqParams.tf['type'] = obj.data.HealthCheckConfig.Type;
 
                 /*
                 TODO:
@@ -4111,12 +5247,15 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'route53',
                     'type': 'AWS::Route53::HealthCheck',
+                    'terraformType': 'aws_route53_health_check',
                     'options': reqParams
                 });
             } else if (obj.type == "elb.loadbalancer") {
                 reqParams.cfn['LoadBalancerName'] = obj.data.LoadBalancerName;
+                reqParams.tf['name'] = obj.data.LoadBalancerName;
                 if (obj.data.ListenerDescriptions) {
                     reqParams.cfn['Listeners'] = [];
+                    reqParams.tf['listener'] = [];
                     obj.data.ListenerDescriptions.forEach(listener => {
                         reqParams.cfn['Listeners'].push({
                             'InstancePort': listener.Listener.InstanceProtocol,
@@ -4126,21 +5265,43 @@ function performF2Mappings(objects) {
                             'Protocol': listener.Listener.Protocol,
                             'SSLCertificateId': listener.Listener.SSLCertificateId
                         });
+                        reqParams.tf['listener'].push({
+                            'instance_port': listener.Listener.InstanceProtocol,
+                            'instance_protocol': listener.Listener.InstancePort,
+                            'lb_port': listener.Listener.LoadBalancerPort,
+                            'lb_protocol': listener.Listener.Protocol,
+                            'ssl_certificate_id': listener.Listener.SSLCertificateId
+                        });
                     });
                 }
                 reqParams.cfn['AppCookieStickinessPolicy'] = obj.data.Policies.AppCookieStickinessPolicies;
                 reqParams.cfn['LBCookieStickinessPolicy'] = obj.data.Policies.LBCookieStickinessPolicies;
                 reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['Subnets'] = obj.data.Subnets;
+                reqParams.tf['subnets'] = obj.data.Subnets;
                 if (obj.data.Instances) {
                     reqParams.cfn['Instances'] = [];
+                    reqParams.tf['instances'] = [];
                     obj.data.Instances.forEach(instance => {
                         reqParams.cfn['Instances'].push(instance.InstanceId);
+                        reqParams.tf['instances'].push(instance.InstanceId);
                     });
                 }
                 reqParams.cfn['HealthCheck'] = obj.data.HealthCheck;
+                if (obj.data.HealthCheck) {
+                    reqParams.tf['health_check'] = {
+                        'healthy_threshold': obj.data.HealthCheck.HealthyThreshold,
+                        'interval': obj.data.HealthCheck.Interval,
+                        'target': obj.data.HealthCheck.Target,
+                        'timeout': obj.data.HealthCheck.Timeout,
+                        'unhealthy_threshold': obj.data.HealthCheck.UnhealthyThreshold
+                    };
+                }
                 reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.tf['security_groups'] = obj.data.SecurityGroups;
                 reqParams.cfn['Scheme'] = obj.data.Scheme;
+                reqParams.tf['internal'] = (obj.data.Scheme == "internal");
 
                 /*
                 TODO:
@@ -4162,39 +5323,84 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'elb',
                     'type': 'AWS::ElasticLoadBalancing::LoadBalancer',
+                    'terraformType': 'aws_elb',
                     'options': reqParams
                 });
             } else if (obj.type == "cloudwatch.alarm") {
                 reqParams.cfn['AlarmName'] = obj.data.AlarmName;
+                reqParams.tf['alarm_name'] = obj.data.AlarmName;
                 reqParams.cfn['AlarmDescription'] = obj.data.AlarmDescription;
+                reqParams.tf['alarm_description'] = obj.data.AlarmDescription;
                 reqParams.cfn['ActionsEnabled'] = obj.data.ActionsEnabled;
+                reqParams.tf['actions_enabled'] = obj.data.ActionsEnabled;
                 reqParams.cfn['OKActions'] = obj.data.OKActions;
+                reqParams.tf['ok_actions'] = obj.data.OKActions;
                 reqParams.cfn['AlarmActions'] = obj.data.AlarmActions;
+                reqParams.tf['alarm_actions'] = obj.data.AlarmActions;
                 reqParams.cfn['InsufficientDataActions'] = obj.data.InsufficientDataActions;
+                reqParams.tf['insufficient_data_actions'] = obj.data.InsufficientDataActions;
                 reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.tf['metric_name'] = obj.data.MetricName;
                 reqParams.cfn['Namespace'] = obj.data.Namespace;
+                reqParams.tf['namespace'] = obj.data.Namespace;
                 reqParams.cfn['Statistic'] = obj.data.Statistic;
+                reqParams.tf['statistic'] = obj.data.Statistic;
                 reqParams.cfn['ExtendedStatistic'] = obj.data.ExtendedStatistic;
+                reqParams.tf['extended_statistic'] = obj.data.ExtendedStatistic;
                 reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+                reqParams.tf['dimensions'] = obj.data.Dimensions;
                 reqParams.cfn['Period'] = obj.data.Period;
+                reqParams.tf['period'] = obj.data.Period;
                 reqParams.cfn['Unit'] = obj.data.Unit;
+                reqParams.tf['unit'] = obj.data.Unit;
                 reqParams.cfn['EvaluationPeriods'] = obj.data.EvaluationPeriods;
+                reqParams.tf['evaluation_periods'] = obj.data.EvaluationPeriods;
                 reqParams.cfn['DatapointsToAlarm'] = obj.data.DatapointsToAlarm;
+                reqParams.tf['datapoints_to_alarm'] = obj.data.DatapointsToAlarm;
                 reqParams.cfn['Threshold'] = obj.data.Threshold;
+                reqParams.tf['threshold'] = obj.data.Threshold;
                 reqParams.cfn['ComparisonOperator'] = obj.data.ComparisonOperator;
+                reqParams.tf['comparison_operator'] = obj.data.ComparisonOperator;
                 reqParams.cfn['TreatMissingData'] = obj.data.TreatMissingData;
+                reqParams.tf['treat_missing_data'] = obj.data.TreatMissingData;
                 reqParams.cfn['EvaluateLowSampleCountPercentile'] = obj.data.EvaluateLowSampleCountPercentile;
+                reqParams.tf['evaluate_low_sample_count_percentiles'] = obj.data.EvaluateLowSampleCountPercentile;
                 reqParams.cfn['Metrics'] = obj.data.Metrics;
+                if (obj.data.Metrics) {
+                    reqParams.tf['metric_query'] = [];
+                    obj.data.Metrics.forEach(metric => {
+                        metricstat = null;
+                        if (metric.MetricStat) {
+                            metricstat = {
+                                'metric_name': metric.MetricStat.Metric.MetricName,
+                                'namespace': metric.MetricStat.Metric.Namespace,
+                                'dimensions': metric.MetricStat.Metric.Dimensions,
+                                'period': metric.MetricStat.Period,
+                                'stat': metric.MetricStat.Stat,
+                                'unit': metric.MetricStat.Unit
+                            };
+                        }
+                        reqParams.tf['metric_query'].push({
+                            'expression': metric.Expression,
+                            'id': metric.Id,
+                            'label': metric.Label,
+                            'metric': metric.MetricStat,
+                            'return_data': metric.ReturnData
+                        });
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
                     'type': 'AWS::CloudWatch::Alarm',
+                    'terraformType': 'aws_cloudwatch_metric_alarm',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.launchtemplate") {
                 reqParams.cfn['LaunchTemplateName'] = obj.data.LaunchTemplateName;
+                reqParams.tf['name'] = obj.data.LaunchTemplateName;
                 reqParams.cfn['LaunchTemplateData'] = {
                     'SecurityGroups': obj.data.LaunchTemplateData.SecurityGroups,
                     'TagSpecifications': obj.data.LaunchTemplateData.TagSpecifications,
@@ -4217,19 +5423,116 @@ function performF2Mappings(objects) {
                     'Monitoring': obj.data.LaunchTemplateData.Monitoring,
                     'CreditSpecification': obj.data.LaunchTemplateData.CreditSpecification
                 };
+                reqParams.tf['security_group_names'] = obj.data.LaunchTemplateData.SecurityGroups;
+                if (obj.data.LaunchTemplateData.TagSpecifications) {
+                    reqParams.tf['tag_specifications'] = [];
+                    obj.data.LaunchTemplateData.TagSpecifications.forEach(tagspecification => {
+                        var tags = {};
+                        tagspecification.Tags.forEach(tag => {
+                            tags[tag.Key] = tag.Value;
+                        });
+                        reqParams.tf['tag_specifications'].push({
+                            'resource_type': tagspecification.ResourceType,
+                            'tags': tags
+                        });
+                    });
+                }
+                reqParams.tf['user_data'] = obj.data.LaunchTemplateData.UserData;
+                reqParams.tf['instance_initiated_shutdown_behavior'] = obj.data.LaunchTemplateData.InstanceInitiatedShutdownBehavior;
+                //reqParams.tf['block_device_mappings'] = obj.data.LaunchTemplateData.BlockDeviceMappings; TODO
+                if (obj.data.LaunchTemplateData.IamInstanceProfile) {
+                    reqParams.tf['iam_instance_profile'] = {
+                        'arn': obj.data.LaunchTemplateData.IamInstanceProfile.Arn,
+                        'name': obj.data.LaunchTemplateData.IamInstanceProfile.Name
+                    };
+                }
+                reqParams.tf['kernel_id'] = obj.data.LaunchTemplateData.KernelId;
+                reqParams.tf['vpc_security_group_ids'] = obj.data.LaunchTemplateData.SecurityGroupIds;
+                reqParams.tf['ebs_optimized'] = obj.data.LaunchTemplateData.EbsOptimized;
+                reqParams.tf['key_name'] = obj.data.LaunchTemplateData.KeyName;
+                reqParams.tf['disable_api_termination'] = obj.data.LaunchTemplateData.DisableApiTermination;
+                if (obj.data.LaunchTemplateData.ElasticGpuSpecifications) {
+                    reqParams.tf['elastic_gpu_specifications'] = [];
+                    obj.data.LaunchTemplateData.ElasticGpuSpecifications.forEach(elasticgpuspecification => {
+                        reqParams.tf['elastic_gpu_specifications'].push({
+                            'type': elasticgpuspecification.Type
+                        });
+                    });
+                }
+                if (obj.data.LaunchTemplateData.Placement) {
+                    reqParams.tf['placement'] = {
+                        'affinity': obj.data.LaunchTemplateData.Placement.Affinity,
+                        'availability_zone': obj.data.LaunchTemplateData.Placement.AvailabilityZone,
+                        'group_name': obj.data.LaunchTemplateData.Placement.GroupName,
+                        'host_id': obj.data.LaunchTemplateData.Placement.HostId,
+                        'tenancy': obj.data.LaunchTemplateData.Placement.Tenancy
+                    };
+                }
+                if (obj.data.LaunchTemplateData.InstanceMarketOptions) {
+                    var spotoptions = null;
+                    if (obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions) {
+                        spotoptions = {
+                            'block_duration_minutes': obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions.BlockDurationMinutes,
+                            'instance_interruption_behavior': obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions.InstanceInterruptionBehavior,
+                            'max_price': obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions.MaxPrice,
+                            'spot_instance_type': obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions.SpotInstanceType,
+                            'valid_until': obj.data.LaunchTemplateData.InstanceMarketOptions.SpotOptions.ValidUntil // TODO: Parse Date
+                        };
+                    }
+                    reqParams.tf['instance_market_options'] = {
+                        'market_type': obj.data.LaunchTemplateData.InstanceMarketOptions.MarketType,
+                        'spot_options': spotoptions
+                    };
+                }
+                if (obj.data.LaunchTemplateData.NetworkInterfaces) {
+                    reqParams.tf['network_interfaces'] = [];
+                    obj.data.LaunchTemplateData.NetworkInterfaces.forEach(networkinterface => {
+                        reqParams.tf['network_interfaces'].push({
+                            'associate_public_ip_address': networkinterface.AssociatePublicIpAddress,
+                            'delete_on_termination': networkinterface.DeleteOnTermination,
+                            'description': networkinterface.Description,
+                            'device_index': networkinterface.DeviceIndex,
+                            'ipv6_addresses': networkinterface.Ipv6Addresses ? networkinterface.Ipv6Addresses.map(ipv6address => {return ipv6address.Ipv6Address}) : null,
+                            'ipv6_address_count': networkinterface.Ipv6AddressCount,
+                            'network_interface_id': networkinterface.NetworkInterfaceId,
+                            'private_ip_address': networkinterface.PrivateIpAddress,
+                            'ipv4_address_count': networkinterface.SecondaryPrivateIpAddressCount,
+                            'ipv4_addresses': networkinterface.PrivateIpAddresses,
+                            'security_groups': networkinterface.Groups,
+                            'subnet_id': networkinterface.SubnetId
+                        });
+                    });
+                }
+                reqParams.tf['image_id'] = obj.data.LaunchTemplateData.ImageId;
+                reqParams.tf['instance_type'] = obj.data.LaunchTemplateData.InstanceType;
+                reqParams.tf['ram_disk_id'] = obj.data.LaunchTemplateData.RamDiskId;
+                if (obj.data.LaunchTemplateData.Monitoring) {
+                    reqParams.tf['monitoring'] = {
+                        'enabled': obj.data.LaunchTemplateData.Monitoring.Enabled
+                    };
+                }
+                if (obj.data.LaunchTemplateData.CreditSpecification) {
+                    reqParams.tf['credit_specification'] = {
+                        '': obj.data.LaunchTemplateData.CreditSpecification.CpuCredits
+                    };
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::LaunchTemplate',
+                    'terraformType': 'aws_launch_template',
                     'options': reqParams
                 });
             } else if (obj.type == "cloud9.environment") {
                 if (obj.data.type == "ec2") {
                     reqParams.cfn['Name'] = obj.data.name;
+                    reqParams.tf['name'] = obj.data.name;
                     reqParams.cfn['Description'] = obj.data.description;
+                    reqParams.tf['description'] = obj.data.description;
                     reqParams.cfn['OwnerArn'] = obj.data.ownerArn;
+                    reqParams.tf['owner_arn'] = obj.data.ownerArn;
 
                     /*
                     TODO:
@@ -4245,19 +5548,29 @@ function performF2Mappings(objects) {
                         'region': obj.region,
                         'service': 'cloud9',
                         'type': 'AWS::Cloud9::EnvironmentEC2',
+                        'terraformType': 'aws_cloud9_environment_ec2',
                         'options': reqParams
                     });
                 }
             } else if (obj.type == "apigateway.restapi") {
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['MinimumCompressionSize'] = obj.data.minimumCompressionSize;
+                reqParams.tf['minimum_compression_size'] = obj.data.minimumCompressionSize;
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
                 reqParams.cfn['ApiKeySourceType'] = obj.data.apiKeySource;
+                reqParams.tf['api_key_source'] = obj.data.apiKeySource;
                 reqParams.cfn['Policy'] = obj.data.policy;
+                reqParams.tf['policy'] = obj.data.policy;
                 reqParams.cfn['BinaryMediaTypes'] = obj.data.binaryMediaTypes;
+                reqParams.tf['binary_media_types'] = obj.data.binaryMediaTypes;
                 if (obj.data.endpointConfiguration) {
                     reqParams.cfn['EndpointConfiguration'] = {
                         'Types': obj.data.endpointConfiguration.types
+                    };
+                    reqParams.tf['endpoint_configuration'] = {
+                        'types': obj.data.endpointConfiguration.types
                     };
                 }
 
@@ -4277,15 +5590,22 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::RestApi',
+                    'terraformType': 'aws_api_gateway_rest_api',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.stage") {
                 reqParams.cfn['StageName'] = obj.data.stageName;
+                reqParams.tf['stage_name'] = obj.data.stageName;
                 reqParams.cfn['DeploymentId'] = obj.data.deploymentId;
+                reqParams.tf['deployment_id'] = obj.data.deploymentId;
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
                 reqParams.cfn['CacheClusterEnabled'] = obj.data.cacheClusterEnabled;
+                reqParams.tf['cache_cluster_enabled'] = obj.data.cacheClusterEnabled;
                 reqParams.cfn['CacheClusterSize'] = obj.data.cacheClusterSize;
+                reqParams.tf['cache_cluster_size'] = obj.data.cacheClusterSize;
                 if (obj.data.methodSettings) {
                     reqParams.cfn['MethodSettings'] = [];
                     Object.keys(obj.data.methodSettings).forEach(fullpath => {
@@ -4308,11 +5628,17 @@ function performF2Mappings(objects) {
                     });
                 }
                 reqParams.cfn['Variables'] = obj.data.variables;
+                reqParams.tf['variables'] = obj.data.variables;
                 reqParams.cfn['DocumentationVersion'] = obj.data.documentationVersion;
+                reqParams.tf['documentation_version'] = obj.data.documentationVersion;
                 if (obj.data.accessLogSettings) {
                     reqParams.cfn['AccessLogSetting'] = {
                         'Format': obj.data.format,
                         'DestinationArn': obj.data.destinationArn
+                    };
+                    reqParams.tf['access_log_settings'] = {
+                        'format': obj.data.format,
+                        'destination_arn': obj.data.destinationArn
                     };
                 }
                 if (obj.data.canarySettings) {
@@ -4324,8 +5650,10 @@ function performF2Mappings(objects) {
                     };
                 }
                 reqParams.cfn['TracingEnabled'] = obj.data.tracingEnabled;
+                reqParams.tf['xray_tracing_enabled'] = obj.data.tracingEnabled;
                 if (obj.data.tags) {
                     reqParams.cfn['Tags'] = [];
+                    reqParams.tf['Tags'] = {};
                     Object.keys(obj.data.tags).forEach(tagKey => {
                         reqParams.cfn['Tags'].push({
                             'Key': tagKey,
@@ -4334,17 +5662,21 @@ function performF2Mappings(objects) {
                     });
                 }
                 reqParams.cfn['ClientCertificateId'] = obj.data.clientCertificateId;
+                reqParams.tf['client_certificate_id'] = obj.data.clientCertificateId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Stage',
+                    'terraformType': 'aws_api_gateway_stage',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.deployment") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
 
                 /*
                 TODO:
@@ -4358,64 +5690,95 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Deployment',
+                    'terraformType': 'aws_api_gateway_deployment',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.resource") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['PathPart'] = obj.data.pathPart;
+                reqParams.tf['path_part'] = obj.data.pathPart;
                 reqParams.cfn['ParentId'] = obj.data.parentId;
+                reqParams.tf['parent_id'] = obj.data.parentId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Resource',
+                    'terraformType': 'aws_api_gateway_resource',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.model") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
                 reqParams.cfn['Schema'] = obj.data.schema;
+                reqParams.tf['schema'] = obj.data.schema;
                 reqParams.cfn['ContentType'] = obj.data.contentType;
+                reqParams.tf['content_type'] = obj.data.contentType;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Model',
+                    'terraformType': 'aws_api_gateway_model',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.authorizer") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['Type'] = obj.data.type;
+                reqParams.tf['type'] = obj.data.type;
                 reqParams.cfn['ProviderARNs'] = obj.data.providerARNs;
+                reqParams.tf['provider_arns'] = obj.data.providerARNs;
                 reqParams.cfn['AuthType'] = obj.data.authType;
+                reqParams.tf['AuthType'] = obj.data.authType;
                 reqParams.cfn['AuthorizerUri'] = obj.data.authorizerUri;
+                reqParams.tf['authorizer_uri'] = obj.data.authorizerUri;
                 reqParams.cfn['AuthorizerCredentials'] = obj.data.authorizerCredentials;
+                reqParams.tf['authorizer_credentials'] = obj.data.authorizerCredentials;
                 reqParams.cfn['IdentitySource'] = obj.data.identitySource;
+                reqParams.tf['identity_source'] = obj.data.identitySource;
                 reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression;
+                reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression;
                 reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.authorizerResultTtlInSeconds;
+                reqParams.tf['authorizer_result_ttl_in_seconds'] = obj.data.authorizerResultTtlInSeconds;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Authorizer',
+                    'terraformType': 'aws_api_gateway_authorizer',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.method") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['ResourceId'] = obj.data.resourceId;
+                reqParams.tf['resource_id'] = obj.data.resourceId;
                 reqParams.cfn['HttpMethod'] = obj.data.httpMethod;
+                reqParams.tf['http_method'] = obj.data.httpMethod;
                 reqParams.cfn['AuthorizationType'] = obj.data.authorizationType;
+                reqParams.tf['authorization'] = obj.data.authorizationType;
                 reqParams.cfn['AuthorizerId'] = obj.data.authorizerId;
+                reqParams.tf['authorizer_id'] = obj.data.authorizerId;
                 reqParams.cfn['ApiKeyRequired'] = obj.data.apiKeyRequired;
+                reqParams.tf['api_key_required'] = obj.data.apiKeyRequired;
                 reqParams.cfn['RequestValidatorId'] = obj.data.requestValidatorId;
+                reqParams.tf['request_validator_id'] = obj.data.requestValidatorId;
                 reqParams.cfn['OperationName'] = obj.data.operationName;
                 reqParams.cfn['RequestParameters'] = obj.data.requestParameters;
+                reqParams.tf['request_parameters'] = obj.data.requestParameters;
                 reqParams.cfn['RequestModels'] = obj.data.requestModels;
+                reqParams.tf['request_models'] = obj.data.requestModels;
                 if (obj.data.methodResponses) {
                     reqParams.cfn['MethodResponses'] = [];
                     Object.values(obj.data.methodResponses).forEach(methodResponse => {
@@ -4437,7 +5800,7 @@ function performF2Mappings(objects) {
                                 'ResponseTemplates': integrationResponse.responseTemplates,
                                 'SelectionPattern': integrationResponse.selectionPattern,
                                 'StatusCode': integrationResponse.statusCode
-                            })
+                            });
                         });
                     }
                     reqParams.cfn['Integration'] = {
@@ -4455,47 +5818,67 @@ function performF2Mappings(objects) {
                         'TimeoutInMillis': obj.data.methodIntegration.timeoutInMillis,
                         'Type': obj.data.methodIntegration.type,
                         'Uri': obj.data.methodIntegration.uri
-                    }                      
+                    }                
                 }
                 reqParams.cfn['AuthorizationScopes'] = obj.data.authorizationScopes;
+                reqParams.tf['authorization_scopes'] = obj.data.authorizationScopes;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Method',
+                    'terraformType': 'aws_api_gateway_method',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.gatewayresponse") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['ResponseType'] = obj.data.responseType;
+                reqParams.tf['response_type'] = obj.data.responseType;
                 reqParams.cfn['StatusCode'] = obj.data.statusCode;
+                reqParams.tf['status_code'] = obj.data.statusCode;
                 reqParams.cfn['ResponseParameters'] = obj.data.responseParameters;
+                reqParams.tf['response_parameters'] = obj.data.responseParameters;
                 reqParams.cfn['ResponseTemplates'] = obj.data.responseTemplates;
+                reqParams.tf['response_templates'] = obj.data.responseTemplates;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::GatewayResponse',
+                    'terraformType': 'aws_api_gateway_gateway_response',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.documentationversion") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
                 reqParams.cfn['DocumentationVersion'] = obj.data.version;
+                reqParams.tf['version'] = obj.data.version;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::DocumentationVersion',
+                    'terraformType': 'aws_api_gateway_documentation_version',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.documentationpart") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 if (obj.data.location) {
                     reqParams.cfn['Location'] = {
+                        'method': obj.data.location.method,
+                        'name': obj.data.location.name,
+                        'path': obj.data.location.path,
+                        'status_code': obj.data.location.statusCode,
+                        'type': obj.data.location.type
+                    };
+                    reqParams.tf['location'] = {
                         'Method': obj.data.location.method,
                         'Name': obj.data.location.name,
                         'Path': obj.data.location.path,
@@ -4504,89 +5887,118 @@ function performF2Mappings(objects) {
                     };
                 }
                 reqParams.cfn['Properties'] = obj.data.properties;
+                reqParams.tf['properties'] = obj.data.properties;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::DocumentationPart',
+                    'terraformType': 'aws_api_gateway_documentation_part',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.requestvalidator") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['rest_api_id'] = obj.data.restApiId;
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['ValidateRequestBody'] = obj.data.validateRequestBody;
+                reqParams.tf['validate_request_body'] = obj.data.validateRequestBody;
                 reqParams.cfn['ValidateRequestParameters'] = obj.data.validateRequestParameters;
+                reqParams.tf['validate_request_parameters'] = obj.data.validateRequestParameters;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::RequestValidator',
+                    'terraformType': 'aws_api_gateway_request_validator',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.account") {
                 reqParams.cfn['CloudWatchRoleArn'] = obj.data.cloudwatchRoleArn;
+                reqParams.tf['cloudwatch_role_arn'] = obj.data.cloudwatchRoleArn;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Account',
+                    'terraformType': 'aws_api_gateway_account',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.domainname") {
                 reqParams.cfn['CertificateArn'] = obj.data.certificateArn;
+                reqParams.tf['certificate_arn'] = obj.data.certificateArn;
                 reqParams.cfn['DomainName'] = obj.data.domainName;
+                reqParams.tf['domain_name'] = obj.data.domainName;
                 if (obj.data.endpointConfiguration) {
                     reqParams.cfn['EndpointConfiguration'] = {
                         'Types': obj.data.endpointConfiguration.types
                     };
+                    reqParams.tf['endpoint_configuration'] = {
+                        'types': obj.data.endpointConfiguration.types
+                    };
                 }
                 reqParams.cfn['RegionalCertificateArn'] = obj.data.regionalCertificateArn;
+                reqParams.tf['regional_certificate_arn'] = obj.data.regionalCertificateArn;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::DomainName',
+                    'terraformType': 'aws_api_gateway_domain_name',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.basepathmapping") {
                 reqParams.cfn['BasePath'] = obj.data.basePath;
+                reqParams.tf['base_path'] = obj.data.basePath;
                 reqParams.cfn['DomainName'] = obj.data.domainName;
+                reqParams.tf['domain_name'] = obj.data.domainName;
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
+                reqParams.tf['api_id'] = obj.data.restApiId;
                 reqParams.cfn['Stage'] = obj.data.stage;
+                reqParams.tf['stage_name'] = obj.data.stage;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::BasePathMapping',
+                    'terraformType': 'aws_api_gateway_base_path_mapping',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.usageplankey") {
                 reqParams.cfn['KeyId'] = obj.data.id;
+                reqParams.tf['key_id'] = obj.data.id;
                 reqParams.cfn['KeyType'] = obj.data.type;
+                reqParams.tf['key_type'] = obj.data.type;
                 reqParams.cfn['UsagePlanId'] = obj.data.value; // TODO: ???
+                reqParams.tf['usage_plan_id'] = obj.data.value;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::UsagePlanKey',
+                    'terraformType': 'aws_api_gateway_usage_plan_key',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.vpclink") {
                 reqParams.cfn['Description'] = obj.data.description;
+                reqParams.tf['description'] = obj.data.description;
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['TargetArns'] = obj.data.targetArns;
+                reqParams.tf['target_arns'] = obj.data.targetArns;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::VpcLink',
+                    'terraformType': 'aws_api_gateway_vpc_link',
                     'options': reqParams
                 });
             } else if (obj.type == "apigatewayv2.api") {
@@ -4746,18 +6158,29 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "batch.computeenvironment") {
                 reqParams.cfn['ComputeEnvironmentName'] = obj.data.computeEnvironmentName;
+                reqParams.tf['compute_environment_name'] = obj.data.computeEnvironmentName;
                 reqParams.cfn['Type'] = obj.data.type;
+                reqParams.tf['type'] = obj.data.type;
                 reqParams.cfn['State'] = obj.data.state;
+                reqParams.tf['state'] = obj.data.state;
                 reqParams.cfn['ServiceRole'] = obj.data.serviceRole;
+                reqParams.tf['service_role'] = obj.data.serviceRole;
                 if (obj.data.computeResources) {
                     reqParams.cfn['ComputeResources'] = [];
+                    reqParams.tf['compute_resources'] = [];
 
                     var launchTemplate = null;
+                    var tfLaunchTemplate = null;
                     if (computeResource.launchTemplate) {
                         launchTemplate = {
                             'LaunchTemplateId': computeResource.launchTemplate.launchTemplateId,
                             'LaunchTemplateName': computeResource.launchTemplate.launchTemplateName,
                             'Version': computeResource.launchTemplate.version
+                        };
+                        tfLaunchTemplate = {
+                            'launch_template_id': computeResource.launchTemplate.launchTemplateId,
+                            'launch_template_name': computeResource.launchTemplate.launchTemplateName,
+                            'version': computeResource.launchTemplate.version
                         };
                     }
 
@@ -4777,8 +6200,23 @@ function performF2Mappings(objects) {
                             'PlacementGroup': computeResource.placementGroup,
                             'BidPercentage': computeResource.bidPercentage,
                             'SpotIamFleetRole': computeResource.spotIamFleetRole,
-                            'LaunchTemplate': launchTemplate,
-                            
+                            'LaunchTemplate': launchTemplate
+                        });
+                        reqParams.tf['compute_resources'].push({
+                            'type': computeResource.type,
+                            'min_vcpus': computeResource.minvCpus,
+                            'max_vcpus': computeResource.maxvCpus,
+                            'desired_vcpus': computeResource.desiredvCpus,
+                            'instance_type': computeResource.instanceTypes,
+                            'image_id': computeResource.imageId,
+                            'subnets': computeResource.subnets,
+                            'security_group_ids': computeResource.securityGroupIds,
+                            'ec2_key_pair': computeResource.ec2KeyPair,
+                            'instance_role': computeResource.instanceRole,
+                            'tags': computeResource.tags,
+                            'bid_percentage': computeResource.bidPercentage,
+                            'spot_iam_fleet_role': computeResource.spotIamFleetRole,
+                            'launch_template': launchTemplate
                         });
                     });
                 }
@@ -4788,25 +6226,32 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'batch',
                     'type': 'AWS::Batch::ComputeEnvironment',
+                    'terraformType': 'aws_batch_compute_environment',
                     'options': reqParams
                 });
             } else if (obj.type == "batch.jobqueue") {
                 reqParams.cfn['ComputeEnvironmentOrder'] = [];
+                reqParams.tf['compute_environments'] = [];
                 obj.data.computeEnvironmentOrder.forEach(computeEnvironmentOrder => {
                     reqParams.cfn['ComputeEnvironmentOrder'].push({
                         'ComputeEnvironment': computeEnvironmentOrder.computeEnvironment,
                         'Order': computeEnvironmentOrder.order
                     });
+                    reqParams.tf['compute_environments'].push(computeEnvironmentOrder.computeEnvironment);
                 });
                 reqParams.cfn['Priority'] = obj.data.priority;
+                reqParams.tf['priority'] = obj.data.priority;
                 reqParams.cfn['State'] = obj.data.state;
+                reqParams.tf['state'] = obj.data.state;
                 reqParams.cfn['JobQueueName'] = obj.data.jobQueueName;
+                reqParams.tf['name'] = obj.data.jobQueueName;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('batch', obj.id),
                     'region': obj.region,
                     'service': 'batch',
                     'type': 'AWS::Batch::JobQueue',
+                    'terraformType': 'aws_batch_job_queue',
                     'options': reqParams
                 });
             } else if (obj.type == "batch.jobdefinition") {
@@ -4984,30 +6429,47 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "efs.filesystem") {
                 reqParams.cfn['PerformanceMode'] = obj.data.PerformanceMode;
+                reqParams.tf['performance_mode'] = obj.data.PerformanceMode;
                 reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+                reqParams.tf['encrypted'] = obj.data.Encrypted;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 reqParams.cfn['ThroughputMode'] = obj.data.ThroughputMode;
+                reqParams.tf['throughput_mode'] = obj.data.ThroughputMode;
                 reqParams.cfn['ProvisionedThroughputInMibps'] = obj.data.ProvisionedThroughputInMibps;
+                reqParams.tf['provisioned_throughput_in_mibps'] = obj.data.ProvisionedThroughputInMibps;
                 reqParams.cfn['FileSystemTags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'logicalId': getResourceName('efs', obj.id),
                     'region': obj.region,
                     'service': 'efs',
                     'type': 'AWS::EFS::FileSystem',
+                    'terraformType': 'aws_efs_file_system',
                     'options': reqParams
                 });
             } else if (obj.type == "efs.mounttarget") {
                 reqParams.cfn['FileSystemId'] = obj.data.FileSystemId;
+                reqParams.tf['file_system_id'] = obj.data.FileSystemId;
                 reqParams.cfn['IpAddress'] = obj.data.IpAddress;
+                reqParams.tf['ip_address'] = obj.data.IpAddress;
                 reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+                reqParams.tf['security_groups'] = obj.data.SecurityGroups;
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+                reqParams.tf['subnet_id'] = obj.data.SubnetId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('efs', obj.id),
                     'region': obj.region,
                     'service': 'efs',
                     'type': 'AWS::EFS::MountTarget',
+                    'terraformType': 'aws_efs_mount_target',
                     'options': reqParams
                 });
             } else if (obj.type == "fsx.filesystem") {
@@ -5051,14 +6513,18 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "ram.resourceshare") {
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['AllowExternalPrincipals'] = obj.data.allowExternalPrincipals;
+                reqParams.tf['allow_external_principals'] = obj.data.allowExternalPrincipals;
                 if (obj.data.tags) {
                     reqParams.cfn['Tags'] = [];
+                    reqParams.tf['tags'] = {};
                     obj.data.tags.forEach(tag => {
                         reqParams.cfn['Tags'].push({
                             'Key': tag.key,
                             'Value': tag.value
-                        })
+                        });
+                        reqParams.tf['tags'][tag.key] = tag.value;
                     });
                 }
                 reqParams.cfn['Principals'] = obj.data.principals;
@@ -5069,16 +6535,20 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ram',
                     'type': 'AWS::RAM::ResourceShare',
+                    'terraformType': 'aws_ram_resource_share',
                     'options': reqParams
                 });
             } else if (obj.type == "acm.certificate") {
                 reqParams.cfn['DomainName'] = obj.data.DomainName;
+                reqParams.tf['domain_name'] = obj.data.DomainName;
                 reqParams.cfn['SubjectAlternativeNames'] = obj.data.SubjectAlternativeNames;
+                reqParams.tf['subject_alternative_names'] = obj.data.SubjectAlternativeNames;
                 if (obj.data.DomainValidationOptions) {
                     reqParams.cfn['DomainValidationOptions'] = {
                         'DomainName': obj.data.DomainValidationOptions.DomainName,
                         'ValidationDomain': obj.data.DomainValidationOptions.ValidationDomain
                     };
+                    reqParams.tf['validation_method'] = "DNS";
                 }
 
                 /*
@@ -5093,14 +6563,20 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'acm',
                     'type': 'AWS::CertificateManager::Certificate',
+                    'terraformType': 'aws_acm_certificate',
                     'options': reqParams
                 });
             } else if (obj.type == "kms.key") {
                 reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.tf['is_enabled'] = obj.data.Enabled;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['KeyUsage'] = obj.data.KeyUsage;
+                reqParams.tf['key_usage'] = obj.data.KeyUsage;
                 reqParams.cfn['EnableKeyRotation'] = obj.data.KeyRotationEnabled;
+                reqParams.tf['enable_key_rotation'] = obj.data.KeyRotationEnabled;
                 reqParams.cfn['KeyPolicy'] = obj.data.Policy;
+                reqParams.tf['policy'] = obj.data.Policy;
 
                 /*
                 TODO:
@@ -5114,23 +6590,30 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'kms',
                     'type': 'AWS::KMS::Key',
+                    'terraformType': 'aws_kms_key',
                     'options': reqParams
                 });
             } else if (obj.type == "kms.alias") {
                 reqParams.cfn['AliasName'] = obj.data.AliasArn;
+                reqParams.tf['name'] = obj.data.AliasArn;
                 reqParams.cfn['TargetKeyId'] = obj.data.TargetKeyId;
+                reqParams.tf['target_key_id'] = obj.data.TargetKeyId;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('kms', obj.id),
                     'region': obj.region,
                     'service': 'kms',
                     'type': 'AWS::KMS::Alias',
+                    'terraformType': 'aws_kms_alias',
                     'options': reqParams
                 });
             } else if (obj.type == "stepfunctions.statemachine") {
                 reqParams.cfn['StateMachineName'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['DefinitionString'] = obj.data.definition;
+                reqParams.tf['definition'] = obj.data.definition;
                 reqParams.cfn['RoleArn'] = obj.data.roleArn;
+                reqParams.tf['role_arn'] = obj.data.roleArn;
 
                 /*
                 TODO:
@@ -5143,10 +6626,12 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'stepfunctions',
                     'type': 'AWS::StepFunctions::StateMachine',
+                    'terraformType': 'sfn_state_machine',
                     'options': reqParams
                 });
             } else if (obj.type == "stepfunctions.activity") {
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
 
                 /*
                 TODO:
@@ -5159,69 +6644,88 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'stepfunctions',
                     'type': 'AWS::StepFunctions::Activity',
+                    'terraformType': 'sfn_activity',
                     'options': reqParams
                 });
             } else if (obj.type == "athena.namedquery") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['name'] = obj.data.Name;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['description'] = obj.data.Description;
                 reqParams.cfn['Database'] = obj.data.Database;
+                reqParams.cfn['database'] = obj.data.Database;
                 reqParams.cfn['QueryString'] = obj.data.QueryString;
+                reqParams.cfn['query'] = obj.data.QueryString;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('athena', obj.id),
                     'region': obj.region,
                     'service': 'athena',
                     'type': 'AWS::Athena::NamedQuery',
+                    'terraformType': 'aws_athena_named_query',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.thing") {
                 reqParams.cfn['ThingName'] = obj.data.thingName;
+                reqParams.tf['name'] = obj.data.thingName;
                 reqParams.cfn['AttributePayload'] = {
                     'Attributes': obj.data.attributes
                 };
+                reqParams.tf['attributes'] = obj.data.attributes;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
                     'type': 'AWS::IoT::Thing',
+                    'terraformType': 'aws_iot_thing',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.thingprincipalattachment") {
                 reqParams.cfn['ThingName'] = obj.data.thing.thingName;
+                reqParams.tf['thing'] = obj.data.thing.thingName;
                 reqParams.cfn['Principal'] = obj.data.principal;
+                reqParams.tf['principal'] = obj.data.principal;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
                     'type': 'AWS::IoT::ThingPrincipalAttachment',
+                    'terraformType': 'aws_iot_thing_principal_attachment',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.policy") {
                 reqParams.cfn['PolicyName'] = obj.data.policyName;
+                reqParams.tf['name'] = obj.data.policyName;
                 reqParams.cfn['PolicyDocument'] = obj.data.policyDocument;
+                reqParams.tf['policy'] = obj.data.policyDocument;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
                     'type': 'AWS::IoT::Policy',
+                    'terraformType': 'aws_iot_policy',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.policyprincipalattachment") {
                 reqParams.cfn['PolicyName'] = obj.data.policy.policyName;
+                reqParams.cfn['policy'] = obj.data.policy.policyName;
                 reqParams.cfn['Principal'] = obj.data.principal;
+                reqParams.cfn['target'] = obj.data.principal;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
                     'type': 'AWS::IoT::PolicyPrincipalAttachment',
+                    'terraformType': 'aws_iot_policy_attachment',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.certificate") {
                 reqParams.cfn['Status'] = obj.data.status;
+                reqParams.cfn['active'] = (obj.data.status.toLowerCase() == "active");
 
                 /*
                 TODO:
@@ -5233,6 +6737,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'iot',
                     'type': 'AWS::IoT::Certificate',
+                    'terraformType': 'aws_iot_certificate',
                     'options': reqParams
                 });
             } else if (obj.type == "iot.topicrule") {
@@ -5529,7 +7034,9 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "codecommit.repository") {
                 reqParams.cfn['RepositoryDescription'] = obj.data.repositoryDescription;
+                reqParams.tf['description'] = obj.data.repositoryDescription;
                 reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
+                reqParams.tf['repository_name'] = obj.data.repositoryName;
 
                 /*
                 TODO:
@@ -5541,6 +7048,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'codecommit',
                     'type': 'AWS::CodeCommit::Repository',
+                    'terraformType': 'aws_codecommit_repository',
                     'options': reqParams
                 });
             } else if (obj.type == "codebuild.project") {
@@ -5717,13 +7225,16 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "codedeploy.application") {
                 reqParams.cfn['ApplicationName'] = obj.data.applicationName;
+                reqParams.tf['name'] = obj.data.applicationName;
                 reqParams.cfn['ComputePlatform'] = obj.data.computePlatform;
+                reqParams.tf['compute_platform'] = obj.data.computePlatform;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('codedeploy', obj.id),
                     'region': obj.region,
                     'service': 'codedeploy',
                     'type': 'AWS::CodeDeploy::Application',
+                    'terraformType': 'aws_codedeploy_app',
                     'options': reqParams
                 });
             } else if (obj.type == "codedeploy.deploymentgroup") {
@@ -5844,10 +7355,15 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "codedeploy.deploymentconfiguration") {
                 reqParams.cfn['DeploymentConfigName'] = obj.data.deploymentConfigName;
+                reqParams.tf['deployment_config_name'] = obj.data.deploymentConfigName;
                 if (obj.data.minimumHealthyHosts) {
                     reqParams.cfn['MinimumHealthyHosts'] = {
                         'Type': obj.data.minimumHealthyHosts.type,
                         'Value': obj.data.minimumHealthyHosts.value
+                    };
+                    reqParams.tf['minimum_healthy_hosts'] = {
+                        'type': obj.data.minimumHealthyHosts.type,
+                        'value': obj.data.minimumHealthyHosts.value
                     };
                 }
 
@@ -5856,26 +7372,40 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'codedeploy',
                     'type': 'AWS::CodeDeploy::DeploymentConfig',
+                    'terraformType': 'aws_codedeploy_deployment_config',
                     'options': reqParams
                 });
             } else if (obj.type == "neptune.cluster") {
                 reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+                reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
                 reqParams.cfn['DBClusterParameterGroupName'] = obj.data.DBClusterParameterGroup;
+                reqParams.tf['neptune_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup;
+                reqParams.tf['neptune_subnet_group_name'] = obj.data.DBSubnetGroup;
                 reqParams.cfn['Port'] = obj.data.Port;
+                reqParams.tf['port'] = obj.data.Port;
                 reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+                reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 if (obj.data.VpcSecurityGroups) {
                     reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
                     obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
-                        reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup.VpcSecurityGroupId)
+                        reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                        reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
                     });
                 }
                 reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+                reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_arn'] = obj.data.KmsKeyId;
                 reqParams.cfn['IamAuthEnabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+                reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
 
                 /*
                 TODO:
@@ -5889,18 +7419,26 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'neptune',
                     'type': 'AWS::Neptune::DBCluster',
+                    'terraformType': 'aws_neptune_cluster',
                     'options': reqParams
                 });
             } else if (obj.type == "neptune.instance") {
                 reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
+                reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
                 reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
+                reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 if (obj.data.DBSubnetGroup) {
                     reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
+                    reqParams.tf['neptune_subnet_group_name'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
                 }
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+                reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
 
                 /*
                 TODO:
@@ -5916,12 +7454,16 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'neptune',
                     'type': 'AWS::Neptune::DBInstance',
+                    'terraformType': 'aws_neptune_cluster_instance',
                     'options': reqParams
                 });
             } else if (obj.type == "neptune.clusterparametergroup") {
                 reqParams.cfn['Name'] = obj.data.DBClusterParameterGroupName;
+                reqParams.tf['name'] = obj.data.DBClusterParameterGroupName;
                 reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 /*
                 TODO:
@@ -5935,12 +7477,16 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'neptune',
                     'type': 'AWS::Neptune::DBClusterParameterGroup',
+                    'terraformType': 'aws_neptune_cluster_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "neptune.parametergroup") {
                 reqParams.cfn['Name'] = obj.data.DBParameterGroupName;
+                reqParams.tf['name'] = obj.data.DBParameterGroupName;
                 reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 /*
                 TODO:
@@ -5954,15 +7500,20 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'neptune',
                     'type': 'AWS::Neptune::DBParameterGroup',
+                    'terraformType': 'aws_neptune_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "neptune.subnetgroup") {
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+                reqParams.tf['name'] = obj.data.DBSubnetGroupName;
                 reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+                reqParams.tf['description'] = obj.data.DBSubnetGroupDescription;
                 if (obj.data.Subnets) {
                     reqParams.cfn['SubnetIds'] = [];
+                    reqParams.tf['subnet_ids'] = [];
                     obj.data.Subnets.forEach(subnet => {
                         reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                        reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
                     });
                 }
 
@@ -5977,27 +7528,42 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'neptune',
                     'type': 'AWS::Neptune::DBSubnetGroup',
+                    'terraformType': 'aws_neptune_subnet_group',
                     'options': reqParams
                 });
             } else if (obj.type == "documentdb.cluster") {
                 reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+                reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
                 reqParams.cfn['DBClusterParameterGroupName'] = obj.data.DBClusterParameterGroup;
+                reqParams.tf['db_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBClusterParameterGroupName;
+                reqParams.tf['db_subnet_group_name'] = obj.data.DBClusterParameterGroupName;
                 reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+                reqParams.tf['engine_version'] = obj.data.EngineVersion;
                 reqParams.cfn['Port'] = obj.data.Port;
+                reqParams.tf['port'] = obj.data.Port;
                 reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.tf['master_username'] = obj.data.MasterUsername;
                 reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+                reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 if (obj.data.VpcSecurityGroups) {
                     reqParams.cfn['VpcSecurityGroupIds'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
                     obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
                         reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup['VpcSecurityGroupId']);
+                        reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup['VpcSecurityGroupId']);
                     });
                 }
                 reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+                reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+                reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
 
                 /*
                 TODO:
@@ -6012,15 +7578,22 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'docdb',
                     'type': 'AWS::DocDB::DBCluster',
+                    'terraformType': 'aws_docdb_cluster',
                     'options': reqParams
                 });
             } else if (obj.type == "documentdb.instance") {
                 reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
+                reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
                 reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
+                reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
                 reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+                reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
                 reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+                reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+                reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
 
                 /*
                 TODO:
@@ -6033,12 +7606,16 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'docdb',
                     'type': 'AWS::DocDB::DBInstance',
+                    'terraformType': 'aws_docdb_cluster_instance',
                     'options': reqParams
                 });
             } else if (obj.type == "documentdb.clusterparametergroup") {
                 reqParams.cfn['Name'] = obj.data.DBClusterParameterGroupName;
+                reqParams.tf['name'] = obj.data.DBClusterParameterGroupName;
                 reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+                reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 /*
                 TODO:
@@ -6052,15 +7629,20 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'docdb',
                     'type': 'AWS::DocDB::DBClusterParameterGroup',
+                    'terraformType': 'aws_docdb_cluster_parameter_group',
                     'options': reqParams
                 });
             } else if (obj.type == "documentdb.subnetgroup") {
                 reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+                reqParams.tf['name'] = obj.data.DBSubnetGroupName;
                 reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+                reqParams.tf['description'] = obj.data.DBSubnetGroupDescription;
                 if (obj.data.Subnets) {
                     reqParams.cfn['SubnetIds'] = [];
+                    reqParams.tf['subnet_ids'] = [];
                     obj.data.Subnets.forEach(subnet => {
                         reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                        reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
                     });
                 }
 
@@ -6075,6 +7657,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'docdb',
                     'type': 'AWS::DocDB::DBSubnetGroup',
+                    'terraformType': 'aws_docdb_subnet_group',
                     'options': reqParams
                 });
             } else if (obj.type == "robomaker.robot") {
@@ -6172,12 +7755,16 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "gamelift.fleet") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['BuildId'] = obj.data.BuildId;
+                reqParams.tf['build_id'] = obj.data.BuildId;
                 reqParams.cfn['ServerLaunchPath'] = obj.data.ServerLaunchPath;
                 reqParams.cfn['ServerLaunchParameters'] = obj.data.ServerLaunchParameters;
                 reqParams.cfn['LogPaths'] = obj.data.LogPaths;
                 reqParams.cfn['EC2InstanceType'] = obj.data.InstanceType;
+                reqParams.tf['ec2_instance_type'] = obj.data.InstanceType;
 
                 /*
                 TODO:
@@ -6193,11 +7780,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'gamelift',
                     'type': 'AWS::GameLift::Fleet',
+                    'terraformType': 'aws_gamelift_fleet',
                     'options': reqParams
                 });
             } else if (obj.type == "gamelift.build") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Version'] = obj.data.Version;
+                reqParams.tf['version'] = obj.data.Version;
 
                 /*
                 TODO:
@@ -6209,18 +7799,26 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'gamelift',
                     'type': 'AWS::GameLift::Build',
+                    'terraformType': 'aws_gamelift_build',
                     'options': reqParams
                 });
             } else if (obj.type == "gamelift.alias") {
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['RoutingStrategy'] = obj.data.RoutingStrategy;
+                reqParams.tf['routing_strategy'] = {
+                    'message': obj.data.RoutingStrategy.Message,
+                    'type': obj.data.RoutingStrategy.Type
+                };
 
                 tracked_resources.push({
                     'logicalId': getResourceName('gamelift', obj.id),
                     'region': obj.region,
                     'service': 'gamelift',
                     'type': 'AWS::GameLift::Alias',
+                    'terraformType': 'aws_gamelift_alias',
                     'options': reqParams
                 });
             } else if (obj.type == "amazonmq.broker") {
@@ -6319,28 +7917,63 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "config.configrule") {
                 reqParams.cfn['ConfigRuleName'] = obj.data.ConfigRuleName;
+                reqParams.tf['name'] = obj.data.ConfigRuleName;
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Scope'] = obj.data.Scope;
+                if (obj.data.Scope) {
+                    reqParams.tf['scope'] = {
+                        'compliance_resource_id': obj.data.Scope.ComplianceResourceId,
+                        'compliance_resource_types': obj.data.Scope.ComplianceResourceTypes,
+                        'tag_key': obj.data.Scope.TagKey,
+                        'tag_value': obj.data.Scope.TagValue
+                    };
+                }
                 reqParams.cfn['Source'] = obj.data.Source;
+                if (obj.data.Source) {
+                    var sourcedetail = null;
+                    if (obj.data.Source.SourceDetails) {
+                        sourcedetail = {
+                            'event_source': obj.data.Source.SourceDetails.EventSource,
+                            'maximum_execution_frequency': obj.data.Source.SourceDetails.MaximumExecutionFrequency,
+                            'message_type': obj.data.Source.SourceDetails.MessageType
+                        };
+                    }
+                    reqParams.tf['source'] = {
+                        'owner': obj.data.Source.Owner,
+                        'source_identifier': obj.data.Source.SourceIdentifier,
+                        'source_detail': sourcedetail
+                    };
+                }
                 reqParams.cfn['InputParameters'] = obj.data.InputParameters;
+                reqParams.tf['input_parameters'] = obj.data.InputParameters;
                 reqParams.cfn['MaximumExecutionFrequency'] = obj.data.MaximumExecutionFrequency;
+                reqParams.tf['maximum_execution_frequency'] = obj.data.MaximumExecutionFrequency;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::ConfigRule',
+                    'terraformType': 'aws_config_config_rule',
                     'options': reqParams
                 });
             } else if (obj.type == "config.configurationaggregator") {
                 reqParams.cfn['ConfigurationAggregatorName'] = obj.data.ConfigurationAggregatorName;
+                reqParams.tf['name'] = obj.data.ConfigurationAggregatorName;
                 if (obj.data.AccountAggregationSources) {
                     reqParams.cfn['AccountAggregationSources'] = [];
+                    reqParams.tf['account_aggregation_source'] = [];
                     obj.data.AccountAggregationSources.forEach(accountAggregationSource => {
                         reqParams.cfn['AccountAggregationSources'].push({
                             'AllAwsRegions': accountAggregationSource.AllAwsRegions,
                             'AwsRegions': accountAggregationSource.AwsRegions,
                             'AccountIds': accountAggregationSource.AccountIds
+                        });
+                        reqParams.tf['account_aggregation_source'].push({
+                            'all_regions': accountAggregationSource.AllAwsRegions,
+                            'regions': accountAggregationSource.AwsRegions,
+                            'account_ids': accountAggregationSource.AccountIds
                         });
                     });
                 }
@@ -6350,6 +7983,11 @@ function performF2Mappings(objects) {
                         'AwsRegions': obj.data.OrganizationAggregationSource.AwsRegions,
                         'RoleArn': obj.data.OrganizationAggregationSource.RoleArn
                     };
+                    reqParams.tf['organization_aggregation_source'] = {
+                        'all_regions': obj.data.OrganizationAggregationSource.AllAwsRegions,
+                        'regions': obj.data.OrganizationAggregationSource.AwsRegions,
+                        'role_arn': obj.data.OrganizationAggregationSource.RoleArn
+                    };
                 }
 
                 tracked_resources.push({
@@ -6357,45 +7995,64 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::ConfigurationAggregator',
+                    'terraformType': 'aws_config_configuration_aggregator',
                     'options': reqParams
                 });
             } else if (obj.type == "config.configurationrecorder") {
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 if (obj.data.recordingGroup) {
                     reqParams.cfn['RecordingGroup'] = {
                         'AllSupported': obj.data.recordingGroup.allSupported,
                         'IncludeGlobalResourceTypes': obj.data.recordingGroup.includeGlobalResourceTypes,
                         'ResourceTypes': obj.data.recordingGroup.resourceTypes
                     };
+                    reqParams.tf['recording_group'] = {
+                        'all_supported': obj.data.recordingGroup.allSupported,
+                        'include_global_resource_types': obj.data.recordingGroup.includeGlobalResourceTypes,
+                        'resource_types': obj.data.recordingGroup.resourceTypes
+                    };
                 }
                 reqParams.cfn['RoleARN'] = obj.data.roleARN;
+                reqParams.tf['role_arn'] = obj.data.roleARN;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::ConfigurationRecorder',
+                    'terraformType': 'aws_config_configuration_recorder',
                     'options': reqParams
                 });
             } else if (obj.type == "config.aggregationauthorization") {
                 reqParams.cfn['AuthorizedAccountId'] = obj.data.AuthorizedAccountId;
+                reqParams.tf['account_id'] = obj.data.AuthorizedAccountId;
                 reqParams.cfn['AuthorizedAwsRegion'] = obj.data.AuthorizedAwsRegion;
+                reqParams.tf['region'] = obj.data.AuthorizedAwsRegion;
 
                 tracked_resources.push({
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::AggregationAuthorization',
+                    'terraformType': 'aws_config_aggregate_authorization',
                     'options': reqParams
                 });
             } else if (obj.type == "config.deliverychannel") {
                 reqParams.cfn['Name'] = obj.data.name;
+                reqParams.tf['name'] = obj.data.name;
                 reqParams.cfn['S3BucketName'] = obj.data.s3BucketName;
+                reqParams.tf['s3_bucket_name'] = obj.data.s3BucketName;
                 reqParams.cfn['S3KeyPrefix'] = obj.data.s3KeyPrefix;
+                reqParams.tf['s3_key_prefix'] = obj.data.s3KeyPrefix;
                 reqParams.cfn['SnsTopicARN'] = obj.data.snsTopicARN;
+                reqParams.tf['sns_topic_arn'] = obj.data.snsTopicARN;
                 if (obj.data.configSnapshotDeliveryProperties) {
                     reqParams.cfn['ConfigSnapshotDeliveryProperties'] = {
                         'DeliveryFrequency': obj.data.configSnapshotDeliveryProperties.deliveryFrequency
+                    };
+                    reqParams.tf['snapshot_delivery_properties'] = {
+                        'delivery_frequency': obj.data.configSnapshotDeliveryProperties.deliveryFrequency
                     };
                 }
 
@@ -6404,6 +8061,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::DeliveryChannel',
+                    'terraformType': 'aws_config_delivery_channel',
                     'options': reqParams
                 });
             } else if (obj.type == "budgets.budget") {
@@ -6416,6 +8074,33 @@ function performF2Mappings(objects) {
                     'CostTypes': obj.data.CostTypes,
                     'BudgetType': obj.data.BudgetType
                 };
+                if (obj.data.BudgetLimit) {
+                    reqParams.tf['limit_amount'] = obj.data.BudgetLimit.Amount;
+                    reqParams.tf['limit_unit'] = obj.data.BudgetLimit.Unit;
+                }
+                if (obj.data.TimePeriod) {
+                    reqParams.tf['time_period_end'] = obj.data.TimePeriod.End;
+                    reqParams.tf['time_period_start'] = obj.data.TimePeriod.Start;
+                }
+                reqParams.tf['time_unit'] = obj.data.TimeUnit;
+                reqParams.tf['cost_filters'] = obj.data.CostFilters;
+                reqParams.tf['name'] = obj.data.BudgetName;
+                if (obj.data.CostTypes) {
+                    reqParams.tf['cost_types'] = {
+                        'include_support': obj.data.CostTypes.IncludeSupport,
+                        'include_other_subscription': obj.data.CostTypes.IncludeOtherSubscription,
+                        'include_tax': obj.data.CostTypes.IncludeTax,
+                        'include_subscription': obj.data.CostTypes.IncludeSubscription,
+                        'use_blended': obj.data.CostTypes.UseBlended,
+                        'include_upfront': obj.data.CostTypes.IncludeUpfront,
+                        'include_discount': obj.data.CostTypes.IncludeDiscount,
+                        'include_credit': obj.data.CostTypes.IncludeCredit,
+                        'include_recurring': obj.data.CostTypes.IncludeRecurring,
+                        'use_amortized': obj.data.CostTypes.UseAmortized,
+                        'include_refund': obj.data.CostTypes.IncludeRefund
+                    }
+                }
+                reqParams.tf['budget_type'] = obj.data.BudgetType;
 
                 /*
                 TODO:
@@ -6427,6 +8112,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'budgets',
                     'type': 'AWS::Budgets::Budget',
+                    'terraformType': 'aws_budgets_budget',
                     'options': reqParams
                 });
             } else if (obj.type == "waf.webacl") {

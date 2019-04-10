@@ -1,6 +1,6 @@
 # Former2
 
-![CloudFormation](https://img.shields.io/badge/CloudFormation-100%25-orange.svg)
+![CloudFormation](https://img.shields.io/badge/CloudFormation-97%25-orange.svg) ![Terraform](https://img.shields.io/badge/Terraform-0%25-blue.svg)
 
 > Convert your existing cloud resources into CloudFormation / Terraform / Troposphere etc.
 
@@ -8,8 +8,6 @@
 ![Screenshot](img/screen1.png)
 
 ![Screenshot](img/screen2.png)
-
-:exclamation: **CAUTION:** This project is currently in beta stages. Some components may not work as expected.
 
 ## Overview
 
@@ -34,10 +32,9 @@ You will need an [IAM key pair](https://docs.aws.amazon.com/IAM/latest/UserGuide
 The following outputs are currently supported:
 
 * CloudFormation
+* Terraform (not fully implemented yet)
 * Troposphere
 * TypeScript CDK (Cfn Primitives)
-
-With Terraform and IAM policy support coming soon.
 
 ## Security
 
