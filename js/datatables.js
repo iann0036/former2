@@ -25831,7 +25831,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                         return sdkcall("Greengrass", "getCoreDefinitionVersion", {
                             CoreDefinitionId: definition.Id,
                             CoreDefinitionVersionId: version.Id
-                        }, true).then((data) => {
+                        }, false).then((data) => {
                             data['CoreDefinitionId'] = definition.Id;
                             $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('append', [{
                                 f2id: data.Arn,
@@ -25842,7 +25842,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        });
+                        }).catch(() => {;});
                     }));
                 }),
                 sdkcall("Greengrass", "getCoreDefinition", {
