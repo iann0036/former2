@@ -14524,6 +14524,98 @@ function performF2Mappings(objects) {
                     'type': 'AWS::AppMesh::VirtualNode',
                     'options': reqParams
                 });
+            } else if (obj.type == "elastictranscoder.pipeline") {
+                reqParams.tf['input_bucket'] = obj.data.InputBucket;
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.tf['role'] = obj.data.Role;
+                reqParams.tf['output_bucket'] = obj.data.OutputBucket;
+                reqParams.tf['aws_kms_key_arn'] = obj.data.AwsKmsKeyArn;
+                if (obj.data.ContentConfig) {
+                    reqParams.tf['content_config'] = {
+                        'bucket': obj.data.ContentConfig.Bucket,
+                        'storage_class': obj.data.ContentConfig.StorageClass
+                    };
+                    if (obj.data.ContentConfig.Permissions) {
+                        reqParams.tf['content_config_permissions'] = [];
+                        obj.data.ContentConfig.Permissions.forEach(permission => {
+                            reqParams.tf['content_config_permissions'].push({
+                                'grantee_type': permission.GranteeType,
+                                'grantee': permission.Grantee,
+                                'access': permission.Access
+                            });
+                        });
+                    }
+                }
+                if (obj.data.Notifications) {
+                    reqParams.tf['notifications'] = {
+                        'completed': obj.data.Notifications.Completed,
+                        'error': obj.data.Notifications.Error,
+                        'progressing': obj.data.Notifications.Progressing,
+                        'warning': obj.data.Notifications.Warning
+                    };
+                }
+                if (obj.data.ThumbnailConfig) {
+                    reqParams.tf['thumbnail_config'] = {
+                        'bucket': obj.data.ThumbnailConfig.Bucket,
+                        'storage_class': obj.data.ThumbnailConfig.StorageClass
+                    };
+                    if (obj.data.ThumbnailConfig.Permissions) {
+                        reqParams.tf['thumbnail_config_permissions'] = [];
+                        obj.data.ThumbnailConfig.Permissions.forEach(permission => {
+                            reqParams.tf['thumbnail_config_permissions'].push({
+                                'grantee_type': permission.GranteeType,
+                                'grantee': permission.Grantee,
+                                'access': permission.Access
+                            });
+                        });
+                    }
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('elastictranscoder', obj.id),
+                    'region': obj.region,
+                    'service': 'elastictranscoder',
+                    'terraformType': 'aws_elastictranscoder_pipeline',
+                    'options': reqParams
+                });
+            } else if (obj.type == "mediapackage.channel") {
+                reqParams.tf['channel_id'] = obj.data.Id;
+                reqParams.tf['description'] = obj.data.Description;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('mediapackage', obj.id),
+                    'region': obj.region,
+                    'service': 'mediapackage',
+                    'terraformType': 'aws_media_package_channel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "mediastore.container") {
+                reqParams.tf['name'] = obj.data.Name;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('mediastore', obj.id),
+                    'region': obj.region,
+                    'service': 'mediastore',
+                    'terraformType': 'aws_media_store_container',
+                    'options': reqParams
+                });
+            } else if (obj.type == "mediastore.containerpolicy") {
+                reqParams.tf['container_name'] = obj.data.ContainerName;
+                reqParams.tf['policy'] = obj.data.Policy;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('mediastore', obj.id),
+                    'region': obj.region,
+                    'service': 'mediastore',
+                    'terraformType': 'aws_media_store_container_policy',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

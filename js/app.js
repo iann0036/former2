@@ -40,6 +40,7 @@ $(document).ready(function(){
                             <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable" disabled>
                                 <i class="font-icon font-icon-plus"></i> Add Selected
                             </button>
+                            ${section.resourcetypes[resourcetype].terraformonly ? `<span style="margin-left: 16px; display: inline-block; vertical-align: middle; line-height: 16px; color: #6c7a86; font-weight: 600;"><i class="fa fa-info-circle"></i> Terraform only</span>` : ""}
                         </div>
                         <div class="table-responsive">
                             <table id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable"

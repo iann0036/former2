@@ -26566,3 +26566,306 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
     unblockUI('#section-networkingandcontentdelivery-appmesh-virtualrouters-datatable');
     unblockUI('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable');
 }
+
+/* ========================================================================== */
+// Elastic Transcoder
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Media Services',
+    'service': 'Elastic Transcoder',
+    'resourcetypes': {
+        'Pipelines': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'inputbucket',
+                        title: 'Input Bucket',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'outputbucket',
+                        title: 'Output Bucket',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableMediaServicesElasticTranscoder() {
+    blockUI('#section-mediaservices-elastictranscoder-pipelines-datatable');
+
+    await sdkcall("ElasticTranscoder", "listPipelines", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mediaservices-elastictranscoder-pipelines-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Pipelines.map(pipeline => {
+            return sdkcall("ElasticTranscoder", "readPipeline", {
+                Id: pipeline.Id
+            }, true).then((data) => {
+                $('#section-mediaservices-elastictranscoder-pipelines-datatable').bootstrapTable('append', [{
+                    f2id: data.Pipeline.Arn,
+                    f2type: 'elastictranscoder.pipeline',
+                    f2data: data.Pipeline,
+                    f2region: region,
+                    id: data.Pipeline.Id,
+                    name: data.Pipeline.Name,
+                    inputbucket: data.Pipeline.InputBucket,
+                    outputbucket: data.Pipeline.OutputBucket
+                }]);
+            });
+        }));
+
+        unblockUI('#section-mediaservices-elastictranscoder-pipelines-datatable');
+    });
+}
+
+/* ========================================================================== */
+// MediaPackage
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Media Services',
+    'service': 'MediaPackage',
+    'resourcetypes': {
+        'Channels': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableMediaServicesMediaPackage() {
+    blockUI('#section-mediaservices-mediapackage-channels-datatable');
+
+    await sdkcall("MediaPackage", "listChannels", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mediaservices-mediapackage-channels-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Channels.map(channel => {
+            return sdkcall("MediaPackage", "describeChannel", {
+                Id: channel.Id
+            }, true).then((data) => {
+                $('#section-mediaservices-mediapackage-channels-datatable').bootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'mediapackage.channel',
+                    f2data: data,
+                    f2region: region,
+                    id: data.Id,
+                    description: data.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-mediaservices-mediapackage-channels-datatable');
+    });
+}
+
+/* ========================================================================== */
+// MediaStore
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Media Services',
+    'service': 'MediaStore',
+    'resourcetypes': {
+        'Containers': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Container Policies': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policy',
+                        title: 'Policy',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableMediaServicesMediaStore() {
+    blockUI('#section-mediaservices-mediastore-containers-datatable');
+    blockUI('#section-mediaservices-mediastore-containerpolicies-datatable');
+
+    await sdkcall("MediaStore", "listContainers", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Containers.map(container => {
+            return Promise.all([
+                sdkcall("MediaStore", "describeContainer", {
+                    ContainerName: container.Name
+                }, true).then((data) => {
+                    $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('append', [{
+                        f2id: data.ARN,
+                        f2type: 'mediastore.container',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        endpoint: data.Endpoint
+                    }]);
+                }),
+                sdkcall("MediaStore", "getContainerPolicy", {
+                    ContainerName: container.Name
+                }, true).then((data) => {
+                    $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('append', [{
+                        f2id: container.Name + " Policy",
+                        f2type: 'mediastore.containerpolicy',
+                        f2data: {
+                            'Policy': data.Policy,
+                            'ContainerName': container.Name
+                        },
+                        f2region: region,
+                        name: container.Name,
+                        policy: data.Policy
+                    }]);
+                })
+            ]);
+        }));
+
+        unblockUI('#section-mediaservices-mediastore-containers-datatable');
+        unblockUI('#section-mediaservices-mediastore-containerpolicies-datatable');
+    });
+}
