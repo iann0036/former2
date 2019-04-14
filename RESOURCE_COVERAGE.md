@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**359/384 (93%)** Resources Covered
+**359/396 (96%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -68,11 +68,11 @@
 | *AWS::Budgets::Budget* | :thumbsup: |
 | *AWS::CertificateManager::Certificate* | :thumbsup: |
 | *AWS::Cloud9::EnvironmentEC2* | :thumbsup: |
-| *AWS::CloudFormation::CustomResource* |  |
-| *AWS::CloudFormation::Macro* |  |
-| *AWS::CloudFormation::Stack* |  |
-| *AWS::CloudFormation::WaitCondition* |  |
-| *AWS::CloudFormation::WaitConditionHandle* |  |
+| *AWS::CloudFormation::CustomResource* | N/A |
+| *AWS::CloudFormation::Macro* | N/A |
+| *AWS::CloudFormation::Stack* | N/A |
+| *AWS::CloudFormation::WaitCondition* | N/A |
+| *AWS::CloudFormation::WaitConditionHandle* | N/A |
 | *AWS::CloudFront::CloudFrontOriginAccessIdentity* | :thumbsup: |
 | *AWS::CloudFront::Distribution* | :thumbsup: |
 | *AWS::CloudFront::StreamingDistribution* | :thumbsup: |
@@ -138,8 +138,8 @@
 | *AWS::EC2::Route* | :thumbsup: |
 | *AWS::EC2::RouteTable* | :thumbsup: |
 | *AWS::EC2::SecurityGroup* | :thumbsup: |
-| *AWS::EC2::SecurityGroupEgress* |  |
-| *AWS::EC2::SecurityGroupIngress* |  |
+| *AWS::EC2::SecurityGroupEgress* | N/A |
+| *AWS::EC2::SecurityGroupIngress* | N/A |
 | *AWS::EC2::SpotFleet* | :thumbsup: |
 | *AWS::EC2::Subnet* | :thumbsup: |
 | *AWS::EC2::SubnetCidrBlock* | :thumbsup: |
@@ -151,7 +151,7 @@
 | *AWS::EC2::TransitGatewayRouteTable* | :thumbsup: |
 | *AWS::EC2::TransitGatewayRouteTableAssociation* | :thumbsup: |
 | *AWS::EC2::TransitGatewayRouteTablePropagation* | :thumbsup: |
-| *AWS::EC2::TrunkInterfaceAssociation* |  |
+| *AWS::EC2::TrunkInterfaceAssociation* | N/A |
 | *AWS::EC2::VPC* | :thumbsup: |
 | *AWS::EC2::VPCCidrBlock* | :thumbsup: |
 | *AWS::EC2::VPCDHCPOptionsAssociation* | :thumbsup: |
@@ -183,7 +183,7 @@
 | *AWS::ElastiCache::ParameterGroup* | :thumbsup: |
 | *AWS::ElastiCache::ReplicationGroup* | :thumbsup: |
 | *AWS::ElastiCache::SecurityGroup* | :thumbsup: |
-| *AWS::ElastiCache::SecurityGroupIngress* |  |
+| *AWS::ElastiCache::SecurityGroupIngress* | N/A |
 | *AWS::ElastiCache::SubnetGroup* | :thumbsup: |
 | *AWS::ElasticBeanstalk::Application* | :thumbsup: |
 | *AWS::ElasticBeanstalk::ApplicationVersion* | :thumbsup: |
@@ -307,7 +307,7 @@
 | *AWS::Redshift::Cluster* | :thumbsup: |
 | *AWS::Redshift::ClusterParameterGroup* | :thumbsup: |
 | *AWS::Redshift::ClusterSecurityGroup* | :thumbsup: |
-| *AWS::Redshift::ClusterSecurityGroupIngress* |  |
+| *AWS::Redshift::ClusterSecurityGroupIngress* | N/A |
 | *AWS::Redshift::ClusterSubnetGroup* | :thumbsup: |
 | *AWS::RoboMaker::Fleet* | :thumbsup: |
 | *AWS::RoboMaker::Robot* | :thumbsup: |
@@ -318,13 +318,13 @@
 | *AWS::Route53::HealthCheck* | :thumbsup: |
 | *AWS::Route53::HostedZone* | :thumbsup: |
 | *AWS::Route53::RecordSet* | :thumbsup: |
-| *AWS::Route53::RecordSetGroup* |  |
+| *AWS::Route53::RecordSetGroup* | N/A |
 | *AWS::Route53Resolver::ResolverEndpoint* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRule* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRuleAssociation* | :thumbsup: |
 | *AWS::S3::Bucket* | :thumbsup: |
 | *AWS::S3::BucketPolicy* | :thumbsup: |
-| *AWS::SDB::Domain* |  |
+| *AWS::SDB::Domain* | N/A |
 | *AWS::SES::ConfigurationSet* | :thumbsup: |
 | *AWS::SES::ConfigurationSetEventDestination* | :thumbsup: |
 | *AWS::SES::ReceiptFilter* | :thumbsup: |

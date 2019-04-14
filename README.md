@@ -1,6 +1,6 @@
 # Former2
 
-![CloudFormation](https://img.shields.io/badge/CloudFormation-97%25-orange.svg) ![Terraform](https://img.shields.io/badge/Terraform-40%25-blue.svg)
+![CloudFormation](https://img.shields.io/badge/CloudFormation-96%25-orange.svg) ![Terraform](https://img.shields.io/badge/Terraform-45%25-blue.svg)
 
 > Convert your existing cloud resources into CloudFormation / Terraform / Troposphere etc.
 
