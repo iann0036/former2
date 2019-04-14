@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**359/True (93%)** Resources Covered
+**359/384 (93%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |

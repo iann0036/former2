@@ -41,7 +41,7 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
     f.write("## CloudFormation Resource Coverage\n\n")
     f.write("**%s/%s (%s%%)** Resources Covered\n" % (
         len(set(cfn_occurances)),
-        len(cfn_types) > 0,
+        len(cfn_types),
         int(math.floor(len(set(cfn_occurances)) * 100 / len(cfn_types)))
     ))
 
