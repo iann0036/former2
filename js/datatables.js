@@ -157,6 +157,8 @@ function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextT
             if (err) {
                 if (err.code == "NetworkingError") {
                     console.log("Skipping " + svc + "." + method + " NetworkingError");
+                } else if (err.code == "AccessDeniedException" && svc.startsWith("KinesisAnalytics")) {
+                    console.log("Skipping " + svc + "." + method + " AccessDeniedException");
                 } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
                     console.log("Skipping " + svc + "." + method + " ForbiddenException");
                 } else if (err.code == "AccessDeniedException" && svc == "FSx") {

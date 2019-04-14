@@ -242,8 +242,6 @@ $(document).ready(function(){
                 rows.forEach(row => {
                     var searchterm = $('#search-input').val();
                     if (JSON.stringify(row).includes(searchterm)) {
-                        console.log("Adding row:");
-                        console.log(row);
                         $('#section-search-datatable').bootstrapTable('append', [row]);
                     }
                 });
@@ -616,17 +614,12 @@ $(document).ready(function(){
     // AWS SDK Proxy for Extension (must be before Account Scan)
     /* ========================================================================== */
 
-    var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi";
-
     class AWSConfigClass {
         static update(obj) {
-            chrome.runtime.sendMessage(
-                HELPER_EXTENSION_ID,
-                {
-                    action: 'configUpdate',
-                    obj: obj
-                }
-            );
+            extensionSendMessage({
+                action: 'configUpdate',
+                obj: obj
+            }, function(){});
         }
     }
 
@@ -638,81 +631,65 @@ $(document).ready(function(){
         }
     }
 
-    if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
-        chrome.runtime.sendMessage(
-            HELPER_EXTENSION_ID,
-            {
-                action: 'ping'
-            },
-            function(response) {
-                if (response) {
-                    extension_available = true;
+    extensionSendMessage(
+        {
+            action: 'ping'
+        },
+        function(response) {
+            if (response) {
+                extension_available = true;
 
-                    AWS = new Proxy({}, {
-                        get: function(obj, prop) {
-                            if (prop == "config") {
-                                return AWSConfigClass;
-                            } else if (prop == "Credentials") {
-                                return AWSCredentialsClass;
-                            }
-                            
-                            return function (service_params) {
-                                return new Proxy({
-                                    'name': prop,
-                                    'properties': service_params
-                                }, {
-                                    get: function(service, service_action) {
-                                        return (params, callback) => {
-                                            chrome.runtime.sendMessage(
-                                                HELPER_EXTENSION_ID,
-                                                {
-                                                    action: 'serviceAction',
-                                                    args: this.serviceArgs,
-                                                    service: service,
-                                                    service_action: service_action,
-                                                    params: params
-                                                },
-                                                function(response) {
-                                                    if (!response) {
-                                                        callback("No response from extension", null);
-                                                    } else if (!response.success) {
-                                                        callback(response.error, response.data);
-                                                    } else {
-                                                        callback(null, response.data);
-                                                    }
-                                                }
-                                            );
-                                        }
-                                    }
-                                });
-                            };
+                AWS = new Proxy({}, {
+                    get: function(obj, prop) {
+                        if (prop == "config") {
+                            return AWSConfigClass;
+                        } else if (prop == "Credentials") {
+                            return AWSCredentialsClass;
                         }
-                    });
-                }
-
-                postExtensionPing();
+                        
+                        return function (service_params) {
+                            return new Proxy({
+                                'name': prop,
+                                'properties': service_params
+                            }, {
+                                get: function(service, service_action) {
+                                    return (params, callback) => {
+                                        extensionSendMessage(
+                                            {
+                                                action: 'serviceAction',
+                                                args: this.serviceArgs,
+                                                service: service,
+                                                service_action: service_action,
+                                                params: params
+                                            },
+                                            function(response) {
+                                                if (!response) {
+                                                    callback("No response from extension", null);
+                                                } else if (!response.success) {
+                                                    callback(response.error, response.data);
+                                                } else {
+                                                    callback(null, response.data);
+                                                }
+                                            }
+                                        );
+                                    }
+                                }
+                            });
+                        };
+                    }
+                });
             }
-        );
-    } else {
-        postExtensionPing();
-    }
+
+            postExtensionPing();
+        }
+    );
 
     async function postExtensionPing() {
         /* ========================================================================== */
-        // AWS Base Config (must be before Account Scan and after SDK Proxy)
+        // Update Identity (must be before Account Scan and after SDK Proxy)
         /* ========================================================================== */
 
-        AWS.config.update({
-            credentials: new AWS.Credentials(
-                window.localStorage.getItem('credentials-accesskey'),
-                window.localStorage.getItem('credentials-secretkey'),
-                window.localStorage.getItem('credentials-sessiontoken')
-            ),
-            region: region,
-            httpOptions: {
-                timeout: 60000
-            }
-        });
+        updateIdentity();
         
         /* ========================================================================== */
         // Misc
@@ -743,12 +720,6 @@ $(document).ready(function(){
         });
 
         /* ========================================================================== */
-        // Update Identity
-        /* ========================================================================== */
-
-        updateIdentity();
-
-        /* ========================================================================== */
         // Account Scan
         /* ========================================================================== */
 
@@ -757,6 +728,7 @@ $(document).ready(function(){
             var datatablefuncs = [];
 
             $('#scan-account').attr('disabled', 'disabled');
+            $('#search-no-scan-warning').attr('style', 'display: none;');
 
             Object.getOwnPropertyNames(window).forEach(prop => {
                 if (prop.startsWith("updateDatatable")) {
@@ -787,6 +759,49 @@ $(document).ready(function(){
     }
 
 }); // <-- End of documentReady
+
+/* ========================================================================== */
+// Extension Request/Response
+/* ========================================================================== */
+
+var HELPER_EXTENSION_ID = "bpcbemjboghejkdhecdmdnmjoacgfijd"; // Chrome
+var active_firefoxaddon_requests = {};
+
+document.addEventListener('f2response', msg => {
+    console.log(msg);
+    var detail = JSON.parse(msg.detail);
+
+    if (active_firefoxaddon_requests[detail.id]) {
+        active_firefoxaddon_requests[detail.id](detail.data);
+        delete active_firefoxaddon_requests[msg.id];
+    } else {
+        console.warn("No callback found for request: " + detail.id);
+    }
+});
+
+function extensionSendMessage(data, callback) {
+    if (navigator.userAgent.search("Firefox") > -1) {
+        var uid = Math.random().toString(36);
+        var event = new CustomEvent('f2request', {
+            detail: JSON.stringify({
+                id: uid,
+                data: data
+            })
+        });
+        console.log(JSON.stringify({
+            id: uid,
+            data: data
+        }));
+        active_firefoxaddon_requests[uid] = callback;
+        document.dispatchEvent(event);
+    } else {
+        if (window.chrome && window.chrome.runtime) {
+            chrome.runtime.sendMessage(HELPER_EXTENSION_ID, data, callback);
+        } else {
+            callback(null);
+        }
+    }
+}
 
 /* ========================================================================== */
 // BlockUI
@@ -822,7 +837,10 @@ function updateIdentity() {
             window.localStorage.getItem('credentials-secretkey'),
             window.localStorage.getItem('credentials-sessiontoken')
         ),
-        region: region
+        region: region,
+        httpOptions: {
+            timeout: 60000
+        }
     });
 
     if (window.localStorage.getItem('credentials-accesskey')) {
@@ -841,7 +859,7 @@ function updateIdentity() {
                 }
                 $('#user-id').html(user + " @ " + account);
             }).catch(err => {
-                $('#user-id').html("");
+                $('#user-id').html(user + " @ " + account);
             });
         }).catch(err => {
             $('#user-id').html("");
