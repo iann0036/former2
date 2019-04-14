@@ -1,8 +1,8 @@
 # Former2
 
-[![CloudFormation](https://img.shields.io/badge/CloudFormation-96%25-orange.svg)](RESOURCE_COVERAGE.md) [![Terraform](https://img.shields.io/badge/Terraform-45%25-blue.svg)](RESOURCE_COVERAGE.md#terraform-coverage)
+[![CloudFormation](https://img.shields.io/badge/CloudFormation-96%25-orange.svg)](RESOURCE_COVERAGE.md#cloudformation-resource-coverage) [![Terraform](https://img.shields.io/badge/Terraform-45%25-blue.svg)](RESOURCE_COVERAGE.md#terraform-coverage)
 
-> Convert your existing cloud resources into CloudFormation / Terraform / Troposphere etc.
+> Convert your existing cloud resources into CloudFormation / Terraform / Troposphere
 
 
 ![Screenshot](img/screen1.png)
