@@ -764,11 +764,10 @@ $(document).ready(function(){
 // Extension Request/Response
 /* ========================================================================== */
 
-var HELPER_EXTENSION_ID = "bpcbemjboghejkdhecdmdnmjoacgfijd"; // Chrome
+var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
 var active_firefoxaddon_requests = {};
 
 document.addEventListener('f2response', msg => {
-    console.log(msg);
     var detail = JSON.parse(msg.detail);
 
     if (active_firefoxaddon_requests[detail.id]) {
@@ -780,7 +779,7 @@ document.addEventListener('f2response', msg => {
 });
 
 function extensionSendMessage(data, callback) {
-    if (navigator.userAgent.search("Firefox") > -1) {
+    if (navigator.userAgent.search("Firefox") > -1) { // Firefox
         var uid = Math.random().toString(36);
         var event = new CustomEvent('f2request', {
             detail: JSON.stringify({
@@ -788,13 +787,14 @@ function extensionSendMessage(data, callback) {
                 data: data
             })
         });
-        console.log(JSON.stringify({
-            id: uid,
-            data: data
-        }));
         active_firefoxaddon_requests[uid] = callback;
         document.dispatchEvent(event);
-    } else {
+        if (data.action == "ping") { // quick timeout for ping
+            setTimeout(function(callback){
+                callback(null);
+            }, 500, callback);
+        }
+    } else { // Chrome
         if (window.chrome && window.chrome.runtime) {
             chrome.runtime.sendMessage(HELPER_EXTENSION_ID, data, callback);
         } else {
