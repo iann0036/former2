@@ -50,8 +50,8 @@ Unfortunately not. This service will only generate the templates you'd need to r
 
 **Does this replace Console Recorder?**
 
-Console Recorder still fills a certain gap and has features this tool does not support (such as Get/List outputs). I'll be maintaining both for as long as I can.
+[Console Recorder](https://github.com/iann0036/AWSConsoleRecorder) still fills a certain gap and has features this tool does not support (such as Get/List outputs). I'll be maintaining both for as long as I can.
 
-**I found an issue/I'm missing an output/Something's wrong. Can you help?**
+**I found an issue / I'm missing an output / Something's wrong. Can you help?**
 
 If you find a bug or want to raise a feature request, please do so via [the issues page](https://github.com/iann0036/former2/issues).
