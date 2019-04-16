@@ -3278,12 +3278,16 @@ function performF2Mappings(objects) {
                 reqParams.tf['subnet_id'] = obj.data.SubnetId;
                 reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
                 reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
-                if (obj.data.SecurityGroups) {
-                    reqParams.cfn['SecurityGroups'] = [];
-                    reqParams.tf['security_groups'] = [];
-                    obj.data.SecurityGroups.forEach(securityGroup => {
-                        reqParams.cfn['SecurityGroups'].push(securityGroup.GroupName);
-                        reqParams.tf['security_groups'].push(securityGroup.GroupName);
+                if (obj.data.NetworkInterfaces) {
+                    reqParams.cfn['SecurityGroupIds'] = [];
+                    reqParams.tf['vpc_security_group_ids'] = [];
+                    obj.data.NetworkInterfaces.forEach(networkInterface => {
+                        if (networkInterface.Groups) {
+                            networkInterface.Groups.forEach(securityGroup => {
+                                reqParams.cfn['SecurityGroupIds'].push(securityGroup.GroupId);
+                                reqParams.tf['vpc_security_group_ids'].push(securityGroup.GroupId);
+                            });
+                        }
                     });
                 }
                 reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
@@ -3318,7 +3322,7 @@ function performF2Mappings(objects) {
                 NetworkInterfaces: 
                     - EC2 Network Interface
                 PrivateIpAddress: String
-                SecurityGroupIds: 
+                SecurityGroups: 
                     - String
                 SsmAssociations: 
                     - SSMAssociation
