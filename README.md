@@ -44,6 +44,14 @@ If you prefer not to use a publicly hosted site to use Former2, you can host you
 
 ## FAQ
 
-*So I can put an existing resource directly into a CloudFormation stack?*
+**So I can put an existing resource directly into a CloudFormation stack?**
 
-If you prefer not to use a publicly hosted site to use Former2, you can host your own version by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1:8080, otherwise you can modify the extension as needed.
+Unfortunately not. This service will only generate the templates you'd need to recreate your resources in a new stack. You may need to remove your existing resources before you create your stack if they are uniquely named (like S3 Buckets).
+
+**Does this replace Console Recorder?**
+
+Console Recorder still fills a certain gap and has features this tool does not support (such as Get/List outputs). I'll be maintaining both for as long as I can.
+
+**I found an issue/I'm missing an output/Something's wrong. Can you help?**
+
+If you find a bug or want to raise a feature request, please do so via [the issues page](https://github.com/iann0036/former2/issues).
