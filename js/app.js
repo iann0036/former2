@@ -3,6 +3,7 @@ var region = 'us-east-1';
 var output_objects = [];
 var _AWS = AWS;
 var visited_sections = [];
+var ping_extension_interval = null;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -611,6 +612,44 @@ $(document).ready(function(){
     regenerateOutputs();
 
     /* ========================================================================== */
+    // Account Scan
+    /* ========================================================================== */
+
+    $('#scan-account').on('click', () => {
+        var completeddatatablecalls = 0;
+        var datatablefuncs = [];
+
+        $('#scan-account').attr('disabled', 'disabled');
+        $('#search-no-scan-warning').attr('style', 'display: none;');
+
+        Object.getOwnPropertyNames(window).forEach(prop => {
+            if (prop.startsWith("updateDatatable")) {
+                datatablefuncs.push(prop);
+            }
+        });
+
+        $('#scan-account').html('Scanning... (0/' + datatablefuncs.length + ')');
+
+        datatablefuncs.forEach(async func => {
+            await window[func]().catch(err => {});
+            completeddatatablecalls += 1;
+            $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
+            if (completeddatatablecalls == datatablefuncs.length) {
+                visited_sections.push("all");
+                $('#scan-account').removeAttr('disabled');
+                $('#scan-account').html('Scan Again');
+            }
+        });
+    });
+
+    $('#add-all-resources').on('click', () => {
+        output_objects = [];
+        $('.f2datatable').each(function() {
+            addAllTableRowsToTemplate("#" + this.id);
+        });
+    });
+
+    /* ========================================================================== */
     // AWS SDK Proxy for Extension (must be before Account Scan)
     /* ========================================================================== */
 
@@ -631,132 +670,109 @@ $(document).ready(function(){
         }
     }
 
-    extensionSendMessage(
-        {
-            action: 'ping'
-        },
-        function(response) {
-            if (response) {
-                extension_available = true;
+    function pingExtension() {
+        return new Promise(function(resolve, reject) {
+            extensionSendMessage(
+                {
+                    action: 'ping'
+                },
+                function(response) {
+                    if (response) {
+                        extension_available = true;
 
-                AWS = new Proxy({}, {
-                    get: function(obj, prop) {
-                        if (prop == "config") {
-                            return AWSConfigClass;
-                        } else if (prop == "Credentials") {
-                            return AWSCredentialsClass;
-                        }
-                        
-                        return function (service_params) {
-                            return new Proxy({
-                                'name': prop,
-                                'properties': service_params
-                            }, {
-                                get: function(service, service_action) {
-                                    return (params, callback) => {
-                                        extensionSendMessage(
-                                            {
-                                                action: 'serviceAction',
-                                                args: this.serviceArgs,
-                                                service: service,
-                                                service_action: service_action,
-                                                params: params
-                                            },
-                                            function(response) {
-                                                if (!response) {
-                                                    callback("No response from extension", null);
-                                                } else if (!response.success) {
-                                                    callback(response.error, response.data);
-                                                } else {
-                                                    callback(null, response.data);
-                                                }
-                                            }
-                                        );
-                                    }
+                        AWS = new Proxy({}, {
+                            get: function(obj, prop) {
+                                if (prop == "config") {
+                                    return AWSConfigClass;
+                                } else if (prop == "Credentials") {
+                                    return AWSCredentialsClass;
                                 }
-                            });
-                        };
+                                
+                                return function (service_params) {
+                                    return new Proxy({
+                                        'name': prop,
+                                        'properties': service_params
+                                    }, {
+                                        get: function(service, service_action) {
+                                            return (params, callback) => {
+                                                extensionSendMessage(
+                                                    {
+                                                        action: 'serviceAction',
+                                                        args: this.serviceArgs,
+                                                        service: service,
+                                                        service_action: service_action,
+                                                        params: params
+                                                    },
+                                                    function(response) {
+                                                        if (!response) {
+                                                            callback("No response from extension", null);
+                                                        } else if (!response.success) {
+                                                            callback(response.error, response.data);
+                                                        } else {
+                                                            callback(null, response.data);
+                                                        }
+                                                    }
+                                                );
+                                            }
+                                        }
+                                    });
+                                };
+                            }
+                        });
+
+                        resolve();
+                    } else {
+                        reject();
                     }
-                });
-            }
-
-            postExtensionPing();
-        }
-    );
-
-    async function postExtensionPing() {
-        /* ========================================================================== */
-        // Update Identity (must be before Account Scan and after SDK Proxy)
-        /* ========================================================================== */
-
-        updateIdentity();
-        
-        /* ========================================================================== */
-        // Misc
-        /* ========================================================================== */
-
-        doNavigation(); // initial navigation
-
-        $('.select2-no-search-arrow').select2({ // Selectors for settings
-			minimumResultsForSearch: "Infinity",
-			theme: "arrow"
+                }
+            );
         });
-        
-        var spacingamount = window.localStorage.getItem('cfnspacing');
-        if (spacingamount && spacingamount == 2) {
+    };
+
+    pingExtension().catch(() => {
+        ping_extension_interval = setInterval(function(){
+            pingExtension().then(() => {
+                clearInterval(ping_extension_interval);
+                updateIdentity();
+                $.notify({
+                    icon: 'font-icon font-icon-success',
+                    title: '<strong>Helper Available</strong>',
+                    message: 'The Former2 helper is now active for all actions.'
+                },{
+                    type: 'success'
+                });
+            }).catch(() => {});
+        }, 3000);
+    }).finally(() => {
+        updateIdentity();
+        doNavigation(); // initial navigation
+    });
+
+    /* ========================================================================== */
+    // Misc
+    /* ========================================================================== */
+
+    $('.select2-no-search-arrow').select2({ // Selectors for settings
+        minimumResultsForSearch: "Infinity",
+        theme: "arrow"
+    });
+    
+    var spacingamount = window.localStorage.getItem('cfnspacing');
+    if (spacingamount && spacingamount == 2) {
+        cfnspacing = "  ";
+        //alert();
+        $('#cfnspacing').val("2").trigger('change');
+    } else {
+        cfnspacing = "    ";
+    }
+    $('#cfnspacing').change(function() {
+        window.localStorage.setItem('cfnspacing', $(this).val());
+        if ($(this).val() == "2") {
             cfnspacing = "  ";
-            //alert();
-            $('#cfnspacing').val("2").trigger('change');
-        } else {
+        } else if ($(this).val() == "4") {
             cfnspacing = "    ";
         }
-        $('#cfnspacing').change(function() {
-            window.localStorage.setItem('cfnspacing', $(this).val());
-            if ($(this).val() == "2") {
-                cfnspacing = "  ";
-            } else if ($(this).val() == "4") {
-                cfnspacing = "    ";
-            }
-        });
-
-        /* ========================================================================== */
-        // Account Scan
-        /* ========================================================================== */
-
-        $('#scan-account').on('click', () => {
-            var completeddatatablecalls = 0;
-            var datatablefuncs = [];
-
-            $('#scan-account').attr('disabled', 'disabled');
-            $('#search-no-scan-warning').attr('style', 'display: none;');
-
-            Object.getOwnPropertyNames(window).forEach(prop => {
-                if (prop.startsWith("updateDatatable")) {
-                    datatablefuncs.push(prop);
-                }
-            });
-
-            $('#scan-account').html('Scanning... (0/' + datatablefuncs.length + ')');
-
-            datatablefuncs.forEach(async func => {
-                await window[func]().catch(err => {});
-                completeddatatablecalls += 1;
-                $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
-                if (completeddatatablecalls == datatablefuncs.length) {
-                    visited_sections.push("all");
-                    $('#scan-account').removeAttr('disabled');
-                    $('#scan-account').html('Scan Again');
-                }
-            });
-        });
-
-        $('#add-all-resources').on('click', () => {
-            output_objects = [];
-            $('.f2datatable').each(function() {
-                addAllTableRowsToTemplate("#" + this.id);
-            });
-        });
-    }
+    });
 
 }); // <-- End of documentReady
 
@@ -792,7 +808,7 @@ function extensionSendMessage(data, callback) {
         if (data.action == "ping") { // quick timeout for ping
             setTimeout(function(callback){
                 callback(null);
-            }, 500, callback);
+            }, 200, callback);
         }
     } else { // Chrome
         if (window.chrome && window.chrome.runtime) {
