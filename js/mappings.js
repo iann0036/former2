@@ -3272,6 +3272,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['placement_group'] = (obj.data.Placement.GroupName == "" ? null : obj.data.Placement.GroupName);
                     reqParams.cfn['Tenancy'] = obj.data.Placement.Tenancy;
                     reqParams.tf['tenancy'] = obj.data.Placement.Tenancy;
+                    reqParams.cfn['HostId'] = obj.data.Placement.HostId;
                 }
                 reqParams.cfn['RamdiskId'] = obj.data.RamdiskId;
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
@@ -3292,6 +3293,55 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
                 reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
+                if (obj.data.BlockDeviceMappings) {
+                    reqParams.cfn['BlockDeviceMappings'] = [];
+                    reqParams.tf['ebs_block_device'] = [];
+                    obj.data.BlockDeviceMappings.forEach(blockDeviceMapping => {
+                        var ebs = null;
+                        if (blockDeviceMapping.Ebs && blockDeviceMapping.Ebs.VolumeId) {
+                            ebs = {
+                                'Encrypted': blockDeviceMapping.Ebs.Encrypted,
+                                'VolumeSize': blockDeviceMapping.Ebs.Size,
+                                'SnapshotId': blockDeviceMapping.Ebs.SnapshotId,
+                                'Iops': (blockDeviceMapping.Ebs.VolumeType == "io1" ? blockDeviceMapping.Ebs.Iops : null),
+                                'VolumeType': blockDeviceMapping.Ebs.VolumeType,
+                                'DeleteOnTermination': blockDeviceMapping.Ebs.DeleteOnTermination
+                            };
+                            if (blockDeviceMapping.DeviceName != "/dev/sda1" && blockDeviceMapping.DeviceName != "/dev/xvda") {
+                                reqParams.tf['ebs_block_device'].push({
+                                    'device_name': blockDeviceMapping.DeviceName,
+                                    'encrypted': blockDeviceMapping.Ebs.Encrypted,
+                                    'volume_size': blockDeviceMapping.Ebs.Size,
+                                    'snapshot_id': blockDeviceMapping.Ebs.SnapshotId,
+                                    'iops': (blockDeviceMapping.Ebs.VolumeType == "io1" ? blockDeviceMapping.Ebs.Iops : null),
+                                    'volume_type': blockDeviceMapping.Ebs.VolumeType,
+                                    'delete_on_termination': blockDeviceMapping.Ebs.DeleteOnTermination
+                                });
+                            } else {
+                                reqParams.tf['root_block_device'] = {
+                                    'volume_size': blockDeviceMapping.Ebs.Size,
+                                    'iops': (blockDeviceMapping.Ebs.VolumeType == "io1" ? blockDeviceMapping.Ebs.Iops : null),
+                                    'volume_type': blockDeviceMapping.Ebs.VolumeType,
+                                    'delete_on_termination': blockDeviceMapping.Ebs.DeleteOnTermination
+                                };
+                            }
+                        }
+                        reqParams.cfn['BlockDeviceMappings'].push({
+                            'DeviceName': blockDeviceMapping.DeviceName,
+                            'Ebs': ebs
+                        });
+                    });
+                }
+                reqParams.cfn['UserData'] = obj.data.UserData;
+                reqParams.tf['user_data'] = obj.data.UserData;
+                if (obj.data.IamInstanceProfile) {
+                    reqParams.cfn['IamInstanceProfile'] = obj.data.IamInstanceProfile.Arn.split("/").pop();
+                    reqParams.tf['iam_instance_profile'] = obj.data.IamInstanceProfile.Arn.split("/").pop();
+                }
+                if (obj.data.Monitoring && obj.data.Monitoring.State == "enabled") {
+                    reqParams.cfn['Monitoring'] = true;
+                    reqParams.tf['monitoring'] = true;
+                }
                 reqParams.cfn['Tags'] = obj.data.Tags;
                 if (obj.data.Tags) {
                     reqParams.tf['tags'] = {};
@@ -3299,18 +3349,15 @@ function performF2Mappings(objects) {
                         reqParams.tf['tags'][tag['Key']] = tag['Value'];
                     });
                 }
+                
 
                 /*
                 TODO:
-                BlockDeviceMappings: 
-                    - EC2 Block Device Mapping
                 CreditSpecification: CreditSpecification
                 DisableApiTermination: Boolean
                 ElasticGpuSpecifications: [ ElasticGpuSpecification, ... ]
                 ElasticInferenceAccelerators: 
                     - ElasticInferenceAccelerator
-                HostId: String
-                IamInstanceProfile: String
                 InstanceInitiatedShutdownBehavior: String
                 Ipv6AddressCount: Integer
                 Ipv6Addresses:
@@ -3318,7 +3365,6 @@ function performF2Mappings(objects) {
                 LaunchTemplate: LaunchTemplateSpecification
                 LicenseSpecifications: 
                     - LicenseSpecification
-                Monitoring: Boolean
                 NetworkInterfaces: 
                     - EC2 Network Interface
                 PrivateIpAddress: String
@@ -3326,7 +3372,6 @@ function performF2Mappings(objects) {
                     - String
                 SsmAssociations: 
                     - SSMAssociation
-                UserData: String
                 Volumes: 
                     - EC2 MountPoint
                 AdditionalInfo: String
@@ -14618,6 +14663,39 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'mediastore',
                     'terraformType': 'aws_media_store_container_policy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "glacier.vault") {
+                reqParams.tf['name'] = obj.data.VaultName;
+                reqParams.tf['access_policy'] = obj.data.AccessPolicy;
+                if (obj.data.NotificationConfig) {
+                    reqParams.tf['notification'] = {
+                        'events': obj.data.NotificationConfig.Events,
+                        'sns_topic': obj.data.NotificationConfig.SNSTopic
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glacier', obj.id),
+                    'region': obj.region,
+                    'service': 'glacier',
+                    'terraformType': 'aws_glacier_vault',
+                    'options': reqParams
+                });
+            } else if (obj.type == "glacier.vaultlock") {
+                var completelock = false;
+                if (obj.data.State == "Locked") {
+                    completelock = true;
+                }
+                reqParams.tf['vault_name'] = obj.data.VaultName;
+                reqParams.tf['complete_lock'] = completelock;
+                reqParams.tf['policy'] = obj.data.Policy;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('glacier', obj.id),
+                    'region': obj.region,
+                    'service': 'glacier',
+                    'terraformType': 'aws_glacier_vault_lock',
                     'options': reqParams
                 });
             } else {

@@ -244,6 +244,7 @@
                             <li><a href="#section-storage-s3"><span class="lbl">S3</span></a></li>
                             <li><a href="#section-storage-efs"><span class="lbl">EFS</span></a></li>
                             <li><a href="#section-storage-fsx"><span class="lbl">FSx</span></a></li>
+                            <li><a href="#section-storage-glacier"><span class="lbl">Glacier</span></a></li>
                         </ul>
                     </li>
                     <li class="blue with-sub" data-category="database">
@@ -502,7 +503,8 @@
                                                 <td style="padding-left: 12px;">
                                                     <a href="#section-storage-s3" style="font-weight: 600;">S3</a><br />
                                                     <a href="#section-storage-efs" style="font-weight: 600;">EFS</a><br />
-                                                    <a href="#section-storage-fsx" style="font-weight: 600;">FSx</a>
+                                                    <a href="#section-storage-fsx" style="font-weight: 600;">FSx</a><br />
+                                                    <a href="#section-storage-glacier" style="font-weight: 600;">Glacier</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -831,6 +833,9 @@
                                 </div>
                                 <div class="form-group">
                                     <input id="credentials-sessiontoken" type="text" class="form-control credentials-field" placeholder="Session Token (optional)"/>
+                                </div>
+                                <div class="form-group">
+                                    <input id="credentials-assumerole" type="text" class="form-control credentials-field" placeholder="Assumed Role ARN (optional)"/>
                                 </div>
                                 <div class="form-group">
                                     <strong>Logged in as: </strong><span id="user-id"></span>

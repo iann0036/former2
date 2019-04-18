@@ -271,6 +271,10 @@ $(document).ready(function(){
         window.localStorage.setItem('credentials-sessiontoken', $('#credentials-sessiontoken').val().trim());
         updateIdentity();
     });
+    $('#credentials-assumerole').on('change', () => {
+        window.localStorage.setItem('credentials-assumerole', $('#credentials-assumerole').val().trim());
+        updateIdentity();
+    });
 
     var accesskey = window.localStorage.getItem('credentials-accesskey');
     if (accesskey) {
@@ -283,6 +287,10 @@ $(document).ready(function(){
     var sessiontoken = window.localStorage.getItem('credentials-sessiontoken');
     if (sessiontoken) {
         $('#credentials-sessiontoken').val(sessiontoken);
+    }
+    var assumerole = window.localStorage.getItem('credentials-assumerole');
+    if (assumerole) {
+        $('#credentials-assumerole').val(assumerole);
     }
 
     /* ========================================================================== */
@@ -730,7 +738,7 @@ $(document).ready(function(){
     };
 
     pingExtension().catch(() => {
-        ping_extension_interval = setInterval(function(){
+        ping_extension_interval = setInterval(function(){ // continuously check for extension being present after 
             pingExtension().then(() => {
                 clearInterval(ping_extension_interval);
                 updateIdentity();
@@ -744,8 +752,7 @@ $(document).ready(function(){
             }).catch(() => {});
         }, 3000);
     }).finally(() => {
-        updateIdentity();
-        doNavigation(); // initial navigation
+        updateIdentity().finally(doNavigation);
     });
 
     /* ========================================================================== */
@@ -845,42 +852,82 @@ function unblockUI(selector) {
 /* ========================================================================== */
 
 function updateIdentity() {
-    $('#user-id').html("...");
+    return new Promise(function(resolve, reject) {
+        $('#user-id').html("...");
 
-    AWS.config.update({
-        credentials: new AWS.Credentials(
-            window.localStorage.getItem('credentials-accesskey'),
-            window.localStorage.getItem('credentials-secretkey'),
-            window.localStorage.getItem('credentials-sessiontoken')
-        ),
-        region: region,
-        httpOptions: {
-            timeout: 60000
+        AWS.config.update({
+            credentials: new AWS.Credentials(
+                window.localStorage.getItem('credentials-accesskey'),
+                window.localStorage.getItem('credentials-secretkey'),
+                window.localStorage.getItem('credentials-sessiontoken')
+            ),
+            region: region,
+            httpOptions: {
+                timeout: 60000
+            }
+        });
+
+        if (window.localStorage.getItem('credentials-assumerole')) {
+            sdkcall("STS", "assumeRole", {
+                RoleArn: window.localStorage.getItem('credentials-assumerole'),
+                RoleSessionName: "former2-" + Math.floor(Date.now())
+            }, false).then((data) => {
+                AWS.config.update({
+                    credentials: new AWS.Credentials(
+                        data.Credentials.AccessKeyId,
+                        data.Credentials.SecretAccessKey,
+                        data.Credentials.SessionToken
+                    ),
+                    region: region,
+                    httpOptions: {
+                        timeout: 60000
+                    }
+                });
+
+                account = data.AssumedRoleUser.Arn.split(":")[4];
+                user = data.AssumedRoleUser.Arn.split("/").pop();
+                sdkcall("IAM", "listAccountAliases", {
+                    // no params
+                }, false).then((accountAliases) => {
+                    if (accountAliases.AccountAliases && accountAliases.AccountAliases.length) {
+                        account = accountAliases.AccountAliases[0];
+                    }
+                    $('#user-id').html(user + " @ " + account);
+                }).catch(err => {
+                    $('#user-id').html(user + " @ " + account);
+                });
+
+                resolve();
+            }).catch(err => {
+                $('#user-id').html("");
+                reject();
+            });
+        } else if (window.localStorage.getItem('credentials-accesskey')) {
+            var account = "unknown-account";
+            var user = "unknown-user";
+            sdkcall("STS", "getCallerIdentity", {
+                // no params
+            }, false).then((callerid) => {
+                account = callerid.Account;
+                user = callerid.Arn.split("/").pop();
+                sdkcall("IAM", "listAccountAliases", {
+                    // no params
+                }, false).then((accountAliases) => {
+                    if (accountAliases.AccountAliases && accountAliases.AccountAliases.length) {
+                        account = accountAliases.AccountAliases[0];
+                    }
+                    $('#user-id').html(user + " @ " + account);
+                }).catch(err => {
+                    $('#user-id').html(user + " @ " + account);
+                });
+            }).catch(err => {
+                $('#user-id').html("");
+            });
+
+            resolve();
+        } else {
+            $('#user-id').html("");
+            reject();
         }
     });
-
-    if (window.localStorage.getItem('credentials-accesskey')) {
-        var account = "unknown-account";
-        var user = "unknown-user";
-        sdkcall("STS", "getCallerIdentity", {
-            // no params
-        }, false).then((callerid) => {
-            account = callerid.Account;
-            user = callerid.Arn.split("/").pop();
-            sdkcall("IAM", "listAccountAliases", {
-                // no params
-            }, false).then((accountAliases) => {
-                if (accountAliases.AccountAliases && accountAliases.AccountAliases.length) {
-                    account = accountAliases.AccountAliases[0];
-                }
-                $('#user-id').html(user + " @ " + account);
-            }).catch(err => {
-                $('#user-id').html(user + " @ " + account);
-            });
-        }).catch(err => {
-            $('#user-id').html("");
-        });
-    } else {
-        $('#user-id').html("");
-    }
 }
