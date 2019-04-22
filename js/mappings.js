@@ -2984,6 +2984,7 @@ function performF2Mappings(objects) {
                     - TargetGroupAttributes
                 Targets:
                     - TargetDescription
+                HealthCheckEnabled
                 */
 
                 tracked_resources.push({
@@ -6625,6 +6626,11 @@ function performF2Mappings(objects) {
                         'NodeRangeProperties': nodeRangeProperties
                     };
                 }
+
+                /*
+                TODO:
+                ResourceRequirement
+                */
 
                 tracked_resources.push({
                     'logicalId': getResourceName('batch', obj.id),
@@ -10773,6 +10779,11 @@ function performF2Mappings(objects) {
                     reqParams.cfn['ComputeCapacity'] = obj.data.ComputeCapacityStatus.Desired;
                 }
 
+                /*
+                TODO:
+                Tags
+                */
+
                 tracked_resources.push({
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
@@ -10818,6 +10829,7 @@ function performF2Mappings(objects) {
                 AttributesToDelete: 
                     - String
                 DeleteStorageConnectors: Boolean
+                Tags
                 */
 
                 tracked_resources.push({
@@ -10837,11 +10849,11 @@ function performF2Mappings(objects) {
                 reqParams.cfn['EnableDefaultInternetAccess'] = obj.data.EnableDefaultInternetAccess;
                 reqParams.cfn['DomainJoinInfo'] = obj.data.DomainJoinInfo;
                 reqParams.cfn['AppstreamAgentVersion'] = obj.data.AppstreamAgentVersion;
-                reqParams.cfn[''] = obj.data;
 
                 /*
                 TODO:
                 ImageName: String
+                Tags
                 */
 
                 tracked_resources.push({
@@ -13112,6 +13124,15 @@ function performF2Mappings(objects) {
                     });
                 }
 
+                /*
+                TODO:
+                ProxyConfiguration
+                ContainerDefinition:
+                    DependsOn
+                    StartTimeout
+                    StopTimeout
+                */
+
                 tracked_resources.push({
                     'logicalId': getResourceName('ecs', obj.id),
                     'region': obj.region,
@@ -14886,6 +14907,36 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::CapacityReservation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudhsm.cluster") {
+                reqParams.tf['source_backup_identifier'] = obj.data.SourceBackupId;
+                reqParams.tf['hsm_type'] = obj.data.HsmType;
+                reqParams.tf['subnet_ids'] = Object.values(obj.data.SubnetMapping);
+
+                /*
+                TODO:
+                tags
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudhsm', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudhsm',
+                    'terraformType': 'aws_cloudhsm_v2_cluster',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cloudhsm.hsm") {
+                reqParams.tf['cluster_id'] = obj.data.ClusterId;
+                reqParams.tf['subnet_id'] = obj.data.SubnetId;
+                reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+                reqParams.tf['ip_address'] = obj.data.EniIp;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('cloudhsm', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudhsm',
+                    'terraformType': 'aws_cloudhsm_v2_hsm',
                     'options': reqParams
                 });
             } else {

@@ -391,7 +391,7 @@
 
 ## Terraform Coverage
 
-**225/491 (45%)** Resources Covered
+**230/491 (46%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -454,14 +454,14 @@
 | *aws_batch_job_queue* | :thumbsup: |
 | *aws_budgets_budget* | :thumbsup: |
 | *aws_cloud9_environment_ec2* | :thumbsup: |
-| *aws_cloudformation_stack* |  |
-| *aws_cloudformation_stack_set* |  |
-| *aws_cloudformation_stack_set_instance* |  |
+| *aws_cloudformation_stack* | N/A |
+| *aws_cloudformation_stack_set* | N/A |
+| *aws_cloudformation_stack_set_instance* | N/A |
 | *aws_cloudfront_distribution* | :thumbsup: |
 | *aws_cloudfront_origin_access_identity* | :thumbsup: |
 | *aws_cloudfront_public_key* |  |
-| *aws_cloudhsm_v2_cluster* |  |
-| *aws_cloudhsm_v2_hsm* |  |
+| *aws_cloudhsm_v2_cluster* | :thumbsup: |
+| *aws_cloudhsm_v2_hsm* | :thumbsup: |
 | *aws_cloudtrail* | :thumbsup: |
 | *aws_cloudwatch_dashboard* | :thumbsup: |
 | *aws_cloudwatch_event_permission* |  |

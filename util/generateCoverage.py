@@ -25,6 +25,11 @@ cfn_exceptions = {
     'AWS::Route53::RecordSetGroup': 'N/A',
     'AWS::SDB::Domain': 'N/A'
 }
+tf_exceptions = {
+    'aws_cloudformation_stack': 'N/A',
+    'aws_cloudformation_stack_set': 'N/A',
+    'aws_cloudformation_stack_set_instance': 'N/A'
+}
 
 with open("util/cfnspec.json", "r") as f:
     cfn_spec = json.loads(f.read())['ResourceTypes']
@@ -72,9 +77,9 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
 
     f.write("\n## Terraform Coverage\n\n")
     f.write("**%s/%s (%s%%)** Resources Covered\n" % (
-        len(set(tf_occurances)),
+        len(set(tf_occurances)) + len(tf_exceptions),
         len(tf_resources),
-        int(math.floor(len(set(tf_occurances)) * 100 / len(tf_resources)))
+        int(math.floor((len(set(tf_occurances)) + len(tf_exceptions)) * 100 / len(tf_resources)))
     ))
     
     f.write("\n| Type | Coverage |\n")
@@ -84,4 +89,6 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
         coverage = ""
         if tf_occurances.count(tf_resource) > 0:
             coverage = ":thumbsup:"
+        if tf_resource in tf_exceptions:
+            coverage = tf_exceptions[tf_resource]
         f.write("| *%s* | %s |\n" % (tf_resource, coverage))

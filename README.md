@@ -1,6 +1,6 @@
 # Former2
 
-[![CloudFormation](https://img.shields.io/badge/CloudFormation-97%25-orange.svg)](RESOURCE_COVERAGE.md#cloudformation-resource-coverage) [![Terraform](https://img.shields.io/badge/Terraform-45%25-blue.svg)](RESOURCE_COVERAGE.md#terraform-coverage)
+[![CloudFormation](https://img.shields.io/badge/CloudFormation-97%25-orange.svg)](RESOURCE_COVERAGE.md#cloudformation-resource-coverage) [![Terraform](https://img.shields.io/badge/Terraform-46%25-blue.svg)](RESOURCE_COVERAGE.md#terraform-coverage)
 
 > Generate CloudFormation / Terraform / Troposphere templates from your existing AWS resources
 
