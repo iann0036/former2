@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**360/396 (96%)** Resources Covered
+**363/396 (97%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -8,10 +8,10 @@
 | *AWS::AmazonMQ::Configuration* | :thumbsup: |
 | *AWS::AmazonMQ::ConfigurationAssociation* | :thumbsup: |
 | *AWS::ApiGateway::Account* | :thumbsup: |
-| *AWS::ApiGateway::ApiKey* |  |
+| *AWS::ApiGateway::ApiKey* | :thumbsup: |
 | *AWS::ApiGateway::Authorizer* | :thumbsup: |
 | *AWS::ApiGateway::BasePathMapping* | :thumbsup: |
-| *AWS::ApiGateway::ClientCertificate* |  |
+| *AWS::ApiGateway::ClientCertificate* | :thumbsup: |
 | *AWS::ApiGateway::Deployment* | :thumbsup: |
 | *AWS::ApiGateway::DocumentationPart* | :thumbsup: |
 | *AWS::ApiGateway::DocumentationVersion* | :thumbsup: |
@@ -23,7 +23,7 @@
 | *AWS::ApiGateway::Resource* | :thumbsup: |
 | *AWS::ApiGateway::RestApi* | :thumbsup: |
 | *AWS::ApiGateway::Stage* | :thumbsup: |
-| *AWS::ApiGateway::UsagePlan* |  |
+| *AWS::ApiGateway::UsagePlan* | :thumbsup: |
 | *AWS::ApiGateway::UsagePlanKey* | :thumbsup: |
 | *AWS::ApiGateway::VpcLink* | :thumbsup: |
 | *AWS::ApiGatewayV2::Api* | :thumbsup: |

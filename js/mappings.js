@@ -6056,6 +6056,37 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_account',
                     'options': reqParams
                 });
+            } else if (obj.type == "apigateway.apikey") {
+                reqParams.cfn['CustomerId'] = obj.data.customerId;
+                reqParams.cfn['Description'] = obj.data.description;
+                reqParams.cfn['Enabled'] = obj.data.enabled;
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Value'] = obj.data.value;
+
+                /*
+                TODO:
+                GenerateDistinctId: Boolean
+                StageKeys:
+                - StageKey
+                */
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::ApiKey',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.clientcertificate") {
+                reqParams.cfn['Description'] = obj.data.description;
+               
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::ClientCertificate',
+                    'options': reqParams
+                });
             } else if (obj.type == "apigateway.domainname") {
                 reqParams.cfn['CertificateArn'] = obj.data.certificateArn;
                 reqParams.tf['certificate_arn'] = obj.data.certificateArn;
@@ -6096,6 +6127,52 @@ function performF2Mappings(objects) {
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::BasePathMapping',
                     'terraformType': 'aws_api_gateway_base_path_mapping',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigateway.usageplan") {
+                reqParams.cfn['UsagePlanName'] = obj.data.name;
+                reqParams.cfn['Description'] = obj.data.description;
+                if (obj.data.apiStages) {
+                    reqParams.cfn['ApiStages'] = [];
+                    obj.data.apiStages.forEach(apistage => {
+                        var throttle = null;
+
+                        if (apistage.throttle) {
+                            throttle = {};
+                            Object.keys(apistage.throttle).forEach(key => {
+                                throttle[key] = {
+                                    'BurstLimit': apistage.throttle[key].burstLimit,
+                                    'RateLimit': apistage.throttle[key].rateLimit
+                                };
+                            });
+                        }
+
+                        reqParams.cfn['ApiStages'].push({
+                            'ApiId': apistage.apiId,
+                            'Stage': apistage.stage,
+                            'Throttle': throttle
+                        });
+                    });
+                }
+                if (obj.data.throttle) {
+                    reqParams.cfn['Throttle'] = {
+                        'BurstLimit': obj.data.throttle.burstLimit,
+                        'RateLimit': obj.data.throttle.rateLimit
+                    };
+                }
+                if (obj.data.quota) {
+                    reqParams.cfn['Quota'] = {
+                        'Limit': obj.data.quota.limit,
+                        'Offset': obj.data.quota.offset,
+                        'Period': obj.data.quota.period
+                    };
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('apigateway', obj.id),
+                    'region': obj.region,
+                    'service': 'apigateway',
+                    'type': 'AWS::ApiGateway::UsagePlan',
                     'options': reqParams
                 });
             } else if (obj.type == "apigateway.usageplankey") {
