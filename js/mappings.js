@@ -2828,7 +2828,10 @@ function performF2Mappings(objects) {
                     'service': 'ec2',
                     'type': 'AWS::EC2::PlacementGroup',
                     'terraformType': 'aws_placement_group',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.GroupName
+                    }
                 });
             } else if (obj.type == "route53.record") {
                 reqParams.cfn['Name'] = obj.data.Name;
@@ -3127,7 +3130,15 @@ function performF2Mappings(objects) {
                     'service': 'rds',
                     'type': 'AWS::RDS::DBCluster',
                     'terraformType': 'aws_rds_cluster',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.DBClusterIdentifier,
+                        'GetAtt': {
+                            'Endpoint.Address': obj.data.Endpoint,
+                            'Endpoint.Port': obj.data.Port,
+                            'ReadEndpoint.Address': obj.data.ReaderEndpoint
+                        }
+                    }
                 });
             } else if (obj.type == "rds.instance") {
                 reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
@@ -3168,8 +3179,8 @@ function performF2Mappings(objects) {
                 reqParams.tf['publicly_accessible'] = obj.data.PubliclyAccessible;
                 reqParams.cfn['StorageType'] = obj.data.StorageType;
                 reqParams.tf['storage_type'] = obj.data.StorageType;
-                reqParams.cfn['Port'] = obj.data.Port;
-                reqParams.tf['port'] = obj.data.Port;
+                reqParams.cfn['Port'] = obj.data.Endpoint.Port;
+                reqParams.tf['port'] = obj.data.Endpoint.Port;
                 reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
                 reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
                 reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
@@ -3234,7 +3245,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'rds',
                     'type': 'AWS::RDS::DBInstance',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.DBClusterIdentifier,
+                        'GetAtt': {
+                            'Endpoint.Address': obj.data.Endpoint.Address,
+                            'Endpoint.Port': obj.data.Endpoint.Port
+                        }
+                    }
                 });
             } else if (obj.type == "rds.eventsubscription") {
                 reqParams.cfn['SourceType'] = obj.data.SourceType;
@@ -3383,7 +3401,17 @@ function performF2Mappings(objects) {
                     'service': 'ec2',
                     'type': 'AWS::EC2::Instance',
                     'terraformType': 'aws_instance',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.InstanceId,
+                        'GetAtt': {
+                            'AvailabilityZone': obj.data.Placement.AvailabilityZone,
+                            'PrivateDnsName': obj.data.PrivateDnsName,
+                            'PublicDnsName': obj.data.PublicDnsName,
+                            'PrivateIp': obj.data.PrivateIpAddress,
+                            'PublicIp': obj.data.PublicIpAddress
+                        }
+                    }
                 });
             } else if (obj.type == "sns.topic") {
                 reqParams.cfn['DisplayName'] = obj.data.Attributes.DisplayName;
@@ -3404,7 +3432,13 @@ function performF2Mappings(objects) {
                     'service': 'sns',
                     'type': 'AWS::SNS::Topic',
                     'terraformType': 'aws_sns_topic',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TopicArn,
+                        'GetAtt': {
+                            'TopicName': obj.data.Attributes.TopicArn.split(':').pop()
+                        }
+                    }
                 });
             } else if (obj.type == "sns.topicpolicy") {
                 reqParams.cfn['PolicyDocument'] = obj.data.Policy;
@@ -3456,7 +3490,13 @@ function performF2Mappings(objects) {
                     'service': 'sqs',
                     'type': 'AWS::SQS::Queue',
                     'terraformType': 'aws_sqs_queue',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Attributes.QueueArn,
+                        'GetAtt': {
+                            'QueueName': obj.data.Attributes.QueueArn.split(":").pop()
+                        }
+                    }
                 });
             } else if (obj.type == "sqs.queuepolicy") {
                 reqParams.cfn['PolicyDocument'] = obj.data.Policy;
@@ -3843,7 +3883,13 @@ function performF2Mappings(objects) {
                     'service': 'ec2',
                     'type': 'AWS::EC2::EIP',
                     'terraformType': 'aws_eip',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.PublicIp,
+                        'GetAtt': {
+                            'AllocationId': obj.data.AllocationId
+                        }
+                    }
                 });
             } else if (obj.type == "ec2.elasticipassociation") {
                 reqParams.cfn['AllocationId'] = obj.data.AllocationId;
@@ -3998,7 +4044,14 @@ function performF2Mappings(objects) {
                     'service': 'redshift',
                     'type': 'AWS::Redshift::Cluster',
                     'terraformType': 'aws_redshift_cluster',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.ClusterIdentifier,
+                        'GetAtt': {
+                            'Endpoint.Address': obj.data.Endpoint.Address,
+                            'Endpoint.Port': obj.data.Endpoint.Port
+                        }
+                    }
                 });
             } else if (obj.type == "redshift.subnetgroup") {
                 reqParams.cfn['Description'] = obj.data.Description;
@@ -4593,7 +4646,13 @@ function performF2Mappings(objects) {
                     'service': 'kinesis',
                     'type': 'AWS::Kinesis::Stream',
                     'terraformType': 'aws_kinesis_stream',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.StreamName,
+                        'GetAtt': {
+                            'Arn': obj.data.StreamARN
+                        }
+                    }
                 });
             } else if (obj.type == "elasticache.cluster") {
                 reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
@@ -4783,7 +4842,14 @@ function performF2Mappings(objects) {
                     'service': 'dynamodb',
                     'type': 'AWS::DynamoDB::Table',
                     'terraformType': 'aws_dynamodb_table',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TableName,
+                        'GetAtt': {
+                            'Arn': obj.data.TableArn,
+                            'StreamArn': obj.data.LatestStreamArn
+                        }
+                    }
                 });
             } else if (obj.type == "cloudtrail.trail") {
                 reqParams.cfn['TrailName'] = obj.data.Name;
@@ -5038,7 +5104,10 @@ function performF2Mappings(objects) {
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::AutoScalingGroup',
                     'terraformType': 'aws_autoscaling_group',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.AutoScalingGroupName
+                    }
                 });
             } else if (obj.type == "autoscaling.launchconfiguration") {
                 reqParams.cfn['LaunchConfigurationName'] = obj.data.LaunchConfigurationName;
@@ -6651,7 +6720,13 @@ function performF2Mappings(objects) {
                     'service': 'kms',
                     'type': 'AWS::KMS::Key',
                     'terraformType': 'aws_kms_key',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.KeyId,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn
+                        }
+                    }
                 });
             } else if (obj.type == "kms.alias") {
                 reqParams.cfn['AliasName'] = obj.data.AliasArn;

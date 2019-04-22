@@ -9013,7 +9013,7 @@ async function updateDatatableDatabaseDynamoDB() {
                 TableName: tableName
             }, true).then((data) => {
                 $('#section-database-dynamodb-tables-datatable').bootstrapTable('append', [{
-                    f2id: data.Table.TableName,
+                    f2id: data.Table.TableArn,
                     f2type: 'dynamodb.table',
                     f2data: data.Table,
                     f2region: region,
