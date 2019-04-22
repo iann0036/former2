@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**359/396 (96%)** Resources Covered
+**360/396 (96%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -391,7 +391,7 @@
 
 ## Terraform Coverage
 
-**224/491 (45%)** Resources Covered
+**225/491 (45%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -522,7 +522,7 @@
 | *aws_default_subnet* |  |
 | *aws_default_vpc* |  |
 | *aws_default_vpc_dhcp_options* |  |
-| *aws_devicefarm_project* |  |
+| *aws_devicefarm_project* | :thumbsup: |
 | *aws_directory_service_conditional_forwarder* |  |
 | *aws_directory_service_directory* | :thumbsup: |
 | *aws_dlm_lifecycle_policy* | :thumbsup: |

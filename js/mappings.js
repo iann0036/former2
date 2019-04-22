@@ -14773,6 +14773,44 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_glacier_vault_lock',
                     'options': reqParams
                 });
+            } else if (obj.type == "devicefarm.project") {
+                reqParams.tf['name'] = obj.data.name;
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('devicefarm', obj.id),
+                    'region': obj.region,
+                    'service': 'devicefarm',
+                    'terraformType': 'aws_devicefarm_project',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.capacityreservation") {
+                reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+                reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+                reqParams.cfn['InstancePlatform'] = obj.data.InstancePlatform;
+                reqParams.cfn['Tenancy'] = obj.data.Tenancy;
+                reqParams.cfn['InstanceCount'] = obj.data.TotalInstanceCount;
+                reqParams.cfn['EphemeralStorage'] = obj.data.EphemeralStorage;
+                reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+                reqParams.cfn['EndDateType'] = obj.data.EndDateType;
+                if (obj.data.EndDateType == "limited" && obj.data.EndDate) {
+                    var enddate = new Date(obj.data.EndDate);
+                    reqParams.cfn['EndDate'] = enddate.getMonth() + "/" + enddate.getDate() + "/" + enddate.getFullYear() + ", " + enddate.getHours() + ":" + enddate.getMinutes() + ":" + enddate.getSeconds(); // 5/31/2019, 13:30:55
+                }
+                reqParams.cfn['InstanceMatchCriteria'] = obj.data.InstanceMatchCriteria;
+                if (obj.data.Tags) {
+                    reqParams.cfn['TagSpecifications'] = [{
+                        'ResourceType': 'capacity-reservation',
+                        'Tags': obj.data.Tags
+                    }];
+                }
+
+                tracked_resources.push({
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::CapacityReservation',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

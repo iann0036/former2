@@ -3660,6 +3660,67 @@ sections.push({
                 ]
             ]
         },
+        'Capacity Reservations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'instancetype',
+                        title: 'Instance Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'availabilityzone',
+                        title: 'Availability Zone',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancecount',
+                        title: 'Instance Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'tenancy',
+                        title: 'Tenancy',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Volumes': {
             'columns': [
                 [
@@ -4181,6 +4242,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-launchtemplates-datatable');
     blockUI('#section-compute-ec2-targetgroups-datatable');
     blockUI('#section-compute-ec2-v2targetgroups-datatable');
+    blockUI('#section-compute-ec2-capacityreservations-datatable');
     blockUI('#section-compute-ec2-volumes-datatable');
     blockUI('#section-compute-ec2-volumeattachments-datatable');
     blockUI('#section-compute-ec2-networkinterfaces-datatable');
@@ -4268,6 +4330,28 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-hosts-datatable');
+    });
+
+    await sdkcall("EC2", "describeCapacityReservations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-capacityreservations-datatable').bootstrapTable('removeAll');
+
+        data.CapacityReservations.forEach(capacityreservation => {
+            $('#section-compute-ec2-capacityreservations-datatable').bootstrapTable('append', [{
+                f2id: capacityreservation.CapacityReservationId,
+                f2type: 'ec2.capacityreservation',
+                f2data: capacityreservation,
+                f2region: region,
+                id: capacityreservation.CapacityReservationId,
+                availabilityzone: capacityreservation.AvailabilityZone,
+                instancetype: capacityreservation.InstanceType,
+                tenancy: capacityreservation.Tenancy,
+                instancecount: capacityreservation.TotalInstanceCount
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-capacityreservations-datatable');
     });
 
     await sdkcall("ELB", "describeLoadBalancers", {
@@ -27047,5 +27131,81 @@ async function updateDatatableStorageGlacier() {
 
         unblockUI('#section-storage-glacier-vaults-datatable');
         unblockUI('#section-storage-glacier-vaultlocks-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Device Farm
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Mobile',
+    'service': 'Device Farm',
+    'resourcetypes': {
+        'Projects': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableMobileDeviceFarm() {
+    blockUI('#section-mobile-devicefarm-projects-datatable');
+
+    await sdkcall("DeviceFarm", "listProjects", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.projects.map(project => {
+            return sdkcall("DeviceFarm", "getProject", {
+                arn: project.arn
+            }, false).then((data) => {
+                $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('append', [{
+                    f2id: data.project.arn,
+                    f2type: 'devicefarm.project',
+                    f2data: data.project,
+                    f2region: region,
+                    name: data.project.name,
+                    creationtime: data.created.toString()
+                }]);
+            });
+        }));
+
+        unblockUI('#section-mobile-devicefarm-projects-datatable');
     });
 }
