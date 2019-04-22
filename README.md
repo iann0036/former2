@@ -29,6 +29,8 @@ Visit [former2.com](https://former2.com/) to start.
 
 You will need an [IAM key pair](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html) to authenticate your requests. It is recommended that you provide only read access with these credentials and suggest you assign the [ReadOnlyAccess](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/ReadOnlyAccess) policy.
 
+Once authenticated you can navigate via the dashboard or sidebar to specific services, select the resources to add to your outputs and finally click the "Generate" button at the top of the screen.
+
 The following outputs are currently supported:
 
 * CloudFormation

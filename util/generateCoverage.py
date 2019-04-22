@@ -45,8 +45,8 @@ cfn_types = set(cfn_types)
 with open("js/mappings.js", "r") as f:
     text = f.read()
     lines = text.splitlines()
-    cfn_occurances += re.compile('(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
-    tf_occurances += re.compile('terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
+    cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
+    tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
 
 total_services = 0
 total_operations = 0

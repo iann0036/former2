@@ -391,7 +391,7 @@
 
 ## Terraform Coverage
 
-**222/491 (45%)** Resources Covered
+**224/491 (45%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -599,8 +599,8 @@
 | *aws_gamelift_build* | :thumbsup: |
 | *aws_gamelift_fleet* | :thumbsup: |
 | *aws_gamelift_game_session_queue* |  |
-| *aws_glacier_vault* |  |
-| *aws_glacier_vault_lock* |  |
+| *aws_glacier_vault* | :thumbsup: |
+| *aws_glacier_vault_lock* | :thumbsup: |
 | *aws_globalaccelerator_accelerator* |  |
 | *aws_globalaccelerator_listener* |  |
 | *aws_glue_catalog_database* |  |
