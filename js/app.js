@@ -194,11 +194,10 @@ $(document).ready(function(){
                 ${related_resources[restype].map(res => `
                     <div class="checkbox">
                         <input type="checkbox" id="related-check-${i}" class="related-check" data-f2id="${res.obj.id}" data-dt="${res.obj.datatableid}" data-splicelocation="${res.splicelocation}" checked="">
-                        <label for="related-check-${i}">${res.obj.id} (${res.type})</label>
+                        <label for="related-check-${i++}">${res.obj.id} (${res.type})</label>
                     </div>
                 `).join('')}
                 </p>`;
-                i += 1;
             });
             $('#relatedresources').html(html);
             $('#relatedmodal').modal('show');
