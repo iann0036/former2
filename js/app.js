@@ -108,7 +108,7 @@ $(document).ready(function(){
         return ids;
     }
 
-    function checkRelatedResources(row) {
+    function checkRelatedResources(rows) {
         var check_objects = [];
         var related_resources = {};
         $('.f2datatable').each(function() {
@@ -127,35 +127,47 @@ $(document).ready(function(){
         });
         mapped_check_objects = performF2Mappings(check_objects);
         mapped_check_objects.forEach(obj => {
-            if (obj.obj.id == row.f2id && obj.type && RELATIONSHIP_TYPE_MAP[obj.type] && RELATIONSHIP_TYPE_MAP[obj.type]['Relationships']) {
-                var relationships = RELATIONSHIP_TYPE_MAP[obj.type]['Relationships'];
-                Object.keys(relationships).forEach(relationshiptype => {
-                    var readable_relationship_type = relationshiptype;
+            rows.forEach(row => {
+                if (obj.obj.id == row.f2id && obj.type && RELATIONSHIP_TYPE_MAP[obj.type] && RELATIONSHIP_TYPE_MAP[obj.type]['Relationships']) {
+                    var relationships = RELATIONSHIP_TYPE_MAP[obj.type]['Relationships'];
+                    Object.keys(relationships).forEach(relationshiptype => {
+                        var readable_relationship_type = relationshiptype;
 
-                    if (relationshiptype == "IsContainedInside") {
-                        readable_relationship_type = "Is Contained Inside";
-                    } else if (relationshiptype == "Uses") {
-                        readable_relationship_type = "Uses";
-                    } else if (relationshiptype == "IsAssociatedWith") {
-                        readable_relationship_type = "Is Associated With";
-                    } else if (relationshiptype == "References") {
-                        readable_relationship_type = "References";
-                    }
-
-                    Object.keys(relationships[relationshiptype]).forEach(relatedresourcetype => {
-                        if (!Array.isArray(relationships[relationshiptype][relatedresourcetype])) {
-                            relationships[relationshiptype][relatedresourcetype] = [
-                                relationships[relationshiptype][relatedresourcetype]
-                            ]; // always in array
+                        if (relationshiptype == "IsContainedInside") {
+                            readable_relationship_type = "Is Contained Inside";
+                        } else if (relationshiptype == "Uses") {
+                            readable_relationship_type = "Uses";
+                        } else if (relationshiptype == "IsAssociatedWith") {
+                            readable_relationship_type = "Is Associated With";
+                        } else if (relationshiptype == "References") {
+                            readable_relationship_type = "References";
                         }
-                        relationships[relationshiptype][relatedresourcetype].forEach(relation => {
-                            var propertyname = relation['PropertyName'];
-                            if (propertyname && obj.options.cfn[propertyname]) {
-                                if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
-                                    obj.options.cfn[propertyname].forEach(propertyvalue => {
-                                        if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
-                                            propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
-                                        }
+
+                        Object.keys(relationships[relationshiptype]).forEach(relatedresourcetype => {
+                            if (!Array.isArray(relationships[relationshiptype][relatedresourcetype])) {
+                                relationships[relationshiptype][relatedresourcetype] = [
+                                    relationships[relationshiptype][relatedresourcetype]
+                                ]; // always in array
+                            }
+                            relationships[relationshiptype][relatedresourcetype].forEach(relation => {
+                                var propertyname = relation['PropertyName'];
+                                if (propertyname && obj.options.cfn[propertyname]) {
+                                    if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
+                                        obj.options.cfn[propertyname].forEach(propertyvalue => {
+                                            if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                                                propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                                            }
+                                            mapped_check_objects.forEach(child_obj => {
+                                                if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
+                                                    if (!Array.isArray(related_resources[relationshiptype])) {
+                                                        related_resources[readable_relationship_type] = [];
+                                                    }
+                                                    related_resources[readable_relationship_type].push(child_obj);
+                                                }
+                                            });
+                                        });
+                                    } else {
+                                        var propertyvalue = obj.options.cfn[propertyname];
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
                                                 if (!Array.isArray(related_resources[relationshiptype])) {
@@ -164,24 +176,15 @@ $(document).ready(function(){
                                                 related_resources[readable_relationship_type].push(child_obj);
                                             }
                                         });
-                                    });
-                                } else {
-                                    var propertyvalue = obj.options.cfn[propertyname];
-                                    mapped_check_objects.forEach(child_obj => {
-                                        if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
-                                            if (!Array.isArray(related_resources[relationshiptype])) {
-                                                related_resources[readable_relationship_type] = [];
-                                            }
-                                            related_resources[readable_relationship_type].push(child_obj);
-                                        }
-                                    });
+                                    }
                                 }
-                            }
+                            });
                         });
                     });
-                });
-            }
+                }
+            });
         });
+
         if (Object.keys(related_resources).length) {
             var html = '';
             var i = 1;
@@ -200,6 +203,37 @@ $(document).ready(function(){
             $('#relatedresources').html(html);
             $('#relatedmodal').modal('show');
         }
+        
+        $('#related-add-selected-button').off('click').on('click', function(){
+            $('.related-check').each(function(i){
+                var check_element = $(this);
+                if (check_element.is(':checked')) {
+                    $.map($("#" + check_element.attr('data-dt')).bootstrapTable('getData'), function (row) {
+                        if (row.f2id == check_element.attr('data-f2id')) {
+                            var exists = false;
+                            output_objects.forEach(output_object => { // check if already added
+                                if (output_object.id == row.f2id && output_object.region == row.f2region && output_object.type == row.f2type) {
+                                    exists = true;
+                                }
+                            });
+                            if (exists) return null;
+        
+                            output_objects.splice(-1 * rows.length, 0, {
+                                'id': row.f2id,
+                                'type': row.f2type,
+                                'data': row.f2data,
+                                'region': row.f2region
+                            });
+                        }
+                    });
+                }
+            });
+        
+            $('#relatedmodal').modal('hide');
+        
+            $('#generate-outputs').text("Generate (" + output_objects.length + ")");
+            $('#generate-outputs').removeAttr('disabled');
+        });
     }
 
     function addSelectedRowsToTemplate(selector) {
@@ -219,9 +253,6 @@ $(document).ready(function(){
                 'region': row.f2region
             });
 
-            // Check for associated resources
-            checkRelatedResources(row);
-
             //$(selector).bootstrapTable('refresh');
 
             return row.f2id;
@@ -229,6 +260,9 @@ $(document).ready(function(){
 
         $('#generate-outputs').text("Generate (" + output_objects.length + ")");
         $('#generate-outputs').removeAttr('disabled');
+
+        // Check for associated resources
+        checkRelatedResources($(selector).bootstrapTable('getSelections'));
 
         return ids;
     }
@@ -878,40 +912,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#related-add-selected-button').click(relatedAddSelectedButton);
-
 }); // <-- End of documentReady
-
-function relatedAddSelectedButton() {
-    $('.related-check').each(function(i){
-        var check_element = $(this);
-        if (check_element.is(':checked')) {
-            $.map($("#" + check_element.attr('data-dt')).bootstrapTable('getData'), function (row) {
-                if (row.f2id == check_element.attr('data-f2id')) {
-                    var exists = false;
-                    output_objects.forEach(output_object => { // check if already added
-                        if (output_object.id == row.f2id && output_object.region == row.f2region && output_object.type == row.f2type) {
-                            exists = true;
-                        }
-                    });
-                    if (exists) return null;
-
-                    output_objects.splice(-1, 0, {
-                        'id': row.f2id,
-                        'type': row.f2type,
-                        'data': row.f2data,
-                        'region': row.f2region
-                    });
-                }
-            });
-        }
-    });
-
-    $('#relatedmodal').modal('hide');
-
-    $('#generate-outputs').text("Generate (" + output_objects.length + ")");
-    $('#generate-outputs').removeAttr('disabled');
-}
 
 /* ========================================================================== */
 // Extension Request/Response

@@ -2130,7 +2130,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 if (route.Origin == "CreateRoute") {
                     route['RouteTableId'] = routeTable.RouteTableId;
                     $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('append', [{
-                        f2id: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
+                        f2id: (route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId) + " to " + (route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId),
                         f2type: 'ec2.route',
                         f2data: route,
                         f2region: region,
