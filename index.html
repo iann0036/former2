@@ -451,6 +451,27 @@
 
         <div class="page-content">
             <div class="container-fluid">
+                <div class="modal fade" id="relatedmodal" tabindex="-1" role="dialog" aria-labelledby="relatedmodal" aria-hidden="true">
+                   <div class="modal-dialog" role="document">
+                       <div class="modal-content">
+                           <!--<div class="modal-header">
+                               <button type="button" class="modal-close" data-dismiss="modal" aria-label="Close">
+                                   <i class="font-icon-close-2"></i>
+                               </button>
+                               <h4 class="modal-title" id="relatedmodal">Related Resources</h4>
+                           </div>-->
+                           <div class="modal-body">
+                               <p>Would you like to add these related resources?</p>
+                               <div id="relatedresources"></div>
+                           </div>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                               <button type="button" class="btn btn-primary" id="related-add-selected-button">Add Selected</button>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
                 <header class="section-header">
                     <div class="tbl">
                         <div class="tbl-row">
@@ -896,7 +917,9 @@
                                         <i class="font-icon font-icon-scanner"></i> Scan Entire Account
                                     </button>
                                 </div>
+                                <br />
                                 <div class="form-group">
+                                    <h5>Experimental&nbsp;<i class="fa fa-warning" style="color: #f29824;"></i></h5>
                                     <p>Use the below button to add all scanned resources to the outputs (not recommended):</p>
                                     <button id="add-all-resources" class="btn btn-sm btn-secondary">
                                         <i class="font-icon font-icon-scanner"></i> Add All Resources
@@ -1035,6 +1058,7 @@
         <script src="js/deepmerge.js"></script>
 
         <script src="aws-sdk-2.412.0.min.js"></script>
+        <script src="js/RelationshipTypeMap.js"></script>
 
         <script src="js/mappings.js"></script>
         <script src="js/datatables.js"></script>

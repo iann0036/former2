@@ -157,8 +157,10 @@ function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextT
             if (err) {
                 if (err.code == "NetworkingError") {
                     console.log("Skipping " + svc + "." + method + " NetworkingError");
-                } else if (err.code == "AccessDeniedException" && svc.startsWith("KinesisAnalytics")) {
+                } else if (err.code == "AccessDeniedException") {
                     console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                } else if (err.code == "UnknownError" && svc == "MediaStore") {
+                    console.log("Skipping " + svc + "." + method + " UnknownError");
                 } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
                     console.log("Skipping " + svc + "." + method + " ForbiddenException");
                 } else if (err.code == "AccessDeniedException" && svc == "FSx") {
@@ -27188,7 +27190,7 @@ async function updateDatatableMobileDeviceFarm() {
 
     await sdkcall("DeviceFarm", "listProjects", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.projects.map(project => {
@@ -27205,9 +27207,9 @@ async function updateDatatableMobileDeviceFarm() {
                 }]);
             });
         }));
+    }).catch(() => {});
 
-        unblockUI('#section-mobile-devicefarm-projects-datatable');
-    });
+    unblockUI('#section-mobile-devicefarm-projects-datatable');
 }
 
 /* ========================================================================== */
