@@ -159,7 +159,7 @@ $(document).ready(function(){
                                             }
                                             mapped_check_objects.forEach(child_obj => {
                                                 if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
-                                                    if (!Array.isArray(related_resources[relationshiptype])) {
+                                                    if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                         related_resources[readable_relationship_type] = [];
                                                     }
                                                     related_resources[readable_relationship_type].push(child_obj);
@@ -170,7 +170,7 @@ $(document).ready(function(){
                                         var propertyvalue = obj.options.cfn[propertyname];
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
-                                                if (!Array.isArray(related_resources[relationshiptype])) {
+                                                if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                     related_resources[readable_relationship_type] = [];
                                                 }
                                                 related_resources[readable_relationship_type].push(child_obj);
@@ -196,7 +196,7 @@ $(document).ready(function(){
                         <input type="checkbox" id="related-check-${i}" class="related-check" data-f2id="${res.obj.id}" data-dt="${res.obj.datatableid}" data-splicelocation="${res.splicelocation}" checked="">
                         <label for="related-check-${i}">${res.obj.id} (${res.type})</label>
                     </div>
-                `)}
+                `).join('')}
                 </p>`;
                 i += 1;
             });
@@ -262,7 +262,9 @@ $(document).ready(function(){
         $('#generate-outputs').removeAttr('disabled');
 
         // Check for associated resources
-        checkRelatedResources($(selector).bootstrapTable('getSelections'));
+        if (window.localStorage.getItem('relatedresourcessetting') == "true") {
+            checkRelatedResources($(selector).bootstrapTable('getSelections'));
+        }
 
         return ids;
     }
@@ -910,6 +912,12 @@ $(document).ready(function(){
         } else if ($(this).val() == "4") {
             cfnspacing = "    ";
         }
+    });
+    if (window.localStorage.getItem('relatedresourcessetting') == "true") {
+        $('#relatedresourcessetting').prop('checked', true);
+    }
+    $('#relatedresourcessetting').change(function() {
+        window.localStorage.setItem('relatedresourcessetting', $(this).is(':checked').toString());
     });
 
 }); // <-- End of documentReady

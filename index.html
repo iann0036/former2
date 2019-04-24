@@ -900,6 +900,14 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-4">
                                 <div class="form-group">
+                                    <h5>Account Scanning</h5>
+                                    <p>Use the below button to pre-populate all categories by triggering a scan for the entire account:</p>
+                                    <button id="scan-account" class="btn btn-sm btn-success">
+                                        <i class="font-icon font-icon-scanner"></i> Scan Entire Account
+                                    </button>
+                                </div>
+                                <br />
+                                <div class="form-group">
                                     <h5>CloudFormation Spacing</h5>
                                     <p>Change your preference of the number of spaces for the CloudFormation output:</p>
                                     <select id="cfnspacing" class="select2-arrow manual select2-no-search-arrow">
@@ -911,15 +919,16 @@
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <h5>Account Scanning</h5>
-                                    <p>Use the below button to pre-populate all categories by triggering a scan for the entire account:</p>
-                                    <button id="scan-account" class="btn btn-sm btn-success">
-                                        <i class="font-icon font-icon-scanner"></i> Scan Entire Account
-                                    </button>
+                                    <h5>Related Resources</h5>
+                                    <p>When enabled, this setting will suggest resources related to the ones you are adding (requires account scan to work effectively):</p>
+                                    <div class="checkbox-toggle">
+                                        <input type="checkbox" id="relatedresourcessetting">
+                                        <label for="relatedresourcessetting">Enable Related Resources</label>
+                                    </div>
                                 </div>
                                 <br />
                                 <div class="form-group">
-                                    <h5>Experimental&nbsp;<i class="fa fa-warning" style="color: #f29824;"></i></h5>
+                                    <h5>Experimental Features&nbsp;<i class="fa fa-warning" style="color: #f29824;"></i></h5>
                                     <p>Use the below button to add all scanned resources to the outputs (not recommended):</p>
                                     <button id="add-all-resources" class="btn btn-sm btn-secondary">
                                         <i class="font-icon font-icon-scanner"></i> Add All Resources
