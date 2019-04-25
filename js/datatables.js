@@ -8,6 +8,50 @@ function textFormatter(data) {
     return data;
 }
 
+function dateFormatter(data) {
+    if (data) {
+        if (typeof data == "string") {
+            parseddate = Date.parse(data);
+            if (isNaN(parseddate)) {
+                return data;
+            }
+            data = new Date(parseddate);
+        }
+        if (!data instanceof Date) {
+            return data;
+        }
+
+        var seconds = Math.floor((new Date() - data) / 1000);
+        var interval = Math.floor(seconds / 31536000);
+
+        if (interval > 1) {
+            return interval + " years ago";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months ago";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days ago";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours ago";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes ago";
+        }
+        if (seconds > 0) {
+            return Math.floor(seconds) + " seconds ago";
+        }
+        return "In the future";
+    }
+
+    return data;
+}
+
 function tickFormatter(data) {
     if (data) {
         return `<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>`
@@ -1062,6 +1106,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -1153,6 +1198,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -1530,6 +1576,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -2209,7 +2256,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2region: region,
                 id: transitGateway.TransitGatewayId,
                 description: transitGateway.Description,
-                creationtime: transitGateway.CreationTime.toString()
+                creationtime: transitGateway.CreationTime
             }]);
         });
 
@@ -2232,7 +2279,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2region: region,
                 id: transitGatewayRouteTable.TransitGatewayRouteTableId,
                 transitgatewayid: transitGatewayRouteTable.TransitGatewayId,
-                creationtime: transitGatewayRouteTable.CreationTime.toString()
+                creationtime: transitGatewayRouteTable.CreationTime
             }]);
 
             return Promise.all([
@@ -2409,7 +2456,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2data: natGateway,
                 f2region: region,
                 id: natGateway.NatGatewayId,
-                creationtime: natGateway.CreateTime.toString(),
+                creationtime: natGateway.CreateTime,
                 subnetid: natGateway.SubnetId,
                 vpcid: natGateway.VpcId
             }]);
@@ -4227,6 +4274,7 @@ sections.push({
                         title: 'Date Created',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -4824,7 +4872,7 @@ async function updateDatatableComputeEC2() {
                         f2region: region,
                         id: policy.Policy.PolicyId,
                         description: policy.Policy.Description,
-                        datecreated: policy.Policy.DateCreated.toString()
+                        datecreated: policy.Policy.DateCreated
                     }]);
                 });
             }));
@@ -7719,6 +7767,7 @@ sections.push({
                         title: 'Date Created',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -7772,6 +7821,7 @@ sections.push({
                         title: 'Date Created',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -7894,6 +7944,7 @@ sections.push({
                         title: 'Date Created',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -7922,7 +7973,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                 f2region: region,
                 name: application.ApplicationName,
                 description: application.Description,
-                datecreated: application.DateCreated.toString()
+                datecreated: application.DateCreated
             }]);
 
             return sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
@@ -7940,15 +7991,14 @@ async function updateDatatableComputeElasticBeanstalk() {
                         description: configurationTemplate.Description,
                         platformarn: configurationTemplate.PlatformArn,
                         environmentname: configurationTemplate.EnvironmentName,
-                        datecreated: configurationTemplate.DateCreated.toString()
+                        datecreated: configurationTemplate.DateCreated
                     }]);
                 });
-        
-                unblockUI('#section-compute-elasticbeanstalk-configurationtemplates-datatable');
             });
         }));
 
         unblockUI('#section-compute-elasticbeanstalk-applications-datatable');
+        unblockUI('#section-compute-elasticbeanstalk-configurationtemplates-datatable');
     });
 
     await sdkcall("ElasticBeanstalk", "describeApplicationVersions", {
@@ -7965,7 +8015,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                 name: applicationVersion.VersionLabel,
                 applicationname: applicationVersion.ApplicationName,
                 description: applicationVersion.Description,
-                datecreated: applicationVersion.DateCreated.toString()
+                datecreated: applicationVersion.DateCreated
             }]);
         });
 
@@ -9003,6 +9053,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -9176,7 +9227,7 @@ async function updateDatatableDatabaseDynamoDB() {
                     f2data: data.Table,
                     f2region: region,
                     name: data.Table.TableName,
-                    creationtime: data.Table.CreationDateTime.toString(),
+                    creationtime: data.Table.CreationDateTime,
                     size: data.Table.TableSizeBytes,
                     itemcount: data.Table.ItemCount
                 }]);
@@ -9981,6 +10032,7 @@ sections.push({
                         title: 'Created At',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10015,7 +10067,7 @@ async function updateDatatableComputeECR() {
                         f2region: region,
                         name: repository.repositoryName,
                         uri: repository.repositoryUri,
-                        createdat: repository.createdAt.toString()
+                        createdat: repository.createdAt
                     }]);
                 });
             });
@@ -10546,6 +10598,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -10599,6 +10652,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -11890,11 +11944,9 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             deploymentid: stage.deploymentId,
                             description: stage.description,
                             tracingenabled: stage.tracingEnabled,
-                            creationtime: stage.createdDate.toString()
+                            creationtime: stage.createdDate
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
                 }),
                 sdkcall("APIGateway", "getDeployments", {
                     restApiId: api.id
@@ -11909,11 +11961,9 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             id: deployment.id,
                             apiid: api.ApiId,
                             description: deployment.description,
-                            creationtime: deployment.createdDate.toString()
+                            creationtime: deployment.createdDate
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
                 }),
                 sdkcall("APIGateway", "getResources", {
                     restApiId: api.id
@@ -11973,8 +12023,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             contenttype: model.contentType
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
                 }),
                 sdkcall("APIGateway", "getAuthorizers", {
                     restApiId: api.id
@@ -11992,8 +12040,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             type: authorizer.type
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
                 })
             ]);
         }));
@@ -12032,11 +12078,9 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             apiid: api.ApiId,
                             deploymentid: api.DeploymentId,
                             description: api.Description,
-                            creationtime: api.CreatedDate.toString()
+                            creationtime: api.CreatedDate
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
                 }),
                 sdkcall("ApiGatewayV2", "getDeployments", {
                     ApiId: api.ApiId
@@ -12051,11 +12095,9 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             id: deployment.DeploymentId,
                             apiid: api.ApiId,
                             description: deployment.Description,
-                            creationtime: deployment.CreatedDate.toString()
+                            creationtime: deployment.CreatedDate
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
                 }),
                 sdkcall("ApiGatewayV2", "getModels", {
                     ApiId: api.ApiId
@@ -12073,8 +12115,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             contenttype: model.ContentType
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
                 }),
                 sdkcall("ApiGatewayV2", "getAuthorizers", {
                     ApiId: api.ApiId
@@ -12092,8 +12132,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             type: authorizer.AuthorizerType
                         }]);
                     });
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
                 }),
                 sdkcall("ApiGatewayV2", "getRoutes", {
                     ApiId: api.ApiId
@@ -12131,9 +12169,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             });
                         });
                     }));
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
                 }),
                 sdkcall("ApiGatewayV2", "getIntegrations", {
                     ApiId: api.ApiId
@@ -12173,14 +12208,19 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             });
                         });
                     }));
-    
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
-                    unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
                 })
             ]);
         }));
-
+    
+        unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
     });
 }
 
@@ -12453,6 +12493,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -12531,7 +12572,7 @@ async function updateDatatableStorageEFS() {
                 f2data: fileSystem,
                 f2region: region,
                 id: fileSystem.FileSystemId,
-                creationtime: fileSystem.CreationTime.toString(),
+                creationtime: fileSystem.CreationTime,
                 name: fileSystem.Name,
                 size: fileSystem.SizeInBytes.Value
             }]);
@@ -12862,6 +12903,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13047,7 +13089,7 @@ async function updateDatatableDatabaseNeptune() {
                 f2region: region,
                 id: instance.DBInstanceIdentifier,
                 instanceclass: instance.DBInstanceClass,
-                creationtime: instance.InstanceCreateTime.toString(),
+                creationtime: instance.InstanceCreateTime,
                 availabilityzone: instance.AvailabilityZone
             }]);
         });
@@ -13171,6 +13213,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13232,6 +13275,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13352,7 +13396,7 @@ async function updateDatatableDatabaseDocumentDB() {
                 id: cluster.DBClusterIdentifier,
                 engineversion: cluster.EngineVersion,
                 endpoint: cluster.Endpoint,
-                creationtime: cluster.ClusterCreateTime.toString()
+                creationtime: cluster.ClusterCreateTime
             }]);
         });
 
@@ -13372,7 +13416,7 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2region: region,
                 id: instance.DBInstanceIdentifier,
                 instanceclass: instance.DBInstanceClass,
-                creationtime: instance.InstanceCreateTime.toString(),
+                creationtime: instance.InstanceCreateTime,
                 availabilityzone: instance.AvailabilityZone,
                 engineversion: instance.EngineVersion
             }]);
@@ -13548,6 +13592,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13577,7 +13622,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                     name: data.projects[0].name,
                     description: data.projects[0].description,
                     timeout: data.projects[0].timeoutInMinutes + " minutes",
-                    creationtime: data.projects[0].created.toString()
+                    creationtime: data.projects[0].created
                 }]);
             });
         }));
@@ -13641,6 +13686,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13694,6 +13740,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -13811,7 +13858,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                         id: data.application.applicationId,
                         name: data.application.applicationName,
                         computeplatform: data.application.computePlatform,
-                        creationtime: data.application.createTime.toString()
+                        creationtime: data.application.createTime
                     }]);
                 })
             ]);
@@ -13838,7 +13885,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                     id: data.deploymentConfigInfo.deploymentConfigId,
                     name: data.deploymentConfigInfo.deploymentConfigName,
                     computeplatform: data.deploymentConfigInfo.computePlatform,
-                    creationtime: data.deploymentConfigInfo.createTime.toString()
+                    creationtime: data.deploymentConfigInfo.createTime
                 }]);
             });
         }));
@@ -14342,6 +14389,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -14429,7 +14477,7 @@ async function updateDatatableCustomerEngagementSES() {
                     f2data: ruleSet,
                     f2region: region,
                     name: ruleSet.Name,
-                    creationtime: ruleSet.CreatedTimestamp.toString()
+                    creationtime: ruleSet.CreatedTimestamp
                 }]);
 
                 return sdkcall("SES", "describeReceiptRuleSet", {
@@ -14474,7 +14522,7 @@ async function updateDatatableCustomerEngagementSES() {
                         f2data: data,
                         f2region: region,
                         name: data.Template.TemplateName,
-                        creationtime: data.Template.CreatedTimestamp.toString()
+                        creationtime: data.Template.CreatedTimestamp
                     }]);
                 });
             }));
@@ -16213,6 +16261,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16258,7 +16307,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
                         name: resourceShare.name,
                         accountid: resourceShare.owningAccountId,
                         allowexternapprincipals: resourceShare.allowExternalPrincipals,
-                        creationtime: resourceShare.creationTime.toString()
+                        creationtime: resourceShare.creationTime
                     }]);
                 });
             });
@@ -16573,6 +16622,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16618,6 +16668,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -16646,7 +16697,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
                     f2data: data,
                     f2region: region,
                     name: data.name,
-                    creationtime: data.creationDate.toString()
+                    creationtime: data.creationDate
                 }]);
             });
         }));
@@ -16671,13 +16722,13 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
                         f2region: region,
                         name: data.name,
                         activityarn: data.activityArn,
-                        creaiontime: data.creationDate.toString()
+                        creaiontime: data.creationDate
                     }]);
                 });
             }));
         }
 
-        unblockUI('#section-applicationintegration-stepfunctions-statemachines-datatable');
+        unblockUI('#section-applicationintegration-stepfunctions-activities-datatable');
     });
 }
 
@@ -17362,6 +17413,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17415,6 +17467,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -17535,7 +17588,7 @@ async function updateDatatableRoboticsRoboMaker() {
                     f2data: data,
                     f2region: region,
                     name: data.name,
-                    creationtime: data.createdAt.toString()
+                    creationtime: data.createdAt
                 }]);
             });
         }));
@@ -17560,7 +17613,7 @@ async function updateDatatableRoboticsRoboMaker() {
                     name: data.name,
                     fleetarn: data.fleetArn,
                     architecture: data.architecture,
-                    creationtime: data.createdAt.toString()
+                    creationtime: data.createdAt
                 }]);
             });
         }));
@@ -17934,6 +17987,7 @@ async function updateDatatableMobileAppSync() {
         // no params
     }, true).then(async (data) => {
         $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-appsync-graphqlschemas-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-datasources-datatable').bootstrapTable('removeAll');
@@ -18044,6 +18098,7 @@ async function updateDatatableMobileAppSync() {
         }));
 
         unblockUI('#section-mobile-appsync-graphqlapis-datatable');
+        unblockUI('#section-mobile-appsync-graphqlschemas-datatable');
         unblockUI('#section-mobile-appsync-resolvers-datatable');
         unblockUI('#section-mobile-appsync-apikeys-datatable');
         unblockUI('#section-mobile-appsync-datasources-datatable');
@@ -19034,6 +19089,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19059,7 +19115,7 @@ async function updateDatatableManagementAndGovernanceAutoScaling() {
                 f2region: region,
                 name: scalingPlan.ScalingPlanName,
                 version: scalingPlan.ScalingPlanVersion,
-                creationtime: scalingPlan.CreationTime.toString()
+                creationtime: scalingPlan.CreationTime
             }]);
         });
 
@@ -19184,6 +19240,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19229,6 +19286,7 @@ sections.push({
                         title: 'creationtime',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -19331,7 +19389,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                 f2data: configurationAggregator,
                 f2region: region,
                 name: configurationAggregator.ConfigurationAggregatorName,
-                creationtime: configurationAggregator.CreationTime.toString()
+                creationtime: configurationAggregator.CreationTime
             }]);
         });
 
@@ -19369,7 +19427,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                 f2region: region,
                 authorizedaccountid: aggregationAuthorization.AuthorizedAccountId,
                 authorizedawsregion: aggregationAuthorization.AuthorizedAwsRegion,
-                creationtime: aggregationAuthorization.CreationTime.toString()
+                creationtime: aggregationAuthorization.CreationTime
             }]);
         });
 
@@ -20777,6 +20835,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-portfolioshares-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.PortfolioDetails.map(portfolio => {
@@ -20816,6 +20875,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         }));
 
         unblockUI('#section-managementandgovernance-servicecatalog-portfolios-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-portfolioshares-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable');
     });
 
@@ -21090,6 +21150,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21127,6 +21188,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21164,6 +21226,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21217,7 +21280,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                     f2data: data.pipeline,
                     f2region: region,
                     name: data.pipeline.name,
-                    creationtime: data.pipeline.creationTime.toString()
+                    creationtime: data.pipeline.creationTime
                 }]);
             });
         }));
@@ -21240,7 +21303,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                     f2data: data.datastore,
                     f2region: region,
                     name: data.datastore.name,
-                    creationtime: data.datastore.creationTime.toString()
+                    creationtime: data.datastore.creationTime
                 }]);
             });
         }));
@@ -21263,7 +21326,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                     f2data: data.dataset,
                     f2region: region,
                     name: data.dataset.name,
-                    creationtime: data.dataset.creationTime.toString()
+                    creationtime: data.dataset.creationTime
                 }]);
             });
         }));
@@ -21335,6 +21398,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21396,6 +21460,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21457,6 +21522,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21580,7 +21646,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         name: data.Namespace.Name,
                         description: data.Namespace.Description,
                         servicecount: data.Namespace.ServiceCount,
-                        creationtime: data.Namespace.CreateDate.toString()
+                        creationtime: data.Namespace.CreateDate
                     }]);
                 } else if (data.Namespace.Type == "DNS_PUBLIC") {
                     $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('append', [{
@@ -21588,7 +21654,10 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         f2type: 'servicediscovery.publicdnsnamespace',
                         f2data: data.Namespace,
                         f2region: region,
-                        name: data.Namespace.Name
+                        name: data.Namespace.Name,
+                        description: data.Namespace.Description,
+                        servicecount: data.Namespace.ServiceCount,
+                        creationtime: data.Namespace.CreateDate
                     }]);
                 } else if (data.Namespace.Type == "DNS_PRIVATE") {
                     $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').bootstrapTable('append', [{
@@ -21596,7 +21665,10 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         f2type: 'servicediscovery.privatednsnamespace',
                         f2data: data.Namespace,
                         f2region: region,
-                        name: data.Namespace.Name
+                        name: data.Namespace.Name,
+                        description: data.Namespace.Description,
+                        servicecount: data.Namespace.ServiceCount,
+                        creationtime: data.Namespace.CreateDate
                     }]);
                 }
             });
@@ -21696,6 +21768,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21741,6 +21814,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21786,6 +21860,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21884,6 +21959,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -21915,7 +21991,7 @@ async function updateDatatableMachineLearningSageMaker() {
                     f2data: data,
                     f2region: region,
                     name: data.ModelName,
-                    creationtime: data.CreationTime.toString()
+                    creationtime: data.CreationTime
                 }]);
             });
         }));
@@ -21939,7 +22015,7 @@ async function updateDatatableMachineLearningSageMaker() {
                     f2region: region,
                     name: data.EndpointName,
                     endpointconfigname: data.EndpointConfigName,
-                    creationtime: data.CreationTime.toString()
+                    creationtime: data.CreationTime
                 }]);
             });
         }));
@@ -21963,7 +22039,7 @@ async function updateDatatableMachineLearningSageMaker() {
                     f2region: region,
                     name: data.EndpointConfigName,
                     kmskeyid: data.KmsKeyId,
-                    creationtime: data.CreationTime.toString()
+                    creationtime: data.CreationTime
                 }]);
             });
         }));
@@ -22012,7 +22088,7 @@ async function updateDatatableMachineLearningSageMaker() {
                     f2data: data,
                     f2region: region,
                     name: data.NotebookInstanceLifecycleConfigName,
-                    creationtime: data.CreationTime.toString()
+                    creationtime: data.CreationTime
                 }]);
             });
         }));
@@ -22219,6 +22295,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -22378,7 +22455,7 @@ async function updateDatatableAnalyticsEMR() {
                     f2data: data,
                     f2region: region,
                     name: data.Name,
-                    creationtime: data.CreationDateTime.toString()
+                    creationtime: data.CreationDateTime
                 }]);
             });
         }));
@@ -22552,6 +22629,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
         
@@ -22604,6 +22682,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         }
 
         unblockUI('#section-securityidentityandcompliance-secretsmanager-secrets-datatable');
+        unblockUI('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable');
     });
@@ -24554,6 +24633,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -24610,6 +24690,7 @@ async function updateDatatableEndUserComputingAppStream() {
         }));
 
         unblockUI('#section-endusercomputing-appstream-fleets-datatable');
+        unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
     });
 
     await sdkcall("AppStream", "describeUsers", {
@@ -24705,7 +24786,7 @@ async function updateDatatableEndUserComputingAppStream() {
                 f2region: region,
                 name: directoryConfig.DirectoryName,
                 oudistinguishednames: directoryConfig.OrganizationalUnitDistinguishedNames.join(", "),
-                creationtime: directoryConfig.CreatedTime.toString()
+                creationtime: directoryConfig.CreatedTime
             }]);
         });
 
@@ -24837,6 +24918,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -25111,7 +25193,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
                 id: replicationInstance.ReplicationInstanceIdentifier,
                 instanceclass: replicationInstance.ReplicationInstanceClass,
                 allocatedstorage: replicationInstance.AllocatedStorage + " GB",
-                creationtime: replicationInstance.InstanceCreateTime.toString(),
+                creationtime: replicationInstance.InstanceCreateTime,
                 availabilityzone: replicationInstance.AvailabilityZone
             }]);
         });
@@ -27145,6 +27227,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -27197,7 +27280,7 @@ async function updateDatatableStorageGlacier() {
                         f2data: data,
                         f2region: region,
                         vaultname: vault.VaultName,
-                        creationtime: data.CreationDate.toString()
+                        creationtime: data.CreationDate
                     }]);
                 }).catch(() => {})
             ]);
@@ -27248,6 +27331,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -27275,7 +27359,7 @@ async function updateDatatableMobileDeviceFarm() {
                     f2data: data.project,
                     f2region: region,
                     name: data.project.name,
-                    creationtime: data.created.toString()
+                    creationtime: data.created
                 }]);
             });
         }));
@@ -27332,6 +27416,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     },
@@ -27421,7 +27506,7 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
                 f2region: region,
                 id: cluster.ClusterId,
                 type: cluster.HsmType,
-                creationtime: cluster.CreateTimestamp.toString(),
+                creationtime: cluster.CreateTimestamp,
                 vpcid: cluster.VpcId
             }]);
 
