@@ -197,6 +197,15 @@ function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextT
                     }, data => {
                         reject(data);
                     });
+                } else if (data.ContinuationToken) {
+                    params['ContinuationToken'] = data.ContinuationToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
                 } else if (data.NextToken) {
                     params['NextToken'] = data.NextToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
@@ -5399,29 +5408,92 @@ async function updateDatatableStorageS3() {
         $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Buckets.map(bucket => {
-            $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
-                f2id: bucket.Name,
-                f2type: 's3.bucket',
-                f2data: bucket,
-                f2region: region,
-                name: bucket.Name,
-                creationdate: bucket.CreationDate
-            }]);
-
-            return sdkcall("S3", "getBucketPolicy", {
-                Bucket: bucket.Name
-            }, false).then((data) => {
-                data['Bucket'] = bucket.Name;
-                $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+            return Promise.all([
+                sdkcall("S3", "getBucketAccelerateConfiguration", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['AccelerateConfiguration'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketEncryption", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Encryption'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketCors", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Cors'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketLifecycle", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Lifecycle'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketLogging", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Logging'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketNotificationConfiguration", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['NotificationConfiguration'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketReplication", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Replication'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketVersioning", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Versioning'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "getBucketWebsite", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Website'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "listBucketAnalyticsConfigurations", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['AnalyticsConfigurations'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "listBucketInventoryConfigurations", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['InventoryConfigurations'] = data;
+                }).catch(() => {}),
+                sdkcall("S3", "listBucketMetricsConfigurations", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['MetricsConfigurations'] = data;
+                }).catch(() => {})
+            ]).then(async () => {
+                $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
                     f2id: bucket.Name,
-                    f2type: 's3.bucketpolicy',
-                    f2data: data,
+                    f2type: 's3.bucket',
+                    f2data: bucket,
                     f2region: region,
-                    bucketname: bucket.Name,
-                    policy: data.Policy,
-                    policylength: data.Policy.length
+                    name: bucket.Name,
+                    creationdate: bucket.CreationDate
                 }]);
-            }).catch(() => {});
+
+                await sdkcall("S3", "getBucketPolicy", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    data['Bucket'] = bucket.Name;
+                    $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+                        f2id: bucket.Name,
+                        f2type: 's3.bucketpolicy',
+                        f2data: data,
+                        f2region: region,
+                        bucketname: bucket.Name,
+                        policy: data.Policy,
+                        policylength: data.Policy.length
+                    }]);
+                }).catch(() => {});
+            });
         }));
 
         unblockUI('#section-storage-s3-buckets-datatable');

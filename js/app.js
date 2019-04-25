@@ -617,6 +617,7 @@ $(document).ready(function(){
         "us-east-2": "US East (Ohio)",
         "us-west-1": "US West (N. California)",
         "us-west-2": "US West (Oregon)",
+        "ap-east-1": "Asia Pacific (Hong Kong)",
         "ap-south-1": "Asia Pacific (Mumbai)",
         "ap-northeast-2": "Asia Pacific (Seoul)",
         "ap-southeast-1": "Asia Pacific (Singapore)",
@@ -1008,7 +1009,7 @@ function updateIdentity() {
         if (window.localStorage.getItem('credentials-assumerole')) {
             sdkcall("STS", "assumeRole", {
                 RoleArn: window.localStorage.getItem('credentials-assumerole'),
-                RoleSessionName: "former2-" + Math.floor(Date.now())
+                RoleSessionName: "former2-session-" + window.localStorage.getItem('credentials-assumerole').split("/").pop()
             }, false).then((data) => {
                 AWS.config.update({
                     credentials: new AWS.Credentials(
