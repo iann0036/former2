@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**375/384 (97%)** Resources Covered
+**376/385 (97%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -117,6 +117,7 @@
 | *AWS::DocDB::DBInstance* | :thumbsup: |
 | *AWS::DocDB::DBSubnetGroup* | :thumbsup: |
 | *AWS::DynamoDB::Table* | :thumbsup: |
+| *AWS::EC2::CapacityReservation* | :thumbsup: |
 | *AWS::EC2::CustomerGateway* | :thumbsup: |
 | *AWS::EC2::DHCPOptions* | :thumbsup: |
 | *AWS::EC2::EC2Fleet* |  |
@@ -240,7 +241,7 @@
 | *AWS::IAM::Role* | :thumbsup: |
 | *AWS::IAM::ServiceLinkedRole* |  |
 | *AWS::IAM::User* | :thumbsup: |
-| *AWS::IAM::UserToGroupAddition* |  |
+| *AWS::IAM::UserToGroupAddition* | N/A |
 | *AWS::Inspector::AssessmentTarget* | :thumbsup: |
 | *AWS::Inspector::AssessmentTemplate* | :thumbsup: |
 | *AWS::Inspector::ResourceGroup* | :thumbsup: |

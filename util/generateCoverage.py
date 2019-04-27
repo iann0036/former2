@@ -23,7 +23,8 @@ cfn_exceptions = {
     'AWS::ElastiCache::SecurityGroupIngress': 'N/A',
     'AWS::Redshift::ClusterSecurityGroupIngress': 'N/A',
     'AWS::Route53::RecordSetGroup': 'N/A',
-    'AWS::SDB::Domain': 'N/A'
+    'AWS::SDB::Domain': 'N/A',
+    'AWS::IAM::UserToGroupAddition': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
@@ -45,6 +46,7 @@ for cfntype, _ in cfn_spec.items():
 cfn_types.append("AWS::Lambda::LayerVersionPermission")
 cfn_types.append("AWS::EC2::VPCEndpointService")
 cfn_types.append("AWS::Lambda::LayerVersion")
+cfn_types.append("AWS::EC2::CapacityReservation")
 cfn_types = set(cfn_types)
 
 with open("js/mappings.js", "r") as f:

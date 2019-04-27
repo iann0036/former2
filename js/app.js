@@ -160,7 +160,7 @@ $(document).ready(function(){
                                             mapped_check_objects.forEach(child_obj => {
                                                 if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                     for (var i=0; i<output_objects.length; i++) { // check if already added
-                                                        if (output_object[i].id == child_obj.obj.id) {
+                                                        if (output_objects[i].id == child_obj.obj.id) {
                                                             return;
                                                         }
                                                     };
@@ -176,7 +176,7 @@ $(document).ready(function(){
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                 for (var i=0; i<output_objects.length; i++) { // check if already added
-                                                    if (output_object[i].id == child_obj.obj.id) {
+                                                    if (output_objects[i].id == child_obj.obj.id) {
                                                         return;
                                                     }
                                                 };

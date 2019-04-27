@@ -42,7 +42,7 @@ The following outputs are currently supported:
 
 Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
 
-If you prefer not to use a publicly hosted site to use Former2, you can host your own version by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1:8080, otherwise you can modify the extension as needed.
+If you prefer not to use a publicly hosted site to use Former2, you can host your own version by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1, otherwise you can modify the extension as needed.
 
 ## FAQ
 
