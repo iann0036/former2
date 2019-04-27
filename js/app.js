@@ -158,7 +158,12 @@ $(document).ready(function(){
                                                 propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
                                             }
                                             mapped_check_objects.forEach(child_obj => {
-                                                if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
+                                                if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
+                                                    for (var i=0; i<output_objects.length; i++) { // check if already added
+                                                        if (output_object[i].id == child_obj.obj.id) {
+                                                            return;
+                                                        }
+                                                    };
                                                     if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                         related_resources[readable_relationship_type] = [];
                                                     }
@@ -169,7 +174,12 @@ $(document).ready(function(){
                                     } else {
                                         var propertyvalue = obj.options.cfn[propertyname];
                                         mapped_check_objects.forEach(child_obj => {
-                                            if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) { // TODO: Check resource not already included
+                                            if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
+                                                for (var i=0; i<output_objects.length; i++) { // check if already added
+                                                    if (output_object[i].id == child_obj.obj.id) {
+                                                        return;
+                                                    }
+                                                };
                                                 if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                     related_resources[readable_relationship_type] = [];
                                                 }
