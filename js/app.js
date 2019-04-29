@@ -639,7 +639,9 @@ $(document).ready(function(){
         "eu-west-2": "EU (London)",
         "eu-west-3": "EU (Paris)",
         "eu-north-1": "EU (Stockholm)",
-        "sa-east-1": "South America (S&#227;o Paulo)"
+        "sa-east-1": "South America (S&#227;o Paulo)",
+        "us-gov-east-1": "AWS GovCloud (US-East)",
+        "us-gov-west-1": "AWS GovCloud (US)"
     };
 
     $('.region-item').on('click', el => {

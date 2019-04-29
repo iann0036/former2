@@ -2190,6 +2190,20 @@ function performF2Mappings(objects) {
                 reqParams.tf['function_name'] = obj.data.Configuration.FunctionName;
                 reqParams.cfn['Handler'] = obj.data.Configuration.Handler;
                 reqParams.tf['handler'] = obj.data.Configuration.Handler;
+
+                if (obj.data.Code && obj.data.Code.RepositoryType == "S3") {
+                    var url = new URL(obj.data.Code.Location);
+
+                    reqParams.cfn['Code'] = {
+                        'S3Bucket': url.host.split(".")[0],
+                        'S3Key': url.pathname,
+                        'S3ObjectVersion': url.searchParams.get('versionId')
+                    };
+                    reqParams.tf['s3_bucket'] = url.host.split(".")[0];
+                    reqParams.tf['s3_key'] = url.pathname;
+                    reqParams.tf['s3_object_version'] = url.searchParams.get('versionId');
+                }
+                
                 reqParams.cfn['KmsKeyArn'] = obj.data.Configuration.KMSKeyArn;
                 reqParams.tf['kms_key_arn'] = obj.data.Configuration.KMSKeyArn;
                 reqParams.cfn['MemorySize'] = obj.data.Configuration.MemorySize;
@@ -2240,8 +2254,6 @@ function performF2Mappings(objects) {
                 
                 /*
                 TODO:
-                Code:
-                    Code
                 Tags: 
                     Resource Tag
                 */
