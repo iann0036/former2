@@ -13074,6 +13074,26 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_appsync_resolver',
                     'options': reqParams
                 });
+            } else if (obj.type == "appsync.graphqlschema") {
+                var definition = String.fromCharCode.apply(null, obj.data.schema.data);
+                reqParams.cfn['Definition'] = definition;
+                reqParams.tf['definition'] = definition;
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+                reqParams.tf['api_id'] = obj.data.apiId;
+
+                /*
+                SKIPPED
+                DefinitionS3Location
+                */
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::GraphQLSchema',
+                    'options': reqParams
+                });
             } else if (obj.type == "appsync.datasource") {
                 reqParams.cfn['Name'] = obj.data.name;
                 reqParams.tf['name'] = obj.data.name;

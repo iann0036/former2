@@ -17734,29 +17734,17 @@ sections.push({
                         valign: 'middle'
                     },
                     {
-                        title: 'Name',
-                        field: 'name',
+                        title: 'API ID',
+                        field: 'apiid',
                         rowspan: 2,
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
+                    // nothing
                 ]
             ]
         },
@@ -18007,15 +17995,15 @@ async function updateDatatableMobileAppSync() {
                             data.resolvers.forEach(resolver => {
                                 resolver['apiId'] = graphqlApi.apiId;
                                 $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('append', [{
-                                    f2id: data.resolverArn,
+                                    f2id: resolver.resolverArn,
                                     f2type: 'appsync.resolver',
-                                    f2data: data,
+                                    f2data: resolver,
                                     f2region: region,
-                                    arn: data.resolverArn,
-                                    typename: data.typeName,
-                                    fieldname: data.fieldName,
-                                    datasourcename: data.dataSourceName,
-                                    kind: data.kind
+                                    arn: resolver.resolverArn,
+                                    typename: resolver.typeName,
+                                    fieldname: resolver.fieldName,
+                                    datasourcename: resolver.dataSourceName,
+                                    kind: resolver.kind
                                 }]);
                             });
                         });
@@ -18031,13 +18019,13 @@ async function updateDatatableMobileAppSync() {
                         }, true).then((data) => {
                             data['apiId'] = graphqlApi.apiId;
                             $('#section-mobile-appsync-datasources-datatable').bootstrapTable('append', [{
-                                f2id: data.dataSourceArn,
+                                f2id: data.dataSource.dataSourceArn,
                                 f2type: 'appsync.datasource',
-                                f2data: data,
+                                f2data: data.dataSource,
                                 f2region: region,
-                                name: data.name,
-                                description: data.description,
-                                type: data.type
+                                name: data.dataSource.name,
+                                description: data.dataSource.description,
+                                type: data.dataSource.type
                             }]);
                         });
                     }));
@@ -18052,15 +18040,15 @@ async function updateDatatableMobileAppSync() {
                         }, true).then((data) => {
                             data['apiId'] = graphqlApi.apiId;
                             $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('append', [{
-                                f2id: data.functionArn,
+                                f2id: data.functionConfiguration.functionArn,
                                 f2type: 'appsync.functionconfiguration',
-                                f2data: data,
+                                f2data: data.functionConfiguration,
                                 f2region: region,
-                                name: data.name,
-                                id: data.functionId,
-                                description: data.description,
-                                datasourcename: data.dataSourceName,
-                                functionversion: data.functionVersion
+                                name: data.functionConfiguration.name,
+                                id: data.functionConfiguration.functionId,
+                                description: data.functionConfiguration.description,
+                                datasourcename: data.functionConfiguration.dataSourceName,
+                                functionversion: data.functionConfiguration.functionVersion
                             }]);
                         });
                     }));
@@ -18070,7 +18058,7 @@ async function updateDatatableMobileAppSync() {
                 }, true).then((data) => {
                     data.apiKeys.forEach(apiKey => {
                         apiKey['apiId'] = graphqlApi.apiId;
-                        $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('append', [{
+                        $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('append', [{
                             f2id: apiKey.id,
                             f2type: 'appsync.apikey',
                             f2data: apiKey,
@@ -18081,17 +18069,31 @@ async function updateDatatableMobileAppSync() {
                         }]);
                     });
                 }),
+                sdkcall("AppSync", "getIntrospectionSchema", {
+                    apiId: graphqlApi.apiId,
+                    format: 'SDL'
+                }, true).then((data) => {
+                    data['apiId'] = graphqlApi.apiId;
+
+                    $('#section-mobile-appsync-graphqlschemas-datatable').bootstrapTable('append', [{
+                        f2id: data.apiId + " Schema",
+                        f2type: 'appsync.graphqlschema',
+                        f2data: data,
+                        f2region: region,
+                        apiid: data.apiId
+                    }]);
+                }),
                 sdkcall("AppSync", "getGraphqlApi", {
                     apiId: graphqlApi.apiId
                 }, true).then((data) => {
                     $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('append', [{
-                        f2id: data.apiId,
+                        f2id: data.graphqlApi.apiId,
                         f2type: 'appsync.graphqlapi',
-                        f2data: data,
+                        f2data: data.graphqlApi,
                         f2region: region,
-                        name: data.name,
-                        id: data.apiId,
-                        authenticationtype: data.authenticationType
+                        name: data.graphqlApi.name,
+                        id: data.graphqlApi.apiId,
+                        authenticationtype: data.graphqlApi.authenticationType
                     }]);
                 })
             ]);
