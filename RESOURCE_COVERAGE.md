@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**376/385 (97%)** Resources Covered
+**377/385 (97%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -51,7 +51,7 @@
 | *AWS::AppSync::DataSource* | :thumbsup: |
 | *AWS::AppSync::FunctionConfiguration* | :thumbsup: |
 | *AWS::AppSync::GraphQLApi* | :thumbsup: |
-| *AWS::AppSync::GraphQLSchema* |  |
+| *AWS::AppSync::GraphQLSchema* | :thumbsup: |
 | *AWS::AppSync::Resolver* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalableTarget* |  |
 | *AWS::ApplicationAutoScaling::ScalingPolicy* |  |
