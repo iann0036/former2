@@ -3309,14 +3309,14 @@ function performF2Mappings(objects) {
                 reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
                 reqParams.cfn['Encrypted'] = obj.data.Encrypted;
                 reqParams.tf['encrypted'] = obj.data.Encrypted;
-                reqParams.cfn['Iops'] = obj.data.Iops;
-                reqParams.tf['iops'] = obj.data.Iops;
+                reqParams.cfn['Iops'] = (obj.data.VolumeType == "io1") ? obj.data.Iops : null;
+                reqParams.tf['iops'] = (obj.data.VolumeType == "io1") ? obj.data.Iops : null;
                 reqParams.cfn['Size'] = obj.data.Size;
                 reqParams.tf['size'] = obj.data.Size;
                 reqParams.cfn['VolumeType'] = obj.data.VolumeType;
                 reqParams.tf['type'] = obj.data.VolumeType;
-                reqParams.cfn['SnapshotId'] = obj.data.SnapshotId;
-                reqParams.tf['snapshot_id'] = obj.data.SnapshotId;
+                reqParams.cfn['SnapshotId'] = (obj.data.SnapshotId == "") ? null : obj.data.SnapshotId;
+                reqParams.tf['snapshot_id'] = (obj.data.SnapshotId == "") ? null : obj.data.SnapshotId;
                 reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
                 reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
