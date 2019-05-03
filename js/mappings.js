@@ -6849,16 +6849,25 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "batch.jobdefinition") {
                 reqParams.cfn['JobDefinitionName'] = obj.data.jobDefinitionName;
+                reqParams.tf['name'] = obj.data.jobDefinitionName;
                 reqParams.cfn['Type'] = obj.data.type;
+                reqParams.tf['type'] = obj.data.type;
                 reqParams.cfn['Parameters'] = obj.data.parameters;
+                reqParams.tf['parameters'] = obj.data.parameters;
                 if (obj.data.retryStrategy) {
                     reqParams.cfn['RetryStrategy'] = {
                         'Attempts': obj.data.retryStrategy.attempts
+                    };
+                    reqParams.tf['retry_strategy'] = {
+                        'attempts': obj.data.retryStrategy.attempts
                     };
                 }
                 if (obj.data.timeout) {
                     reqParams.cfn['Timeout'] = {
                         'AttemptDurationSeconds': obj.data.timeout.attemptDurationSeconds
+                    };
+                    reqParams.tf['timeout'] = {
+                        'attempt_duration_seconds': obj.data.timeout.attemptDurationSeconds
                     };
                 }
                 if (obj.data.containerProperties) {
@@ -6928,6 +6937,7 @@ function performF2Mappings(objects) {
                         'Vcpus': obj.data.containerProperties.vcpus,
                         'Image': obj.data.containerProperties.image
                     };
+                    reqParams.tf['container_properties'] = obj.data.containerProperties;
                 }
                 if (obj.data.nodeProperties) {
                     var nodeRangeProperties = [];
@@ -7024,6 +7034,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'batch',
                     'type': 'AWS::Batch::JobDefinition',
+                    'terraformType': 'aws_batch_job_definition',
                     'options': reqParams
                 });
             } else if (obj.type == "efs.filesystem") {
