@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**379/387 (97%)** Resources Covered
+**380/387 (98%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -241,7 +241,7 @@
 | *AWS::IAM::ManagedPolicy* | :thumbsup: |
 | *AWS::IAM::Policy* | :thumbsup: |
 | *AWS::IAM::Role* | :thumbsup: |
-| *AWS::IAM::ServiceLinkedRole* |  |
+| *AWS::IAM::ServiceLinkedRole* | :thumbsup: |
 | *AWS::IAM::User* | :thumbsup: |
 | *AWS::IAM::UserToGroupAddition* | N/A |
 | *AWS::Inspector::AssessmentTarget* | :thumbsup: |

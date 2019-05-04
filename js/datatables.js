@@ -14893,6 +14893,59 @@ sections.push({
                 ]
             ]
         },
+        'Service Linked Roles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Managed Policies': {
             'columns': [
                 [
@@ -15096,6 +15149,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     blockUI('#section-securityidentityandcompliance-iam-users-datatable');
     blockUI('#section-securityidentityandcompliance-iam-groups-datatable');
     blockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
     blockUI('#section-securityidentityandcompliance-iam-managedpolices-datatable');
     blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
@@ -15231,18 +15285,32 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Roles.map(role => {
-            $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
-                f2id: role.Arn,
-                f2type: 'iam.role',
-                f2data: role,
-                f2region: region,
-                name: role.RoleName,
-                path: role.Path,
-                id: role.RoleId,
-                description: role.Description
-            }]);
+            if (role.Path.startsWith("/aws-service-role/")) {
+                $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
+                    f2id: role.Arn,
+                    f2type: 'iam.servicelinkedrole',
+                    f2data: role,
+                    f2region: region,
+                    name: role.RoleName,
+                    path: role.Path,
+                    id: role.RoleId,
+                    description: role.Description
+                }]);
+            } else {
+                $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
+                    f2id: role.Arn,
+                    f2type: 'iam.role',
+                    f2data: role,
+                    f2region: region,
+                    name: role.RoleName,
+                    path: role.Path,
+                    id: role.RoleId,
+                    description: role.Description
+                }]);
+            }
 
             return sdkcall("IAM", "listAttachedRolePolicies", {
                 RoleName: role.RoleName
@@ -15278,6 +15346,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
         unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     });
 

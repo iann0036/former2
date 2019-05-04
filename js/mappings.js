@@ -15665,6 +15665,23 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ApiGatewayV2::ApiMapping',
                     'options': reqParams
                 });
+            } else if (obj.type == "iam.servicelinkedrole") {
+                reqParams.cfn['AWSServiceName'] = obj.data.Path.split("/")[2];
+                if (obj.data.RoleName.includes("_") && !obj.data.Path.endsWith(".application-autoscaling.amazonaws.com/") && !obj.data.Path.endsWith(".autoscaling-plans.amazonaws.com/")) {
+                    var suffixparts = obj.data.RoleName.split("_");
+                    suffixparts.shift();
+                    reqParams.cfn['CustomSuffix'] = suffixparts.join("_");
+                }
+                reqParams.cfn['Description'] = obj.data.Description;
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('iam', obj.id),
+                    'region': obj.region,
+                    'service': 'iam',
+                    'type': 'AWS::IAM::ServiceLinkedRole',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
