@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**377/385 (97%)** Resources Covered
+**379/387 (97%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -27,8 +27,10 @@
 | *AWS::ApiGateway::UsagePlanKey* | :thumbsup: |
 | *AWS::ApiGateway::VpcLink* | :thumbsup: |
 | *AWS::ApiGatewayV2::Api* | :thumbsup: |
+| *AWS::ApiGatewayV2::ApiMapping* | :thumbsup: |
 | *AWS::ApiGatewayV2::Authorizer* | :thumbsup: |
 | *AWS::ApiGatewayV2::Deployment* | :thumbsup: |
+| *AWS::ApiGatewayV2::DomainName* | :thumbsup: |
 | *AWS::ApiGatewayV2::Integration* | :thumbsup: |
 | *AWS::ApiGatewayV2::IntegrationResponse* | :thumbsup: |
 | *AWS::ApiGatewayV2::Model* | :thumbsup: |
@@ -392,7 +394,7 @@
 
 ## Terraform Coverage
 
-**230/491 (46%)** Resources Covered
+**231/491 (47%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -451,7 +453,7 @@
 | *aws_backup_selection* |  |
 | *aws_backup_vault* |  |
 | *aws_batch_compute_environment* | :thumbsup: |
-| *aws_batch_job_definition* |  |
+| *aws_batch_job_definition* | :thumbsup: |
 | *aws_batch_job_queue* | :thumbsup: |
 | *aws_budgets_budget* | :thumbsup: |
 | *aws_cloud9_environment_ec2* | :thumbsup: |

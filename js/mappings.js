@@ -15630,6 +15630,41 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_cloudhsm_v2_hsm',
                     'options': reqParams
                 });
+            } else if (obj.type == "apigatewayv2.domainname") {
+                reqParams.cfn['DomainName'] = obj.data.DomainName;
+                if (obj.data.DomainNameConfigurations) {
+                    reqParams.cfn['DomainNameConfigurations'] = [];
+                    obj.data.DomainNameConfigurations.forEach(domainnameconfiguration => {
+                        reqParams.cfn['DomainNameConfigurations'].push({
+                            'CertificateArn': domainnameconfiguration.CertificateArn,
+                            'CertificateName': domainnameconfiguration.CertificateName,
+                            'EndpointType': domainnameconfiguration.EndpointType
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::DomainName',
+                    'options': reqParams
+                });
+            } else if (obj.type == "apigatewayv2.apimapping") {
+                reqParams.cfn['ApiId'] = obj.data.ApiId;
+                reqParams.cfn['DomainName'] = obj.data.DomainName;
+                reqParams.cfn['Stage'] = obj.data.Stage;
+                reqParams.cfn['ApiMappingKey'] = obj.data.ApiMappingKey;
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('apigatewayv2', obj.id),
+                    'region': obj.region,
+                    'service': 'apigatewayv2',
+                    'type': 'AWS::ApiGatewayV2::ApiMapping',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

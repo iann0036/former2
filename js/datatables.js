@@ -10993,6 +10993,59 @@ sections.push({
                 ]
             ]
         },
+        'API Mappings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'stage',
+                        title: 'Stage',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'domainname',
+                        title: 'Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Account': {
             'columns': [
                 [
@@ -11652,6 +11705,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     blockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-apimappings-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
@@ -11739,7 +11793,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
             });
         }));
 
-        unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
     });
 
@@ -12211,16 +12264,59 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 })
             ]);
         }));
+
+        await sdkcall("APIGatewayV2", "getDomainNames", {
+            // no params
+        }, true).then(async (data) => {
+            await Promise.all(data.Items.map(domainName => {
+                var certificatename = null;
+                if (domainName.DomainNameConfigurations && domainName.DomainNameConfigurations.length) {
+                    certificatename = domainName.DomainNameConfigurations[0].CertificateName;
+                }
+
+                $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('append', [{
+                    f2id: domainName.DomainName,
+                    f2type: 'apigatewayv2.domainname',
+                    f2data: domainName,
+                    f2region: region,
+                    domainname: domainName.DomainName,
+                    certificatename: certificatename,
+                    regionaldomainname: null,
+                    regionalcertificatename: null
+                }]);
+
+                return sdkcall("ApiGatewayV2", "getApiMappings", {
+                    DomainName: domainName.DomainName
+                }, true).then((data) => {
+                    data.Items.forEach(apimapping => {
+                        integrationResponse['DomainName'] = domainName.DomainName;
+
+                        $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').bootstrapTable('append', [{
+                            f2id: apimapping.ApiMappingId,
+                            f2type: 'apigatewayv2.apimapping',
+                            f2data: apimapping,
+                            f2region: region,
+                            id: apimapping.ApiMappingId,
+                            apiid: apimapping.ApiId,
+                            stage: apimapping.Stage,
+                            domainname: domainName.DomainName
+                        }]);
+                    });
+                });
+            }));
+        });
     
         unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-apimappings-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
+        unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
     });
 }
 

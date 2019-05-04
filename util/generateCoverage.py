@@ -47,6 +47,8 @@ cfn_types.append("AWS::Lambda::LayerVersionPermission")
 cfn_types.append("AWS::EC2::VPCEndpointService")
 cfn_types.append("AWS::Lambda::LayerVersion")
 cfn_types.append("AWS::EC2::CapacityReservation")
+cfn_types.append("AWS::ApiGatewayV2::DomainName")
+cfn_types.append("AWS::ApiGatewayV2::ApiMapping")
 cfn_types = set(cfn_types)
 
 with open("js/mappings.js", "r") as f:
