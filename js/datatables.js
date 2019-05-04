@@ -193,7 +193,7 @@ function lambdaRuntimeFormatter(data) {
 // SDK Helpers
 /* ========================================================================== */
 
-function sdkcall(svc, method, params, alert_on_errors) { // TODO: Add auto NextToken, Marker etc. detection
+function sdkcall(svc, method, params, alert_on_errors) {
     return new Promise(function(resolve, reject) {
         var service = new AWS[svc]({region: region});
 
@@ -11731,6 +11731,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').bootstrapTable('removeAll');
@@ -12265,7 +12266,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
             ]);
         }));
 
-        await sdkcall("APIGatewayV2", "getDomainNames", {
+        await sdkcall("ApiGatewayV2", "getDomainNames", {
             // no params
         }, true).then(async (data) => {
             await Promise.all(data.Items.map(domainName => {
@@ -12289,7 +12290,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     DomainName: domainName.DomainName
                 }, true).then((data) => {
                     data.Items.forEach(apimapping => {
-                        integrationResponse['DomainName'] = domainName.DomainName;
+                        apimapping['DomainName'] = domainName.DomainName;
 
                         $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').bootstrapTable('append', [{
                             f2id: apimapping.ApiMappingId,
@@ -12305,19 +12306,19 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 });
             }));
         });
-    
-        unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-apimappings-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
-        unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
     });
+    
+    unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-apimappings-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
 }
 
 /* ========================================================================== */
