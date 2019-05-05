@@ -455,6 +455,7 @@ $(document).ready(function(){
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdkts').attr('style', 'display: none;');
+        $('#header-button-copy-tfstate').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
@@ -516,6 +517,13 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     cdkts_editor.refresh();
+                }, 1);
+            } else if (location.hash == "#section-outputs-tfstate") {
+                $('#header-button-copy-tfstate').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    tfstate_editor.refresh();
                 }, 1);
             } else if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
@@ -607,6 +615,11 @@ $(document).ready(function(){
             cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
             setTimeout(function(){
                 cdkts_editor.refresh();
+            }, 1);
+
+            tfstate_editor.getDoc().setValue(mapped_outputs['tfstate']);
+            setTimeout(function(){
+                tfstate_editor.refresh();
             }, 1);
 
             raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
@@ -743,6 +756,18 @@ $(document).ready(function(){
         scrollbarStyle: "null"
     });
     setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
+
+    tfstate_editor = CodeMirror.fromTextArea(document.getElementById('tfstate'), {
+        lineNumbers: true,
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-tfstate', tfstate_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,

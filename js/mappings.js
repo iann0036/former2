@@ -73,6 +73,13 @@ function MD5(e) {
     return (p(a) + p(b) + p(c) + p(d)).toLowerCase()
 };
 
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
 function getResourceName(service, requestId) {
     var i = 1; // on purpose, 2 means second usage
     var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
@@ -1718,6 +1725,30 @@ resource "${type}" "${logicalId}" {${params}}
     return output;
 }
 
+function outputMapTfstate(index, service, type, options, region, was_blocked, logicalId) {
+    var output = {
+        "type": type,
+        "depends_on": [],
+        "primary": {
+            "id": "api",
+            "attributes": {
+                "arn": "arn:aws:iam::123456789012:user/api",
+                "id": "api",
+                "name": "api",
+                "path": "/",
+                "tags.%": "0",
+                "unique_id": "AIDAIZJRIT4EQKDABCDEF"
+            },
+            "meta": {},
+            "tainted": false
+        },
+        "deposed": [],
+        "provider": "provider.aws"
+    };
+
+    return output;
+}
+
 function outputMapCli(service, method, options, region, was_blocked) {
     var params = '';
 
@@ -1852,6 +1883,22 @@ provider "aws" {
     region = "${tracked_resources[0].region}"
 }
 `}`,
+        'tfstate': {
+            "version": 3,
+            "terraform_version": "0.11.13",
+            "serial": 1,
+            "lineage": uuidv4(),
+            "modules": [
+                {
+                    "path": [
+                        "root"
+                    ],
+                    "outputs": {},
+                    "resources": {},
+                    "depends_on": []
+                }
+            ]
+        },
         'cli': `# pip install awscli --upgrade --user
 
 `,
@@ -1920,6 +1967,7 @@ template.add_version("2010-09-09")
         }
         if (tracked_resources[i].terraformType) {
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['tfstate']['modules'][0]['resources'][tracked_resources[i].terraformType + "." + tracked_resources[i].logicalId] = outputMapTfstate(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
     }
     for (var i=0; i<tracked_resources.length; i++) {
@@ -1944,6 +1992,8 @@ app.run();
         compiled['troposphere'] += `print(template.to_yaml())
 `;
     }
+
+    compiled['tfstate'] = JSON.stringify(compiled['tfstate'], null, 4);
 
     return compiled;
 }
@@ -15667,12 +15717,15 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "iam.servicelinkedrole") {
                 reqParams.cfn['AWSServiceName'] = obj.data.Path.split("/")[2];
+                reqParams.tf['aws_service_name'] = obj.data.Path.split("/")[2];
                 if (obj.data.RoleName.includes("_") && !obj.data.Path.endsWith(".application-autoscaling.amazonaws.com/") && !obj.data.Path.endsWith(".autoscaling-plans.amazonaws.com/")) {
                     var suffixparts = obj.data.RoleName.split("_");
                     suffixparts.shift();
                     reqParams.cfn['CustomSuffix'] = suffixparts.join("_");
+                    reqParams.tf['custom_suffix'] = suffixparts.join("_");
                 }
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 tracked_resources.push({
                     'obj': obj,                     
@@ -15680,6 +15733,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'iam',
                     'type': 'AWS::IAM::ServiceLinkedRole',
+                    'terraformType': 'aws_iam_service_linked_role',
                     'options': reqParams
                 });
             } else {
