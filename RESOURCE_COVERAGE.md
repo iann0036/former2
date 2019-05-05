@@ -394,7 +394,7 @@
 
 ## Terraform Coverage
 
-**231/491 (47%)** Resources Covered
+**245/491 (49%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -539,18 +539,18 @@
 | *aws_docdb_cluster_parameter_group* | :thumbsup: |
 | *aws_docdb_cluster_snapshot* |  |
 | *aws_docdb_subnet_group* | :thumbsup: |
-| *aws_dx_bgp_peer* |  |
-| *aws_dx_connection* |  |
-| *aws_dx_connection_association* |  |
-| *aws_dx_gateway* |  |
-| *aws_dx_gateway_association* |  |
-| *aws_dx_hosted_private_virtual_interface* |  |
-| *aws_dx_hosted_private_virtual_interface_accepter* |  |
-| *aws_dx_hosted_public_virtual_interface* |  |
-| *aws_dx_hosted_public_virtual_interface_accepter* |  |
-| *aws_dx_lag* |  |
-| *aws_dx_private_virtual_interface* |  |
-| *aws_dx_public_virtual_interface* |  |
+| *aws_dx_bgp_peer* | :thumbsup: |
+| *aws_dx_connection* | :thumbsup: |
+| *aws_dx_connection_association* | :thumbsup: |
+| *aws_dx_gateway* | :thumbsup: |
+| *aws_dx_gateway_association* | :thumbsup: |
+| *aws_dx_hosted_private_virtual_interface* | :thumbsup: |
+| *aws_dx_hosted_private_virtual_interface_accepter* | N/A |
+| *aws_dx_hosted_public_virtual_interface* | :thumbsup: |
+| *aws_dx_hosted_public_virtual_interface_accepter* | N/A |
+| *aws_dx_lag* | :thumbsup: |
+| *aws_dx_private_virtual_interface* | :thumbsup: |
+| *aws_dx_public_virtual_interface* | :thumbsup: |
 | *aws_dynamodb_global_table* |  |
 | *aws_dynamodb_table* | :thumbsup: |
 | *aws_dynamodb_table_item* |  |
@@ -635,7 +635,7 @@
 | *aws_iam_role_policy_attachment* |  |
 | *aws_iam_saml_provider* |  |
 | *aws_iam_server_certificate* |  |
-| *aws_iam_service_linked_role* |  |
+| *aws_iam_service_linked_role* | :thumbsup: |
 | *aws_iam_user* | :thumbsup: |
 | *aws_iam_user_group_membership* |  |
 | *aws_iam_user_login_profile* |  |

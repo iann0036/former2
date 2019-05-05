@@ -29,7 +29,9 @@ cfn_exceptions = {
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
     'aws_cloudformation_stack_set': 'N/A',
-    'aws_cloudformation_stack_set_instance': 'N/A'
+    'aws_cloudformation_stack_set_instance': 'N/A',
+    'aws_dx_hosted_public_virtual_interface_accepter': 'N/A',
+    'aws_dx_hosted_private_virtual_interface_accepter': 'N/A'
 }
 
 with open("util/cfnspec.json", "r") as f:
