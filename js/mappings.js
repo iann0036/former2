@@ -15667,12 +15667,15 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "iam.servicelinkedrole") {
                 reqParams.cfn['AWSServiceName'] = obj.data.Path.split("/")[2];
+                reqParams.tf['aws_service_name'] = obj.data.Path.split("/")[2];
                 if (obj.data.RoleName.includes("_") && !obj.data.Path.endsWith(".application-autoscaling.amazonaws.com/") && !obj.data.Path.endsWith(".autoscaling-plans.amazonaws.com/")) {
                     var suffixparts = obj.data.RoleName.split("_");
                     suffixparts.shift();
                     reqParams.cfn['CustomSuffix'] = suffixparts.join("_");
+                    reqParams.tf['custom_suffix'] = suffixparts.join("_");
                 }
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
 
                 tracked_resources.push({
                     'obj': obj,                     
@@ -15680,6 +15683,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'iam',
                     'type': 'AWS::IAM::ServiceLinkedRole',
+                    'terraformType': 'aws_iam_service_linked_role',
                     'options': reqParams
                 });
             } else {
