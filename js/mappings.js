@@ -2325,6 +2325,10 @@ function performF2Mappings(objects) {
                             DefaultNetworkAcl
                             DefaultSecurityGroup
                             */
+                        },
+                        'Terraform': {
+                            'id': obj.data.VpcId,
+                            'cidr_block': obj.data.CidrBlock
                         }
                     }
                 });
