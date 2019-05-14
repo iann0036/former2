@@ -6082,7 +6082,10 @@ function performF2Mappings(objects) {
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::RestApi',
                     'terraformType': 'aws_api_gateway_rest_api',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.id
+                    }
                 });
             } else if (obj.type == "apigateway.stage") {
                 reqParams.cfn['StageName'] = obj.data.stageName;
@@ -6201,7 +6204,10 @@ function performF2Mappings(objects) {
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::Resource',
                     'terraformType': 'aws_api_gateway_resource',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.id
+                    }
                 });
             } else if (obj.type == "apigateway.model") {
                 reqParams.cfn['RestApiId'] = obj.data.restApiId;
@@ -6309,8 +6315,8 @@ function performF2Mappings(objects) {
                         'IntegrationHttpMethod': obj.data.methodIntegration.httpMethod,
                         'IntegrationResponses': integrationResponses,
                         'PassthroughBehavior': obj.data.methodIntegration.passthroughBehavior,
-                        'RequestParameters': obj.data.requestParameters,
-                        'RequestTemplates': obj.data.requestTemplates,
+                        'RequestParameters': obj.data.methodIntegration.requestParameters,
+                        'RequestTemplates': obj.data.methodIntegration.requestTemplates,
                         'TimeoutInMillis': obj.data.methodIntegration.timeoutInMillis,
                         'Type': obj.data.methodIntegration.type,
                         'Uri': obj.data.methodIntegration.uri

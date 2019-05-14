@@ -193,35 +193,52 @@ function lambdaRuntimeFormatter(data) {
 // SDK Helpers
 /* ========================================================================== */
 
-function sdkcall(svc, method, params, alert_on_errors) {
+function sdkcall(svc, method, params, alert_on_errors, backoff) {
     return new Promise(function(resolve, reject) {
         var service = new AWS[svc]({region: region});
 
-        service[method].call(service, params, function(err, data) {
+        service[method].call(service, params, async function(err, data) {
             if (err) {
-                if (err.code == "NetworkingError") {
-                    console.log("Skipping " + svc + "." + method + " NetworkingError");
-                } else if (err.code == "AccessDeniedException") {
-                    console.log("Skipping " + svc + "." + method + " AccessDeniedException");
-                } else if (err.code == "UnknownError" && svc == "MediaStore") {
-                    console.log("Skipping " + svc + "." + method + " UnknownError");
-                } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
-                    console.log("Skipping " + svc + "." + method + " ForbiddenException");
-                } else if (err.code == "AccessDeniedException" && svc == "FSx") {
-                    console.log("Skipping " + svc + "." + method + " AccessDeniedException");
-                } else if (alert_on_errors) {
-                    console.log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
-                    console.trace(err);
-                    $.notify({
-                        icon: 'font-icon font-icon-warning',
-                        title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
-                        message: err.message || JSON.stringify(err)
-                    },{
-                        type: 'danger'
+                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests") {
+                    if (backoff) {
+                        console.log("Too many requests, sleeping for " + backoff + "ms");
+                        await new Promise(resolve => setTimeout(resolve, backoff));
+                        backoff *= 2;
+                    } else {
+                        console.log("Too many requests, sleeping for 500ms");
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                        backoff = 500 + Math.floor(Math.random() * 500);
+                    }
+                    sdkcall(svc, method, params, alert_on_errors, backoff).then(newdata => {
+                        resolve(newdata);
+                    }, data => {
+                        reject(data);
                     });
+                } else {
+                    if (err.code == "NetworkingError") {
+                        console.log("Skipping " + svc + "." + method + " NetworkingError");
+                    } else if (err.code == "AccessDeniedException") {
+                        console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                    } else if (err.code == "UnknownError" && svc == "MediaStore") {
+                        console.log("Skipping " + svc + "." + method + " UnknownError");
+                    } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
+                        console.log("Skipping " + svc + "." + method + " ForbiddenException");
+                    } else if (err.code == "AccessDeniedException" && svc == "FSx") {
+                        console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                    } else if (alert_on_errors) {
+                        console.log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
+                        console.trace(err);
+                        $.notify({
+                            icon: 'font-icon font-icon-warning',
+                            title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                            message: err.message || JSON.stringify(err)
+                        },{
+                            type: 'danger'
+                        });
+                    }
+                    
+                    reject(data);
                 }
-                
-                reject(data);
             } else {
                 if (data.Marker) {
                     params['Marker'] = data.Marker;
@@ -10755,8 +10772,8 @@ sections.push({
                         align: 'center'
                     },
                     {
-                        field: 'operationname',
-                        title: 'Operation Name',
+                        field: 'httpmethod',
+                        title: 'HTTP Method',
                         sortable: true,
                         editable: true,
                         footerFormatter: textFormatter,
@@ -11913,7 +11930,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                                 f2type: 'apigateway.requestvalidator',
                                 f2data: requestValidator,
                                 f2region: region,
-                                apiid: api.ApiId,
+                                apiid: api.apiId,
                                 id: requestValidator.id,
                                 name: requestValidator.name,
                                 validaterequestbody: requestValidator.validateRequestBody,
@@ -11935,7 +11952,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                                 f2type: 'apigateway.documentationpart',
                                 f2data: documentationPart,
                                 f2region: region,
-                                apiid: api.ApiId,
+                                apiid: api.id,
                                 id: documentationPart.id
                             }]);
                         });
@@ -11974,7 +11991,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                                 f2type: 'apigateway.gatewayresponse',
                                 f2data: gatewayResponse,
                                 f2region: region,
-                                apiid: api.ApiId,
+                                apiid: api.id,
                                 responsetype: gatewayResponse.responseType,
                                 statuscode: gatewayResponse.statusCode
                             }]);
@@ -11994,7 +12011,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             f2data: stage,
                             f2region: region,
                             name: stage.stageName,
-                            apiid: api.ApiId,
+                            apiid: api.id,
                             deploymentid: stage.deploymentId,
                             description: stage.description,
                             tracingenabled: stage.tracingEnabled,
@@ -12013,36 +12030,38 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             f2data: deployment,
                             f2region: region,
                             id: deployment.id,
-                            apiid: api.ApiId,
+                            apiid: api.id,
                             description: deployment.description,
                             creationtime: deployment.createdDate
                         }]);
                     });
                 }),
                 sdkcall("APIGateway", "getResources", {
-                    restApiId: api.id
+                    restApiId: api.id,
+                    limit: 500
                 }, true).then((data) => {
                     data.items.forEach(async (resource) => {
-                        await Promise.all(Object.keys(resource.resourceMethods).map(resourceMethod => {
-                            return sdkcall("APIGateway", "getMethod", {
-                                httpMethod: resourceMethod,
-                                resourceId: resource.id,
-                                restApiId: api.id
-                            }, true).then((data) => {
-                                data['restApiId'] = api.id;
-                                data['resourceId'] = resource.id;
-                                $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('append', [{
-                                    f2id: resource.id + "-" + data.httpMethod,
-                                    f2type: 'apigateway.method',
-                                    f2data: data,
-                                    f2region: region,
-                                    apiid: api.ApiId,
-                                    resourceid: resource.id,
-                                    httpmethod: data.httpMethod,
-                                    operationname: data.operationName
-                                }]);
-                            });
-                        }));
+                        if (resource.resourceMethods) {
+                            await Promise.all(Object.keys(resource.resourceMethods).map(resourceMethod => {
+                                return sdkcall("APIGateway", "getMethod", {
+                                    httpMethod: resourceMethod,
+                                    resourceId: resource.id,
+                                    restApiId: api.id
+                                }, true).then((data) => {
+                                    data['restApiId'] = api.id;
+                                    data['resourceId'] = resource.id;
+                                    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('append', [{
+                                        f2id: resource.id + "-" + data.httpMethod,
+                                        f2type: 'apigateway.method',
+                                        f2data: data,
+                                        f2region: region,
+                                        apiid: api.id,
+                                        resourceid: resource.id,
+                                        httpmethod: data.httpMethod
+                                    }]);
+                                });
+                            }));
+                        }
     
                         resource['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('append', [{
@@ -12050,7 +12069,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             f2type: 'apigateway.resource',
                             f2data: resource,
                             f2region: region,
-                            apiid: api.ApiId,
+                            apiid: api.id,
                             id: resource.id,
                             parentid: resource.parentId,
                             path: resource.path
@@ -12071,7 +12090,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             f2data: model,
                             f2region: region,
                             id: model.id,
-                            apiid: api.ApiId,
+                            apiid: api.id,
                             name: model.name,
                             description: model.description,
                             contenttype: model.contentType
@@ -12090,7 +12109,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             f2region: region,
                             name: authorizer.name,
                             id: authorizer.id,
-                            apiid: api.ApiId,
+                            apiid: api.id,
                             type: authorizer.type
                         }]);
                     });
