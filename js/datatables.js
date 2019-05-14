@@ -199,7 +199,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 
         service[method].call(service, params, async function(err, data) {
             if (err) {
-                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests") {
+                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded") {
                     if (backoff) {
                         console.log("Too many requests, sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
