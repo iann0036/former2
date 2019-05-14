@@ -5677,7 +5677,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_security_group',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.GroupId
+                        'Ref': obj.data.GroupId,
+                        'Terraform': {
+                            'id': obj.data.GroupId
+                        }
                     }
                 });
             } else if (obj.type == "route53.healthcheck") {
