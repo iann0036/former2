@@ -19,12 +19,13 @@ cfn_exceptions = {
     'AWS::CloudFormation::WaitConditionHandle': 'N/A',
     'AWS::EC2::SecurityGroupEgress': 'N/A',
     'AWS::EC2::SecurityGroupIngress': 'N/A',
-    'AWS::EC2::TrunkInterfaceAssociation': 'N/A',
+    'AWS::RDS::DBSecurityGroupIngress': 'N/A',
     'AWS::ElastiCache::SecurityGroupIngress': 'N/A',
     'AWS::Redshift::ClusterSecurityGroupIngress': 'N/A',
     'AWS::Route53::RecordSetGroup': 'N/A',
     'AWS::SDB::Domain': 'N/A',
-    'AWS::IAM::UserToGroupAddition': 'N/A'
+    'AWS::IAM::UserToGroupAddition': 'N/A',
+    'Alexa::ASK::Skill': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
@@ -51,6 +52,7 @@ cfn_types.append("AWS::Lambda::LayerVersion")
 cfn_types.append("AWS::EC2::CapacityReservation")
 cfn_types.append("AWS::ApiGatewayV2::DomainName")
 cfn_types.append("AWS::ApiGatewayV2::ApiMapping")
+cfn_types.append("AWS::SSM::MaintenanceWindowTarget")
 cfn_types = set(cfn_types)
 
 with open("js/mappings.js", "r") as f:

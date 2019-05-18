@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**380/387 (98%)** Resources Covered
+**384/392 (97%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -154,7 +154,6 @@
 | *AWS::EC2::TransitGatewayRouteTable* | :thumbsup: |
 | *AWS::EC2::TransitGatewayRouteTableAssociation* | :thumbsup: |
 | *AWS::EC2::TransitGatewayRouteTablePropagation* | :thumbsup: |
-| *AWS::EC2::TrunkInterfaceAssociation* | N/A |
 | *AWS::EC2::VPC* | :thumbsup: |
 | *AWS::EC2::VPCCidrBlock* | :thumbsup: |
 | *AWS::EC2::VPCDHCPOptionsAssociation* | :thumbsup: |
@@ -208,10 +207,12 @@
 | *AWS::Glue::Classifier* | :thumbsup: |
 | *AWS::Glue::Connection* | :thumbsup: |
 | *AWS::Glue::Crawler* | :thumbsup: |
+| *AWS::Glue::DataCatalogEncryptionSettings* | :thumbsup: |
 | *AWS::Glue::Database* | :thumbsup: |
 | *AWS::Glue::DevEndpoint* | :thumbsup: |
 | *AWS::Glue::Job* | :thumbsup: |
 | *AWS::Glue::Partition* | :thumbsup: |
+| *AWS::Glue::SecurityConfiguration* | :thumbsup: |
 | *AWS::Glue::Table* | :thumbsup: |
 | *AWS::Glue::Trigger* | :thumbsup: |
 | *AWS::Greengrass::ConnectorDefinition* | :thumbsup: |
@@ -226,6 +227,7 @@
 | *AWS::Greengrass::GroupVersion* | :thumbsup: |
 | *AWS::Greengrass::LoggerDefinition* | :thumbsup: |
 | *AWS::Greengrass::LoggerDefinitionVersion* | :thumbsup: |
+| *AWS::Greengrass::ResourceDefinition* | :thumbsup: |
 | *AWS::Greengrass::ResourceDefinitionVersion* | :thumbsup: |
 | *AWS::Greengrass::SubscriptionDefinition* | :thumbsup: |
 | *AWS::Greengrass::SubscriptionDefinitionVersion* | :thumbsup: |
@@ -284,6 +286,7 @@
 | *AWS::Logs::LogStream* | :thumbsup: |
 | *AWS::Logs::MetricFilter* | :thumbsup: |
 | *AWS::Logs::SubscriptionFilter* | :thumbsup: |
+| *AWS::MediaStore::Container* | :thumbsup: |
 | *AWS::Neptune::DBCluster* | :thumbsup: |
 | *AWS::Neptune::DBClusterParameterGroup* | :thumbsup: |
 | *AWS::Neptune::DBInstance* | :thumbsup: |
@@ -303,7 +306,7 @@
 | *AWS::RDS::DBInstance* | :thumbsup: |
 | *AWS::RDS::DBParameterGroup* | :thumbsup: |
 | *AWS::RDS::DBSecurityGroup* | :thumbsup: |
-| *AWS::RDS::DBSecurityGroupIngress* |  |
+| *AWS::RDS::DBSecurityGroupIngress* | N/A |
 | *AWS::RDS::DBSubnetGroup* | :thumbsup: |
 | *AWS::RDS::EventSubscription* | :thumbsup: |
 | *AWS::RDS::OptionGroup* | :thumbsup: |
@@ -342,6 +345,7 @@
 | *AWS::SSM::Association* | :thumbsup: |
 | *AWS::SSM::Document* | :thumbsup: |
 | *AWS::SSM::MaintenanceWindow* | :thumbsup: |
+| *AWS::SSM::MaintenanceWindowTarget* | :thumbsup: |
 | *AWS::SSM::MaintenanceWindowTask* | :thumbsup: |
 | *AWS::SSM::Parameter* | :thumbsup: |
 | *AWS::SSM::PatchBaseline* | :thumbsup: |
@@ -365,6 +369,7 @@
 | *AWS::ServiceCatalog::PortfolioPrincipalAssociation* | :thumbsup: |
 | *AWS::ServiceCatalog::PortfolioProductAssociation* | :thumbsup: |
 | *AWS::ServiceCatalog::PortfolioShare* |  |
+| *AWS::ServiceCatalog::ResourceUpdateConstraint* |  |
 | *AWS::ServiceCatalog::TagOption* | :thumbsup: |
 | *AWS::ServiceCatalog::TagOptionAssociation* | :thumbsup: |
 | *AWS::ServiceDiscovery::HttpNamespace* | :thumbsup: |
@@ -390,11 +395,11 @@
 | *AWS::WAFRegional::WebACLAssociation* | :thumbsup: |
 | *AWS::WAFRegional::XssMatchSet* | :thumbsup: |
 | *AWS::WorkSpaces::Workspace* | :thumbsup: |
-| *Alexa::ASK::Skill* |  |
+| *Alexa::ASK::Skill* | N/A |
 
 ## Terraform Coverage
 
-**245/491 (49%)** Resources Covered
+**246/491 (50%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -839,7 +844,7 @@
 | *aws_storagegateway_upload_buffer* |  |
 | *aws_storagegateway_working_storage* |  |
 | *aws_subnet* | :thumbsup: |
-| *aws_swf_domain* |  |
+| *aws_swf_domain* | :thumbsup: |
 | *aws_transfer_server* |  |
 | *aws_transfer_ssh_key* |  |
 | *aws_transfer_user* |  |
