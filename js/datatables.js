@@ -23319,6 +23319,69 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Security Configuration': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Data Catalog Encryption Settings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Catalog ID',
+                        field: 'catalogid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -23333,6 +23396,8 @@ async function updateDatatableAnalyticsGlue() {
     blockUI('#section-analytics-glue-triggers-datatable');
     blockUI('#section-analytics-glue-connections-datatable');
     blockUI('#section-analytics-glue-devendpoints-datatable');
+    blockUI('#section-analytics-glue-securityconfigurations-datatable');
+    blockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
 
     await sdkcall("Glue", "getDatabases", {
         // no params
@@ -23533,6 +23598,41 @@ async function updateDatatableAnalyticsGlue() {
         });
 
         unblockUI('#section-analytics-glue-devendpoints-datatable');
+    });
+
+    await sdkcall("Glue", "getSecurityConfigurations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('removeAll');
+        
+        data.SecurityConfigurations.forEach(securityConfiguration => {
+            $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('append', [{
+                f2id: securityConfiguration.EndpointName,
+                f2type: 'glue.securityconfiguration',
+                f2data: securityConfiguration,
+                f2region: region,
+                name: securityConfiguration.Name,
+                creationtime: devEndpoint.CreatedTimeStamp
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-securityconfigurations-datatable');
+    });
+
+    await sdkcall("Glue", "getDataCatalogEncryptionSettings", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('removeAll');
+        
+        $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('append', [{
+            f2id: 'GlueDataCatalogEncryptionSettingsCurrentAccount',
+            f2type: 'glue.datacatalogencryptionsettings',
+            f2data: data,
+            f2region: region,
+            catalogid: "(current account)"
+        }]);
+
+        unblockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
     });
 }
 
@@ -27202,7 +27302,6 @@ sections.push({
     'service': 'MediaStore',
     'resourcetypes': {
         'Containers': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -27294,31 +27393,49 @@ async function updateDatatableMediaServicesMediaStore() {
             return Promise.all([
                 sdkcall("MediaStore", "describeContainer", {
                     ContainerName: container.Name
-                }, true).then((data) => {
+                }, true).then(async (containerdata) => {
+                    await Promise.all([
+                        sdkcall("MediaStore", "getCorsPolicy", {
+                            ContainerName: container.Name
+                        }, false).then((data) => {
+                            containerdata['CorsPolicy'] = data.CorsPolicy;
+                        }).catch(() => {}),
+                        sdkcall("MediaStore", "getLifecyclePolicy", {
+                            ContainerName: container.Name
+                        }, false).then((data) => {
+                            containerdata['LifecyclePolicy'] = data.LifecyclePolicy;
+                        }).catch(() => {}),
+                        sdkcall("MediaStore", "getContainerPolicy", {
+                            ContainerName: container.Name
+                        }, false).then((data) => {
+                            containerdata['Policy'] = data.Policy;
+                        }).catch(() => {})
+                    ]);
+
                     $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('append', [{
-                        f2id: data.ARN,
+                        f2id: containerdata.Container.ARN,
                         f2type: 'mediastore.container',
-                        f2data: data,
+                        f2data: containerdata,
                         f2region: region,
-                        name: data.Name,
-                        endpoint: data.Endpoint
+                        name: containerdata.Container.Name,
+                        endpoint: containerdata.Container.Endpoint
                     }]);
-                }),
-                sdkcall("MediaStore", "getContainerPolicy", {
-                    ContainerName: container.Name
-                }, true).then((data) => {
-                    $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('append', [{
-                        f2id: container.Name + " Policy",
-                        f2type: 'mediastore.containerpolicy',
-                        f2data: {
-                            'Policy': data.Policy,
-                            'ContainerName': container.Name
-                        },
-                        f2region: region,
-                        name: container.Name,
-                        policy: data.Policy
-                    }]);
+
+                    if (containerdata.Policy) {
+                        $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('append', [{
+                            f2id: container.Name + " Policy",
+                            f2type: 'mediastore.containerpolicy',
+                            f2data: {
+                                'Policy': containerdata.Policy,
+                                'ContainerName': container.Name
+                            },
+                            f2region: region,
+                            name: container.Name,
+                            policy: containerdata.Policy
+                        }]);
+                    }
                 })
+                // additional removed
             ]);
         }));
 

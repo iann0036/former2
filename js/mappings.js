@@ -15514,13 +15514,19 @@ function performF2Mappings(objects) {
                     'options': reqParams
                 });
             } else if (obj.type == "mediastore.container") {
-                reqParams.tf['name'] = obj.data.Name;
+                reqParams.cfn['ContainerName'] = obj.data.Container.Name;
+                reqParams.tf['name'] = obj.data.Container.Name;
+                reqParams.cfn['AccessLoggingEnabled'] = obj.data.Container.AccessLoggingEnabled;
+                reqParams.cfn['CorsPolicy'] = obj.data.CorsPolicy;
+                reqParams.cfn['LifecyclePolicy'] = obj.data.LifecyclePolicy;
+                reqParams.cfn['Policy'] = obj.data.Policy;
 
                 tracked_resources.push({
                     'obj': obj,                     
                     'logicalId': getResourceName('mediastore', obj.id),
                     'region': obj.region,
                     'service': 'mediastore',
+                    'type': 'AWS::MediaStore::Container',
                     'terraformType': 'aws_media_store_container',
                     'options': reqParams
                 });
@@ -15930,6 +15936,48 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'swf',
                     'terraformType': 'aws_swf_domain',
+                    'options': reqParams
+                });
+            } else if (obj.type == "glue.securityconfiguration") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                if (obj.data.EncryptionConfiguration) {
+                    reqParams.cfn['EncryptionConfiguration'] = {
+                        'CloudWatchEncryption': obj.data.CloudWatchEncryption,
+                        'JobBookmarksEncryption': obj.data.JobBookmarksEncryption,
+                        'S3Encryptions': obj.data.S3Encryption
+                    };
+                }
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('glue', obj.id),
+                    'region': obj.region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::SecurityConfiguration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "glue.datacatalogencryptionsettings") {
+                reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+                if (obj.data.DataCatalogEncryptionSettings) {
+                    var connectionpasswordencryption = null;
+                    if (obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption) {
+                        connectionpasswordencryption = {
+                            'ReturnConnectionPasswordEncrypted': obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption.ReturnConnectionPasswordEncrypted,
+                            'KmsKeyId': obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption.AwsKmsKeyId
+                        };
+                    }
+                    reqParams.cfn['DataCatalogEncryptionSettings'] = {
+                        'EncryptionAtRest': obj.data.DataCatalogEncryptionSettings.EncryptionAtRest,
+                        'ConnectionPasswordEncryption': connectionpasswordencryption
+                    };
+                }
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('glue', obj.id),
+                    'region': obj.region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::DataCatalogEncryptionSettings',
                     'options': reqParams
                 });
             } else {
