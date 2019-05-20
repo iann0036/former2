@@ -23974,13 +23974,18 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentity", "getIdentityPoolRoles", {
                     IdentityPoolId: identityPool.IdentityPoolId
                 }, true).then((data) => {
+                    let roles = null;
+                    if (data.Roles) {
+                        roles = Object.values(data.Roles).join(", ");
+                    }
+
                     $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('append', [{
                         f2id: data.IdentityPoolId,
                         f2type: 'cognito.identitypoolroleattachment',
                         f2data: data,
                         f2region: region,
                         id: data.IdentityPoolId,
-                        roles: data.Roles.join(", ")
+                        roles: roles
                     }]);
                 }),
                 sdkcall("CognitoIdentity", "describeIdentityPool", {
