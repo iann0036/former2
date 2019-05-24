@@ -15980,6 +15980,138 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Glue::DataCatalogEncryptionSettings',
                     'options': reqParams
                 });
+            } else if (obj.type == "backup.backupvault") {
+                reqParams.cfn['BackupVaultName'] = obj.data.BackupVaultName;
+                reqParams.tf['name'] = obj.data.BackupVaultName;
+                reqParams.cfn['EncryptionKeyArn'] = obj.data.EncryptionKeyArn;
+                reqParams.tf['kms_key_arn'] = obj.data.EncryptionKeyArn;
+                reqParams.cfn['AccessPolicy'] = obj.data.AccessPolicy;
+                reqParams.cfn['Notifications'] = obj.data.Notifications;
+
+                /*
+                TODO:
+                BackupVaultTags: Json
+
+                tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('backup', obj.id),
+                    'region': obj.region,
+                    'service': 'backup',
+                    'type': 'AWS::Backup::BackupVault',
+                    'terraformType': 'aws_backup_vault',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.BackupVaultName,
+                        'GetAtt': {
+                            'BackupVaultName': obj.data.BackupVaultName,
+                            'BackupVaultArn': obj.data.BackupVaultArn
+                        }
+                    }
+                });
+            } else if (obj.type == "backup.backupplan") {
+                var rules = [];
+                var tfRules = [];
+
+                if (obj.data.BackupPlan.Rules) {
+                    obj.data.BackupPlan.Rules.forEach(rule => {
+                        rules.push({
+                            'CompletionWindowMinutes': rule.CompletionWindowMinutes,
+                            'Lifecycle': rule.Lifecycle,
+                            'RecoveryPointTags': rule.RecoveryPointTags,
+                            'RuleName': rule.RuleName,
+                            'ScheduleExpression': rule.ScheduleExpression,
+                            'StartWindowMinutes': rule.StartWindowMinutes,
+                            'TargetBackupVault': rule.TargetBackupVaultName,
+                        });
+                        var tfLifecycle = null;
+                        if (rule.Lifecycle) {
+                            tfLifecycle = {
+                                'cold_storage_after': rule.Lifecycle.MoveToColdStorageAfterDays,
+                                'delete_after': rule.Lifecycle.DeleteAfterDays
+                            };
+                        }
+                        tfRules.push({
+                            'completion_window': rule.CompletionWindowMinutes,
+                            'lifecycle': tfLifecycle,
+                            'recovery_point_tags': rule.RecoveryPointTags,
+                            'rule_name': rule.RuleName,
+                            'schedule': rule.ScheduleExpression,
+                            'start_window': rule.StartWindowMinutes,
+                            'target_vault_name': rule.TargetBackupVaultName,
+                        });
+                    });
+                }
+
+                reqParams.cfn['BackupPlan'] = {
+                    'BackupPlanName': obj.data.BackupPlan.BackupPlanName,
+                    'BackupPlanRule': rules
+                };
+
+                reqParams.tf['name'] = obj.data.BackupPlan.BackupPlanName;
+                reqParams.tf['rule'] = tfRules;
+                
+                /*
+                TODO:
+                BackupPlanTags: Json
+
+                tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('backup', obj.id),
+                    'region': obj.region,
+                    'service': 'backup',
+                    'type': 'AWS::Backup::BackupPlan',
+                    'terraformType': 'aws_backup_plan',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.BackupPlanId,
+                        'GetAtt': {
+                            'BackupPlanId': obj.data.BackupPlanId,
+                            'BackupPlanArn': obj.data.BackupPlanArn,
+                            'VersionId': obj.data.VersionId
+                        }
+                    }
+                });
+            } else if (obj.type == "backup.backupselection") {
+                reqParams.cfn['BackupPlanId'] = obj.data.BackupPlanId;
+                reqParams.cfn['BackupSelection'] = obj.data.BackupSelection;
+
+                reqParams.tf['plan_id'] = obj.data.BackupPlanId;
+                reqParams.tf['name'] = obj.data.BackupSelection.SelectionName;
+                reqParams.tf['resources'] = obj.data.BackupSelection.Resources;
+                reqParams.tf['iam_role_arn'] = obj.data.BackupSelection.IamRoleArn;
+                if (obj.data.BackupSelection.ListOfTags) {
+                    reqParams.tf['selection_tag'] = [];
+                    obj.data.BackupSelection.ListOfTags.forEach(tag => {
+                        reqParams.tf['selection_tag'].push({
+                            'type': tag.ConditionType,
+                            'key': tag.ConditionKey,
+                            'value': tag.ConditionValue
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,                     
+                    'logicalId': getResourceName('backup', obj.id),
+                    'region': obj.region,
+                    'service': 'backup',
+                    'type': 'AWS::Backup::BackupSelection',
+                    'terraformType': 'aws_backup_selection',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.SelectionId,
+                        'GetAtt': {
+                            'BackupPlanId': obj.data.BackupPlanId,
+                            'SelectionId': obj.data.SelectionId
+                        }
+                    }
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
