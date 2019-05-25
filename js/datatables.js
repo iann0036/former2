@@ -15834,6 +15834,59 @@ sections.push({
                 ]
             ]
         },
+        'Regional Rate Based Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'metricname',
+                        title: 'Metric Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ratelimit',
+                        title: 'Rate Limit',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Regional XSS Match Sets': {
             'columns': [
                 [
@@ -16018,6 +16071,80 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Regional Geo Match Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Regional Regex Pattern Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -16038,6 +16165,9 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
 
     await sdkcall("WAF", "listWebACLs", {
         // no params
@@ -16387,6 +16517,77 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
+    });
+
+    await sdkcall("WAFRegional", "listGeoMatchSets", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.GeoMatchSets.map(geoMatchSet => {
+            return sdkcall("WAFRegional", "getGeoMatchSet", {
+                GeoMatchSetId: geoMatchSet.GeoMatchSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('append', [{
+                    f2id: data.GeoMatchSet.GeoMatchSetId,
+                    f2type: 'wafregional.geomatchset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.GeoMatchSet.Name,
+                    id: data.GeoMatchSet.GeoMatchSetId
+                }]);
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
+    });
+
+    await sdkcall("WAFRegional", "listRegexPatternSets", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
+            return sdkcall("WAFRegional", "getRegexPatternSet", {
+                RegexPatternSetId: regexPatternSet.RegexPatternSetId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('append', [{
+                    f2id: data.RegexPatternSet.RegexPatternSetId,
+                    f2type: 'wafregional.regexpatternset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.RegexPatternSet.Name,
+                    id: data.RegexPatternSet.RegexPatternSetId
+                }]);
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
+    });
+
+    await sdkcall("WAFRegional", "listRateBasedRules", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Rules.map(rule => {
+            return sdkcall("WAFRegional", "getRateBasedRule", {
+                RuleId: rule.RuleId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('append', [{
+                    f2id: data.Rule.RegexPatternSetId,
+                    f2type: 'wafregional.ratebasedrule',
+                    f2data: data.Rule,
+                    f2region: region,
+                    name: data.Rule.Name,
+                    id: data.Rule.RuleId,
+                    metricname: data.Rule.MetricName,
+                    ratelimit: data.Rule.RateLimit
+                }]);
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
     });
 }
 

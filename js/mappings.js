@@ -16214,6 +16214,77 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_transfer_ssh_key',
                     'options': reqParams
                 });
+            } else if (obj.type == "wafregional.geomatchset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.cfn['GeoMatchConstraints'] = obj.data.GeoMatchConstraints;
+                if (obj.data.GeoMatchConstraints) {
+                    reqParams.tf['geo_match_constraint'] = [];
+                    obj.data.GeoMatchConstraints.forEach(geomatchconstraint => {
+                        reqParams.tf['geo_match_constraint'].push({
+                            'type': geomatchconstraint.Type,
+                            'value': geomatchconstraint.Value
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::GeoMatchSet',
+                    'terraformType': 'aws_wafregional_geo_match_set',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.regexpatternset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.cfn['RegexPatternStrings'] = obj.data.RegexPatternStrings;
+                reqParams.tf['regex_pattern_strings'] = obj.data.RegexPatternStrings;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::RegexPatternSet',
+                    'terraformType': 'aws_wafregional_regex_pattern_set',
+                    'options': reqParams
+                });
+            } else if (obj.type == "wafregional.ratebasedrule") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.tf['metric_name'] = obj.data.MetricName;
+                reqParams.cfn['RateKey'] = obj.data.RateKey;
+                reqParams.tf['rate_key'] = obj.data.RateKey;
+                reqParams.cfn['RateLimit'] = obj.data.RateLimit;
+                reqParams.tf['rate_limit'] = obj.data.RateLimit;
+                reqParams.cfn['MatchPredicates'] = [];
+                reqParams.tf['predicate'] = [];
+                obj.data.MatchPredicates.forEach(matchpredicate => {
+                    reqParams.cfn['MatchPredicates'].push({
+                        'Negated': matchpredicate.Negated,
+                        'Type': matchpredicate.Type,
+                        'DataId': matchpredicate.DataId
+                    });
+                    reqParams.tf['predicate'].push({
+                        'negated': matchpredicate.Negated,
+                        'type': matchpredicate.Type,
+                        'data_id': matchpredicate.DataId
+                    });
+                });
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('wafregional', obj.id),
+                    'region': obj.region,
+                    'service': 'wafregional',
+                    'type': 'AWS::WAFRegional::RateBasedRule',
+                    'terraformType': 'aws_wafregional_rate_based_rule',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
