@@ -16171,8 +16171,9 @@ function performF2Mappings(objects) {
                 reqParams.cfn['UserName'] = obj.data.User.UserName;
                 reqParams.tf['user_name'] = obj.data.User.UserName;
                 if (obj.data.User.SshPublicKeys) {
+                    reqParams.cfn['SshPublicKeys'] = [];
                     obj.data.User.SshPublicKeys.forEach(sshkey => {
-                        ; // TODO: Docs are broken...
+                        reqParams.cfn['SshPublicKeys'].push(sshkey.SshPublicKeyBody);
                     });
                 }
 
