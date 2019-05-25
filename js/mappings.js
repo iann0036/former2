@@ -16421,6 +16421,40 @@ function performF2Mappings(objects) {
                     'type': 'AWS::PinpointEmail::Identity',
                     'options': reqParams
                 });
+            } else if (obj.type == "licensemanager.licenseconfiguration") {
+                reqParams.tf['name'] = obj.data.Name;
+                reqParams.tf['description'] = obj.data.Description;
+                reqParams.tf['license_counting_type'] = obj.data.LicenseCountingType;
+                reqParams.tf['license_rules'] = obj.data.LicenseRules;
+                reqParams.tf['license_count'] = obj.data.LicenseCount;
+                reqParams.tf['license_count_hard_limit'] = obj.data.LicenseCountHardLimit;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('licensemanager', obj.id),
+                    'region': obj.region,
+                    'service': 'licensemanager',
+                    'terraformType': 'aws_licensemanager_license_configuration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "licensemanager.association") {
+                reqParams.tf['license_configuration_arn'] = obj.data.LicenseConfigurationArn;
+                reqParams.tf['resource_arn'] = obj.data.ResourceArn;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('licensemanager', obj.id),
+                    'region': obj.region,
+                    'service': 'licensemanager',
+                    'terraformType': 'aws_licensemanager_association',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
