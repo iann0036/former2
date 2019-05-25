@@ -408,7 +408,7 @@
 
 ## Terraform Coverage
 
-**255/499 (51%)** Resources Covered
+**259/499 (51%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -620,8 +620,8 @@
 | *aws_gamelift_game_session_queue* |  |
 | *aws_glacier_vault* | :thumbsup: |
 | *aws_glacier_vault_lock* | :thumbsup: |
-| *aws_globalaccelerator_accelerator* |  |
-| *aws_globalaccelerator_listener* |  |
+| *aws_globalaccelerator_accelerator* | :thumbsup: |
+| *aws_globalaccelerator_listener* | :thumbsup: |
 | *aws_glue_catalog_database* |  |
 | *aws_glue_catalog_table* |  |
 | *aws_glue_classifier* |  |
@@ -695,8 +695,8 @@
 | *aws_lb_ssl_negotiation_policy* |  |
 | *aws_lb_target_group* | :thumbsup: |
 | *aws_lb_target_group_attachment* |  |
-| *aws_licensemanager_association* |  |
-| *aws_licensemanager_license_configuration* |  |
+| *aws_licensemanager_association* | :thumbsup: |
+| *aws_licensemanager_license_configuration* | :thumbsup: |
 | *aws_lightsail_domain* |  |
 | *aws_lightsail_instance* |  |
 | *aws_lightsail_key_pair* |  |
