@@ -8211,6 +8211,7 @@ sections.push({
                         title: 'Enabled',
                         sortable: true,
                         editable: true,
+                        formatter: tickFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
@@ -29421,5 +29422,243 @@ async function updateDatatableMigrationAndTransferTransfer() {
         unblockUI('#section-migrationandtransfer-transfer-servers-datatable');
         unblockUI('#section-migrationandtransfer-transfer-users-datatable');
         unblockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
+    });
+}
+
+/* ========================================================================== */
+// Pinpoint
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Customer Engagement',
+    'service': 'Pinpoint',
+    'resourcetypes': {
+        'Email Configuration Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Email Configuration Set Event Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'matchingeventtypes',
+                        title: 'Matching Event Types',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Email Dedicated IP Pools': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Email Identities': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableCustomerEngagementPinpoint() {
+    blockUI('#section-customerengagement-pinpoint-emailconfigurationsets-datatable');
+    blockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
+    blockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
+    blockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
+
+    await sdkcall("PinpointEmail", "listConfigurationSets", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ConfigurationSets.map(configurationset => {
+            return sdkcall("PinpointEmail", "getConfigurationSet", {
+                ConfigurationSetName: configurationset
+            }, true).then(async (data) => {
+                $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').bootstrapTable('append', [{
+                    f2id: data.ConfigurationSetName,
+                    f2type: 'pinpoint.emailconfigurationset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ConfigurationSetName
+                }]);
+                
+                await sdkcall("PinpointEmail", "getConfigurationSetEventDestinations", {
+                    ConfigurationSetName: data.ConfigurationSetName
+                }, true).then((data) => {
+                    data.EventDestinations.forEach(eventdestination => {
+                        eventdestination['ConfigurationSetName'] = configurationset;
+    
+                        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').bootstrapTable('append', [{
+                            f2id: eventdestination.Name,
+                            f2type: 'pinpoint.emailconfigurationseteventdestination',
+                            f2data: eventdestination,
+                            f2region: region,
+                            name: eventdestination.Name,
+                            enabled: eventdestination.Enabled,
+                            matchingeventtypes: eventdestination.MatchingEventTypes.join(", ")
+                        }]);
+                    });
+                });
+            });
+        }));
+
+        unblockUI('#section-customerengagement-pinpoint-emailconfigurationsets-datatable');
+        unblockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
+    });
+
+    await sdkcall("PinpointEmail", "listDedicatedIpPools", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').bootstrapTable('removeAll');
+        
+        data.DedicatedIpPools.forEach(dedicatedippool => {
+            $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').bootstrapTable('append', [{
+                f2id: dedicatedippool,
+                f2type: 'pinpoint.emaildedicatedippool',
+                f2data: {
+                    'PoolName': dedicatedippool
+                },
+                f2region: region,
+                name: dedicatedippool
+            }]);
+        });
+
+        unblockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
+    });
+
+    await sdkcall("PinpointEmail", "listEmailIdentities", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-customerengagement-pinpoint-emailidentities-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.EmailIdentities.map(emailidentity => {
+            return sdkcall("PinpointEmail", "getEmailIdentity", {
+                EmailIdentity: emailidentity.IdentityName
+            }, true).then(async (data) => {
+                data['Name'] = emailidentity.IdentityName;
+
+                $('#section-customerengagement-pinpoint-emailidentities-datatable').bootstrapTable('append', [{
+                    f2id: emailidentity.IdentityName,
+                    f2type: 'pinpoint.emailidentity',
+                    f2data: data,
+                    f2region: region,
+                    name: emailidentity.IdentityName,
+                    type: data.IdentityType
+                }]);
+            });
+        }));
+
+        unblockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
     });
 }

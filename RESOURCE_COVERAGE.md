@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**384/392 (97%)** Resources Covered
+**396/401 (98%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -300,6 +300,10 @@
 | *AWS::OpsWorks::UserProfile* | :thumbsup: |
 | *AWS::OpsWorks::Volume* | :thumbsup: |
 | *AWS::OpsWorksCM::Server* | :thumbsup: |
+| *AWS::PinpointEmail::ConfigurationSet* | :thumbsup: |
+| *AWS::PinpointEmail::ConfigurationSetEventDestination* | :thumbsup: |
+| *AWS::PinpointEmail::DedicatedIpPool* | :thumbsup: |
+| *AWS::PinpointEmail::Identity* | :thumbsup: |
 | *AWS::RAM::ResourceShare* | :thumbsup: |
 | *AWS::RDS::DBCluster* | :thumbsup: |
 | *AWS::RDS::DBClusterParameterGroup* | :thumbsup: |
@@ -379,6 +383,8 @@
 | *AWS::ServiceDiscovery::Service* | :thumbsup: |
 | *AWS::StepFunctions::Activity* | :thumbsup: |
 | *AWS::StepFunctions::StateMachine* | :thumbsup: |
+| *AWS::Transfer::Server* | :thumbsup: |
+| *AWS::Transfer::User* | :thumbsup: |
 | *AWS::WAF::ByteMatchSet* | :thumbsup: |
 | *AWS::WAF::IPSet* | :thumbsup: |
 | *AWS::WAF::Rule* | :thumbsup: |
@@ -387,7 +393,10 @@
 | *AWS::WAF::WebACL* | :thumbsup: |
 | *AWS::WAF::XssMatchSet* | :thumbsup: |
 | *AWS::WAFRegional::ByteMatchSet* | :thumbsup: |
+| *AWS::WAFRegional::GeoMatchSet* | :thumbsup: |
 | *AWS::WAFRegional::IPSet* | :thumbsup: |
+| *AWS::WAFRegional::RateBasedRule* | :thumbsup: |
+| *AWS::WAFRegional::RegexPatternSet* | :thumbsup: |
 | *AWS::WAFRegional::Rule* | :thumbsup: |
 | *AWS::WAFRegional::SizeConstraintSet* | :thumbsup: |
 | *AWS::WAFRegional::SqlInjectionMatchSet* | :thumbsup: |
@@ -399,7 +408,7 @@
 
 ## Terraform Coverage
 
-**246/491 (50%)** Resources Covered
+**255/499 (51%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -454,9 +463,9 @@
 | *aws_autoscaling_notification* |  |
 | *aws_autoscaling_policy* | :thumbsup: |
 | *aws_autoscaling_schedule* | :thumbsup: |
-| *aws_backup_plan* |  |
-| *aws_backup_selection* |  |
-| *aws_backup_vault* |  |
+| *aws_backup_plan* | :thumbsup: |
+| *aws_backup_selection* | :thumbsup: |
+| *aws_backup_vault* | :thumbsup: |
 | *aws_batch_compute_environment* | :thumbsup: |
 | *aws_batch_job_definition* | :thumbsup: |
 | *aws_batch_job_queue* | :thumbsup: |
@@ -519,6 +528,7 @@
 | *aws_db_cluster_snapshot* |  |
 | *aws_db_event_subscription* | :thumbsup: |
 | *aws_db_instance* |  |
+| *aws_db_instance_role_association* |  |
 | *aws_db_option_group* | :thumbsup: |
 | *aws_db_parameter_group* | :thumbsup: |
 | *aws_db_security_group* | :thumbsup: |
@@ -549,6 +559,7 @@
 | *aws_dx_connection_association* | :thumbsup: |
 | *aws_dx_gateway* | :thumbsup: |
 | *aws_dx_gateway_association* | :thumbsup: |
+| *aws_dx_gateway_association_proposal* | :thumbsup: |
 | *aws_dx_hosted_private_virtual_interface* | :thumbsup: |
 | *aws_dx_hosted_private_virtual_interface_accepter* | N/A |
 | *aws_dx_hosted_public_virtual_interface* | :thumbsup: |
@@ -702,6 +713,8 @@
 | *aws_media_store_container_policy* | :thumbsup: |
 | *aws_mq_broker* |  |
 | *aws_mq_configuration* |  |
+| *aws_msk_cluster* |  |
+| *aws_msk_configuration* |  |
 | *aws_nat_gateway* | :thumbsup: |
 | *aws_neptune_cluster* | :thumbsup: |
 | *aws_neptune_cluster_instance* | :thumbsup: |
@@ -733,6 +746,7 @@
 | *aws_opsworks_user_profile* | :thumbsup: |
 | *aws_organizations_account* |  |
 | *aws_organizations_organization* |  |
+| *aws_organizations_organizational_unit* |  |
 | *aws_organizations_policy* |  |
 | *aws_organizations_policy_attachment* |  |
 | *aws_pinpoint_adm_channel* |  |
@@ -806,6 +820,7 @@
 | *aws_ses_domain_identity* |  |
 | *aws_ses_domain_identity_verification* |  |
 | *aws_ses_domain_mail_from* |  |
+| *aws_ses_email_identity* |  |
 | *aws_ses_event_destination* | :thumbsup: |
 | *aws_ses_identity_notification_topic* |  |
 | *aws_ses_receipt_filter* | :thumbsup: |
@@ -814,6 +829,7 @@
 | *aws_ses_template* | :thumbsup: |
 | *aws_sfn_activity* |  |
 | *aws_sfn_state_machine* |  |
+| *aws_shield_protection* |  |
 | *aws_simpledb_domain* |  |
 | *aws_snapshot_create_volume_permission* |  |
 | *aws_sns_platform_application* |  |
@@ -845,9 +861,9 @@
 | *aws_storagegateway_working_storage* |  |
 | *aws_subnet* | :thumbsup: |
 | *aws_swf_domain* | :thumbsup: |
-| *aws_transfer_server* |  |
-| *aws_transfer_ssh_key* |  |
-| *aws_transfer_user* |  |
+| *aws_transfer_server* | :thumbsup: |
+| *aws_transfer_ssh_key* | :thumbsup: |
+| *aws_transfer_user* | :thumbsup: |
 | *aws_volume_attachment* | :thumbsup: |
 | *aws_vpc* | :thumbsup: |
 | *aws_vpc_dhcp_options* | :thumbsup: |
@@ -880,11 +896,11 @@
 | *aws_waf_web_acl* | :thumbsup: |
 | *aws_waf_xss_match_set* | :thumbsup: |
 | *aws_wafregional_byte_match_set* | :thumbsup: |
-| *aws_wafregional_geo_match_set* |  |
+| *aws_wafregional_geo_match_set* | :thumbsup: |
 | *aws_wafregional_ipset* | :thumbsup: |
-| *aws_wafregional_rate_based_rule* |  |
+| *aws_wafregional_rate_based_rule* | :thumbsup: |
 | *aws_wafregional_regex_match_set* |  |
-| *aws_wafregional_regex_pattern_set* |  |
+| *aws_wafregional_regex_pattern_set* | :thumbsup: |
 | *aws_wafregional_rule* | :thumbsup: |
 | *aws_wafregional_rule_group* |  |
 | *aws_wafregional_size_constraint_set* | :thumbsup: |
@@ -894,3 +910,4 @@
 | *aws_wafregional_xss_match_set* | :thumbsup: |
 | *aws_worklink_fleet* |  |
 | *aws_worklink_website_certificate_authority_association* |  |
+| *aws_xray_sampling_rule* |  |

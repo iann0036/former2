@@ -16285,6 +16285,142 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_wafregional_rate_based_rule',
                     'options': reqParams
                 });
+            } else if (obj.type == "pinpoint.emailconfigurationset") {
+                reqParams.cfn['Name'] = obj.data.ConfigurationSetName;
+                if (obj.data.TrackingOptions) {
+                    reqParams.cfn['TrackingOptions'] = {
+                        'CustomRedirectDomain': obj.data.TrackingOptions.CustomRedirectDomain
+                    };
+                }
+                if (obj.data.DeliveryOptions) {
+                    reqParams.cfn['DeliveryOptions'] = {
+                        'SendingPoolName': obj.data.DeliveryOptions.SendingPoolName
+                    };
+                }
+                if (obj.data.ReputationOptions) {
+                    reqParams.cfn['ReputationOptions'] = {
+                        'ReputationMetricsEnabled': obj.data.ReputationOptions.ReputationMetricsEnabled
+                    };
+                }
+                if (obj.data.SendingOptions) {
+                    reqParams.cfn['SendingOptions'] = {
+                        'SendingEnabled': obj.data.SendingOptions.SendingEnabled
+                    };
+                }
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::PinpointEmail::ConfigurationSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.emailconfigurationseteventdestination") {
+                reqParams.cfn['ConfigurationSetName'] = obj.data.ConfigurationSetName;
+                reqParams.cfn['EventDestinationName'] = obj.data.Name;
+                if (obj.data.MatchingEventTypes && obj.data.MatchingEventTypes.length > 0) {
+                    var cloudwatchdestination = null;
+                    if (obj.data.CloudWatchDestination) {
+                        var dimensionconfigurations = [];
+                        obj.data.CloudWatchDestination.DimensionConfigurations.forEach(dimensionconfiguration => {
+                            dimensionconfigurations.push({
+                                'DimensionName': dimensionconfiguration.DimensionName,
+                                'DimensionValueSource': dimensionconfiguration.DimensionValueSource,
+                                'DefaultDimensionValue': dimensionconfiguration.DefaultDimensionValue
+                            });
+                        });
+                        cloudwatchdestination = {
+                            'DimensionConfigurations': dimensionconfigurations
+                        };
+                    }
+                    var kinesisfirehosedestination = null;
+                    if (obj.data.KinesisFirehoseDestination) {
+                        kinesisfirehosedestination = {
+                            'IamRoleArn': obj.data.KinesisFirehoseDestination.IamRoleArn,
+                            'DeliveryStreamArn': obj.data.KinesisFirehoseDestination.DeliveryStreamArn
+                        };
+                    }
+                    var pinpointdestination = null;
+                    if (obj.data.PinpointDestination) {
+                        pinpointdestination = {
+                            'ApplicationArn': obj.data.PinpointDestination.ApplicationArn
+                        };
+                    }
+                    var snsdestination = null;
+                    if (obj.data.SnsDestination) {
+                        snsdestination = {
+                            'TopicArn': obj.data.SnsDestination.TopicArn
+                        };
+                    }
+                    reqParams.cfn['EventDestination'] = {
+                        'CloudWatchDestination': cloudwatchdestination,
+                        'Enabled': obj.data.Enabled,
+                        'KinesisFirehoseDestination': kinesisfirehosedestination,
+                        'MatchingEventTypes': obj.data.MatchingEventTypes,
+                        'PinpointDestination': pinpointdestination,
+                        'SnsDestination': snsdestination
+                    };
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::PinpointEmail::ConfigurationSetEventDestination',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.emaildedicatedippool") {
+                reqParams.cfn['PoolName'] = obj.data.PoolName;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::PinpointEmail::DedicatedIpPool',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.emailidentity") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                if (obj.data.DkimAttributes) {
+                    reqParams.cfn['DkimSigningEnabled'] = obj.data.DkimAttributes.SigningEnabled;
+                }
+                reqParams.cfn['FeedbackForwardingEnabled'] = obj.data.FeedbackForwardingStatus;
+                if (obj.data.MailFromAttributes) {
+                    reqParams.cfn['MailFromAttributes'] = {
+                        'BehaviorOnMxFailure': obj.data.MailFromAttributes.BehaviorOnMxFailure,
+                        'MailFromDomain': obj.data.MailFromAttributes.MailFromDomain
+                    };
+                }
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::PinpointEmail::Identity',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

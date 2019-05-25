@@ -116,6 +116,7 @@ aws_dx_connection
 aws_dx_connection_association
 aws_dx_gateway
 aws_dx_gateway_association
+aws_dx_gateway_association_proposal
 aws_dx_hosted_private_virtual_interface
 aws_dx_hosted_private_virtual_interface_accepter
 aws_dx_hosted_public_virtual_interface
@@ -285,6 +286,8 @@ aws_mq_configuration
 aws_media_package_channel
 aws_media_store_container
 aws_media_store_container_policy
+aws_msk_cluster
+aws_msk_configuration
 aws_neptune_parameter_group
 aws_neptune_subnet_group
 aws_neptune_cluster_parameter_group
@@ -310,6 +313,7 @@ aws_opsworks_static_web_layer
 aws_opsworks_user_profile
 aws_organizations_account
 aws_organizations_organization
+aws_organizations_organizational_unit
 aws_organizations_policy
 aws_organizations_policy_attachment
 aws_pinpoint_app
@@ -329,6 +333,7 @@ aws_ram_resource_share
 aws_db_cluster_snapshot
 aws_db_event_subscription
 aws_db_instance
+aws_db_instance_role_association
 aws_db_option_group
 aws_db_parameter_group
 aws_db_security_group
@@ -378,6 +383,7 @@ aws_ses_domain_identity
 aws_ses_domain_identity_verification
 aws_ses_domain_dkim
 aws_ses_domain_mail_from
+aws_ses_email_identity
 aws_ses_receipt_filter
 aws_ses_receipt_rule
 aws_ses_receipt_rule_set
@@ -390,6 +396,7 @@ aws_service_discovery_http_namespace
 aws_service_discovery_private_dns_namespace
 aws_service_discovery_public_dns_namespace
 aws_service_discovery_service
+aws_shield_protection
 aws_simpledb_domain
 aws_sns_platform_application
 aws_sns_sms_preferences
@@ -489,3 +496,4 @@ aws_wafregional_web_acl_association
 aws_wafregional_xss_match_set
 aws_worklink_fleet
 aws_worklink_website_certificate_authority_association
+aws_xray_sampling_rule
