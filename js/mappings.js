@@ -2259,7 +2259,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -2307,7 +2307,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2344,7 +2344,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2359,7 +2359,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['vpc_id'] = obj.data.VpcId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2672,7 +2672,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('s3', obj.id),
                     'region': obj.region,
                     'service': 's3',
@@ -2692,7 +2692,7 @@ function performF2Mappings(objects) {
                 // TODO: Check for multiple
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2716,7 +2716,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2733,7 +2733,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['VpcId'] = obj.data.VpcId;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -2747,7 +2747,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['vpc_id'] = obj.data.VpcId;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -2790,7 +2790,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2827,7 +2827,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2845,7 +2845,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['destination_cidr_block'] = obj.data.DestinationCidrBlock;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2860,7 +2860,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['route_table_id'] = obj.data.RouteTableId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2891,7 +2891,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2911,7 +2911,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2934,7 +2934,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2970,7 +2970,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['rule_number'] = obj.data.RuleNumber;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -2995,7 +2995,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3022,7 +3022,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3052,7 +3052,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3074,7 +3074,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['policy'] = obj.data.Policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('s3', obj.id),
                     'region': obj.region,
                     'service': 's3',
@@ -3109,7 +3109,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -3126,7 +3126,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.GroupName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3201,7 +3201,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -3233,7 +3233,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -3294,7 +3294,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elbv2', obj.id),
                     'region': obj.region,
                     'service': 'elbv2',
@@ -3337,7 +3337,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3357,7 +3357,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['device_name'] = obj.data.Device;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3435,7 +3435,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -3553,7 +3553,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -3581,7 +3581,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['enabled'] = obj.data.Enabled;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -3711,7 +3711,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -3743,7 +3743,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sns', obj.id),
                     'region': obj.region,
                     'service': 'sns',
@@ -3764,7 +3764,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['arn'] = obj.data.Topic;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sns', obj.id),
                     'region': obj.region,
                     'service': 'sns',
@@ -3803,7 +3803,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sqs', obj.id),
                     'region': obj.region,
                     'service': 'sqs',
@@ -3824,7 +3824,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['queue_url'] = obj.data.Queue;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sqs', obj.id),
                     'region': obj.region,
                     'service': 'sqs',
@@ -3845,7 +3845,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
@@ -3865,7 +3865,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
@@ -3902,7 +3902,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
@@ -3940,7 +3940,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticbeanstalk', obj.id),
                     'region': obj.region,
                     'service': 'elasticbeanstalk',
@@ -4017,7 +4017,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -4079,7 +4079,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -4120,7 +4120,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -4132,7 +4132,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['LayerId'] = obj.data.LayerId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -4190,7 +4190,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -4207,7 +4207,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['public_ipv4_pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -4232,7 +4232,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['private_ip_address'] = obj.data.PrivateIpAddress;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -4278,7 +4278,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -4371,7 +4371,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('redshift', obj.id),
                     'region': obj.region,
                     'service': 'redshift',
@@ -4404,7 +4404,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('redshift', obj.id),
                     'region': obj.region,
                     'service': 'redshift',
@@ -4426,7 +4426,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('redshift', obj.id),
                     'region': obj.region,
                     'service': 'redshift',
@@ -4440,7 +4440,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('redshift', obj.id),
                     'region': obj.region,
                     'service': 'redshift',
@@ -4468,7 +4468,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -4491,7 +4491,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -4514,7 +4514,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -4589,7 +4589,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -4611,7 +4611,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('rds', obj.id),
                     'region': obj.region,
                     'service': 'rds',
@@ -4632,7 +4632,7 @@ function performF2Mappings(objects) {
                 });
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
@@ -4652,7 +4652,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
@@ -4672,7 +4672,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
@@ -4953,7 +4953,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudfront', obj.id),
                     'region': obj.region,
                     'service': 'cloudfront',
@@ -4988,7 +4988,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -5060,7 +5060,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
@@ -5186,7 +5186,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dynamodb', obj.id),
                     'region': obj.region,
                     'service': 'dynamodb',
@@ -5235,7 +5235,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudtrail', obj.id),
                     'region': obj.region,
                     'service': 'cloudtrail',
@@ -5309,7 +5309,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -5334,7 +5334,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['desired_capacity'] = obj.data.DesiredCapacity;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -5452,7 +5452,7 @@ function performF2Mappings(objects) {
                 */
                 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -5505,7 +5505,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -5669,7 +5669,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -5726,7 +5726,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -5803,7 +5803,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elb', obj.id),
                     'region': obj.region,
                     'service': 'elb',
@@ -5881,7 +5881,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -6009,7 +6009,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -6036,7 +6036,7 @@ function performF2Mappings(objects) {
                     */
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('cloud9', obj.id),
                         'region': obj.region,
                         'service': 'cloud9',
@@ -6079,7 +6079,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6162,7 +6162,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['client_certificate_id'] = obj.data.clientCertificateId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6184,7 +6184,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6201,7 +6201,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['parent_id'] = obj.data.parentId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6225,7 +6225,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['content_type'] = obj.data.contentType;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6256,7 +6256,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['authorizer_result_ttl_in_seconds'] = obj.data.authorizerResultTtlInSeconds;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6329,7 +6329,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['authorization_scopes'] = obj.data.authorizationScopes;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6350,7 +6350,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['response_templates'] = obj.data.responseTemplates;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6367,7 +6367,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['version'] = obj.data.version;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6398,7 +6398,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['properties'] = obj.data.properties;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6417,7 +6417,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['validate_request_parameters'] = obj.data.validateRequestParameters;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6430,7 +6430,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['cloudwatch_role_arn'] = obj.data.cloudwatchRoleArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6453,7 +6453,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6464,7 +6464,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Description'] = obj.data.description;
                
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6488,7 +6488,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['regional_certificate_arn'] = obj.data.regionalCertificateArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6507,7 +6507,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['stage_name'] = obj.data.stage;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6555,7 +6555,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6571,7 +6571,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['usage_plan_id'] = obj.data.value;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6588,7 +6588,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['target_arns'] = obj.data.targetArns;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
                     'region': obj.region,
                     'service': 'apigateway',
@@ -6606,7 +6606,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Version'] = obj.data.Version;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6625,7 +6625,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['AccessLogSettings'] = obj.data.AccessLogSettings;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6642,7 +6642,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6657,7 +6657,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Schema'] = obj.data.Schema;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6675,7 +6675,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6691,7 +6691,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RouteId'] = obj.data.RouteId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6713,7 +6713,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Target'] = obj.data.Target;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6730,7 +6730,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6753,7 +6753,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TimeoutInMillis'] = obj.data.TimeoutInMillis;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -6826,7 +6826,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('batch', obj.id),
                     'region': obj.region,
                     'service': 'batch',
@@ -6852,7 +6852,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.jobQueueName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('batch', obj.id),
                     'region': obj.region,
                     'service': 'batch',
@@ -7042,7 +7042,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('batch', obj.id),
                     'region': obj.region,
                     'service': 'batch',
@@ -7070,7 +7070,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('efs', obj.id),
                     'region': obj.region,
                     'service': 'efs',
@@ -7089,7 +7089,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['subnet_id'] = obj.data.SubnetId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('efs', obj.id),
                     'region': obj.region,
                     'service': 'efs',
@@ -7130,7 +7130,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('fsx', obj.id),
                     'region': obj.region,
                     'service': 'fsx',
@@ -7157,7 +7157,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ResourceArns'] = obj.data.resourceArns;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ram', obj.id),
                     'region': obj.region,
                     'service': 'ram',
@@ -7186,7 +7186,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('acm', obj.id),
                     'region': obj.region,
                     'service': 'acm',
@@ -7214,7 +7214,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kms', obj.id),
                     'region': obj.region,
                     'service': 'kms',
@@ -7235,7 +7235,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['target_key_id'] = obj.data.TargetKeyId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kms', obj.id),
                     'region': obj.region,
                     'service': 'kms',
@@ -7258,7 +7258,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('stepfunctions', obj.id),
                     'region': obj.region,
                     'service': 'stepfunctions',
@@ -7277,7 +7277,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('stepfunctions', obj.id),
                     'region': obj.region,
                     'service': 'stepfunctions',
@@ -7296,7 +7296,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['query'] = obj.data.QueryString;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('athena', obj.id),
                     'region': obj.region,
                     'service': 'athena',
@@ -7313,7 +7313,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['attributes'] = obj.data.attributes;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7328,7 +7328,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['principal'] = obj.data.principal;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7343,7 +7343,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['policy'] = obj.data.policyDocument;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7358,7 +7358,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['target'] = obj.data.principal;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7376,7 +7376,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7627,7 +7627,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot', obj.id),
                     'region': obj.region,
                     'service': 'iot',
@@ -7643,7 +7643,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ProjectName'] = obj.data.projectName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot1click', obj.id),
                     'region': obj.region,
                     'service': 'iot1click',
@@ -7661,7 +7661,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot1click', obj.id),
                     'region': obj.region,
                     'service': 'iot1click',
@@ -7673,7 +7673,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Enabled'] = obj.data.Enabled;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iot1click', obj.id),
                     'region': obj.region,
                     'service': 'iot1click',
@@ -7692,7 +7692,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codecommit', obj.id),
                     'region': obj.region,
                     'service': 'codecommit',
@@ -7866,7 +7866,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codebuild', obj.id),
                     'region': obj.region,
                     'service': 'codebuild',
@@ -7880,7 +7880,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['compute_platform'] = obj.data.computePlatform;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codedeploy', obj.id),
                     'region': obj.region,
                     'service': 'codedeploy',
@@ -7998,7 +7998,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codedeploy', obj.id),
                     'region': obj.region,
                     'service': 'codedeploy',
@@ -8020,7 +8020,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codedeploy', obj.id),
                     'region': obj.region,
                     'service': 'codedeploy',
@@ -8068,7 +8068,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('neptune', obj.id),
                     'region': obj.region,
                     'service': 'neptune',
@@ -8104,7 +8104,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('neptune', obj.id),
                     'region': obj.region,
                     'service': 'neptune',
@@ -8128,7 +8128,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('neptune', obj.id),
                     'region': obj.region,
                     'service': 'neptune',
@@ -8152,7 +8152,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('neptune', obj.id),
                     'region': obj.region,
                     'service': 'neptune',
@@ -8181,7 +8181,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('neptune', obj.id),
                     'region': obj.region,
                     'service': 'neptune',
@@ -8232,7 +8232,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('docdb', obj.id),
                     'region': obj.region,
                     'service': 'docdb',
@@ -8261,7 +8261,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('docdb', obj.id),
                     'region': obj.region,
                     'service': 'docdb',
@@ -8285,7 +8285,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('docdb', obj.id),
                     'region': obj.region,
                     'service': 'docdb',
@@ -8314,7 +8314,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('docdb', obj.id),
                     'region': obj.region,
                     'service': 'docdb',
@@ -8330,7 +8330,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('robomaker', obj.id),
                     'region': obj.region,
                     'service': 'robomaker',
@@ -8342,7 +8342,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('robomaker', obj.id),
                     'region': obj.region,
                     'service': 'robomaker',
@@ -8371,7 +8371,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('robomaker', obj.id),
                     'region': obj.region,
                     'service': 'robomaker',
@@ -8412,7 +8412,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('robomaker', obj.id),
                     'region': obj.region,
                     'service': 'robomaker',
@@ -8442,7 +8442,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('gamelift', obj.id),
                     'region': obj.region,
                     'service': 'gamelift',
@@ -8462,7 +8462,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('gamelift', obj.id),
                     'region': obj.region,
                     'service': 'gamelift',
@@ -8482,7 +8482,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('gamelift', obj.id),
                     'region': obj.region,
                     'service': 'gamelift',
@@ -8541,7 +8541,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('amazonmq', obj.id),
                     'region': obj.region,
                     'service': 'amazonmq',
@@ -8565,7 +8565,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('amazonmq', obj.id),
                     'region': obj.region,
                     'service': 'amazonmq',
@@ -8580,7 +8580,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('amazonmq', obj.id),
                     'region': obj.region,
                     'service': 'amazonmq',
@@ -8623,7 +8623,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['maximum_execution_frequency'] = obj.data.MaximumExecutionFrequency;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
@@ -8664,7 +8664,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
@@ -8691,7 +8691,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['role_arn'] = obj.data.roleARN;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
@@ -8706,7 +8706,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['region'] = obj.data.AuthorizedAwsRegion;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
@@ -8733,7 +8733,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
                     'region': obj.region,
                     'service': 'config',
@@ -8785,7 +8785,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('budgets', obj.id),
                     'region': obj.region,
                     'service': 'budgets',
@@ -8828,7 +8828,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8854,7 +8854,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8880,7 +8880,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8903,7 +8903,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8931,7 +8931,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8957,7 +8957,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -8991,7 +8991,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('waf', obj.id),
                     'region': obj.region,
                     'service': 'waf',
@@ -9034,7 +9034,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9049,7 +9049,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['web_acl_id'] = obj.data.WebACLId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9075,7 +9075,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9101,7 +9101,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9124,7 +9124,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9152,7 +9152,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9178,7 +9178,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9212,7 +9212,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('wafregional', obj.id),
                     'region': obj.region,
                     'service': 'wafregional',
@@ -9252,7 +9252,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directoryservice', obj.id),
                     'region': obj.region,
                     'service': 'directoryservice',
@@ -9290,7 +9290,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directoryservice', obj.id),
                     'region': obj.region,
                     'service': 'directoryservice',
@@ -9371,7 +9371,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticsearch', obj.id),
                     'region': obj.region,
                     'service': 'elasticsearch',
@@ -9393,7 +9393,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9416,7 +9416,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9481,7 +9481,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9526,7 +9526,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9560,7 +9560,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9589,7 +9589,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Description'] = obj.data.Description;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9658,7 +9658,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9683,7 +9683,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['KMSKeyArn'] = obj.data.S3Destination.AWSKMSKeyARN;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ssm', obj.id),
                     'region': obj.region,
                     'service': 'ssm',
@@ -9709,7 +9709,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9729,7 +9729,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9747,7 +9747,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9767,7 +9767,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9786,7 +9786,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9805,7 +9805,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9821,7 +9821,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9840,7 +9840,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9867,7 +9867,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9880,7 +9880,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Active'] = obj.data.Active;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9892,7 +9892,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ResourceId'] = obj.data.resource.Id;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicecatalog', obj.id),
                     'region': obj.region,
                     'service': 'servicecatalog',
@@ -9915,7 +9915,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iotanalytics', obj.id),
                     'region': obj.region,
                     'service': 'iotanalytics',
@@ -10016,7 +10016,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iotanalytics', obj.id),
                     'region': obj.region,
                     'service': 'iotanalytics',
@@ -10126,7 +10126,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iotanalytics', obj.id),
                     'region': obj.region,
                     'service': 'iotanalytics',
@@ -10149,7 +10149,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iotanalytics', obj.id),
                     'region': obj.region,
                     'service': 'iotanalytics',
@@ -10163,7 +10163,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.Name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicediscovery', obj.id),
                     'region': obj.region,
                     'service': 'servicediscovery',
@@ -10183,7 +10183,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicediscovery', obj.id),
                     'region': obj.region,
                     'service': 'servicediscovery',
@@ -10198,7 +10198,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.Name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicediscovery', obj.id),
                     'region': obj.region,
                     'service': 'servicediscovery',
@@ -10247,7 +10247,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicediscovery', obj.id),
                     'region': obj.region,
                     'service': 'servicediscovery',
@@ -10261,7 +10261,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ServiceId'] = obj.data.ServiceId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('servicediscovery', obj.id),
                     'region': obj.region,
                     'service': 'servicediscovery',
@@ -10299,7 +10299,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sagemaker', obj.id),
                     'region': obj.region,
                     'service': 'sagemaker',
@@ -10317,7 +10317,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sagemaker', obj.id),
                     'region': obj.region,
                     'service': 'sagemaker',
@@ -10347,7 +10347,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sagemaker', obj.id),
                     'region': obj.region,
                     'service': 'sagemaker',
@@ -10373,7 +10373,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sagemaker', obj.id),
                     'region': obj.region,
                     'service': 'sagemaker',
@@ -10386,7 +10386,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['OnStart'] = obj.data.OnStart;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sagemaker', obj.id),
                     'region': obj.region,
                     'service': 'sagemaker',
@@ -10430,7 +10430,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('emr', obj.id),
                     'region': obj.region,
                     'service': 'emr',
@@ -10451,7 +10451,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('emr', obj.id),
                     'region': obj.region,
                     'service': 'emr',
@@ -10503,7 +10503,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['LaunchSpecifications'] = obj.data.LaunchSpecifications;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('emr', obj.id),
                     'region': obj.region,
                     'service': 'emr',
@@ -10552,7 +10552,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('emr', obj.id),
                     'region': obj.region,
                     'service': 'emr',
@@ -10564,7 +10564,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SecurityConfiguration'] = obj.data.SecurityConfiguration;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('emr', obj.id),
                     'region': obj.region,
                     'service': 'emr',
@@ -10594,7 +10594,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('secretsmanager', obj.id),
                     'region': obj.region,
                     'service': 'secretsmanager',
@@ -10616,7 +10616,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['secret_string'] = obj.data.SecretString;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('secretsmanager', obj.id),
                     'region': obj.region,
                     'service': 'secretsmanager',
@@ -10629,7 +10629,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RotationRules'] = obj.data.RotationRules;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('secretsmanager', obj.id),
                     'region': obj.region,
                     'service': 'secretsmanager',
@@ -10641,7 +10641,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ResourcePolicy'] = obj.data.ResourcePolicy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('secretsmanager', obj.id),
                     'region': obj.region,
                     'service': 'secretsmanager',
@@ -10658,7 +10658,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10682,7 +10682,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10705,7 +10705,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10734,7 +10734,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Configuration'] = obj.data.Configuration;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10765,7 +10765,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10785,7 +10785,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['AllocatedCapacity'] = obj.data.AllocatedCapacity;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10828,7 +10828,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10847,7 +10847,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10865,7 +10865,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['PublicKey'] = obj.data.PublicKey;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -10908,7 +10908,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -10947,7 +10947,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['roles'] = obj.data.Roles;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11081,7 +11081,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11106,7 +11106,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11121,7 +11121,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RoleArn'] = obj.data.RoleArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11134,7 +11134,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['UserPoolId'] = obj.data.userpoolid;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11160,7 +11160,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cognito', obj.id),
                     'region': obj.region,
                     'service': 'cognito',
@@ -11184,7 +11184,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11201,7 +11201,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['FindingCriteria'] = obj.data.FindingCriteria;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11226,7 +11226,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['detector_id'] = obj.data.DetectorId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11252,7 +11252,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['detector_id'] = obj.data.DetectorId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11266,7 +11266,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['InvitationId'] = obj.data.InvitationId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11285,7 +11285,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['finding_publishing_frequency'] = obj.data.FindingPublishingFrequency;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('guardduty', obj.id),
                     'region': obj.region,
                     'service': 'guardduty',
@@ -11298,7 +11298,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['StackName'] = obj.data.stackname;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11328,7 +11328,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11347,7 +11347,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11378,7 +11378,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11403,7 +11403,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11416,7 +11416,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['OrganizationalUnitDistinguishedNames'] = obj.data.OrganizationalUnitDistinguishedNames;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11430,7 +11430,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SendEmailNotification'] = obj.data.SendEmailNotification;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appstream', obj.id),
                     'region': obj.region,
                     'service': 'appstream',
@@ -11468,7 +11468,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11481,7 +11481,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.ConfigurationSet.Name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11496,7 +11496,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['policy'] = obj.data.IpFilter.Policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11607,7 +11607,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['rule_set_name'] = obj.data.RuleSetName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11620,7 +11620,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['rule_set_name'] = obj.data.Name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11636,7 +11636,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.Template.TemplateName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ses', obj.id),
                     'region': obj.region,
                     'service': 'ses',
@@ -11663,7 +11663,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('eks', obj.id),
                     'region': obj.region,
                     'service': 'eks',
@@ -11683,7 +11683,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11712,7 +11712,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['PolicyName'] = obj.data.policy.PolicyName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11743,7 +11743,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11765,7 +11765,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11796,7 +11796,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11825,7 +11825,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11848,7 +11848,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -11892,7 +11892,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -11984,7 +11984,7 @@ function performF2Mappings(objects) {
                         }
 
                         tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                             'logicalId': getResourceName('cloudwatch', obj.id),
                             'region': obj.region,
                             'service': 'cloudwatch',
@@ -12009,7 +12009,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['StatementId'] = obj.data.Sid;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12026,7 +12026,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['DestinationPolicy'] = obj.data.accessPolicy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12041,7 +12041,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.logStreamName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12060,7 +12060,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['role_arn'] = obj.data.roleArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12075,7 +12075,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['retention_in_days'] = obj.data.retentionInDays;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12108,7 +12108,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12123,7 +12123,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['dashboard_body'] = obj.data.DashboardBody;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
                     'region': obj.region,
                     'service': 'cloudwatch',
@@ -12141,7 +12141,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RepositoryPolicyText'] = obj.data.policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ecr', obj.id),
                     'region': obj.region,
                     'service': 'ecr',
@@ -12164,7 +12164,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['policy'] = obj.data.policy;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ecr', obj.id),
                         'region': obj.region,
                         'service': 'ecr',
@@ -12187,7 +12187,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['policy'] = obj.data.lifecyclePolicyText;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ecr', obj.id),
                         'region': obj.region,
                         'service': 'ecr',
@@ -12211,7 +12211,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Region'] = obj.data.TopicArn.split(":")[3];
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('sns', obj.id),
                     'region': obj.region,
                     'service': 'sns',
@@ -12228,7 +12228,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12240,7 +12240,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Connectors'] = obj.data.Definition.Connectors;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12256,7 +12256,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12268,7 +12268,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Cores'] = obj.data.Definition.Cores;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12284,7 +12284,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12296,7 +12296,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Devices'] = obj.data.Definition.Devices;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12312,7 +12312,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12325,7 +12325,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Functions'] = obj.data.Definition.Functions;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12342,7 +12342,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12360,7 +12360,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SubscriptionDefinitionVersionArn'] = obj.data.Definition.SubscriptionDefinitionVersionArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12376,7 +12376,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12388,7 +12388,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Loggers'] = obj.data.Definition.Loggers;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12404,7 +12404,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12416,7 +12416,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Resources'] = obj.data.Definition.Resources;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12432,7 +12432,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12444,7 +12444,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Subscriptions'] = obj.data.Definition.Subscriptions;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('greengrass', obj.id),
                     'region': obj.region,
                     'service': 'greengrass',
@@ -12595,7 +12595,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codepipeline', obj.id),
                     'region': obj.region,
                     'service': 'codepipeline',
@@ -12650,7 +12650,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codepipeline', obj.id),
                     'region': obj.region,
                     'service': 'codepipeline',
@@ -12698,7 +12698,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('codepipeline', obj.id),
                     'region': obj.region,
                     'service': 'codepipeline',
@@ -12717,7 +12717,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('inspector', obj.id),
                     'region': obj.region,
                     'service': 'inspector',
@@ -12729,7 +12729,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ResourceGroupArn'] = obj.data.resourceGroupArn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('inspector', obj.id),
                     'region': obj.region,
                     'service': 'inspector',
@@ -12752,7 +12752,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('inspector', obj.id),
                     'region': obj.region,
                     'service': 'inspector',
@@ -12793,7 +12793,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12828,7 +12828,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12852,7 +12852,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12876,7 +12876,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12889,7 +12889,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['CertificateWallet'] = obj.data.CertificateWallet;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12911,7 +12911,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dms', obj.id),
                     'region': obj.region,
                     'service': 'dms',
@@ -12939,7 +12939,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['route_table_id'] = obj.data.RouteTableId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -12960,7 +12960,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -12983,7 +12983,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -12995,7 +12995,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TransitGatewayRouteTableId'] = obj.data.TransitGatewayRouteTableId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13007,7 +13007,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TransitGatewayRouteTableId'] = obj.data.TransitGatewayRouteTableId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13019,7 +13019,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13033,7 +13033,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13056,7 +13056,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('workspaces', obj.id),
                     'region': obj.region,
                     'service': 'workspaces',
@@ -13090,7 +13090,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13111,7 +13111,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13200,7 +13200,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['api_id'] = obj.data.apiId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13224,7 +13224,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13240,7 +13240,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['api_id'] = obj.data.apiId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13293,7 +13293,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -13309,7 +13309,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13341,7 +13341,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13356,7 +13356,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ConnectionEvents'] = obj.data.ConnectionEvents;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13371,7 +13371,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ServiceId'] = obj.data.ServiceId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13393,7 +13393,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['principal_arn'] = allowedPrincipal.Principal;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -13409,7 +13409,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['acceptance_required'] = obj.data.AcceptanceRequired;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -13439,7 +13439,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13452,7 +13452,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.clusterName;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ecs', obj.id),
                     'region': obj.region,
                     'service': 'ecs',
@@ -13567,7 +13567,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['scheduling_strategy'] = obj.data.schedulingStrategy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ecs', obj.id),
                     'region': obj.region,
                     'service': 'ecs',
@@ -13780,7 +13780,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ecs', obj.id),
                     'region': obj.region,
                     'service': 'ecs',
@@ -13804,7 +13804,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -13839,7 +13839,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -13856,7 +13856,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['vpc_id'] = obj.data.VPCId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('route53', obj.id),
                     'region': obj.region,
                     'service': 'route53',
@@ -13889,7 +13889,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('datapipeline', obj.id),
                     'region': obj.region,
                     'service': 'datapipeline',
@@ -13902,7 +13902,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Permission'] = obj.data.Permission;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -13932,7 +13932,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -14022,7 +14022,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -14034,7 +14034,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['StreamARN'] = obj.data.StreamARN;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14069,7 +14069,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14087,7 +14087,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14103,7 +14103,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14210,7 +14210,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14228,7 +14228,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14244,7 +14244,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14258,7 +14258,7 @@ function performF2Mappings(objects) {
                 };
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14379,7 +14379,7 @@ function performF2Mappings(objects) {
                 });
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('kinesis', obj.id),
                     'region': obj.region,
                     'service': 'kinesis',
@@ -14395,7 +14395,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudfront', obj.id),
                     'region': obj.region,
                     'service': 'cloudfront',
@@ -14433,7 +14433,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudfront', obj.id),
                     'region': obj.region,
                     'service': 'cloudfront',
@@ -14513,7 +14513,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elbv2', obj.id),
                     'region': obj.region,
                     'service': 'elbv2',
@@ -14532,7 +14532,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['ListenerArn'] = obj.data.ListenerArn;
 
                     tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                         'logicalId': getResourceName('elbv2', obj.id),
                         'region': obj.region,
                         'service': 'elbv2',
@@ -14554,7 +14554,7 @@ function performF2Mappings(objects) {
                         reqParams.tf['certificate_arn'] = certificate.CertificateArn;
 
                         tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                             'logicalId': getResourceName('elbv2', obj.id),
                             'region': obj.region,
                             'service': 'elbv2',
@@ -14682,7 +14682,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elbv2', obj.id),
                     'region': obj.region,
                     'service': 'elbv2',
@@ -14712,7 +14712,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Actions'] = obj.data.Actions;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elbv2', obj.id),
                     'region': obj.region,
                     'service': 'elbv2',
@@ -14730,7 +14730,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -14754,7 +14754,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -14771,7 +14771,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -14797,7 +14797,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -14821,7 +14821,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('lambda', obj.id),
                     'region': obj.region,
                     'service': 'lambda',
@@ -14884,7 +14884,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dynamodb', obj.id),
                     'region': obj.region,
                     'service': 'dynamodb',
@@ -14910,7 +14910,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dynamodb', obj.id),
                     'region': obj.region,
                     'service': 'dynamodb',
@@ -14933,7 +14933,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('dynamodb', obj.id),
                     'region': obj.region,
                     'service': 'dynamodb',
@@ -14946,7 +14946,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -14960,7 +14960,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['subnet_id'] = obj.data.SubnetId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -14973,7 +14973,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -14987,7 +14987,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['StackId'] = obj.data.StackId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -15005,7 +15005,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['ssh_username'] = obj.data.SshUsername;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -15037,7 +15037,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('opsworks', obj.id),
                     'region': obj.region,
                     'service': 'opsworks',
@@ -15067,7 +15067,7 @@ function performF2Mappings(objects) {
                 });
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -15132,7 +15132,7 @@ function performF2Mappings(objects) {
                 }
                 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -15150,7 +15150,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['DeleteOnTermination'] = obj.data.DeleteOnTermination;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -15177,7 +15177,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['lifecycle_transition'] = obj.data.LifecycleTransition;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
                     'region': obj.region,
                     'service': 'autoscaling',
@@ -15244,7 +15244,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elasticache', obj.id),
                     'region': obj.region,
                     'service': 'elasticache',
@@ -15267,7 +15267,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appsync', obj.id),
                     'region': obj.region,
                     'service': 'appsync',
@@ -15297,7 +15297,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appmesh', obj.id),
                     'region': obj.region,
                     'service': 'appmesh',
@@ -15345,7 +15345,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appmesh', obj.id),
                     'region': obj.region,
                     'service': 'appmesh',
@@ -15373,7 +15373,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appmesh', obj.id),
                     'region': obj.region,
                     'service': 'appmesh',
@@ -15433,7 +15433,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('appmesh', obj.id),
                     'region': obj.region,
                     'service': 'appmesh',
@@ -15488,7 +15488,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('elastictranscoder', obj.id),
                     'region': obj.region,
                     'service': 'elastictranscoder',
@@ -15506,7 +15506,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('mediapackage', obj.id),
                     'region': obj.region,
                     'service': 'mediapackage',
@@ -15522,7 +15522,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Policy'] = obj.data.Policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('mediastore', obj.id),
                     'region': obj.region,
                     'service': 'mediastore',
@@ -15535,7 +15535,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['policy'] = obj.data.Policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('mediastore', obj.id),
                     'region': obj.region,
                     'service': 'mediastore',
@@ -15553,7 +15553,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glacier', obj.id),
                     'region': obj.region,
                     'service': 'glacier',
@@ -15570,7 +15570,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['policy'] = obj.data.Policy;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glacier', obj.id),
                     'region': obj.region,
                     'service': 'glacier',
@@ -15581,7 +15581,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.name;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('devicefarm', obj.id),
                     'region': obj.region,
                     'service': 'devicefarm',
@@ -15610,7 +15610,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
                     'region': obj.region,
                     'service': 'ec2',
@@ -15628,7 +15628,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudhsm', obj.id),
                     'region': obj.region,
                     'service': 'cloudhsm',
@@ -15642,7 +15642,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['ip_address'] = obj.data.EniIp;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('cloudhsm', obj.id),
                     'region': obj.region,
                     'service': 'cloudhsm',
@@ -15663,7 +15663,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -15677,7 +15677,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ApiMappingKey'] = obj.data.ApiMappingKey;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('apigatewayv2', obj.id),
                     'region': obj.region,
                     'service': 'apigatewayv2',
@@ -15697,7 +15697,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['description'] = obj.data.Description;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('iam', obj.id),
                     'region': obj.region,
                     'service': 'iam',
@@ -15716,7 +15716,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15728,7 +15728,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['lag_id'] = obj.data.lagId;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15757,7 +15757,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15783,7 +15783,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15808,7 +15808,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['owner_account_id'] = obj.data.ownerAccount;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15828,7 +15828,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['owner_account_id'] = obj.data.ownerAccount;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15844,7 +15844,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['customer_address'] = obj.data.customerAddress;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15863,7 +15863,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15875,7 +15875,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['amazon_side_asn'] = obj.data.amazonSideAsn;
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('directconnect', obj.id),
                     'region': obj.region,
                     'service': 'directconnect',
@@ -15894,7 +15894,7 @@ function performF2Mappings(objects) {
                     }
 
                     tracked_resources.push({
-                        'obj': obj,                     
+                        'obj': obj,
                         'logicalId': getResourceName('directconnect', obj.id),
                         'region': obj.region,
                         'service': 'directconnect',
@@ -15915,7 +15915,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['dx_gateway_owner_account_id'] = obj.data.associatedGateway.ownerAccount;
 
                     tracked_resources.push({
-                        'obj': obj,                     
+                        'obj': obj,
                         'logicalId': getResourceName('directconnect', obj.id),
                         'region': obj.region,
                         'service': 'directconnect',
@@ -15931,7 +15931,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('swf', obj.id),
                     'region': obj.region,
                     'service': 'swf',
@@ -15949,7 +15949,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -15973,7 +15973,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('glue', obj.id),
                     'region': obj.region,
                     'service': 'glue',
@@ -15996,7 +15996,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('backup', obj.id),
                     'region': obj.region,
                     'service': 'backup',
@@ -16061,7 +16061,7 @@ function performF2Mappings(objects) {
                 */
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('backup', obj.id),
                     'region': obj.region,
                     'service': 'backup',
@@ -16097,7 +16097,7 @@ function performF2Mappings(objects) {
                 }
 
                 tracked_resources.push({
-                    'obj': obj,                     
+                    'obj': obj,
                     'logicalId': getResourceName('backup', obj.id),
                     'region': obj.region,
                     'service': 'backup',
@@ -16111,6 +16111,107 @@ function performF2Mappings(objects) {
                             'SelectionId': obj.data.SelectionId
                         }
                     }
+                });
+            } else if (obj.type == "transfer.server") {
+                reqParams.cfn['EndpointType'] = obj.data.EndpointType;
+                reqParams.tf['endpoint_type'] = obj.data.EndpointType;
+                reqParams.cfn['IdentityProviderType'] = obj.data.IdentityProviderType;
+                reqParams.tf['identity_provider_type'] = obj.data.IdentityProviderType;
+                reqParams.cfn['LoggingRole'] = obj.data.LoggingRole;
+                reqParams.tf['logging_role'] = obj.data.LoggingRole;
+                if (obj.data.EndpointDetails) {
+                    reqParams.cfn['EndpointDetails'] = {
+                        'VpcEndpointId': obj.data.EndpointDetails.VpcEndpointId
+                    };
+                    reqParams.tf['endpoint_details'] = {
+                        'vpc_endpoint_id': obj.data.EndpointDetails.VpcEndpointId
+                    };
+                }
+                if (obj.data.IdentityProviderDetails) {
+                    reqParams.cfn['IdentityProviderDetails'] = {
+                        'InvocationRole': obj.data.IdentityProviderDetails.InvocationRole,
+                        'Url': obj.data.IdentityProviderDetails.Url
+                    };
+                    reqParams.tf['invocation_role'] = obj.data.IdentityProviderDetails.InvocationRole;
+                    reqParams.tf['url'] = obj.data.IdentityProviderDetails.Url;
+                }
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('transfer', obj.id),
+                    'region': obj.region,
+                    'service': 'transfer',
+                    'type': 'AWS::Transfer::Server',
+                    'terraformType': 'aws_transfer_server',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.ServerId,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn,
+                            'ServerId': obj.data.ServerId
+                        }
+                    }
+                });
+            } else if (obj.type == "transfer.user") {
+                reqParams.cfn['ServerId'] = obj.data.ServerId;
+                reqParams.tf['server_id'] = obj.data.ServerId;
+                reqParams.cfn['HomeDirectory'] = obj.data.User.HomeDirectory;
+                reqParams.tf['home_directory'] = obj.data.User.HomeDirectory;
+                reqParams.cfn['Policy'] = obj.data.User.Policy;
+                reqParams.tf['policy'] = obj.data.User.Policy;
+                reqParams.cfn['Role'] = obj.data.User.Role;
+                reqParams.tf['role'] = obj.data.User.Role;
+                reqParams.cfn['UserName'] = obj.data.User.UserName;
+                reqParams.tf['user_name'] = obj.data.User.UserName;
+                if (obj.data.User.SshPublicKeys) {
+                    obj.data.User.SshPublicKeys.forEach(sshkey => {
+                        ; // TODO: Docs are broken...
+                    });
+                }
+
+                reqParams.cfn['Tags'] = obj.data.User.Tags;
+                if (obj.data.User.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.User.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('transfer', obj.id),
+                    'region': obj.region,
+                    'service': 'transfer',
+                    'type': 'AWS::Transfer::User',
+                    'terraformType': 'aws_transfer_user',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Arn,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn,
+                            'ServerId': obj.data.ServerId
+                        }
+                    }
+                });
+            } else if (obj.type == "transfer.sshkey") {
+                reqParams.tf['server_id'] = obj.data.ServerId;
+                reqParams.tf['user_name'] = obj.data.UserName;
+                reqParams.tf['body'] = obj.data.Body;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('transfer', obj.id),
+                    'region': obj.region,
+                    'service': 'transfer',
+                    'terraformType': 'aws_transfer_ssh_key',
+                    'options': reqParams
                 });
             } else {
                 $.notify({
