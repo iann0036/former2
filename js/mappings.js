@@ -73,20 +73,6 @@ function MD5(e) {
     return (p(a) + p(b) + p(c) + p(d)).toLowerCase()
 };
 
-function getResourceName(service, requestId) {
-    var i = 1; // on purpose, 2 means second usage
-    var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
-
-    while (global_used_refs.includes(proposed)) {
-        proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0,7);
-        i += 1;
-    }
-
-    global_used_refs.push(proposed);
-
-    return proposed;
-}
-
 function ensureInitDeclaredJs(service, region) {
     if (!declared_services['js'].includes(service)) {
         var mappedservice = mapServiceJs(service);
@@ -8350,75 +8336,103 @@ function performF2Mappings(objects) {
                     'options': reqParams
                 });
             } else if (obj.type == "robomaker.robotapplication") {
-                reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
-                reqParams.cfn['Name'] = obj.data.name;
-                if (obj.data.robotSoftwareSuite) {
-                    reqParams.cfn['RobotSoftwareSuite'] = {
-                        'Name': obj.data.robotSoftwareSuite.name,
-                        'Version': obj.data.robotSoftwareSuite.version
-                    };
-                }
-                if (obj.data.sources) {
-                    reqParams.cfn['Sources'] = [];
-                    obj.data.sources.forEach(source => {
-                        reqParams.cfn['Sources'].push({
-                            'Architecture': source.architecture,
-                            'S3Bucket': source.s3Bucket,
-                            'S3Key': source.s3Key
+                if (obj.data.version == "$LATEST") {
+                    reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+                    reqParams.cfn['Name'] = obj.data.name;
+                    if (obj.data.robotSoftwareSuite) {
+                        reqParams.cfn['RobotSoftwareSuite'] = {
+                            'Name': obj.data.robotSoftwareSuite.name,
+                            'Version': obj.data.robotSoftwareSuite.version
+                        };
+                    }
+                    if (obj.data.sources) {
+                        reqParams.cfn['Sources'] = [];
+                        obj.data.sources.forEach(source => {
+                            reqParams.cfn['Sources'].push({
+                                'Architecture': source.architecture,
+                                'S3Bucket': source.s3Bucket,
+                                'S3Key': source.s3Key
+                            });
                         });
+                    }
+                    reqParams.cfn['Tags'] = obj.data.tags;
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('robomaker', obj.id),
+                        'region': obj.region,
+                        'service': 'robomaker',
+                        'type': 'AWS::RoboMaker::RobotApplication',
+                        'options': reqParams
+                    });
+                } else {
+                    reqParams.cfn['Application'] = obj.data.arn;
+                    reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('robomaker', obj.id),
+                        'region': obj.region,
+                        'service': 'robomaker',
+                        'type': 'AWS::RoboMaker::RobotApplicationVersion',
+                        'options': reqParams
                     });
                 }
-                reqParams.cfn['Tags'] = obj.data.tags;
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('robomaker', obj.id),
-                    'region': obj.region,
-                    'service': 'robomaker',
-                    'type': 'AWS::RoboMaker::RobotApplication',
-                    'options': reqParams
-                });
             } else if (obj.type == "robomaker.simulationapplication") {
-                reqParams.cfn['Name'] = obj.data.name;
-                if (obj.data.robotSoftwareSuite) {
-                    reqParams.cfn['RobotSoftwareSuite'] = {
-                        'Name': obj.data.robotSoftwareSuite.name,
-                        'Version': obj.data.robotSoftwareSuite.version
-                    };
-                }
-                if (obj.data.simulationSoftwareSuite) {
-                    reqParams.cfn['SimulationSoftwareSuite'] = {
-                        'Name': obj.data.simulationSoftwareSuite.name,
-                        'Version': obj.data.simulationSoftwareSuite.version
-                    };
-                }
-                if (obj.data.renderingEngine) {
-                    reqParams.cfn['RenderingEngine'] = {
-                        'Name': obj.data.renderingEngine.name,
-                        'Version': obj.data.renderingEngine.version
-                    };
-                }
-                if (obj.data.sources) {
-                    reqParams.cfn['Sources'] = [];
-                    obj.data.sources.forEach(source => {
-                        reqParams.cfn['Sources'].push({
-                            'Architecture': source.architecture,
-                            'S3Bucket': source.s3Bucket,
-                            'S3Key': source.s3Key
+                if (obj.data.version == "$LATEST") {
+                    reqParams.cfn['Name'] = obj.data.name;
+                    if (obj.data.robotSoftwareSuite) {
+                        reqParams.cfn['RobotSoftwareSuite'] = {
+                            'Name': obj.data.robotSoftwareSuite.name,
+                            'Version': obj.data.robotSoftwareSuite.version
+                        };
+                    }
+                    if (obj.data.simulationSoftwareSuite) {
+                        reqParams.cfn['SimulationSoftwareSuite'] = {
+                            'Name': obj.data.simulationSoftwareSuite.name,
+                            'Version': obj.data.simulationSoftwareSuite.version
+                        };
+                    }
+                    if (obj.data.renderingEngine) {
+                        reqParams.cfn['RenderingEngine'] = {
+                            'Name': obj.data.renderingEngine.name,
+                            'Version': obj.data.renderingEngine.version
+                        };
+                    }
+                    if (obj.data.sources) {
+                        reqParams.cfn['Sources'] = [];
+                        obj.data.sources.forEach(source => {
+                            reqParams.cfn['Sources'].push({
+                                'Architecture': source.architecture,
+                                'S3Bucket': source.s3Bucket,
+                                'S3Key': source.s3Key
+                            });
                         });
+                    }
+                    reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+                    reqParams.cfn['Tags'] = obj.data.tags;
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('robomaker', obj.id),
+                        'region': obj.region,
+                        'service': 'robomaker',
+                        'type': 'AWS::RoboMaker::SimulationApplication',
+                        'options': reqParams
+                    });
+                } else {
+                    reqParams.cfn['Application'] = obj.data.arn;
+                    reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('robomaker', obj.id),
+                        'region': obj.region,
+                        'service': 'robomaker',
+                        'type': 'AWS::RoboMaker::SimulationApplicationVersion',
+                        'options': reqParams
                     });
                 }
-                reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
-                reqParams.cfn['Tags'] = obj.data.tags;
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('robomaker', obj.id),
-                    'region': obj.region,
-                    'service': 'robomaker',
-                    'type': 'AWS::RoboMaker::SimulationApplication',
-                    'options': reqParams
-                });
             } else if (obj.type == "gamelift.fleet") {
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.tf['description'] = obj.data.Description;
@@ -13409,7 +13423,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['acceptance_required'] = obj.data.AcceptanceRequired;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -16497,6 +16511,221 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_globalaccelerator_listener',
                     'options': reqParams
                 });
+            } else if (obj.type == "ec2.fleet") {
+                reqParams.cfn['ExcessCapacityTerminationPolicy'] = obj.data.ExcessCapacityTerminationPolicy;
+                reqParams.cfn['ReplaceUnhealthyInstances'] = obj.data.ReplaceUnhealthyInstances;
+                reqParams.cfn['TerminateInstancesWithExpiration'] = obj.data.TerminateInstancesWithExpiration;
+                reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.cfn['ValidFrom'] = obj.data.ValidFrom;
+                reqParams.cfn['ValidUntil'] = obj.data.ValidUntil;
+                if (obj.data.LaunchTemplateConfigs) {
+                    reqParams.cfn['LaunchTemplateConfigs'] = [];
+                    obj.data.LaunchTemplateConfigs.forEach(launchtemplateconfig => {
+                        var launchtemplatespecification = null;
+                        if (launchtemplateconfig.LaunchTemplateSpecification) {
+                            launchtemplatespecification = {
+                                'LaunchTemplateId': launchtemplateconfig.LaunchTemplateSpecification.LaunchTemplateId,
+                                'LaunchTemplateName': launchtemplateconfig.LaunchTemplateSpecification.LaunchTemplateName,
+                                'Version': launchtemplateconfig.LaunchTemplateSpecification.Version
+                            };
+                        }
+                        var overrides = null;
+                        if (launchtemplateconfig.Overrides) {
+                            overrides = [];
+                            launchtemplateconfig.Overrides.forEach(override => {
+                                overrides.push({
+                                    'AvailabilityZone': override.AvailabilityZone,
+                                    'InstanceType': override.InstanceType,
+                                    'MaxPrice': override.MaxPrice,
+                                    'Priority': override.Priority,
+                                    'SubnetId': override.SubnetId,
+                                    'WeightedCapacity': override.WeightedCapacity
+                                });
+                            });
+                        }
+                        reqParams.cfn['LaunchTemplateConfigs'].push({
+                            'LaunchTemplateSpecification': launchtemplatespecification,
+                            'Overrides': overrides
+                        });
+                    });
+                }
+                if (obj.data.TargetCapacitySpecification) {
+                    reqParams.cfn['TargetCapacitySpecification'] = {
+                        'DefaultTargetCapacityType': obj.data.TargetCapacitySpecification.DefaultTargetCapacityType,
+                        'OnDemandTargetCapacity': obj.data.TargetCapacitySpecification.OnDemandTargetCapacity,
+                        'SpotTargetCapacity': obj.data.TargetCapacitySpecification.SpotTargetCapacity,
+                        'TotalTargetCapacity': obj.data.TargetCapacitySpecification.TotalTargetCapacity
+                    };
+                }
+                if (obj.data.SpotOptions) {
+                    reqParams.cfn['SpotOptions'] = {
+                        'AllocationStrategy': obj.data.SpotOptions.AllocationStrategy,
+                        'InstanceInterruptionBehavior': obj.data.SpotOptions.InstanceInterruptionBehavior,
+                        'InstancePoolsToUseCount': obj.data.SpotOptions.InstancePoolsToUseCount
+                    };
+                }
+                if (obj.data.OnDemandOptions) {
+                    reqParams.cfn['OnDemandOptions'] = {
+                        'AllocationStrategy': obj.data.OnDemandOptions.AllocationStrategy
+                    };
+                }
+                if (obj.data.Tags) {
+                    reqParams.cfn['TagSpecifications'] = [{
+                        'ResourceType': 'fleet',
+                        'Tags': obj.data.Tags
+                    }];
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::EC2Fleet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "applicationautoscaling.scalabletarget") {
+                reqParams.cfn['MaxCapacity'] = obj.data.MaxCapacity;
+                reqParams.cfn['MinCapacity'] = obj.data.MinCapacity;
+                reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+                reqParams.cfn['RoleARN'] = obj.data.RoleARN;
+                reqParams.cfn['ScalableDimension'] = obj.data.ScalableDimension;
+                reqParams.cfn['ServiceNamespace'] = obj.data.ServiceNamespace;
+                if (obj.data.ScheduledActions) {
+                    reqParams.cfn['ScheduledActions'] = [];
+                    obj.data.ScheduledActions.forEach(scheduledaction => {
+                        var scalabletargetaction = null;
+                        if (scheduledaction.ScalableTargetAction) {
+                            scalabletargetaction = {
+                                'MinCapacity': scheduledaction.ScalableTargetAction.MinCapacity,
+                                'MaxCapacity': scheduledaction.ScalableTargetAction.MaxCapacity
+                            };
+                        }
+                        reqParams.cfn['ScheduledActions'].push({
+                            'StartTime': scheduledaction.StartTime,
+                            'EndTime': scheduledaction.EndTime,
+                            'Schedule': scheduledaction.Schedule,
+                            'ScheduledActionName': scheduledaction.ScheduledActionName,
+                            'ScalableTargetAction': scalabletargetaction,
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('applicationautoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'applicationautoscaling',
+                    'type': 'AWS::ApplicationAutoScaling::ScalableTarget',
+                    'options': reqParams
+                });
+            } else if (obj.type == "applicationautoscaling.scalingpolicy") {
+                reqParams.cfn['PolicyName'] = obj.data.PolicyName;
+                reqParams.cfn['PolicyType'] = obj.data.PolicyType;
+                reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+                reqParams.cfn['ScalableDimension'] = obj.data.ScalableDimension;
+                reqParams.cfn['ServiceNamespace'] = obj.data.ServiceNamespace;
+                if (obj.data.StepScalingPolicyConfiguration) {
+                    var stepadjustments = null;
+                    if (obj.data.StepScalingPolicyConfiguration.StepAdjustments) {
+                        stepadjustments = {
+                            'MetricIntervalLowerBound': obj.data.StepScalingPolicyConfiguration.StepAdjustments.MetricIntervalLowerBound,
+                            'MetricIntervalUpperBound': obj.data.StepScalingPolicyConfiguration.StepAdjustments.MetricIntervalUpperBound,
+                            'ScalingAdjustment': obj.data.StepScalingPolicyConfiguration.StepAdjustments.ScalingAdjustment
+                        };
+                    }
+                    reqParams.cfn['StepScalingPolicyConfiguration'] = {
+                        'AdjustmentType': obj.data.StepScalingPolicyConfiguration.AdjustmentType,
+                        'Cooldown': obj.data.StepScalingPolicyConfiguration.Cooldown,
+                        'MetricAggregationType': obj.data.StepScalingPolicyConfiguration.MetricAggregationType,
+                        'MinAdjustmentMagnitude': obj.data.StepScalingPolicyConfiguration.MinAdjustmentMagnitude,
+                        'StepAdjustments': stepadjustments
+                    };
+                }
+                if (obj.data.TargetTrackingScalingPolicyConfiguration) {
+                    var predefinedmetricspecification = null;
+                    if (obj.data.TargetTrackingScalingPolicyConfiguration.PredefinedMetricSpecification) {
+                        predefinedmetricspecification = {
+                            'PredefinedMetricType': obj.data.TargetTrackingScalingPolicyConfiguration.PredefinedMetricSpecification.PredefinedMetricType,
+                            'ResourceLabel': obj.data.TargetTrackingScalingPolicyConfiguration.PredefinedMetricSpecification.ResourceLabel
+                        };
+                    }
+                    var customizedmetricspecification = null;
+                    if (obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification) {
+                        var dimensions = null;
+                        if (obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.Dimensions) {
+                            dimensions = [];
+                            obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.Dimensions.forEach(dimension => {
+                                dimensions.push({
+                                    'Name': dimension.Name,
+                                    'Value': dimension.Value
+                                });
+                            });
+                        }
+                        customizedmetricspecification = {
+                            'MetricName': obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.MetricName,
+                            'Namespace': obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.Namespace,
+                            'Dimensions': dimensions,
+                            'Statistic': obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.Statistic,
+                            'Unit': obj.data.TargetTrackingScalingPolicyConfiguration.CustomizedMetricSpecification.Unit
+                        };
+                    }
+                    reqParams.cfn['TargetTrackingScalingPolicyConfiguration'] = {
+                        'CustomizedMetricSpecification': customizedmetricspecification,
+                        'DisableScaleIn': obj.data.TargetTrackingScalingPolicyConfiguration.DisableScaleIn,
+                        'PredefinedMetricSpecification': predefinedmetricspecification,
+                        'ScaleInCooldown': obj.data.TargetTrackingScalingPolicyConfiguration.ScaleInCooldown,
+                        'ScaleOutCooldown': obj.data.TargetTrackingScalingPolicyConfiguration.ScaleOutCooldown,
+                        'TargetValue': obj.data.TargetTrackingScalingPolicyConfiguration.TargetValue
+                    };
+                }
+
+                /*
+                SKIPPED:
+                ScalingTargetId
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('applicationautoscaling', obj.id),
+                    'region': obj.region,
+                    'service': 'applicationautoscaling',
+                    'type': 'AWS::ApplicationAutoScaling::ScalingPolicy',
+                    'options': reqParams
+                });
+            } else if (obj.type == "sagemaker.coderepository") {
+                reqParams.cfn['CodeRepositoryName'] = obj.data.CodeRepositoryName;
+                reqParams.cfn['Definition'] = {
+                    'RepositoryUrl': obj.data.GitConfig.RepositoryUrl,
+                    'Branch': obj.data.GitConfig.Branch,
+                    'SecretArn': obj.data.GitConfig.SecretArn
+                };
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::CodeRepository',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iotthingsgraph.flowtemplate") {
+                if (obj.data.definition) {
+                    reqParams.cfn['CompatibleNamespaceVersion'] = obj.data.validatedNamespaceVersion;
+                    reqParams.cfn['Definition'] = {
+                        'Language': obj.data.definition.language,
+                        'Text': obj.data.definition.text
+                    };
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('iotthingsgraph', obj.id),
+                        'region': obj.region,
+                        'service': 'iotthingsgraph',
+                        'type': 'AWS::IoTThingsGraph::FlowTemplate',
+                        'options': reqParams
+                    });
+                }
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

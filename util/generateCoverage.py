@@ -25,7 +25,10 @@ cfn_exceptions = {
     'AWS::Route53::RecordSetGroup': 'N/A',
     'AWS::SDB::Domain': 'N/A',
     'AWS::IAM::UserToGroupAddition': 'N/A',
-    'Alexa::ASK::Skill': 'N/A'
+    'Alexa::ASK::Skill': 'N/A',
+    'AWS::ServiceCatalog::PortfolioShare': 'N/A',
+    'AWS::SecretsManager::SecretTargetAttachment': 'N/A',
+    'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
@@ -43,23 +46,21 @@ with open("util/tf_resources.txt", "r") as f:
     for line in lines:
         tf_resources.append(line)
 
-for cfntype, _ in cfn_spec.items():
-    cfn_types.append(cfntype)
-
-cfn_types.append("AWS::Lambda::LayerVersionPermission")
-cfn_types.append("AWS::EC2::VPCEndpointService")
-cfn_types.append("AWS::Lambda::LayerVersion")
-cfn_types.append("AWS::EC2::CapacityReservation")
-cfn_types.append("AWS::ApiGatewayV2::DomainName")
-cfn_types.append("AWS::ApiGatewayV2::ApiMapping")
-cfn_types.append("AWS::SSM::MaintenanceWindowTarget")
-cfn_types = set(cfn_types)
-
 with open("js/mappings.js", "r") as f:
     text = f.read()
     lines = text.splitlines()
     cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
     tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
+
+for cfntype, _ in cfn_spec.items():
+    cfn_types.append(cfntype)
+
+for cfn_occurance in cfn_occurances:
+    if cfn_occurance not in cfn_types:
+        print("Resource not in spec: " + cfn_occurance)
+        cfn_types.append(cfn_occurance)
+
+cfn_types = set(cfn_types)
 
 total_services = 0
 total_operations = 0

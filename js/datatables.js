@@ -202,7 +202,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 
         service[method].call(service, params, async function(err, data) {
             if (err) {
-                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded") {
+                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
                     if (backoff) {
                         console.log("Too many requests, sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
@@ -3799,6 +3799,43 @@ sections.push({
                 ]
             ]
         },
+        'Fleets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Volumes': {
             'columns': [
                 [
@@ -4300,6 +4337,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -4322,6 +4465,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-targetgroups-datatable');
     blockUI('#section-compute-ec2-v2targetgroups-datatable');
     blockUI('#section-compute-ec2-capacityreservations-datatable');
+    blockUI('#section-compute-ec2-fleets-datatable');
     blockUI('#section-compute-ec2-volumes-datatable');
     blockUI('#section-compute-ec2-volumeattachments-datatable');
     blockUI('#section-compute-ec2-networkinterfaces-datatable');
@@ -4331,6 +4475,8 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-placementgroups-datatable');
     blockUI('#section-compute-ec2-flowlogs-datatable');
     blockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
+    blockUI('#section-compute-ec2-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("EC2", "describeInstances", {
         // no params
@@ -4431,6 +4577,25 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-capacityreservations-datatable');
+    });
+
+    await sdkcall("EC2", "describeFleets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-fleets-datatable').bootstrapTable('removeAll');
+
+        data.Fleets.forEach(fleet => {
+            $('#section-compute-ec2-fleets-datatable').bootstrapTable('append', [{
+                f2id: fleet.FleetId,
+                f2type: 'ec2.fleet',
+                f2data: fleet,
+                f2region: region,
+                id: fleet.FleetId,
+                type: fleet.Type
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-fleets-datatable');
     });
 
     await sdkcall("ELB", "describeLoadBalancers", {
@@ -4899,6 +5064,58 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "ec2"
+    }, true).then(async (data) => {
+        $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "ec2",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-compute-ec2-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "ec2"
+    }, true).then(async (data) => {
+        $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -5984,6 +6201,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -5997,6 +6320,8 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-optiongroups-datatable');
     blockUI('#section-database-rds-securitygroups-datatable');
     blockUI('#section-database-rds-eventsubscriptions-datatable');
+    blockUI('#section-database-rds-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
         // no params
@@ -6162,6 +6487,58 @@ async function updateDatatableDatabaseRDS() {
         });
 
         unblockUI('#section-database-rds-eventsubscriptions-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "rds"
+    }, true).then(async (data) => {
+        $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "rds",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-database-rds-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "rds"
+    }, true).then(async (data) => {
+        $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -9223,6 +9600,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -9232,6 +9715,8 @@ async function updateDatatableDatabaseDynamoDB() {
     blockUI('#section-database-dynamodb-acceleratorclusters-datatable');
     blockUI('#section-database-dynamodb-acceleratorparametergroups-datatable');
     blockUI('#section-database-dynamodb-acceleratorsubnetgroups-datatable');
+    blockUI('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("DynamoDB", "listTables", {
         // no params
@@ -9322,6 +9807,58 @@ async function updateDatatableDatabaseDynamoDB() {
         });
 
         unblockUI('#section-database-dynamodb-acceleratorsubnetgroups-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "dynamodb"
+    }, true).then(async (data) => {
+        $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "dynamodb",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "dynamodb"
+    }, true).then(async (data) => {
+        $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -10365,6 +10902,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -10373,6 +11016,8 @@ async function updateDatatableComputeECS() {
     blockUI('#section-compute-ecs-clusters-datatable');
     blockUI('#section-compute-ecs-services-datatable');
     blockUI('#section-compute-ecs-taskdefinitions-datatable');
+    blockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("ECS", "listClusters", {
         // no params
@@ -10447,6 +11092,60 @@ async function updateDatatableComputeECS() {
         }));
 
         unblockUI('#section-compute-ecs-taskdefinitions-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "ecs"
+    }, true).then(async (data) => {
+        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            await Promise.all(data.ScalableTargets.map(target => {
+                return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                    ServiceNamespace: "ecs",
+                    ResourceId: target.ResourceId,
+                    ScalableDimension: target.ScalableDimension
+                }, true).then((actions) => {
+                    target['ScheduledActions'] = actions.ScheduledActions;
+
+                    $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                        f2id: target.ResourceId,
+                        f2type: 'applicationautoscaling.scalabletarget',
+                        f2data: target,
+                        f2region: region,
+                        resourceid: target.ResourceId,
+                        scalabledimension: target.ScalableDimension,
+                        mincapacity: target.MinCapacity,
+                        maxcapacity: target.MaxCapacity
+                    }]);
+                });
+            }));
+        }
+
+        unblockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "ecs"
+    }, true).then(async (data) => {
+        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalingPolicies) {
+            data.ScalingPolicies.forEach(policy => {
+                $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: policy.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: policy,
+                    f2region: region,
+                    resourceid: policy.ResourceId,
+                    scalabledimension: policy.ScalableDimension,
+                    policyname: policy.PolicyName,
+                    policytype: policy.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -18012,16 +18711,17 @@ async function updateDatatableRoboticsRoboMaker() {
     unblockUI('#section-robotics-robomaker-robots-datatable');
 
     await sdkcall("RoboMaker", "listRobotApplications", {
-        // no params
+        versionQualifier: "ALL"
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.robotApplicationSummaries.map(robotApplication => {
             return sdkcall("RoboMaker", "describeRobotApplication", {
-                application: robotApplication.arn
+                application: robotApplication.arn,
+                applicationVersion: robotApplication.version
             }, true).then((data) => {
                 $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('append', [{
-                    f2id: data.arn,
+                    f2id: data.arn + data.revisionId,
                     f2type: 'robomaker.robotapplication',
                     f2data: data,
                     f2region: region,
@@ -18036,16 +18736,17 @@ async function updateDatatableRoboticsRoboMaker() {
     unblockUI('#section-robotics-robomaker-robotapplications-datatable');
 
     await sdkcall("RoboMaker", "listSimulationApplications", {
-        // no params
+        versionQualifier: "ALL"
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.simulationApplicationSummaries.map(simulationApplication => {
             return sdkcall("RoboMaker", "describeSimulationApplication", {
-                application: simulationApplication.arn
+                application: simulationApplication.arn,
+                applicationVersion: simulationApplication.version
             }, true).then((data) => {
                 $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('append', [{
-                    f2id: data.arn,
+                    f2id: data.arn + data.revisionId,
                     f2type: 'robomaker.simulationapplication',
                     f2data: data,
                     f2region: region,
@@ -22357,6 +23058,150 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Code Repositories': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -22367,6 +23212,32 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-endpointconfigs-datatable');
     blockUI('#section-machinelearning-sagemaker-notebookinstances-datatable');
     blockUI('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable');
+    blockUI('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-machinelearning-sagemaker-coderepositories-datatable');
+
+    await sdkcall("SageMaker", "listCodeRepositories", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-machinelearning-sagemaker-coderepositories-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.CodeRepositorySummaryList.map(coderepository => {
+            return sdkcall("SageMaker", "describeCodeRepository", {
+                CodeRepositoryName: coderepository.CodeRepositoryName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-coderepositories-datatable').bootstrapTable('append', [{
+                    f2id: data.CodeRepositoryName,
+                    f2type: 'sagemaker.coderepository',
+                    f2data: data,
+                    f2region: region,
+                    name: data.CodeRepositoryName,
+                    creationtime: data.CreationTime
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-coderepositories-datatable');
+    });
 
     await sdkcall("SageMaker", "listModels", {
         // no params
@@ -22486,6 +23357,58 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "ecs"
+    }, true).then(async (data) => {
+        $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "ecs",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "ecs"
+    }, true).then(async (data) => {
+        $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -22738,6 +23661,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -22748,6 +23777,8 @@ async function updateDatatableAnalyticsEMR() {
     blockUI('#section-analytics-emr-instancegroupconfigs-datatable');
     blockUI('#section-analytics-emr-securityconfigurations-datatable');
     blockUI('#section-analytics-emr-steps-datatable');
+    blockUI('#section-analytics-emr-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("EMR", "listClusters", {
         // no params
@@ -22853,6 +23884,58 @@ async function updateDatatableAnalyticsEMR() {
         }));
 
         unblockUI('#section-analytics-emr-securityconfigurations-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "elasticmapreduce"
+    }, true).then(async (data) => {
+        $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "elasticmapreduce",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-analytics-emr-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "elasticmapreduce"
+    }, true).then(async (data) => {
+        $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -25136,6 +26219,112 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Auto Scaling Scalable Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'mincapacity',
+                        title: 'Min Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxcapacity',
+                        title: 'Max Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Auto Scaling Scaling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'policyname',
+                        title: 'Policy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scalabledimension',
+                        title: 'Scalable Dimension',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'policytype',
+                        title: 'Policy Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -25148,6 +26337,8 @@ async function updateDatatableEndUserComputingAppStream() {
     blockUI('#section-endusercomputing-appstream-stackfleetassociations-datatable');
     blockUI('#section-endusercomputing-appstream-imagebuilders-datatable');
     blockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
+    blockUI('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable');
 
     await sdkcall("AppStream", "describeFleets", {
         // no params
@@ -25288,6 +26479,58 @@ async function updateDatatableEndUserComputingAppStream() {
         });
 
         unblockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
+        ServiceNamespace: "appstream"
+    }, true).then(async (data) => {
+        $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ScalableTargets.map(target => {
+            return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
+                ServiceNamespace: "appstream",
+                ResourceId: target.ResourceId,
+                ScalableDimension: target.ScalableDimension
+            }, true).then((actions) => {
+                target['ScheduledActions'] = actions.ScheduledActions;
+
+                $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    f2id: target.ResourceId,
+                    f2type: 'applicationautoscaling.scalabletarget',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    mincapacity: target.MinCapacity,
+                    maxcapacity: target.MaxCapacity
+                }]);
+            });
+        }));
+
+        unblockUI('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable');
+    });
+
+    await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
+        ServiceNamespace: "appstream"
+    }, true).then(async (data) => {
+        $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        
+        if (data.ScalableTargets) {
+            data.ScalableTargets.forEach(target => {
+                $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                    f2id: target.PolicyARN,
+                    f2type: 'applicationautoscaling.scalingpolicy',
+                    f2data: target,
+                    f2region: region,
+                    resourceid: target.ResourceId,
+                    scalabledimension: target.ScalableDimension,
+                    policyname: target.PolicyName,
+                    policytype: target.PolicyType
+                }]);
+            });
+        }
+
+        unblockUI('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable');
     });
 }
 
@@ -29436,6 +30679,789 @@ sections.push({
     'category': 'Customer Engagement',
     'service': 'Pinpoint',
     'resourcetypes': {
+        'Apps': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Settings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Campaigns': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Segments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'segmenttype',
+                        title: 'Segment Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Application ID',
+                        field: 'appid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'destinationstreamarn',
+                        title: 'Destination Stream ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'ADM Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'APNs Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'APNs Sandbox Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'APNs VoIP Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'APNs VoIP Sandbox Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Baidu Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Email Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'GCM Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'SMS Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Voice Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'appid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Email Configuration Sets': {
             'columns': [
                 [
@@ -29573,10 +31599,150 @@ sections.push({
 });
 
 async function updateDatatableCustomerEngagementPinpoint() {
+    blockUI('#section-customerengagement-pinpoint-apps-datatable');
+    blockUI('#section-customerengagement-pinpoint-applicationsettings-datatable');
+    blockUI('#section-customerengagement-pinpoint-campaigns-datatable');
+    blockUI('#section-customerengagement-pinpoint-segments-datatable');
+    blockUI('#section-customerengagement-pinpoint-eventstreams-datatable');
+    blockUI('#section-customerengagement-pinpoint-admchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-apnschannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-apnssandboxchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-apnsvoipchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-baiduchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-emailchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-gcmchannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-smschannels-datatable');
+    blockUI('#section-customerengagement-pinpoint-voicechannels-datatable');
     blockUI('#section-customerengagement-pinpoint-emailconfigurationsets-datatable');
     blockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
     blockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
     blockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
+
+    await sdkcall("Pinpoint", "getApps", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-customerengagement-pinpoint-apps-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-applicationsettings-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-campaigns-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-segments-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-eventstreams-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-admchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnschannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-baiduchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-gcmchannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-smschannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-voicechannels-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.ApplicationsResponse.Item.map(app => {
+            $('#section-customerengagement-pinpoint-apps-datatable').bootstrapTable('append', [{
+                f2id: app.Arn,
+                f2type: 'pinpoint.app',
+                f2data: app,
+                f2region: region,
+                name: app.Name,
+                id: app.Id
+            }]);
+
+            return Promise.all([
+                sdkcall("Pinpoint", "getConfigurationSet", {
+                    ApplicationId: app.Id
+                }, true).then(async (data) => {
+
+                    $('#section-customerengagement-pinpoint-applicationsettings-datatable').bootstrapTable('append', [{
+                        f2id: app.Arn + " Settings",
+                        f2type: 'pinpoint.applicationsettings',
+                        f2data: data.ApplicationSettingsResource,
+                        f2region: region,
+                        name: app.Name,
+                        id: app.Id
+                    }]);
+                }),
+                sdkcall("Pinpoint", "getCampaigns", {
+                    ApplicationId: app.Id
+                }, true).then(async (data) => {
+                    data.CampaignsResponse.Item.forEach(campaign => {
+                        $('#section-customerengagement-pinpoint-campaigns-datatable').bootstrapTable('append', [{
+                            f2id: campaign.Arn,
+                            f2type: 'pinpoint.campaign',
+                            f2data: campaign,
+                            f2region: region,
+                            name: campaign.Name,
+                            appid: app.Id,
+                            description: campaign.Description,
+                            id: campaign.Id,
+                            version: campaign.Version
+                        }]);
+                    });
+                }),
+                sdkcall("Pinpoint", "getSegments", {
+                    ApplicationId: app.Id
+                }, true).then(async (data) => {
+                    data.SegmentsResponse.Item.forEach(segment => {
+                        $('#section-customerengagement-pinpoint-segments-datatable').bootstrapTable('append', [{
+                            f2id: segment.Arn,
+                            f2type: 'pinpoint.segment',
+                            f2data: segment,
+                            f2region: region,
+                            name: segment.Name,
+                            appid: app.Id,
+                            id: segment.Id,
+                            version: segment.Version,
+                            segmenttype: segment.SegmentType
+                        }]);
+                    });
+                }),
+                sdkcall("Pinpoint", "getEventStream", {
+                    ApplicationId: app.Id
+                }, true).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-eventstreams-datatable').bootstrapTable('append', [{
+                        f2id: data.EventStream.ApplicationId + " Event Stream",
+                        f2type: 'pinpoint.eventstream',
+                        f2data: data.EventStream,
+                        f2region: region,
+                        appid: data.EventStream.ApplicationId,
+                        destinationstreamarn: data.EventStream.DestinationStreamArn
+                    }]);
+                }),
+                sdkcall("Pinpoint", "getChannels", {
+                    ApplicationId: app.Id
+                }, true).then(async (data) => {
+                    for (var channeltype in data.ChannelsResponse.Channels) {
+                        $('#section-customerengagement-pinpoint-' + channeltype.toLowerCase().replace(/\_/g,"") + 'channels-datatable').bootstrapTable('append', [{
+                            f2id: data.ChannelsResponse.Channels[channeltype].ApplicationId + " " + channeltype + " Channel",
+                            f2type: 'pinpoint.' + channeltype.toLowerCase().replace(/\_/g,"") + 'channel',
+                            f2data: data.ChannelsResponse.Channels[channeltype],
+                            f2region: region,
+                            appid: data.ChannelsResponse.Channels[channeltype].ApplicationId,
+                            id: data.ChannelsResponse.Channels[channeltype].Id,
+                            enabled: data.ChannelsResponse.Channels[channeltype].Enabled,
+                            creationtime: data.ChannelsResponse.Channels[channeltype].CreationDate
+                        }]);
+                    };
+                })
+            ]);
+        }));
+
+        unblockUI('#section-customerengagement-pinpoint-apps-datatable');
+        unblockUI('#section-customerengagement-pinpoint-applicationsettings-datatable');
+        unblockUI('#section-customerengagement-pinpoint-campaigns-datatable');
+        unblockUI('#section-customerengagement-pinpoint-segments-datatable');
+        unblockUI('#section-customerengagement-pinpoint-eventstreams-datatable');
+        unblockUI('#section-customerengagement-pinpoint-admchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-apnschannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-apnssandboxchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-apnsvoipchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-baiduchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-emailchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-gcmchannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-smschannels-datatable');
+        unblockUI('#section-customerengagement-pinpoint-voicechannels-datatable');
+    });
 
     await sdkcall("PinpointEmail", "listConfigurationSets", {
         // no params
@@ -29989,4 +32155,81 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
 
     unblockUI('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable');
     unblockUI('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable');
+}
+
+/* ========================================================================== */
+// IoT Things Graph
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Internet of Things',
+    'service': 'Things Graph',
+    'resourcetypes': {
+        'Flow Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableInternetofThingsThingsGraph() {
+    blockUI('#section-internetofthings-thingsgraph-flowtemplates-datatable');
+
+    await sdkcall("IoTThingsGraph", "searchFlowTemplates", {
+        // no params
+    }, false).then(async (data) => {
+        console.log(data);
+        $('#section-internetofthings-thingsgraph-flowtemplates-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.summaries.map(flowtemplate => {
+            return sdkcall("IoTThingsGraph", "getFlowTemplate", {
+                id: flowtemplate.id
+            }, true).then(async (data) => {
+                $('#section-internetofthings-thingsgraph-flowtemplates-datatable').bootstrapTable('append', [{
+                    f2id: data.description.summary.arn,
+                    f2type: 'iotthingsgraph.flowtemplate',
+                    f2data: data.description,
+                    f2region: region,
+                    id: data.description.summary.id,
+                    creationtime: data.description.summary.createdAt
+                }]);
+            });
+        }));
+    }).catch(() => {});
+
+    unblockUI('#section-internetofthings-thingsgraph-flowtemplates-datatable');
 }

@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**396/401 (98%)** Resources Covered
+**404/404 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -55,8 +55,8 @@
 | *AWS::AppSync::GraphQLApi* | :thumbsup: |
 | *AWS::AppSync::GraphQLSchema* | :thumbsup: |
 | *AWS::AppSync::Resolver* | :thumbsup: |
-| *AWS::ApplicationAutoScaling::ScalableTarget* |  |
-| *AWS::ApplicationAutoScaling::ScalingPolicy* |  |
+| *AWS::ApplicationAutoScaling::ScalableTarget* | :thumbsup: |
+| *AWS::ApplicationAutoScaling::ScalingPolicy* | :thumbsup: |
 | *AWS::Athena::NamedQuery* | :thumbsup: |
 | *AWS::AutoScaling::AutoScalingGroup* | :thumbsup: |
 | *AWS::AutoScaling::LaunchConfiguration* | :thumbsup: |
@@ -64,6 +64,9 @@
 | *AWS::AutoScaling::ScalingPolicy* | :thumbsup: |
 | *AWS::AutoScaling::ScheduledAction* | :thumbsup: |
 | *AWS::AutoScalingPlans::ScalingPlan* | :thumbsup: |
+| *AWS::Backup::BackupPlan* | :thumbsup: |
+| *AWS::Backup::BackupSelection* | :thumbsup: |
+| *AWS::Backup::BackupVault* | :thumbsup: |
 | *AWS::Batch::ComputeEnvironment* | :thumbsup: |
 | *AWS::Batch::JobDefinition* | :thumbsup: |
 | *AWS::Batch::JobQueue* | :thumbsup: |
@@ -122,7 +125,7 @@
 | *AWS::EC2::CapacityReservation* | :thumbsup: |
 | *AWS::EC2::CustomerGateway* | :thumbsup: |
 | *AWS::EC2::DHCPOptions* | :thumbsup: |
-| *AWS::EC2::EC2Fleet* |  |
+| *AWS::EC2::EC2Fleet* | :thumbsup: |
 | *AWS::EC2::EIP* | :thumbsup: |
 | *AWS::EC2::EIPAssociation* | :thumbsup: |
 | *AWS::EC2::EgressOnlyInternetGateway* | :thumbsup: |
@@ -322,9 +325,9 @@
 | *AWS::RoboMaker::Fleet* | :thumbsup: |
 | *AWS::RoboMaker::Robot* | :thumbsup: |
 | *AWS::RoboMaker::RobotApplication* | :thumbsup: |
-| *AWS::RoboMaker::RobotApplicationVersion* |  |
+| *AWS::RoboMaker::RobotApplicationVersion* | :thumbsup: |
 | *AWS::RoboMaker::SimulationApplication* | :thumbsup: |
-| *AWS::RoboMaker::SimulationApplicationVersion* |  |
+| *AWS::RoboMaker::SimulationApplicationVersion* | :thumbsup: |
 | *AWS::Route53::HealthCheck* | :thumbsup: |
 | *AWS::Route53::HostedZone* | :thumbsup: |
 | *AWS::Route53::RecordSet* | :thumbsup: |
@@ -362,7 +365,7 @@
 | *AWS::SecretsManager::ResourcePolicy* | :thumbsup: |
 | *AWS::SecretsManager::RotationSchedule* | :thumbsup: |
 | *AWS::SecretsManager::Secret* | :thumbsup: |
-| *AWS::SecretsManager::SecretTargetAttachment* |  |
+| *AWS::SecretsManager::SecretTargetAttachment* | N/A |
 | *AWS::ServiceCatalog::AcceptedPortfolioShare* | :thumbsup: |
 | *AWS::ServiceCatalog::CloudFormationProduct* | :thumbsup: |
 | *AWS::ServiceCatalog::CloudFormationProvisionedProduct* | :thumbsup: |
@@ -372,8 +375,8 @@
 | *AWS::ServiceCatalog::Portfolio* | :thumbsup: |
 | *AWS::ServiceCatalog::PortfolioPrincipalAssociation* | :thumbsup: |
 | *AWS::ServiceCatalog::PortfolioProductAssociation* | :thumbsup: |
-| *AWS::ServiceCatalog::PortfolioShare* |  |
-| *AWS::ServiceCatalog::ResourceUpdateConstraint* |  |
+| *AWS::ServiceCatalog::PortfolioShare* | N/A |
+| *AWS::ServiceCatalog::ResourceUpdateConstraint* | N/A |
 | *AWS::ServiceCatalog::TagOption* | :thumbsup: |
 | *AWS::ServiceCatalog::TagOptionAssociation* | :thumbsup: |
 | *AWS::ServiceDiscovery::HttpNamespace* | :thumbsup: |
