@@ -16726,6 +16726,303 @@ function performF2Mappings(objects) {
                         'options': reqParams
                     });
                 }
+            } else if (obj.type == "pinpoint.app") {
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::App',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.admchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+                /*
+                TODO:
+                ClientId
+                ClientSecret
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::ADMChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.apnschannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['DefaultAuthenticationMethod'] = obj.data.DefaultAuthenticationMethod;
+
+                /*
+                TODO:
+                BundleId: String
+                Certificate: String
+                PrivateKey: String
+                TeamId: String
+                TokenKey: String
+                TokenKeyId: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::APNSChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.apnssandboxchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['DefaultAuthenticationMethod'] = obj.data.DefaultAuthenticationMethod;
+
+                /*
+                TODO:
+                BundleId: String
+                Certificate: String
+                PrivateKey: String
+                TeamId: String
+                TokenKey: String
+                TokenKeyId: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::APNSSandboxChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.apnsvoipchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['DefaultAuthenticationMethod'] = obj.data.DefaultAuthenticationMethod;
+
+                /*
+                TODO:
+                BundleId: String
+                Certificate: String
+                PrivateKey: String
+                TeamId: String
+                TokenKey: String
+                TokenKeyId: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::APNSVoipChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.apnsvoipsandboxchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['DefaultAuthenticationMethod'] = obj.data.DefaultAuthenticationMethod;
+
+                /*
+                TODO:
+                BundleId: String
+                Certificate: String
+                PrivateKey: String
+                TeamId: String
+                TokenKey: String
+                TokenKeyId: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::APNSVoipSandboxChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.baiduchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+                /*
+                TODO:
+                ApiKey: String
+                SecretKey: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::BaiduChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.emailchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['FromAddress'] = obj.data.FromAddress;
+                reqParams.cfn['Identity'] = obj.data.Identity;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.cfn['ConfigurationSet'] = obj.data.ConfigurationSet;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::EmailChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.gcmchannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+                /*
+                TODO:
+                ApiKey: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::GCMChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.smschannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.cfn['SenderId'] = obj.data.SenderId;
+                reqParams.cfn['ShortCode'] = obj.data.ShortCode;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::SMSChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.voicechannel") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::VoiceChannel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.eventstream") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['DestinationStreamArn'] = obj.data.DestinationStreamArn;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::EventStream',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.applicationsettings") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                if (obj.data.CampaignHook) {
+                    reqParams.cfn['CampaignHook'] = {
+                        'LambdaFunctionName': obj.data.CampaignHook.LambdaFunctionName,
+                        'Mode': obj.data.CampaignHook.Mode,
+                        'WebUrl': obj.data.CampaignHook.WebUrl
+                    };
+                }
+                if (obj.data.Limits) {
+                    reqParams.cfn['Limits'] = {
+                        'Daily': obj.data.Limits.Daily,
+                        'MaximumDuration': obj.data.Limits.MaximumDuration,
+                        'MessagesPerSecond': obj.data.Limits.MessagesPerSecond,
+                        'Total': obj.data.Limits.Total
+                    };
+                }
+                if (obj.data.QuietTime) {
+                    reqParams.cfn['QuietTime'] = {
+                        'Start': obj.data.QuietTime.Start,
+                        'End': obj.data.QuietTime.End
+                    };
+                }
+                
+                /*
+                TODO:
+                CloudWatchMetricsEnabled: Boolean
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::ApplicationSettings',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.campaign") {
+                if (obj.data.AdditionalTreatments) {
+                    reqParams.cfn['AdditionalTreatments'] = [];
+                    obj.data.AdditionalTreatments.forEach(additionaltreatment => {
+                        reqParams.cfn['AdditionalTreatments'].push({
+                            'MessageConfiguration': additionaltreatment.MessageConfiguration,
+                            'Schedule': additionaltreatment.Schedule,
+                            'TreatmentDescription': additionaltreatment.TreatmentDescription,
+                            'TreatmentName': additionaltreatment.TreatmentName,
+                            'SizePercent': additionaltreatment.SizePercent
+                        });
+                    });
+                }
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['HoldoutPercent'] = obj.data.HoldoutPercent;
+                reqParams.cfn['MessageConfiguration'] = obj.data.MessageConfiguration;
+                reqParams.cfn['Schedule'] = obj.data.Schedule;
+                reqParams.cfn['TreatmentDescription'] = obj.data.TreatmentDescription;
+                reqParams.cfn['TreatmentName'] = obj.data.TreatmentName;
+                reqParams.cfn['CampaignHook'] = obj.data.Hook;
+                reqParams.cfn['IsPaused'] = obj.data.IsPaused;
+                reqParams.cfn['Limits'] = obj.data.Limits;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['SegmentId'] = obj.data.SegmentId;
+                reqParams.cfn['SegmentVersion'] = obj.data.SegmentVersion;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::Campaign',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.segment") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+                reqParams.cfn['SegmentGroups'] = obj.data.SegmentGroups;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::Segment',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

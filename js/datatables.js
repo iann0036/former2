@@ -31651,8 +31651,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
             return Promise.all([
                 sdkcall("Pinpoint", "getConfigurationSet", {
                     ApplicationId: app.Id
-                }, true).then(async (data) => {
-
+                }, false).then(async (data) => {
                     $('#section-customerengagement-pinpoint-applicationsettings-datatable').bootstrapTable('append', [{
                         f2id: app.Arn + " Settings",
                         f2type: 'pinpoint.applicationsettings',
@@ -31661,44 +31660,48 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         name: app.Name,
                         id: app.Id
                     }]);
-                }),
+                }).catch(() => {}),
                 sdkcall("Pinpoint", "getCampaigns", {
                     ApplicationId: app.Id
-                }, true).then(async (data) => {
-                    data.CampaignsResponse.Item.forEach(campaign => {
-                        $('#section-customerengagement-pinpoint-campaigns-datatable').bootstrapTable('append', [{
-                            f2id: campaign.Arn,
-                            f2type: 'pinpoint.campaign',
-                            f2data: campaign,
-                            f2region: region,
-                            name: campaign.Name,
-                            appid: app.Id,
-                            description: campaign.Description,
-                            id: campaign.Id,
-                            version: campaign.Version
-                        }]);
-                    });
-                }),
+                }, false).then(async (data) => {
+                    if (data.CampaignsResponse && data.CampaignsResponse.Item) {
+                        data.CampaignsResponse.Item.forEach(campaign => {
+                            $('#section-customerengagement-pinpoint-campaigns-datatable').bootstrapTable('append', [{
+                                f2id: campaign.Arn,
+                                f2type: 'pinpoint.campaign',
+                                f2data: campaign,
+                                f2region: region,
+                                name: campaign.Name,
+                                appid: app.Id,
+                                description: campaign.Description,
+                                id: campaign.Id,
+                                version: campaign.Version
+                            }]);
+                        });
+                    }
+                }).catch(() => {}),
                 sdkcall("Pinpoint", "getSegments", {
                     ApplicationId: app.Id
-                }, true).then(async (data) => {
-                    data.SegmentsResponse.Item.forEach(segment => {
-                        $('#section-customerengagement-pinpoint-segments-datatable').bootstrapTable('append', [{
-                            f2id: segment.Arn,
-                            f2type: 'pinpoint.segment',
-                            f2data: segment,
-                            f2region: region,
-                            name: segment.Name,
-                            appid: app.Id,
-                            id: segment.Id,
-                            version: segment.Version,
-                            segmenttype: segment.SegmentType
-                        }]);
-                    });
-                }),
+                }, false).then(async (data) => {
+                    if (data.SegmentsResponse && data.SegmentsResponse.Item) {
+                        data.SegmentsResponse.Item.forEach(segment => {
+                            $('#section-customerengagement-pinpoint-segments-datatable').bootstrapTable('append', [{
+                                f2id: segment.Arn,
+                                f2type: 'pinpoint.segment',
+                                f2data: segment,
+                                f2region: region,
+                                name: segment.Name,
+                                appid: app.Id,
+                                id: segment.Id,
+                                version: segment.Version,
+                                segmenttype: segment.SegmentType
+                            }]);
+                        });
+                    }
+                }).catch(() => {}),
                 sdkcall("Pinpoint", "getEventStream", {
                     ApplicationId: app.Id
-                }, true).then(async (data) => {
+                }, false).then(async (data) => {
                     $('#section-customerengagement-pinpoint-eventstreams-datatable').bootstrapTable('append', [{
                         f2id: data.EventStream.ApplicationId + " Event Stream",
                         f2type: 'pinpoint.eventstream',
@@ -31707,23 +31710,147 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         appid: data.EventStream.ApplicationId,
                         destinationstreamarn: data.EventStream.DestinationStreamArn
                     }]);
-                }),
-                sdkcall("Pinpoint", "getChannels", {
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getAdmChannel", {
                     ApplicationId: app.Id
-                }, true).then(async (data) => {
-                    for (var channeltype in data.ChannelsResponse.Channels) {
-                        $('#section-customerengagement-pinpoint-' + channeltype.toLowerCase().replace(/\_/g,"") + 'channels-datatable').bootstrapTable('append', [{
-                            f2id: data.ChannelsResponse.Channels[channeltype].ApplicationId + " " + channeltype + " Channel",
-                            f2type: 'pinpoint.' + channeltype.toLowerCase().replace(/\_/g,"") + 'channel',
-                            f2data: data.ChannelsResponse.Channels[channeltype],
-                            f2region: region,
-                            appid: data.ChannelsResponse.Channels[channeltype].ApplicationId,
-                            id: data.ChannelsResponse.Channels[channeltype].Id,
-                            enabled: data.ChannelsResponse.Channels[channeltype].Enabled,
-                            creationtime: data.ChannelsResponse.Channels[channeltype].CreationDate
-                        }]);
-                    };
-                })
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-admchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.ADMChannelResponse.ApplicationId + " ADM Channel",
+                        f2type: 'pinpoint.admchannel',
+                        f2data: data.ADMChannelResponse,
+                        f2region: region,
+                        appid: data.ADMChannelResponse.ApplicationId,
+                        id: data.ADMChannelResponse.Id,
+                        enabled: data.ADMChannelResponse.Enabled,
+                        creationtime: data.ADMChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getApnsChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-apnschannels-datatable').bootstrapTable('append', [{
+                        f2id: data.APNSChannelResponse.ApplicationId + " APNs Channel",
+                        f2type: 'pinpoint.apnschannel',
+                        f2data: data.APNSChannelResponse,
+                        f2region: region,
+                        appid: data.APNSChannelResponse.ApplicationId,
+                        id: data.APNSChannelResponse.Id,
+                        enabled: data.APNSChannelResponse.Enabled,
+                        creationtime: data.APNSChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getApnsSandboxChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.APNSSandboxChannelResponse.ApplicationId + " APNs Sandbox Channel",
+                        f2type: 'pinpoint.apnssandboxchannel',
+                        f2data: data.APNSSandboxChannelResponse,
+                        f2region: region,
+                        appid: data.APNSSandboxChannelResponse.ApplicationId,
+                        id: data.APNSSandboxChannelResponse.Id,
+                        enabled: data.APNSSandboxChannelResponse.Enabled,
+                        creationtime: data.APNSSandboxChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getApnsVoipChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.APNSVoipChannelResponse.ApplicationId + " APNs VoIP Channel",
+                        f2type: 'pinpoint.apnsvoipchannel',
+                        f2data: data.APNSVoipChannelResponse,
+                        f2region: region,
+                        appid: data.APNSVoipChannelResponse.ApplicationId,
+                        id: data.APNSVoipChannelResponse.Id,
+                        enabled: data.APNSVoipChannelResponse.Enabled,
+                        creationtime: data.APNSVoipChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getApnsVoipSandboxChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.APNSVoipSandboxChannelResponse.ApplicationId + " APNs VoIP Sandbox Channel",
+                        f2type: 'pinpoint.apnsvoipsandboxchannel',
+                        f2data: data.APNSVoipSandboxChannelResponse,
+                        f2region: region,
+                        appid: data.APNSVoipSandboxChannelResponse.ApplicationId,
+                        id: data.APNSVoipSandboxChannelResponse.Id,
+                        enabled: data.APNSVoipSandboxChannelResponse.Enabled,
+                        creationtime: data.APNSVoipSandboxChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getBaiduChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-baiduchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.BaiduChannelResponse.ApplicationId + " Baidu Channel",
+                        f2type: 'pinpoint.baiduchannel',
+                        f2data: data.BaiduChannelResponse,
+                        f2region: region,
+                        appid: data.BaiduChannelResponse.ApplicationId,
+                        id: data.BaiduChannelResponse.Id,
+                        enabled: data.BaiduChannelResponse.Enabled,
+                        creationtime: data.BaiduChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getEmailChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-emailchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.EmailChannelResponse.ApplicationId + " Email Channel",
+                        f2type: 'pinpoint.emailchannel',
+                        f2data: data.EmailChannelResponse,
+                        f2region: region,
+                        appid: data.EmailChannelResponse.ApplicationId,
+                        id: data.EmailChannelResponse.Id,
+                        enabled: data.EmailChannelResponse.Enabled,
+                        creationtime: data.EmailChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getGcmChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-gcmchannels-datatable').bootstrapTable('append', [{
+                        f2id: data.GCMChannelResponse.ApplicationId + " GCM Channel",
+                        f2type: 'pinpoint.gcmchannel',
+                        f2data: data.GCMChannelResponse,
+                        f2region: region,
+                        appid: data.GCMChannelResponse.ApplicationId,
+                        id: data.GCMChannelResponse.Id,
+                        enabled: data.GCMChannelResponse.Enabled,
+                        creationtime: data.GCMChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getSmsChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-smschannels-datatable').bootstrapTable('append', [{
+                        f2id: data.SMSChannelResponse.ApplicationId + " SMS Channel",
+                        f2type: 'pinpoint.smschannel',
+                        f2data: data.SMSChannelResponse,
+                        f2region: region,
+                        appid: data.SMSChannelResponse.ApplicationId,
+                        id: data.SMSChannelResponse.Id,
+                        enabled: data.SMSChannelResponse.Enabled,
+                        creationtime: data.SMSChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {}),
+                sdkcall("Pinpoint", "getVoiceChannel", {
+                    ApplicationId: app.Id
+                }, false).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-voicechannels-datatable').bootstrapTable('append', [{
+                        f2id: data.VoiceChannelResponse.ApplicationId + " Voice Channel",
+                        f2type: 'pinpoint.voicechannel',
+                        f2data: data.VoiceChannelResponse,
+                        f2region: region,
+                        appid: data.VoiceChannelResponse.ApplicationId,
+                        id: data.VoiceChannelResponse.Id,
+                        enabled: data.VoiceChannelResponse.Enabled,
+                        creationtime: data.VoiceChannelResponse.CreationDate
+                    }]);
+                }).catch(() => {})
             ]);
         }));
 

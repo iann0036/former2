@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**404/404 (100%)** Resources Covered
+**421/421 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -265,6 +265,7 @@
 | *AWS::IoTAnalytics::Dataset* | :thumbsup: |
 | *AWS::IoTAnalytics::Datastore* | :thumbsup: |
 | *AWS::IoTAnalytics::Pipeline* | :thumbsup: |
+| *AWS::IoTThingsGraph::FlowTemplate* | :thumbsup: |
 | *AWS::KMS::Alias* | :thumbsup: |
 | *AWS::KMS::Key* | :thumbsup: |
 | *AWS::Kinesis::Stream* | :thumbsup: |
@@ -303,6 +304,21 @@
 | *AWS::OpsWorks::UserProfile* | :thumbsup: |
 | *AWS::OpsWorks::Volume* | :thumbsup: |
 | *AWS::OpsWorksCM::Server* | :thumbsup: |
+| *AWS::Pinpoint::ADMChannel* | :thumbsup: |
+| *AWS::Pinpoint::APNSChannel* | :thumbsup: |
+| *AWS::Pinpoint::APNSSandboxChannel* | :thumbsup: |
+| *AWS::Pinpoint::APNSVoipChannel* | :thumbsup: |
+| *AWS::Pinpoint::APNSVoipSandboxChannel* | :thumbsup: |
+| *AWS::Pinpoint::App* | :thumbsup: |
+| *AWS::Pinpoint::ApplicationSettings* | :thumbsup: |
+| *AWS::Pinpoint::BaiduChannel* | :thumbsup: |
+| *AWS::Pinpoint::Campaign* | :thumbsup: |
+| *AWS::Pinpoint::EmailChannel* | :thumbsup: |
+| *AWS::Pinpoint::EventStream* | :thumbsup: |
+| *AWS::Pinpoint::GCMChannel* | :thumbsup: |
+| *AWS::Pinpoint::SMSChannel* | :thumbsup: |
+| *AWS::Pinpoint::Segment* | :thumbsup: |
+| *AWS::Pinpoint::VoiceChannel* | :thumbsup: |
 | *AWS::PinpointEmail::ConfigurationSet* | :thumbsup: |
 | *AWS::PinpointEmail::ConfigurationSetEventDestination* | :thumbsup: |
 | *AWS::PinpointEmail::DedicatedIpPool* | :thumbsup: |
@@ -357,6 +373,7 @@
 | *AWS::SSM::Parameter* | :thumbsup: |
 | *AWS::SSM::PatchBaseline* | :thumbsup: |
 | *AWS::SSM::ResourceDataSync* | :thumbsup: |
+| *AWS::SageMaker::CodeRepository* | :thumbsup: |
 | *AWS::SageMaker::Endpoint* | :thumbsup: |
 | *AWS::SageMaker::EndpointConfig* | :thumbsup: |
 | *AWS::SageMaker::Model* | :thumbsup: |
@@ -411,7 +428,7 @@
 
 ## Terraform Coverage
 
-**259/499 (51%)** Resources Covered
+**259/500 (51%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -586,6 +603,7 @@
 | *aws_ec2_transit_gateway_route_table_association* |  |
 | *aws_ec2_transit_gateway_route_table_propagation* |  |
 | *aws_ec2_transit_gateway_vpc_attachment* |  |
+| *aws_ec2_transit_gateway_vpc_attachment_accepter* |  |
 | *aws_ecr_lifecycle_policy* | :thumbsup: |
 | *aws_ecr_repository* | :thumbsup: |
 | *aws_ecr_repository_policy* | :thumbsup: |
