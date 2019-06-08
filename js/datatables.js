@@ -21166,7 +21166,10 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     blockUI('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable');
 
     await sdkcall("SSM", "listDocuments", {
-        // no params
+        DocumentFilterList: [{
+            key: "Owner",
+            value: "Self"
+        }]
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
         
@@ -21218,7 +21221,10 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     });
 
     await sdkcall("SSM", "describePatchBaselines", {
-        // no params
+        Filters: [{
+            Key: "OWNER",
+            Values: ["Self"]
+        }]
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('removeAll');
         
