@@ -5398,7 +5398,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['termination_policies'] = obj.data.TerminationPolicies;
                 reqParams.cfn['ServiceLinkedRoleARN'] = obj.data.ServiceLinkedRoleARN;
                 reqParams.tf['service_linked_role_arn'] = obj.data.ServiceLinkedRoleARN;
-                if (obj.data.EnabledMetrics) {
+                if (obj.data.EnabledMetrics && obj.data.EnabledMetrics[0] && obj.data.EnabledMetrics[0].Granularity) {
                     reqParams.tf['metrics_granularity'] = obj.data.EnabledMetrics[0].Granularity;
                     reqParams.tf['enabled_metrics'] = [];
                     reqParams.cfn['MetricsCollection'] = {
