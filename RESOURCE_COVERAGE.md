@@ -1,12 +1,15 @@
 ## CloudFormation Resource Coverage
 
-**421/421 (100%)** Resources Covered
+**429/429 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
 | *AWS::AmazonMQ::Broker* | :thumbsup: |
 | *AWS::AmazonMQ::Configuration* | :thumbsup: |
 | *AWS::AmazonMQ::ConfigurationAssociation* | :thumbsup: |
+| *AWS::Amplify::App* | :thumbsup: |
+| *AWS::Amplify::Branch* | :thumbsup: |
+| *AWS::Amplify::Domain* | :thumbsup: |
 | *AWS::ApiGateway::Account* | :thumbsup: |
 | *AWS::ApiGateway::ApiKey* | :thumbsup: |
 | *AWS::ApiGateway::Authorizer* | :thumbsup: |
@@ -123,6 +126,10 @@
 | *AWS::DocDB::DBSubnetGroup* | :thumbsup: |
 | *AWS::DynamoDB::Table* | :thumbsup: |
 | *AWS::EC2::CapacityReservation* | :thumbsup: |
+| *AWS::EC2::ClientVpnAuthorizationRule* | :thumbsup: |
+| *AWS::EC2::ClientVpnEndpoint* | :thumbsup: |
+| *AWS::EC2::ClientVpnRoute* | :thumbsup: |
+| *AWS::EC2::ClientVpnTargetNetworkAssociation* | :thumbsup: |
 | *AWS::EC2::CustomerGateway* | :thumbsup: |
 | *AWS::EC2::DHCPOptions* | :thumbsup: |
 | *AWS::EC2::EC2Fleet* | :thumbsup: |
@@ -290,6 +297,7 @@
 | *AWS::Logs::LogStream* | :thumbsup: |
 | *AWS::Logs::MetricFilter* | :thumbsup: |
 | *AWS::Logs::SubscriptionFilter* | :thumbsup: |
+| *AWS::MSK::Cluster* | :thumbsup: |
 | *AWS::MediaStore::Container* | :thumbsup: |
 | *AWS::Neptune::DBCluster* | :thumbsup: |
 | *AWS::Neptune::DBClusterParameterGroup* | :thumbsup: |
@@ -428,7 +436,7 @@
 
 ## Terraform Coverage
 
-**259/500 (51%)** Resources Covered
+**264/500 (52%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -765,11 +773,11 @@
 | *aws_opsworks_stack* | :thumbsup: |
 | *aws_opsworks_static_web_layer* |  |
 | *aws_opsworks_user_profile* | :thumbsup: |
-| *aws_organizations_account* |  |
-| *aws_organizations_organization* |  |
-| *aws_organizations_organizational_unit* |  |
-| *aws_organizations_policy* |  |
-| *aws_organizations_policy_attachment* |  |
+| *aws_organizations_account* | :thumbsup: |
+| *aws_organizations_organization* | :thumbsup: |
+| *aws_organizations_organizational_unit* | :thumbsup: |
+| *aws_organizations_policy* | :thumbsup: |
+| *aws_organizations_policy_attachment* | :thumbsup: |
 | *aws_pinpoint_adm_channel* |  |
 | *aws_pinpoint_apns_channel* |  |
 | *aws_pinpoint_apns_sandbox_channel* |  |

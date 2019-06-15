@@ -17263,6 +17263,85 @@ function performF2Mappings(objects) {
                     'type': 'AWS::MSK::Cluster',
                     'options': reqParams
                 });
+            } else if (obj.type == "ec2.clientvpnendpoint") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['ClientCidrBlock'] = obj.data.ClientCidrBlock;
+                reqParams.cfn['DnsServers'] = obj.data.DnsServers;
+                reqParams.cfn['TransportProtocol'] = obj.data.TransportProtocol;
+                reqParams.cfn['ServerCertificateArn'] = obj.data.ServerCertificateArn;
+                if (obj.data.AuthenticationOptions) {
+                    reqParams.cfn['AuthenticationOptions'] = [];
+                    obj.data.AuthenticationOptions.forEach(authenticationoptions => {
+                        var mutualauthentication = null;
+                        if (authenticationoptions.MutualAuthentication) {
+                            mutualauthentication = {
+                                'ClientRootCertificateChainArn': authenticationoptions.MutualAuthentication.ClientRootCertificateChain
+                            }
+                        }
+                        reqParams.cfn['AuthenticationOptions'].push({
+                            'Type': authenticationoptions.Type,
+                            'ActiveDirectory': authenticationoptions.ActiveDirectory,
+                            'MutualAuthentication': mutualauthentication,
+                        });
+                    });
+                }
+                reqParams.cfn['ConnectionLogOptions'] = obj.data.ConnectionLogOptions;
+                if (obj.data.Tags) {
+                    reqParams.cfn['TagSpecifications'] = [{
+                        'ResourceType': 'client-vpn-endpoint',
+                        'Tags': obj.data.Tags
+                    }];
+                }
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::ClientVpnEndpoint',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.clientvpnroute") {
+                reqParams.cfn['ClientVpnEndpointId'] = obj.data.ClientVpnEndpointId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidr;
+                reqParams.cfn['TargetVpcSubnetId'] = obj.data.TargetSubnet;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::ClientVpnRoute',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.clientvpntargetnetworkassociation") {
+                reqParams.cfn['ClientVpnEndpointId'] = obj.data.ClientVpnEndpointId;
+                reqParams.cfn['SubnetId'] = obj.data.TargetNetworkId;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::ClientVpnTargetNetworkAssociation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.clientvpnauthorizationrule") {
+                reqParams.cfn['ClientVpnEndpointId'] = obj.data.ClientVpnEndpointId;
+                reqParams.cfn['AccessGroupId'] = obj.data.AccessGroupId;
+                reqParams.cfn['AuthorizeAllGroups'] = obj.data.AuthorizeAllGroups;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['TargetNetworkCidr'] = obj.data.TargetNetworkCidr;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::ClientVpnAuthorizationRule',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

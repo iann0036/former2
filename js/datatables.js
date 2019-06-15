@@ -1087,6 +1087,60 @@ sections.push({
                 ]
             ]
         },
+        'NAT Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Transit Gateways': {
             'columns': [
                 [
@@ -1549,60 +1603,6 @@ sections.push({
                 ]
             ]
         },
-        'NAT Gateways': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'ID',
-                        field: 'id',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'subnetid',
-                        title: 'Subnet ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'vpcid',
-                        title: 'VPC ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'creationtime',
-                        title: 'Creation Time',
-                        sortable: true,
-                        editable: true,
-                        formatter: dateFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
         'Gateway Attachments': {
             'columns': [
                 [
@@ -1774,6 +1774,227 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Client VPN Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'dnsname',
+                        title: 'DNS Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Client VPN Routes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Client VPN Endpoint ID',
+                        field: 'clientvpnendpointid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'destinationcidr',
+                        title: 'Destination CIDR',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetsubnet',
+                        title: 'Target Subnet',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Client VPN Target Network Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Association ID',
+                        field: 'associationid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetnetworkid',
+                        title: 'Target Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'clientvpnendpointid',
+                        title: 'Client VPN Endpoint ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Client VPN Authorization Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Client VPN Endpoint ID',
+                        field: 'clientvpnendpointid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'destinationcidr',
+                        title: 'Destination CIDR',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'groupid',
+                        title: 'Group ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1813,6 +2034,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -2483,6 +2708,93 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-natgateways-datatable');
+    });
+
+    await sdkcall("EC2", "describeClientVpnEndpoints", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('removeAll');
+        
+        if (data.ClientVpnEndpoints) {
+            await Promise.all(data.ClientVpnEndpoints.map(async (endpoint) => {
+                $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('append', [{
+                    f2id: endpoint.ClientVpnEndpointId,
+                    f2type: 'ec2.clientvpnendpoint',
+                    f2data: endpoint,
+                    f2region: region,
+                    id: endpoint.ClientVpnEndpointId,
+                    description: endpoint.Description,
+                    creationtime: endpoint.CreationTime,
+                    dnsname: endpoint.DnsName
+                }]);
+
+                return Promise.all([
+                    sdkcall("EC2", "describeClientVpnRoutes", {
+                        ClientVpnEndpointId: endpoint.ClientVpnEndpointId
+                    }, true).then((data) => {
+                        if (data.Routes) {
+                            data.Routes.forEach(route => {
+                                $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('append', [{
+                                    f2id: route.ClientVpnEndpointId + " Route " + route.DestinationCidr + " " + route.TargetSubnet,
+                                    f2type: 'ec2.clientvpnroute',
+                                    f2data: route,
+                                    f2region: region,
+                                    clientvpnendpointid: route.ClientVpnEndpointId,
+                                    destinationcidr: route.DestinationCidr,
+                                    targetsubnet: route.TargetSubnet,
+                                    type: route.Type,
+                                    description: route.Description
+                                }]);
+                            });
+                        }
+                    }),
+                    sdkcall("EC2", "describeClientVpnTargetNetworks", {
+                        ClientVpnEndpointId: endpoint.ClientVpnEndpointId
+                    }, true).then((data) => {
+                        if (data.ClientVpnTargetNetworks) {
+                            data.ClientVpnTargetNetworks.forEach(network => {
+                                $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('append', [{
+                                    f2id: network.AssociationId,
+                                    f2type: 'ec2.clientvpntargetnetworkassociation',
+                                    f2data: network,
+                                    f2region: region,
+                                    associationid: network.AssociationId,
+                                    vpcid: network.VpcId,
+                                    targetnetworkid: network.TargetNetworkId,
+                                    clientvpnendpointid: network.ClientVpnEndpointId
+                                }]);
+                            });
+                        }
+                    }),
+                    sdkcall("EC2", "describeClientVpnAuthorizationRules", {
+                        ClientVpnEndpointId: endpoint.ClientVpnEndpointId
+                    }, true).then((data) => {
+                        if (data.AuthorizationRules) {
+                            data.AuthorizationRules.forEach(rule => {
+                                $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('append', [{
+                                    f2id: rule.ClientVpnEndpointId + " Rule " + rule.DestinationCidr + " " + rule.GroupId,
+                                    f2type: 'ec2.clientvpnauthorizationrule',
+                                    f2data: rule,
+                                    f2region: region,
+                                    clientvpnendpointid: rule.ClientVpnEndpointId,
+                                    destinationcidr: rule.DestinationCidr,
+                                    groupid: rule.GroupId,
+                                    description: rule.Description
+                                }]);
+                            });
+                        }
+                    })
+                ]);
+            }));
+        }
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
     });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
@@ -6200,6 +6512,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
