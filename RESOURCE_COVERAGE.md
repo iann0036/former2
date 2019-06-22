@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**429/429 (100%)** Resources Covered
+**431/431 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -107,6 +107,7 @@
 | *AWS::Config::ConfigurationAggregator* | :thumbsup: |
 | *AWS::Config::ConfigurationRecorder* | :thumbsup: |
 | *AWS::Config::DeliveryChannel* | :thumbsup: |
+| *AWS::Config::RemediationConfiguration* | :thumbsup: |
 | *AWS::DAX::Cluster* | :thumbsup: |
 | *AWS::DAX::ParameterGroup* | :thumbsup: |
 | *AWS::DAX::SubnetGroup* | :thumbsup: |
@@ -402,6 +403,7 @@
 | *AWS::ServiceCatalog::PortfolioProductAssociation* | :thumbsup: |
 | *AWS::ServiceCatalog::PortfolioShare* | N/A |
 | *AWS::ServiceCatalog::ResourceUpdateConstraint* | N/A |
+| *AWS::ServiceCatalog::StackSetConstraint* | :thumbsup: |
 | *AWS::ServiceCatalog::TagOption* | :thumbsup: |
 | *AWS::ServiceCatalog::TagOptionAssociation* | :thumbsup: |
 | *AWS::ServiceDiscovery::HttpNamespace* | :thumbsup: |

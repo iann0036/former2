@@ -9826,6 +9826,31 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ServiceCatalog::LaunchTemplateConstraint',
                     'options': reqParams
                 });
+            } else if (obj.type == "servicecatalog.stacksetconstraint") {
+                reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
+                reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
+                reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+                /*
+                TODO:
+                AcceptLanguage: String
+                AccountList: 
+                    - String
+                AdminRole: String
+                ExecutionRole: String
+                RegionList: 
+                    - String
+                StackInstanceControl: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('servicecatalog', obj.id),
+                    'region': obj.region,
+                    'service': 'servicecatalog',
+                    'type': 'AWS::ServiceCatalog::StackSetConstraint',
+                    'options': reqParams
+                });
             } else if (obj.type == "servicecatalog.acceptedportfolioshare") {
                 reqParams.cfn['PortfolioId'] = obj.data.portfolio.Id;
 
@@ -17340,6 +17365,22 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::ClientVpnAuthorizationRule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "config.remediationconfiguration") {
+                reqParams.cfn['ConfigRuleName'] = obj.data.ConfigRuleName;
+                reqParams.cfn['Parameters'] = obj.data.Parameters;
+                reqParams.cfn['ResourceType'] = obj.data.ResourceType;
+                reqParams.cfn['TargetId'] = obj.data.TargetId;
+                reqParams.cfn['TargetType'] = obj.data.TargetType;
+                reqParams.cfn['TargetVersion'] = obj.data.TargetVersion;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('config', obj.id),
+                    'region': obj.region,
+                    'service': 'config',
+                    'type': 'AWS::Config::RemediationConfiguration',
                     'options': reqParams
                 });
             } else {

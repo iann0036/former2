@@ -20600,6 +20600,59 @@ sections.push({
                 ]
             ]
         },
+        'Remediation Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Config Rule Name',
+                        field: 'configrulename',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'targetid',
+                        title: 'Target ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetversion',
+                        title: 'Target Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resourcetype',
+                        title: 'Resource Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Configuration Recorder': {
             'columns': [
                 [
@@ -20767,6 +20820,7 @@ sections.push({
 
 async function updateDatatableManagementAndGovernanceConfig() {
     blockUI('#section-managementandgovernance-config-configrules-datatable');
+    blockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
     blockUI('#section-managementandgovernance-config-configurationaggregators-datatable');
     blockUI('#section-managementandgovernance-config-configurationrecorder-datatable');
     blockUI('#section-managementandgovernance-config-aggregationauthorizations-datatable');
@@ -20774,10 +20828,10 @@ async function updateDatatableManagementAndGovernanceConfig() {
 
     await sdkcall("ConfigService", "describeConfigRules", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('removeAll');
         
-        data.ConfigRules.forEach(configRule => {
+        await Promise.all(data.ConfigRules.map(configRule => {
             $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('append', [{
                 f2id: configRule.ConfigRuleArn,
                 f2type: 'config.configrule',
@@ -20788,7 +20842,28 @@ async function updateDatatableManagementAndGovernanceConfig() {
                 description: configRule.Description,
                 maximumexecutionfrequency: configRule.MaximumExecutionFrequency
             }]);
-        });
+
+            return sdkcall("ConfigService", "describeRemediationConfigurations", {
+                ConfigRuleNames: [configRule.ConfigRuleName]
+            }, true).then((data) => {
+                $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('removeAll');
+                
+                data.RemediationConfigurations.forEach(remediationConfiguration => {
+                    $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('append', [{
+                        f2id: remediationConfiguration.ConfigRuleName + " " + remediationConfiguration.TargetId + " Remediation Configuration",
+                        f2type: 'config.remediationconfiguration',
+                        f2data: remediationConfiguration,
+                        f2region: region,
+                        configrulename: remediationConfiguration.ConfigRuleName,
+                        targetid: remediationConfiguration.TargetId,
+                        targetversion: remediationConfiguration.TargetVersion,
+                        resourcetype: remediationConfiguration.ResourceType
+                    }]);
+                });
+        
+                unblockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
+            });
+        }));
 
         unblockUI('#section-managementandgovernance-config-configrules-datatable');
     });
@@ -22146,6 +22221,43 @@ sections.push({
                 ]
             ]
         },
+        'Stack Set Constraints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Tag Options': {
             'columns': [
                 [
@@ -22250,6 +22362,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     blockUI('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
 
@@ -22358,6 +22471,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ProvisionedProducts.map(provisionedProduct => {
             return Promise.all([
@@ -22415,6 +22529,15 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                                             id: data.ConstraintDetail.ConstraintId,
                                             description: data.ConstraintDetail.Description
                                         }]);
+                                    } else if (data.ConstraintDetail.Type == "STACKSET") {
+                                        $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').bootstrapTable('append', [{
+                                            f2id: data.ConstraintDetail.ConstraintId,
+                                            f2type: 'servicecatalog.stacksetconstraint',
+                                            f2data: data,
+                                            f2region: region,
+                                            id: data.ConstraintDetail.ConstraintId,
+                                            description: data.ConstraintDetail.Description
+                                        }]);
                                     }
                                 });
                             }));
@@ -22447,6 +22570,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         unblockUI('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable');
     });
 
     await sdkcall("ServiceCatalog", "listTagOptions", {
