@@ -1917,7 +1917,8 @@ template.add_version("2010-09-09")
     }
 
     if (tracked_resources.length) {
-        compiled['cdkts'] += `
+        if (compiled['cdkts'] != "// No resources generated") {
+            compiled['cdkts'] += `
     }
 }
 
@@ -1927,8 +1928,11 @@ new MyStack(app, 'my-stack-name', { env: { region: '${tracked_resources[0].regio
 
 app.run();
 `;
-        compiled['troposphere'] += `print(template.to_yaml())
+        }
+        if (compiled['troposphere'] != "# No resources generated") {
+            compiled['troposphere'] += `print(template.to_yaml())
 `;
+        }
     }
 
     return compiled;
@@ -17381,6 +17385,38 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'config',
                     'type': 'AWS::Config::RemediationConfiguration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "macie.memberaccountassociation") {
+                reqParams.tf['member_account_id'] = obj.data.accountId;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('macie', obj.id),
+                    'region': obj.region,
+                    'service': 'macie',
+                    'terraformType': 'aws_macie_member_account_association',
+                    'options': reqParams
+                });
+            } else if (obj.type == "macie.s3bucketassociation") {
+                reqParams.tf['bucket_name'] = obj.data.bucketName;
+                reqParams.tf['prefix'] = obj.data.prefix;
+                reqParams.tf['classification_type'] = {
+                    'continuous': obj.data.classificationType.continuous,
+                    'one_time': obj.data.classificationType.oneTime
+                };
+
+                /*
+                SKIPPED:
+                member_account_id
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('macie', obj.id),
+                    'region': obj.region,
+                    'service': 'macie',
+                    'terraformType': 'aws_macie_s3_bucket_association',
                     'options': reqParams
                 });
             } else {
