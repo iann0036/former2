@@ -13630,33 +13630,45 @@ function performF2Mappings(objects) {
                         }
                         var portMappings = null;
                         if (containerDefinition.portMappings) {
-                            portMappings = {
-                                'ContainerPort': containerDefinition.portMappings.containerPort,
-                                'HostPort': containerDefinition.portMappings.hostPort,
-                                'Protocol': containerDefinition.portMappings.protocol
-                            };
+                            portMappings = [];
+                            containerDefinition.portMappings.forEach(portmapping => {
+                                portMappings.push({
+                                    'ContainerPort': portmapping.containerPort,
+                                    'HostPort': portmapping.hostPort,
+                                    'Protocol': portmapping.protocol
+                                });
+                            });
                         }
                         var environment = null;
                         if (containerDefinition.environment) {
-                            environment = {
-                                'Name': containerDefinition.environment.name,
-                                'Value': containerDefinition.environment.value
-                            };
+                            environment = [];
+                            containerDefinition.environment.forEach(env => {
+                                environment.push({
+                                    'Name': env.name,
+                                    'Value': env.value
+                                });
+                            });
                         }
                         var mountPoints = null;
                         if (containerDefinition.mountPoints) {
-                            mountPoints = {
-                                'SourceVolume': containerDefinition.mountPoints.sourceVolume,
-                                'ContainerPath': containerDefinition.mountPoints.containerPath,
-                                'ReadOnly': containerDefinition.mountPoints.readOnly
-                            };
+                            mountPoints = [];
+                            containerDefinition.mountPoints.forEach(mountpoint => {
+                                mountPoints.push({
+                                    'SourceVolume': mountpoint.sourceVolume,
+                                    'ContainerPath': mountpoint.containerPath,
+                                    'ReadOnly': mountpoint.readOnly
+                                });
+                            });
                         }
                         var volumesFrom = null;
                         if (containerDefinition.volumesFrom) {
-                            volumesFrom = {
-                                'SourceContainer': containerDefinition.volumesFrom.sourceContainer,
-                                'ReadOnly': containerDefinition.volumesFrom.readOnly
-                            };
+                            volumesFrom = [];
+                            containerDefinition.volumesFrom.forEach(vf => {
+                                volumesFrom.push({
+                                    'SourceContainer': vf.sourceContainer,
+                                    'ReadOnly': vf.readOnly
+                                });
+                            });
                         }
                         var linuxParameters = null;
                         if (containerDefinition.linuxParameters) {
@@ -13669,19 +13681,25 @@ function performF2Mappings(objects) {
                             }
                             var devices = null;
                             if (containerDefinition.linuxParameters.devices) {
-                                devices = {
-                                    'HostPath': containerDefinition.linuxParameters.devices.hostPath,
-                                    'ContainerPath': containerDefinition.linuxParameters.devices.containerPath,
-                                    'Permissions': containerDefinition.linuxParameters.devices.permissions
-                                };
+                                devices = [];
+                                containerDefinition.linuxParameters.devices.forEach(device => {
+                                    devices.push({
+                                        'HostPath': device.hostPath,
+                                        'ContainerPath': device.containerPath,
+                                        'Permissions': device.permissions
+                                    });
+                                });
                             }
                             var tmpfs = null;
                             if (containerDefinition.linuxParameters.tmpfs) {
-                                tmpfs = {
-                                    'ContainerPath': containerDefinition.linuxParameters.tmpfs.containerPath,
-                                    'Size': containerDefinition.linuxParameters.tmpfs.size,
-                                    'MountOptions': containerDefinition.linuxParameters.tmpfs.mountOptions
-                                };
+                                tmpfs = [];
+                                containerDefinition.linuxParameters.tmpfs.forEach(fs => {
+                                    tmpfs.push({
+                                        'ContainerPath': fs.containerPath,
+                                        'Size': fs.size,
+                                        'MountOptions': fs.mountOptions
+                                    });
+                                });
                             }
                             linuxParameters = {
                                 'Capabilities': capabilities,
@@ -13691,34 +13709,46 @@ function performF2Mappings(objects) {
                                 'Tmpfs': tmpfs
                             }
                         }
-                        var secrets = null; // not yet implemented in CFN!
+                        var secrets = null;
                         if (obj.data.secrets) {
-                            secrets = {
-                                '': obj.data.secrets.name,
-                                '': obj.data.secrets.valueFrom
-                            };
+                            secrets = [];
+                            obj.data.secrets.forEach(secret => {
+                                secrets.push({
+                                    'Name': secret.name,
+                                    'ValueFrom': secret.valueFrom
+                                });
+                            });
                         }
-                        var dependsOn = null; // not used
+                        var dependsOn = null;
                         if (obj.data.dependsOn) {
-                            dependsOn = {
-                                '': obj.data.dependsOn.containerName,
-                                '': obj.data.dependsOn.condition
-                            };
+                            dependsOn = [];
+                            obj.data.dependsOn.forEach(depends => {
+                                dependsOn.push({
+                                    'ContainerName': depends.containerName,
+                                    'Condition': depends.condition
+                                });
+                            });
                         }
                         var extraHosts = null;
                         if (obj.data.extraHosts) {
-                            extraHosts = {
-                                'Hostname': obj.data.extraHosts.hostname,
-                                'IpAddress': obj.data.extraHosts.ipAddress
-                            };
+                            extraHosts = [];
+                            obj.data.extraHosts.forEach(extrahost => {
+                                extraHosts.push({
+                                    'Hostname': extrahost.hostname,
+                                    'IpAddress': extrahost.ipAddress
+                                });
+                            });
                         }
                         var ulimits = null;
                         if (obj.data.ulimits) {
-                            ulimits = {
-                                'Name': obj.data.ulimits.name,
-                                'SoftLimit': obj.data.ulimits.softLimit,
-                                'HardLimit': obj.data.ulimits.hardLimit
-                            };
+                            ulimits = [];
+                            obj.data.ulimits.forEach(ulimit => {
+                                ulimits.push({
+                                    'Name': ulimit.name,
+                                    'SoftLimit': ulimit.softLimit,
+                                    'HardLimit': ulimit.hardLimit
+                                });
+                            });
                         }
                         var logConfiguration = null;
                         if (obj.data.logConfiguration) {
@@ -13739,7 +13769,7 @@ function performF2Mappings(objects) {
                         }
                         reqParams.cfn['ContainerDefinitions'].push({
                             'Command': containerDefinition.command,
-                            'Cpu': containerDefinition.cpu,
+                            'Cpu': (containerDefinition.cpu == 0) ? null : containerDefinition.cpu,
                             'DisableNetworking': containerDefinition.disableNetworking,
                             'DnsSearchDomains': containerDefinition.dnsSearchDomains,
                             'DnsServers': containerDefinition.dnsServers,
