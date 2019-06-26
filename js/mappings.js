@@ -17168,7 +17168,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.name;
                 if (obj.data.tags) {
                     reqParams.cfn['Tags'] = [];
-                    for (k in obj.data.tags) {
+                    for (var k in obj.data.tags) {
                         reqParams.cfn['Tags'].push({
                             'Key': k,
                             'Value': obj.data.tags[k]
@@ -17180,7 +17180,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['IAMServiceRole'] = obj.data.iamServiceRoleArn;
                 if (obj.data.environmentVariables) {
                     reqParams.cfn['EnvironmentVariables'] = [];
-                    for (k in obj.data.environmentVariables) {
+                    for (var k in obj.data.environmentVariables) {
                         reqParams.cfn['EnvironmentVariables'].push({
                             'Name': k,
                             'Value': obj.data.environmentVariables[k]
@@ -17228,7 +17228,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Description'] = obj.data.description;
                 if (obj.data.tags) {
                     reqParams.cfn['Tags'] = [];
-                    for (k in obj.data.tags) {
+                    for (var k in obj.data.tags) {
                         reqParams.cfn['Tags'].push({
                             'Key': k,
                             'Value': obj.data.tags[k]
@@ -17238,7 +17238,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Stage'] = obj.data.stage;
                 if (obj.data.environmentVariables) {
                     reqParams.cfn['EnvironmentVariables'] = [];
-                    for (k in obj.data.environmentVariables) {
+                    for (var k in obj.data.environmentVariables) {
                         reqParams.cfn['EnvironmentVariables'].push({
                             'Name': k,
                             'Value': obj.data.environmentVariables[k]
@@ -17447,6 +17447,18 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'macie',
                     'terraformType': 'aws_macie_s3_bucket_association',
+                    'options': reqParams
+                });
+            } else if (obj.type == "securityhub.hub") {
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('securityhub', obj.id),
+                    'region': obj.region,
+                    'service': 'securityhub',
+                    'type': 'AWS::SecurityHub::Hub',
+                    'terraformType': 'aws_securityhub_account',
                     'options': reqParams
                 });
             } else {

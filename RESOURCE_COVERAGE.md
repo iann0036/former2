@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**431/431 (100%)** Resources Covered
+**432/432 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -392,6 +392,7 @@
 | *AWS::SecretsManager::RotationSchedule* | :thumbsup: |
 | *AWS::SecretsManager::Secret* | :thumbsup: |
 | *AWS::SecretsManager::SecretTargetAttachment* | N/A |
+| *AWS::SecurityHub::Hub* | :thumbsup: |
 | *AWS::ServiceCatalog::AcceptedPortfolioShare* | :thumbsup: |
 | *AWS::ServiceCatalog::CloudFormationProduct* | :thumbsup: |
 | *AWS::ServiceCatalog::CloudFormationProvisionedProduct* | :thumbsup: |
@@ -438,7 +439,7 @@
 
 ## Terraform Coverage
 
-**264/500 (52%)** Resources Covered
+**267/500 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -736,8 +737,8 @@
 | *aws_load_balancer_backend_server_policy* |  |
 | *aws_load_balancer_listener_policy* |  |
 | *aws_load_balancer_policy* |  |
-| *aws_macie_member_account_association* |  |
-| *aws_macie_s3_bucket_association* |  |
+| *aws_macie_member_account_association* | :thumbsup: |
+| *aws_macie_s3_bucket_association* | :thumbsup: |
 | *aws_main_route_table_association* |  |
 | *aws_media_package_channel* | :thumbsup: |
 | *aws_media_store_container* | :thumbsup: |
@@ -837,7 +838,7 @@
 | *aws_secretsmanager_secret_version* | :thumbsup: |
 | *aws_security_group* | :thumbsup: |
 | *aws_security_group_rule* |  |
-| *aws_securityhub_account* |  |
+| *aws_securityhub_account* | :thumbsup: |
 | *aws_securityhub_product_subscription* |  |
 | *aws_securityhub_standards_subscription* |  |
 | *aws_service_discovery_http_namespace* | :thumbsup: |
