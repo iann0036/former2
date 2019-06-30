@@ -17461,6 +17461,62 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_securityhub_account',
                     'options': reqParams
                 });
+            } else if (obj.type == "medialive.inputsecuritygroup") {
+                reqParams.cfn['WhitelistRules'] = obj.data.WhitelistRules;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('medialive', obj.id),
+                    'region': obj.region,
+                    'service': 'medialive',
+                    'type': 'AWS::MediaLive::InputSecurityGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "medialive.channel") {
+                reqParams.cfn['ChannelClass'] = obj.data.ChannelClass;
+                reqParams.cfn['Destinations'] = obj.data.Destinations;
+                reqParams.cfn['EncoderSettings'] = obj.data.EncoderSettings;
+                reqParams.cfn['InputAttachments'] = obj.data.InputAttachments;
+                reqParams.cfn['InputSpecification'] = obj.data.InputSpecification;
+                reqParams.cfn['LogLevel'] = obj.data.LogLevel;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('medialive', obj.id),
+                    'region': obj.region,
+                    'service': 'medialive',
+                    'type': 'AWS::MediaLive::Channel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "medialive.input") {
+                reqParams.cfn['MediaConnectFlows'] = obj.data.MediaConnectFlows;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.cfn['Sources'] = obj.data.Sources;
+                reqParams.cfn['InputSecurityGroups'] = obj.data.SecurityGroups;
+
+                /*
+                TODO:
+                Destinations: 
+                    - InputDestinationRequest
+                Vpc: 
+                    InputVpcRequest
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('medialive', obj.id),
+                    'region': obj.region,
+                    'service': 'medialive',
+                    'type': 'AWS::MediaLive::Input',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**432/432 (100%)** Resources Covered
+**435/435 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -299,6 +299,9 @@
 | *AWS::Logs::MetricFilter* | :thumbsup: |
 | *AWS::Logs::SubscriptionFilter* | :thumbsup: |
 | *AWS::MSK::Cluster* | :thumbsup: |
+| *AWS::MediaLive::Channel* | :thumbsup: |
+| *AWS::MediaLive::Input* | :thumbsup: |
+| *AWS::MediaLive::InputSecurityGroup* | :thumbsup: |
 | *AWS::MediaStore::Container* | :thumbsup: |
 | *AWS::Neptune::DBCluster* | :thumbsup: |
 | *AWS::Neptune::DBClusterParameterGroup* | :thumbsup: |
