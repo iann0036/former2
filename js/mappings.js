@@ -1404,6 +1404,10 @@ ${service}.${method}(${params});${was_blocked ? ' // blocked' : ''}`;
 }
 
 function getResourceName(service, requestId) {
+    if (!requestId) {
+        console.trace("No request ID found for " + service);
+    }
+
     var i = 1; // on purpose, 2 means second usage
     var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
 
