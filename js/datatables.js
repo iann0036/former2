@@ -4975,7 +4975,7 @@ async function updateDatatableComputeEC2() {
                     }]);
         
                     return Promise.all([
-                        sdkcall("ELBv2", "describeListenerCertificates", {
+                        listener.Protocol.startsWith("HTTP") ? sdkcall("ELBv2", "describeListenerCertificates", {
                             ListenerArn: listener.ListenerArn
                         }, true).then((data) => {
                             data.Certificates.forEach(certificate => {
@@ -4989,7 +4989,7 @@ async function updateDatatableComputeEC2() {
                                     isdefault: certificate.IsDefault
                                 }]);
                             });
-                        }),
+                        }) : Promise.resolve(),
                         sdkcall("ELBv2", "describeRules", {
                             ListenerArn: listener.ListenerArn
                         }, true).then((data) => {
@@ -10928,9 +10928,10 @@ async function updateDatatableComputeECR() {
         await Promise.all(data.repositories.map(repository => {
             return sdkcall("ECR", "getLifecyclePolicy", {
                 repositoryName: repository.repositoryName
-            }, true).then(async (data) => {
+            }, false).then(async (data) => {
                 repository['lifecyclePolicyText'] = data.lifecyclePolicyText;
                 repository['registryId'] = data.registryId;
+                
                 await sdkcall("ECR", "getRepositoryPolicy", {
                     repositoryName: repository.repositoryName
                 }, true).then((data) => {
@@ -10945,7 +10946,7 @@ async function updateDatatableComputeECR() {
                         createdat: repository.createdAt
                     }]);
                 });
-            });
+            }).catch(() => {});
         }));
 
         unblockUI('#section-compute-ecr-repositories-datatable');
