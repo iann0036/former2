@@ -2345,11 +2345,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         data.VpcPeeringConnections.forEach(peeringConnection => {
             $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('append', [{
-                f2id: peeringConnection.PeeringConnectionId,
+                f2id: peeringConnection.VpcPeeringConnectionId,
                 f2type: 'ec2.peeringconnection',
                 f2data: peeringConnection,
                 f2region: region,
-                connectionid: peeringConnection.PeeringConnectionId
+                connectionid: peeringConnection.VpcPeeringConnectionId
             }]);
         });
 
