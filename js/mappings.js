@@ -11903,7 +11903,7 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_iam_instance_profile',
                     'options': reqParams
                 });
-            } else if (obj.type == "cloudwatch.rule") {
+            } else if (obj.type == "eventbridge.rule") {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Description'] = obj.data.Description;
@@ -11940,9 +11940,9 @@ function performF2Mappings(objects) {
 
                 tracked_resources.push({
                     'obj': obj,
-                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'logicalId': getResourceName('events', obj.id),
                     'region': obj.region,
-                    'service': 'cloudwatch',
+                    'service': 'events',
                     'type': 'AWS::Events::Rule',
                     'terraformType': 'aws_cloudwatch_event_rule',
                     'options': reqParams
@@ -12040,7 +12040,7 @@ function performF2Mappings(objects) {
                         });
                     });
                 }
-            } else if (obj.type == "cloudwatch.eventbuspolicy") {
+            } else if (obj.type == "eventbridge.eventbuspolicy") {
                 reqParams.cfn['Action'] = obj.data.Action;
                 if (obj.data.Condition && obj.data.Condition.StringEquals && obj.data.Condition.StringEquals['aws:PrincipalOrgID']) {
                     reqParams.cfn['Condition'] = {
@@ -12057,9 +12057,9 @@ function performF2Mappings(objects) {
 
                 tracked_resources.push({
                     'obj': obj,
-                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'logicalId': getResourceName('eventbridge', obj.id),
                     'region': obj.region,
-                    'service': 'cloudwatch',
+                    'service': 'eventbridge',
                     'type': 'AWS::Events::EventBusPolicy',
                     'options': reqParams
                 });
@@ -17519,6 +17519,40 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'medialive',
                     'type': 'AWS::MediaLive::Input',
+                    'options': reqParams
+                });
+            } else if (obj.type == "worklink.fleet") {
+                reqParams.tf['name'] = obj.data.FleetName;
+                reqParams.tf['display_name'] = obj.data.DisplayName;
+                reqParams.tf['optimize_for_end_user_location '] = obj.data.OptimizeForEndUserLocation;
+
+                /*
+                TODO:
+                network
+                identity_provider
+                device_ca_certificate
+                audit_stream_arn
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('worklink', obj.id),
+                    'region': obj.region,
+                    'service': 'worklink',
+                    'terraformType': 'aws_worklink_fleet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "worklink.websitecertificateauthority") {
+                reqParams.tf['fleet_arn'] = obj.data.FleetArn;
+                reqParams.tf['certificate'] = obj.data.Certificate;
+                reqParams.tf['display_name '] = obj.data.DisplayName;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('worklink', obj.id),
+                    'region': obj.region,
+                    'service': 'worklink',
+                    'terraformType': 'aws_worklink_website_certificate_authority_association',
                     'options': reqParams
                 });
             } else {

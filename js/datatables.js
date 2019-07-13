@@ -8853,93 +8853,6 @@ sections.push({
                 ]
             ]
         },
-        'Rules': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'eventpattern',
-                        title: 'Event Pattern',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'scheduleexpression',
-                        title: 'Schedule Expression',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'enabled',
-                        title: 'Enabled',
-                        sortable: true,
-                        editable: true,
-                        formatter: tickFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Event Bus Policies': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    }
-                ],
-                [
-                    // nothing
-                ]
-            ]
-        },
         'Destinations': {
             'columns': [
                 [
@@ -9165,8 +9078,6 @@ sections.push({
 async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
-    blockUI('#section-managementandgovernance-cloudwatch-rules-datatable');
-    blockUI('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
@@ -9217,57 +9128,6 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         }
 
         unblockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
-    });
-
-    await sdkcall("CloudWatchEvents", "listRules", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudwatch-rules-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Rules.map(rule => {
-            return sdkcall("CloudWatchEvents", "describeRule", {
-                Name: rule.Name
-            }, true).then(async (data) => {
-                await sdkcall("CloudWatchEvents", "listTargetsByRule", {
-                    Rule: data.Name
-                }, true).then((targets) => {
-                    data['Targets'] = targets.Targets;
-                    $('#section-managementandgovernance-cloudwatch-rules-datatable').bootstrapTable('append', [{
-                        f2id: data.Arn,
-                        f2type: 'cloudwatch.rule',
-                        f2data: data,
-                        f2region: region,
-                        name: data.Name,
-                        description: data.Description,
-                        eventpattern: data.EventPattern,
-                        scheduleexpression: data.ScheduleExpression,
-                        enabled: (data.State == "ENABLED")
-                    }]);
-                });
-            });
-        }));
-
-        unblockUI('#section-managementandgovernance-cloudwatch-rules-datatable');
-    });
-
-    await sdkcall("CloudWatchEvents", "describeEventBus", {
-        // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable').bootstrapTable('removeAll');
-
-        var policyobj = JSON.parse(data.Policy);
-
-        policyobj.Statement.forEach(statement => {
-            $('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable').bootstrapTable('append', [{
-                f2id: data.Arn,
-                f2type: 'cloudwatch.eventbuspolicy',
-                f2data: statement,
-                f2region: region,
-                name: data.Name // TODO: much better datatable keys
-            }]);
-        });
-
-        unblockUI('#section-managementandgovernance-cloudwatch-eventbuspolicies-datatable');
     });
 
     await sdkcall("CloudWatchLogs", "describeDestinations", {
@@ -10931,7 +10791,6 @@ async function updateDatatableComputeECR() {
             }, false).then(async (data) => {
                 repository['lifecyclePolicyText'] = data.lifecyclePolicyText;
                 repository['registryId'] = data.registryId;
-                
                 await sdkcall("ECR", "getRepositoryPolicy", {
                     repositoryName: repository.repositoryName
                 }, true).then((data) => {
@@ -33922,4 +33781,333 @@ async function updateDatatableMediaServicesMediaLive() {
     unblockUI('#section-mediaservices-medialive-channels-datatable');
     unblockUI('#section-mediaservices-medialive-inputs-datatable');
     unblockUI('#section-mediaservices-medialive-inputsecuritygroups-datatable');
+}
+
+/* ========================================================================== */
+// EventBridge
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Application Integration',
+    'service': 'EventBridge',
+    'resourcetypes': {
+        'Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'eventpattern',
+                        title: 'Event Pattern',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scheduleexpression',
+                        title: 'Schedule Expression',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Bus Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableApplicationIntegrationEventBridge() {
+    blockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    blockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
+
+    await sdkcall("CloudWatchEvents", "listRules", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-rules-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.Rules.map(rule => {
+            return sdkcall("CloudWatchEvents", "describeRule", {
+                Name: rule.Name
+            }, true).then(async (data) => {
+                await sdkcall("CloudWatchEvents", "listTargetsByRule", {
+                    Rule: data.Name
+                }, true).then((targets) => {
+                    data['Targets'] = targets.Targets;
+                    $('#section-applicationintegration-eventbridge-rules-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'eventbridge.rule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        description: data.Description,
+                        eventpattern: data.EventPattern,
+                        scheduleexpression: data.ScheduleExpression,
+                        enabled: (data.State == "ENABLED")
+                    }]);
+                });
+            });
+        }));
+    });
+
+    await sdkcall("CloudWatchEvents", "describeEventBus", {
+        // no params
+    }, true).then((data) => {
+        $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('removeAll');
+
+        var policyobj = JSON.parse(data.Policy);
+
+        policyobj.Statement.forEach(statement => {
+            $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('append', [{
+                f2id: data.Arn,
+                f2type: 'eventbridge.eventbuspolicy',
+                f2data: statement,
+                f2region: region,
+                name: data.Name // TODO: much better datatable keys
+            }]);
+        });
+    });
+
+    unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
+}
+
+/* ========================================================================== */
+// WorkLink
+/* ========================================================================== */
+
+sections.push({
+    'category': 'End User Computing',
+    'service': 'WorkLink',
+    'resourcetypes': {
+        'Fleets': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'companycode',
+                        title: 'Company Code',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Website Certificate Authority Associations': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'eventpattern',
+                        title: 'Event Pattern',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'scheduleexpression',
+                        title: 'Schedule Expression',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableEndUserComputingWorkLink() {
+    blockUI('#section-endusercomputing-worklink-fleets-datatable');
+    blockUI('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable');
+
+    await sdkcall("WorkLink", "listFleets", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-endusercomputing-worklink-fleets-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.FleetSummaryList.map(fleet => {
+            return sdkcall("WorkLink", "describeFleetMetadata", {
+                FleetArn: fleet.FleetArn
+            }, true).then(async (data) => {
+                $('#section-endusercomputing-worklink-fleets-datatable').bootstrapTable('append', [{
+                    f2id: fleet.FleetArn,
+                    f2type: 'worklink.fleet',
+                    f2data: data,
+                    f2region: region,
+                    name: data.FleetName,
+                    displayname: data.DisplayName,
+                    companycode: data.CompanyCode
+                }]);
+
+                await sdkcall("WorkLink", "listWebsiteCertificateAuthorities", {
+                    FleetArn: fleet.FleetArn
+                }, true).then(async (data) => {
+                    $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').bootstrapTable('removeAll');
+            
+                    await Promise.all(data.WebsiteCertificateAuthorities.map(websiteca => {
+                        return sdkcall("WorkLink", "describeWebsiteCertificateAuthority", {
+                            FleetArn: fleet.FleetArn,
+                            WebsiteCaId: websiteca.WebsiteCaId
+                        }, true).then(async (data) => {
+                            $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').bootstrapTable('append', [{
+                                f2id: fleet.FleetArn,
+                                f2type: 'worklink.websitecertificateauthority',
+                                f2data: {
+                                    'Certificate': data.Certificate,
+                                    'DisplayName': data.DisplayName,
+                                    'FleetArn': fleet.FleetArn
+                                },
+                                f2region: region,
+                                displayname: data.DisplayName,
+                                fleetarn: fleet.FleetArn
+                            }]);
+                        });
+                    }));
+                });
+            });
+        }));
+    }).catch(() => {});
+
+    unblockUI('#section-endusercomputing-worklink-fleets-datatable');
+    unblockUI('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable');
 }
