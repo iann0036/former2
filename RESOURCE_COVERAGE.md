@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**435/435 (100%)** Resources Covered
+**436/436 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -86,6 +86,7 @@
 | *AWS::CloudFront::StreamingDistribution* | :thumbsup: |
 | *AWS::CloudTrail::Trail* | :thumbsup: |
 | *AWS::CloudWatch::Alarm* | :thumbsup: |
+| *AWS::CloudWatch::AnomalyDetector* | :thumbsup: |
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
 | *AWS::CodeCommit::Repository* | :thumbsup: |
@@ -442,7 +443,7 @@
 
 ## Terraform Coverage
 
-**267/500 (53%)** Resources Covered
+**269/500 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -943,6 +944,6 @@
 | *aws_wafregional_web_acl* | :thumbsup: |
 | *aws_wafregional_web_acl_association* | :thumbsup: |
 | *aws_wafregional_xss_match_set* | :thumbsup: |
-| *aws_worklink_fleet* |  |
-| *aws_worklink_website_certificate_authority_association* |  |
+| *aws_worklink_fleet* | :thumbsup: |
+| *aws_worklink_website_certificate_authority_association* | :thumbsup: |
 | *aws_xray_sampling_rule* |  |
