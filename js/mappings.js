@@ -17555,6 +17555,26 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_worklink_website_certificate_authority_association',
                     'options': reqParams
                 });
+            } else if (obj.type == "cloudwatch.anomalydetector") {
+                reqParams.cfn['MetricName'] = obj.data.MetricName;
+                reqParams.cfn['Namespace'] = obj.data.Namespace;
+                reqParams.cfn['Stat'] = obj.data.Stat;
+                if (obj.data.Configuration) {
+                    reqParams.cfn['Configuration'] = {
+                        'ExcludedTimeRanges': obj.data.Configuration.ExcludedTimeRanges,
+                        'MetricTimeZone': obj.data.Configuration.MetricTimezone
+                    };
+                }
+                reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::CloudWatch::AnomalyDetector',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

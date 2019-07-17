@@ -9071,6 +9071,51 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Anomaly Detectors': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Metric Name',
+                        field: 'metricname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'namespace',
+                        title: 'Namespace',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'stat',
+                        title: 'Stat',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -9083,6 +9128,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-metricfilters-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         // no params
@@ -9208,10 +9254,6 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     });
     */
 
-   unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
-   unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
-   unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
-
     await sdkcall("CloudWatchLogs", "describeMetricFilters", {
         // no params
     }, true).then((data) => {
@@ -9231,6 +9273,29 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
         unblockUI('#section-managementandgovernance-cloudwatch-metricfilters-datatable');
     });
+
+    await sdkcall("CloudWatch", "describeAnomalyDetectors", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').bootstrapTable('removeAll');
+
+        data.AnomalyDetectors.forEach(anomalyDetector => {
+            $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').bootstrapTable('append', [{
+                f2id: anomalyDetector.MetricName + " " + anomalyDetector.Namespace + " " + anomalyDetector.Stat,
+                f2type: 'cloudwatch.anomalydetector',
+                f2data: anomalyDetector,
+                f2region: region,
+                metricname: anomalyDetector.MetricName,
+                namespace: anomalyDetector.Namespace,
+                stat: anomalyDetector.Stat
+            }]);
+        });
+    });
+
+    unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
 }
 
 /* ========================================================================== */
