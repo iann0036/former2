@@ -629,6 +629,7 @@ $(document).ready(function(){
         "us-west-2": "US West (Oregon)",
         "ap-east-1": "Asia Pacific (Hong Kong)",
         "ap-south-1": "Asia Pacific (Mumbai)",
+        "ap-northeast-3": "Asia Pacific (Osaka-Local)",
         "ap-northeast-2": "Asia Pacific (Seoul)",
         "ap-southeast-1": "Asia Pacific (Singapore)",
         "ap-southeast-2": "Asia Pacific (Sydney)",
@@ -640,8 +641,8 @@ $(document).ready(function(){
         "eu-west-3": "EU (Paris)",
         "eu-north-1": "EU (Stockholm)",
         "sa-east-1": "South America (S&#227;o Paulo)",
-        "us-gov-east-1": "AWS GovCloud (US-East)",
-        "us-gov-west-1": "AWS GovCloud (US)"
+        "us-gov-east-1": "AWS GovCloud (US-Gov-East)",
+        "us-gov-west-1": "AWS GovCloud (US-Gov-West)"
     };
 
     $('.region-item').on('click', el => {
