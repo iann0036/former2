@@ -18035,6 +18035,19 @@ function performF2Mappings(objects) {
                     'type': 'AWS::IoTEvents::Input',
                     'options': reqParams
                 });
+            } else if (obj.type == "servicequotas.servicequota") {
+                reqParams.tf['quota_code'] = obj.data.QuotaCode;
+                reqParams.tf['service_code'] = obj.data.ServiceCode;
+                reqParams.tf['value'] = obj.data.DesiredValue;
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('servicequotas', obj.id),
+                    'region': obj.region,
+                    'service': 'servicequotas',
+                    'terraformType': 'aws_servicequotas_service_quota',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
