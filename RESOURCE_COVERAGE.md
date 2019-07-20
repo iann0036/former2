@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**436/436 (100%)** Resources Covered
+**438/438 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -274,6 +274,8 @@
 | *AWS::IoTAnalytics::Dataset* | :thumbsup: |
 | *AWS::IoTAnalytics::Datastore* | :thumbsup: |
 | *AWS::IoTAnalytics::Pipeline* | :thumbsup: |
+| *AWS::IoTEvents::DetectorModel* | :thumbsup: |
+| *AWS::IoTEvents::Input* | :thumbsup: |
 | *AWS::IoTThingsGraph::FlowTemplate* | :thumbsup: |
 | *AWS::KMS::Alias* | :thumbsup: |
 | *AWS::KMS::Key* | :thumbsup: |
@@ -443,7 +445,7 @@
 
 ## Terraform Coverage
 
-**269/500 (53%)** Resources Covered
+**271/510 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -488,10 +490,12 @@
 | *aws_appmesh_virtual_service* |  |
 | *aws_appsync_api_key* | :thumbsup: |
 | *aws_appsync_datasource* | :thumbsup: |
+| *aws_appsync_function* |  |
 | *aws_appsync_graphql_api* | :thumbsup: |
 | *aws_appsync_resolver* | :thumbsup: |
 | *aws_athena_database* |  |
 | *aws_athena_named_query* | :thumbsup: |
+| *aws_athena_workgroup* |  |
 | *aws_autoscaling_attachment* |  |
 | *aws_autoscaling_group* | :thumbsup: |
 | *aws_autoscaling_lifecycle_hook* | :thumbsup: |
@@ -552,6 +556,7 @@
 | *aws_config_delivery_channel* | :thumbsup: |
 | *aws_cur_report_definition* |  |
 | *aws_customer_gateway* | :thumbsup: |
+| *aws_datapipeline_pipeline* |  |
 | *aws_datasync_agent* |  |
 | *aws_datasync_location_efs* |  |
 | *aws_datasync_location_nfs* |  |
@@ -578,6 +583,7 @@
 | *aws_devicefarm_project* | :thumbsup: |
 | *aws_directory_service_conditional_forwarder* |  |
 | *aws_directory_service_directory* | :thumbsup: |
+| *aws_directory_service_log_subscription* |  |
 | *aws_dlm_lifecycle_policy* | :thumbsup: |
 | *aws_dms_certificate* |  |
 | *aws_dms_endpoint* |  |
@@ -605,6 +611,8 @@
 | *aws_dynamodb_global_table* |  |
 | *aws_dynamodb_table* | :thumbsup: |
 | *aws_dynamodb_table_item* |  |
+| *aws_ebs_default_kms_key* |  |
+| *aws_ebs_encryption_by_default* |  |
 | *aws_ebs_snapshot* |  |
 | *aws_ebs_snapshot_copy* |  |
 | *aws_ebs_volume* | :thumbsup: |
@@ -657,6 +665,7 @@
 | *aws_glacier_vault* | :thumbsup: |
 | *aws_glacier_vault_lock* | :thumbsup: |
 | *aws_globalaccelerator_accelerator* | :thumbsup: |
+| *aws_globalaccelerator_endpoint_group* |  |
 | *aws_globalaccelerator_listener* | :thumbsup: |
 | *aws_glue_catalog_database* |  |
 | *aws_glue_catalog_table* |  |
@@ -798,6 +807,7 @@
 | *aws_pinpoint_sms_channel* |  |
 | *aws_placement_group* | :thumbsup: |
 | *aws_proxy_protocol_policy* |  |
+| *aws_quicksight_group* | :thumbsup: |
 | *aws_ram_principal_association* |  |
 | *aws_ram_resource_association* |  |
 | *aws_ram_resource_share* | :thumbsup: |
@@ -850,6 +860,7 @@
 | *aws_service_discovery_public_dns_namespace* | :thumbsup: |
 | *aws_service_discovery_service* | :thumbsup: |
 | *aws_servicecatalog_portfolio* |  |
+| *aws_servicequotas_service_quota* | :thumbsup: |
 | *aws_ses_active_receipt_rule_set* |  |
 | *aws_ses_configuration_set* | :thumbsup: |
 | *aws_ses_domain_dkim* |  |
@@ -859,6 +870,7 @@
 | *aws_ses_email_identity* |  |
 | *aws_ses_event_destination* | :thumbsup: |
 | *aws_ses_identity_notification_topic* |  |
+| *aws_ses_identity_policy* |  |
 | *aws_ses_receipt_filter* | :thumbsup: |
 | *aws_ses_receipt_rule* |  |
 | *aws_ses_receipt_rule_set* | :thumbsup: |
