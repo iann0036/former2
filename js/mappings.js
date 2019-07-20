@@ -17575,6 +17575,466 @@ function performF2Mappings(objects) {
                     'type': 'AWS::CloudWatch::AnomalyDetector',
                     'options': reqParams
                 });
+            } else if (obj.type == "iotevents.detectormodel") {
+                var states = [];
+                data.detectorModelDefinition.states.forEach(state => {
+                    var onenter = null;
+                    var onexit = null;
+                    var oninput = null;
+                    if (state.onInput) {
+                        var events = null;
+                        var transitionevents = null;
+                        if (state.onInput.events) {
+                            events = [];
+                            state.onInput.events.forEach(event => {
+                                var actions = null;
+                                if (event.actions) {
+                                    actions = [];
+                                    event.actions.forEach(action => {
+                                        var cleartimer = null;
+                                        var firehose = null;
+                                        var iotevents = null;
+                                        var iottopicpublish = null;
+                                        var lambda = null;
+                                        var resettimer = null;
+                                        var settimer = null;
+                                        var setvariable = null;
+                                        var sns = null;
+                                        var sqs = null;
+
+                                        if (action.setVariable) {
+                                            setvariable = {
+                                                'VariableName': action.setVariable.variableName,
+                                                'Value': action.setVariable.value
+                                            };
+                                        }
+                                        if (action.sns) {
+                                            sns = {
+                                                'TargetArn': action.sns.targetArn
+                                            };
+                                        }
+                                        if (action.iotTopicPublish) {
+                                            iottopicpublish = {
+                                                'MqttTopic': action.iotTopicPublish.mqttTopic
+                                            };
+                                        }
+                                        if (action.setTimer) {
+                                            settimer = {
+                                                'TimerName': action.setTimer.timerName,
+                                                'Seconds': action.setTimer.seconds
+                                            };
+                                        }
+                                        if (action.clearTimer) {
+                                            cleartimer = {
+                                                'TimerName': action.clearTimer.timerName
+                                            };
+                                        }
+                                        if (action.resetTimer) {
+                                            resettimer = {
+                                                'TimerName': action.resetTimer.timerName
+                                            };
+                                        }
+                                        if (action.lambda) {
+                                            lambda = {
+                                                'FunctionArn': action.lambda.functionArn
+                                            };
+                                        }
+                                        if (action.iotEvents) {
+                                            iotevents = {
+                                                'InputName': action.iotEvents.inputName
+                                            };
+                                        }
+                                        if (action.sqs) {
+                                            sqs = {
+                                                'QueueUrl': action.sqs.queueUrl,
+                                                'UseBase64': action.sqs.useBase64
+                                            };
+                                        }
+                                        if (action.firehose) {
+                                            firehose = {
+                                                'DeliveryStreamName': action.firehose.deliveryStreamName,
+                                                'Separator': action.firehose.separator
+                                            };
+                                        }
+
+                                        actions.push({
+                                            'ClearTimer': cleartimer,
+                                            'Firehose': firehose,
+                                            'IotEvents': iotevents,
+                                            'IotTopicPublish': iottopicpublish,
+                                            'Lambda': lambda,
+                                            'ResetTimer': resettimer,
+                                            'SetTimer': settimer,
+                                            'SetVariable': setvariable,
+                                            'Sns': sns,
+                                            'Sqs': sqs
+                                        });
+                                    });
+                                }
+                                events.push({
+                                    'Actions': actions,
+                                    'Condition': event.condition,
+                                    'EventName': event.eventName
+                                });
+                            });
+                        }
+                        if (state.onInput.transitionEvents) {
+                            transitionevents = [];
+                            state.onInput.transitionEvents.forEach(event => {
+                                var actions = null;
+                                if (event.actions) {
+                                    actions = [];
+                                    event.actions.forEach(action => {
+                                        var cleartimer = null;
+                                        var firehose = null;
+                                        var iotevents = null;
+                                        var iottopicpublish = null;
+                                        var lambda = null;
+                                        var resettimer = null;
+                                        var settimer = null;
+                                        var setvariable = null;
+                                        var sns = null;
+                                        var sqs = null;
+
+                                        if (action.setVariable) {
+                                            setvariable = {
+                                                'VariableName': action.setVariable.variableName,
+                                                'Value': action.setVariable.value
+                                            };
+                                        }
+                                        if (action.sns) {
+                                            sns = {
+                                                'TargetArn': action.sns.targetArn
+                                            };
+                                        }
+                                        if (action.iotTopicPublish) {
+                                            iottopicpublish = {
+                                                'MqttTopic': action.iotTopicPublish.mqttTopic
+                                            };
+                                        }
+                                        if (action.setTimer) {
+                                            settimer = {
+                                                'TimerName': action.setTimer.timerName,
+                                                'Seconds': action.setTimer.seconds
+                                            };
+                                        }
+                                        if (action.clearTimer) {
+                                            cleartimer = {
+                                                'TimerName': action.clearTimer.timerName
+                                            };
+                                        }
+                                        if (action.resetTimer) {
+                                            resettimer = {
+                                                'TimerName': action.resetTimer.timerName
+                                            };
+                                        }
+                                        if (action.lambda) {
+                                            lambda = {
+                                                'FunctionArn': action.lambda.functionArn
+                                            };
+                                        }
+                                        if (action.iotEvents) {
+                                            iotevents = {
+                                                'InputName': action.iotEvents.inputName
+                                            };
+                                        }
+                                        if (action.sqs) {
+                                            sqs = {
+                                                'QueueUrl': action.sqs.queueUrl,
+                                                'UseBase64': action.sqs.useBase64
+                                            };
+                                        }
+                                        if (action.firehose) {
+                                            firehose = {
+                                                'DeliveryStreamName': action.firehose.deliveryStreamName,
+                                                'Separator': action.firehose.separator
+                                            };
+                                        }
+
+                                        actions.push({
+                                            'ClearTimer': cleartimer,
+                                            'Firehose': firehose,
+                                            'IotEvents': iotevents,
+                                            'IotTopicPublish': iottopicpublish,
+                                            'Lambda': lambda,
+                                            'ResetTimer': resettimer,
+                                            'SetTimer': settimer,
+                                            'SetVariable': setvariable,
+                                            'Sns': sns,
+                                            'Sqs': sqs
+                                        });
+                                    });
+                                }
+                                transitionevents.push({
+                                    'Actions': actions,
+                                    'Condition': event.condition,
+                                    'EventName': event.eventName,
+                                    'NextState': nextState
+                                });
+                            });
+                        }
+                        oninput = {
+                            'Events': events,
+                            'TransitionEvents': transitionevents
+                        };
+                    }
+                    if (state.onEnter) {
+                        var events = null;
+                        if (state.onEnter.events) {
+                            events = [];
+                            state.onEnter.events.forEach(event => {
+                                var actions = null;
+                                if (event.actions) {
+                                    actions = [];
+                                    event.actions.forEach(action => {
+                                        var cleartimer = null;
+                                        var firehose = null;
+                                        var iotevents = null;
+                                        var iottopicpublish = null;
+                                        var lambda = null;
+                                        var resettimer = null;
+                                        var settimer = null;
+                                        var setvariable = null;
+                                        var sns = null;
+                                        var sqs = null;
+
+                                        if (action.setVariable) {
+                                            setvariable = {
+                                                'VariableName': action.setVariable.variableName,
+                                                'Value': action.setVariable.value
+                                            };
+                                        }
+                                        if (action.sns) {
+                                            sns = {
+                                                'TargetArn': action.sns.targetArn
+                                            };
+                                        }
+                                        if (action.iotTopicPublish) {
+                                            iottopicpublish = {
+                                                'MqttTopic': action.iotTopicPublish.mqttTopic
+                                            };
+                                        }
+                                        if (action.setTimer) {
+                                            settimer = {
+                                                'TimerName': action.setTimer.timerName,
+                                                'Seconds': action.setTimer.seconds
+                                            };
+                                        }
+                                        if (action.clearTimer) {
+                                            cleartimer = {
+                                                'TimerName': action.clearTimer.timerName
+                                            };
+                                        }
+                                        if (action.resetTimer) {
+                                            resettimer = {
+                                                'TimerName': action.resetTimer.timerName
+                                            };
+                                        }
+                                        if (action.lambda) {
+                                            lambda = {
+                                                'FunctionArn': action.lambda.functionArn
+                                            };
+                                        }
+                                        if (action.iotEvents) {
+                                            iotevents = {
+                                                'InputName': action.iotEvents.inputName
+                                            };
+                                        }
+                                        if (action.sqs) {
+                                            sqs = {
+                                                'QueueUrl': action.sqs.queueUrl,
+                                                'UseBase64': action.sqs.useBase64
+                                            };
+                                        }
+                                        if (action.firehose) {
+                                            firehose = {
+                                                'DeliveryStreamName': action.firehose.deliveryStreamName,
+                                                'Separator': action.firehose.separator
+                                            };
+                                        }
+
+                                        actions.push({
+                                            'ClearTimer': cleartimer,
+                                            'Firehose': firehose,
+                                            'IotEvents': iotevents,
+                                            'IotTopicPublish': iottopicpublish,
+                                            'Lambda': lambda,
+                                            'ResetTimer': resettimer,
+                                            'SetTimer': settimer,
+                                            'SetVariable': setvariable,
+                                            'Sns': sns,
+                                            'Sqs': sqs
+                                        });
+                                    });
+                                }
+                                events.push({
+                                    'Actions': actions,
+                                    'Condition': event.condition,
+                                    'EventName': event.eventName
+                                });
+                            });
+                        }
+                        onenter = {
+                            'Events': events
+                        };
+                    }
+                    if (state.onExit) {
+                        var events = null;
+                        if (state.onExit.events) {
+                            events = [];
+                            state.onExit.events.forEach(event => {
+                                var actions = null;
+                                if (event.actions) {
+                                    actions = [];
+                                    event.actions.forEach(action => {
+                                        var cleartimer = null;
+                                        var firehose = null;
+                                        var iotevents = null;
+                                        var iottopicpublish = null;
+                                        var lambda = null;
+                                        var resettimer = null;
+                                        var settimer = null;
+                                        var setvariable = null;
+                                        var sns = null;
+                                        var sqs = null;
+
+                                        if (action.setVariable) {
+                                            setvariable = {
+                                                'VariableName': action.setVariable.variableName,
+                                                'Value': action.setVariable.value
+                                            };
+                                        }
+                                        if (action.sns) {
+                                            sns = {
+                                                'TargetArn': action.sns.targetArn
+                                            };
+                                        }
+                                        if (action.iotTopicPublish) {
+                                            iottopicpublish = {
+                                                'MqttTopic': action.iotTopicPublish.mqttTopic
+                                            };
+                                        }
+                                        if (action.setTimer) {
+                                            settimer = {
+                                                'TimerName': action.setTimer.timerName,
+                                                'Seconds': action.setTimer.seconds
+                                            };
+                                        }
+                                        if (action.clearTimer) {
+                                            cleartimer = {
+                                                'TimerName': action.clearTimer.timerName
+                                            };
+                                        }
+                                        if (action.resetTimer) {
+                                            resettimer = {
+                                                'TimerName': action.resetTimer.timerName
+                                            };
+                                        }
+                                        if (action.lambda) {
+                                            lambda = {
+                                                'FunctionArn': action.lambda.functionArn
+                                            };
+                                        }
+                                        if (action.iotEvents) {
+                                            iotevents = {
+                                                'InputName': action.iotEvents.inputName
+                                            };
+                                        }
+                                        if (action.sqs) {
+                                            sqs = {
+                                                'QueueUrl': action.sqs.queueUrl,
+                                                'UseBase64': action.sqs.useBase64
+                                            };
+                                        }
+                                        if (action.firehose) {
+                                            firehose = {
+                                                'DeliveryStreamName': action.firehose.deliveryStreamName,
+                                                'Separator': action.firehose.separator
+                                            };
+                                        }
+
+                                        actions.push({
+                                            'ClearTimer': cleartimer,
+                                            'Firehose': firehose,
+                                            'IotEvents': iotevents,
+                                            'IotTopicPublish': iottopicpublish,
+                                            'Lambda': lambda,
+                                            'ResetTimer': resettimer,
+                                            'SetTimer': settimer,
+                                            'SetVariable': setvariable,
+                                            'Sns': sns,
+                                            'Sqs': sqs
+                                        });
+                                    });
+                                }
+                                events.push({
+                                    'Actions': actions,
+                                    'Condition': event.condition,
+                                    'EventName': event.eventName
+                                });
+                            });
+                        }
+                        onexit = {
+                            'Events': events
+                        };
+                    }
+                    states.push({
+                        'OnEnter': onenter,
+                        'OnExit': onexit,
+                        'OnInput': oninput,
+                        'StateName': state.stateName
+                    });
+                });
+                reqParams.cfn['DetectorModelDefinition'] = {
+                    'InitialStateName': obj.data.detectorModelDefinition.initialStateName,
+                    'States': states
+                };
+                reqParams.cfn['DetectorModelDescription'] = obj.data.detectorModelConfiguration.detectorModelDescription;
+                reqParams.cfn['DetectorModelName'] = obj.data.detectorModelConfiguration.detectorModelName;
+                reqParams.cfn['Key'] = obj.data.detectorModelConfiguration.key;
+                reqParams.cfn['RoleArn'] = obj.data.detectorModelConfiguration.roleArn;
+
+                /*
+                TODO:
+                Tags
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('iotevents', obj.id),
+                    'region': obj.region,
+                    'service': 'iotevents',
+                    'type': 'AWS::IoTEvents::DetectorModel',
+                    'options': reqParams
+                });
+            } else if (obj.type == "iotevents.input") {
+                if (obj.data.inputDefinition) {
+                    var attributes = [];
+                    obj.data.inputDefinition.attributes.forEach(attribute => {
+                        attributes.push({
+                            'JsonPath': attribute.jsonPath
+                        });
+                    });
+                    reqParams.cfn['InputDefinition'] = {
+                        'Attributes': attributes
+                    };
+                }
+                reqParams.cfn['InputDescription'] = obj.data.inputConfiguration.inputDescription;
+                reqParams.cfn['InputName'] = obj.data.inputConfiguration.inputName;
+
+                /*
+                TODO:
+                Tags
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('iotevents', obj.id),
+                    'region': obj.region,
+                    'service': 'iotevents',
+                    'type': 'AWS::IoTEvents::Input',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
