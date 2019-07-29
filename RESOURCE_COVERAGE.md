@@ -445,7 +445,7 @@
 
 ## Terraform Coverage
 
-**282/510 (55%)** Resources Covered
+**288/510 (56%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -742,11 +742,11 @@
 | *aws_lb_target_group_attachment* |  |
 | *aws_licensemanager_association* | :thumbsup: |
 | *aws_licensemanager_license_configuration* | :thumbsup: |
-| *aws_lightsail_domain* |  |
-| *aws_lightsail_instance* |  |
-| *aws_lightsail_key_pair* |  |
-| *aws_lightsail_static_ip* |  |
-| *aws_lightsail_static_ip_attachment* |  |
+| *aws_lightsail_domain* | :thumbsup: |
+| *aws_lightsail_instance* | :thumbsup: |
+| *aws_lightsail_key_pair* | :thumbsup: |
+| *aws_lightsail_static_ip* | :thumbsup: |
+| *aws_lightsail_static_ip_attachment* | :thumbsup: |
 | *aws_load_balancer_backend_server_policy* |  |
 | *aws_load_balancer_listener_policy* |  |
 | *aws_load_balancer_policy* |  |
@@ -878,7 +878,7 @@
 | *aws_sfn_activity* |  |
 | *aws_sfn_state_machine* |  |
 | *aws_shield_protection* |  |
-| *aws_simpledb_domain* |  |
+| *aws_simpledb_domain* | N/A |
 | *aws_snapshot_create_volume_permission* |  |
 | *aws_sns_platform_application* |  |
 | *aws_sns_sms_preferences* |  |
