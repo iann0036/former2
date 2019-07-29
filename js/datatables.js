@@ -4764,6 +4764,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Key Pairs': {
+            'terraformonly': true,
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'fingerprint',
+                        title: 'Fingerprint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -4798,6 +4836,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
     blockUI('#section-compute-ec2-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-compute-ec2-keypairs-datatable');
 
     await sdkcall("EC2", "describeInstances", {
         // no params
@@ -5437,6 +5476,27 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
+    });
+
+    await sdkcall("EC2", "describeKeyPairs", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-ec2-keypairs-datatable').bootstrapTable('removeAll');
+        
+        if (data.KeyPairs) {
+            data.KeyPairs.forEach(keypair => {
+                $('#section-compute-ec2-keypairs-datatable').bootstrapTable('append', [{
+                    f2id: keypair.KeyName,
+                    f2type: 'ec2.keypair',
+                    f2data: keypair,
+                    f2region: region,
+                    name: keypair.KeyName,
+                    fingerprint: keypair.KeyFingerprint
+                }]);
+            });
+        }
+
+        unblockUI('#section-compute-ec2-keypairs-datatable');
     });
 }
 

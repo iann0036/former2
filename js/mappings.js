@@ -12996,15 +12996,28 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "ec2.transitgateway") {
                 reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.tf['description'] = obj.data.Description;
                 if (obj.data.Options) {
                     reqParams.cfn['AmazonSideAsn'] = obj.data.Options.AmazonSideAsn;
+                    reqParams.tf['amazon_side_asn'] = obj.data.Options.AmazonSideAsn;
                     reqParams.cfn['AutoAcceptSharedAttachments'] = obj.data.Options.AutoAcceptSharedAttachments;
+                    reqParams.tf['auto_accept_shared_attachments'] = obj.data.Options.AutoAcceptSharedAttachments;
                     reqParams.cfn['DefaultRouteTableAssociation'] = obj.data.Options.DefaultRouteTableAssociation;
+                    reqParams.tf['default_route_table_association'] = obj.data.Options.DefaultRouteTableAssociation;
                     reqParams.cfn['DefaultRouteTablePropagation'] = obj.data.Options.DefaultRouteTablePropagation;
+                    reqParams.tf['default_route_table_propagation'] = obj.data.Options.DefaultRouteTablePropagation;
                     reqParams.cfn['DnsSupport'] = obj.data.Options.DnsSupport;
+                    reqParams.tf['dns_support'] = obj.data.Options.DnsSupport;
                     reqParams.cfn['VpnEcmpSupport'] = obj.data.Options.VpnEcmpSupport;
+                    reqParams.tf['vpn_ecmp_support'] = obj.data.Options.VpnEcmpSupport;
                 }
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13012,16 +13025,21 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGateway',
+                    'terraformType': 'aws_ec2_transit_gateway',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.transitgatewayroute") {
                 reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
+                reqParams.tf['destination_cidr_block'] = obj.data.DestinationCidrBlock;
                 reqParams.cfn['TransitGatewayRouteTableId'] = obj.data.TransitGatewayRouteTableId;
+                reqParams.tf['transit_gateway_route_table_id'] = obj.data.TransitGatewayRouteTableId;
                 if (obj.data.State == "blackhole") {
                     reqParams.cfn['Blackhole'] = true;
+                    reqParams.tf['blackhole'] = true;
                 }
                 if (obj.data.TransitGatewayAttachments && obj.data.TransitGatewayAttachments.length == 1) {
                     reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachments[0].TransitGatewayAttachmentId;
+                    reqParams.tf['transit_gateway_attachment_id'] = obj.data.TransitGatewayAttachments[0].TransitGatewayAttachmentId;
                 }
 
                 /*
@@ -13035,11 +13053,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGatewayRoute',
+                    'terraformType': 'aws_ec2_transit_gateway_route',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.transitgatewayroutetableassociation") {
                 reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachmentId;
+                reqParams.tf['transit_gateway_attachment_id'] = obj.data.TransitGatewayAttachmentId;
                 reqParams.cfn['TransitGatewayRouteTableId'] = obj.data.TransitGatewayRouteTableId;
+                reqParams.tf['transit_gateway_route_table_id'] = obj.data.TransitGatewayRouteTableId;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13047,11 +13068,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGatewayRouteTableAssociation',
+                    'terraformType': 'aws_ec2_transit_gateway_route_table_association',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.transitgatewayroutetablepropogation") {
                 reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachmentId;
+                reqParams.tf['transit_gateway_attachment_id'] = obj.data.TransitGatewayAttachmentId;
                 reqParams.cfn['TransitGatewayRouteTableId'] = obj.data.TransitGatewayRouteTableId;
+                reqParams.tf['transit_gateway_route_table_id'] = obj.data.TransitGatewayRouteTableId;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13059,11 +13083,19 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGatewayRouteTablePropagation',
+                    'terraformType': 'aws_ec2_transit_gateway_route_table_propagation',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.transitgatewayroutetable") {
                 reqParams.cfn['TransitGatewayId'] = obj.data.TransitGatewayId;
+                reqParams.tf['transit_gateway_id'] = obj.data.TransitGatewayId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13071,13 +13103,32 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGatewayRouteTable',
+                    'terraformType': 'aws_ec2_transit_gateway_route_table',
                     'options': reqParams
                 });
             } else if (obj.type == "ec2.transitgatewayattachment") {
                 reqParams.cfn['TransitGatewayId'] = obj.data.TransitGatewayId;
+                reqParams.tf['transit_gateway_id'] = obj.data.TransitGatewayId;
                 reqParams.cfn['Tags'] = obj.data.Tags;
+                if (obj.data.Tags) {
+                    reqParams.tf['tags'] = {};
+                    obj.data.Tags.forEach(tag => {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    });
+                }
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
+                reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+                reqParams.tf['subnet_ids'] = obj.data.SubnetIds;
+
+                /*
+                TODO:
+                TF
+                dns_support
+                ipv6_support
+                transit_gateway_default_route_table_association
+                transit_gateway_default_route_table_propagation
+                */
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13085,6 +13136,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ec2',
                     'type': 'AWS::EC2::TransitGatewayAttachment',
+                    'terraformType': 'aws_ec2_transit_gateway_vpc_attachment',
                     'options': reqParams
                 });
             } else if (obj.type == "workspaces.workspace") {
@@ -16930,10 +16982,15 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "pinpoint.emailchannel") {
                 reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.tf['application_id'] = obj.data.ApplicationId;
                 reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.tf['enabled'] = obj.data.Enabled;
                 reqParams.cfn['FromAddress'] = obj.data.FromAddress;
+                reqParams.tf['from_address'] = obj.data.FromAddress;
                 reqParams.cfn['Identity'] = obj.data.Identity;
+                reqParams.tf['identity'] = obj.data.Identity;
                 reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.tf['role_arn'] = obj.data.RoleArn;
                 reqParams.cfn['ConfigurationSet'] = obj.data.ConfigurationSet;
 
                 tracked_resources.push({
@@ -16942,6 +16999,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'pinpoint',
                     'type': 'AWS::Pinpoint::EmailChannel',
+                    'terraformType': 'aws_pinpoint_email_channel',
                     'options': reqParams
                 });
             } else if (obj.type == "pinpoint.gcmchannel") {
@@ -16963,9 +17021,13 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "pinpoint.smschannel") {
                 reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.tf['application_id'] = obj.data.ApplicationId;
                 reqParams.cfn['Enabled'] = obj.data.Enabled;
+                reqParams.tf['enabled'] = obj.data.Enabled;
                 reqParams.cfn['SenderId'] = obj.data.SenderId;
+                reqParams.tf['sender_id'] = obj.data.SenderId;
                 reqParams.cfn['ShortCode'] = obj.data.ShortCode;
+                reqParams.tf['short_code'] = obj.data.ShortCode;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -16973,6 +17035,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'pinpoint',
                     'type': 'AWS::Pinpoint::SMSChannel',
+                    'terraformType': 'aws_pinpoint_sms_channel',
                     'options': reqParams
                 });
             } else if (obj.type == "pinpoint.voicechannel") {
@@ -16989,8 +17052,11 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "pinpoint.eventstream") {
                 reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.tf['application_id'] = obj.data.ApplicationId;
                 reqParams.cfn['DestinationStreamArn'] = obj.data.DestinationStreamArn;
+                reqParams.tf['destination_stream_arn'] = obj.data.DestinationStreamArn;
                 reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+                reqParams.tf['role_arn'] = obj.data.RoleArn;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -16998,6 +17064,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'pinpoint',
                     'type': 'AWS::Pinpoint::EventStream',
+                    'terraformType': 'aws_pinpoint_event_stream',
                     'options': reqParams
                 });
             } else if (obj.type == "pinpoint.applicationsettings") {
@@ -18084,6 +18151,24 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'xray',
                     'terraformType': 'aws_xray_sampling_rule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.keypair") {
+                reqParams.tf['public_key'] = 'REPLACEME';
+                reqParams.tf['key_name'] = obj.data.KeyName;
+
+                /*
+                SKIPPED:
+                key_name_prefix
+                public_key
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'terraformType': 'aws_key_pair',
                     'options': reqParams
                 });
             } else {

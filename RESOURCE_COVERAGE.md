@@ -445,7 +445,7 @@
 
 ## Terraform Coverage
 
-**271/510 (53%)** Resources Covered
+**282/510 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -620,12 +620,12 @@
 | *aws_ec2_client_vpn_endpoint* |  |
 | *aws_ec2_client_vpn_network_association* |  |
 | *aws_ec2_fleet* |  |
-| *aws_ec2_transit_gateway* |  |
-| *aws_ec2_transit_gateway_route* |  |
-| *aws_ec2_transit_gateway_route_table* |  |
-| *aws_ec2_transit_gateway_route_table_association* |  |
-| *aws_ec2_transit_gateway_route_table_propagation* |  |
-| *aws_ec2_transit_gateway_vpc_attachment* |  |
+| *aws_ec2_transit_gateway* | :thumbsup: |
+| *aws_ec2_transit_gateway_route* | :thumbsup: |
+| *aws_ec2_transit_gateway_route_table* | :thumbsup: |
+| *aws_ec2_transit_gateway_route_table_association* | :thumbsup: |
+| *aws_ec2_transit_gateway_route_table_propagation* | :thumbsup: |
+| *aws_ec2_transit_gateway_vpc_attachment* | :thumbsup: |
 | *aws_ec2_transit_gateway_vpc_attachment_accepter* |  |
 | *aws_ecr_lifecycle_policy* | :thumbsup: |
 | *aws_ecr_repository* | :thumbsup: |
@@ -716,7 +716,7 @@
 | *aws_iot_thing_principal_attachment* | :thumbsup: |
 | *aws_iot_thing_type* |  |
 | *aws_iot_topic_rule* |  |
-| *aws_key_pair* |  |
+| *aws_key_pair* | :thumbsup: |
 | *aws_kinesis_analytics_application* |  |
 | *aws_kinesis_firehose_delivery_stream* |  |
 | *aws_kinesis_stream* | :thumbsup: |
@@ -801,10 +801,10 @@
 | *aws_pinpoint_apns_voip_sandbox_channel* |  |
 | *aws_pinpoint_app* |  |
 | *aws_pinpoint_baidu_channel* |  |
-| *aws_pinpoint_email_channel* |  |
-| *aws_pinpoint_event_stream* |  |
+| *aws_pinpoint_email_channel* | :thumbsup: |
+| *aws_pinpoint_event_stream* | :thumbsup: |
 | *aws_pinpoint_gcm_channel* |  |
-| *aws_pinpoint_sms_channel* |  |
+| *aws_pinpoint_sms_channel* | :thumbsup: |
 | *aws_placement_group* | :thumbsup: |
 | *aws_proxy_protocol_policy* |  |
 | *aws_quicksight_group* | :thumbsup: |
@@ -958,4 +958,4 @@
 | *aws_wafregional_xss_match_set* | :thumbsup: |
 | *aws_worklink_fleet* | :thumbsup: |
 | *aws_worklink_website_certificate_authority_association* | :thumbsup: |
-| *aws_xray_sampling_rule* |  |
+| *aws_xray_sampling_rule* | :thumbsup: |
