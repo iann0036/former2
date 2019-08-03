@@ -9490,7 +9490,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ApprovedPatchesEnableNonSecurity'] = obj.data.ApprovedPatchesEnableNonSecurity;
                 reqParams.cfn['RejectedPatches'] = obj.data.RejectedPatches;
                 reqParams.tf['rejected_patches'] = obj.data.RejectedPatches;
-                reqParams.cfn['RejectedPatchesAction'] = [obj.data.RejectedPatchesAction]; // TODO: WTF?
+                reqParams.cfn['RejectedPatchesAction'] = obj.data.RejectedPatchesAction;
                 reqParams.cfn['PatchGroups'] = obj.data.PatchGroups;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.tf['description'] = obj.data.Description;
@@ -18248,6 +18248,31 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'lightsail',
                     'terraformType': 'aws_lightsail_static_ip_attachment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "codestar.githubrepository") {
+                reqParams.cfn['EnableIssues'] = true;
+                reqParams.cfn['RepositoryAccessToken'] = 'REPLACEME';
+                reqParams.cfn['RepositoryName'] = obj.data.Repo;
+                reqParams.cfn['RepositoryOwner'] = obj.data.Owner;
+
+                /*
+                SKIPPED:
+                Code
+                */
+                
+                /*
+                TODO:
+                IsPrivate
+                RepositoryDescription
+                */
+                
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('codestar', obj.id),
+                    'region': obj.region,
+                    'service': 'codestar',
+                    'type': 'AWS::CodeStar::GitHubRepository',
                     'options': reqParams
                 });
             } else {

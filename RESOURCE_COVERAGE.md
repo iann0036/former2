@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**438/438 (100%)** Resources Covered
+**439/439 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -96,6 +96,7 @@
 | *AWS::CodePipeline::CustomActionType* | :thumbsup: |
 | *AWS::CodePipeline::Pipeline* | :thumbsup: |
 | *AWS::CodePipeline::Webhook* | :thumbsup: |
+| *AWS::CodeStar::GitHubRepository* | :thumbsup: |
 | *AWS::Cognito::IdentityPool* | :thumbsup: |
 | *AWS::Cognito::IdentityPoolRoleAttachment* | :thumbsup: |
 | *AWS::Cognito::UserPool* | :thumbsup: |
