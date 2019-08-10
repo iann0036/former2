@@ -18275,6 +18275,120 @@ function performF2Mappings(objects) {
                     'type': 'AWS::CodeStar::GitHubRepository',
                     'options': reqParams
                 });
+            } else if (obj.type == "lakeformation.resource") {
+                reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
+                reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+                /*
+                TODO:
+                UseServiceLinkedRole
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('lakeformation', obj.id),
+                    'region': obj.region,
+                    'service': 'lakeformation',
+                    'type': 'AWS::LakeFormation::Resource',
+                    'options': reqParams
+                });
+            } else if (obj.type == "lakeformation.permission") {
+                if (obj.data.Resource && (obj.data.Resource.Database || obj.data.Resource.Table)) {
+                    reqParams.cfn['DataLakePrincipal'] = obj.data.Principal;
+                    reqParams.cfn['Permissions'] = obj.data.Permissions;
+                    reqParams.cfn['PermissionsWithGrantOption'] = obj.data.PermissionsWithGrantOption;
+                    if (obj.data.Resource.Database) {
+                        reqParams.cfn['Resource'] = {
+                            'DatabaseResource': obj.data.Resource.Database
+                        };
+                    } else if (obj.data.Resource.Table) {
+                        reqParams.cfn['Resource'] = {
+                            'TableResource': obj.data.Resource.Table
+                        };
+                    }
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('lakeformation', obj.id),
+                        'region': obj.region,
+                        'service': 'lakeformation',
+                        'type': 'AWS::LakeFormation::Permissions',
+                        'options': reqParams
+                    });
+                }
+            } else if (obj.type == "lakeformation.datalakesettings") {
+                reqParams.cfn['Admins'] = obj.data.DataLakeAdmins;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('lakeformation', obj.id),
+                    'region': obj.region,
+                    'service': 'lakeformation',
+                    'type': 'AWS::LakeFormation::DataLakeSettings',
+                    'options': reqParams
+                });
+            } else if (obj.type == "managedblockchain.node") {
+                reqParams.cfn['MemberId'] = obj.data.MemberId;
+                reqParams.cfn['NetworkId'] = obj.data.NetworkId;
+                reqParams.cfn['NodeConfiguration'] = {
+                    'AvailabilityZone': obj.data.AvailabilityZone,
+                    'InstanceType': obj.data.InstanceType
+                };
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('managedblockchain', obj.id),
+                    'region': obj.region,
+                    'service': 'managedblockchain',
+                    'type': 'AWS::ManagedBlockchain::Node',
+                    'options': reqParams
+                });
+            } else if (obj.type == "managedblockchain.member") {
+                reqParams.cfn['NetworkId'] = obj.data.NetworkId;
+                var adminusername = 'REPLACEME';
+                if (obj.data.FrameworkAttributes && obj.data.FrameworkAttributes.Fabric) {
+                    adminusername = obj.data.FrameworkAttributes.Fabric.AdminUsername;
+                }
+                reqParams.cfn['MemberConfiguration'] = {
+                    'Description': obj.data.Description,
+                    'MemberFrameworkConfiguration': {
+                        'MemberFabricConfiguration': {
+                            'AdminUsername': adminusername,
+                            'AdminPassword': 'REPLACEME'
+                        }
+                    },
+                    'Name': obj.data.Name
+                };
+                var networkframeworkconfiguration = null;
+                if (obj.data.NetworkDetails.FrameworkAttributes && obj.data.NetworkDetails.FrameworkAttributes.Fabric) {
+                    networkframeworkconfiguration = {
+                        'NetworkFabricConfiguration': {
+                            'Edition': obj.data.NetworkDetails.FrameworkAttributes.Fabric.Edition
+                        }
+                    };
+                }
+                reqParams.cfn['NetworkConfiguration'] = {
+                    'Description': obj.data.NetworkDetails.Description,
+                    'Framework': obj.data.NetworkDetails.Framework,
+                    'FrameworkVersion': obj.data.NetworkDetails.FrameworkVersion,
+                    'Name': obj.data.NetworkDetails.Name,
+                    'NetworkFrameworkConfiguration': networkframeworkconfiguration,
+                    'VotingPolicy': obj.data.NetworkDetails.VotingPolicy
+                };
+
+                /*
+                TODO
+                InvitationId: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('managedblockchain', obj.id),
+                    'region': obj.region,
+                    'service': 'managedblockchain',
+                    'type': 'AWS::ManagedBlockchain::Member',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
