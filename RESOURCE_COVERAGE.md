@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**439/439 (100%)** Resources Covered
+**446/446 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -89,6 +89,7 @@
 | *AWS::CloudWatch::AnomalyDetector* | :thumbsup: |
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
+| *AWS::CodeBuild::SourceCredential* | :thumbsup: |
 | *AWS::CodeCommit::Repository* | :thumbsup: |
 | *AWS::CodeDeploy::Application* | :thumbsup: |
 | *AWS::CodeDeploy::DeploymentConfig* | :thumbsup: |
@@ -224,6 +225,7 @@
 | *AWS::Glue::Database* | :thumbsup: |
 | *AWS::Glue::DevEndpoint* | :thumbsup: |
 | *AWS::Glue::Job* | :thumbsup: |
+| *AWS::Glue::MLTransform* | :thumbsup: |
 | *AWS::Glue::Partition* | :thumbsup: |
 | *AWS::Glue::SecurityConfiguration* | :thumbsup: |
 | *AWS::Glue::Table* | :thumbsup: |
@@ -290,6 +292,9 @@
 | *AWS::KinesisAnalyticsV2::ApplicationOutput* | :thumbsup: |
 | *AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource* | :thumbsup: |
 | *AWS::KinesisFirehose::DeliveryStream* | :thumbsup: |
+| *AWS::LakeFormation::DataLakeSettings* | :thumbsup: |
+| *AWS::LakeFormation::Permissions* | :thumbsup: |
+| *AWS::LakeFormation::Resource* | :thumbsup: |
 | *AWS::Lambda::Alias* | :thumbsup: |
 | *AWS::Lambda::EventSourceMapping* | :thumbsup: |
 | *AWS::Lambda::Function* | :thumbsup: |
@@ -303,6 +308,8 @@
 | *AWS::Logs::MetricFilter* | :thumbsup: |
 | *AWS::Logs::SubscriptionFilter* | :thumbsup: |
 | *AWS::MSK::Cluster* | :thumbsup: |
+| *AWS::ManagedBlockchain::Member* | :thumbsup: |
+| *AWS::ManagedBlockchain::Node* | :thumbsup: |
 | *AWS::MediaLive::Channel* | :thumbsup: |
 | *AWS::MediaLive::Input* | :thumbsup: |
 | *AWS::MediaLive::InputSecurityGroup* | :thumbsup: |

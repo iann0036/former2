@@ -18389,6 +18389,50 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ManagedBlockchain::Member',
                     'options': reqParams
                 });
+            } else if (obj.type == "codebuild.sourcecredentials") {
+                reqParams.cfn['AuthType'] = obj.data.authType;
+                reqParams.cfn['ServerType'] = obj.data.serverType;
+                reqParams.cfn['Token'] = 'REPLACEME';
+                reqParams.cfn['Username'] = 'REPLACEME';
+
+                /*
+                TODO
+                Token: String
+                Username: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('codebuild', obj.id),
+                    'region': obj.region,
+                    'service': 'codebuild',
+                    'type': 'AWS::CodeBuild::SourceCredential',
+                    'options': reqParams
+                });
+            } else if (obj.type == "glue.mltransform") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                if (obj.data.InputRecordTables) {
+                    reqParams.cfn['InputRecordTables'] = {
+                        'GlueTables': obj.data.InputRecordTables
+                    };
+                }
+                reqParams.cfn['MaxCapacity'] = obj.data.MaxCapacity;
+                reqParams.cfn['MaxRetries'] = obj.data.MaxRetries;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['NumberOfWorkers'] = obj.data.NumberOfWorkers;
+                reqParams.cfn['Role'] = obj.data.Role;
+                reqParams.cfn['Timeout'] = obj.data.Timeout;
+                reqParams.cfn['TransformParameters'] = obj.data.Parameters;
+                reqParams.cfn['WorkerType'] = obj.data.WorkerType;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('glue', obj.id),
+                    'region': obj.region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::MLTransform',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

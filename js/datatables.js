@@ -14724,12 +14724,58 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Source Credentials': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ARN',
+                        field: 'arn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'servertype',
+                        title: 'Server Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'authtype',
+                        title: 'Auth Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableDeveloperToolsCodeBuild() {
     blockUI('#section-developertools-codebuild-projects-datatable');
+    blockUI('#section-developertools-codebuild-sourcecredentials-datatable');
 
     await sdkcall("CodeBuild", "listProjects", {
         // no params
@@ -14752,9 +14798,28 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                 }]);
             });
         }));
-
-        unblockUI('#section-developertools-codebuild-projects-datatable');
     });
+
+    await sdkcall("CodeBuild", "listSourceCredentials", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('removeAll');
+        
+        data.sourceCredentialsInfos.forEach(sourcecredentials => {
+            $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('append', [{
+                f2id: sourcecredentials.arn,
+                f2type: 'codebuild.sourcecredentials',
+                f2data: sourcecredentials,
+                f2region: region,
+                arn: sourcecredentials.arn,
+                servertype: sourcecredentials.serverType,
+                authtype: sourcecredentials.authType
+            }]);
+        });
+    });
+
+    unblockUI('#section-developertools-codebuild-projects-datatable');
+    unblockUI('#section-developertools-codebuild-sourcecredentials-datatable');
 }
 
 /* ========================================================================== */
@@ -25006,6 +25071,60 @@ sections.push({
                 ]
             ]
         },
+        'ML Transforms': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Dev Endpoints': {
             'columns': [
                 [
@@ -25126,6 +25245,7 @@ async function updateDatatableAnalyticsGlue() {
     blockUI('#section-analytics-glue-jobs-datatable');
     blockUI('#section-analytics-glue-triggers-datatable');
     blockUI('#section-analytics-glue-connections-datatable');
+    blockUI('#section-analytics-glue-mltransforms-datatable');
     blockUI('#section-analytics-glue-devendpoints-datatable');
     blockUI('#section-analytics-glue-securityconfigurations-datatable');
     blockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
@@ -25309,6 +25429,27 @@ async function updateDatatableAnalyticsGlue() {
         });
 
         unblockUI('#section-analytics-glue-connections-datatable');
+    });
+
+    await sdkcall("Glue", "getMLTransforms", {
+        // no params
+    }, true).then((data) => {
+        $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('removeAll');
+        
+        data.Transforms.forEach(transform => {
+            $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('append', [{
+                f2id: transform.TransformId,
+                f2type: 'glue.mltransform',
+                f2data: transform,
+                f2region: region,
+                id: transform.TransformId,
+                description: transform.Description,
+                name: transform.Name,
+                creationtime: transform.CreatedOn
+            }]);
+        });
+
+        unblockUI('#section-analytics-glue-mltransforms-datatable');
     });
 
     await sdkcall("Glue", "getDevEndpoints", {
