@@ -18433,6 +18433,37 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Glue::MLTransform',
                     'options': reqParams
                 });
+            } else if (obj.type == "sagemaker.workteam") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['WorkteamName'] = obj.data.WorkteamName;
+                if (obj.data.MemberDefinitions) {
+                    reqParams.cfn['MemberDefinitions'] = [];
+                    obj.data.MemberDefinitions.forEach(memberdefinition => {
+                        reqParams.cfn['MemberDefinitions'].push({
+                            'CognitoMemberDefinition': {
+                                'CognitoClientId': memberdefinition.CognitoMemberDefinition.ClientId,
+                                'CognitoUserGroup': memberdefinition.CognitoMemberDefinition.UserGroup,
+                                'CognitoUserPool': memberdefinition.CognitoMemberDefinition.UserPool
+                            }
+                        });
+                    });
+                }
+                reqParams.cfn['NotificationConfiguration'] = obj.data.NotificationConfiguration;
+
+                /*
+                TODO
+                Tags: 
+                    - Tag
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('sagemaker', obj.id),
+                    'region': obj.region,
+                    'service': 'sagemaker',
+                    'type': 'AWS::SageMaker::Workteam',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

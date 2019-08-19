@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**446/446 (100%)** Resources Covered
+**447/447 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -402,6 +402,7 @@
 | *AWS::SageMaker::Model* | :thumbsup: |
 | *AWS::SageMaker::NotebookInstance* | :thumbsup: |
 | *AWS::SageMaker::NotebookInstanceLifecycleConfig* | :thumbsup: |
+| *AWS::SageMaker::Workteam* | :thumbsup: |
 | *AWS::SecretsManager::ResourcePolicy* | :thumbsup: |
 | *AWS::SecretsManager::RotationSchedule* | :thumbsup: |
 | *AWS::SecretsManager::Secret* | :thumbsup: |
