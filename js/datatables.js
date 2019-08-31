@@ -20655,6 +20655,59 @@ sections.push({
                 ]
             ]
         },
+        'Organization Config Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maximumexecutionfrequency',
+                        title: 'Maximum Execution Frequency',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Remediation Configurations': {
             'columns': [
                 [
@@ -20875,6 +20928,7 @@ sections.push({
 
 async function updateDatatableManagementAndGovernanceConfig() {
     blockUI('#section-managementandgovernance-config-configrules-datatable');
+    blockUI('#section-managementandgovernance-config-organizationconfigrules-datatable');
     blockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
     blockUI('#section-managementandgovernance-config-configurationaggregators-datatable');
     blockUI('#section-managementandgovernance-config-configurationrecorder-datatable');
@@ -20940,6 +20994,26 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-configurationaggregators-datatable');
+    });
+
+    await sdkcall("ConfigService", "describeOrganizationConfigRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('removeAll');
+        
+        data.OrganizationConfigRules.forEach(organizationConfigRule => {
+            $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('append', [{
+                f2id: organizationConfigRule.OrganizationConfigRuleArn,
+                f2type: 'config.organizationconfigrule',
+                f2data: organizationConfigRule,
+                f2region: region,
+                name: organizationConfigRule.OrganizationConfigRuleName,
+                description: organizationConfigRule.OrganizationManagedRuleMetadata.Description,
+                maximumexecutionfrequency: organizationConfigRule.OrganizationManagedRuleMetadata.MaximumExecutionFrequency
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-config-organizationconfigrules-datatable');
     });
 
     await sdkcall("ConfigService", "describeConfigurationRecorders", {

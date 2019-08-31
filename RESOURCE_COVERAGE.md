@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**447/447 (100%)** Resources Covered
+**448/448 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -110,6 +110,7 @@
 | *AWS::Config::ConfigurationAggregator* | :thumbsup: |
 | *AWS::Config::ConfigurationRecorder* | :thumbsup: |
 | *AWS::Config::DeliveryChannel* | :thumbsup: |
+| *AWS::Config::OrganizationConfigRule* | :thumbsup: |
 | *AWS::Config::RemediationConfiguration* | :thumbsup: |
 | *AWS::DAX::Cluster* | :thumbsup: |
 | *AWS::DAX::ParameterGroup* | :thumbsup: |

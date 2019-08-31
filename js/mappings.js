@@ -18464,6 +18464,20 @@ function performF2Mappings(objects) {
                     'type': 'AWS::SageMaker::Workteam',
                     'options': reqParams
                 });
+            } else if (obj.type == "config.organizationconfigrule") {
+                reqParams.cfn['ExcludedAccounts'] = obj.data.ExcludedAccounts;
+                reqParams.cfn['OrganizationConfigRuleName'] = obj.data.OrganizationConfigRuleName;
+                reqParams.cfn['OrganizationManagedRuleMetadata'] = obj.data.OrganizationManagedRuleMetadata;
+                reqParams.cfn['OrganizationCustomRuleMetadata'] = obj.data.OrganizationCustomRuleMetadata;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('config', obj.id),
+                    'region': obj.region,
+                    'service': 'config',
+                    'type': 'AWS::Config::OrganizationConfigRule',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
