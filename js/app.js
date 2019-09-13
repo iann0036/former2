@@ -1084,3 +1084,33 @@ function updateIdentity() {
         }
     });
 }
+
+/* 
+    Detect resource stack association
+*/
+
+async function getResourceStackAssociation() {
+    templates = {};
+
+    await sdkcall("CloudFormation", "listStacks", {
+        StackStatusFilter: ["CREATE_COMPLETE", "ROLLBACK_IN_PROGRESS", "ROLLBACK_FAILED", "ROLLBACK_COMPLETE", "DELETE_FAILED", "UPDATE_IN_PROGRESS", "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS", "UPDATE_COMPLETE", "UPDATE_ROLLBACK_IN_PROGRESS", "UPDATE_ROLLBACK_FAILED", "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS", "UPDATE_ROLLBACK_COMPLETE"]
+    }, true).then(async (data) => {
+        console.log(data.StackSummaries);
+        await Promise.all(data.StackSummaries.map(async (stack) => {
+            await sdkcall("CloudFormation", "getTemplate", {
+                StackName: stack.StackId,
+                TemplateStage: "Processed"
+            }, true).then((data) => {
+                template = null;
+                try {
+                    template = JSON.parse(data.TemplateBody);
+                    templates[stack.StackName] = template;
+                } catch(err) {
+                    console.log("Couldn't parse"); // TODO: yaml 2 json
+                }
+            });
+        }));
+    });
+
+    console.log(templates);
+}

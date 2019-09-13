@@ -18478,6 +18478,28 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Config::OrganizationConfigRule',
                     'options': reqParams
                 });
+            } else if (obj.type == "qldb.ledger") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+                reqParams.cfn['PermissionsMode'] = 'ALLOW_ALL';
+
+                /*
+                TODO:
+                DeletionProtection: Boolean
+                Name: String
+                PermissionsMode: String
+                Tags: 
+                    - Tag
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('qldb', obj.id),
+                    'region': obj.region,
+                    'service': 'qldb',
+                    'type': 'AWS::QLDB::Ledger',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
