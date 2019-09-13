@@ -35756,18 +35756,11 @@ sections.push({
                         align: 'center'
                     },
                     {
-                        field: 'networkid',
-                        title: 'Network ID',
+                        field: 'creationdate',
+                        title: 'Creation Date',
                         sortable: true,
                         editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
+                        formatter: timeAgoFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
