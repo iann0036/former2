@@ -11134,7 +11134,17 @@ function performF2Mappings(objects) {
                     'service': 'cognito',
                     'type': 'AWS::Cognito::UserPool',
                     'terraformType': 'aws_cognito_user_pool',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn
+                        },
+                        'Terraform': {
+                            'id': obj.data.Id,
+                            'arn': obj.data.Arn
+                        }
+                    }
                 });
             } else if (obj.type == "cognito.userpooluser") {
                 reqParams.cfn['Username'] = obj.data.Username;
@@ -11849,7 +11859,19 @@ function performF2Mappings(objects) {
                     'service': 'iam',
                     'type': 'AWS::IAM::Role',
                     'terraformType': 'aws_iam_role',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.RoleName,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn,
+                            'RoleId': obj.data.RoleId
+                        },
+                        'Terraform': {
+                            'id': obj.data.Id,
+                            'name': obj.data.RoleName,
+                            'arn': obj.data.Arn
+                        }
+                    }
                 });
             } else if (obj.type == "iam.managedpolicy") {
                 reqParams.cfn['ManagedPolicyName'] = obj.data.PolicyName;
@@ -11878,7 +11900,15 @@ function performF2Mappings(objects) {
                     'service': 'iam',
                     'type': 'AWS::IAM::ManagedPolicy',
                     'terraformType': 'aws_iam_policy',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Arn,
+                        'Terraform': {
+                            'id': obj.data.PolicyId,
+                            'arn': obj.data.Arn,
+                            'name': obj.data.PolicyName
+                        }
+                    }
                 });
             } else if (obj.type == "iam.instanceprofile") {
                 reqParams.cfn['Path'] = obj.data.Path;
