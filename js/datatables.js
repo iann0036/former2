@@ -25315,6 +25315,52 @@ sections.push({
                 ]
             ]
         },
+        'Workflows': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Security Configuration': {
             'columns': [
                 [
@@ -25392,6 +25438,7 @@ async function updateDatatableAnalyticsGlue() {
     blockUI('#section-analytics-glue-connections-datatable');
     blockUI('#section-analytics-glue-mltransforms-datatable');
     blockUI('#section-analytics-glue-devendpoints-datatable');
+    blockUI('#section-analytics-glue-workflows-datatable');
     blockUI('#section-analytics-glue-securityconfigurations-datatable');
     blockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
 
@@ -25615,6 +25662,30 @@ async function updateDatatableAnalyticsGlue() {
         });
 
         unblockUI('#section-analytics-glue-devendpoints-datatable');
+    });
+
+    await sdkcall("Glue", "listWorkflows", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-analytics-glue-workflows-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Workflows.map(workflow => {
+            return sdkcall("Glue", "getWorkflow", {
+                Name: workflow
+            }, true).then((data) => {
+                $('#section-analytics-glue-workflows-datatable').bootstrapTable('append', [{
+                    f2id: data.Workflow.Name,
+                    f2type: 'glue.workflow',
+                    f2data: devEndpoint,
+                    f2region: region,
+                    name: data.Workflow.Name,
+                    description: data.Workflow.Description,
+                    creationtime: data.Workflow.CreatedOn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-analytics-glue-workflows-datatable');
     });
 
     await sdkcall("Glue", "getSecurityConfigurations", {

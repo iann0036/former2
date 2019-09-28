@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**448/448 (100%)** Resources Covered
+**450/450 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -231,6 +231,7 @@
 | *AWS::Glue::SecurityConfiguration* | :thumbsup: |
 | *AWS::Glue::Table* | :thumbsup: |
 | *AWS::Glue::Trigger* | :thumbsup: |
+| *AWS::Glue::Workflow* | :thumbsup: |
 | *AWS::Greengrass::ConnectorDefinition* | :thumbsup: |
 | *AWS::Greengrass::ConnectorDefinitionVersion* | :thumbsup: |
 | *AWS::Greengrass::CoreDefinition* | :thumbsup: |
@@ -347,6 +348,7 @@
 | *AWS::PinpointEmail::ConfigurationSetEventDestination* | :thumbsup: |
 | *AWS::PinpointEmail::DedicatedIpPool* | :thumbsup: |
 | *AWS::PinpointEmail::Identity* | :thumbsup: |
+| *AWS::QLDB::Ledger* | :thumbsup: |
 | *AWS::RAM::ResourceShare* | :thumbsup: |
 | *AWS::RDS::DBCluster* | :thumbsup: |
 | *AWS::RDS::DBClusterParameterGroup* | :thumbsup: |
@@ -455,7 +457,7 @@
 
 ## Terraform Coverage
 
-**288/510 (56%)** Resources Covered
+**288/520 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -542,6 +544,7 @@
 | *aws_cloudwatch_log_subscription_filter* | :thumbsup: |
 | *aws_cloudwatch_metric_alarm* | :thumbsup: |
 | *aws_codebuild_project* |  |
+| *aws_codebuild_source_credential* |  |
 | *aws_codebuild_webhook* |  |
 | *aws_codecommit_repository* | :thumbsup: |
 | *aws_codecommit_trigger* |  |
@@ -564,6 +567,8 @@
 | *aws_config_configuration_recorder* | :thumbsup: |
 | *aws_config_configuration_recorder_status* |  |
 | *aws_config_delivery_channel* | :thumbsup: |
+| *aws_config_organization_custom_rule* |  |
+| *aws_config_organization_managed_rule* |  |
 | *aws_cur_report_definition* |  |
 | *aws_customer_gateway* | :thumbsup: |
 | *aws_datapipeline_pipeline* |  |
@@ -618,6 +623,7 @@
 | *aws_dx_lag* | :thumbsup: |
 | *aws_dx_private_virtual_interface* | :thumbsup: |
 | *aws_dx_public_virtual_interface* | :thumbsup: |
+| *aws_dx_transit_virtual_interface* |  |
 | *aws_dynamodb_global_table* |  |
 | *aws_dynamodb_table* | :thumbsup: |
 | *aws_dynamodb_table_item* |  |
@@ -668,6 +674,9 @@
 | *aws_emr_instance_group* |  |
 | *aws_emr_security_configuration* |  |
 | *aws_flow_log* | :thumbsup: |
+| *aws_fms_admin_account* |  |
+| *aws_fsx_lustre_file_system* |  |
+| *aws_fsx_windows_file_system* |  |
 | *aws_gamelift_alias* | :thumbsup: |
 | *aws_gamelift_build* | :thumbsup: |
 | *aws_gamelift_fleet* | :thumbsup: |
@@ -821,6 +830,7 @@
 | *aws_ram_principal_association* |  |
 | *aws_ram_resource_association* |  |
 | *aws_ram_resource_share* | :thumbsup: |
+| *aws_ram_resource_share_accepter* |  |
 | *aws_rds_cluster* | :thumbsup: |
 | *aws_rds_cluster_endpoint* |  |
 | *aws_rds_cluster_instance* |  |
@@ -831,6 +841,8 @@
 | *aws_redshift_parameter_group* | :thumbsup: |
 | *aws_redshift_security_group* | :thumbsup: |
 | *aws_redshift_snapshot_copy_grant* |  |
+| *aws_redshift_snapshot_schedule* |  |
+| *aws_redshift_snapshot_schedule_association* |  |
 | *aws_redshift_subnet_group* | :thumbsup: |
 | *aws_resourcegroups_group* |  |
 | *aws_route* | :thumbsup: |

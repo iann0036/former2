@@ -18530,6 +18530,24 @@ function performF2Mappings(objects) {
                     'type': 'AWS::QLDB::Ledger',
                     'options': reqParams
                 });
+            } else if (obj.type == "glue.workflow") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DefaultRunProperties'] = obj.data.DefaultRunProperties;
+
+                /*
+                TODO:
+                Tags: Json
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('glue', obj.id),
+                    'region': obj.region,
+                    'service': 'glue',
+                    'type': 'AWS::Glue::Workflow',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
