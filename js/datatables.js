@@ -103,7 +103,7 @@ function recursivePrettyPrintMap(param, spacing) {
             return undefined;
         }
         
-        return param;
+        return param.replace(/\</g, "&lt;"); // TODO: Better sanitization here
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -11366,17 +11366,19 @@ async function updateDatatableComputeECS() {
                         sdkcall("ECS", "describeServices", {
                             services: [serviceArn]
                         }, true).then((data) => {
-                            $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
-                                f2id: data.services[0].serviceArn,
-                                f2type: 'ecs.service',
-                                f2data: data.services[0],
-                                f2region: region,
-                                name: data.services[0].serviceName,
-                                clusterarn: data.services[0].clusterArn,
-                                desiredpendingrunning: data.services[0].desiredCount + "/" + data.services[0].pendingCount + "/" + data.services[0].runningCount,
-                                launchtype: data.services[0].launchType,
-                                schedulingstrategy: data.services[0].schedulingStrategy
-                            }]);
+                            if (data.services[0]) {
+                                $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
+                                    f2id: data.services[0].serviceArn,
+                                    f2type: 'ecs.service',
+                                    f2data: data.services[0],
+                                    f2region: region,
+                                    name: data.services[0].serviceName,
+                                    clusterarn: data.services[0].clusterArn,
+                                    desiredpendingrunning: data.services[0].desiredCount + "/" + data.services[0].pendingCount + "/" + data.services[0].runningCount,
+                                    launchtype: data.services[0].launchType,
+                                    schedulingstrategy: data.services[0].schedulingStrategy
+                                }]);
+                            }
                         });
                     });
                 })
