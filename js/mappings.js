@@ -12210,7 +12210,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "ecr.repository") {
                 reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
-                reqParams.cfn['name'] = obj.data.repositoryName;
+                reqParams.tf['name'] = obj.data.repositoryName;
                 reqParams.cfn['LifecyclePolicy'] = {
                     'LifecyclePolicyText': obj.data.lifecyclePolicyText,
                     'RegistryId': obj.data.registryId
@@ -12241,7 +12241,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['policy'] = obj.data.policy;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ecr', obj.id),
                         'region': obj.region,
                         'service': 'ecr',
@@ -12264,7 +12264,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['policy'] = obj.data.lifecyclePolicyText;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ecr', obj.id),
                         'region': obj.region,
                         'service': 'ecr',
