@@ -10915,8 +10915,8 @@ async function updateDatatableComputeECR() {
     }, true).then(async (data) => {
         $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.repositories.map(repository => {
-            return sdkcall("ECR", "getLifecyclePolicy", {
+        await Promise.all(data.repositories.map(async (repository) => {
+            await sdkcall("ECR", "getLifecyclePolicy", {
                 repositoryName: repository.repositoryName
             }, false).then(async (data) => {
                 repository['lifecyclePolicyText'] = data.lifecyclePolicyText;
@@ -10925,17 +10925,19 @@ async function updateDatatableComputeECR() {
                     repositoryName: repository.repositoryName
                 }, true).then((data) => {
                     repository['policy'] = data.policyText;
-                    $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
-                        f2id: repository.repositoryArn,
-                        f2type: 'ecr.repository',
-                        f2data: repository,
-                        f2region: region,
-                        name: repository.repositoryName,
-                        uri: repository.repositoryUri,
-                        createdat: repository.createdAt
-                    }]);
-                });
+                    
+                }).catch(() => {});
             }).catch(() => {});
+
+            $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
+                f2id: repository.repositoryArn,
+                f2type: 'ecr.repository',
+                f2data: repository,
+                f2region: region,
+                name: repository.repositoryName,
+                uri: repository.repositoryUri,
+                createdat: repository.createdAt
+            }]);
         }));
 
         unblockUI('#section-compute-ecr-repositories-datatable');
