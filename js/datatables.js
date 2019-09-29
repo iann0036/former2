@@ -284,6 +284,15 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }, data => {
                         reject(data);
                     });
+                } else if (data.nextToken) {
+                    params['nextToken'] = data.nextToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
                 } else {
                     resolve(data);
                 }
@@ -11379,11 +11388,23 @@ async function updateDatatableComputeECS() {
     });
 
     await sdkcall("ECS", "listTaskDefinitions", {
-        // no params
+        sort: "DESC"
     }, true).then(async (data) => {
         $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.taskDefinitionArns.map(taskDefinitionArn => {
+        var baseTaskDefinitions = [];
+        var taskDefinitionArns = [];
+        data.taskDefinitionArns.forEach(taskDefinitionArn => {
+            var baseTaskDefinition = taskDefinitionArn.split(":");
+            baseTaskDefinition.pop();
+            baseTaskDefinition = baseTaskDefinition.join(":");
+            if (!baseTaskDefinitions.includes(baseTaskDefinition)) {
+                baseTaskDefinitions.push(baseTaskDefinition);
+                taskDefinitionArns.push(taskDefinitionArn);
+            }
+        });
+
+        await Promise.all(taskDefinitionArns.map(taskDefinitionArn => {
             return sdkcall("ECS", "describeTaskDefinition", {
                 taskDefinition: taskDefinitionArn
             }, true).then((data) => {
