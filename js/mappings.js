@@ -13885,21 +13885,30 @@ function performF2Mappings(objects) {
                             'WorkingDirectory': containerDefinition.workingDirectory
                         });
                     });
+                    reqParams.tf['container_definitions'] = JSON.stringify(obj.data.containerDefinitions);
                 }
                 reqParams.cfn['Family'] = obj.data.family;
+                reqParams.tf['family'] = obj.data.family;
                 reqParams.cfn['TaskRoleArn'] = obj.data.taskRoleArn;
+                reqParams.tf['task_role_arn'] = obj.data.taskRoleArn;
                 reqParams.cfn['ExecutionRoleArn'] = obj.data.executionRoleArn;
+                reqParams.tf['execution_role_arn'] = obj.data.executionRoleArn;
                 reqParams.cfn['NetworkMode'] = obj.data.networkMode;
+                reqParams.tf['network_mode'] = obj.data.networkMode;
                 if (obj.data.volumes) {
                     reqParams.cfn['Volumes'] = [];
+                    reqParams.tf['volume'] = [];
                     obj.data.volumes.forEach(volume => {
                         var host = null;
+                        var host_path = null;
                         if (volume.host) {
                             host = {
                                 'SourcePath': volume.host.sourcePath
                             };
+                            host_path = volume.host.sourcePath;
                         }
                         var dockerVolumeConfiguration = null;
+                        var tfDockerVolumeConfiguration = null;
                         if (volume.dockerVolumeConfiguration) {
                             dockerVolumeConfiguration = {
                                 'Scope': volume.dockerVolumeConfiguration.scope,
@@ -13908,23 +13917,43 @@ function performF2Mappings(objects) {
                                 'DriverOpts': volume.dockerVolumeConfiguration.driverOpts,
                                 'Labels': volume.dockerVolumeConfiguration.labels
                             };
+                            tfDockerVolumeConfiguration = {
+                                'scope': volume.dockerVolumeConfiguration.scope,
+                                'autoprovision': volume.dockerVolumeConfiguration.autoprovision,
+                                'driver': volume.dockerVolumeConfiguration.driver,
+                                'driver_opts': volume.dockerVolumeConfiguration.driverOpts,
+                                'labels': volume.dockerVolumeConfiguration.labels
+                            };
                         }
                         reqParams.cfn['Volumes'].push({
                             'Name': volume.name,
                             'Host': host,
                             'DockerVolumeConfiguration': dockerVolumeConfiguration
                         });
+                        reqParams.tf['volume'].push({
+                            'name': volume.name,
+                            'host_path': host_path,
+                            'docker_volume_configuration': tfDockerVolumeConfiguration
+                        });
                     });
                 }
                 reqParams.cfn['RequiresCompatibilities'] = obj.data.requiresCompatibilities;
+                reqParams.tf['requires_compatibilities'] = obj.data.requiresCompatibilities;
                 reqParams.cfn['Cpu'] = obj.data.cpu;
+                reqParams.tf['cpu'] = obj.data.cpu;
                 reqParams.cfn['Memory'] = obj.data.memory;
+                reqParams.tf['memory'] = obj.data.memory;
                 if (obj.data.placementConstraints) {
                     reqParams.cfn['PlacementConstraints'] = [];
+                    reqParams.tf['placement_constraints'] = [];
                     obj.data.placementConstraints.forEach(placementConstraint => {
                         reqParams.cfn['PlacementConstraints'].push({
                             'Type': placementConstraint.type,
                             'Expression': placementConstraint.expression
+                        });
+                        reqParams.tf['placement_constraints'].push({
+                            'type': placementConstraint.type,
+                            'expression': placementConstraint.expression
                         });
                     });
                 }
@@ -13936,6 +13965,11 @@ function performF2Mappings(objects) {
                     DependsOn
                     StartTimeout
                     StopTimeout
+
+                ipc_mode
+                pid_mode
+                proxy_configuration
+                tags
                 */
 
                 tracked_resources.push({
@@ -13944,7 +13978,14 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'ecs',
                     'type': 'AWS::ECS::TaskDefinition',
-                    'options': reqParams
+                    'terraformType': 'aws_ecs_task_definition',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.taskDefinitionArn,
+                        'Terraform': {
+                            'arn': obj.data.taskDefinitionArn
+                        }
+                    }
                 });
             } else if (obj.type == "route53.resolverendpoint") {
                 reqParams.cfn['Name'] = obj.data.Name;
