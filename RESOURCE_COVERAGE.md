@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**450/450 (100%)** Resources Covered
+**460/460 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -102,7 +102,12 @@
 | *AWS::Cognito::IdentityPoolRoleAttachment* | :thumbsup: |
 | *AWS::Cognito::UserPool* | :thumbsup: |
 | *AWS::Cognito::UserPoolClient* | :thumbsup: |
+| *AWS::Cognito::UserPoolDomain* | :thumbsup: |
 | *AWS::Cognito::UserPoolGroup* | :thumbsup: |
+| *AWS::Cognito::UserPoolIdentityProvider* | :thumbsup: |
+| *AWS::Cognito::UserPoolResourceServer* | :thumbsup: |
+| *AWS::Cognito::UserPoolRiskConfigurationAttachment* | :thumbsup: |
+| *AWS::Cognito::UserPoolUICustomizationAttachment* | :thumbsup: |
 | *AWS::Cognito::UserPoolUser* | :thumbsup: |
 | *AWS::Cognito::UserPoolUserToGroupAttachment* | :thumbsup: |
 | *AWS::Config::AggregationAuthorization* | :thumbsup: |
@@ -163,6 +168,10 @@
 | *AWS::EC2::SubnetCidrBlock* | :thumbsup: |
 | *AWS::EC2::SubnetNetworkAclAssociation* | :thumbsup: |
 | *AWS::EC2::SubnetRouteTableAssociation* | :thumbsup: |
+| *AWS::EC2::TrafficMirrorFilter* | :thumbsup: |
+| *AWS::EC2::TrafficMirrorFilterRule* | :thumbsup: |
+| *AWS::EC2::TrafficMirrorSession* | :thumbsup: |
+| *AWS::EC2::TrafficMirrorTarget* | :thumbsup: |
 | *AWS::EC2::TransitGateway* | :thumbsup: |
 | *AWS::EC2::TransitGatewayAttachment* | :thumbsup: |
 | *AWS::EC2::TransitGatewayRoute* | :thumbsup: |
@@ -213,6 +222,7 @@
 | *AWS::ElasticLoadBalancingV2::LoadBalancer* | :thumbsup: |
 | *AWS::ElasticLoadBalancingV2::TargetGroup* | :thumbsup: |
 | *AWS::Elasticsearch::Domain* | :thumbsup: |
+| *AWS::Events::EventBus* | :thumbsup: |
 | *AWS::Events::EventBusPolicy* | :thumbsup: |
 | *AWS::Events::Rule* | :thumbsup: |
 | *AWS::FSx::FileSystem* | :thumbsup: |
@@ -457,7 +467,7 @@
 
 ## Terraform Coverage
 
-**288/520 (55%)** Resources Covered
+**289/520 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -648,7 +658,7 @@
 | *aws_ecr_repository_policy* | :thumbsup: |
 | *aws_ecs_cluster* | :thumbsup: |
 | *aws_ecs_service* | :thumbsup: |
-| *aws_ecs_task_definition* |  |
+| *aws_ecs_task_definition* | :thumbsup: |
 | *aws_efs_file_system* | :thumbsup: |
 | *aws_efs_mount_target* | :thumbsup: |
 | *aws_egress_only_internet_gateway* | :thumbsup: |

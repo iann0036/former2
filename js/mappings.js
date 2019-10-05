@@ -18689,6 +18689,86 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.TrafficMirrorTargetId
                     }
                 });
+            } else if (obj.type == "cognito.userpooldomain") {
+                reqParams.cfn['Domain'] = obj.data.Domain;
+                reqParams.cfn['CustomDomainConfig'] = obj.data.CustomDomainConfig;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cognito', obj.id),
+                    'region': obj.region,
+                    'service': 'cognito',
+                    'type': 'AWS::Cognito::UserPoolDomain',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Domain
+                    }
+                });
+            } else if (obj.type == "cognito.userpoolresourceserver") {
+                reqParams.cfn['Identifier'] = obj.data.Identifier;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+                reqParams.cfn['Scopes'] = obj.data.Scopes;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cognito', obj.id),
+                    'region': obj.region,
+                    'service': 'cognito',
+                    'type': 'AWS::Cognito::UserPoolResourceServer',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Identifier
+                    }
+                });
+            } else if (obj.type == "cognito.userpoolidentityprovider") {
+                reqParams.cfn['AttributeMapping'] = obj.data.AttributeMapping;
+                reqParams.cfn['IdpIdentifiers'] = obj.data.IdpIdentifiers;
+                reqParams.cfn['ProviderDetails'] = obj.data.ProviderDetails;
+                reqParams.cfn['ProviderName'] = obj.data.ProviderName;
+                reqParams.cfn['ProviderType'] = obj.data.ProviderType;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cognito', obj.id),
+                    'region': obj.region,
+                    'service': 'cognito',
+                    'type': 'AWS::Cognito::UserPoolIdentityProvider',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.ProviderName
+                    }
+                });
+            } else if (obj.type == "cognito.userpoolriskconfigurationattachment") {
+                reqParams.cfn['AccountTakeoverRiskConfiguration'] = obj.data.AccountTakeoverRiskConfiguration;
+                reqParams.cfn['ClientId'] = obj.data.ClientId;
+                reqParams.cfn['CompromisedCredentialsRiskConfiguration'] = obj.data.CompromisedCredentialsRiskConfiguration;
+                reqParams.cfn['RiskExceptionConfiguration'] = obj.data.RiskExceptionConfiguration;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cognito', obj.id),
+                    'region': obj.region,
+                    'service': 'cognito',
+                    'type': 'AWS::Cognito::UserPoolRiskConfigurationAttachment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "cognito.userpooluicustomizationattachment") {
+                reqParams.cfn['ClientId'] = obj.data.ClientId;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+                reqParams.cfn['CSS'] = obj.data.CSS;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cognito', obj.id),
+                    'region': obj.region,
+                    'service': 'cognito',
+                    'type': 'AWS::Cognito::UserPoolUICustomizationAttachment',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

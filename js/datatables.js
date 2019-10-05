@@ -26357,6 +26357,207 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'User Pool Domains': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain',
+                        field: 'domain',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'userpoolid',
+                        title: 'User Pool ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Resource Servers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Identifier',
+                        field: 'identifier',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'userpoolid',
+                        title: 'User Pool ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Identity Providers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'userpoolid',
+                        title: 'User Pool ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool Risk Configuration Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'User Pool ID',
+                        field: 'userpoolid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clientid',
+                        title: 'Client ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Pool UI Customization Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'User Pool ID',
+                        field: 'userpoolid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clientid',
+                        title: 'Client ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -26365,6 +26566,11 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     blockUI('#section-securityidentityandcompliance-cognito-identitypools-datatable');
     blockUI('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable');
     blockUI('#section-securityidentityandcompliance-cognito-userpools-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpooldomains-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable');
+    blockUI('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable');
     blockUI('#section-securityidentityandcompliance-cognito-userpoolclients-datatable');
     blockUI('#section-securityidentityandcompliance-cognito-userpoolusers-datatable');
     blockUI('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable');
@@ -26419,6 +26625,11 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         MaxResults: 60 // WTF? required!
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('removeAll');
@@ -26426,6 +26637,83 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         
         await Promise.all(data.UserPools.map(userPool => {
             return Promise.all([
+                userPool.Domain ? sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
+                    Domain: userPool.Domain
+                }, true).then(async (data) => {
+                    $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').bootstrapTable('append', [{
+                        f2id: data.DomainDescription.Domain,
+                        f2type: 'cognito.userpooldomain',
+                        f2data: data.DomainDescription,
+                        f2region: region,
+                        domain: data.DomainDescription.Domain,
+                        userpoolid: data.DomainDescription.UserPoolId
+                    }]);
+                }) : Promise.resolve(),
+                sdkcall("CognitoIdentityServiceProvider", "listResourceServers", {
+                    UserPoolId: userPool.Id,
+                    MaxResults: 50 // WTF? required!
+                }, true).then(async (data) => {
+                    await Promise.all(data.ResourceServers.map(resourceServer => {
+                        return sdkcall("CognitoIdentityServiceProvider", "describeResourceServer", {
+                            UserPoolId: resourceServer.UserPoolId,
+                            Identifier: resourceServer.Identifier
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').bootstrapTable('append', [{
+                                f2id: data.ResourceServer.Identifier,
+                                f2type: 'cognito.userpoolresourceserver',
+                                f2data: data.ResourceServer,
+                                f2region: region,
+                                name: data.ResourceServer.Name,
+                                userpoolid: data.ResourceServer.UserPoolId,
+                                identifier: data.ResourceServer.Identifier
+                            }]);
+                        });
+                    }));
+                }),
+                sdkcall("CognitoIdentityServiceProvider", "listIdentityProviders", {
+                    UserPoolId: userPool.Id
+                }, true).then(async (data) => {
+                    await Promise.all(data.Providers.map(provider => {
+                        return sdkcall("CognitoIdentityServiceProvider", "describeIdentityProvider", {
+                            UserPoolId: userPool.Id,
+                            ProviderName: provider.ProviderName
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').bootstrapTable('append', [{
+                                f2id: data.IdentityProvider.ProviderName,
+                                f2type: 'cognito.userpoolidentityprovider',
+                                f2data: data.IdentityProvider,
+                                f2region: region,
+                                name: data.IdentityProvider.ProviderName,
+                                userpoolid: data.IdentityProvider.UserPoolId,
+                                type: data.IdentityProvider.ProviderType
+                            }]);
+                        });
+                    }));
+                }),
+                sdkcall("CognitoIdentityServiceProvider", "describeRiskConfiguration", {
+                    UserPoolId: userPool.Id
+                }, false).then((data) => {
+                    $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').bootstrapTable('append', [{
+                        f2id: data.RiskConfiguration.UserPoolId + " " + data.RiskConfiguration.ClientId,
+                        f2type: 'cognito.userpoolriskconfigurationattachment',
+                        f2data: data.RiskConfiguration,
+                        f2region: region,
+                        userpoolid: data.RiskConfiguration.UserPoolId,
+                        clientid: data.RiskConfiguration.ClientId
+                    }]);
+                }).catch(() => {}),
+                sdkcall("CognitoIdentityServiceProvider", "getUICustomization", {
+                    UserPoolId: userPool.Id
+                }, false).then((data) => {
+                    $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').bootstrapTable('append', [{
+                        f2id: data.UICustomization.UserPoolId + " " + data.UICustomization.ClientId,
+                        f2type: 'cognito.userpooluicustomizationattachment',
+                        f2data: data.UICustomization,
+                        f2region: region,
+                        userpoolid: data.UICustomization.UserPoolId,
+                        clientid: data.UICustomization.ClientId
+                    }]);
+                }).catch(() => {}),
                 sdkcall("CognitoIdentityServiceProvider", "listUserPoolClients", {
                     UserPoolId: userPool.Id
                 }, true).then(async (data) => {
@@ -26527,6 +26815,11 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-cognito-userpools-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpooldomains-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable');
+        unblockUI('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable');
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolclients-datatable');
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolusers-datatable');
         unblockUI('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable');
