@@ -2009,6 +2009,202 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Traffic Mirror Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Traffic Mirror Filter Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'filterid',
+                        title: 'Filter ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'direction',
+                        title: 'Direction',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'rulenumber',
+                        title: 'Rule Number',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Traffic Mirror Sessions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'targetid',
+                        title: 'Target ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'filterid',
+                        title: 'Filter ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Traffic Mirror Targets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'target',
+                        title: 'Target',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2052,6 +2248,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -2810,6 +3010,100 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
     });
+
+    await sdkcall("EC2", "describeTrafficMirrorFilters", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('removeAll');
+
+        data.TrafficMirrorFilters.forEach(trafficMirrorFilter => {
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('append', [{
+                f2id: trafficMirrorFilter.TrafficMirrorFilterId,
+                f2type: 'ec2.trafficmirrorfilter',
+                f2data: trafficMirrorFilter,
+                f2region: region,
+                id: trafficMirrorFilter.TrafficMirrorFilterId,
+                description: trafficMirrorFilter.Description
+            }]);
+
+            trafficMirrorFilter.IngressFilterRules.forEach(filterRule => {
+                filterRule['TrafficDirection'] = "ingress";
+
+                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('append', [{
+                    f2id: filterRule.TrafficMirrorFilterRuleId,
+                    f2type: 'ec2.trafficmirrorfilterrule',
+                    f2data: filterRule,
+                    f2region: region,
+                    id: filterRule.TrafficMirrorFilterRuleId,
+                    filterid: trafficMirrorFilter.TrafficMirrorFilterId,
+                    description: filterRule.Description,
+                    direction: "ingress",
+                    rulenumber: filterRule.RuleNumber
+                }]);
+            });
+
+            trafficMirrorFilter.EgressFilterRules.forEach(filterRule => {
+                filterRule['TrafficDirection'] = "egress";
+
+                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('append', [{
+                    f2id: filterRule.TrafficMirrorFilterRuleId,
+                    f2type: 'ec2.trafficmirrorfilterrule',
+                    f2data: filterRule,
+                    f2region: region,
+                    id: filterRule.TrafficMirrorFilterRuleId,
+                    filterid: trafficMirrorFilter.TrafficMirrorFilterId,
+                    description: filterRule.Description,
+                    direction: "egress",
+                    rulenumber: filterRule.RuleNumber
+                }]);
+            });
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable');
+    }).catch(err => {});
+
+    await sdkcall("EC2", "describeTrafficMirrorSessions", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('removeAll');
+
+        data.TrafficMirrorSessions.forEach(trafficMirrorSession => {
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('append', [{
+                f2id: trafficMirrorSession.TrafficMirrorSessionId,
+                f2type: 'ec2.trafficmirrorsession',
+                f2data: trafficMirrorSession,
+                f2region: region,
+                id: trafficMirrorSession.TrafficMirrorSessionId,
+                description: trafficMirrorSession.Description,
+                targetid: trafficMirrorSession.TrafficMirrorTargetId,
+                filterid: trafficMirrorSession.TrafficMirrorFilterId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
+    }).catch(err => {})
+
+    await sdkcall("EC2", "describeTrafficMirrorTargets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('removeAll');
+
+        data.TrafficMirrorTargets.forEach(trafficMirrorTarget => {
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('append', [{
+                f2id: trafficMirrorTarget.TrafficMirrorSessionId,
+                f2type: 'ec2.trafficmirrortarget',
+                f2data: trafficMirrorTarget,
+                f2region: region,
+                id: trafficMirrorTarget.TrafficMirrorSessionId,
+                description: trafficMirrorTarget.Description,
+                target: trafficMirrorTarget.NetworkInterfaceId || trafficMirrorTarget.NetworkLoadBalancerArn
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
+    }).catch(err => {});
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');

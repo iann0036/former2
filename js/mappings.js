@@ -18612,6 +18612,83 @@ function performF2Mappings(objects) {
                         }
                     }
                 });
+            } else if (obj.type == "ec2.trafficmirrorfilter") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['NetworkServices'] = obj.data.NetworkServices;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::TrafficMirrorFilter',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TrafficMirrorFilterId
+                    }
+                });
+            } else if (obj.type == "ec2.trafficmirrorfilterrule") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
+                reqParams.cfn['DestinationPortRange'] = obj.data.DestinationPortRange;
+                reqParams.cfn['Protocol'] = obj.data.Protocol;
+                reqParams.cfn['RuleAction'] = obj.data.RuleAction;
+                reqParams.cfn['RuleNumber'] = obj.data.RuleNumber;
+                reqParams.cfn['SourceCidrBlock'] = obj.data.SourceCidrBlock;
+                reqParams.cfn['SourcePortRange'] = obj.data.SourcePortRange;
+                reqParams.cfn['TrafficDirection'] = obj.data.TrafficDirection;
+                reqParams.cfn['TrafficMirrorFilterId'] = obj.data.TrafficMirrorFilterId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::TrafficMirrorFilterRule',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TrafficMirrorFilterRuleId
+                    }
+                });
+            } else if (obj.type == "ec2.trafficmirrorsession") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.cfn['PacketLength'] = obj.data.PacketLength;
+                reqParams.cfn['SessionNumber'] = obj.data.SessionNumber;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                reqParams.cfn['TrafficMirrorFilterId'] = obj.data.TrafficMirrorFilterId;
+                reqParams.cfn['TrafficMirrorTargetId'] = obj.data.TrafficMirrorTargetId;
+                reqParams.cfn['VirtualNetworkId'] = obj.data.VirtualNetworkId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::TrafficMirrorSession',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TrafficMirrorSessionId
+                    }
+                });
+            } else if (obj.type == "ec2.trafficmirrortarget") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+                reqParams.cfn['NetworkLoadBalancerArn'] = obj.data.NetworkLoadBalancerArn;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::TrafficMirrorTarget',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.TrafficMirrorTargetId
+                    }
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
