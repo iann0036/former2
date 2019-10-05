@@ -12084,6 +12084,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['Principal'] = obj.data.Principal.AWS;
                 }
                 reqParams.cfn['StatementId'] = obj.data.Sid;
+                reqParams.cfn['EventBusName'] = obj.data.EventBusName;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -18588,6 +18589,28 @@ function performF2Mappings(objects) {
                     'service': 'glue',
                     'type': 'AWS::Glue::Workflow',
                     'options': reqParams
+                });
+            } else if (obj.type == "eventbridge.eventbus") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                if (obj.data.Name.startsWith('aws.partner/')) {
+                    reqParams.cfn['EventSourceName'] = obj.data.Name;
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('eventbridge', obj.id),
+                    'region': obj.region,
+                    'service': 'eventbridge',
+                    'type': 'AWS::Events::EventBus',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Name,
+                        'GetAtt': {
+                            'Arn': obj.data.Arn,
+                            'Name': obj.data.Name,
+                            'Policy': obj.data.Policy
+                        }
+                    }
                 });
             } else {
                 $.notify({

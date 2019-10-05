@@ -34365,6 +34365,43 @@ sections.push({
                 ]
             ]
         },
+        'Event Buses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'eventsourcename',
+                        title: 'Event Source Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Event Bus Policies': {
             'columns': [
                 [
@@ -34395,18 +34432,19 @@ sections.push({
 
 async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    blockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     blockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
 
-    await sdkcall("CloudWatchEvents", "listRules", {
+    await sdkcall("EventBridge", "listRules", {
         // no params
     }, true).then(async (data) => {
         $('#section-applicationintegration-eventbridge-rules-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Rules.map(rule => {
-            return sdkcall("CloudWatchEvents", "describeRule", {
+            return sdkcall("EventBridge", "describeRule", {
                 Name: rule.Name
             }, true).then(async (data) => {
-                await sdkcall("CloudWatchEvents", "listTargetsByRule", {
+                await sdkcall("EventBridge", "listTargetsByRule", {
                     Rule: data.Name
                 }, true).then((targets) => {
                     data['Targets'] = targets.Targets;
@@ -34426,25 +34464,47 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     });
 
-    await sdkcall("CloudWatchEvents", "describeEventBus", {
+    await sdkcall("EventBridge", "listEventBuses", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-eventbuses-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('removeAll');
 
-        var policyobj = JSON.parse(data.Policy);
+        await Promise.all(data.EventBuses.map(async (eventBus) => {
+            return sdkcall("EventBridge", "describeEventBus", {
+                Name: eventBus.Name
+            }, true).then(async (data) => {
+                if (data.Name != "default") {
+                    $('#section-applicationintegration-eventbridge-eventbuses-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'eventbridge.eventbus',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name
+                    }]);
+                }
 
-        policyobj.Statement.forEach(statement => {
-            $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('append', [{
-                f2id: data.Arn,
-                f2type: 'eventbridge.eventbuspolicy',
-                f2data: statement,
-                f2region: region,
-                name: data.Name // TODO: much better datatable keys
-            }]);
-        });
+                var policyobj = JSON.parse(data.Policy);
+
+                policyobj.Statement.forEach(statement => {
+                    if (data.Name != "default") {
+                        statement["EventBusName"] = data.Name;
+                    }
+
+                    $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'eventbridge.eventbuspolicy',
+                        f2data: statement,
+                        f2region: region,
+                        name: data.Name // TODO: much better datatable keys
+                    }]);
+                });
+            });
+        }));
     });
 
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
 }
 
