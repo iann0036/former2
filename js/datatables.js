@@ -248,34 +248,8 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     reject(data);
                 }
             } else {
-                if (data.Marker) {
-                    params['Marker'] = data.Marker;
-                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
-                        var mergeddata = deepmerge.all([data, newdata]);
-                        
-                        resolve(mergeddata);
-                    }, data => {
-                        reject(data);
-                    });
-                } else if (data.NextPageToken) {
-                    params['PageToken'] = data.NextPageToken;
-                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
-                        var mergeddata = deepmerge.all([data, newdata]);
-                        
-                        resolve(mergeddata);
-                    }, data => {
-                        reject(data);
-                    });
-                } else if (data.ContinuationToken) {
-                    params['ContinuationToken'] = data.ContinuationToken;
-                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
-                        var mergeddata = deepmerge.all([data, newdata]);
-                        
-                        resolve(mergeddata);
-                    }, data => {
-                        reject(data);
-                    });
-                } else if (data.NextToken) {
+                // https://github.com/iann0036/aws-pagination-rules
+                if (data.NextToken) {
                     params['NextToken'] = data.NextToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
@@ -286,6 +260,185 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     });
                 } else if (data.nextToken) {
                     params['nextToken'] = data.nextToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.NextMarker) {
+                    if (["WAF", "WAFRegional"].includes(svc)) {
+                        params['NextMarker'] = data.NextMarker;
+                    } else {
+                        params['Marker'] = data.NextMarker;
+                    }
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.NextPageMarker) { // Route53Domains
+                    params['Marker'] = data.NextPageMarker;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.Marker) {
+                    if (svc == "Glacier") {
+                        params['marker'] = data.Marker;
+                    } else {
+                        params['Marker'] = data.Marker;
+                    }
+
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.NextPageToken) {
+                    if (svc == "CostExplorer") {
+                        params['NextPageToken'] = data.NextPageToken;
+                    } else {
+                        params['PageToken'] = data.NextPageToken;
+                    }
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.NextContinuationToken) { // S3
+                    params['ContinuationToken'] = data.NextContinuationToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.PaginationToken) { // ResourceGroupsTaggingAPI
+                    params['PaginationToken'] = data.PaginationToken;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.nextMarker) { // Iot
+                    params['marker'] = data.nextMarker;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.nextPageToken) {
+                    if (svc == "SWF") {
+                        params['nextPageToken'] = data.nextPageToken;
+                    } else {
+                        params['pageToken'] = data.nextPageToken; // Lightsail
+                    }
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.marker) { // DataPipeline
+                    params['marker'] = data.marker;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (data.position && svc == "APIGateway") {
+                    params['position'] = data.position;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "CloudFront" && typeof data == "object" && Object.keys(data).length && data[Object.keys(data)[0]] && data[Object.keys(data)[0]]['NextMarker']) {
+                    params['Marker'] = data[Object.keys(data)[0]]['NextMarker'];
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "Pinpoint" && typeof data == "object" && Object.keys(data).length && data[Object.keys(data)[0]] && data[Object.keys(data)[0]]['NextToken']) {
+                    params['Token'] = data[Object.keys(data)[0]]['NextToken'];
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "DynamoDB" && method == "listGlobalTables" && data.LastEvaluatedGlobalTableName) {
+                    params['ExclusiveStartGlobalTableName'] = data.LastEvaluatedTableName;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "DynamoDB" && method == "listTables" && data.LastEvaluatedTableName) {
+                    params['ExclusiveStartTableName'] = data.LastEvaluatedTableName;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "DynamoDBStreams" && method == "listStreams" && data.LastEvaluatedStreamArn) {
+                    params['ExclusiveStartTableName'] = data.LastEvaluatedStreamArn;
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "Firehose" && method == "listDeliveryStreams" && data.DeliveryStreamNames && data.DeliveryStreamNames.length) {
+                    params['ExclusiveStartDeliveryStreamName'] = data.DeliveryStreamNames[data.DeliveryStreamNames.length - 1];
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "Kinesis" && method == "listStreams" && data.StreamNames && data.StreamNames.length) {
+                    params['ExclusiveStartStreamName'] = data.StreamNames[data.StreamNames.length - 1];
+                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                        var mergeddata = deepmerge.all([data, newdata]);
+                        
+                        resolve(mergeddata);
+                    }, data => {
+                        reject(data);
+                    });
+                } else if (svc == "KinesisAnalytics" && method == "listApplications" && data.ApplicationSummaries && data.ApplicationSummaries.length) {
+                    params['ExclusiveStartApplicationName'] = data.ApplicationSummaries[data.ApplicationSummaries.length - 1].ApplicationName;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
                         
@@ -3066,7 +3219,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeTrafficMirrorSessions", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('removeAll');
 
         data.TrafficMirrorSessions.forEach(trafficMirrorSession => {
@@ -3083,7 +3236,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
-    }).catch(err => {})
+    }).catch(() => {})
 
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
@@ -9060,7 +9213,7 @@ async function updateDatatableComputeElasticBeanstalk() {
 
             return sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
                 ApplicationName: application.ApplicationName
-            }, true).then((data) => {
+            }, false).then((data) => {
                 $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
         
                 data.ConfigurationSettings.forEach(configurationTemplate => {
@@ -9076,7 +9229,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                         datecreated: configurationTemplate.DateCreated
                     }]);
                 });
-            });
+            }).catch(() => {});
         }));
 
         unblockUI('#section-compute-elasticbeanstalk-applications-datatable');
@@ -18739,7 +18892,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                 await sdkcall("MQ", "describeConfigurationRevision", {
                     ConfigurationId: configuration.Id,
                     ConfigurationRevision: configuration.LatestRevision.Revision
-                }, true).then((revisiondata) => {
+                }, false).then((revisiondata) => {
                     data['Data'] = revisiondata.Data;
 
                     $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('append', [{
@@ -18752,7 +18905,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                         engineversion: data.EngineVersion,
                         description: data.Description
                     }]);
-                });
+                }).catch(() => {});
             });
         }));
 
@@ -29350,7 +29503,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                         return sdkcall("Greengrass", "getFunctionDefinitionVersion", {
                             FunctionDefinitionId: definition.Id,
                             FunctionDefinitionVersionId: version.Id
-                        }, true).then((data) => {
+                        }, false).then((data) => {
                             data['FunctionDefinitionId'] = definition.Id;
                             $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('append', [{
                                 f2id: data.Arn,
@@ -29361,7 +29514,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        });
+                        }).catch(() => {});
                     }));
                 }),
                 sdkcall("Greengrass", "getFunctionDefinition", {
@@ -29399,7 +29552,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                         return sdkcall("Greengrass", "getGroupVersion", {
                             GroupId: group.Id,
                             GroupVersionId: version.Id
-                        }, true).then((data) => {
+                        }, false).then((data) => {
                             data['GroupId'] = group.Id;
                             $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('append', [{
                                 f2id: data.Arn,
@@ -29410,7 +29563,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 groupid: group.Id
                             }]);
-                        });
+                        }).catch(() => {});
                     }));
                 }),
                 sdkcall("Greengrass", "getGroup", {
