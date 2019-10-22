@@ -174,17 +174,20 @@ function timeAgoFormatter(data) {
 
 function lambdaRuntimeFormatter(data) {
     var runtimeMappings = {
+        'nodejs10.x': 'Node.js 10',
         'nodejs8.10': 'Node.js 8.10',
         'nodejs6.10': 'Node.js 6.10',
         'python3.6': 'Python 3.6',
         'python3.7': 'Python 3.7',
+        'python3.8': 'Python 3.8',
         'python2.7': 'Python 2.7',
         'ruby2.5': 'Ruby 2.5',
         'java8': 'Java 8',
         'go1.x': 'Go 1.x',
         'dotnetcore2.1': '.NET Core 2.1',
         'dotnetcore2.0': '.NET Core 2.0',
-        'dotnetcore1.0': '.NET Core 1.0'
+        'dotnetcore1.0': '.NET Core 1.0',
+        'provided': 'Custom Runtime'
     }
 
     if (runtimeMappings[data]) {
