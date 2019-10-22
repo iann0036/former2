@@ -7342,7 +7342,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'stepfunctions',
                     'type': 'AWS::StepFunctions::StateMachine',
-                    'terraformType': 'sfn_state_machine',
+                    'terraformType': 'aws_sfn_state_machine',
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.stateMachineArn,
@@ -7367,7 +7367,7 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'stepfunctions',
                     'type': 'AWS::StepFunctions::Activity',
-                    'terraformType': 'sfn_activity',
+                    'terraformType': 'aws_sfn_activity',
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.activityArn,

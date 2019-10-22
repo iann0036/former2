@@ -467,7 +467,7 @@
 
 ## Terraform Coverage
 
-**289/520 (55%)** Resources Covered
+**297/520 (57%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -582,11 +582,11 @@
 | *aws_cur_report_definition* |  |
 | *aws_customer_gateway* | :thumbsup: |
 | *aws_datapipeline_pipeline* |  |
-| *aws_datasync_agent* |  |
-| *aws_datasync_location_efs* |  |
-| *aws_datasync_location_nfs* |  |
-| *aws_datasync_location_s3* |  |
-| *aws_datasync_task* |  |
+| *aws_datasync_agent* | :thumbsup: |
+| *aws_datasync_location_efs* | :thumbsup: |
+| *aws_datasync_location_nfs* | :thumbsup: |
+| *aws_datasync_location_s3* | :thumbsup: |
+| *aws_datasync_task* | :thumbsup: |
 | *aws_dax_cluster* | :thumbsup: |
 | *aws_dax_parameter_group* | :thumbsup: |
 | *aws_dax_subnet_group* | :thumbsup: |
@@ -907,8 +907,8 @@
 | *aws_ses_receipt_rule* |  |
 | *aws_ses_receipt_rule_set* | :thumbsup: |
 | *aws_ses_template* | :thumbsup: |
-| *aws_sfn_activity* |  |
-| *aws_sfn_state_machine* |  |
+| *aws_sfn_activity* | :thumbsup: |
+| *aws_sfn_state_machine* | :thumbsup: |
 | *aws_shield_protection* |  |
 | *aws_simpledb_domain* | N/A |
 | *aws_snapshot_create_volume_permission* |  |
@@ -963,7 +963,7 @@
 | *aws_vpn_gateway* | :thumbsup: |
 | *aws_vpn_gateway_attachment* | :thumbsup: |
 | *aws_vpn_gateway_route_propagation* | :thumbsup: |
-| *aws_waf_byte_match_set* |  |
+| *aws_waf_byte_match_set* | :thumbsup: |
 | *aws_waf_geo_match_set* |  |
 | *aws_waf_ipset* | :thumbsup: |
 | *aws_waf_rate_based_rule* |  |
