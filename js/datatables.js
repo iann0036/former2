@@ -455,6 +455,846 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 }
 
 /* ========================================================================== */
+// IAM
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'IAM',
+    'resourcetypes': {
+        'Users': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'User Name',
+                        field: 'username',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Roles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Service Linked Roles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Managed Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'owner',
+                        title: 'Owner',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Instance Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'path',
+                        title: 'Path',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Access Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'username',
+                        title: 'User Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableSecurityIdentityAndComplianceIAM() {
+    blockUI('#section-securityidentityandcompliance-iam-users-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-groups-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-managedpolices-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+
+    $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
+
+    await sdkcall("IAM", "listUsers", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Users.map(user => {
+            $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
+                f2id: user.Arn,
+                f2type: 'iam.user',
+                f2data: user,
+                f2region: region,
+                username: user.UserName,
+                path: user.Path,
+                id: user.UserId
+            }]);
+
+            return Promise.all([
+                sdkcall("IAM", "listAccessKeys", {
+                    UserName: user.UserName
+                }, true).then((data) => {
+                    data.AccessKeyMetadata.forEach(accessKey => {
+                        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
+                            f2id: accessKey.AccessKeyId,
+                            f2type: 'iam.accesskey',
+                            f2data: accessKey,
+                            f2region: region,
+                            id: accessKey.AccessKeyId,
+                            username: accessKey.UserName
+                        }]);
+                    });
+                }),
+                sdkcall("IAM", "listAttachedUserPolicies", {
+                    UserName: user.UserName
+                }, true).then(async (data) => {
+                    await Promise.all(data.AttachedPolicies.map(policy => {
+                        return sdkcall("IAM", "getPolicy", {
+                            PolicyArn: policy.PolicyArn
+                        }, true).then(async (policydata) => {
+                            await sdkcall("IAM", "getPolicyVersion", {
+                                PolicyArn: policy.PolicyArn,
+                                VersionId: policydata.Policy.DefaultVersionId
+                            }, true).then((data) => {
+                                $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                    f2id: policy.PolicyArn,
+                                    f2type: 'iam.policy',
+                                    f2data: {
+                                        'type': 'user',
+                                        'username': user.UserName,
+                                        'policy': policydata,
+                                        'document': data.PolicyVersion.Document
+                                    },
+                                    f2region: region,
+                                    name: policy.PolicyName,
+                                    owner: user.UserName,
+                                    type: "User",
+                                    id: policy.PolicyId,
+                                    path: policy.Path
+                                }]);
+                            });
+                        });
+                    }));
+                })
+            ]);
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    await sdkcall("IAM", "listGroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Groups.map(group => {
+            $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
+                f2id: group.Arn,
+                f2type: 'iam.group',
+                f2data: group,
+                f2region: region,
+                name: group.GroupName,
+                id: group.GroupId,
+                path: group.Path
+            }]);
+
+            return sdkcall("IAM", "listAttachedGroupPolicies", {
+                GroupName: group.GroupName
+            }, true).then(async (data) => {
+                await Promise.all(data.AttachedPolicies.map(policy => {
+                    return sdkcall("IAM", "getPolicy", {
+                        PolicyArn: policy.PolicyArn
+                    }, true).then(async (policydata) => {
+                        await sdkcall("IAM", "getPolicyVersion", {
+                            PolicyArn: policy.PolicyArn,
+                            VersionId: policydata.Policy.DefaultVersionId
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: policy.PolicyArn,
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'group',
+                                    'groupname': group.GroupName,
+                                    'policy': policydata,
+                                    'document': data.PolicyVersion.Document
+                                },
+                                f2region: region,
+                                name: policy.PolicyName,
+                                owner: group.GroupName,
+                                type: "Group",
+                                id: policy.PolicyId,
+                                path: policy.Path
+                            }]);
+                        });
+                    });
+                }));
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-iam-groups-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    await sdkcall("IAM", "listRoles", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Roles.map(role => {
+            if (role.Path.startsWith("/aws-service-role/")) {
+                $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
+                    f2id: role.Arn,
+                    f2type: 'iam.servicelinkedrole',
+                    f2data: role,
+                    f2region: region,
+                    name: role.RoleName,
+                    path: role.Path,
+                    id: role.RoleId,
+                    description: role.Description
+                }]);
+            } else {
+                $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
+                    f2id: role.Arn,
+                    f2type: 'iam.role',
+                    f2data: role,
+                    f2region: region,
+                    name: role.RoleName,
+                    path: role.Path,
+                    id: role.RoleId,
+                    description: role.Description
+                }]);
+            }
+
+            return sdkcall("IAM", "listAttachedRolePolicies", {
+                RoleName: role.RoleName
+            }, true).then(async (data) => {
+                await Promise.all(data.AttachedPolicies.map(policy => {
+                    return sdkcall("IAM", "getPolicy", {
+                        PolicyArn: policy.PolicyArn
+                    }, true).then(async (policydata) => {
+                        await sdkcall("IAM", "getPolicyVersion", {
+                            PolicyArn: policy.PolicyArn,
+                            VersionId: policydata.Policy.DefaultVersionId
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: policy.PolicyArn,
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'role',
+                                    'rolename': role.RoleName,
+                                    'policy': policydata,
+                                    'document': data.PolicyVersion.Document
+                                },
+                                f2region: region,
+                                name: policy.PolicyName,
+                                owner: role.RoleName,
+                                type: "Role",
+                                id: policy.PolicyId,
+                                path: policy.Path
+                            }]);
+                        });
+                    });
+                }));
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
+        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    });
+
+    await sdkcall("IAM", "listPolicies", {
+        Scope: 'Local'
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Policies.map(managedPolicy => {
+            if (!managedPolicy.Arn.startsWith("arn:aws:iam::aws")) {
+                return sdkcall("IAM", "getPolicy", {
+                    PolicyArn: managedPolicy.Arn
+                }, true).then(async (policydata) => {
+                    await sdkcall("IAM", "getPolicyVersion", {
+                        PolicyArn: managedPolicy.Arn,
+                        VersionId: policydata.Policy.DefaultVersionId
+                    }, true).then((data) => {
+                        managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
+                        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
+                            f2id: managedPolicy.Arn,
+                            f2type: 'iam.managedpolicy',
+                            f2data: managedPolicy,
+                            f2region: region,
+                            name: managedPolicy.PolicyName,
+                            id: managedPolicy.PolicyId,
+                            path: managedPolicy.Path,
+                            description: managedPolicy.Description
+                        }]);
+                    });
+                });
+            }
+            return Promise.resolve();
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
+    });
+
+    await sdkcall("IAM", "listInstanceProfiles", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
+        
+        data.InstanceProfiles.forEach(instanceProfile => {
+            $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('append', [{
+                f2id: instanceProfile.Arn,
+                f2type: 'iam.instanceprofile',
+                f2data: instanceProfile,
+                f2region: region,
+                name: instanceProfile.InstanceProfileName,
+                id: instanceProfile.InstanceProfileId,
+                path: instanceProfile.Path
+            }]);
+        });
+
+        unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
+    });
+}
+
+/* ========================================================================== */
+// KMS
+/* ========================================================================== */
+
+sections.push({
+    'category': 'Security, Identity &amp; Compliance',
+    'service': 'KMS',
+    'resourcetypes': {
+        'Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'accountid',
+                        title: 'Account ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'origin',
+                        title: 'Origin',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'key',
+                        title: 'Key',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        }
+    }
+});
+
+async function updateDatatableSecurityIdentityAndComplianceKMS() {
+    blockUI('#section-securityidentityandcompliance-kms-keys-datatable');
+    blockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
+
+    await sdkcall("KMS", "listKeys", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.Keys.map(key => {
+            return sdkcall("KMS", "describeKey", {
+                KeyId: key.KeyId
+            }, true).then(async (keydata) => {
+                if (keydata.KeyMetadata.KeyManager == "CUSTOMER") {
+                    await sdkcall("KMS", "getKeyPolicy", {
+                        KeyId: key.KeyId,
+                        PolicyName: "default"
+                    }, true).then(async (data) => {
+                        keydata['Policy'] = data.Policy;
+
+                        await sdkcall("KMS", "getKeyRotationStatus", {
+                            KeyId: key.KeyId
+                        }, true).then((data) => {
+                            keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
+                        });
+
+                        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
+                            f2id: keydata.KeyMetadata.Arn,
+                            f2type: 'kms.key',
+                            f2data: keydata.KeyMetadata,
+                            f2region: region,
+                            id: keydata.KeyMetadata.KeyId,
+                            accountid: keydata.KeyMetadata.AWSAccountId,
+                            enabled: keydata.KeyMetadata.Enabled,
+                            description: keydata.KeyMetadata.Description,
+                            origin: keydata.KeyMetadata.Origin
+                        }]);
+                    });
+                }
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-kms-keys-datatable');
+    });
+
+    await sdkcall("KMS", "listAliases", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('removeAll');
+        
+        data.Aliases.forEach(alias => {
+            if (!alias.AliasName.startsWith("alias/aws/")) {
+                $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('append', [{
+                    f2id: alias.AliasArn,
+                    f2type: 'kms.alias',
+                    f2data: alias,
+                    f2region: region,
+                    name: alias.AliasName,
+                    key: alias.TargetKeyId
+                }]);
+            }
+        });
+
+        unblockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
+    });
+}
+
+/* ========================================================================== */
 // VPC
 /* ========================================================================== */
 
@@ -3166,7 +4006,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeTrafficMirrorFilters", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('removeAll');
 
@@ -3240,7 +4080,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('removeAll');
 
         data.TrafficMirrorTargets.forEach(trafficMirrorTarget => {
@@ -11784,6 +12624,43 @@ async function updateDatatableComputeECS() {
     blockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
 
+    await sdkcall("ECS", "listTaskDefinitions", {
+        sort: "DESC"
+    }, true).then(async (data) => {
+        $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
+
+        var baseTaskDefinitions = [];
+        var taskDefinitionArns = [];
+        data.taskDefinitionArns.forEach(taskDefinitionArn => {
+            var baseTaskDefinition = taskDefinitionArn.split(":");
+            baseTaskDefinition.pop();
+            baseTaskDefinition = baseTaskDefinition.join(":");
+            if (!baseTaskDefinitions.includes(baseTaskDefinition)) {
+                baseTaskDefinitions.push(baseTaskDefinition);
+                taskDefinitionArns.push(taskDefinitionArn);
+            }
+        });
+
+        await Promise.all(taskDefinitionArns.map(taskDefinitionArn => {
+            return sdkcall("ECS", "describeTaskDefinition", {
+                taskDefinition: taskDefinitionArn
+            }, true).then((data) => {
+                $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
+                    f2id: data.taskDefinition.taskDefinitionArn,
+                    f2type: 'ecs.taskdefinition',
+                    f2data: data.taskDefinition,
+                    f2region: region,
+                    name: data.taskDefinition.family,
+                    networkmode: data.taskDefinition.networkMode,
+                    cpu: data.taskDefinition.cpu,
+                    memory: data.taskDefinition.memory
+                }]);
+            });
+        }));
+
+        unblockUI('#section-compute-ecs-taskdefinitions-datatable');
+    });
+
     await sdkcall("ECS", "listClusters", {
         // no params
     }, true).then(async (data) => {
@@ -11834,43 +12711,6 @@ async function updateDatatableComputeECS() {
 
         unblockUI('#section-compute-ecs-clusters-datatable');
         unblockUI('#section-compute-ecs-services-datatable');
-    });
-
-    await sdkcall("ECS", "listTaskDefinitions", {
-        sort: "DESC"
-    }, true).then(async (data) => {
-        $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
-
-        var baseTaskDefinitions = [];
-        var taskDefinitionArns = [];
-        data.taskDefinitionArns.forEach(taskDefinitionArn => {
-            var baseTaskDefinition = taskDefinitionArn.split(":");
-            baseTaskDefinition.pop();
-            baseTaskDefinition = baseTaskDefinition.join(":");
-            if (!baseTaskDefinitions.includes(baseTaskDefinition)) {
-                baseTaskDefinitions.push(baseTaskDefinition);
-                taskDefinitionArns.push(taskDefinitionArn);
-            }
-        });
-
-        await Promise.all(taskDefinitionArns.map(taskDefinitionArn => {
-            return sdkcall("ECS", "describeTaskDefinition", {
-                taskDefinition: taskDefinitionArn
-            }, true).then((data) => {
-                $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
-                    f2id: data.taskDefinition.taskDefinitionArn,
-                    f2type: 'ecs.taskdefinition',
-                    f2data: data.taskDefinition,
-                    f2region: region,
-                    name: data.taskDefinition.family,
-                    networkmode: data.taskDefinition.networkMode,
-                    cpu: data.taskDefinition.cpu,
-                    memory: data.taskDefinition.memory
-                }]);
-            });
-        }));
-
-        unblockUI('#section-compute-ecs-taskdefinitions-datatable');
     });
 
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
@@ -15117,19 +15957,23 @@ async function updateDatatableDeveloperToolsCodeCommit() {
 
     await sdkcall("CodeCommit", "listRepositories", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('removeAll');
         
-        data.repositories.forEach(repository => {
-            $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('append', [{
-                f2id: repository.repositoryId,
-                f2type: 'codecommit.repository',
-                f2data: repository,
-                f2region: region,
-                name: repository.repositoryName,
-                id: repository.repositoryId
-            }]);
-        });
+        await Promise.all(data.repositories.map(repository => {
+            return sdkcall("CodeCommit", "getRepository", {
+                repositoryName: repository.repositoryName
+            }, true).then((data) => {
+                $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('append', [{
+                    f2id: data.repositoryMetadata.repositoryId,
+                    f2type: 'codecommit.repository',
+                    f2data: data.repositoryMetadata,
+                    f2region: region,
+                    name: data.repositoryMetadata.repositoryName,
+                    id: data.repositoryMetadata.repositoryId
+                }]);
+            });
+        }));
 
         unblockUI('#section-developertools-codecommit-repositories-datatable');
     });
@@ -16311,669 +17155,6 @@ async function updateDatatableAWSCostManagementBudgets() {
 }
 
 /* ========================================================================== */
-// IAM
-/* ========================================================================== */
-
-sections.push({
-    'category': 'Security, Identity &amp; Compliance',
-    'service': 'IAM',
-    'resourcetypes': {
-        'Users': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'User Name',
-                        field: 'username',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Groups': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Roles': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Service Linked Roles': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Managed Policies': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Policies': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'type',
-                        title: 'Type',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'owner',
-                        title: 'Owner',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Instance Profiles': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'path',
-                        title: 'Path',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Access Keys': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'ID',
-                        field: 'id',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'username',
-                        title: 'User Name',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        }
-    }
-});
-
-async function updateDatatableSecurityIdentityAndComplianceIAM() {
-    blockUI('#section-securityidentityandcompliance-iam-users-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-groups-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-roles-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-managedpolices-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
-
-    $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
-
-    await sdkcall("IAM", "listUsers", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.Users.map(user => {
-            $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
-                f2id: user.Arn,
-                f2type: 'iam.user',
-                f2data: user,
-                f2region: region,
-                username: user.UserName,
-                path: user.Path,
-                id: user.UserId
-            }]);
-
-            return Promise.all([
-                sdkcall("IAM", "listAccessKeys", {
-                    UserName: user.UserName
-                }, true).then((data) => {
-                    data.AccessKeyMetadata.forEach(accessKey => {
-                        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
-                            f2id: accessKey.AccessKeyId,
-                            f2type: 'iam.accesskey',
-                            f2data: accessKey,
-                            f2region: region,
-                            id: accessKey.AccessKeyId,
-                            username: accessKey.UserName
-                        }]);
-                    });
-                }),
-                sdkcall("IAM", "listAttachedUserPolicies", {
-                    UserName: user.UserName
-                }, true).then(async (data) => {
-                    await Promise.all(data.AttachedPolicies.map(policy => {
-                        return sdkcall("IAM", "getPolicy", {
-                            PolicyArn: policy.PolicyArn
-                        }, true).then(async (policydata) => {
-                            await sdkcall("IAM", "getPolicyVersion", {
-                                PolicyArn: policy.PolicyArn,
-                                VersionId: policydata.Policy.DefaultVersionId
-                            }, true).then((data) => {
-                                $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                                    f2id: policy.PolicyArn,
-                                    f2type: 'iam.policy',
-                                    f2data: {
-                                        'type': 'user',
-                                        'username': user.UserName,
-                                        'policy': policydata,
-                                        'document': data.PolicyVersion.Document
-                                    },
-                                    f2region: region,
-                                    name: policy.PolicyName,
-                                    owner: user.UserName,
-                                    type: "User",
-                                    id: policy.PolicyId,
-                                    path: policy.Path
-                                }]);
-                            });
-                        });
-                    }));
-                })
-            ]);
-        }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
-    });
-
-    await sdkcall("IAM", "listGroups", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.Groups.map(group => {
-            $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
-                f2id: group.Arn,
-                f2type: 'iam.group',
-                f2data: group,
-                f2region: region,
-                name: group.GroupName,
-                id: group.GroupId,
-                path: group.Path
-            }]);
-
-            return sdkcall("IAM", "listAttachedGroupPolicies", {
-                GroupName: group.GroupName
-            }, true).then(async (data) => {
-                await Promise.all(data.AttachedPolicies.map(policy => {
-                    return sdkcall("IAM", "getPolicy", {
-                        PolicyArn: policy.PolicyArn
-                    }, true).then(async (policydata) => {
-                        await sdkcall("IAM", "getPolicyVersion", {
-                            PolicyArn: policy.PolicyArn,
-                            VersionId: policydata.Policy.DefaultVersionId
-                        }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                                f2id: policy.PolicyArn,
-                                f2type: 'iam.policy',
-                                f2data: {
-                                    'type': 'group',
-                                    'groupname': group.GroupName,
-                                    'policy': policydata,
-                                    'document': data.PolicyVersion.Document
-                                },
-                                f2region: region,
-                                name: policy.PolicyName,
-                                owner: group.GroupName,
-                                type: "Group",
-                                id: policy.PolicyId,
-                                path: policy.Path
-                            }]);
-                        });
-                    });
-                }));
-            });
-        }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-groups-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
-    });
-
-    await sdkcall("IAM", "listRoles", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.Roles.map(role => {
-            if (role.Path.startsWith("/aws-service-role/")) {
-                $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
-                    f2id: role.Arn,
-                    f2type: 'iam.servicelinkedrole',
-                    f2data: role,
-                    f2region: region,
-                    name: role.RoleName,
-                    path: role.Path,
-                    id: role.RoleId,
-                    description: role.Description
-                }]);
-            } else {
-                $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
-                    f2id: role.Arn,
-                    f2type: 'iam.role',
-                    f2data: role,
-                    f2region: region,
-                    name: role.RoleName,
-                    path: role.Path,
-                    id: role.RoleId,
-                    description: role.Description
-                }]);
-            }
-
-            return sdkcall("IAM", "listAttachedRolePolicies", {
-                RoleName: role.RoleName
-            }, true).then(async (data) => {
-                await Promise.all(data.AttachedPolicies.map(policy => {
-                    return sdkcall("IAM", "getPolicy", {
-                        PolicyArn: policy.PolicyArn
-                    }, true).then(async (policydata) => {
-                        await sdkcall("IAM", "getPolicyVersion", {
-                            PolicyArn: policy.PolicyArn,
-                            VersionId: policydata.Policy.DefaultVersionId
-                        }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                                f2id: policy.PolicyArn,
-                                f2type: 'iam.policy',
-                                f2data: {
-                                    'type': 'role',
-                                    'rolename': role.RoleName,
-                                    'policy': policydata,
-                                    'document': data.PolicyVersion.Document
-                                },
-                                f2region: region,
-                                name: policy.PolicyName,
-                                owner: role.RoleName,
-                                type: "Role",
-                                id: policy.PolicyId,
-                                path: policy.Path
-                            }]);
-                        });
-                    });
-                }));
-            });
-        }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
-    });
-
-    await sdkcall("IAM", "listPolicies", {
-        Scope: 'Local'
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.Policies.map(managedPolicy => {
-            if (!managedPolicy.Arn.startsWith("arn:aws:iam::aws")) {
-                return sdkcall("IAM", "getPolicy", {
-                    PolicyArn: managedPolicy.Arn
-                }, true).then(async (policydata) => {
-                    await sdkcall("IAM", "getPolicyVersion", {
-                        PolicyArn: managedPolicy.Arn,
-                        VersionId: policydata.Policy.DefaultVersionId
-                    }, true).then((data) => {
-                        managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
-                        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
-                            f2id: managedPolicy.Arn,
-                            f2type: 'iam.managedpolicy',
-                            f2data: managedPolicy,
-                            f2region: region,
-                            name: managedPolicy.PolicyName,
-                            id: managedPolicy.PolicyId,
-                            path: managedPolicy.Path,
-                            description: managedPolicy.Description
-                        }]);
-                    });
-                });
-            }
-            return Promise.resolve();
-        }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
-    });
-
-    await sdkcall("IAM", "listInstanceProfiles", {
-        // no params
-    }, true).then((data) => {
-        $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
-        
-        data.InstanceProfiles.forEach(instanceProfile => {
-            $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('append', [{
-                f2id: instanceProfile.Arn,
-                f2type: 'iam.instanceprofile',
-                f2data: instanceProfile,
-                f2region: region,
-                name: instanceProfile.InstanceProfileName,
-                id: instanceProfile.InstanceProfileId,
-                path: instanceProfile.Path
-            }]);
-        });
-
-        unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
-    });
-}
-
-/* ========================================================================== */
 // WAF & Shield
 /* ========================================================================== */
 
@@ -17730,7 +17911,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('append', [{
                     f2id: data.WebACL.WebACLId,
                     f2type: 'waf.webacl',
-                    f2data: data,
+                    f2data: data.WebACL,
                     f2region: region,
                     name: data.WebACL.Name,
                     id: data.WebACL.WebACLId,
@@ -17755,7 +17936,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('append', [{
                         f2id: data.Rule.RuleId,
                         f2type: 'waf.rule',
-                        f2data: data,
+                        f2data: data.Rule,
                         f2region: region,
                         name: data.Rule.Name,
                         id: data.Rule.RuleId,
@@ -17780,7 +17961,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('append', [{
                     f2id: data.XssMatchSet.XssMatchSetId,
                     f2type: 'waf.xssmatchset',
-                    f2data: data,
+                    f2data: data.XssMatchSet,
                     f2region: region,
                     name: data.XssMatchSet.Name,
                     id: data.XssMatchSet.XssMatchSetId
@@ -17803,7 +17984,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('append', [{
                     f2id: data.IPSet.IPSetId,
                     f2type: 'waf.ipset',
-                    f2data: data,
+                    f2data: data.IPSet,
                     f2region: region,
                     name: data.IPSet.Name,
                     id: data.IPSet.IPSetId
@@ -17826,7 +18007,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('append', [{
                     f2id: data.SizeConstraintSet.SizeConstraintSetId,
                     f2type: 'waf.sizeconstraintset',
-                    f2data: data,
+                    f2data: data.SizeConstraintSet,
                     f2region: region,
                     name: data.SizeConstraintSet.Name,
                     id: data.SizeConstraintSet.SizeConstraintSetId
@@ -17849,7 +18030,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('append', [{
                     f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
                     f2type: 'waf.sqlinjectionmatchset',
-                    f2data: data,
+                    f2data: data.SqlInjectionMatchSet,
                     f2region: region,
                     name: data.SqlInjectionMatchSet.Name,
                     id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId
@@ -17872,7 +18053,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('append', [{
                     f2id: data.ByteMatchSet.ByteMatchSetId,
                     f2type: 'waf.bytematchset',
-                    f2data: data,
+                    f2data: data.ByteMatchSet,
                     f2region: region,
                     name: data.ByteMatchSet.Name,
                     id: data.ByteMatchSet.ByteMatchSetId
@@ -17899,7 +18080,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('append', [{
                         f2id: data.WebACL.WebACLId,
                         f2type: 'wafregional.webacl',
-                        f2data: data,
+                        f2data: data.WebACL,
                         f2region: region,
                         name: data.WebACL.Name,
                         id: data.WebACL.WebACLId,
@@ -17942,7 +18123,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('append', [{
                     f2id: data.Rule.RuleId,
                     f2type: 'wafregional.rule',
-                    f2data: data,
+                    f2data: data.Rule,
                     f2region: region,
                     name: data.Rule.Name,
                     id: data.Rule.RuleId,
@@ -17966,7 +18147,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('append', [{
                     f2id: data.XssMatchSet.XssMatchSetId,
                     f2type: 'wafregional.xssmatchset',
-                    f2data: data,
+                    f2data: data.XssMatchSet,
                     f2region: region,
                     name: data.XssMatchSet.Name,
                     id: data.XssMatchSet.XssMatchSetId
@@ -17989,7 +18170,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('append', [{
                     f2id: data.IPSet.IPSetId,
                     f2type: 'wafregional.ipset',
-                    f2data: data,
+                    f2data: data.IPSet,
                     f2region: region,
                     name: data.IPSet.Name,
                     id: data.IPSet.IPSetId
@@ -18012,7 +18193,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('append', [{
                     f2id: data.SizeConstraintSet.SizeConstraintSetId,
                     f2type: 'wafregional.sizeconstraintset',
-                    f2data: data,
+                    f2data: data.SizeConstraintSet,
                     f2region: region,
                     name: data.SizeConstraintSet.Name,
                     id: data.SizeConstraintSet.SizeConstraintSetId
@@ -18035,7 +18216,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('append', [{
                     f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
                     f2type: 'wafregional.sqlinjectionmatchset',
-                    f2data: data,
+                    f2data: data.SqlInjectionMatchSet,
                     f2region: region,
                     name: data.SqlInjectionMatchSet.Name
                 }]);
@@ -18057,7 +18238,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('append', [{
                     f2id: data.ByteMatchSet.ByteMatchSetId,
                     f2type: 'wafregional.bytematchset',
-                    f2data: data,
+                    f2data: data.ByteMatchSet,
                     f2region: region,
                     name: data.BytenMatchSet.Name,
                     id: data.ByteMatchSet.ByteMatchSetId
@@ -18080,7 +18261,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('append', [{
                     f2id: data.GeoMatchSet.GeoMatchSetId,
                     f2type: 'wafregional.geomatchset',
-                    f2data: data,
+                    f2data: data.GeoMatchSet,
                     f2region: region,
                     name: data.GeoMatchSet.Name,
                     id: data.GeoMatchSet.GeoMatchSetId
@@ -18103,7 +18284,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('append', [{
                     f2id: data.RegexPatternSet.RegexPatternSetId,
                     f2type: 'wafregional.regexpatternset',
-                    f2data: data,
+                    f2data: data.RegexPatternSet,
                     f2region: region,
                     name: data.RegexPatternSet.Name,
                     id: data.RegexPatternSet.RegexPatternSetId
@@ -18342,183 +18523,6 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
         }));
 
         unblockUI('#section-securityidentityandcompliance-certificatemanager-certificates-datatable');
-    });
-}
-
-/* ========================================================================== */
-// KMS
-/* ========================================================================== */
-
-sections.push({
-    'category': 'Security, Identity &amp; Compliance',
-    'service': 'KMS',
-    'resourcetypes': {
-        'Keys': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'ID',
-                        field: 'id',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'accountid',
-                        title: 'Account ID',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'description',
-                        title: 'Description',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'origin',
-                        title: 'Origin',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'enabled',
-                        title: 'Enabled',
-                        sortable: true,
-                        editable: true,
-                        formatter: tickFormatter,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
-        'Aliases': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'key',
-                        title: 'Key',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        }
-    }
-});
-
-async function updateDatatableSecurityIdentityAndComplianceKMS() {
-    blockUI('#section-securityidentityandcompliance-kms-keys-datatable');
-    blockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
-
-    await sdkcall("KMS", "listKeys", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
-        
-        await Promise.all(data.Keys.map(key => {
-            return sdkcall("KMS", "describeKey", {
-                KeyId: key.KeyId
-            }, true).then(async (keydata) => {
-                if (keydata.KeyMetadata.KeyManager == "CUSTOMER") {
-                    await sdkcall("KMS", "getKeyPolicy", {
-                        KeyId: key.KeyId,
-                        PolicyName: "default"
-                    }, true).then(async (data) => {
-                        keydata['Policy'] = data.Policy;
-
-                        await sdkcall("KMS", "getKeyRotationStatus", {
-                            KeyId: key.KeyId
-                        }, true).then((data) => {
-                            keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
-                        });
-
-                        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
-                            f2id: keydata.KeyMetadata.Arn,
-                            f2type: 'kms.key',
-                            f2data: keydata.KeyMetadata,
-                            f2region: region,
-                            id: keydata.KeyMetadata.KeyId,
-                            accountid: keydata.KeyMetadata.AWSAccountId,
-                            enabled: keydata.KeyMetadata.Enabled,
-                            description: keydata.KeyMetadata.Description,
-                            origin: keydata.KeyMetadata.Origin
-                        }]);
-                    });
-                }
-            });
-        }));
-
-        unblockUI('#section-securityidentityandcompliance-kms-keys-datatable');
-    });
-
-    await sdkcall("KMS", "listAliases", {
-        // no params
-    }, true).then((data) => {
-        $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('removeAll');
-        
-        data.Aliases.forEach(alias => {
-            if (!alias.AliasName.startsWith("alias/aws/")) {
-                $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('append', [{
-                    f2id: alias.AliasArn,
-                    f2type: 'kms.alias',
-                    f2data: alias,
-                    f2region: region,
-                    name: alias.AliasName,
-                    key: alias.TargetKeyId
-                }]);
-            }
-        });
-
-        unblockUI('#section-securityidentityandcompliance-kms-aliases-datatable');
     });
 }
 
