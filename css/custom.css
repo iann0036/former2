@@ -46,3 +46,11 @@
 .faq-page-questions {
     padding: 15px !important;
 }
+
+a.f2issues {
+    color: #fb747b !important;
+}
+
+a.f2issues:hover {
+    color: #fa424a !important;
+}

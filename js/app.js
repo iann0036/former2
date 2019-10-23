@@ -933,6 +933,12 @@ $(document).ready(function(){
     $('#relatedresourcessetting').change(function() {
         window.localStorage.setItem('relatedresourcessetting', $(this).is(':checked').toString());
     });
+    if (window.localStorage.getItem('enablef2issuessetting') == "true") {
+        $('#enablef2issuessetting').prop('checked', true);
+    }
+    $('#enablef2issuessetting').change(function() {
+        window.localStorage.setItem('enablef2issuessetting', $(this).is(':checked').toString());
+    });
 
 }); // <-- End of documentReady
 
@@ -1113,4 +1119,43 @@ async function getResourceStackAssociation() {
     });
 
     console.log(templates);
+}
+
+////////
+
+function openF2IssuesModal(index, ctx) {
+    while ((ctx = ctx.parentElement) && !((ctx.matches || ctx.matchesSelector).call(ctx,'table')));
+    var data = $(ctx).bootstrapTable('getData')[index];
+    console.log(data);
+
+    var html = '';
+    data.f2issues.forEach(f2issue => {
+        if (html != '') {
+            html += "<hr />";
+        }
+
+        var severity = "<span class='label label-warning'>" + f2issue.severity.charAt(0).toUpperCase() + f2issue.severity.substring(1) + "</span>";
+        if (f2issue.severity == "high")  {
+            severity = "<span class='label label-danger'>High</span>";
+        } else if (f2issue.severity == "low")  {
+            severity = "<span class='label label-primary'>Low</span>";
+        }
+
+        var references = "<ul>";
+        for (var title in f2issue.references) {
+            references += "<li><a target='_blank' href='" + f2issue.references[title] + "'>" + title + "</a></li>";
+        }
+        references += "</ul>";
+
+        html += `
+        <h5>${f2issue.title}</h5>
+        <p><strong>Severity</strong><br />${severity}</p>
+        <p><strong>Details</strong><br />${f2issue.message}</p>
+        <p><strong>Cause</strong><br /><code>${f2issue.field}: ${f2issue.value}</code></p>
+        <p><strong>References</strong><br />${references}</p>
+        `;
+    });
+
+    $('#f2issuescontent').html(html);
+    $('#f2issuesmodal').modal("show");
 }
