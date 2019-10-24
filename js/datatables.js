@@ -7257,7 +7257,7 @@ async function updateDatatableComputeLambda() {
                             title: "EOL Runtime",
                             message: "You are currently using a runtime that has reached its end-of-life. Consider migrating to a supported version.",
                             field: "Configuration.Runtime",
-                            value: data.Configuration.Runtime,
+                            value: JSON.stringify(data.Configuration.Runtime),
                             references: {
                                 "Lambda Runtimes - AWS Documentation": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
                                 "AWS Breaking Changes - SummitRoute GitHub Repository": "https://github.com/SummitRoute/aws_breaking_changes"
@@ -7270,7 +7270,7 @@ async function updateDatatableComputeLambda() {
                             title: "Tracing not enabled",
                             message: "Tracing allows you to track specific performance or security issues with X-Ray. Consider enabling tracing for this function.",
                             field: "Configuration.TracingConfig.Mode",
-                            value: data.Configuration.TracingConfig.Mode,
+                            value: JSON.stringify(data.Configuration.TracingConfig.Mode),
                             references: {
                                 "Using AWS X-Ray - AWS Documentation": "https://docs.aws.amazon.com/lambda/latest/dg/lambda-x-ray.html"
                             }
@@ -7307,7 +7307,7 @@ async function updateDatatableComputeLambda() {
                                 title: "Exposed Lambda",
                                 message: "You have permitted a wildcard principal to access your Lambda function without an associated condition. Consider restricting the policy to a specific resource or add a condition.",
                                 field: "Principal",
-                                value: statement.Principal,
+                                value: JSON.stringify(statement.Principal),
                                 references: {
                                     "Using Resource-based Policies for AWS Lambda - AWS Documentation": "https://docs.aws.amazon.com/lambda/latest/dg/access-control-resource-based.html"
                                 }
@@ -7617,12 +7617,36 @@ async function updateDatatableStorageS3() {
                 await sdkcall("S3", "getBucketPolicy", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
+                    var f2issues = [];
+                    var publicS3BucketPolicyFound = false;
+                    var policy = JSON.parse(data.Policy);
+                    policy.Statement.forEach(statement => {
+                        if (
+                            !publicS3BucketPolicyFound &&
+                            (statement['Principal'] == "*" || (statement['Principal'].AWS && statement['Principal']['AWS'] == "*")) &&
+                            !statement['Condition']
+                        ) {
+                            f2issues.push({
+                                severity: "high",
+                                title: "Exposed S3 Bucket",
+                                message: "You have an S3 bucket that is exposed by a bucket policy. Consider changing or removing the statement which has the wildcard principals or add a condition to restrict its scope.",
+                                field: "Policy.Statement[*].Principal",
+                                value: JSON.stringify(statement.Principal),
+                                references: {
+                                    "Add Bucket Policy - AWS Documentation": "https://docs.aws.amazon.com/AmazonS3/latest/user-guide/add-bucket-policy.html"
+                                }
+                            });
+                            publicS3BucketPolicyFound = true;
+                        }
+                    });
+
                     data['Bucket'] = bucket.Name;
                     $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
                         f2id: bucket.Name,
                         f2type: 's3.bucketpolicy',
                         f2data: data,
                         f2region: region,
+                        f2issues: f2issues,
                         bucketname: bucket.Name,
                         policy: data.Policy,
                         policylength: data.Policy.length
@@ -11161,11 +11185,30 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('removeAll');
 
         data.DistributionList.Items.forEach(distribution => {
+            var f2issues = [];
+            var foundOriginSSLv3 = false;
+            distribution.Origins.Items.forEach(origin => {
+                if (!foundOriginSSLv3 && origin.CustomOriginConfig && origin.CustomOriginConfig.OriginSslProtocols && origin.CustomOriginConfig.OriginSslProtocols.Items.includes("SSLv3")) {
+                    f2issues.push({
+                        severity: "high",
+                        title: "Custom Origin(s) Using Insecure SSL Protocol",
+                        message: "Your distribution has one or more custom origins with an insecure SSL protocol. Consider removing the insecure protocol(s).",
+                        field: "Origins.Items[*].CustomOriginConfig.OriginSslProtocols.Items[*]",
+                        value: JSON.stringify("SSLv3"),
+                        references: {
+                            "Changing Origin SSL Protocols - AWS Documentation": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-https-cloudfront-to-custom-origin.html#using-https-cloudfront-to-origin-distribution-setting",
+                            "Why - Disable SSLv3": "https://disablessl3.com/#why"
+                        }
+                    });
+                    foundOriginSSLv3 = true;
+                }
+            });
             $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('append', [{
                 f2id: distribution.ARN,
                 f2type: 'cloudfront.distribution',
                 f2data: distribution,
                 f2region: region,
+                f2issues: f2issues,
                 domainname: distribution.DomainName,
                 id: distribution.Id,
                 httpversion: distribution.HttpVersion,
