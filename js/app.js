@@ -913,6 +913,8 @@ $(document).ready(function(){
         theme: "arrow"
     });
 
+    $('.tags-field').tagEditor();
+
     $('#add-parameter-expand-link').click(function(){
         $('#add-parameter-expand-section').slideToggle('fast');
     });
@@ -922,16 +924,39 @@ $(document).ready(function(){
 
         if (!$('#add-parameter-name').val() || $('#add-parameter-name').val().length < 1) return;
 
+        var allowed_values = $('#add-parameter-allowed-values').val();
+        if (allowed_values && allowed_values.length) {
+            allowed_values = allowed_values.split(",");
+        }
+
         stack_parameters.push({
             'name': $('#add-parameter-name').val(),
             'description': $('#add-parameter-description').val(),
+            'constraint_description': $('#add-parameter-constraint-description').val(),
             'default_value': $('#add-parameter-default-value').val(),
-            'type': 'String'
+            'allowed_pattern': $('#add-parameter-allowed-pattern').val(),
+            'allowed_values': allowed_values,
+            'minimum_length': $('#add-parameter-minimum-length').val(),
+            'maximum_length': $('#add-parameter-maximum-length').val(),
+            'minimum_value': $('#add-parameter-minimum-value').val(),
+            'maximum_value': $('#add-parameter-maximum-value').val(),
+            'no_echo': $('#add-parameter-noecho').prop('checked'),
+            'type': $('#add-parameter-type').val()
         });
 
         $('#add-parameter-name').val("");
         $('#add-parameter-default-value').val("");
         $('#add-parameter-description').val("");
+        $('#add-parameter-constraint-description').val("");
+        $('#add-parameter-allowed-pattern').val("");
+        $('#add-parameter-allowed-values').val("");
+        $('#add-parameter-minimum-length').val("");
+        $('#add-parameter-maximum-length').val("");
+        $('#add-parameter-minimum-value').val("");
+        $('#add-parameter-maximum-value').val("");
+        $('#add-parameter-noecho').prop('checked', false);
+        $('#add-parameter-type').val("String");
+
         $('#add-parameter-name').focus();
 
         generateParameterTable();
@@ -1036,7 +1061,6 @@ function generateParameterTable() {
         stack_parameters.forEach(stack_parameter => {
             parameter_html += "<tr><td>" + stack_parameter.name +
                 "</td><td>" + stack_parameter.type +
-                "</td><td>" + (stack_parameter.description ? stack_parameter.description : "") +
                 "</td><td>" + (stack_parameter.default_value ? stack_parameter.default_value : "") +
                 "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick='removeParameter(" + p_index + ")' type='button' class='param-del'><i class='font-icon font-icon-trash'></i></button></td></tr>";
             p_index += 1;

@@ -27,6 +27,7 @@
         <![endif]-->
         <link rel="stylesheet" href="css/separate/elements/steps.min.css">
         <!--<link rel="stylesheet" href="css/lib/bootstrap-table/bootstrap-table.min.css">-->
+        <link rel="stylesheet" href="css/separate/vendor/tags_editor.min.css">
         <link rel="stylesheet" href="css/lib/bootstrap-table-updated/bootstrap-table.min.css">
         <link rel="stylesheet" href="css/lib/font-awesome/font-awesome.min.css">
         <link rel="stylesheet" href="css/lib/bootstrap/bootstrap.min.css">
@@ -1004,11 +1005,10 @@
                                 <table id="parameter-table" style="display: none;">
                                     <thead>
                                         <tr>
-                                            <th style="min-width: 100px;"><strong>Name</strong></th>
-                                            <th style="min-width: 100px;"><strong>Type</strong></th>
-                                            <th style="min-width: 100px;"><strong>Description</strong></th>
-                                            <th style="min-width: 100px;"><strong>Default Value</strong></th>
-                                            <th style="min-width: 20px;">&nbsp;</th>
+                                            <th><strong>Name</strong></th>
+                                            <th><strong>Type</strong></th>
+                                            <th><strong>Default Value</strong></th>
+                                            <th>&nbsp;</th>
                                         </tr>
                                     </thead>
                                     <tbody id="parameter-list"></tbody>
@@ -1021,20 +1021,20 @@
                                 <div class="col-md-1"></div>
                                 <div class="col-md-10">
                                     <div class="row">
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-4">
                                             <fieldset class="form-group">
                                                 <label class="form-label semibold" for="add-parameter-name">Name</label>
-                                                <input type="text" class="form-control" id="add-parameter-name">
+                                                <input type="text" class="form-control" id="add-parameter-name" required>
                                             </fieldset>
                                         </div>
-                                        <div class="col-lg-5">
+                                        <div class="col-lg-4">
                                             <fieldset class="form-group">
                                                 <label class="form-label semibold" for="add-parameter-default-value">Default Value</label>
                                                 <input type="text" class="form-control" id="add-parameter-default-value">
                                                 <small class="text-muted">Variable substitution will look for this value</small>
                                             </fieldset>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-lg-4">
                                             <fieldset class="form-group">
                                                 <label class="form-label">&nbsp;</label>
                                                 <button type="submit" class="btn" id="add-parameter-button"><span class="glyphicon glyphicon-plus"></span> Add</button>
@@ -1049,7 +1049,7 @@
                                             <div class="col-lg-4">
                                                 <fieldset class="form-group">
                                                     <label class="form-label semibold" for="add-parameter-type">Type</label>
-                                                    <input disabled type="text" class="form-control" id="add-parameter-type" placeholder="Type" value="String">
+                                                    <input type="text" class="form-control" id="add-parameter-type" placeholder="Type" value="String">
                                                 </fieldset>
                                             </div>
                                             <div class="col-lg-4">
@@ -1060,19 +1060,56 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-constraint-description">Constraint Description</label>
+                                                    <input type="text" class="form-control" id="add-parameter-constraint-description">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
                                                     <label class="form-label semibold" for="add-parameter-allowed-values">Allowed Values</label>
-                                                    <input disabled type="text" class="form-control" id="add-parameter-allowed-values">
+                                                    <input type="text" class="form-control" id="add-parameter-allowed-values">
+                                                    <!--<textarea id="add-parameter-allowed-values" class="tags-field"></textarea>-->
                                                     <small class="text-muted">Use commas to seperate values</small>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-allowed-pattern">Allowed Pattern</label>
+                                                    <input type="text" class="form-control" id="add-parameter-allowed-pattern">
                                                 </fieldset>
                                             </div>
                                             <div class="col-lg-4">
                                                 <fieldset class="form-group">
                                                     <label class="form-label semibold" for="add-parameter-noecho">Mask Parameter (NoEcho)</label>
                                                     <div class="checkbox-toggle">
-                                                        <input disabled type="checkbox" id="add-parameter-noecho">
+                                                        <input type="checkbox" id="add-parameter-noecho">
                                                         <label for="add-parameter-noecho">&nbsp;</label>
                                                     </div>
                                                     <small class="text-muted">This will <b>not</b> mask the value within Former2</small>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-minimum-length">Minimum Length</label>
+                                                    <input type="text" class="form-control" id="add-parameter-minimum-length">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-maximum-length">Maximum Length</label>
+                                                    <input type="text" class="form-control" id="add-parameter-maximum-length">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-minimum-value">Minimum Value</label>
+                                                    <input type="text" class="form-control" id="add-parameter-minimum-value">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-maximum-value">Maximum Value</label>
+                                                    <input type="text" class="form-control" id="add-parameter-maximum-value">
                                                 </fieldset>
                                             </div>
                                         </div>
@@ -1269,6 +1306,9 @@
         
         <script src="js/lib/blockUI/jquery.blockUI.js"></script>
         <script src="js/lib/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+        <script src="js/lib/jquery-tag-editor/jquery.caret.min.js"></script>
+        <script src="js/lib/jquery-tag-editor/jquery.tag-editor.min.js"></script>
 
         <script src="js/ui-app.js"></script>
 

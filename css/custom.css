@@ -64,3 +64,12 @@
 #parameter-table {
     margin-bottom: 32px;
 }
+
+#parameter-table>thead>tr>th {
+    min-width: 100px;
+    padding-right: 10px;
+}
+
+#parameter-table>tbody>tr>td {
+    padding-right: 10px;
+}

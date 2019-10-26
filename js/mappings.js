@@ -1903,6 +1903,16 @@ template.add_version("2010-09-09")
 ${cfnspacing}${cfnspacing}Type: "${stack_parameter.type}"
 ${(stack_parameter.description && stack_parameter.description != "") ? `${cfnspacing}${cfnspacing}Description: "${stack_parameter.description.toString()}"
 ` : ''}${(stack_parameter.default_value && stack_parameter.default_value != "") ? `${cfnspacing}${cfnspacing}Default: "${stack_parameter.default_value.toString()}"
+` : ''}${(stack_parameter.constraint_description && stack_parameter.constraint_description != "") ? `${cfnspacing}${cfnspacing}ConstraintDescription: "${stack_parameter.constraint_description.toString()}"
+` : ''}${(stack_parameter.allowed_pattern && stack_parameter.allowed_pattern != "") ? `${cfnspacing}${cfnspacing}AllowedPattern: "${stack_parameter.allowed_pattern.toString()}"
+` : ''}${(stack_parameter.minimum_length && stack_parameter.minimum_length != "") ? `${cfnspacing}${cfnspacing}MinimumLength: ${stack_parameter.minimum_length.toString()}
+` : ''}${(stack_parameter.maximum_length && stack_parameter.maximum_length != "") ? `${cfnspacing}${cfnspacing}MaximumLength: ${stack_parameter.maximum_length.toString()}
+` : ''}${(stack_parameter.minimum_value && stack_parameter.minimum_value != "") ? `${cfnspacing}${cfnspacing}MinimumValue: ${stack_parameter.minimum_value.toString()}
+` : ''}${(stack_parameter.maximum_value && stack_parameter.maximum_value != "") ? `${cfnspacing}${cfnspacing}MaximumValue: ${stack_parameter.maximum_value.toString()}
+` : ''}${(stack_parameter.allowed_values && stack_parameter.allowed_values != "") ? `${cfnspacing}${cfnspacing}AllowedValues:
+${cfnspacing}${cfnspacing}  - "${stack_parameter.allowed_values.join(`"
+${cfnspacing}${cfnspacing}  - "`)}"
+` : ''}${(stack_parameter.no_echo) ? `${cfnspacing}${cfnspacing}NoEcho: true
 ` : ''}
 `;
             });
