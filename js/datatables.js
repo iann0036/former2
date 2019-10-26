@@ -115,7 +115,7 @@ function recursivePrettyPrintMap(param, spacing) {
         });
 
         return `<br />
-` + '&nbsp;'.repeat(spacing + 4) + "<b>-</b> " + paramitems.join(`,<br />
+` + '&nbsp;'.repeat(spacing + 4) + "<b>-</b> " + paramitems.join(`<br />
 ` + '&nbsp;'.repeat(spacing + 4) + "<b>-</b> ");
     }
     if (typeof param == "object") {
