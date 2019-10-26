@@ -4,6 +4,7 @@ var output_objects = [];
 var _AWS = AWS;
 var visited_sections = [];
 var ping_extension_interval = null;
+var stack_parameters = [];
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -911,6 +912,30 @@ $(document).ready(function(){
         minimumResultsForSearch: "Infinity",
         theme: "arrow"
     });
+
+    $('#add-parameter-expand-link').click(function(){
+        $('#add-parameter-expand-section').slideToggle('fast');
+    });
+
+    $('#add-parameter-form').submit(function(e){
+        e.preventDefault();
+
+        if (!$('#add-parameter-name').val() || $('#add-parameter-name').val().length < 1) return;
+
+        stack_parameters.push({
+            'name': $('#add-parameter-name').val(),
+            'description': $('#add-parameter-description').val(),
+            'default_value': $('#add-parameter-default-value').val(),
+            'type': 'String'
+        });
+
+        $('#add-parameter-name').val("");
+        $('#add-parameter-default-value').val("");
+        $('#add-parameter-description').val("");
+        $('#add-parameter-name').focus();
+
+        generateParameterTable();
+    });
     
     var spacingamount = window.localStorage.getItem('cfnspacing');
     if (spacingamount && spacingamount == 2) {
@@ -1003,6 +1028,33 @@ function unblockUI(selector) {
 }
 
 /* ========================================================================== */
+
+function generateParameterTable() {
+    if (stack_parameters.length) {
+        var parameter_html = "";
+        var p_index = 0;
+        stack_parameters.forEach(stack_parameter => {
+            parameter_html += "<tr><td>" + stack_parameter.name +
+                "</td><td>" + stack_parameter.type +
+                "</td><td>" + (stack_parameter.description ? stack_parameter.description : "") +
+                "</td><td>" + (stack_parameter.default_value ? stack_parameter.default_value : "") +
+                "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick='removeParameter(" + p_index + ")' type='button' class='param-del'><i class='font-icon font-icon-trash'></i></button></td></tr>";
+            p_index += 1;
+        });
+
+        $('#parameter-list').html(parameter_html);
+
+        $('#parameter-table').attr('style', '');
+    } else {
+        $('#parameter-table').attr('style', 'display: none;');
+    }
+}
+
+function removeParameter(index) {
+    stack_parameters.splice(index, 1);
+
+    generateParameterTable();
+}
 
 function updateIdentity() {
     return new Promise(function(resolve, reject) {

@@ -203,6 +203,7 @@
                     <ul>
                         <li><a href="#section-setup-introduction"><span class="lbl">Introduction</span></a></li>
                         <li><a href="#section-setup-credentials"><span class="lbl">Credentials</span></a></li>
+                        <li><a href="#section-setup-parameters"><span class="lbl">Parameters</span></a></li>
                         <li><a href="#section-setup-settings"><span class="lbl">Settings</span></a></li>
                     </ul>
                 </li>
@@ -894,7 +895,8 @@
                             <ul>
                                 <li class="active"><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li><div class="item"><span class="num">3</span>Settings</div></li>
+                                <li><div class="item"><span class="num">3</span>Parameters</div></li>
+                                <li><div class="item"><span class="num">4</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
@@ -937,7 +939,8 @@
                             <ul>
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
                                 <li class="active"><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li><div class="item"><span class="num">3</span>Settings</div></li>
+                                <li><div class="item"><span class="num">3</span>Parameters</div></li>
+                                <li><div class="item"><span class="num">4</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
@@ -976,6 +979,113 @@
                     <div class="tbl steps-numeric-footer">
                         <div class="tbl-row">
                             <a href="#section-setup-introduction" class="tbl-cell">← Return to Introduction</a>
+                            <a href="#section-setup-parameters" class="tbl-cell color-green">Continue to Parameters →</a>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="section-setup-parameters" data-section-breadcrumb1-title="Setup" data-section-breadcrumb1-link="#section-setup-introduction" data-section-title="Parameters" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div class="steps-numeric-header">
+                        <div class="steps-numeric-header-in">
+                            <ul>
+                                <li><div class="item"><span class="num">1</span>Introduction</div></li>
+                                <li><div class="item"><span class="num">2</span>Credentials</div></li>
+                                <li class="active"><div class="item"><span class="num">3</span>Parameters</div></li>
+                                <li><div class="item"><span class="num">4</span>Settings</div></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps-numeric-inner">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                                <h4>Parameters</h4>
+                                <table id="parameter-table" style="display: none;">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width: 100px;"><strong>Name</strong></th>
+                                            <th style="min-width: 100px;"><strong>Type</strong></th>
+                                            <th style="min-width: 100px;"><strong>Description</strong></th>
+                                            <th style="min-width: 100px;"><strong>Default Value</strong></th>
+                                            <th style="min-width: 20px;">&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="parameter-list"></tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        <form id="add-parameter-form">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <div class="col-lg-5">
+                                            <fieldset class="form-group">
+                                                <label class="form-label semibold" for="add-parameter-name">Name</label>
+                                                <input type="text" class="form-control" id="add-parameter-name">
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-5">
+                                            <fieldset class="form-group">
+                                                <label class="form-label semibold" for="add-parameter-default-value">Default Value</label>
+                                                <input type="text" class="form-control" id="add-parameter-default-value">
+                                                <small class="text-muted">Variable substitution will look for this value</small>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <fieldset class="form-group">
+                                                <label class="form-label">&nbsp;</label>
+                                                <button type="submit" class="btn" id="add-parameter-button"><span class="glyphicon glyphicon-plus"></span> Add</button>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <small><a id="add-parameter-expand-link" href="#section-setup-parameters">[+] Advanced Settings<br /><br /></a></small>
+                                        </div>
+                                    </div>
+                                    <div id="add-parameter-expand-section" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-type">Type</label>
+                                                    <input disabled type="text" class="form-control" id="add-parameter-type" placeholder="Type" value="String">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-description">Description</label>
+                                                    <input type="text" class="form-control" id="add-parameter-description">
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-allowed-values">Allowed Values</label>
+                                                    <input disabled type="text" class="form-control" id="add-parameter-allowed-values">
+                                                    <small class="text-muted">Use commas to seperate values</small>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <fieldset class="form-group">
+                                                    <label class="form-label semibold" for="add-parameter-noecho">Mask Parameter (NoEcho)</label>
+                                                    <div class="checkbox-toggle">
+                                                        <input disabled type="checkbox" id="add-parameter-noecho">
+                                                        <label for="add-parameter-noecho">&nbsp;</label>
+                                                    </div>
+                                                    <small class="text-muted">This will <b>not</b> mask the value within Former2</small>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1"></div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tbl steps-numeric-footer">
+                        <div class="tbl-row">
+                            <a href="#section-setup-credentials" class="tbl-cell">← Return to Credentials</a>
                             <a href="#section-setup-settings" class="tbl-cell color-green">Continue to Settings →</a>
                         </div>
                     </div>
@@ -986,8 +1096,9 @@
                         <div class="steps-numeric-header-in">
                             <ul>
                                 <li><div class="item"><span class="num">1</span>Introduction</div></li>
-                                <li></li><div class="item"><span class="num">2</span>Credentials</div></li>
-                                <li class="active"><div class="item"><span class="num">3</span>Settings</div></li>
+                                <li><div class="item"><span class="num">2</span>Credentials</div></li>
+                                <li><div class="item"><span class="num">3</span>Parameters</div></li>
+                                <li class="active"><div class="item"><span class="num">4</span>Settings</div></li>
                             </ul>
                         </div>
                     </div>
@@ -1038,7 +1149,7 @@
 
                     <div class="tbl steps-numeric-footer">
                         <div class="tbl-row">
-                            <a href="#section-setup-credentials" class="tbl-cell">← Return to Credentials</a>
+                            <a href="#section-setup-parameters" class="tbl-cell">← Return to Parameters</a>
                             <a href="#section-dashboard" class="tbl-cell color-green">Go to Dashboard →</a>
                         </div>
                     </div>

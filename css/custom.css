@@ -46,3 +46,21 @@
 .faq-page-questions {
     padding: 15px !important;
 }
+
+.param-del {
+    height: 38px;
+    border: none;
+    background: none;
+    font-size: 1.125rem;
+    color: #919fa9;
+}
+.param-del:hover {
+    color: #fa424a;
+}
+.param-del .font-icon {
+    vertical-align: middle;
+}
+
+#parameter-table {
+    margin-bottom: 32px;
+}

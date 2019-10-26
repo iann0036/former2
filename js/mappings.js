@@ -221,6 +221,14 @@ function processCfnParameter(param, spacing, index) {
                 }
             }
         }
+        for (var sp_index in stack_parameters) {
+            var stack_parameter = stack_parameters[sp_index];
+            if (stack_parameter.default_value && stack_parameter.default_value != "") {
+                if (parseInt(stack_parameter.default_value) == param) {
+                    return "!Ref " + stack_parameter.default_value;
+                }
+            }
+        }
 
         return param;
     }
@@ -272,6 +280,21 @@ function processCfnParameter(param, spacing, index) {
                                 param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
                             }
                         }
+                    }
+                }
+            }
+        }
+        for (var sp_index in stack_parameters) {
+            var stack_parameter = stack_parameters[sp_index];
+            if (pre_return_str == "" && stack_parameter.default_value && stack_parameter.default_value != "") {
+                if (stack_parameter.default_value.toString() == param) {
+                    return "!Ref " + stack_parameter.name;
+                } else if (
+                    param.includes(stack_parameter.default_value.toString())
+                ) {
+                    for (var j=0; j<10; j++) { // replace many
+                        pre_return_str = "!Sub ";
+                        param = param.replace(stack_parameter.default_value.toString(), "${" + stack_parameter.name + "}");
                     }
                 }
             }
@@ -1834,7 +1857,6 @@ func main() {
 Metadata:
 ${cfnspacing}Generator: "former2"
 Description: ""
-Resources:
 `}`,
         'tf': `${!has_tf ? '# No resources generated' : `# https://www.terraform.io/downloads.html
 
@@ -1870,6 +1892,23 @@ template = Template()
 template.add_version("2010-09-09")
 
 `}`
+    }
+
+    if (has_cfn) {
+        if (stack_parameters.length) {
+            compiled['cfn'] += `Parameters:
+`;
+            stack_parameters.forEach(stack_parameter => {
+                compiled['cfn'] += `${cfnspacing}${stack_parameter.name}:
+${cfnspacing}${cfnspacing}Type: "${stack_parameter.type}"
+${(stack_parameter.description && stack_parameter.description != "") ? `${cfnspacing}${cfnspacing}Description: "${stack_parameter.description.toString()}"
+` : ''}${(stack_parameter.default_value && stack_parameter.default_value != "") ? `${cfnspacing}${cfnspacing}Default: "${stack_parameter.default_value.toString()}"
+` : ''}
+`;
+            });
+        }
+        compiled['cfn'] += `Resources:
+`;
     }
 
     declared_services = {
