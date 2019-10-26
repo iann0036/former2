@@ -286,7 +286,7 @@ function processCfnParameter(param, spacing, index) {
         }
         for (var sp_index in stack_parameters) {
             var stack_parameter = stack_parameters[sp_index];
-            if (pre_return_str == "" && stack_parameter.default_value && stack_parameter.default_value != "") {
+            if (stack_parameter.default_value && stack_parameter.default_value != "") {
                 if (stack_parameter.default_value.toString() == param) {
                     return "!Ref " + stack_parameter.name;
                 } else if (
@@ -1899,7 +1899,8 @@ template.add_version("2010-09-09")
             compiled['cfn'] += `Parameters:
 `;
             stack_parameters.forEach(stack_parameter => {
-                compiled['cfn'] += `${cfnspacing}${stack_parameter.name}:
+                if (!stack_parameter.name.startsWith("AWS::")) {
+                    compiled['cfn'] += `${cfnspacing}${stack_parameter.name}:
 ${cfnspacing}${cfnspacing}Type: "${stack_parameter.type}"
 ${(stack_parameter.description && stack_parameter.description != "") ? `${cfnspacing}${cfnspacing}Description: "${stack_parameter.description.toString()}"
 ` : ''}${(stack_parameter.default_value && stack_parameter.default_value != "") ? `${cfnspacing}${cfnspacing}Default: "${stack_parameter.default_value.toString()}"
@@ -1915,6 +1916,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 ` : ''}${(stack_parameter.no_echo) ? `${cfnspacing}${cfnspacing}NoEcho: true
 ` : ''}
 `;
+                }
             });
         }
         compiled['cfn'] += `Resources:

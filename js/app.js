@@ -655,6 +655,12 @@ $(document).ready(function(){
         $('.region-item[data-region=\'' + region + '\']').attr('style', 'font-weight: bold;')
 
         window.localStorage.setItem('region', region);
+
+        for (var sp_index in stack_parameters) {
+            if (stack_parameters[sp_index].name == "AWS::Region") {
+                stack_parameters[sp_index].default_value = region;
+            }
+        }
     });
     
     var storedregion = window.localStorage.getItem('region');
@@ -664,7 +670,12 @@ $(document).ready(function(){
         region = 'us-east-1';
     }
     $('#selected-region').html(region_map[region]);
-    $('.region-item[data-region=\'' + region + '\']').attr('style', 'font-weight: bold;')
+    $('.region-item[data-region=\'' + region + '\']').attr('style', 'font-weight: bold;');
+    stack_parameters.push({
+        'name': 'AWS::Region',
+        'default_value': region,
+        'type': 'String'
+    });
 
     /* ========================================================================== */
     // CodeMirror Init
@@ -1064,10 +1075,12 @@ function generateParameterTable() {
         var parameter_html = "";
         var p_index = 0;
         stack_parameters.forEach(stack_parameter => {
-            parameter_html += "<tr><td>" + stack_parameter.name +
-                "</td><td>" + stack_parameter.type +
-                "</td><td>" + (stack_parameter.default_value ? stack_parameter.default_value : "") +
-                "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick='removeParameter(" + p_index + ")' type='button' class='param-del'><i class='font-icon font-icon-trash'></i></button></td></tr>";
+            if (!stack_parameter.name.startsWith("AWS::")) {
+                parameter_html += "<tr><td>" + stack_parameter.name +
+                    "</td><td>" + stack_parameter.type +
+                    "</td><td>" + (stack_parameter.default_value ? stack_parameter.default_value : "") +
+                    "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick='removeParameter(" + p_index + ")' type='button' class='param-del'><i class='font-icon font-icon-trash'></i></button></td></tr>";
+            }
             p_index += 1;
         });
 
@@ -1119,6 +1132,22 @@ function updateIdentity() {
                 });
 
                 account = data.AssumedRoleUser.Arn.split(":")[4];
+
+                var account_param_exists = false;
+                for (var sp_index in stack_parameters) {
+                    if (stack_parameters[sp_index].name == "AWS::AccountId") {
+                        stack_parameters[sp_index].default_value = account;
+                        account_param_exists = true;
+                    }
+                }
+                if (!account_param_exists) {
+                    stack_parameters.push({
+                        'name': 'AWS::AccountId',
+                        'default_value': account,
+                        'type': 'String'
+                    });
+                }
+                
                 user = data.AssumedRoleUser.Arn.split("/").pop();
                 sdkcall("IAM", "listAccountAliases", {
                     // no params
@@ -1143,6 +1172,22 @@ function updateIdentity() {
                 // no params
             }, false).then((callerid) => {
                 account = callerid.Account;
+
+                var account_param_exists = false;
+                for (var sp_index in stack_parameters) {
+                    if (stack_parameters[sp_index].name == "AWS::AccountId") {
+                        stack_parameters[sp_index].default_value = account;
+                        account_param_exists = true;
+                    }
+                }
+                if (!account_param_exists) {
+                    stack_parameters.push({
+                        'name': 'AWS::AccountId',
+                        'default_value': account,
+                        'type': 'String'
+                    });
+                }
+
                 user = callerid.Arn.split("/").pop();
                 sdkcall("IAM", "listAccountAliases", {
                     // no params
