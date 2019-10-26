@@ -5785,8 +5785,9 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['AppCookieStickinessPolicy'] = obj.data.Policies.AppCookieStickinessPolicies;
                 reqParams.cfn['LBCookieStickinessPolicy'] = obj.data.Policies.LBCookieStickinessPolicies;
-                reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
-                reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
+                // Omitted
+                //reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+                //reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
                 reqParams.cfn['Subnets'] = obj.data.Subnets;
                 reqParams.tf['subnets'] = obj.data.Subnets;
                 if (obj.data.Instances) {
@@ -19139,6 +19140,29 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'datasync',
                     'terraformType': 'aws_datasync_location_s3',
+                    'options': reqParams
+                });
+            } else if (obj.type == "storagegateway.gateway") {
+                reqParams.tf['gateway_name'] = obj.data.GatewayName;
+                reqParams.tf['gateway_timezone'] = obj.data.GatewayTimezone;
+                reqParams.tf['gateway_type'] = obj.data.GatewayType;
+                reqParams.tf['activation_key'] = "REPLACEME";
+                
+                /*
+                TODO:
+                gateway_ip_address
+                media_changer_type
+                tape_drive_type
+                smb_active_directory_settings
+                smb_guest_password
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('storagegateway', obj.id),
+                    'region': obj.region,
+                    'service': 'storagegateway',
+                    'terraformType': 'aws_storagegateway_gateway',
                     'options': reqParams
                 });
             } else {
