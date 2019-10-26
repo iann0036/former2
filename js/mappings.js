@@ -1895,7 +1895,7 @@ template.add_version("2010-09-09")
     }
 
     if (has_cfn) {
-        if (stack_parameters.length) {
+        if (stack_parameters.length > 2) {
             compiled['cfn'] += `Parameters:
 `;
             stack_parameters.forEach(stack_parameter => {

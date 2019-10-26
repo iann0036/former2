@@ -1071,7 +1071,7 @@ function unblockUI(selector) {
 /* ========================================================================== */
 
 function generateParameterTable() {
-    if (stack_parameters.length) {
+    if (stack_parameters.length > 2) {
         var parameter_html = "";
         var p_index = 0;
         stack_parameters.forEach(stack_parameter => {
@@ -1147,7 +1147,7 @@ function updateIdentity() {
                         'type': 'String'
                     });
                 }
-                
+
                 user = data.AssumedRoleUser.Arn.split("/").pop();
                 sdkcall("IAM", "listAccountAliases", {
                     // no params
