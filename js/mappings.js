@@ -3273,18 +3273,25 @@ function performF2Mappings(objects) {
                 reqParams.cfn['HealthyThresholdCount'] = obj.data.HealthyThresholdCount;
                 reqParams.cfn['VpcId'] = obj.data.VpcId;
                 reqParams.tf['vpc_id'] = obj.data.VpcId;
-                reqParams.cfn['Name'] = obj.data.LoadBalancerName;
-                reqParams.tf['name'] = obj.data.LoadBalancerName;
+                reqParams.cfn['Name'] = obj.data.TargetGroupName;
+                reqParams.tf['name'] = obj.data.TargetGroupName;
+                reqParams.cfn['HealthCheckEnabled'] = obj.data.HealthCheckEnabled;
+                reqParams.cfn['TargetGroupAttributes'] = obj.data.TargetGroupAttributes;
+                if (obj.data.Targets) {
+                    reqParams.cfn['Targets'] = [];
+                    obj.data.Targets.forEach(target => {
+                        if (target.Target) {
+                            reqParams.cfn['Targets'].push(target.Target);
+                        }
+                    });
+                }
 
                 /*
                 TODO:
                 Tags:
                     - Resource Tag
-                TargetGroupAttributes:
-                    - TargetGroupAttributes
                 Targets:
                     - TargetDescription
-                HealthCheckEnabled
                 */
 
                 tracked_resources.push({

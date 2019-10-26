@@ -6451,22 +6451,34 @@ async function updateDatatableComputeEC2() {
 
     await sdkcall("ELBv2", "describeTargetGroups", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('removeAll');
 
-        data.TargetGroups.forEach(targetGroup => {
-            $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('append', [{
-                f2id: targetGroup.TargetGroupName,
-                f2type: 'elbv2.targetgroup',
-                f2data: targetGroup,
-                f2region: region,
-                name: targetGroup.TargetGroupName,
-                protocol: targetGroup.Protocol,
-                port: targetGroup.Port,
-                vpcid: targetGroup.VpcId,
-                targettype: targetGroup.targettype
-            }]);
-        });
+        await Promise.all(data.TargetGroups.map(async (targetGroup) => {
+            await sdkcall("ELBv2", "describeTargetHealth", {
+                TargetGroupArn: targetGroup.TargetGroupArn
+            }, true).then((data) => {
+                targetGroup["Targets"] = data.TargetHealthDescriptions;
+            });
+
+            return sdkcall("ELBv2", "describeTargetGroupAttributes", {
+                TargetGroupArn: targetGroup.TargetGroupArn
+            }, true).then((data) => {
+                targetGroup["TargetGroupAttributes"] = data.Attributes;
+
+                $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('append', [{
+                    f2id: targetGroup.TargetGroupArn,
+                    f2type: 'elbv2.targetgroup',
+                    f2data: targetGroup,
+                    f2region: region,
+                    name: targetGroup.TargetGroupName,
+                    protocol: targetGroup.Protocol,
+                    port: targetGroup.Port,
+                    vpcid: targetGroup.VpcId,
+                    targettype: targetGroup.targettype
+                }]);
+            });
+        }));
 
         unblockUI('#section-compute-ec2-v2targetgroups-datatable');
     });
