@@ -518,3 +518,4 @@ aws_redshift_snapshot_schedule
 aws_redshift_snapshot_schedule_association
 aws_codebuild_source_credential
 aws_fms_admin_account
+aws_quicksight_user
