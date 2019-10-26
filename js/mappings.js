@@ -3290,8 +3290,6 @@ function performF2Mappings(objects) {
                 TODO:
                 Tags:
                     - Resource Tag
-                Targets:
-                    - TargetDescription
                 */
 
                 tracked_resources.push({

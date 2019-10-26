@@ -6261,9 +6261,9 @@ async function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('removeAll');
-
+        
         data.LoadBalancerDescriptions.forEach(loadBalancer => {
-            $('#section-compute-ec2-hosts-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('append', [{
                 f2id: loadBalancer.LoadBalancerName,
                 f2type: 'elb.loadbalancer',
                 f2data: loadBalancer,
