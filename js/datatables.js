@@ -37053,6 +37053,7 @@ sections.push({
     'service': 'Storage Gateway',
     'resourcetypes': {
         'Gateways': {
+            'terraformonly': true,
             'columns': [
                 [
                     {
