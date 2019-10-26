@@ -916,6 +916,11 @@ $(document).ready(function(){
     $('.tags-field').tagEditor();
 
     $('#add-parameter-expand-link').click(function(){
+        if ($("#add-parameter-expand-section").is(":hidden")) {
+            $('#add-parameter-expand-link').html("[&ndash;] Advanced Settings");
+        } else {
+            $('#add-parameter-expand-link').html("[+] Advanced Settings");
+        }
         $('#add-parameter-expand-section').slideToggle('fast');
     });
 
