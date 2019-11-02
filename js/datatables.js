@@ -33178,6 +33178,120 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Email Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'SMS Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Push Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -33202,6 +33316,9 @@ async function updateDatatableCustomerEngagementPinpoint() {
     blockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
     blockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
     blockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
+    blockUI('#section-customerengagement-pinpoint-emailtemplates-datatable');
+    blockUI('#section-customerengagement-pinpoint-smstemplates-datatable');
+    blockUI('#section-customerengagement-pinpoint-pushtemplates-datatable');
 
     await sdkcall("Pinpoint", "getApps", {
         // no params
@@ -33540,6 +33657,61 @@ async function updateDatatableCustomerEngagementPinpoint() {
         }));
 
         unblockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
+    });
+
+    await sdkcall("Pinpoint", "listTemplates", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-customerengagement-pinpoint-emailtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-smstemplates-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-pushtemplates-datatable').bootstrapTable('removeAll');
+        
+        await Promise.all(data.TemplatesResponse.Item.map(template => {
+            if (template.TemplateType == "EMAIL") {
+                return sdkcall("Pinpoint", "getEmailTemplate", {
+                    TemplateName: template.TemplateName
+                }, true).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-emailtemplates-datatable').bootstrapTable('append', [{
+                        f2id: data.EmailTemplateResponse.Arn,
+                        f2type: 'pinpoint.emailtemplate',
+                        f2data: data.EmailTemplateResponse,
+                        f2region: region,
+                        name: data.EmailTemplateResponse.TemplateName,
+                        creationtime: data.EmailTemplateResponse.CreationDate
+                    }]);
+                });
+            } else if (template.TemplateType == "SMS") {
+                return sdkcall("Pinpoint", "getSmsTemplate", {
+                    TemplateName: template.TemplateName
+                }, true).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-smstemplates-datatable').bootstrapTable('append', [{
+                        f2id: data.SMSTemplateResponse.Arn,
+                        f2type: 'pinpoint.smstemplate',
+                        f2data: data.SMSTemplateResponse,
+                        f2region: region,
+                        name: data.SMSTemplateResponse.TemplateName,
+                        creationtime: data.SMSTemplateResponse.CreationDate
+                    }]);
+                });
+            } else if (template.TemplateType == "PUSH") {
+                return sdkcall("Pinpoint", "getPushTemplate", {
+                    TemplateName: template.TemplateName
+                }, true).then(async (data) => {
+                    $('#section-customerengagement-pinpoint-pushtemplates-datatable').bootstrapTable('append', [{
+                        f2id: data.PushNotificationTemplateResponse.Arn,
+                        f2type: 'pinpoint.pushtemplate',
+                        f2data: data.PushNotificationTemplateResponse,
+                        f2region: region,
+                        name: data.PushNotificationTemplateResponse.TemplateName,
+                        creationtime: data.PushNotificationTemplateResponse.CreationDate
+                    }]);
+                });
+            }
+        }));
+
+        unblockUI('#section-customerengagement-pinpoint-emailtemplates-datatable');
+        unblockUI('#section-customerengagement-pinpoint-smstemplates-datatable');
+        unblockUI('#section-customerengagement-pinpoint-pushtemplates-datatable');
     });
 }
 

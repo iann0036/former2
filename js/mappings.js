@@ -19216,6 +19216,51 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_storagegateway_gateway',
                     'options': reqParams
                 });
+            } else if (obj.type == "pinpoint.emailtemplate") {
+                reqParams.cfn['HtmlPart'] = obj.data.HtmlPart;
+                reqParams.cfn['Subject'] = obj.data.Subject;
+                reqParams.cfn['Tags'] = obj.data.tags;
+                reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+                reqParams.cfn['TextPart'] = obj.data.TextPart;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::EmailTemplate',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.smstemplate") {
+                reqParams.cfn['Body'] = obj.data.Body;
+                reqParams.cfn['Tags'] = obj.data.tags;
+                reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::SmsTemplate',
+                    'options': reqParams
+                });
+            } else if (obj.type == "pinpoint.pushtemplate") {
+                reqParams.cfn['Tags'] = obj.data.tags;
+                reqParams.cfn['ADM'] = obj.data.ADM;
+                reqParams.cfn['APNS'] = obj.data.APNS;
+                reqParams.cfn['Baidu'] = obj.data.Baidu;
+                reqParams.cfn['Default'] = obj.data.Default;
+                reqParams.cfn['GCM'] = obj.data.GCM;
+                reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('pinpoint', obj.id),
+                    'region': obj.region,
+                    'service': 'pinpoint',
+                    'type': 'AWS::Pinpoint::PushTemplate',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
