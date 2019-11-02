@@ -351,8 +351,34 @@ $(document).ready(function(){
             });
     });
 
+    // Custom checkboxes
+    $('.f2datatable').on('post-body.bs.table', function () {
+        var dtid = $(this).attr('id');
+        $('#' + dtid + ' :checkbox').each(function () {
+            if (!$(this).parent().hasClass('checkbox')) {
+                if ($(this).attr('data-index')) {
+                    var rowid = dtid + "-row-" + $(this).attr('data-index');
+                    $(this).attr('id', rowid);
+                    $(this).wrap('<div class="checkbox checkbox-only"></div>').after('<label for="' + rowid + '"></label>');
+                }
+            }
+        });
+
+        // Select All checkboxes
+        $('input[name="btSelectAll"]').each(function () {
+            if (!$(this).parent().hasClass('checkbox')) {
+                var selectallid = $(this).closest(".f2datatable").attr("id") + "-selectallcheck";
+                $(this).attr('id', selectallid);
+                $(this).wrap('<div class="checkbox checkbox-only"></div>').after('<label for="' + selectallid + '"></label>');
+            }
+        });
+    });
+
     $('.additems').click(function () {
         var ids = addSelectedRowsToTemplate("#" + $(this).attr('data-datatable'));
+
+        $(this).closest(".table-responsive").find(".f2datatable").bootstrapTable('uncheckAll');
+        $(this).closest(".table-responsive").find(".f2datatable tr.selected").removeClass('selected');
         
         $(this).prop('disabled', true);
     });
