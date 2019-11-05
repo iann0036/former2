@@ -3592,22 +3592,22 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 networkAcl.Entries.forEach(entry => {
                     entry['NetworkAclId'] = networkAcl.NetworkAclId;
                     var range = "";
-                    if (networkAcl.PortRange) {
-                        range = networkAcl.PortRange.From;
-                        if (networkAcl.PortRange.From != networkAcl.PortRange.To) {
-                            range = networkAcl.PortRange.From + "-" + networkAcl.PortRange.To;
+                    if (entry.PortRange) {
+                        range = entry.PortRange.From;
+                        if (entry.PortRange.From != entry.PortRange.To) {
+                            range = entry.PortRange.From + "-" + entry.PortRange.To;
                         }
                     }
                     $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
-                        f2id: entry.NetworkAclId,
+                        f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
                         f2type: 'ec2.networkaclentry',
                         f2data: entry,
                         f2region: region,
-                        networkaclid: networkAcl.NetworkAclId,
-                        cidrblocks: networkAcl.CidrBlock + " " + networkAcl.Ipv6CidrBlock,
-                        egress: networkAcl.Egress,
-                        protocol: networkAcl.Protocol,
-                        action: networkAcl.RuleAction,
+                        networkaclid: entry.NetworkAclId,
+                        cidrblocks: (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || ""),
+                        egress: entry.Egress,
+                        protocol: entry.Protocol,
+                        action: entry.RuleAction,
                         range: range
                     }]);
                 });
