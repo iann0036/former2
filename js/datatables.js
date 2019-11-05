@@ -3700,7 +3700,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeTransitGateways", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('removeAll');
 
         data.TransitGateways.forEach(transitGateway => {
@@ -3716,11 +3716,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgateways-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeTransitGatewayRouteTables", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('removeAll');
@@ -3793,11 +3793,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeTransitGatewayVpcAttachments", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('removeAll');
 
         data.TransitGatewayVpcAttachments.forEach(transitGatewayVpcAttachment => {
@@ -3813,7 +3813,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeVpcEndpoints", {
         // no params
@@ -3922,7 +3922,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeClientVpnEndpoints", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('removeAll');
@@ -4005,7 +4005,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeTrafficMirrorFilters", {
         // no params
@@ -4058,7 +4058,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable');
-    }).catch(err => {});
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeTrafficMirrorSessions", {
         // no params
