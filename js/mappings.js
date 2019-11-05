@@ -6885,59 +6885,54 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ServiceRole'] = obj.data.serviceRole;
                 reqParams.tf['service_role'] = obj.data.serviceRole;
                 if (obj.data.computeResources) {
-                    reqParams.cfn['ComputeResources'] = [];
-                    reqParams.tf['compute_resources'] = [];
+                    var launchTemplate = null;
+                    var tfLaunchTemplate = null;
+                    if (obj.data.computeResources.launchTemplate) {
+                        launchTemplate = {
+                            'LaunchTemplateId': obj.data.computeResources.launchTemplate.launchTemplateId,
+                            'LaunchTemplateName': obj.data.computeResources.launchTemplate.launchTemplateName,
+                            'Version': obj.data.computeResources.launchTemplate.version
+                        };
+                        tfLaunchTemplate = {
+                            'launch_template_id': obj.data.computeResources.launchTemplate.launchTemplateId,
+                            'launch_template_name': obj.data.computeResources.launchTemplate.launchTemplateName,
+                            'version': obj.data.computeResources.launchTemplate.version
+                        };
+                    }
 
-                    obj.data.computeResources.forEach(computeResource => {
-                        var launchTemplate = null;
-                        var tfLaunchTemplate = null;
-                        if (computeResource.launchTemplate) {
-                            launchTemplate = {
-                                'LaunchTemplateId': computeResource.launchTemplate.launchTemplateId,
-                                'LaunchTemplateName': computeResource.launchTemplate.launchTemplateName,
-                                'Version': computeResource.launchTemplate.version
-                            };
-                            tfLaunchTemplate = {
-                                'launch_template_id': computeResource.launchTemplate.launchTemplateId,
-                                'launch_template_name': computeResource.launchTemplate.launchTemplateName,
-                                'version': computeResource.launchTemplate.version
-                            };
-                        }
-
-                        reqParams.cfn['ComputeResources'].push({
-                            'Type': computeResource.type,
-                            'MinvCpus': computeResource.minvCpus,
-                            'MaxvCpus': computeResource.maxvCpus,
-                            'DesiredvCpus': computeResource.desiredvCpus,
-                            'InstanceTypes': computeResource.instanceTypes,
-                            'ImageId': computeResource.imageId,
-                            'Subnets': computeResource.subnets,
-                            'SecurityGroupIds': computeResource.securityGroupIds,
-                            'Ec2KeyPair': computeResource.ec2KeyPair,
-                            'InstanceRole': computeResource.instanceRole,
-                            'Tags': computeResource.tags,
-                            'PlacementGroup': computeResource.placementGroup,
-                            'BidPercentage': computeResource.bidPercentage,
-                            'SpotIamFleetRole': computeResource.spotIamFleetRole,
-                            'LaunchTemplate': launchTemplate
-                        });
-                        reqParams.tf['compute_resources'].push({
-                            'type': computeResource.type,
-                            'min_vcpus': computeResource.minvCpus,
-                            'max_vcpus': computeResource.maxvCpus,
-                            'desired_vcpus': computeResource.desiredvCpus,
-                            'instance_type': computeResource.instanceTypes,
-                            'image_id': computeResource.imageId,
-                            'subnets': computeResource.subnets,
-                            'security_group_ids': computeResource.securityGroupIds,
-                            'ec2_key_pair': computeResource.ec2KeyPair,
-                            'instance_role': computeResource.instanceRole,
-                            'tags': computeResource.tags,
-                            'bid_percentage': computeResource.bidPercentage,
-                            'spot_iam_fleet_role': computeResource.spotIamFleetRole,
-                            'launch_template': tfLaunchTemplate
-                        });
-                    });
+                    reqParams.cfn['ComputeResourcess'] = {
+                        'Type': obj.data.computeResources.type,
+                        'MinvCpus': obj.data.computeResources.minvCpus,
+                        'MaxvCpus': obj.data.computeResources.maxvCpus,
+                        'DesiredvCpus': obj.data.computeResources.desiredvCpus,
+                        'InstanceTypes': obj.data.computeResources.instanceTypes,
+                        'ImageId': obj.data.computeResources.imageId,
+                        'Subnets': obj.data.computeResources.subnets,
+                        'SecurityGroupIds': obj.data.computeResources.securityGroupIds,
+                        'Ec2KeyPair': obj.data.computeResources.ec2KeyPair,
+                        'InstanceRole': obj.data.computeResources.instanceRole,
+                        'Tags': obj.data.computeResources.tags,
+                        'PlacementGroup': obj.data.computeResources.placementGroup,
+                        'BidPercentage': obj.data.computeResources.bidPercentage,
+                        'SpotIamFleetRole': obj.data.computeResources.spotIamFleetRole,
+                        'LaunchTemplate': launchTemplate
+                    };
+                    reqParams.tf['compute_resources'] = {
+                        'type': obj.data.computeResources.type,
+                        'min_vcpus': obj.data.computeResources.minvCpus,
+                        'max_vcpus': obj.data.computeResources.maxvCpus,
+                        'desired_vcpus': obj.data.computeResources.desiredvCpus,
+                        'instance_type': obj.data.computeResources.instanceTypes,
+                        'image_id': obj.data.computeResources.imageId,
+                        'subnets': obj.data.computeResources.subnets,
+                        'security_group_ids': obj.data.computeResources.securityGroupIds,
+                        'ec2_key_pair': obj.data.computeResources.ec2KeyPair,
+                        'instance_role': obj.data.computeResources.instanceRole,
+                        'tags': obj.data.computeResources.tags,
+                        'bid_percentage': obj.data.computeResources.bidPercentage,
+                        'spot_iam_fleet_role': obj.data.computeResources.spotIamFleetRole,
+                        'launch_template': tfLaunchTemplate
+                    };
                 }
 
                 tracked_resources.push({
