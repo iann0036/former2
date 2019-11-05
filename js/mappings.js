@@ -6888,22 +6888,22 @@ function performF2Mappings(objects) {
                     reqParams.cfn['ComputeResources'] = [];
                     reqParams.tf['compute_resources'] = [];
 
-                    var launchTemplate = null;
-                    var tfLaunchTemplate = null;
-                    if (computeResource.launchTemplate) {
-                        launchTemplate = {
-                            'LaunchTemplateId': computeResource.launchTemplate.launchTemplateId,
-                            'LaunchTemplateName': computeResource.launchTemplate.launchTemplateName,
-                            'Version': computeResource.launchTemplate.version
-                        };
-                        tfLaunchTemplate = {
-                            'launch_template_id': computeResource.launchTemplate.launchTemplateId,
-                            'launch_template_name': computeResource.launchTemplate.launchTemplateName,
-                            'version': computeResource.launchTemplate.version
-                        };
-                    }
-
                     obj.data.computeResources.forEach(computeResource => {
+                        var launchTemplate = null;
+                        var tfLaunchTemplate = null;
+                        if (computeResource.launchTemplate) {
+                            launchTemplate = {
+                                'LaunchTemplateId': computeResource.launchTemplate.launchTemplateId,
+                                'LaunchTemplateName': computeResource.launchTemplate.launchTemplateName,
+                                'Version': computeResource.launchTemplate.version
+                            };
+                            tfLaunchTemplate = {
+                                'launch_template_id': computeResource.launchTemplate.launchTemplateId,
+                                'launch_template_name': computeResource.launchTemplate.launchTemplateName,
+                                'version': computeResource.launchTemplate.version
+                            };
+                        }
+
                         reqParams.cfn['ComputeResources'].push({
                             'Type': computeResource.type,
                             'MinvCpus': computeResource.minvCpus,
@@ -6935,7 +6935,7 @@ function performF2Mappings(objects) {
                             'tags': computeResource.tags,
                             'bid_percentage': computeResource.bidPercentage,
                             'spot_iam_fleet_role': computeResource.spotIamFleetRole,
-                            'launch_template': launchTemplate
+                            'launch_template': tfLaunchTemplate
                         });
                     });
                 }
