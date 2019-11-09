@@ -19317,6 +19317,36 @@ function performF2Mappings(objects) {
                     'type': 'AWS::MediaConvert::JobTemplate',
                     'options': reqParams
                 });
+            } else if (obj.type == "codestar.notificationrule") {
+                reqParams.cfn['DetailType'] = obj.data.DetailType;
+                if (obj.data.EventTypes) {
+                    reqParams.cfn['EventTypeIds'] = [];
+                    obj.data.EventTypes.forEach(eventType => {
+                        reqParams.cfn['EventTypeIds'].push(eventType.EventTypeId);
+                    });
+                }
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Resource'] = obj.data.Resource;
+                reqParams.cfn['Status'] = obj.data.Status;
+                if (obj.data.Targets) {
+                    reqParams.cfn['Targets'] = [];
+                    obj.data.Targets.forEach(target => {
+                        reqParams.cfn['Targets'].push({
+                            'TargetAddress': target.TargetAddress,
+                            'TargetType': target.TargetType
+                        });
+                    });
+                }
+                reqParams.cfn['Tags'] = obj.data.Tags;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('codestar', obj.id),
+                    'region': obj.region,
+                    'service': 'codestar',
+                    'type': 'AWS::CodeStarNotifications::NotificationRule',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

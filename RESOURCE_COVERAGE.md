@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**460/460 (100%)** Resources Covered
+**467/467 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -98,6 +98,7 @@
 | *AWS::CodePipeline::Pipeline* | :thumbsup: |
 | *AWS::CodePipeline::Webhook* | :thumbsup: |
 | *AWS::CodeStar::GitHubRepository* | :thumbsup: |
+| *AWS::CodeStarNotifications::NotificationRule* | :thumbsup: |
 | *AWS::Cognito::IdentityPool* | :thumbsup: |
 | *AWS::Cognito::IdentityPoolRoleAttachment* | :thumbsup: |
 | *AWS::Cognito::UserPool* | :thumbsup: |
@@ -322,6 +323,9 @@
 | *AWS::MSK::Cluster* | :thumbsup: |
 | *AWS::ManagedBlockchain::Member* | :thumbsup: |
 | *AWS::ManagedBlockchain::Node* | :thumbsup: |
+| *AWS::MediaConvert::JobTemplate* | :thumbsup: |
+| *AWS::MediaConvert::Preset* | :thumbsup: |
+| *AWS::MediaConvert::Queue* | :thumbsup: |
 | *AWS::MediaLive::Channel* | :thumbsup: |
 | *AWS::MediaLive::Input* | :thumbsup: |
 | *AWS::MediaLive::InputSecurityGroup* | :thumbsup: |
@@ -349,10 +353,13 @@
 | *AWS::Pinpoint::BaiduChannel* | :thumbsup: |
 | *AWS::Pinpoint::Campaign* | :thumbsup: |
 | *AWS::Pinpoint::EmailChannel* | :thumbsup: |
+| *AWS::Pinpoint::EmailTemplate* | :thumbsup: |
 | *AWS::Pinpoint::EventStream* | :thumbsup: |
 | *AWS::Pinpoint::GCMChannel* | :thumbsup: |
+| *AWS::Pinpoint::PushTemplate* | :thumbsup: |
 | *AWS::Pinpoint::SMSChannel* | :thumbsup: |
 | *AWS::Pinpoint::Segment* | :thumbsup: |
+| *AWS::Pinpoint::SmsTemplate* | :thumbsup: |
 | *AWS::Pinpoint::VoiceChannel* | :thumbsup: |
 | *AWS::PinpointEmail::ConfigurationSet* | :thumbsup: |
 | *AWS::PinpointEmail::ConfigurationSetEventDestination* | :thumbsup: |
@@ -467,7 +474,7 @@
 
 ## Terraform Coverage
 
-**297/520 (57%)** Resources Covered
+**298/521 (57%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -837,6 +844,7 @@
 | *aws_placement_group* | :thumbsup: |
 | *aws_proxy_protocol_policy* |  |
 | *aws_quicksight_group* | :thumbsup: |
+| *aws_quicksight_user* |  |
 | *aws_ram_principal_association* |  |
 | *aws_ram_resource_association* |  |
 | *aws_ram_resource_share* | :thumbsup: |
@@ -934,7 +942,7 @@
 | *aws_ssm_resource_data_sync* | :thumbsup: |
 | *aws_storagegateway_cache* |  |
 | *aws_storagegateway_cached_iscsi_volume* |  |
-| *aws_storagegateway_gateway* |  |
+| *aws_storagegateway_gateway* | :thumbsup: |
 | *aws_storagegateway_nfs_file_share* |  |
 | *aws_storagegateway_smb_file_share* |  |
 | *aws_storagegateway_upload_buffer* |  |
