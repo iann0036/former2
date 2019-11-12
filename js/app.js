@@ -1394,6 +1394,7 @@ async function importResources(stack_name, deletion_policy) {
         $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
             <strong><i class="fa fa-exclamation-circle"></i></strong> Cannot create a change set as the total length of the template would exceed 50kb
         </div>`);
+        return;
     }
 
     var changeSetName = 'Import' + Math.round((new Date()).getTime() / 1000);
