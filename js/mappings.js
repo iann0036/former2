@@ -12183,7 +12183,12 @@ function performF2Mappings(objects) {
                     'service': 'iam',
                     'type': 'AWS::IAM::User',
                     'terraformType': 'aws_iam_user',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'UserName': obj.data.UserName
+                        }
+                    }
                 });
             } else if (obj.type == "iam.group") {
                 reqParams.cfn['Path'] = obj.data.Path;
@@ -12205,7 +12210,12 @@ function performF2Mappings(objects) {
                     'service': 'iam',
                     'type': 'AWS::IAM::Group',
                     'terraformType': 'aws_iam_group',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'GroupName': obj.data.GroupName
+                        }
+                    }
                 });
             } else if (obj.type == "iam.role") {
                 reqParams.cfn['Path'] = obj.data.Path;
@@ -12247,6 +12257,9 @@ function performF2Mappings(objects) {
                             'id': obj.data.Id,
                             'name': obj.data.RoleName,
                             'arn': obj.data.Arn
+                        },
+                        'Import': {
+                            'RoleName': obj.data.RoleName
                         }
                     }
                 });
@@ -12284,6 +12297,9 @@ function performF2Mappings(objects) {
                             'id': obj.data.PolicyId,
                             'arn': obj.data.Arn,
                             'name': obj.data.PolicyName
+                        },
+                        'Import': {
+                            'PolicyArn': obj.data.Arn
                         }
                     }
                 });
@@ -12308,7 +12324,12 @@ function performF2Mappings(objects) {
                     'service': 'iam',
                     'type': 'AWS::IAM::InstanceProfile',
                     'terraformType': 'aws_iam_instance_profile',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'InstanceProfileName': obj.data.InstanceProfileName
+                        }
+                    }
                 });
             } else if (obj.type == "eventbridge.rule") {
                 reqParams.cfn['Name'] = obj.data.Name;

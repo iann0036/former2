@@ -878,7 +878,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     blockUI('#section-securityidentityandcompliance-iam-groups-datatable');
     blockUI('#section-securityidentityandcompliance-iam-roles-datatable');
     blockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
-    blockUI('#section-securityidentityandcompliance-iam-managedpolices-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
     blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
     blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
@@ -950,10 +950,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 })
             ]);
         }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     });
 
     await sdkcall("IAM", "listGroups", {
@@ -1004,9 +1000,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }));
             });
         }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-groups-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     });
 
     await sdkcall("IAM", "listRoles", {
@@ -1072,10 +1065,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }));
             });
         }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
-        unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     });
 
     await sdkcall("IAM", "listPolicies", {
@@ -1108,8 +1097,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             }
             return Promise.resolve();
         }));
-
-        unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
     });
 
     await sdkcall("IAM", "listInstanceProfiles", {
@@ -1128,9 +1115,18 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 path: instanceProfile.Path
             }]);
         });
-
-        unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     });
+
+    unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-groups-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-managedpolicies-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
 }
 
 /* ========================================================================== */

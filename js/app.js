@@ -1337,7 +1337,7 @@ eligibleImportResources = {
     'AWS::AutoScaling::AutoScalingGroup': {'importProperties': ['AutoScalingGroupName']},
     'AWS::CloudWatch::Alarm': {'importProperties': ['AlarmName']},
     'AWS::AutoScaling::ScalingPolicy': {'importProperties': ['PolicyName']},
-    'AWS::CloudFormation::Stack': {'importProperties': ['StackId']}, // interesting...
+    'AWS::CloudFormation::Stack': {'importProperties': ['StackId'], 'capabilities': ['CAPABILITY_NAMED_IAM']}, // interesting...
     'AWS::DynamoDB::Table': {'importProperties': ['TableName']},
     'AWS::EC2::EIP': {'importProperties': ['PublicIp']},
     'AWS::EC2::NetworkAcl': {'importProperties': ['NetworkAclId']},
@@ -1356,12 +1356,18 @@ eligibleImportResources = {
     'AWS::Lambda::Function': {'importProperties': ['FunctionName']},
     'AWS::Logs::SubscriptionFilter': {'importProperties': ['LogGroupName', 'FilterName']},
     'AWS::SQS::Queue': {'importProperties': ['QueueUrl']},
-    'AWS::S3::Bucket': {'importProperties': ['BucketName']}
-}; // TODO: 8 IAM resource types
+    'AWS::S3::Bucket': {'importProperties': ['BucketName']},
+    'AWS::IAM::Group': {'importProperties': ['GroupName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
+    'AWS::IAM::InstanceProfile': {'importProperties': ['InstanceProfileName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
+    'AWS::IAM::Role': {'importProperties': ['RoleName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
+    'AWS::IAM::User': {'importProperties': ['UserName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
+    'AWS::IAM::ManagedPolicy': {'importProperties': ['PolicyArn'], 'capabilities': ['CAPABILITY_NAMED_IAM']}
+};
 
 async function importResources(stack_name, deletion_policy) {
     var importable_resources = [];
     var resources_to_import = [];
+    var capabilities = [];
     tracked_resources.forEach(res => {
         if ('type' in res && res['type'] in eligibleImportResources) {
             importable_resources.push(res);
@@ -1374,12 +1380,21 @@ async function importResources(stack_name, deletion_policy) {
                 'ResourceIdentifier': resource_identifier,
                 'ResourceType': res.type
             });
+            if ('capabilities' in eligibleImportResources[res.type]) {
+                capabilities = eligibleImportResources[res.type].capabilities; // TODO: Make aggregate
+            }
         }
     });
 
     var mapped_cfn_output = compileOutputs(importable_resources, deletion_policy)['cfn'];
     
-    // TODO: Check 50kb limit
+    if (mapped_cfn_output.length > 51200) {
+        $('#import-button').removeAttr('disabled');
+        $('#import-button').text("Create Change Set");
+        $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
+            <strong><i class="fa fa-exclamation-circle"></i></strong> Cannot create a change set as the total length of the template would exceed 50kb
+        </div>`);
+    }
 
     var changeSetName = 'Import' + Math.round((new Date()).getTime() / 1000);
 
@@ -1388,7 +1403,8 @@ async function importResources(stack_name, deletion_policy) {
         StackName: stack_name,
         ChangeSetType: "IMPORT",
         ResourcesToImport: resources_to_import,
-        TemplateBody: mapped_cfn_output
+        TemplateBody: mapped_cfn_output,
+        Capabilities: capabilities
     }, true).then(async (data) => {
         await sdkcallwaiter("CloudFormation", "waitFor", "changeSetCreateComplete", {
             ChangeSetName: changeSetName,
