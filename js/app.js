@@ -1431,6 +1431,7 @@ async function importResources(stack_name, deletion_policy) {
                 StackName: stack_name,
                 ClientRequestToken: crt
             }, true).then(async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 4000)); // eventual consistency weirdness
                 await sdkcallwaiter("CloudFormation", "waitFor", "stackImportComplete", {
                     StackName: stack_name
                 });
