@@ -203,10 +203,7 @@ function lambdaRuntimeFormatter(data) {
 
 function sdkcallwaiter(svc, method, params1, params2) {
     return new Promise(function(resolve, reject) {
-        var service = new AWS[svc]({region: region});
-        if (svc == "GlobalAccelerator") {
-            service = new AWS[svc]({region: 'us-west-2'});
-        }
+        var service = new _AWS[svc]({region: region});
 
         service[method].call(service, params1, params2, async function(err, data) {
             resolve();
