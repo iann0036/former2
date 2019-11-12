@@ -522,6 +522,34 @@
                        </div>
                    </div>
                </div>
+               <div class="modal fade" id="importmodal" tabindex="-1" role="dialog" aria-labelledby="importmodal" aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                      <div class="modal-content">
+                          <div class="modal-body">
+                              <br />
+                              <h4 class="modal-title">Import into a CloudFormation Stack</h4>
+                              <p>Enter the details below to create a CloudFormation Stack containing the selected resources.</p>
+                              <fieldset class="form-group">
+                                <label class="form-label semibold" for="import-stackname">Stack Name</label>
+                                <input type="text" class="form-control" id="import-stackname" placeholder="MyStack" value="">
+                              </fieldset>
+                              <fieldset class="form-group">
+                                <label class="form-label semibold" for="import-deletionpolicy">Deletion Policy</label>
+                                <select id="import-deletionpolicy" class="select2-arrow manual select2-no-search-arrow">
+                                    <option value="Retain">Retain</option>
+                                    <option value="Delete">Delete</option>
+                                </select>
+                              </fieldset>
+                              <div id="import-warnings"></div>
+                              <br />
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                              <button type="button" class="btn btn-primary" disabled id="import-button">Create Change Set</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
 
                 <header class="section-header">
                     <div class="tbl">
@@ -534,6 +562,7 @@
                                 </ol>
                             </div>
                             <button id="header-button-clear-outputs" type="button" class="f2-header-button btn btn-danger-outline" style="margin-left: 16px; display: none;"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Clear All</button>
+                            <button id="header-button-import-cfn" type="button" class="f2-header-button btn btn-info-outline" style="margin-left: 16px; display: none;"><i class="fa fa-cloud-upload"></i>&nbsp;&nbsp;Import</button>
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
@@ -1315,7 +1344,7 @@
 
         <script src="js/deepmerge.js"></script>
 
-        <script src="aws-sdk-2.567.0.min.js"></script>
+        <script src="aws-sdk-2.569.0.min.js"></script>
         <script src="js/RelationshipTypeMap.js"></script>
 
         <script src="js/mappings.js"></script>

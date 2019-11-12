@@ -479,6 +479,7 @@ $(document).ready(function(){
 
     function doNavigation() {
         $('#header-button-copy-cfn').attr('style', 'display: none;');
+        $('#header-button-import-cfn').attr('style', 'margin-left: 16px; display: none;');
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdkts').attr('style', 'display: none;');
@@ -518,6 +519,7 @@ $(document).ready(function(){
             $('#header-button-clear-outputs').attr('style', 'margin-left: 16px; display: none;');
             if (location.hash == "#section-outputs-cloudformation") {
                 $('#header-button-copy-cfn').attr('style', '');
+                $('#header-button-import-cfn').attr('style', 'margin-left: 16px;');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
                 
                 setTimeout(function(){
@@ -614,7 +616,7 @@ $(document).ready(function(){
     function regenerateOutputs() {
         return new Promise(function(resolve, reject) {
             tracked_resources = performF2Mappings(output_objects);
-            var mapped_outputs = compileOutputs(tracked_resources);
+            var mapped_outputs = compileOutputs(tracked_resources, null);
 
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
             setTimeout(function(){
@@ -942,6 +944,42 @@ $(document).ready(function(){
     });
 
     /* ========================================================================== */
+    // Import
+    /* ========================================================================== */
+
+    $('#header-button-import-cfn').click(function(){
+        $('#import-warnings').html("");
+        $('#import-stackname').val("");
+
+        var non_importable_resources = getNonImportableResources();
+        non_importable_resources.forEach(res => {
+            $('#import-warnings').append(`<div class="alert alert-warning" role="alert">
+    <strong><i class="fa fa-warning"></i> Non-compatible Resource: </strong>${res.obj.id} (${res.type}). This resource will not be imported.
+</div>`);
+        });
+
+        $('#import-button').attr('disabled','disabled');
+        $('#import-button').text("Create Change Set");
+
+        $('#import-button').off('click').on('click', function() {
+            $('#import-button').attr('disabled', 'disabled');
+            $('#import-button').text("Creating change set...");
+            
+            importResources($('#import-stackname').val(), $('#import-deletionpolicy').val());
+        });
+
+        $('#importmodal').modal('show');
+    });
+
+    $('#import-stackname').on('input', function() {
+        if ($('#import-stackname').val() == "") {
+            $('#import-button').attr("disabled", "disabled");
+        } else {
+            $('#import-button').removeAttr("disabled");
+        }
+    });
+
+    /* ========================================================================== */
     // Misc
     /* ========================================================================== */
 
@@ -1265,4 +1303,155 @@ async function getResourceStackAssociation() {
     });
 
     console.log(templates);
+}
+
+// Import
+
+eligibleImportResources = {
+    'AWS::ApiGateway::Authorizer': {'importProperties': ['RestApiId', 'AuthorizerId']},
+    'AWS::ApiGateway::Deployment': {'importProperties': ['RestApiId', 'DeploymentId']},
+    'AWS::ApiGateway::Method': {'importProperties': ['RestApiId', 'ResourceId', 'HttpMethod']},
+    'AWS::ApiGateway::Model': {'importProperties': ['RestApiId', 'Name']},
+    'AWS::ApiGateway::RestApi': {'importProperties': ['RestApiId']},
+    'AWS::AutoScaling::LaunchConfiguration': {'importProperties': ['LaunchConfigurationName']},
+    'AWS::EC2::InternetGateway': {'importProperties': ['InternetGatewayId']},
+    'AWS::EC2::Instance': {'importProperties': ['InstanceId']},
+    'AWS::EC2::NatGateway': {'importProperties': ['NatGatewayId']},
+    'AWS::EC2::RouteTable': {'importProperties': ['RouteTableId']},
+    'AWS::ElasticLoadBalancingV2::LoadBalancer': {'importProperties': ['LoadBalancerArn']},
+    'AWS::Events::Rule': {'importProperties': ['Name']},
+    'AWS::ApiGateway::Stage': {'importProperties': ['RestApiId', 'StageName']},
+    'AWS::ApiGateway::Resource': {'importProperties': ['RestApiId', 'ResourceId']},
+    'AWS::ApiGateway::RequestValidator': {'importProperties': ['RestApiId', 'RequestValidatorId']},
+    'AWS::AutoScaling::LifecycleHook': {'importProperties': ['AutoScalingGroupName', 'LifecycleHookName']},
+    'AWS::AutoScaling::ScheduledAction': {'importProperties': ['ScheduledActionName']},
+    'AWS::CloudTrail::Trail': {'importProperties': ['TrailName']},
+    'AWS::EC2::Subnet': {'importProperties': ['SubnetId']},
+    'AWS::EC2::SecurityGroup': {'importProperties': ['GroupId']},
+    'AWS::EC2::VPC': {'importProperties': ['VpcId']},
+    'AWS::ElasticLoadBalancing::LoadBalancer': {'importProperties': ['LoadBalancerName']},
+    'AWS::ElasticLoadBalancingV2::Listener': {'importProperties': ['ListenerArn']},
+    'AWS::ElasticLoadBalancingV2::ListenerRule': {'importProperties': ['RuleArn']},
+    'AWS::Logs::MetricFilter': {'importProperties': ['FilterName']},
+    'AWS::Lambda::Alias': {'importProperties': ['AliasArn']},
+    'AWS::AutoScaling::AutoScalingGroup': {'importProperties': ['AutoScalingGroupName']},
+    'AWS::CloudWatch::Alarm': {'importProperties': ['AlarmName']},
+    'AWS::AutoScaling::ScalingPolicy': {'importProperties': ['PolicyName']},
+    'AWS::CloudFormation::Stack': {'importProperties': ['StackId']}, // interesting...
+    'AWS::DynamoDB::Table': {'importProperties': ['TableName']},
+    'AWS::EC2::EIP': {'importProperties': ['PublicIp']},
+    'AWS::EC2::NetworkAcl': {'importProperties': ['NetworkAclId']},
+    'AWS::ECS::TaskDefinition': {'importProperties': ['TaskDefinitionArn']},
+    'AWS::Lambda::Version': {'importProperties': ['FunctionArn']}, // just FunctionArn?
+    'AWS::RDS::DBCluster': {'importProperties': ['DBClusterIdentifier']},
+    'AWS::Route53::HostedZone': {'importProperties': ['HostedZoneId']},
+    'AWS::ECS::Cluster': {'importProperties': ['ClusterName']},
+    'AWS::ECS::Service': {'importProperties': ['ServiceArn', 'Cluster']}, // ClusterArn ?
+    'AWS::EC2::Volume': {'importProperties': ['VolumeId']},
+    'AWS::IoT::Thing': {'importProperties': ['ThingName']},
+    'AWS::Logs::LogGroup': {'importProperties': ['LogGroupName']},
+    'AWS::RDS::DBInstance': {'importProperties': ['DBInstanceIdentifier']},
+    'AWS::SNS::Topic': {'importProperties': ['TopicArn']},
+    'AWS::EC2::NetworkInterface': {'importProperties': ['NetworkInterfaceId']},
+    'AWS::Lambda::Function': {'importProperties': ['FunctionName']},
+    'AWS::Logs::SubscriptionFilter': {'importProperties': ['LogGroupName', 'FilterName']},
+    'AWS::SQS::Queue': {'importProperties': ['QueueUrl']},
+    'AWS::S3::Bucket': {'importProperties': ['BucketName']}
+}; // TODO: 8 IAM resource types
+
+async function importResources(stack_name, deletion_policy) {
+    var importable_resources = [];
+    var resources_to_import = [];
+    tracked_resources.forEach(res => {
+        if ('type' in res && res['type'] in eligibleImportResources) {
+            importable_resources.push(res);
+            var resource_identifier = {};
+            eligibleImportResources[res.type].importProperties.forEach(prop => {
+                resource_identifier[prop] = res.returnValues.Import[prop];
+            });
+            resources_to_import.push({
+                'LogicalResourceId': res.logicalId,
+                'ResourceIdentifier': resource_identifier,
+                'ResourceType': res.type
+            });
+        }
+    });
+
+    var mapped_cfn_output = compileOutputs(importable_resources, deletion_policy)['cfn'];
+    
+    // TODO: Check 50kb limit
+
+    var changeSetName = 'Import' + Math.round((new Date()).getTime() / 1000);
+
+    await sdkcall("CloudFormation", "createChangeSet", {
+        ChangeSetName: changeSetName,
+        StackName: stack_name,
+        ChangeSetType: "IMPORT",
+        ResourcesToImport: resources_to_import,
+        TemplateBody: mapped_cfn_output
+    }, true).then(async (data) => {
+        await sdkcallwaiter("CloudFormation", "waitFor", "changeSetCreateComplete", {
+            ChangeSetName: changeSetName,
+            StackName: stack_name
+        });
+
+        var stack_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/stackinfo?stackId=" + encodeURIComponent(data.StackId);
+        var change_set_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/changesets/changes?stackId=" + encodeURIComponent(data.StackId) + "&changeSetId=" + encodeURIComponent(data.Id);
+        $('#import-button').removeAttr('disabled');
+        $('#import-button').text("Execute Change Set");
+        $('#import-warnings').append(`<div class="alert alert-info" role="alert">
+            <strong><i class="fa fa-info-circle"></i></strong> Created change set <a target="_blank" href="${change_set_url}">${changeSetName}</a> in stack <a target="_blank" href="${stack_url}">${stack_name}</i>
+        </div>`);
+
+        $('#import-button').off('click').on('click', function() {
+            $('#import-button').attr('disabled', 'disabled');
+            $('#import-button').text("Executing change set...");
+            var crt = (new Date()).getTime().toString();
+            
+            sdkcall("CloudFormation", "executeChangeSet", {
+                ChangeSetName: changeSetName,
+                StackName: stack_name,
+                ClientRequestToken: crt
+            }, true).then(async (data) => {
+                await sdkcallwaiter("CloudFormation", "waitFor", "stackImportComplete", {
+                    StackName: stack_name
+                });
+
+                $('#import-button').removeAttr('disabled');
+                $('#import-button').text("Close");
+                $('#import-warnings').append(`<div class="alert alert-info" role="alert">
+                    <strong><i class="fa fa-info-circle"></i></strong> Successfully deployed stack <a target="_blank" href="${stack_url}">${stack_name}</i>
+                </div>`);
+
+                $('#import-button').off('click').on('click', function() {
+                    $('#importmodal').modal('hide');
+                });
+            }).catch(e => {
+                console.log(e);
+                $('#import-button').removeAttr('disabled');
+                $('#import-button').text("Execute Change Set");
+                $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
+                    <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred executing the change set. Check your IAM credentials have appropriate permissions.
+                </div>`);
+            });
+        });
+    }).catch(e => {
+        console.log(e);
+        $('#import-button').removeAttr('disabled');
+        $('#import-button').text("Create Change Set");
+        $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
+            <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred creating the change set. Check your IAM credentials have appropriate permissions.
+        </div>`);
+    });
+}
+
+function getNonImportableResources() {
+    var non_importable_resources = [];
+    tracked_resources.forEach(res => {
+        if ('type' in res && !(res['type'] in eligibleImportResources)) {
+            non_importable_resources.push(res);
+        }
+    });
+
+    return non_importable_resources;
 }

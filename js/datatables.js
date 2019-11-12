@@ -201,6 +201,19 @@ function lambdaRuntimeFormatter(data) {
 // SDK Helpers
 /* ========================================================================== */
 
+function sdkcallwaiter(svc, method, params1, params2) {
+    return new Promise(function(resolve, reject) {
+        var service = new AWS[svc]({region: region});
+        if (svc == "GlobalAccelerator") {
+            service = new AWS[svc]({region: 'us-west-2'});
+        }
+
+        service[method].call(service, params1, params2, async function(err, data) {
+            resolve();
+        });
+    });
+}
+
 function sdkcall(svc, method, params, alert_on_errors, backoff) {
     return new Promise(function(resolve, reject) {
         var service = new AWS[svc]({region: region});
@@ -7190,7 +7203,7 @@ async function updateDatatableComputeLambda() {
                 }, true).then((data) => {
                     data.Versions.forEach(version => {
                         $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
-                            f2id: version.FunctionArn + " " + version.Version,
+                            f2id: version.FunctionArn + ":" + version.Version,
                             f2type: 'lambda.version',
                             f2data: version,
                             f2region: region,
@@ -9657,6 +9670,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                 sdkcall("SNS", "getTopicAttributes", {
                     TopicArn: topic.TopicArn
                 }, true).then((data) => {
+                    data['TopicArn'] = topic.TopicArn;
                     $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('append', [{
                         f2id: topic.TopicArn,
                         f2type: 'sns.topic',
@@ -9783,6 +9797,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                 QueueUrl: queueUrl,
                 AttributeNames: ['All']
             }, true).then((data) => {
+                data['QueueUrl'] = queueUrl;
                 $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('append', [{
                     f2id: queueUrl,
                     f2type: 'sqs.queue',

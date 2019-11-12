@@ -1649,7 +1649,7 @@ function compileMapIam(compiled_iam_outputs, service, method, options, region, w
     return compiled_iam_outputs;
 }
 
-function outputMapCfn(index, service, type, options, region, was_blocked, logicalId) {
+function outputMapCfn(index, service, type, options, region, was_blocked, logicalId, cfn_deletion_policy) {
     var output = '';
     var params = '';
 
@@ -1669,12 +1669,14 @@ ${cfnspacing}${cfnspacing}${cfnspacing}${option}: ${optionvalue}`;
     }
 
     if (params.trim() == "") {
-        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}${cfn_deletion_policy ? `
+${cfnspacing}${cfnspacing}DeletionPolicy: "${cfn_deletion_policy}"` : ''}
 ${cfnspacing}${cfnspacing}Type: "${type}"
 
 `;
     } else {
-        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}
+        output += `${cfnspacing}${logicalId}:${was_blocked ? ' # blocked' : ''}${cfn_deletion_policy ? `
+${cfnspacing}${cfnspacing}DeletionPolicy: "${cfn_deletion_policy}"` : ''}
 ${cfnspacing}${cfnspacing}Type: "${type}"
 ${cfnspacing}${cfnspacing}Properties:${params}
 `;
@@ -1775,7 +1777,7 @@ function outputMapCli(service, method, options, region, was_blocked) {
     return output;
 }
 
-function compileOutputs() {
+function compileOutputs(tracked_resources, cfn_deletion_policy) {
     /*if (!outputs.length) {
         return {
             'boto3': '# No resources generated',
@@ -1955,7 +1957,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 
     for (var i=0; i<tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
-            compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy);
             compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
@@ -2315,6 +2317,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.Configuration.FunctionName,
                         'GetAtt': {
                             'Arn': obj.data.Configuration.FunctionArn
+                        },
+                        'Import': {
+                            'FunctionName': obj.data.Configuration.FunctionName
                         }
                     }
                 });
@@ -2374,6 +2379,9 @@ function performF2Mappings(objects) {
                         'Terraform': {
                             'id': obj.data.VpcId,
                             'cidr_block': obj.data.CidrBlock
+                        },
+                        'Import': {
+                            'VpcId': obj.data.VpcId
                         }
                     }
                 });
@@ -2725,7 +2733,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_s3_bucket',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.Name
+                        'Ref': obj.data.Name,
+                        'Import': {
+                            'BucketName': obj.data.Name
+                        }
                     }
                 });
             } else if (obj.type == "ec2.egressonlyinternetgateway") {
@@ -2769,7 +2780,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_internet_gateway',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.InternetGatewayId
+                        'Ref': obj.data.InternetGatewayId,
+                        'Import': {
+                            'InternetGatewayId': obj.data.InternetGatewayId
+                        }
                     }
                 });
             } else if (obj.type == "ec2.gatewayattachment") {
@@ -2964,7 +2978,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_route_table',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.RouteTableId
+                        'Ref': obj.data.RouteTableId,
+                        'Import': {
+                            'RouteTableId': obj.data.RouteTableId
+                        }
                     }
                 });
             } else if (obj.type == "ec2.networkacl") {
@@ -2987,7 +3004,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_network_acl',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.NetworkAclId
+                        'Ref': obj.data.NetworkAclId,
+                        'Import': {
+                            'NetworkAclId': obj.data.NetworkAclId
+                        }
                     }
                 });
             } else if (obj.type == "ec2.networkaclentry") {
@@ -3109,6 +3129,9 @@ function performF2Mappings(objects) {
                         'GetAtt': {
                             'AvailabilityZone': obj.data.AvailabilityZone,
                             'VpcId': obj.data.VpcId
+                        },
+                        'Import': {
+                            'SubnetId': obj.data.SubnetId
                         }
                     }
                 });
@@ -3162,7 +3185,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_lambda_alias',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.AliasArn
+                        'Ref': obj.data.AliasArn,
+                        'Import': {
+                            'AliasArn': obj.data.AliasArn
+                        }
                     }
                 });
             } else if (obj.type == "ec2.placementgroup") {
@@ -3286,7 +3312,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_route53_zone',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.Id.split("/").pop()
+                        'Ref': obj.data.Id.split("/").pop(),
+                        'Import': {
+                            'HostedZoneId': obj.data.Id.split("/").pop()
+                        }
                         /*
                         TODO:
                         NameServers
@@ -3395,7 +3424,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_ebs_volume',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.VolumeId
+                        'Ref': obj.data.VolumeId,
+                        'Import': {
+                            'VolumeId': obj.data.VolumeId
+                        }
                     }
                 });
             } else if (obj.type == "ec2.volumeattachment") {
@@ -3498,6 +3530,9 @@ function performF2Mappings(objects) {
                             'Endpoint.Address': obj.data.Endpoint,
                             'Endpoint.Port': obj.data.Port,
                             'ReadEndpoint.Address': obj.data.ReaderEndpoint
+                        },
+                        'Import': {
+                            'DBClusterIdentifier': obj.data.DBClusterIdentifier
                         }
                     }
                 });
@@ -3615,6 +3650,9 @@ function performF2Mappings(objects) {
                         'GetAtt': {
                             'Endpoint.Address': obj.data.Endpoint.Address,
                             'Endpoint.Port': obj.data.Endpoint.Port
+                        },
+                        'Import': {
+                            'DBInstanceIdentifier': obj.data.DBInstanceIdentifier
                         }
                     }
                 });
@@ -3776,6 +3814,9 @@ function performF2Mappings(objects) {
                             'PublicDnsName': obj.data.PublicDnsName,
                             'PrivateIp': obj.data.PrivateIpAddress,
                             'PublicIp': obj.data.PublicIpAddress
+                        },
+                        'Import': {
+                            'InstanceId': obj.data.InstanceId
                         }
                     }
                 });
@@ -3804,6 +3845,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.TopicArn,
                         'GetAtt': {
                             'TopicName': obj.data.Attributes.TopicArn.split(':').pop()
+                        },
+                        'Import': {
+                            'TopicArn': obj.data.TopicArn
                         }
                     }
                 });
@@ -3864,6 +3908,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.Attributes.QueueArn,
                         'GetAtt': {
                             'QueueName': obj.data.Attributes.QueueArn.split(":").pop()
+                        },
+                        'Import': {
+                            'QueueUrl': obj.data.QueueUrl
                         }
                     }
                 });
@@ -4268,6 +4315,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.PublicIp,
                         'GetAtt': {
                             'AllocationId': obj.data.AllocationId
+                        },
+                        'Import': {
+                            'PublicIp': obj.data.PublicIp
                         }
                     }
                 });
@@ -4334,7 +4384,12 @@ function performF2Mappings(objects) {
                     'service': 'ec2',
                     'type': 'AWS::EC2::NetworkInterface',
                     'terraformType': 'aws_network_interface',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'NetworkInterfaceId': obj.data.NetworkInterfaceId
+                        }
+                    }
                 });
             } else if (obj.type == "redshift.cluster") {
                 reqParams.cfn['ClusterIdentifier'] = obj.data.ClusterIdentifier;
@@ -5255,6 +5310,9 @@ function performF2Mappings(objects) {
                         'GetAtt': {
                             'Arn': obj.data.TableArn,
                             'StreamArn': obj.data.LatestStreamArn
+                        },
+                        'Import': {
+                            'TableName': obj.data.TableName
                         }
                     }
                 });
@@ -5304,6 +5362,9 @@ function performF2Mappings(objects) {
                         'GetAtt': {
                             'Arn': obj.data.TrailARN,
                             'SnsTopicArn': obj.data.SnsTopicARN
+                        },
+                        'Import': {
+                            'TrailName': obj.data.Name
                         }
                     }
                 });
@@ -5381,7 +5442,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_autoscaling_policy',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.PolicyARN
+                        'Ref': obj.data.PolicyARN,
+                        'Import': {
+                            'PolicyName': obj.data.PolicyName
+                        }
                     }
                 });
             } else if (obj.type == "autoscaling.scheduledaction") {
@@ -5409,7 +5473,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_autoscaling_schedule',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.AutoScalingGroupName
+                        'Ref': obj.data.AutoScalingGroupName,
+                        'Import': {
+                            'ScheduledActionName': obj.data.ScheduledActionName
+                        }
                     }
                 });
             } else if (obj.type == "autoscaling.autoscalinggroup") {
@@ -5530,7 +5597,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_autoscaling_group',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.AutoScalingGroupName
+                        'Ref': obj.data.AutoScalingGroupName,
+                        'Import': {
+                            'AutoScalingGroupName': obj.data.AutoScalingGroupName
+                        }
                     }
                 });
             } else if (obj.type == "autoscaling.launchconfiguration") {
@@ -5583,7 +5653,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_launch_configuration',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.LaunchConfigurationName
+                        'Ref': obj.data.LaunchConfigurationName,
+                        'Import': {
+                            'LaunchConfigurationName': obj.data.LaunchConfigurationName
+                        }
                     }
                 });
             } else if (obj.type == "ec2.securitygroup") {
@@ -5753,6 +5826,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.GroupId,
                         'Terraform': {
                             'id': obj.data.GroupId
+                        },
+                        'Import': {
+                            'GroupId': obj.data.GroupId
                         }
                     }
                 });
@@ -5886,7 +5962,12 @@ function performF2Mappings(objects) {
                     'service': 'elb',
                     'type': 'AWS::ElasticLoadBalancing::LoadBalancer',
                     'terraformType': 'aws_elb',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'LoadBalancerName': obj.data.LoadBalancerName
+                        }
+                    }
                 });
             } else if (obj.type == "cloudwatch.alarm") {
                 reqParams.cfn['AlarmName'] = obj.data.AlarmName;
@@ -5969,6 +6050,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.AlarmName,
                         'GetAtt': {
                             'Arn': obj.data.AlarmArn
+                        },
+                        'Import': {
+                            'AlarmName': obj.data.AlarmName
                         }
                     }
                 });
@@ -6180,7 +6264,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_rest_api',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.id
+                        'Ref': obj.data.id,
+                        'Import': {
+                            'RestApiId': obj.data.id
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.stage") {
@@ -6263,7 +6350,11 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_stage',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.stageName
+                        'Ref': obj.data.stageName,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'StageName': obj.data.stageName
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.deployment") {
@@ -6288,7 +6379,11 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_deployment',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.id
+                        'Ref': obj.data.id,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'DeploymentId': obj.data.id
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.resource") {
@@ -6308,7 +6403,11 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_resource',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.id
+                        'Ref': obj.data.id,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'ResourceId': obj.data.id
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.model") {
@@ -6332,7 +6431,11 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_model',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.name
+                        'Ref': obj.data.name,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'Name': obj.data.name
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.authorizer") {
@@ -6366,7 +6469,11 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_authorizer',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.id
+                        'Ref': obj.data.id,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'AuthorizerId': obj.data.id
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.method") {
@@ -6442,7 +6549,12 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_api_gateway_method',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.id
+                        'Ref': obj.data.id,
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'ResourceId': obj.data.resourceId,
+                            'HttpMethod': obj.data.httpMethod
+                        }
                     }
                 });
             } else if (obj.type == "apigateway.gatewayresponse") {
@@ -6532,7 +6644,13 @@ function performF2Mappings(objects) {
                     'service': 'apigateway',
                     'type': 'AWS::ApiGateway::RequestValidator',
                     'terraformType': 'aws_api_gateway_request_validator',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'RestApiId': obj.data.restApiId,
+                            'RequestValidatorId': obj.data.id
+                        }
+                    }
                 });
             } else if (obj.type == "apigateway.account") {
                 reqParams.cfn['CloudWatchRoleArn'] = obj.data.cloudwatchRoleArn;
@@ -7464,7 +7582,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_iot_thing',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.thing.thingName
+                        'Ref': obj.data.thing.thingName,
+                        'Import': {
+                            'ThingName': obj.data.thing.thingName
+                        }
                     }
                 });
             } else if (obj.type == "iot.thingprincipalattachment") {
@@ -12236,6 +12357,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.Name,
                         'GetAtt': {
                             'Arn': obj.data.Arn
+                        },
+                        'Import': {
+                            'Name': obj.data.Name
                         }
                     }
                 });
@@ -12406,7 +12530,13 @@ function performF2Mappings(objects) {
                     'service': 'cloudwatch',
                     'type': 'AWS::Logs::SubscriptionFilter',
                     'terraformType': 'aws_cloudwatch_log_subscription_filter',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'LogGroupName': obj.data.logGroupName,
+                            'FilterName': obj.data.filterName
+                        }
+                    }
                 });
             } else if (obj.type == "cloudwatch.loggroup") {
                 reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
@@ -12421,7 +12551,12 @@ function performF2Mappings(objects) {
                     'service': 'cloudwatch',
                     'type': 'AWS::Logs::LogGroup',
                     'terraformType': 'aws_cloudwatch_log_group',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'LogGroupName': obj.data.logGroupName
+                        }
+                    }
                 });
             } else if (obj.type == "cloudwatch.metricfilter") {
                 reqParams.cfn['FilterPattern'] = obj.data.filterPattern;
@@ -12454,7 +12589,12 @@ function performF2Mappings(objects) {
                     'service': 'cloudwatch',
                     'type': 'AWS::Logs::MetricFilter',
                     'terraformType': 'aws_cloudwatch_log_metric_filter',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'FilterName': obj.data.filterName
+                        }
+                    }
                 });
             } else if (obj.type == "cloudwatch.dashboard") {
                 reqParams.cfn['DashboardName'] = obj.data.DashboardName;
@@ -13845,7 +13985,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_nat_gateway',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.NatGatewayId
+                        'Ref': obj.data.NatGatewayId,
+                        'Import': {
+                            'NatGatewayId': obj.data.NatGatewayId
+                        }
                     }
                 });
             } else if (obj.type == "ecs.cluster") {
@@ -13864,6 +14007,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.clusterName,
                         'GetAtt': {
                             'Arn': obj.data.clusterArn
+                        },
+                        'Import': {
+                            'ClusterName': obj.data.clusterName
                         }
                     }
                 });
@@ -13985,6 +14131,10 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.serviceArn,
                         'GetAtt': {
                             'Name': obj.data.serviceName
+                        },
+                        'Import': {
+                            'ServiceArn': obj.data.serviceArn,
+                            'Cluster': obj.data.clusterArn
                         }
                     }
                 });
@@ -14268,6 +14418,9 @@ function performF2Mappings(objects) {
                         'Ref': obj.data.taskDefinitionArn,
                         'Terraform': {
                             'arn': obj.data.taskDefinitionArn
+                        },
+                        'Import': {
+                            'TaskDefinitionArn': obj.data.taskDefinitionArn
                         }
                     }
                 });
@@ -15018,6 +15171,9 @@ function performF2Mappings(objects) {
                             //'LoadBalancerFullName': obj.data.,
                             'LoadBalancerName': obj.data.LoadBalancerName,
                             'SecurityGroups': obj.data.SecurityGroups
+                        },
+                        'Import': {
+                            'LoadBalancerArn': obj.data.LoadBalancerArn
                         }
                     }
                 });
@@ -15190,7 +15346,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_lb_listener',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.ListenerArn
+                        'Ref': obj.data.ListenerArn,
+                        'Import': {
+                            'ListenerArn': obj.data.ListenerArn
+                        }
                     }
                 });
             } else if (obj.type == "elbv2.loadbalancerlistenerrule") {
@@ -15223,7 +15382,10 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_lb_listener_rule',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.RuleArn
+                        'Ref': obj.data.RuleArn,
+                        'Import': {
+                            'RuleArn': obj.data.RuleArn
+                        }
                     }
                 });
             } else if (obj.type == "lambda.version") {
@@ -15241,7 +15403,12 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'lambda',
                     'type': 'AWS::Lambda::Version',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'FunctionArn': obj.data.FunctionArn + ":" + obj.data.Version
+                        }
+                    }
                 });
             } else if (obj.type == "lambda.layerversion") {
                 reqParams.cfn['Description'] = obj.data.Description;
@@ -15689,7 +15856,13 @@ function performF2Mappings(objects) {
                     'service': 'autoscaling',
                     'type': 'AWS::AutoScaling::LifecycleHook',
                     'terraformType': 'aws_autoscaling_lifecycle_hook',
-                    'options': reqParams
+                    'options': reqParams,
+                    'returnValues': {
+                        'Import': {
+                            'AutoScalingGroupName': obj.data.AutoScalingGroupName,
+                            'LifecycleHookName': obj.data.LifecycleHookName
+                        }
+                    }
                 });
             } else if (obj.type == "elasticache.replicationgroup") {
                 reqParams.cfn['ReplicationGroupId'] = obj.data.ReplicationGroupId;
