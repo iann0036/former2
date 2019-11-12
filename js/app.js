@@ -1448,7 +1448,7 @@ async function importResources(stack_name, deletion_policy) {
                 $('#import-button').removeAttr('disabled');
                 $('#import-button').text("Execute Change Set");
                 $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
-                    <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred executing the change set. Check your IAM credentials have appropriate permissions.
+                    <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred executing the change set.
                 </div>`);
             });
         });
@@ -1457,7 +1457,7 @@ async function importResources(stack_name, deletion_policy) {
         $('#import-button').removeAttr('disabled');
         $('#import-button').text("Create Change Set");
         $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
-            <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred creating the change set. Check your IAM credentials have appropriate permissions.
+            <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred creating the change set.
         </div>`);
     });
 }
