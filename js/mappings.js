@@ -5894,16 +5894,16 @@ function performF2Mappings(objects) {
                     reqParams.tf['listener'] = [];
                     obj.data.ListenerDescriptions.forEach(listener => {
                         reqParams.cfn['Listeners'].push({
-                            'InstancePort': listener.Listener.InstanceProtocol,
-                            'InstanceProtocol': listener.Listener.InstancePort,
+                            'InstancePort': listener.Listener.InstancePort,
+                            'InstanceProtocol': listener.Listener.InstanceProtocol,
                             'LoadBalancerPort': listener.Listener.LoadBalancerPort,
                             'PolicyNames': listener.PolicyNames,
                             'Protocol': listener.Listener.Protocol,
                             'SSLCertificateId': listener.Listener.SSLCertificateId
                         });
                         reqParams.tf['listener'].push({
-                            'instance_port': listener.Listener.InstanceProtocol,
-                            'instance_protocol': listener.Listener.InstancePort,
+                            'instance_port': listener.Listener.InstancePort,
+                            'instance_protocol': listener.Listener.InstanceProtocol,
                             'lb_port': listener.Listener.LoadBalancerPort,
                             'lb_protocol': listener.Listener.Protocol,
                             'ssl_certificate_id': listener.Listener.SSLCertificateId
