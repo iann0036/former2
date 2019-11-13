@@ -25993,10 +25993,6 @@ async function updateDatatableAnalyticsGlue() {
                 }));
             });
         }));
-
-        unblockUI('#section-analytics-glue-databases-datatable');
-        unblockUI('#section-analytics-glue-tables-datatable');
-        unblockUI('#section-analytics-glue-partitions-datatable');
     });
 
     await sdkcall("Glue", "getCrawlers", {
@@ -26017,8 +26013,6 @@ async function updateDatatableAnalyticsGlue() {
                 version: crawler.Version
             }]);
         });
-
-        unblockUI('#section-analytics-glue-crawlers-datatable');
     });
 
     await sdkcall("Glue", "getClassifiers", {
@@ -26057,8 +26051,6 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             }
         });
-
-        unblockUI('#section-analytics-glue-classifiers-datatable');
     });
 
     await sdkcall("Glue", "getJobs", {
@@ -26077,8 +26069,6 @@ async function updateDatatableAnalyticsGlue() {
                 workertype: job.WorkerType
             }]);
         });
-
-        unblockUI('#section-analytics-glue-jobs-datatable');
     });
 
     await sdkcall("Glue", "getTriggers", {
@@ -26098,8 +26088,6 @@ async function updateDatatableAnalyticsGlue() {
                 schedule: trigger.Schedule
             }]);
         });
-
-        unblockUI('#section-analytics-glue-triggers-datatable');
     });
 
     await sdkcall("Glue", "getConnections", {
@@ -26118,8 +26106,6 @@ async function updateDatatableAnalyticsGlue() {
                 type: connection.ConnectionType
             }]);
         });
-
-        unblockUI('#section-analytics-glue-connections-datatable');
     });
 
     await sdkcall("Glue", "getMLTransforms", {
@@ -26139,8 +26125,6 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: transform.CreatedOn
             }]);
         });
-
-        unblockUI('#section-analytics-glue-mltransforms-datatable');
     });
 
     await sdkcall("Glue", "getDevEndpoints", {
@@ -26159,8 +26143,6 @@ async function updateDatatableAnalyticsGlue() {
                 availabilityzone: devEndpoint.AvailabilityZone
             }]);
         });
-
-        unblockUI('#section-analytics-glue-devendpoints-datatable');
     });
 
     await sdkcall("Glue", "listWorkflows", {
@@ -26183,8 +26165,6 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             });
         }));
-
-        unblockUI('#section-analytics-glue-workflows-datatable');
     });
 
     await sdkcall("Glue", "getSecurityConfigurations", {
@@ -26202,8 +26182,6 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: devEndpoint.CreatedTimeStamp
             }]);
         });
-
-        unblockUI('#section-analytics-glue-securityconfigurations-datatable');
     });
 
     await sdkcall("Glue", "getDataCatalogEncryptionSettings", {
@@ -26218,9 +26196,21 @@ async function updateDatatableAnalyticsGlue() {
             f2region: region,
             catalogid: "(current account)"
         }]);
-
-        unblockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
     });
+
+    unblockUI('#section-analytics-glue-databases-datatable');
+    unblockUI('#section-analytics-glue-tables-datatable');
+    unblockUI('#section-analytics-glue-partitions-datatable');
+    unblockUI('#section-analytics-glue-crawlers-datatable');
+    unblockUI('#section-analytics-glue-classifiers-datatable');
+    unblockUI('#section-analytics-glue-jobs-datatable');
+    unblockUI('#section-analytics-glue-triggers-datatable');
+    unblockUI('#section-analytics-glue-connections-datatable');
+    unblockUI('#section-analytics-glue-mltransforms-datatable');
+    unblockUI('#section-analytics-glue-devendpoints-datatable');
+    unblockUI('#section-analytics-glue-workflows-datatable');
+    unblockUI('#section-analytics-glue-securityconfigurations-datatable');
+    unblockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
 }
 
 /* ========================================================================== */
