@@ -1411,7 +1411,7 @@ async function importResources(stack_name, deletion_policy) {
             ChangeSetName: changeSetName,
             StackName: stack_name
         });
-        await new Promise(resolve => setTimeout(resolve, 4000)); // eventual consistency weirdness
+        await new Promise(resolve => setTimeout(resolve, 7000)); // eventual consistency weirdness
 
         var stack_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/stackinfo?stackId=" + encodeURIComponent(data.StackId);
         var change_set_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/changesets/changes?stackId=" + encodeURIComponent(data.StackId) + "&changeSetId=" + encodeURIComponent(data.Id);
