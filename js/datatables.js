@@ -8,6 +8,14 @@ function textFormatter(data) {
     return data;
 }
 
+function primaryFieldFormatter(data, row) {
+    if (row.f2link) {
+        return "<a href=\"" + row.f2link + "\" target=\"_blank\">" + data + "</a>";
+    }
+
+    return data;
+}
+
 function dateFormatter(data) {
     if (data) {
         if (typeof data == "string") {
@@ -492,6 +500,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -537,6 +546,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -582,6 +592,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -635,6 +646,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -688,6 +700,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -741,6 +754,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -802,6 +816,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -847,6 +862,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -894,6 +910,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 f2type: 'iam.user',
                 f2data: user,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/iam/home?#/users/' + user.UserName,
                 username: user.UserName,
                 path: user.Path,
                 id: user.UserId
@@ -960,6 +977,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 f2type: 'iam.group',
                 f2data: group,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/iam/home?#/groups/' + group.GroupName,
                 name: group.GroupName,
                 id: group.GroupId,
                 path: group.Path
@@ -1023,6 +1041,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     f2type: 'iam.role',
                     f2data: role,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/iam/home?#/roles/' + role.RoleName,
                     name: role.RoleName,
                     path: role.Path,
                     id: role.RoleId,
@@ -1084,6 +1103,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                             f2type: 'iam.managedpolicy',
                             f2data: managedPolicy,
                             f2region: region,
+                            f2link: 'https://console.aws.amazon.com/iam/home#/policies/' + managedPolicy.Arn,
                             name: managedPolicy.PolicyName,
                             id: managedPolicy.PolicyId,
                             path: managedPolicy.Path,
@@ -1151,6 +1171,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1213,6 +1234,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1267,6 +1289,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
                             f2type: 'kms.key',
                             f2data: keydata.KeyMetadata,
                             f2region: region,
+                            f2link: 'https://console.aws.amazon.com/kms/home#/kms/keys/' + keydata.KeyMetadata.KeyId,
                             id: keydata.KeyMetadata.KeyId,
                             accountid: keydata.KeyMetadata.AWSAccountId,
                             enabled: keydata.KeyMetadata.Enabled,
@@ -1328,6 +1351,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1373,6 +1397,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1418,6 +1443,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1479,6 +1505,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -1504,6 +1531,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -1529,6 +1557,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1574,6 +1603,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1619,6 +1649,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1656,6 +1687,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1717,6 +1749,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1754,6 +1787,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -1779,6 +1813,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1816,6 +1851,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1869,6 +1905,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1906,6 +1943,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -1931,6 +1969,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -1968,6 +2007,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2038,6 +2078,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2075,6 +2116,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2120,6 +2162,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2174,6 +2217,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2220,6 +2264,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2266,6 +2311,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2312,6 +2358,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2357,6 +2404,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2402,6 +2450,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2447,6 +2496,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2500,6 +2550,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2553,6 +2604,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2599,6 +2651,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2636,6 +2689,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2673,6 +2727,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2718,6 +2773,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2763,6 +2819,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2808,6 +2865,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2862,6 +2920,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2923,6 +2982,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -2976,6 +3036,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -3029,6 +3090,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -3066,6 +3128,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -3127,6 +3190,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -3180,6 +3244,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -3308,6 +3373,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         f2type: 'ec2.vpc',
                         f2data: vpc,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#vpcs:filter=' + vpc.VpcId,
                         vpcid: vpc.VpcId,
                         instancetenancy: vpc.InstanceTenancy,
                         cidrblock: vpc.CidrBlock
@@ -3344,6 +3410,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.subnet',
                 f2data: subnet,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#subnets:filter=' + subnet.SubnetId,
                 subnetid: subnet.SubnetId,
                 availabilityzone: subnet.AvailabilityZone,
                 cidrblock: subnet.CidrBlock,
@@ -3385,6 +3452,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.customergateway',
                 f2data: customerGateway,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home#CustomerGateways:CustomerGatewayId=' + customerGateway.CustomerGatewayId,
                 gatewayid: customerGateway.CustomerGatewayId,
                 bgpasn: customerGateway.BgpAsn,
                 ipaddress: customerGateway.IpAddress
@@ -3476,6 +3544,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.elasticip',
                 f2data: address,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#eips:filter=' + address.PublicIp,
                 ip: address.PublicIp,
                 instanceid: address.InstanceId,
                 allocationid: address.AllocationId,
@@ -4137,6 +4206,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4182,6 +4252,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4227,6 +4298,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4280,6 +4352,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4341,6 +4414,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4394,6 +4468,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4608,6 +4683,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4669,6 +4745,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4722,6 +4799,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4767,6 +4845,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4820,6 +4899,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4873,6 +4953,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4919,6 +5000,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -4957,6 +5039,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5010,6 +5093,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5071,6 +5155,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5124,6 +5209,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5177,6 +5263,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5222,6 +5309,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5275,6 +5363,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5285,7 +5374,7 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'lcid',
+                        field: 'ltid',
                         title: 'Launch Template ID',
                         sortable: true,
                         editable: true,
@@ -5320,6 +5409,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5381,6 +5471,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5442,6 +5533,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5479,6 +5571,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5540,6 +5633,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5593,6 +5687,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5662,6 +5757,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5715,6 +5811,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5776,6 +5873,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5837,6 +5935,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5882,6 +5981,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5935,6 +6035,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -5981,6 +6082,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6034,6 +6136,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6088,6 +6191,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6190,6 +6294,7 @@ async function updateDatatableComputeEC2() {
                     f2type: 'ec2.instance',
                     f2data: instance,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#Instances:search=' + instance.InstanceId,
                     name: name,
                     instanceid: instance.InstanceId,
                     instancetype: instance.InstanceType,
@@ -6274,6 +6379,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'elb.loadbalancer',
                 f2data: loadBalancer,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#LoadBalancers:search=' + loadBalancer.LoadBalancerName,
                 name: loadBalancer.LoadBalancerName,
                 vpcid: loadBalancer.VPCId,
                 scheme: loadBalancer.Scheme
@@ -6378,6 +6484,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.autoscalinggroup',
                 f2data: autoScalingGroup,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/autoscaling/home?region=' + region + '#AutoScalingGroups:id=' + autoScalingGroup.AutoScalingGroupName + ';filter=' + autoScalingGroup.AutoScalingGroupName,
                 name: autoScalingGroup.AutoScalingGroupName,
                 lcname: autoScalingGroup.LaunchConfigurationName,
                 sizes: autoScalingGroup.MinSize + "/" + autoScalingGroup.MaxSize + "/" + autoScalingGroup.DesiredCapacity,
@@ -6417,6 +6524,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'autoscaling.launchconfiguration',
                 f2data: launchConfiguration,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/autoscaling/home?region=' + region + '#LaunchConfigurations:id=' + launchConfiguration.LaunchConfigurationName + ';filter=' + launchConfiguration.LaunchConfigurationName,
                 name: launchConfiguration.LaunchConfigurationName,
                 imageid: launchConfiguration.ImageId,
                 instancetype: launchConfiguration.InstanceType,
@@ -6444,9 +6552,10 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.launchtemplate',
                         f2data: launchTemplate,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/ec2/v2/home#LaunchTemplates:launchTemplateId=' + launchTemplate.LaunchTemplateId,
                         name: launchTemplate.LaunchTemplateName,
                         latestversion: launchTemplate.LatestVersionNumber,
-                        lcid: launchTemplate.LaunchTemplateId
+                        ltid: launchTemplate.LaunchTemplateId
                     }]);
                 });
             }));
@@ -6501,6 +6610,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.volume',
                 f2data: volume,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#Volumes:search=' + volume.VolumeId,
                 volumeid: volume.VolumeId,
                 volumetype: volume.VolumeType,
                 availabilityzone: volume.AvailabilityZone,
@@ -6685,6 +6795,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.securitygroup',
                 f2data: securityGroup,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#SecurityGroups:search=' + securityGroup.GroupId,
                 id: securityGroup.GroupId,
                 description: securityGroup.Description,
                 vpcid: securityGroup.VpcId
@@ -6842,6 +6953,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6903,6 +7015,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6954,6 +7067,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -6991,6 +7105,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -7016,6 +7131,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7061,6 +7177,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -7086,6 +7203,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7152,6 +7270,7 @@ async function updateDatatableComputeLambda() {
                         f2type: 'lambda.function',
                         f2data: data,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/lambda/home?region=' + region + '#functions/' + data.Configuration.FunctionName,
                         name: data.Configuration.FunctionName,
                         description: data.Configuration.Description,
                         lastmodified: data.Configuration.LastModified,
@@ -7318,6 +7437,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7356,6 +7476,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7458,6 +7579,7 @@ async function updateDatatableStorageS3() {
                     f2type: 's3.bucket',
                     f2data: bucket,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/s3/home?region=' + region + '&bucket=' + bucket.Name,
                     name: bucket.Name,
                     creationdate: bucket.CreationDate
                 }]);
@@ -7509,6 +7631,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7570,6 +7693,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7631,6 +7755,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7676,6 +7801,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7721,6 +7847,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7766,6 +7893,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7819,6 +7947,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7864,6 +7993,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7918,6 +8048,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -7971,6 +8102,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8055,6 +8187,7 @@ async function updateDatatableDatabaseRDS() {
                 f2type: 'rds.instance',
                 f2data: dbInstance,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/rds/home?region=' + region + '#dbinstance:id=' + dbInstance.DBInstanceIdentifier,
                 instanceid: dbInstance.DBInstanceIdentifier,
                 engine: dbInstance.Engine,
                 instanceclass: dbInstance.DBInstanceClass,
@@ -8266,6 +8399,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8327,6 +8461,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8372,6 +8507,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8417,6 +8553,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8462,6 +8599,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8625,6 +8763,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8678,6 +8817,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8739,6 +8879,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8800,6 +8941,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8861,6 +9003,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8922,6 +9065,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -8983,6 +9127,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9028,6 +9173,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9275,6 +9421,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9336,6 +9483,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9381,6 +9529,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9426,6 +9575,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9562,6 +9712,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9599,6 +9750,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -9624,6 +9776,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9739,6 +9892,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -9764,6 +9918,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -9843,6 +9998,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9889,6 +10045,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -9943,6 +10100,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10004,6 +10162,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10168,6 +10327,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10229,6 +10389,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -10254,6 +10415,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10291,6 +10453,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10337,6 +10500,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10375,6 +10539,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10420,6 +10585,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10473,6 +10639,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10525,6 +10692,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.alarm',
                 f2data: metricAlarm,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/cloudwatch/home?region=' + region + '#alarm:alarm:alarmFilter=ANY;name=' + metricAlarm.AlarmName,
                 name: metricAlarm.AlarmName,
                 description: metricAlarm.AlarmDescription,
                 metric: metricAlarm.Statistic + " for " + metricAlarm.Namespace + "/" + metricAlarm.MetricName,
@@ -10595,6 +10763,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2type: 'cloudwatch.loggroup',
                 f2data: logGroup,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/cloudwatch/home?region=' + region + '#logStream:group=' + logGroup.logGroupName,
                 name: logGroup.logGroupName,
                 retention: logGroup.retentionInDays + " days",
                 amountstored: logGroup.storedBytes
@@ -10707,6 +10876,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10807,6 +10977,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10868,6 +11039,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -10921,6 +11093,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11046,6 +11219,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11101,6 +11275,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11162,6 +11337,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11199,6 +11375,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11244,6 +11421,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11297,6 +11475,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11358,6 +11537,7 @@ async function updateDatatableDatabaseDynamoDB() {
                     f2type: 'dynamodb.table',
                     f2data: data.Table,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
                     name: data.Table.TableName,
                     creationtime: data.Table.CreationDateTime,
                     size: data.Table.TableSizeBytes,
@@ -11513,6 +11693,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11558,6 +11739,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11595,6 +11777,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11640,6 +11823,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11685,6 +11869,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11730,6 +11915,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11775,6 +11961,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11828,6 +12015,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11873,6 +12061,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11918,6 +12107,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -11976,6 +12166,7 @@ async function updateDatatableAnalyticsKinesis() {
                     f2type: 'kinesis.stream',
                     f2data: data.StreamDescription,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/kinesis/home#/streams/details?streamName=' + data.StreamDescription.StreamName,
                     name: data.StreamDescription.StreamName,
                     retentionperiod: data.StreamDescription.RetentionPeriodHours + " hours",
                     encryption: data.StreamDescription.EncryptionType
@@ -12194,6 +12385,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12253,6 +12445,7 @@ async function updateDatatableComputeECR() {
                 f2type: 'ecr.repository',
                 f2data: repository,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ecr/repositories/' + repository.repositoryName + '/',
                 name: repository.repositoryName,
                 uri: repository.repositoryUri,
                 createdat: repository.createdAt
@@ -12288,6 +12481,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12381,6 +12575,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12434,6 +12629,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12495,6 +12691,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12548,6 +12745,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12601,6 +12799,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12816,6 +13015,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12869,6 +13069,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12922,6 +13123,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -12984,6 +13186,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13038,6 +13241,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13091,6 +13295,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13144,6 +13349,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13197,6 +13403,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13250,6 +13457,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13319,6 +13527,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13372,6 +13581,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13425,6 +13635,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -13448,6 +13659,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13502,6 +13714,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13555,6 +13768,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13600,6 +13814,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13637,6 +13852,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13674,6 +13890,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13719,6 +13936,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13772,6 +13990,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13817,6 +14036,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13870,6 +14090,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13933,6 +14154,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -13978,6 +14200,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14023,6 +14246,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14168,6 +14392,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 f2type: 'apigateway.clientcertificate',
                 f2data: clientCertificate,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/client-certificates/' + clientCertificate.clientCertificateId,
                 id: clientCertificate.clientCertificateId,
                 description: clientCertificate.description
             }]);
@@ -14185,6 +14410,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 f2type: 'apigateway.apikey',
                 f2data: apiKey,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/api-keys/' + apiKey.id,
                 name: apiKey.name,
                 id: apiKey.id,
                 description: apiKey.description,
@@ -14257,6 +14483,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 f2type: 'apigateway.restapi',
                 f2data: api,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/apis/' + api.id,
                 name: api.name,
                 id: api.id,
                 description: api.description,
@@ -14710,6 +14937,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14755,6 +14983,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14800,6 +15029,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14923,6 +15153,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -14978,6 +15209,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15097,6 +15329,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15146,6 +15379,7 @@ async function updateDatatableDeveloperToolsCloud9() {
                         f2type: 'cloud9.environment',
                         f2data: environment,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/cloud9/home/environments/' + environment.id,
                         name: environment.name,
                         id: environment.id,
                         description: environment.description
@@ -15183,6 +15417,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15281,6 +15516,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15334,6 +15570,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15388,6 +15625,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15433,6 +15671,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15478,6 +15717,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15527,6 +15767,7 @@ async function updateDatatableDatabaseNeptune() {
                 f2type: 'neptune.cluster',
                 f2data: cluster,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/neptune/home#cluster:ids=' + cluster.DBClusterIdentifier,
                 id: cluster.DBClusterIdentifier,
                 databasename: cluster.DatabaseName,
                 endpoint: cluster.Endpoint,
@@ -15644,6 +15885,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15698,6 +15940,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15760,6 +16003,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15805,6 +16049,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -15854,6 +16099,7 @@ async function updateDatatableDatabaseDocumentDB() {
                 f2type: 'documentdb.cluster',
                 f2data: cluster,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/docdb/home#cluster-details/' + cluster.DBClusterIdentifier,
                 id: cluster.DBClusterIdentifier,
                 engineversion: cluster.EngineVersion,
                 endpoint: cluster.Endpoint,
@@ -15952,6 +16198,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16027,6 +16274,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16081,6 +16329,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16186,6 +16435,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16240,6 +16490,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16294,6 +16545,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16451,6 +16703,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16504,6 +16757,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16566,6 +16820,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16611,6 +16866,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16656,6 +16912,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16693,6 +16950,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16738,6 +16996,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -16938,6 +17197,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -16963,6 +17223,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17009,6 +17270,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17054,6 +17316,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17117,6 +17380,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17155,6 +17419,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17337,6 +17602,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17450,6 +17716,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17495,6 +17762,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17540,6 +17808,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17577,6 +17846,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17614,6 +17884,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17651,6 +17922,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17688,6 +17960,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17725,6 +17998,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17770,6 +18044,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17807,6 +18082,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17852,6 +18128,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17905,6 +18182,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17942,6 +18220,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -17979,6 +18258,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18016,6 +18296,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18053,6 +18334,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18090,6 +18372,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18127,6 +18410,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18617,6 +18901,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18729,6 +19014,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18822,6 +19108,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18860,6 +19147,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -18971,6 +19259,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19032,6 +19321,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19085,6 +19375,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19213,6 +19504,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19250,6 +19542,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19295,6 +19588,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -19397,6 +19691,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19434,6 +19729,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19487,6 +19783,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19613,6 +19910,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19651,6 +19949,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19705,6 +20004,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19750,6 +20050,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19911,6 +20212,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -19956,6 +20258,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -19981,6 +20284,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20042,6 +20346,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20087,6 +20392,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20148,6 +20454,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20349,6 +20656,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20461,6 +20769,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20563,6 +20872,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20619,6 +20929,7 @@ async function updateDatatableAnalyticsElasticsearch() {
                     f2type: 'elasticsearch.domain',
                     f2data: data.DomainStatusList[0],
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/es/home#domain:resource=' + data.DomainStatusList[0].DomainId,
                     name: data.DomainStatusList[0].DomainName,
                     id: data.DomainStatusList[0].DomainId,
                     endpoint: data.DomainStatusList[0].Endpoint,
@@ -20656,6 +20967,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20709,6 +21021,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20746,6 +21059,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20791,6 +21105,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20828,6 +21143,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -20873,6 +21189,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21068,6 +21385,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21105,6 +21423,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21142,6 +21461,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21285,6 +21605,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21366,6 +21687,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21419,6 +21741,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21472,6 +21795,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21525,6 +21849,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -21550,6 +21875,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21588,6 +21914,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21634,6 +21961,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21848,6 +22176,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -21932,6 +22261,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22030,6 +22360,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22091,6 +22422,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22136,6 +22468,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22189,6 +22522,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22250,6 +22584,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22312,6 +22647,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22365,6 +22701,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22418,6 +22755,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -22664,6 +23002,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22717,6 +23056,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22754,6 +23094,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22799,6 +23140,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22836,6 +23178,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22889,6 +23232,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -22950,6 +23294,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23003,6 +23348,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23040,6 +23386,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23077,6 +23424,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23114,6 +23462,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23151,6 +23500,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23196,6 +23546,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23521,6 +23872,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23558,6 +23910,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23596,6 +23949,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23634,6 +23988,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23782,6 +24137,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23844,6 +24200,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23906,6 +24263,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -23968,6 +24326,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24029,6 +24388,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -24176,6 +24536,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24214,6 +24575,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24260,6 +24622,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24306,6 +24669,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24367,6 +24731,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24405,6 +24770,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24458,6 +24824,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24511,6 +24878,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24549,6 +24917,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24837,6 +25206,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24890,6 +25260,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24935,6 +25306,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -24996,6 +25368,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25034,6 +25407,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25079,6 +25453,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25132,6 +25507,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25364,6 +25740,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25409,6 +25786,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25446,6 +25824,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -25471,6 +25850,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25588,6 +25968,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25633,6 +26014,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25686,6 +26068,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25731,6 +26114,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25792,6 +26176,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25837,6 +26222,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25882,6 +26268,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25935,6 +26322,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -25980,6 +26368,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26034,6 +26423,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26079,6 +26469,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26125,6 +26516,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26163,6 +26555,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -26486,6 +26879,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26531,6 +26925,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26568,6 +26963,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26605,6 +27001,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26658,6 +27055,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26695,6 +27093,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26748,6 +27147,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26793,6 +27193,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26830,6 +27231,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26875,6 +27277,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26920,6 +27323,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -26957,6 +27361,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27270,6 +27675,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27307,6 +27713,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27344,6 +27751,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27405,6 +27813,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27466,6 +27875,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27519,6 +27929,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27726,6 +28137,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27787,6 +28199,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27841,6 +28254,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27886,6 +28300,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27923,6 +28338,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -27960,6 +28376,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28021,6 +28438,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28067,6 +28485,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28120,6 +28539,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28389,6 +28809,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28450,6 +28871,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28512,6 +28934,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28573,6 +28996,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28618,6 +29042,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28679,6 +29104,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28882,6 +29308,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28927,6 +29354,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -28972,6 +29400,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29017,6 +29446,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29062,6 +29492,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29107,6 +29538,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29152,6 +29584,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29197,6 +29630,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29242,6 +29676,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29287,6 +29722,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29332,6 +29768,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29377,6 +29814,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29422,6 +29860,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29467,6 +29906,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29512,6 +29952,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -29557,6 +29998,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30024,6 +30466,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30069,6 +30512,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30130,6 +30574,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30183,6 +30628,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30236,6 +30682,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30432,6 +30879,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30526,6 +30974,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30601,6 +31050,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30639,6 +31089,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30753,6 +31204,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30800,6 +31252,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30904,6 +31357,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -30981,6 +31435,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31036,6 +31491,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31144,6 +31600,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31198,6 +31655,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31236,6 +31694,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31298,6 +31757,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31360,6 +31820,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31414,6 +31875,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31460,6 +31922,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31514,6 +31977,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31568,6 +32032,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31630,6 +32095,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -31692,6 +32158,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32004,6 +32471,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32079,6 +32547,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32116,6 +32585,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32153,6 +32623,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32288,6 +32759,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32341,6 +32813,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32395,6 +32868,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32526,6 +33000,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32563,6 +33038,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32600,6 +33076,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32661,6 +33138,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32722,6 +33200,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32759,6 +33238,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32814,6 +33294,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32869,6 +33350,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32924,6 +33406,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -32979,6 +33462,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33034,6 +33518,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33089,6 +33574,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33144,6 +33630,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33199,6 +33686,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33254,6 +33742,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33309,6 +33798,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -33334,6 +33824,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33380,6 +33871,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -33405,6 +33897,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33442,6 +33935,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33480,6 +33974,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33518,6 +34013,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -33987,6 +34483,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34044,6 +34541,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34152,6 +34650,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34200,6 +34699,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34311,6 +34811,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34388,6 +34889,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34426,6 +34928,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34464,6 +34967,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34510,6 +35014,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34556,6 +35061,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34747,6 +35253,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34809,6 +35316,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -34862,6 +35370,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35000,6 +35509,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35086,6 +35596,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -35112,6 +35623,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35201,6 +35713,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -35237,6 +35750,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
                 'Tags': tags
             },
             f2region: region,
+            f2link: 'https://console.aws.amazon.com/securityhub/home',
             arn: data.HubArn
         }]);
     }).catch(() => {});
@@ -35269,6 +35783,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35314,6 +35829,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35367,6 +35883,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35497,6 +36014,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35559,6 +36077,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35596,6 +36115,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -35630,6 +36150,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                         f2type: 'eventbridge.rule',
                         f2data: data,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/events/home?region=' + region + '#/rules/' + data.Name,
                         name: data.Name,
                         description: data.Description,
                         eventpattern: data.EventPattern,
@@ -35711,6 +36232,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35757,6 +36279,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35886,6 +36409,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -35931,6 +36455,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36031,6 +36556,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36119,6 +36645,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36203,6 +36730,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36302,6 +36830,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36348,6 +36877,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -36374,6 +36904,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36412,6 +36943,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36450,6 +36982,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36591,6 +37124,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36628,6 +37162,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36751,6 +37286,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36788,6 +37324,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36833,6 +37370,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     }
                 ],
@@ -36943,6 +37481,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -36996,6 +37535,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37140,6 +37680,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37226,6 +37767,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37272,6 +37814,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37318,6 +37861,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37357,6 +37901,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37396,6 +37941,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37557,6 +38103,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37641,6 +38188,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37694,6 +38242,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
@@ -37731,6 +38280,7 @@ sections.push({
                         align: 'center',
                         valign: 'middle',
                         sortable: true,
+                        formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
                     },
                     {
