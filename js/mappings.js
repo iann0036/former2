@@ -19516,7 +19516,7 @@ function performF2Mappings(objects) {
                     'type': 'AWS::MediaConvert::JobTemplate',
                     'options': reqParams
                 });
-            } else if (obj.type == "codestar.notificationrule") {
+            } else if (obj.type == "codestarnotifications.notificationrule") {
                 reqParams.cfn['DetailType'] = obj.data.DetailType;
                 if (obj.data.EventTypes) {
                     reqParams.cfn['EventTypeIds'] = [];
@@ -19540,9 +19540,9 @@ function performF2Mappings(objects) {
 
                 tracked_resources.push({
                     'obj': obj,
-                    'logicalId': getResourceName('codestar', obj.id),
+                    'logicalId': getResourceName('codestarnotifications', obj.id),
                     'region': obj.region,
-                    'service': 'codestar',
+                    'service': 'codestarnotifications',
                     'type': 'AWS::CodeStarNotifications::NotificationRule',
                     'options': reqParams
                 });

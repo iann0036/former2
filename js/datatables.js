@@ -16228,12 +16228,59 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Notification Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resource',
+                        title: 'Resource',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'detailtype',
+                        title: 'Detail Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableDeveloperToolsCodeCommit() {
     blockUI('#section-developertools-codecommit-repositories-datatable');
+    blockUI('#section-developertools-codecommit-notificationrules-datatable');
 
     await sdkcall("CodeCommit", "listRepositories", {
         // no params
@@ -16257,6 +16304,32 @@ async function updateDatatableDeveloperToolsCodeCommit() {
 
         unblockUI('#section-developertools-codecommit-repositories-datatable');
     });
+
+    await sdkcall("CodeStarNotifications", "listNotificationRules", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.NotificationRules.map(notificationRule => {
+            return sdkcall("CodeStarNotifications", "describeNotificationRule", {
+                Arn: notificationRule.Arn
+            }, false).then(async (data) => {
+                if (data.Resource.split(":")[2] == "codecommit") {
+                    $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'codestarnotifications.notificationrule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        resource: data.Resource,
+                        detailtype: data.DetailType
+                    }]);
+                }
+            });
+        }));
+    }).catch(() => {});
+
+    unblockUI('#section-developertools-codecommit-notificationrules-datatable');
 }
 
 /* ========================================================================== */
@@ -16367,6 +16440,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Notification Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resource',
+                        title: 'Resource',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'detailtype',
+                        title: 'Detail Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -16374,6 +16493,7 @@ sections.push({
 async function updateDatatableDeveloperToolsCodeBuild() {
     blockUI('#section-developertools-codebuild-projects-datatable');
     blockUI('#section-developertools-codebuild-sourcecredentials-datatable');
+    blockUI('#section-developertools-codebuild-notificationrules-datatable');
 
     await sdkcall("CodeBuild", "listProjects", {
         // no params
@@ -16416,8 +16536,33 @@ async function updateDatatableDeveloperToolsCodeBuild() {
         });
     });
 
+    await sdkcall("CodeStarNotifications", "listNotificationRules", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.NotificationRules.map(notificationRule => {
+            return sdkcall("CodeStarNotifications", "describeNotificationRule", {
+                Arn: notificationRule.Arn
+            }, false).then(async (data) => {
+                if (data.Resource.split(":")[2] == "codebuild") {
+                    $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'codestarnotifications.notificationrule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        resource: data.Resource,
+                        detailtype: data.DetailType
+                    }]);
+                }
+            });
+        }));
+    }).catch(() => {});
+
     unblockUI('#section-developertools-codebuild-projects-datatable');
     unblockUI('#section-developertools-codebuild-sourcecredentials-datatable');
+    unblockUI('#section-developertools-codebuild-notificationrules-datatable');
 }
 
 /* ========================================================================== */
@@ -19822,6 +19967,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Notification Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resource',
+                        title: 'Resource',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'detailtype',
+                        title: 'Detail Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -19830,6 +20021,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     blockUI('#section-developertools-codepipeline-pipelines-datatable');
     blockUI('#section-developertools-codepipeline-webhooks-datatable');
     blockUI('#section-developertools-codepipeline-customactiontypes-datatable');
+    blockUI('#section-developertools-codepipeline-notificationrules-datatable');
 
     await sdkcall("CodePipeline", "listPipelines", {
         // no params
@@ -19894,6 +20086,32 @@ async function updateDatatableDeveloperToolsCodePipeline() {
 
         unblockUI('#section-developertools-codepipeline-customactiontypes-datatable');
     });
+
+    await sdkcall("CodeStarNotifications", "listNotificationRules", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-developertools-codepipeline-notificationrules-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.NotificationRules.map(notificationRule => {
+            return sdkcall("CodeStarNotifications", "describeNotificationRule", {
+                Arn: notificationRule.Arn
+            }, false).then(async (data) => {
+                if (data.Resource.split(":")[2] == "codepipeline") {
+                    $('#section-developertools-codepipeline-notificationrules-datatable').bootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'codestarnotifications.notificationrule',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        resource: data.Resource,
+                        detailtype: data.DetailType
+                    }]);
+                }
+            });
+        }));
+    }).catch(() => {});
+
+    unblockUI('#section-developertools-codepipeline-notificationrules-datatable');
 }
 
 /* ========================================================================== */
@@ -37162,59 +37380,12 @@ sections.push({
                     }
                 ]
             ]
-        },
-        'Notification Rules': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        formatter: primaryFieldFormatter,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'resource',
-                        title: 'Resource',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    },
-                    {
-                        field: 'detailtype',
-                        title: 'Detail Type',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
         }
     }
 });
 
 async function updateDatatableDeveloperToolsCodeStar() {
     blockUI('#section-developertools-codestar-githubrepositories-datatable');
-    blockUI('#section-developertools-codestar-notificationrules-datatable');
 
     await sdkcall("CodeStar", "listProjects", {
         // no params
@@ -37253,30 +37424,7 @@ async function updateDatatableDeveloperToolsCodeStar() {
         
     }).catch(() => {});
 
-    await sdkcall("CodeStarNotifications", "listNotificationRules", {
-        // no params
-    }, false).then(async (data) => {
-        $('#section-developertools-codestar-notificationrules-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.NotificationRules.map(notificationRule => {
-            return sdkcall("CodeStarNotifications", "describeNotificationRule", {
-                Arn: notificationRule.Arn
-            }, false).then(async (data) => {
-                $('#section-developertools-codestar-notificationrules-datatable').bootstrapTable('append', [{
-                    f2id: data.Arn,
-                    f2type: 'codestar.notificationrule',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Name,
-                    resource: data.Resource,
-                    detailtype: data.DetailType
-                }]);
-            });
-        }));
-    }).catch(() => {});
-
     unblockUI('#section-developertools-codestar-githubrepositories-datatable');
-    unblockUI('#section-developertools-codestar-notificationrules-datatable');
 }
 
 /* ========================================================================== */
