@@ -15377,41 +15377,43 @@ function performF2Mappings(objects) {
                     }
                 });
             } else if (obj.type == "elbv2.loadbalancerlistenerrule") {
-                reqParams.cfn['Priority'] = obj.data.Priority;
-                reqParams.tf['priority'] = obj.data.Priority;
-                reqParams.cfn['ListenerArn'] = obj.data.ListenerArn;
-                reqParams.tf['listener_arn'] = obj.data.ListenerArn;
-                if (obj.data.Conditions) {
-                    reqParams.cfn['Conditions'] = [];
-                    reqParams.tf['condition'] = [];
-                    obj.data.Conditions.forEach(condition => {
-                        reqParams.cfn['Conditions'].push({
-                            'Field': condition.Field,
-                            'Values': condition.Values
+                if (obj.data.Priority != "default") {
+                    reqParams.cfn['Priority'] = obj.data.Priority;
+                    reqParams.tf['priority'] = obj.data.Priority;
+                    reqParams.cfn['ListenerArn'] = obj.data.ListenerArn;
+                    reqParams.tf['listener_arn'] = obj.data.ListenerArn;
+                    if (obj.data.Conditions) {
+                        reqParams.cfn['Conditions'] = [];
+                        reqParams.tf['condition'] = [];
+                        obj.data.Conditions.forEach(condition => {
+                            reqParams.cfn['Conditions'].push({
+                                'Field': condition.Field,
+                                'Values': condition.Values
+                            });
+                            reqParams.tf['condition'].push({
+                                'field': condition.Field,
+                                'values': condition.Values
+                            });
                         });
-                        reqParams.tf['condition'].push({
-                            'field': condition.Field,
-                            'values': condition.Values
-                        });
+                    }
+                    reqParams.cfn['Actions'] = obj.data.Actions;
+
+                    tracked_resources.push({
+                        'obj': obj,
+                        'logicalId': getResourceName('elbv2', obj.id),
+                        'region': obj.region,
+                        'service': 'elbv2',
+                        'type': 'AWS::ElasticLoadBalancingV2::ListenerRule',
+                        'terraformType': 'aws_lb_listener_rule',
+                        'options': reqParams,
+                        'returnValues': {
+                            'Ref': obj.data.RuleArn,
+                            'Import': {
+                                'RuleArn': obj.data.RuleArn
+                            }
+                        }
                     });
                 }
-                reqParams.cfn['Actions'] = obj.data.Actions;
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('elbv2', obj.id),
-                    'region': obj.region,
-                    'service': 'elbv2',
-                    'type': 'AWS::ElasticLoadBalancingV2::ListenerRule',
-                    'terraformType': 'aws_lb_listener_rule',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Ref': obj.data.RuleArn,
-                        'Import': {
-                            'RuleArn': obj.data.RuleArn
-                        }
-                    }
-                });
             } else if (obj.type == "lambda.version") {
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['FunctionName'] = obj.data.FunctionName;
