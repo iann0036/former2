@@ -1407,19 +1407,27 @@ async function importResources(stack_name, deletion_policy) {
         TemplateBody: mapped_cfn_output,
         Capabilities: capabilities
     }, true).then(async (data) => {
-        await sdkcallwaiter("CloudFormation", "waitFor", "changeSetCreateComplete", {
-            ChangeSetName: changeSetName,
-            StackName: stack_name
-        });
-        await new Promise(resolve => setTimeout(resolve, 7000)); // eventual consistency weirdness
+        status = "CREATE_PENDING";
+        while (['CREATE_PENDING', 'CREATE_IN_PROGRESS'].includes(status)) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            await sdkcall("CloudFormation", "describeChangeSet", {
+                ChangeSetName: changeSetName,
+                StackName: stack_name
+            }, false).then(async (data) => {
+                status = data.Status;
+            }).catch(() => { status = "ERROR"; });
+        }
 
         var stack_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/stackinfo?stackId=" + encodeURIComponent(data.StackId);
         var change_set_url = "https://console.aws.amazon.com/cloudformation/home?region=" + region + "#/stacks/changesets/changes?stackId=" + encodeURIComponent(data.StackId) + "&changeSetId=" + encodeURIComponent(data.Id);
-        $('#import-button').removeAttr('disabled');
-        $('#import-button').text("Execute Change Set");
         $('#import-warnings').append(`<div class="alert alert-info" role="alert">
             <strong><i class="fa fa-info-circle"></i></strong> Created change set <a target="_blank" href="${change_set_url}">${changeSetName}</a> in stack <a target="_blank" href="${stack_url}">${stack_name}</i>
         </div>`);
+        if (status != "CREATE_COMPLETE") {
+            throw "Bad change set status: " + status;
+        }
+        $('#import-button').removeAttr('disabled');
+        $('#import-button').text("Execute Change Set");
 
         $('#import-button').off('click').on('click', function() {
             $('#import-button').attr('disabled', 'disabled');
