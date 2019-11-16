@@ -4992,15 +4992,18 @@ function performF2Mappings(objects) {
                     });
                 }
                 if (obj.data.CustomErrorResponses) {
-                    reqParams.cfn.DistributionConfig['CustomErrorResponses'] = obj.data.CustomErrorResponses.Items;
+                    reqParams.cfn.DistributionConfig['CustomErrorResponses'] = [];
                     reqParams.tf['custom_error_response'] = []; 
                     obj.data.CustomErrorResponses.Items.forEach(customerrorresponse => {
-                        reqParams.tf['custom_error_response'].push({
-                            'error_caching_min_ttl': customerrorresponse.ErrorCachingMinTTL,
-                            'error_code': customerrorresponse.ErrorCode,
-                            'response_code': customerrorresponse.ResponseCode,
-                            'response_page_path': customerrorresponse.ResponsePagePath
-                        });
+                        if (customerrorresponse.ResponseCode != "" && customerrorresponse.ResponsePagePath != "") {
+                            reqParams.cfn.DistributionConfig['CustomErrorResponses'].push(customerrorresponse);
+                            reqParams.tf['custom_error_response'].push({
+                                'error_caching_min_ttl': customerrorresponse.ErrorCachingMinTTL,
+                                'error_code': customerrorresponse.ErrorCode,
+                                'response_code': customerrorresponse.ResponseCode,
+                                'response_page_path': customerrorresponse.ResponsePagePath
+                            });
+                        }
                     });
                 }
                 reqParams.cfn.DistributionConfig['Comment'] = obj.data.Comment;
