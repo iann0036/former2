@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**467/467 (100%)** Resources Covered
+**471/471 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -230,6 +230,10 @@
 | *AWS::GameLift::Alias* | :thumbsup: |
 | *AWS::GameLift::Build* | :thumbsup: |
 | *AWS::GameLift::Fleet* | :thumbsup: |
+| *AWS::GameLift::MatchmakingConfiguration* | :thumbsup: |
+| *AWS::GameLift::MatchmakingRuleSet* | :thumbsup: |
+| *AWS::GameLift::Queue* | :thumbsup: |
+| *AWS::GameLift::Script* | :thumbsup: |
 | *AWS::Glue::Classifier* | :thumbsup: |
 | *AWS::Glue::Connection* | :thumbsup: |
 | *AWS::Glue::Crawler* | :thumbsup: |
