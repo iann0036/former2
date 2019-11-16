@@ -16593,6 +16593,171 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Scripts': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scriptid',
+                        title: 'Script ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Queues': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'timeout',
+                        title: 'Timeout',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Matchmaking Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rulesetname',
+                        title: 'Rule Set Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Matchmaking Rule Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -16601,6 +16766,10 @@ async function updateDatatableGameDevelopmentGameLift() {
     blockUI('#section-gamedevelopment-gamelift-fleets-datatable');
     blockUI('#section-gamedevelopment-gamelift-builds-datatable');
     blockUI('#section-gamedevelopment-gamelift-aliases-datatable');
+    blockUI('#section-gamedevelopment-gamelift-scripts-datatable');
+    blockUI('#section-gamedevelopment-gamelift-queues-datatable');
+    blockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
+    blockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
 
     await sdkcall("GameLift", "describeFleetAttributes", {
         // no params
@@ -16663,6 +16832,84 @@ async function updateDatatableGameDevelopmentGameLift() {
         });
 
         unblockUI('#section-gamedevelopment-gamelift-aliases-datatable');
+    });
+
+    await sdkcall("GameLift", "listScripts", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('removeAll');
+        
+        data.Scripts.forEach(script => {
+            $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('append', [{
+                f2id: script.ScriptId,
+                f2type: 'gamelift.script',
+                f2data: script,
+                f2region: region,
+                name: script.Name,
+                scriptid: script.ScriptId,
+                version: script.Version
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-scripts-datatable');
+    });
+
+    await sdkcall("GameLift", "describeGameSessionQueues", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('removeAll');
+        
+        data.GameSessionQueues.forEach(queue => {
+            $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('append', [{
+                f2id: queue.GameSessionQueueArn,
+                f2type: 'gamelift.queue',
+                f2data: queue,
+                f2region: region,
+                name: queue.Name,
+                timeout: queue.TimeoutInSeconds + " seconds"
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-queues-datatable');
+    });
+
+    await sdkcall("GameLift", "describeMatchmakingConfigurations", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('removeAll');
+        
+        data.Configurations.forEach(configuration => {
+            $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('append', [{
+                f2id: configuration.Name,
+                f2type: 'gamelift.matchmakingconfiguration',
+                f2data: configuration,
+                f2region: region,
+                name: configuration.Name,
+                description: configuration.Description,
+                rulesetname: configuration.RuleSetName
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
+    });
+
+    await sdkcall("GameLift", "describeMatchmakingRuleSets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('removeAll');
+        
+        data.RuleSets.forEach(ruleset => {
+            $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('append', [{
+                f2id: ruleset.RuleSetName,
+                f2type: 'gamelift.matchmakingruleset',
+                f2data: ruleset,
+                f2region: region,
+                name: ruleset.RuleSetName,
+                creationtime: ruleset.CreationTime
+            }]);
+        });
+
+        unblockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
     });
 }
 
@@ -16884,6 +17131,7 @@ sections.push({
                         title: 'Creation Time',
                         sortable: true,
                         editable: true,
+                        formatter: dateFormatter,
                         footerFormatter: textFormatter,
                         align: 'center'
                     }

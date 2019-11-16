@@ -19546,6 +19546,68 @@ function performF2Mappings(objects) {
                     'type': 'AWS::CodeStarNotifications::NotificationRule',
                     'options': reqParams
                 });
+            } else if (obj.type == "gamelift.script") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Version'] = obj.data.Version;
+                reqParams.cfn['StorageLocation'] = obj.data.StorageLocation;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('gamelift', obj.id),
+                    'region': obj.region,
+                    'service': 'gamelift',
+                    'type': 'AWS::GameLift::Script',
+                    'options': reqParams
+                });
+            } else if (obj.type == "gamelift.queue") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['TimeoutInSeconds'] = obj.data.TimeoutInSeconds;
+                reqParams.cfn['Destinations'] = obj.data.Destinations;
+                reqParams.cfn['PlayerLatencyPolicies'] = obj.data.PlayerLatencyPolicies;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('gamelift', obj.id),
+                    'region': obj.region,
+                    'service': 'gamelift',
+                    'type': 'AWS::GameLift::Queue',
+                    'options': reqParams
+                });
+            } else if (obj.type == "gamelift.matchmakingconfiguration") {
+                reqParams.cfn['AcceptanceRequired'] = obj.data.AcceptanceRequired;
+                reqParams.cfn['AcceptanceTimeoutSeconds'] = obj.data.AcceptanceTimeoutSeconds;
+                reqParams.cfn['AdditionalPlayerCount'] = obj.data.AdditionalPlayerCount;
+                reqParams.cfn['BackfillMode'] = obj.data.BackfillMode;
+                reqParams.cfn['CustomEventData'] = obj.data.CustomEventData;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['GameProperties'] = obj.data.GameProperties;
+                reqParams.cfn['GameSessionData'] = obj.data.GameSessionData;
+                reqParams.cfn['GameSessionQueueArns'] = obj.data.GameSessionQueueArns;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['NotificationTarget'] = obj.data.NotificationTarget;
+                reqParams.cfn['RequestTimeoutSeconds'] = obj.data.RequestTimeoutSeconds;
+                reqParams.cfn['RuleSetName'] = obj.data.RuleSetName;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('gamelift', obj.id),
+                    'region': obj.region,
+                    'service': 'gamelift',
+                    'type': 'AWS::GameLift::MatchmakingConfiguration',
+                    'options': reqParams
+                });
+            } else if (obj.type == "gamelift.matchmakingruleset") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['RuleSetBody'] = obj.data.RuleSetBody;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('gamelift', obj.id),
+                    'region': obj.region,
+                    'service': 'gamelift',
+                    'type': 'AWS::GameLift::MatchmakingRuleSet',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
