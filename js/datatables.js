@@ -6738,7 +6738,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.placementgroup',
                 f2data: placementGroup,
                 f2region: region,
-                f2type: 'https://console.aws.amazon.com/ec2/v2/home#PlacementGroups:groupName=' + placementGroup.GroupName,
+                f2link: 'https://console.aws.amazon.com/ec2/v2/home#PlacementGroups:groupName=' + placementGroup.GroupName,
                 name: placementGroup.GroupName,
                 strategy: placementGroup.Strategy,
                 groupstate: placementGroup.State
@@ -21239,39 +21239,43 @@ async function updateDatatableInternetofThingsCore() {
         $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.things.map(thing => {
-            return Promise.all([
-                sdkcall("Iot", "listThingPrincipals", {
-                    thingName: thing.thingName
-                }, true).then((data) => {
-                    data.principals.forEach(principal => {
-                        $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('append', [{
-                            f2id: principal,
-                            f2type: 'iot.thingprincipalattachment',
-                            f2data: {
-                                'thing': thing,
-                                'principal': principal
-                            },
+            if (thing.thingName) {
+                return Promise.all([
+                    sdkcall("Iot", "listThingPrincipals", {
+                        thingName: thing.thingName
+                    }, true).then((data) => {
+                        data.principals.forEach(principal => {
+                            $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('append', [{
+                                f2id: principal,
+                                f2type: 'iot.thingprincipalattachment',
+                                f2data: {
+                                    'thing': thing,
+                                    'principal': principal
+                                },
+                                f2region: region,
+                                principal: principal,
+                                thingname: thing.thingName
+                            }]);
+                        });
+                    }),
+                    sdkcall("Iot", "describeThing", {
+                        thingName: thing.thingName
+                    }, true).then((data) => {
+                        $('#section-internetofthings-core-things-datatable').bootstrapTable('append', [{
+                            f2id: data.thingArn,
+                            f2type: 'iot.thing',
+                            f2data: data,
                             f2region: region,
-                            principal: principal,
-                            thingname: thing.thingName
+                            name: data.thingName,
+                            id: data.thingId,
+                            typename: data.thingTypeName,
+                            version: data.version
                         }]);
-                    });
-                }),
-                sdkcall("Iot", "describeThing", {
-                    thingName: thing.thingName
-                }, true).then((data) => {
-                    $('#section-internetofthings-core-things-datatable').bootstrapTable('append', [{
-                        f2id: data.thingArn,
-                        f2type: 'iot.thing',
-                        f2data: data,
-                        f2region: region,
-                        name: data.thingName,
-                        id: data.thingId,
-                        typename: data.thingTypeName,
-                        version: data.version
-                    }]);
-                })
-            ]);
+                    })
+                ]);
+            } else {
+                return Promise.resolve();
+            }
         }));
 
         unblockUI('#section-internetofthings-core-things-datatable');
