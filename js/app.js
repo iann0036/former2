@@ -1461,6 +1461,7 @@ async function importResources(stack_name, deletion_policy) {
         $('#import-warnings').append(`<div class="alert alert-danger" role="alert">
             <strong><i class="fa fa-exclamation-circle"></i></strong> An error occurred creating the change set.
         </div>`);
+        console.log(mapped_cfn_output);
     });
 }
 

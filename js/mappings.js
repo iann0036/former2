@@ -196,7 +196,7 @@ function processTfParameter(param, spacing, index) {
     return undefined;
 }
 
-function processCfnParameter(param, spacing, index) {
+function processCfnParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -317,7 +317,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processCfnParameter(paramitem, spacing, index));
+            paramitems.push(processCfnParameter(paramitem, spacing, index, tracked_resources));
         });
 
         if (cfnspacing.length == 4) {
@@ -336,7 +336,7 @@ function processCfnParameter(param, spacing, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processCfnParameter(param[key], spacing + cfnspacing.length, index);
+            var subvalue = processCfnParameter(param[key], spacing + cfnspacing.length, index, tracked_resources);
             if (typeof subvalue !== "undefined") {
                 paramitems.push(key + ": " + subvalue);
             }
@@ -1649,14 +1649,14 @@ function compileMapIam(compiled_iam_outputs, service, method, options, region, w
     return compiled_iam_outputs;
 }
 
-function outputMapCfn(index, service, type, options, region, was_blocked, logicalId, cfn_deletion_policy) {
+function outputMapCfn(index, service, type, options, region, was_blocked, logicalId, cfn_deletion_policy, tracked_resources) {
     var output = '';
     var params = '';
 
     if (Object.keys(options).length) {
         for (option in options) {
             if (options[option] !== undefined && options[option] !== null) {
-                var optionvalue = processCfnParameter(options[option], (cfnspacing.length * 3), index);
+                var optionvalue = processCfnParameter(options[option], (cfnspacing.length * 3), index, tracked_resources);
 
                 if (optionvalue !== undefined) {
                     params += `
@@ -1957,7 +1957,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 
     for (var i=0; i<tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
-            compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy);
+            compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
             compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
         }
