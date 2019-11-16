@@ -3522,6 +3522,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     f2type: 'ec2.internetgateway',
                     f2data: internetGateway,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#igws:filter=' + internetGateway.InternetGatewayId,
                     gatewayid: internetGateway.InternetGatewayId
                 }]);
             });
@@ -3693,6 +3694,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.networkacl',
                 f2data: networkAcl,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#acls:filter=' + networkAcl.NetworkAclId,
                 networkaclid: networkAcl.NetworkAclId,
                 vpcid: networkAcl.VpcId
             }]);
@@ -3784,6 +3786,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.transitgateway',
                 f2data: transitGateway,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home#TransitGateways:transitGatewayId=' + transitGateway.TransitGatewayId,
                 id: transitGateway.TransitGatewayId,
                 description: transitGateway.Description,
                 creationtime: transitGateway.CreationTime
@@ -3901,6 +3904,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 f2type: 'ec2.vpcendpoint',
                 f2data: vpcEndpoint,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/vpc/home#Endpoints:vpcEndpointId=' + vpcEndpoint.VpcEndpointId,
                 id: vpcEndpoint.VpcEndpointId,
                 endpointtype: vpcEndpoint.VpcEndpointType,
                 vpcid: vpcEndpoint.VpcId,
@@ -3945,6 +3949,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     f2type: 'ec2.vpcendpointservice',
                     f2data: serviceDetail,
                     f2region: region,
+                    f2link: 'https://console.aws.amazon.com/vpc/home#EndpointServices:service-id=' + serviceDetail.ServiceName,
                     name: serviceDetail.ServiceName,
                     privatednsname: serviceDetail.PrivateDnsName,
                     acceptancerequired: serviceDetail.AcceptanceRequired
@@ -6650,6 +6655,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.networkinterface',
                 f2data: networkInterface,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#NIC:search=' + networkInterface.NetworkInterfaceId,
                 interfaceid: networkInterface.NetworkInterfaceId,
                 availabilityzone: networkInterface.AvailabilityZone,
                 description: networkInterface.Description,
@@ -6732,6 +6738,7 @@ async function updateDatatableComputeEC2() {
                 f2type: 'ec2.placementgroup',
                 f2data: placementGroup,
                 f2region: region,
+                f2type: 'https://console.aws.amazon.com/ec2/v2/home#PlacementGroups:groupName=' + placementGroup.GroupName,
                 name: placementGroup.GroupName,
                 strategy: placementGroup.Strategy,
                 groupstate: placementGroup.State
@@ -6843,6 +6850,7 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.snapshotlifecyclepolicy',
                         f2data: policy.Policy,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/ec2/v2/home?region=' + region + '#Lifecycle:search=' + policy.Policy.PolicyId + ';sort=PolicyId',
                         id: policy.Policy.PolicyId,
                         description: policy.Policy.Description,
                         datecreated: policy.Policy.DateCreated
@@ -9616,6 +9624,7 @@ async function updateDatatableDatabaseRedshift() {
                 f2type: 'redshift.cluster',
                 f2data: cluster,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/redshift/home?region=' + region + '#cluster-details:cluster=' + cluster.ClusterIdentifier,
                 clusterid: cluster.ClusterIdentifier,
                 nodetype: cluster.NodeType,
                 databasename: cluster.DBName,
@@ -14448,6 +14457,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 f2type: 'apigateway.usageplan',
                 f2data: usagePlan,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/usage-plans/' + usagePlan.id,
                 name: usagePlan.name,
                 id: usagePlan.id,
                 description: usagePlan.description
@@ -17676,6 +17686,7 @@ async function updateDatatableAWSCostManagementBudgets() {
                             f2type: 'budgets.budget',
                             f2data: budget,
                             f2region: region,
+                            f2link: 'https://console.aws.amazon.com/billing/home#/budgets/details?name=' + budget.BudgetName,
                             name: budget.BudgetName,
                             type: budget.BudgetType,
                             timeunit: budget.TimeUnit,
@@ -28664,6 +28675,7 @@ async function updateDatatableEndUserComputingAppStream() {
                 f2type: 'appstream.stack',
                 f2data: stack,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/appstream2/home?region=' + region + '#/stacks?selected=' + stack.Name,
                 name: stack.Name,
                 displayname: stack.DisplayName,
                 description: stack.Description
@@ -32679,6 +32691,7 @@ async function updateDatatableStorageBackup() {
                 f2type: 'backup.backupvault',
                 f2data: backupvault,
                 f2region: region,
+                f2link: 'https://console.aws.amazon.com/backup/home?region=' + region + '#backupvaults/details/' + backupvault.BackupVaultName,
                 name: backupvault.BackupVaultName,
                 numberofrecoverypoints: backupvault.NumberOfRecoveryPoints
             }]);
@@ -36178,6 +36191,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                         f2type: 'eventbridge.eventbus',
                         f2data: data,
                         f2region: region,
+                        f2link: 'https://console.aws.amazon.com/events/home?region=' + region + '#/eventbus/' + data.Name,
                         name: data.Name
                     }]);
                 }
