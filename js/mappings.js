@@ -7021,7 +7021,7 @@ function performF2Mappings(objects) {
                         };
                     }
 
-                    reqParams.cfn['ComputeResourcess'] = {
+                    reqParams.cfn['ComputeResources'] = {
                         'Type': obj.data.computeResources.type,
                         'MinvCpus': obj.data.computeResources.minvCpus,
                         'MaxvCpus': obj.data.computeResources.maxvCpus,
