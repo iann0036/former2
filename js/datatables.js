@@ -233,7 +233,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                         console.log("Too many requests, sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
                         backoff *= 2;
-                        backoff = Math.max(backoff, 60000);
+                        backoff = Math.max(backoff, 120000);
                     } else {
                         console.log("Too many requests, sleeping for 500ms");
                         await new Promise(resolve => setTimeout(resolve, 500));
