@@ -19608,6 +19608,45 @@ function performF2Mappings(objects) {
                     'type': 'AWS::GameLift::MatchmakingRuleSet',
                     'options': reqParams
                 });
+            } else if (obj.type == "eks.nodegroup") {
+                reqParams.cfn['NodegroupName'] = obj.data.nodegroupName;
+                reqParams.cfn['ClusterName'] = obj.data.clusterName;
+                reqParams.cfn['Version'] = obj.data.version;
+                reqParams.cfn['ReleaseVersion'] = obj.data.releaseVersion;
+                if (obj.data.scalingConfig) {
+                    reqParams.cfn['ScalingConfig'] = {
+                        'MinSize': obj.data.scalingConfig.minSize,
+                        'MaxSize': obj.data.scalingConfig.maxSize,
+                        'DesiredSize': obj.data.scalingConfig.desiredSize
+                    };
+                }
+                reqParams.cfn['InstanceTypes'] = obj.data.instanceTypes;
+                reqParams.cfn['Subnets'] = obj.data.subnets;
+                if (obj.data.remoteAccess) {
+                    reqParams.cfn['RemoteAccess'] = {
+                        'Ec2SshKey': obj.data.remoteAccess.ec2SshKey,
+                        'SourceSecurityGroups': obj.data.remoteAccess.sourceSecurityGroups
+                    };
+                }
+                reqParams.cfn['AmiType'] = obj.data.amiType;
+                reqParams.cfn['NodeRole'] = obj.data.nodeRole;
+                reqParams.cfn['Labels'] = obj.data.labels;
+                reqParams.cfn['DiskSize'] = obj.data.diskSize;
+                reqParams.cfn['Tags'] = obj.data.tags;
+
+                /*
+                TODO:
+                ForceUpdateEnabled: Boolean
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('eks', obj.id),
+                    'region': obj.region,
+                    'service': 'eks',
+                    'type': 'AWS::EKS::Nodegroup',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
