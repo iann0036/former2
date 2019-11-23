@@ -19647,6 +19647,22 @@ function performF2Mappings(objects) {
                     'type': 'AWS::EKS::Nodegroup',
                     'options': reqParams
                 });
+            } else if (obj.type == "appsync.apicache") {
+                reqParams.cfn['ApiId'] = obj.data.apiId;
+                reqParams.cfn['Ttl'] = obj.data.ttl;
+                reqParams.cfn['ApiCachingBehavior'] = obj.data.apiCachingBehavior;
+                reqParams.cfn['TransitEncryptionEnabled'] = obj.data.transitEncryptionEnabled;
+                reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.atRestEncryptionEnabled;
+                reqParams.cfn['Type'] = obj.data.type;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appsync', obj.id),
+                    'region': obj.region,
+                    'service': 'appsync',
+                    'type': 'AWS::AppSync::ApiCache',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

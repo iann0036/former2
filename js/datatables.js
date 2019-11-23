@@ -20782,6 +20782,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'API Caches': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'API ID',
+                        field: 'apiid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'ttl',
+                        title: 'TTL',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'cachingbehaviour',
+                        title: 'Caching Behaviour',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -20793,6 +20839,7 @@ async function updateDatatableMobileAppSync() {
     blockUI('#section-mobile-appsync-datasources-datatable');
     blockUI('#section-mobile-appsync-functionconfigurations-datatable');
     blockUI('#section-mobile-appsync-apikeys-datatable');
+    blockUI('#section-mobile-appsync-apicaches-datatable');
 
     await sdkcall("AppSync", "listGraphqlApis", {
         // no params
@@ -20895,7 +20942,7 @@ async function updateDatatableMobileAppSync() {
                 sdkcall("AppSync", "getIntrospectionSchema", {
                     apiId: graphqlApi.apiId,
                     format: 'SDL'
-                }, true).then((data) => {
+                }, false).then((data) => {
                     data['apiId'] = graphqlApi.apiId;
 
                     $('#section-mobile-appsync-graphqlschemas-datatable').bootstrapTable('append', [{
@@ -20905,7 +20952,22 @@ async function updateDatatableMobileAppSync() {
                         f2region: region,
                         apiid: data.apiId
                     }]);
-                }),
+                }).catch(() => {}),
+                sdkcall("AppSync", "getApiCache", {
+                    apiId: graphqlApi.apiId
+                }, false).then((data) => {
+                    data.apiCache['apiId'] = graphqlApi.apiId;
+
+                    $('#section-mobile-appsync-apicaches-datatable').bootstrapTable('append', [{
+                        f2id: data.apiCache.apiId + " Cache",
+                        f2type: 'appsync.apicache',
+                        f2data: data.apiCache,
+                        f2region: region,
+                        apiid: graphqlApi.apiId,
+                        ttl: data.apiCache.ttl,
+                        cachingbehaviour: data.apiCache.apiCachingBehavior
+                    }]);
+                }).catch(() => {}),
                 sdkcall("AppSync", "getGraphqlApi", {
                     apiId: graphqlApi.apiId
                 }, true).then((data) => {
@@ -20928,6 +20990,7 @@ async function updateDatatableMobileAppSync() {
         unblockUI('#section-mobile-appsync-apikeys-datatable');
         unblockUI('#section-mobile-appsync-datasources-datatable');
         unblockUI('#section-mobile-appsync-functionconfigurations-datatable');
+        unblockUI('#section-mobile-appsync-apicaches-datatable');
     });
 }
 
