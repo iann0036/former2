@@ -19663,6 +19663,91 @@ function performF2Mappings(objects) {
                     'type': 'AWS::AppSync::ApiCache',
                     'options': reqParams
                 });
+            } else if (obj.type == "cloudwatch.insightrule") {
+                reqParams.cfn['RuleBody'] = obj.data.Definition;
+                reqParams.cfn['RuleName'] = obj.data.Name;
+                reqParams.cfn['RuleState'] = obj.data.State;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'type': 'AWS::CloudWatch::InsightRule',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecs.primarytaskset") {
+                reqParams.cfn['Cluster'] = obj.data.clusterArn;
+                reqParams.cfn['Service'] = obj.data.serviceArn;
+                reqParams.cfn['TaskSetId'] = obj.data.id;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ecs', obj.id),
+                    'region': obj.region,
+                    'service': 'ecs',
+                    'type': 'AWS::ECS::PrimaryTaskSet',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ecs.taskset") {
+                reqParams.cfn['Cluster'] = obj.data.clusterArn;
+                reqParams.cfn['Service'] = obj.data.serviceArn;
+                reqParams.cfn['ExternalId'] = obj.data.externalId;
+                reqParams.cfn['TaskDefinition'] = obj.data.taskDefinition;
+                reqParams.cfn['LaunchType'] = obj.data.launchType;
+                reqParams.cfn['PlatformVersion'] = obj.data.platformVersion;
+                if (obj.data.networkConfiguration && obj.data.networkConfiguration.awsvpcConfiguration) {
+                    reqParams.cfn['NetworkConfiguration'] = {
+                        'AwsVpcConfiguration': {
+                            'AssignPublicIp': obj.data.networkConfiguration.awsvpcConfiguration.assignPublicIp,
+                            'SecurityGroups': obj.data.networkConfiguration.awsvpcConfiguration.securityGroups,
+                            'Subnets': obj.data.networkConfiguration.awsvpcConfiguration.subnets
+                        }
+                    };
+                }
+                if (obj.data.loadBalancers && obj.data.loadBalancers.length) {
+                    reqParams.cfn['LoadBalancers'] = [];
+                    obj.data.loadBalancers.forEach(loadbalancer => {
+                        reqParams.cfn['LoadBalancers'].push({
+                            'TargetGroupArn': loadbalancer.targetGroupArn,
+                            'LoadBalancerName': loadbalancer.loadBalancerName,
+                            'ContainerName': loadbalancer.containerName,
+                            'ContainerPort': loadbalancer.containerPort
+                        });
+                    });
+                }
+                if (obj.data.serviceRegistries && obj.data.serviceRegistries.length) {
+                    reqParams.cfn['ServiceRegistries'] = [];
+                    obj.data.serviceRegistries.forEach(serviceregistry => {
+                        reqParams.cfn['ServiceRegistries'].push({
+                            'RegistryArn': loadbalancer.registryArn,
+                            'Port': loadbalancer.port,
+                            'ContainerName': loadbalancer.containerName,
+                            'ContainerPort': loadbalancer.containerPort
+                        });
+                    });
+                }
+                if (obj.data.scale) {
+                    reqParams.cfn['Scale'] = {
+                        'Value': obj.data.scale.value,
+                        'Unit': obj.data.scale.unit
+                    };
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ecs', obj.id),
+                    'region': obj.region,
+                    'service': 'ecs',
+                    'type': 'AWS::ECS::TaskSet',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.id,
+                        'GetAtt': {
+                            'Id': obj.data.id
+                        }
+                    }
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

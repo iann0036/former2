@@ -10677,6 +10677,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Insight Rules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'state',
+                        title: 'State',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -10690,6 +10728,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-metricfilters-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         // no params
@@ -10855,10 +10894,28 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     });
 
+    await sdkcall("CloudWatch", "describeInsightRules", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-insightrules-datatable').bootstrapTable('removeAll');
+
+        data.InsightRules.forEach(insightRule => {
+            $('#section-managementandgovernance-cloudwatch-insightrules-datatable').bootstrapTable('append', [{
+                f2id: insightRule.Name,
+                f2type: 'cloudwatch.insightrule',
+                f2data: insightRule,
+                f2region: region,
+                name: insightRule.Name,
+                state: insightRule.State
+            }]);
+        });
+    });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
 }
 
 /* ========================================================================== */
@@ -12915,6 +12972,98 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Task Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Task Set ID',
+                        field: 'tasksetid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'cluster',
+                        title: 'Cluster',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'service',
+                        title: 'Service',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Primary Task Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Task Set ID',
+                        field: 'tasksetid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'cluster',
+                        title: 'Cluster',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'service',
+                        title: 'Service',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -12925,6 +13074,8 @@ async function updateDatatableComputeECS() {
     blockUI('#section-compute-ecs-taskdefinitions-datatable');
     blockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-compute-ecs-primarytasksets-datatable');
+    blockUI('#section-compute-ecs-tasksets-datatable');
 
     await sdkcall("ECS", "listTaskDefinitions", {
         sort: "DESC"
@@ -12987,11 +13138,11 @@ async function updateDatatableComputeECS() {
                 }),
                 sdkcall("ECS", "listServices", {
                     cluster: clusterArn
-                }, true).then((data) => {
-                    data.serviceArns.forEach(serviceArn => {
-                        sdkcall("ECS", "describeServices", {
+                }, true).then(async (data) => {
+                    await Promise.all(data.serviceArns.map(serviceArn => {
+                        return sdkcall("ECS", "describeServices", {
                             services: [serviceArn]
-                        }, true).then((data) => {
+                        }, true).then(async (data) => {
                             if (data.services[0]) {
                                 $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
                                     f2id: data.services[0].serviceArn,
@@ -13004,15 +13155,48 @@ async function updateDatatableComputeECS() {
                                     launchtype: data.services[0].launchType,
                                     schedulingstrategy: data.services[0].schedulingStrategy
                                 }]);
+
+                                if (data.services[0].taskSets && data.services[0].taskSets.length) {
+                                    await sdkcall("ECS", "describeTaskSets", {
+                                        cluster: clusterArn,
+                                        service: serviceArn,
+                                        taskSets: data.services[0].taskSets
+                                    }, true).then((data) => {
+                                        data.taskSets.forEach(taskset => {
+                                            $('#section-compute-ecs-tasksets-datatable').bootstrapTable('append', [{
+                                                f2id: taskset.taskSetArn,
+                                                f2type: 'ecs.taskset',
+                                                f2data: taskset,
+                                                f2region: region,
+                                                tasksetid: taskset.id,
+                                                service: taskset.serviceArn,
+                                                cluster: taskset.clusterArn
+                                            }]);
+                                            if (taskset.status == "PRIMARY") {
+                                                $('#section-compute-ecs-primarytasksets-datatable').bootstrapTable('append', [{
+                                                    f2id: taskset.taskSetArn,
+                                                    f2type: 'ecs.primarytaskset',
+                                                    f2data: taskset,
+                                                    f2region: region,
+                                                    tasksetid: taskset.id,
+                                                    service: taskset.serviceArn,
+                                                    cluster: taskset.clusterArn
+                                                }]);
+                                            }
+                                        });
+                                    });
+                                }
                             }
                         });
-                    });
+                    }));
                 })
             ]);
         }));
 
         unblockUI('#section-compute-ecs-clusters-datatable');
         unblockUI('#section-compute-ecs-services-datatable');
+        unblockUI('#section-compute-ecs-primarytasksets-datatable');
+        unblockUI('#section-compute-ecs-tasksets-datatable');
     });
 
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
