@@ -26087,7 +26087,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
     await sdkcall("SageMaker", "listWorkteams", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-machinelearning-sagemaker-workteams-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Workteams.map(workteam => {
@@ -26107,7 +26107,7 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-workteams-datatable');
-    });
+    }).catch(() => {});
 }
 
 /* ========================================================================== */
