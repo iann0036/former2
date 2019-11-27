@@ -3818,7 +3818,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             return Promise.all([
                 sdkcall("EC2", "searchTransitGatewayRoutes", {
-                    TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId
+                    TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId,
+                    Filters: [{
+                        Name: 'state',
+                        Values: ['active', 'blackhole']
+                    }]
                 }, true).then((data) => {
                     data.Routes.forEach(route => {
                         route['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
@@ -18110,6 +18114,166 @@ sections.push({
     'category': 'Security, Identity &amp; Compliance',
     'service': 'WAF &amp; Shield',
     'resourcetypes': {
+        'V2 Web ACLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Rule Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 IP Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'V2 Regex Pattern Sets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Web ACLs': {
             'columns': [
                 [
@@ -18846,6 +19010,10 @@ sections.push({
 });
 
 async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
+    blockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
@@ -18865,6 +19033,211 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
 
+    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('removeAll');
+
+    if (region == "us-east-1") {
+        await sdkcall("WAFV2", "listWebACLs", {
+            Scope: "CLOUDFRONT"
+        }, true).then(async (data) => {
+            await Promise.all(data.WebACLs.map(webAcl => {
+                return sdkcall("WAF", "getWebACL", {
+                    Scope: "CLOUDFRONT",
+                    Id: webAcl.Id,
+                    Name: webAcl.Name
+                }, true).then((data) => {
+                    data.WebACL['Scope'] = "CLOUDFRONT";
+
+                    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('append', [{
+                        f2id: data.WebACL.ARN,
+                        f2type: 'waf.v2webacl',
+                        f2data: data.WebACL,
+                        f2region: region,
+                        name: data.WebACL.Name,
+                        id: data.WebACL.Id,
+                        description: data.WebACL.Description
+                    }]);
+                });
+            }));
+        });
+    }
+
+    await sdkcall("WAFV2", "listWebACLs", {
+        Scope: "REGIONAL"
+    }, true).then(async (data) => {
+        await Promise.all(data.WebACLs.map(webAcl => {
+            return sdkcall("WAF", "getWebACL", {
+                Scope: "REGIONAL",
+                Id: webAcl.Id,
+                Name: webAcl.Name
+            }, true).then((data) => {
+                data.WebACL['Scope'] = "REGIONAL";
+
+                $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('append', [{
+                    f2id: data.WebACL.ARN,
+                    f2type: 'waf.v2webacl',
+                    f2data: data.WebACL,
+                    f2region: region,
+                    name: data.WebACL.Name,
+                    id: data.WebACL.Id,
+                    description: data.WebACL.Description
+                }]);
+            });
+        }));
+    });
+
+    if (region == "us-east-1") {
+        await sdkcall("WAFV2", "listRuleGroups", {
+            Scope: "CLOUDFRONT"
+        }, true).then(async (data) => {
+            await Promise.all(data.RuleGroups.map(ruleGroup => {
+                return sdkcall("WAF", "getRuleGroup", {
+                    Scope: "CLOUDFRONT",
+                    Id: ruleGroup.Id,
+                    Name: ruleGroup.Name
+                }, true).then((data) => {
+                    data.RuleGroup['Scope'] = "CLOUDFRONT";
+
+                    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('append', [{
+                        f2id: data.RuleGroup.ARN,
+                        f2type: 'waf.v2rulegroup',
+                        f2data: data.RuleGroup,
+                        f2region: region,
+                        name: data.RuleGroup.Name,
+                        id: data.RuleGroup.Id,
+                        description: data.RuleGroup.Description
+                    }]);
+                });
+            }));
+        });
+    }
+
+    await sdkcall("WAFV2", "listRuleGroups", {
+        Scope: "REGIONAL"
+    }, true).then(async (data) => {
+        await Promise.all(data.RuleGroups.map(ruleGroup => {
+            return sdkcall("WAF", "getRuleGroup", {
+                Scope: "REGIONAL",
+                Id: ruleGroup.Id,
+                Name: ruleGroup.Name
+            }, true).then((data) => {
+                data.RuleGroup['Scope'] = "REGIONAL";
+
+                $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('append', [{
+                    f2id: data.RuleGroup.ARN,
+                    f2type: 'waf.v2rulegroup',
+                    f2data: data.RuleGroup,
+                    f2region: region,
+                    name: data.RuleGroup.Name,
+                    id: data.RuleGroup.Id,
+                    description: data.RuleGroup.Description
+                }]);
+            });
+        }));
+    });
+
+    if (region == "us-east-1") {
+        await sdkcall("WAFV2", "listIPSets", {
+            Scope: "CLOUDFRONT"
+        }, true).then(async (data) => {
+            await Promise.all(data.IPSets.map(ipSet => {
+                return sdkcall("WAF", "getIPSet", {
+                    Scope: "CLOUDFRONT",
+                    Id: ipSet.Id,
+                    Name: ipSet.Name
+                }, true).then((data) => {
+                    data.IPSet['Scope'] = "CLOUDFRONT";
+
+                    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('append', [{
+                        f2id: data.IPSet.ARN,
+                        f2type: 'waf.v2ipset',
+                        f2data: data.IPSet,
+                        f2region: region,
+                        name: data.IPSet.Name,
+                        id: data.IPSet.Id,
+                        description: data.IPSet.Description
+                    }]);
+                });
+            }));
+        });
+    }
+
+    await sdkcall("WAFV2", "listIPSets", {
+        Scope: "REGIONAL"
+    }, true).then(async (data) => {
+        await Promise.all(data.IPSets.map(ipSet => {
+            return sdkcall("WAF", "getIPSet", {
+                Scope: "REGIONAL",
+                Id: ipSet.Id,
+                Name: ipSet.Name
+            }, true).then((data) => {
+                data.IPSet['Scope'] = "REGIONAL";
+
+                $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('append', [{
+                    f2id: data.IPSet.ARN,
+                    f2type: 'waf.v2ipset',
+                    f2data: data.IPSet,
+                    f2region: region,
+                    name: data.IPSet.Name,
+                    id: data.IPSet.Id,
+                    description: data.IPSet.Description
+                }]);
+            });
+        }));
+    });
+
+    if (region == "us-east-1") {
+        await sdkcall("WAFV2", "listRegexPatternSets", {
+            Scope: "CLOUDFRONT"
+        }, true).then(async (data) => {
+            await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
+                return sdkcall("WAF", "getRegexPatternSet", {
+                    Scope: "CLOUDFRONT",
+                    Id: regexPatternSet.Id,
+                    Name: regexPatternSet.Name
+                }, true).then((data) => {
+                    data.RegexPatternSet['Scope'] = "CLOUDFRONT";
+
+                    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('append', [{
+                        f2id: data.RegexPatternSet.ARN,
+                        f2type: 'waf.v2regexpatternset',
+                        f2data: data.RegexPatternSet,
+                        f2region: region,
+                        name: data.RegexPatternSet.Name,
+                        id: data.RegexPatternSet.Id,
+                        description: data.RegexPatternSet.Description
+                    }]);
+                });
+            }));
+        });
+    }
+
+    await sdkcall("WAFV2", "listRegexPatternSets", {
+        Scope: "REGIONAL"
+    }, true).then(async (data) => {
+        await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
+            return sdkcall("WAF", "getRegexPatternSet", {
+                Scope: "REGIONAL",
+                Id: regexPatternSet.Id,
+                Name: regexPatternSet.Name
+            }, true).then((data) => {
+                data.RegexPatternSet['Scope'] = "REGIONAL";
+
+                $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('append', [{
+                    f2id: data.RegexPatternSet.ARN,
+                    f2type: 'waf.v2regexpatternset',
+                    f2data: data.RegexPatternSet,
+                    f2region: region,
+                    name: data.RegexPatternSet.Name,
+                    id: data.RegexPatternSet.Id,
+                    description: data.RegexPatternSet.Description
+                }]);
+            });
+        }));
+    });
+    
     await sdkcall("WAF", "listWebACLs", {
         // no params
     }, true).then(async (data) => {
@@ -19285,6 +19658,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
     });
+    
+    unblockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable');
 }
 
 /* ========================================================================== */
