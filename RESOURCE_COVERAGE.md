@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**471/471 (100%)** Resources Covered
+**478/481 (99%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -52,6 +52,7 @@
 | *AWS::AppStream::StackFleetAssociation* | :thumbsup: |
 | *AWS::AppStream::StackUserAssociation* | :thumbsup: |
 | *AWS::AppStream::User* | :thumbsup: |
+| *AWS::AppSync::ApiCache* | :thumbsup: |
 | *AWS::AppSync::ApiKey* | :thumbsup: |
 | *AWS::AppSync::DataSource* | :thumbsup: |
 | *AWS::AppSync::FunctionConfiguration* | :thumbsup: |
@@ -88,6 +89,7 @@
 | *AWS::CloudWatch::Alarm* | :thumbsup: |
 | *AWS::CloudWatch::AnomalyDetector* | :thumbsup: |
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
+| *AWS::CloudWatch::InsightRule* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
 | *AWS::CodeBuild::SourceCredential* | :thumbsup: |
 | *AWS::CodeCommit::Repository* | :thumbsup: |
@@ -196,11 +198,14 @@
 | *AWS::EC2::VolumeAttachment* | :thumbsup: |
 | *AWS::ECR::Repository* | :thumbsup: |
 | *AWS::ECS::Cluster* | :thumbsup: |
+| *AWS::ECS::PrimaryTaskSet* | :thumbsup: |
 | *AWS::ECS::Service* | :thumbsup: |
 | *AWS::ECS::TaskDefinition* | :thumbsup: |
+| *AWS::ECS::TaskSet* | :thumbsup: |
 | *AWS::EFS::FileSystem* | :thumbsup: |
 | *AWS::EFS::MountTarget* | :thumbsup: |
 | *AWS::EKS::Cluster* | :thumbsup: |
+| *AWS::EKS::Nodegroup* | :thumbsup: |
 | *AWS::EMR::Cluster* | :thumbsup: |
 | *AWS::EMR::InstanceFleetConfig* | :thumbsup: |
 | *AWS::EMR::InstanceGroupConfig* | :thumbsup: |
@@ -230,9 +235,9 @@
 | *AWS::GameLift::Alias* | :thumbsup: |
 | *AWS::GameLift::Build* | :thumbsup: |
 | *AWS::GameLift::Fleet* | :thumbsup: |
+| *AWS::GameLift::GameSessionQueue* | :thumbsup: |
 | *AWS::GameLift::MatchmakingConfiguration* | :thumbsup: |
 | *AWS::GameLift::MatchmakingRuleSet* | :thumbsup: |
-| *AWS::GameLift::Queue* | :thumbsup: |
 | *AWS::GameLift::Script* | :thumbsup: |
 | *AWS::Glue::Classifier* | :thumbsup: |
 | *AWS::Glue::Connection* | :thumbsup: |
@@ -313,6 +318,7 @@
 | *AWS::LakeFormation::Permissions* | :thumbsup: |
 | *AWS::LakeFormation::Resource* | :thumbsup: |
 | *AWS::Lambda::Alias* | :thumbsup: |
+| *AWS::Lambda::EventInvokeConfig* |  |
 | *AWS::Lambda::EventSourceMapping* | :thumbsup: |
 | *AWS::Lambda::Function* | :thumbsup: |
 | *AWS::Lambda::LayerVersion* | :thumbsup: |
@@ -473,6 +479,10 @@
 | *AWS::WAFRegional::WebACL* | :thumbsup: |
 | *AWS::WAFRegional::WebACLAssociation* | :thumbsup: |
 | *AWS::WAFRegional::XssMatchSet* | :thumbsup: |
+| *AWS::WAFv2::IPSet* | :thumbsup: |
+| *AWS::WAFv2::RegexPatternSet* | :thumbsup: |
+| *AWS::WAFv2::RuleGroup* |  |
+| *AWS::WAFv2::WebACL* |  |
 | *AWS::WorkSpaces::Workspace* | :thumbsup: |
 | *Alexa::ASK::Skill* | N/A |
 

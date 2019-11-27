@@ -19570,7 +19570,7 @@ function performF2Mappings(objects) {
                     'logicalId': getResourceName('gamelift', obj.id),
                     'region': obj.region,
                     'service': 'gamelift',
-                    'type': 'AWS::GameLift::Queue',
+                    'type': 'AWS::GameLift::GameSessionQueue',
                     'options': reqParams
                 });
             } else if (obj.type == "gamelift.matchmakingconfiguration") {
