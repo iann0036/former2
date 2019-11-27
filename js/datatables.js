@@ -17548,7 +17548,7 @@ async function updateDatatableGameDevelopmentGameLift() {
 
     await sdkcall("GameLift", "describeMatchmakingConfigurations", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('removeAll');
         
         data.Configurations.forEach(configuration => {
@@ -17564,11 +17564,11 @@ async function updateDatatableGameDevelopmentGameLift() {
         });
 
         unblockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("GameLift", "describeMatchmakingRuleSets", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('removeAll');
         
         data.RuleSets.forEach(ruleset => {
@@ -17583,7 +17583,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         });
 
         unblockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
-    });
+    }).catch(() => {});
 }
 
 /* ========================================================================== */
