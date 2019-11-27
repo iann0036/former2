@@ -3818,11 +3818,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             return Promise.all([
                 sdkcall("EC2", "searchTransitGatewayRoutes", {
-                    TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId,
-                    Filters: [{
-                        Name: 'state',
-                        Values: ['active', 'blackhole']
-                    }]
+                    TransitGatewayRouteTableId: transitGatewayRouteTable.TransitGatewayRouteTableId
                 }, true).then((data) => {
                     data.Routes.forEach(route => {
                         route['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
@@ -19237,7 +19233,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             });
         }));
     });
-    
+
     await sdkcall("WAF", "listWebACLs", {
         // no params
     }, true).then(async (data) => {
