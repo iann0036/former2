@@ -7585,9 +7585,9 @@ function performF2Mappings(objects) {
                     'terraformType': 'aws_iot_thing',
                     'options': reqParams,
                     'returnValues': {
-                        'Ref': obj.data.thing.thingName,
+                        'Ref': obj.data.thingName,
                         'Import': {
-                            'ThingName': obj.data.thing.thingName
+                            'ThingName': obj.data.thingName
                         }
                     }
                 });
