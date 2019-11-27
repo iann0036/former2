@@ -31286,7 +31286,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                     await Promise.all(data.Versions.map(version => {
                         return sdkcall("Greengrass", "getResourceDefinitionVersion", {
                             ResourceDefinitionId: definition.Id,
-                            ResourceDefinitionVersionId: version.Id
+                            ResourceDefinitionVersionId: version.Version
                         }, true).then((data) => {
                             data['ResourceDefinitionId'] = definition.Id;
                             $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('append', [{
