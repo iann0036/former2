@@ -19791,6 +19791,26 @@ function performF2Mappings(objects) {
                     'type': 'AWS::WAFv2::RegexPatternSet',
                     'options': reqParams
                 });
+            } else if (obj.type == "lambda.eventinvokeconfig") {
+                reqParams.cfn['DestinationConfig'] = obj.data.DestinationConfig;
+                reqParams.cfn['FunctionName'] = obj.data.FunctionArn;
+                reqParams.cfn['MaximumEventAgeInSeconds'] = obj.data.MaximumEventAgeInSeconds;
+                reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
+                reqParams.cfn['Qualifier'] = obj.data.Qualifier;
+
+                /*
+                SKIPPED:
+                Qualifier: String
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('lambda', obj.id),
+                    'region': obj.region,
+                    'service': 'lambda',
+                    'type': 'AWS::Lambda::EventInvokeConfig',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

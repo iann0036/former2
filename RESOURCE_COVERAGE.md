@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**478/481 (99%)** Resources Covered
+**479/481 (99%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -318,7 +318,7 @@
 | *AWS::LakeFormation::Permissions* | :thumbsup: |
 | *AWS::LakeFormation::Resource* | :thumbsup: |
 | *AWS::Lambda::Alias* | :thumbsup: |
-| *AWS::Lambda::EventInvokeConfig* |  |
+| *AWS::Lambda::EventInvokeConfig* | :thumbsup: |
 | *AWS::Lambda::EventSourceMapping* | :thumbsup: |
 | *AWS::Lambda::Function* | :thumbsup: |
 | *AWS::Lambda::LayerVersion* | :thumbsup: |

@@ -7252,6 +7252,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Event Invoke Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Function',
+                        field: 'function',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'maximumretryattempts',
+                        title: 'Maximum Retry Attempts',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maximumage',
+                        title: 'Maximum Age',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -7264,6 +7310,7 @@ async function updateDatatableComputeLambda() {
     blockUI('#section-compute-lambda-layerversions-datatable');
     blockUI('#section-compute-lambda-layerversionpermissions-datatable');
     blockUI('#section-compute-lambda-eventsourcemappings-datatable');
+    blockUI('#section-compute-lambda-eventinvokeconfigs-datatable');
 
     await sdkcall("Lambda", "listFunctions", {
         // no params
@@ -7336,7 +7383,27 @@ async function updateDatatableComputeLambda() {
                             functionname: version.FunctionName
                         }]);
                     });
-                })
+                }),
+                sdkcall("Lambda", "listFunctionEventInvokeConfigs", {
+                    FunctionName: lambdaFunction.FunctionArn
+                }, false).then(async (data) => {
+                    $('#section-compute-lambda-eventinvokeconfigs-datatable').bootstrapTable('removeAll');
+
+                    var eventConfigIterator = 1;
+                    data.FunctionEventInvokeConfigs.forEach(config => {
+                        $('#section-compute-lambda-eventinvokeconfigs-datatable').bootstrapTable('append', [{
+                            f2id: config.FunctionArn + " Event Config " + eventConfigIterator,
+                            f2type: 'lambda.eventinvokeconfig',
+                            f2data: config,
+                            f2region: region,
+                            function: config.FunctionArn,
+                            maximumretryattempts: config.MaximumRetryAttempts,
+                            maximumage: config.MaximumEventAgeInSeconds + " seconds"
+                        }]);
+
+                        eventConfigIterator += 1;
+                    });
+                }).catch(() => {})
             ]);
         }));
 
@@ -7344,6 +7411,7 @@ async function updateDatatableComputeLambda() {
         unblockUI('#section-compute-lambda-aliases-datatable');
         unblockUI('#section-compute-lambda-versions-datatable');
         unblockUI('#section-compute-lambda-permissions-datatable');
+        unblockUI('#section-compute-lambda-eventinvokeconfigs-datatable');
     });
 
     await sdkcall("Lambda", "listLayers", {
