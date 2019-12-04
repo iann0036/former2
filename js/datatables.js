@@ -19134,7 +19134,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFV2", "listWebACLs", {
         Scope: "REGIONAL"
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         await Promise.all(data.WebACLs.map(webAcl => {
             return sdkcall("WAF", "getWebACL", {
                 Scope: "REGIONAL",
@@ -19154,7 +19154,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    });
+    }).catch(() => {});
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listRuleGroups", {
@@ -19184,7 +19184,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFV2", "listRuleGroups", {
         Scope: "REGIONAL"
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         await Promise.all(data.RuleGroups.map(ruleGroup => {
             return sdkcall("WAF", "getRuleGroup", {
                 Scope: "REGIONAL",
@@ -19204,7 +19204,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    });
+    }).catch(() => {});
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listIPSets", {
@@ -19234,7 +19234,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFV2", "listIPSets", {
         Scope: "REGIONAL"
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         await Promise.all(data.IPSets.map(ipSet => {
             return sdkcall("WAF", "getIPSet", {
                 Scope: "REGIONAL",
@@ -19254,7 +19254,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    });
+    }).catch(() => {});
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listRegexPatternSets", {
@@ -19284,7 +19284,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
     await sdkcall("WAFV2", "listRegexPatternSets", {
         Scope: "REGIONAL"
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
             return sdkcall("WAF", "getRegexPatternSet", {
                 Scope: "REGIONAL",
@@ -19304,11 +19304,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listWebACLs", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.WebACLs.map(webAcl => {
@@ -19328,11 +19328,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listRules", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
         
         if (data.Rules) {
@@ -19354,11 +19354,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listXssMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
@@ -19377,11 +19377,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listIPSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.IPSets.map(ipSet => {
@@ -19400,11 +19400,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-ipsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listSizeConstraintSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
@@ -19423,11 +19423,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listSqlInjectionMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
@@ -19446,11 +19446,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAF", "listByteMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
@@ -19469,13 +19469,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable');
-    });
+    }).catch(() => {});
 
     // Regional
 
     await sdkcall("WAFRegional", "listWebACLs", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('removeAll');
         
@@ -19516,11 +19516,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable');
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listRules", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Rules.map(rule => {
@@ -19540,11 +19540,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listXssMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
@@ -19563,11 +19563,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listIPSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.IPSets.map(ipSet => {
@@ -19586,11 +19586,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listSizeConstraintSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
@@ -19609,11 +19609,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listSqlInjectionMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
@@ -19631,11 +19631,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listByteMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
@@ -19654,11 +19654,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listGeoMatchSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.GeoMatchSets.map(geoMatchSet => {
@@ -19677,11 +19677,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listRegexPatternSets", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
@@ -19700,11 +19700,11 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
-    });
+    }).catch(() => {});
 
     await sdkcall("WAFRegional", "listRateBasedRules", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('removeAll');
         
         await Promise.all(data.Rules.map(rule => {
@@ -19725,7 +19725,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
-    });
+    }).catch(() => {});
     
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');

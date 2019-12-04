@@ -19811,6 +19811,116 @@ function performF2Mappings(objects) {
                     'type': 'AWS::Lambda::EventInvokeConfig',
                     'options': reqParams
                 });
+            } else if (obj.type == "waf.v2webacl") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['DefaultAction'] = obj.data.DefaultAction;
+                reqParams.cfn['VisibilityConfig'] = obj.data.VisibilityConfig;
+                reqParams.cfn['Scope'] = obj.data.Scope;
+                if (obj.data.Rules) {
+                    reqParams.cfn['Rules'] = [];
+                    obj.data.Rules.forEach(rule => {
+                        var statement = {
+                            'AndStatement': rule.Statement.AndStatement,
+                            'ByteMatchStatement': rule.Statement.ByteMatchStatement,
+                            'GeoMatchStatement': rule.Statement.GeoMatchStatement,
+                            'IPSetReferenceStatement': rule.Statement.IPSetReferenceStatement,
+                            'ManagedRuleGroupStatement': rule.Statement.ManagedRuleGroupStatement,
+                            'NotStatement': rule.Statement.NotStatement,
+                            'OrStatement': rule.Statement.OrStatement,
+                            'RateBasedStatement': rule.Statement.RateBasedStatement,
+                            'RegexPatternSetReferenceStatement': {
+                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
+                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
+                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
+                            },
+                            'RuleGroupReferenceStatement': {
+                                'Arn': rule.Statement.RuleGroupReferenceStatement.ARN,
+                                'ExcludedRules': rule.Statement.RuleGroupReferenceStatement.ExcludedRules
+                            },
+                            'SizeConstraintStatement': rule.Statement.SizeConstraintStatement,
+                            'SqliMatchStatement': rule.Statement.SqliMatchStatement,
+                            'XssMatchStatement': rule.Statement.XssMatchStatement
+                        };
+
+                        reqParams.cfn['Rules'].push({
+                            'Name': rule.Name,
+                            'Priority': rule.Priority,
+                            'Action': rule.Action,
+                            'OverrideAction': rule.OverrideAction,
+                            'Statement': statement,
+                            'VisibilityConfig': rule.VisibilityConfig
+                        });
+                    });
+                }
+
+                /*
+                TODO:
+                Tags: 
+                    TagList
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAFv2::WebACL',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.v2rulegroup") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Capacity'] = obj.data.Capacity;
+                reqParams.cfn['VisibilityConfig'] = obj.data.VisibilityConfig;
+                reqParams.cfn['Scope'] = obj.data.Scope;
+                if (obj.data.Rules) {
+                    reqParams.cfn['Rules'] = [];
+                    obj.data.Rules.forEach(rule => {
+                        var statement = {
+                            'AndStatement': rule.Statement.AndStatement,
+                            'ByteMatchStatement': rule.Statement.ByteMatchStatement,
+                            'GeoMatchStatement': rule.Statement.GeoMatchStatement,
+                            'IPSetReferenceStatement': rule.Statement.IPSetReferenceStatement,
+                            'NotStatement': rule.Statement.NotStatement,
+                            'OrStatement': rule.Statement.OrStatement,
+                            'RateBasedStatement': rule.Statement.RateBasedStatement,
+                            'RegexPatternSetReferenceStatement': {
+                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
+                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
+                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
+                            },
+                            'SizeConstraintStatement': rule.Statement.SizeConstraintStatement,
+                            'SqliMatchStatement': rule.Statement.SqliMatchStatement,
+                            'XssMatchStatement': rule.Statement.XssMatchStatement
+                        };
+
+                        reqParams.cfn['Rules'].push({
+                            'Name': rule.Name,
+                            'Priority': rule.Priority,
+                            'Action': rule.Action,
+                            'Statement': statement,
+                            'VisibilityConfig': rule.VisibilityConfig
+                        });
+                    });
+                }
+
+                /*
+                TODO:
+                Rules: 
+                    Rules
+                Tags: 
+                    TagList
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAFv2::RuleGroup',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
