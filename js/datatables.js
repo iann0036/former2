@@ -883,6 +883,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Access Analyzer': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -896,6 +934,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     blockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
     blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-accessanalyzer-datatable');
 
     $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
 
@@ -1135,6 +1174,35 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         });
     });
 
+    await sdkcall("AccessAnalyzer", "listAnalyzers", {
+        type: 'ACCOUNT'
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').bootstrapTable('removeAll');
+        
+        data.analyzers.forEach(async (analyzer) => {
+            await sdkcall("AccessAnalyzer", "getAnalyzer", {
+                analyzerName: analyzer.name
+            }, true).then(async (data) => {
+                await sdkcall("AccessAnalyzer", "listArchiveRules", {
+                    analyzerName: analyzer.name
+                }, true).then(async (archiverulesdata) => {
+                    if (archiverulesdata.archiveRules && Object.keys(archiverulesdata.archiveRules).length > 0) {
+                        data.analyzer['archiveRules'] = archiverulesdata.archiveRules;
+                    }
+                });
+
+                $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').bootstrapTable('append', [{
+                    f2id: data.analyzer.arn,
+                    f2type: 'iam.accessanalyzer',
+                    f2data: data.analyzer,
+                    f2region: region,
+                    name: data.analyzer.name,
+                    type: data.analyzer.type
+                }]);
+            });
+        });
+    });
+
     unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
@@ -1145,6 +1213,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     unblockUI('#section-securityidentityandcompliance-iam-users-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-accessanalyzer-datatable');
 }
 
 /* ========================================================================== */

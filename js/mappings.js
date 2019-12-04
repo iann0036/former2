@@ -19921,6 +19921,47 @@ function performF2Mappings(objects) {
                     'type': 'AWS::WAFv2::RuleGroup',
                     'options': reqParams
                 });
+            } else if (obj.type == "iam.accessanalyzer") {
+                reqParams.cfn['AnalyzerName'] = obj.data.name;
+                reqParams.cfn['Type'] = obj.data.type;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    Object.keys(obj.data.tags).forEach(tagKey => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tagKey,
+                            'Value': obj.data.tags[tagKey]
+                        });
+                    });
+                }
+                if (obj.data.archiveRules) {
+                    reqParams.cfn['ArchiveRules'] = [];
+                    obj.data.archiveRules.forEach(archiveRule => {
+                        var filters = [];
+                        Object.keys(archiveRule.filter).forEach(filterProp => {
+                            filters.push({
+                                'Contains': archiveRule.filter[filterProp].contains,
+                                'Eq': archiveRule.filter[filterProp].eq,
+                                'Exists': archiveRule.filter[filterProp].exists,
+                                'Neq': archiveRule.filter[filterProp].neq,
+                                'Property': filterProp
+                            });
+                        });
+
+                        reqParams.cfn['ArchiveRules'].push({
+                            'Filters': filters,
+                            'RuleName': archiveRule.ruleName
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('accessanalyzer', obj.id),
+                    'region': obj.region,
+                    'service': 'accessanalyzer',
+                    'type': 'AWS::AccessAnalyzer::Analyzer',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
