@@ -19962,6 +19962,22 @@ function performF2Mappings(objects) {
                     'type': 'AWS::AccessAnalyzer::Analyzer',
                     'options': reqParams
                 });
+            } else if (obj.type == "s3.accesspoint") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Bucket'] = obj.data.Bucket;
+                reqParams.cfn['Policy'] = obj.data.Policy;
+                reqParams.cfn['AccountId'] = obj.data.AccountId;
+                reqParams.cfn['VpcConfiguration'] = obj.data.VpcConfiguration;
+                reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('s3', obj.id),
+                    'region': obj.region,
+                    'service': 's3',
+                    'type': 'AWS::S3::AccessPoint',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

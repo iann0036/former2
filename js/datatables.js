@@ -7647,6 +7647,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Access Points': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'bucketname',
+                        title: 'Bucket Name',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -7654,6 +7693,7 @@ sections.push({
 async function updateDatatableStorageS3() {
     blockUI('#section-storage-s3-buckets-datatable');
     blockUI('#section-storage-s3-bucketpolicies-datatable');
+    blockUI('#section-storage-s3-accesspoints-datatable');
 
     await sdkcall("S3", "listBuckets", {
         // no params
@@ -7754,6 +7794,43 @@ async function updateDatatableStorageS3() {
         unblockUI('#section-storage-s3-buckets-datatable');
         unblockUI('#section-storage-s3-bucketpolicies-datatable');
     });
+
+    await sdkcall("STS", "getCallerIdentity", {
+        // no params
+    }, true).then(async (data) => {
+        var accountId = data.Account;
+
+        await sdkcall("S3Control", "listAccessPoints", {
+            AccountId: accountId
+        }, false).then(async (data) => {
+            await Promise.all(data.AccessPointList.map(accessPoint => {
+                return sdkcall("S3Control", "getAccessPoint", {
+                    AccountId: accountId,
+                    Name: accessPoint.Name
+                }, false).then((data) => {
+                    await sdkcall("S3Control", "getAccessPointPolicy", {
+                        AccountId: accountId,
+                        Name: accessPoint.Name
+                    }, false).then(async (policydata) => {
+                        data['Policy'] = policydata.Policy;
+                    });
+
+                    data['AccountId'] = accountId;
+
+                    $('#section-storage-s3-accesspoints-datatable').bootstrapTable('append', [{
+                        f2id: data.Name,
+                        f2type: 's3.accesspoint',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        bucketname: data.Bucket
+                    }]);
+                });
+            }));
+        }).catch(() => {});
+    });
+
+    unblockUI('#section-storage-s3-accesspoints-datatable');
 }
 
 /* ========================================================================== */
