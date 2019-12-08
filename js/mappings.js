@@ -19978,6 +19978,72 @@ function performF2Mappings(objects) {
                     'type': 'AWS::S3::AccessPoint',
                     'options': reqParams
                 });
+            } else if (obj.type == "eventbridge.schemaregistry") {
+                reqParams.cfn['RegistryName'] = obj.data.RegistryName;
+                reqParams.cfn['Description'] = obj.data.Description;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    Object.keys(obj.data.tags).forEach(tagKey => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tagKey,
+                            'Value': obj.data.tags[tagKey]
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('eventbridge', obj.id),
+                    'region': obj.region,
+                    'service': 'eventbridge',
+                    'type': 'AWS::EventSchemas::Registry',
+                    'options': reqParams
+                });
+            } else if (obj.type == "eventbridge.schemadiscoverer") {
+                reqParams.cfn['SourceArn'] = obj.data.SourceArn;
+                reqParams.cfn['Description'] = obj.data.Description;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    Object.keys(obj.data.tags).forEach(tagKey => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tagKey,
+                            'Value': obj.data.tags[tagKey]
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('eventbridge', obj.id),
+                    'region': obj.region,
+                    'service': 'eventbridge',
+                    'type': 'AWS::EventSchemas::Discoverer',
+                    'options': reqParams
+                });
+            } else if (obj.type == "eventbridge.schema") {
+                reqParams.cfn['Content'] = obj.data.Content;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Type'] = obj.data.Type;
+                reqParams.cfn['RegistryName'] = obj.data.RegistryName;
+                reqParams.cfn['SchemaName'] = obj.data.SchemaName;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    Object.keys(obj.data.tags).forEach(tagKey => {
+                        reqParams.cfn['Tags'].push({
+                            'Key': tagKey,
+                            'Value': obj.data.tags[tagKey]
+                        });
+                    });
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('eventbridge', obj.id),
+                    'region': obj.region,
+                    'service': 'eventbridge',
+                    'type': 'AWS::EventSchemas::Schema',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',

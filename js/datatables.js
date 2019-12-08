@@ -7803,11 +7803,12 @@ async function updateDatatableStorageS3() {
         await sdkcall("S3Control", "listAccessPoints", {
             AccountId: accountId
         }, false).then(async (data) => {
+            console.log(data);
             await Promise.all(data.AccessPointList.map(accessPoint => {
                 return sdkcall("S3Control", "getAccessPoint", {
                     AccountId: accountId,
                     Name: accessPoint.Name
-                }, false).then((data) => {
+                }, false).then(async (data) => {
                     await sdkcall("S3Control", "getAccessPointPolicy", {
                         AccountId: accountId,
                         Name: accessPoint.Name
@@ -37268,6 +37269,128 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Schema Registries': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schema Discoverers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Discoverer ID',
+                        field: 'discovererid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schemas': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -37276,6 +37399,9 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-rules-datatable');
     blockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     blockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
+    blockUI('#section-applicationintegration-eventbridge-schemas-datatable');
+    blockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
+    blockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -37347,9 +37473,85 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     });
 
+    await sdkcall("Schemas", "listRegistries", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-schemaregistries-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.Registries.map(async (registry) => {
+            if (registry.RegistryName.startsWith("aws.")) {
+                return Promise.resolve();
+            }
+            
+            return Promise.all([
+                sdkcall("Schemas", "describeRegistry", {
+                    RegistryName: registry.RegistryName
+                }, true).then(async (data) => {
+                    $('#section-applicationintegration-eventbridge-schemaregistries-datatable').bootstrapTable('append', [{
+                        f2id: data.RegistryArn,
+                        f2type: 'eventbridge.schemaregistry',
+                        f2data: data,
+                        f2region: region,
+                        name: data.RegistryName,
+                        description: data.Description
+                    }]);
+                }),
+                sdkcall("Schemas", "listSchemas", {
+                    RegistryName: registry.RegistryName
+                }, true).then(async (data) => {
+                    $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
+            
+                    await Promise.all(data.Schemas.map(async (schema) => {
+                        return sdkcall("Schemas", "describeSchema", {
+                            RegistryName: registry.RegistryName,
+                            SchemaName: schema.SchemaName
+                        }, true).then(async (data) => {
+                            data['RegistryName'] = registry.RegistryName;
+
+                            $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('append', [{
+                                f2id: data.SchemaArn,
+                                f2type: 'eventbridge.schema',
+                                f2data: data,
+                                f2region: region,
+                                name: data.SchemaName,
+                                description: data.Description,
+                                type: data.Type
+                            }]);
+                        });
+                    }));
+                })
+            ]);
+        }));
+    }).catch(() => {});
+
+    await sdkcall("Schemas", "listDiscoverers", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.Discoverers.map(async (discoverer) => {
+            return sdkcall("Schemas", "describeDiscoverer", {
+                DiscovererId: discoverer.DiscovererId
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').bootstrapTable('append', [{
+                    f2id: data.DiscovererArn,
+                    f2type: 'eventbridge.schemadiscoverer',
+                    f2data: data,
+                    f2region: region,
+                    discovererid: data.DiscovererId,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => {});
+
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-schemas-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
 }
 
 /* ========================================================================== */

@@ -1,9 +1,10 @@
 ## CloudFormation Resource Coverage
 
-**479/481 (99%)** Resources Covered
+**486/486 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
+| *AWS::AccessAnalyzer::Analyzer* | :thumbsup: |
 | *AWS::AmazonMQ::Broker* | :thumbsup: |
 | *AWS::AmazonMQ::Configuration* | :thumbsup: |
 | *AWS::AmazonMQ::ConfigurationAssociation* | :thumbsup: |
@@ -228,6 +229,9 @@
 | *AWS::ElasticLoadBalancingV2::LoadBalancer* | :thumbsup: |
 | *AWS::ElasticLoadBalancingV2::TargetGroup* | :thumbsup: |
 | *AWS::Elasticsearch::Domain* | :thumbsup: |
+| *AWS::EventSchemas::Discoverer* | :thumbsup: |
+| *AWS::EventSchemas::Registry* | :thumbsup: |
+| *AWS::EventSchemas::Schema* | :thumbsup: |
 | *AWS::Events::EventBus* | :thumbsup: |
 | *AWS::Events::EventBusPolicy* | :thumbsup: |
 | *AWS::Events::Rule* | :thumbsup: |
@@ -404,6 +408,7 @@
 | *AWS::Route53Resolver::ResolverEndpoint* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRule* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRuleAssociation* | :thumbsup: |
+| *AWS::S3::AccessPoint* | :thumbsup: |
 | *AWS::S3::Bucket* | :thumbsup: |
 | *AWS::S3::BucketPolicy* | :thumbsup: |
 | *AWS::SDB::Domain* | N/A |
@@ -481,8 +486,8 @@
 | *AWS::WAFRegional::XssMatchSet* | :thumbsup: |
 | *AWS::WAFv2::IPSet* | :thumbsup: |
 | *AWS::WAFv2::RegexPatternSet* | :thumbsup: |
-| *AWS::WAFv2::RuleGroup* |  |
-| *AWS::WAFv2::WebACL* |  |
+| *AWS::WAFv2::RuleGroup* | :thumbsup: |
+| *AWS::WAFv2::WebACL* | :thumbsup: |
 | *AWS::WorkSpaces::Workspace* | :thumbsup: |
 | *Alexa::ASK::Skill* | N/A |
 
