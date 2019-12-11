@@ -1201,7 +1201,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }]);
             });
         });
-    });
+    }).catch(() => {});
 
     unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
