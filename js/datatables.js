@@ -10194,7 +10194,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                     policy: data.Attributes.Policy,
                     queueurl: queueUrl
                 }]);
-            });
+            }).catch(() => {});
         }));
     });
 
