@@ -153,7 +153,7 @@ function processTfParameter(param, spacing, index) {
             return string_return;
         }
         
-        string_return = param.replace(/\"/g,`\\"`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/\"/g,`\\"`);
 
         return `"${string_return}"`;
     }
@@ -307,7 +307,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
             return pre_return_str + string_return;
         }
         
-        string_return = param.replace(/\"/g,`\\"`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/\"/g,`\\"`);
 
         return pre_return_str + `"${string_return}"`;
     }
@@ -393,7 +393,7 @@ function processCdktsParameter(param, spacing, index) {
             return string_return;
         }
         
-        string_return = param.replace(/\"/g,`\\"`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/\"/g,`\\"`);
 
         return `"${string_return}"`;
     }
@@ -489,7 +489,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
             return string_return;
         }
         
-        string_return = param.replace(/'/g,`\\'`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/'/g,`\\'`);
 
         return `'${string_return}'`;
     }
@@ -1164,7 +1164,7 @@ function processJsParameter(param, spacing) {
             return string_return;
         }
         
-        string_return = param.replace(/\"/g,`\\"`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/\"/g,`\\"`);
 
         return `"${string_return}"`;
     }
@@ -1222,7 +1222,7 @@ function processBoto3Parameter(param, spacing) {
             return string_return;
         }
         
-        string_return = param.replace(/'/g,`\\'`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/'/g,`\\'`);
 
         return `'${string_return}'`;
     }
@@ -1298,7 +1298,7 @@ function processGoParameter(service, paramkey, param, spacing) {
             return string_return;
         }
         
-        string_return = param.replace(/\"/g,`\\"`).replace(/\\/g,`\\\\`);
+        string_return = param.replace(/\"/g,`\\"`);
 
         return `aws.String("${string_return}")`;
     }
@@ -6458,8 +6458,8 @@ function performF2Mappings(objects) {
                 reqParams.tf['authorizer_credentials'] = obj.data.authorizerCredentials;
                 reqParams.cfn['IdentitySource'] = obj.data.identitySource;
                 reqParams.tf['identity_source'] = obj.data.identitySource;
-                reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression;
-                reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression;
+                reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression.replace(/\\/g,`\\\\`);;
+                reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression.replace(/\\/g,`\\\\`);;
                 reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.authorizerResultTtlInSeconds;
                 reqParams.tf['authorizer_result_ttl_in_seconds'] = obj.data.authorizerResultTtlInSeconds;
 
