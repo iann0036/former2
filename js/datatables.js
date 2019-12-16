@@ -4233,7 +4233,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
-    }).catch(() => {})
+    }).catch(() => {});
 
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
@@ -4253,7 +4253,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -7422,7 +7422,7 @@ async function updateDatatableComputeLambda() {
                             functionname: statement.FunctionName
                         }]);
                     });
-                }).catch(err => {}),
+                }).catch(() => {}),
                 sdkcall("Lambda", "listAliases", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, true).then((data) => {
@@ -7526,7 +7526,7 @@ async function updateDatatableComputeLambda() {
                                     layerversion: statement.LayerVersionArn
                                 }]);
                             });
-                        }).catch(err => {})
+                        }).catch(() => {})
                     ]);
                 }));
             });
@@ -8959,9 +8959,7 @@ async function updateDatatableDatabaseElastiCache() {
                 description: securityGroup.Description
             }]);
         });
-    }).catch((err) => {
-        // Ignoring...most accounts won't have this enabled
-    });
+    }).catch(() => {});
 
     unblockUI('#section-database-elasticache-securitygroups-datatable');
 }
@@ -9911,7 +9909,7 @@ async function updateDatatableDatabaseRedshift() {
                 description: securityGroup.Description
             }]);
         });
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-database-redshift-securitygroups-datatable');
 }
@@ -12561,7 +12559,7 @@ async function updateDatatableAnalyticsKinesis() {
                 }
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-analytics-kinesis-analyticsapplications-datatable');
     unblockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
@@ -12638,7 +12636,7 @@ async function updateDatatableAnalyticsKinesis() {
                 }
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
@@ -15871,7 +15869,7 @@ async function updateDatatableDeveloperToolsCloud9() {
                 });
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-developertools-cloud9-environments-datatable');
 }
@@ -15970,7 +15968,7 @@ async function updateDatatableStorageFSx() {
                 filesystemtype: fileSystem.FileSystemType
             }]);
         });
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-storage-fsx-filesystems-datatable');
 }
@@ -21184,7 +21182,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-robotics-robomaker-fleets-datatable');
 
@@ -21209,7 +21207,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-robotics-robomaker-robots-datatable');
 
@@ -21234,7 +21232,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-robotics-robomaker-robotapplications-datatable');
 
@@ -21259,7 +21257,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-robotics-robomaker-simulationapplications-datatable');
 }
@@ -22693,7 +22691,7 @@ async function updateDatatableInternetofThings1Click() {
                 })
             ]);
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-1click-projects-datatable');
     unblockUI('#section-internetofthings-1click-placements-datatable');
@@ -22719,7 +22717,7 @@ async function updateDatatableInternetofThings1Click() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-1click-devices-datatable');
 }
@@ -23946,7 +23944,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                     documentversion: document.DocumentVersion,
                     documenttype: document.DocumentType
                 }]);
-            }).catch(err => {});
+            }).catch(() => {});
         }));
 
         unblockUI('#section-managementandgovernance-systemsmanager-documents-datatable');
@@ -24985,7 +24983,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                 })
             ]);
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
@@ -25182,7 +25180,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-analytics-channels-datatable');
 
@@ -25205,7 +25203,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-analytics-pipelines-datatable');
 
@@ -25228,7 +25226,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-analytics-datastores-datatable');
 
@@ -25251,7 +25249,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(err => {});
+    }).catch(() => {});
 
     unblockUI('#section-internetofthings-analytics-datasets-datatable');
 }
@@ -31268,7 +31266,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        }).catch(() => {;});
+                        }).catch(() => {});
                     }));
                 }),
                 sdkcall("Greengrass", "getCoreDefinition", {
@@ -39627,7 +39625,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return Promise.resolve();
             }
         }));
-    }).catch(() => {});;
+    }).catch(() => {});
 
     await sdkcall("MediaConvert", "listPresets", {
         // no params
@@ -39652,7 +39650,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return Promise.resolve();
             }
         }));
-    }).catch(() => {});;
+    }).catch(() => {});
 
     await sdkcall("MediaConvert", "listJobTemplates", {
         // no params
