@@ -27776,7 +27776,7 @@ async function updateDatatableAnalyticsGlue() {
                 }));
             });
         }));
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getCrawlers", {
         // no params
@@ -27796,7 +27796,7 @@ async function updateDatatableAnalyticsGlue() {
                 version: crawler.Version
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getClassifiers", {
         // no params
@@ -27834,7 +27834,7 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             }
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getJobs", {
         // no params
@@ -27852,7 +27852,7 @@ async function updateDatatableAnalyticsGlue() {
                 workertype: job.WorkerType
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getTriggers", {
         // no params
@@ -27871,7 +27871,7 @@ async function updateDatatableAnalyticsGlue() {
                 schedule: trigger.Schedule
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getConnections", {
         // no params
@@ -27889,7 +27889,7 @@ async function updateDatatableAnalyticsGlue() {
                 type: connection.ConnectionType
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getMLTransforms", {
         // no params
@@ -27908,7 +27908,7 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: transform.CreatedOn
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getDevEndpoints", {
         // no params
@@ -27926,7 +27926,7 @@ async function updateDatatableAnalyticsGlue() {
                 availabilityzone: devEndpoint.AvailabilityZone
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "listWorkflows", {
         // no params
@@ -27948,7 +27948,7 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             });
         }));
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getSecurityConfigurations", {
         // no params
@@ -27965,7 +27965,7 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: devEndpoint.CreatedTimeStamp
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("Glue", "getDataCatalogEncryptionSettings", {
         // no params
@@ -27979,7 +27979,7 @@ async function updateDatatableAnalyticsGlue() {
             f2region: region,
             catalogid: "(current account)"
         }]);
-    });
+    }).catch(() => {});
 
     unblockUI('#section-analytics-glue-databases-datatable');
     unblockUI('#section-analytics-glue-tables-datatable');
