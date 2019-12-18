@@ -13358,7 +13358,9 @@ async function updateDatatableComputeECS() {
                 }, true).then(async (data) => {
                     await Promise.all(data.serviceArns.map(serviceArn => {
                         return sdkcall("ECS", "describeServices", {
-                            services: [serviceArn]
+                            services: [serviceArn],
+                            cluster: clusterArn,
+                            include: ["TAGS"]
                         }, true).then(async (data) => {
                             if (data.services[0]) {
                                 $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
