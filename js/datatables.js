@@ -290,7 +290,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                         reject(data);
                     });
                 } else if (data.NextMarker) {
-                    if (["WAF", "WAFRegional"].includes(svc)) {
+                    if (["WAF", "WAFRegional", "WAFV2"].includes(svc)) {
                         params['NextMarker'] = data.NextMarker;
                     } else {
                         params['Marker'] = data.NextMarker;
