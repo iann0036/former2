@@ -19818,6 +19818,22 @@ function performF2Mappings(objects) {
                 if (obj.data.Rules) {
                     reqParams.cfn['Rules'] = [];
                     obj.data.Rules.forEach(rule => {
+                        var regexpatternsetreferencestatement = null;
+                        var rulegroupreferencestatement = null;
+                        if (rule.Statement.RegexPatternSetReferenceStatement) {
+                            regexpatternsetreferencestatement = {
+                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
+                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
+                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
+                            };
+                        }
+                        if (rule.Statement.RuleGroupReferenceStatement) {
+                            rulegroupreferencestatement = {
+                                'Arn': rule.Statement.RuleGroupReferenceStatement.ARN,
+                                'ExcludedRules': rule.Statement.RuleGroupReferenceStatement.ExcludedRules
+                            };
+                        }
+
                         var statement = {
                             'AndStatement': rule.Statement.AndStatement,
                             'ByteMatchStatement': rule.Statement.ByteMatchStatement,
@@ -19827,15 +19843,8 @@ function performF2Mappings(objects) {
                             'NotStatement': rule.Statement.NotStatement,
                             'OrStatement': rule.Statement.OrStatement,
                             'RateBasedStatement': rule.Statement.RateBasedStatement,
-                            'RegexPatternSetReferenceStatement': {
-                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
-                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
-                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
-                            },
-                            'RuleGroupReferenceStatement': {
-                                'Arn': rule.Statement.RuleGroupReferenceStatement.ARN,
-                                'ExcludedRules': rule.Statement.RuleGroupReferenceStatement.ExcludedRules
-                            },
+                            'RegexPatternSetReferenceStatement': regexpatternsetreferencestatement,
+                            'RuleGroupReferenceStatement': rulegroupreferencestatement,
                             'SizeConstraintStatement': rule.Statement.SizeConstraintStatement,
                             'SqliMatchStatement': rule.Statement.SqliMatchStatement,
                             'XssMatchStatement': rule.Statement.XssMatchStatement
@@ -19875,6 +19884,15 @@ function performF2Mappings(objects) {
                 if (obj.data.Rules) {
                     reqParams.cfn['Rules'] = [];
                     obj.data.Rules.forEach(rule => {
+                        var regexpatternsetreferencestatement = null;
+                        if (rule.Statement.RegexPatternSetReferenceStatement) {
+                            regexpatternsetreferencestatement = {
+                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
+                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
+                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
+                            };
+                        }
+
                         var statement = {
                             'AndStatement': rule.Statement.AndStatement,
                             'ByteMatchStatement': rule.Statement.ByteMatchStatement,
@@ -19883,11 +19901,7 @@ function performF2Mappings(objects) {
                             'NotStatement': rule.Statement.NotStatement,
                             'OrStatement': rule.Statement.OrStatement,
                             'RateBasedStatement': rule.Statement.RateBasedStatement,
-                            'RegexPatternSetReferenceStatement': {
-                                'Arn': rule.Statement.RegexPatternSetReferenceStatement.ARN,
-                                'FieldToMatch': rule.Statement.RegexPatternSetReferenceStatement.FieldToMatch,
-                                'TextTransformations': rule.Statement.RegexPatternSetReferenceStatement.TextTransformations
-                            },
+                            'RegexPatternSetReferenceStatement': regexpatternsetreferencestatement,
                             'SizeConstraintStatement': rule.Statement.SizeConstraintStatement,
                             'SqliMatchStatement': rule.Statement.SqliMatchStatement,
                             'XssMatchStatement': rule.Statement.XssMatchStatement
