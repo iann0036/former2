@@ -19258,7 +19258,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             Scope: "CLOUDFRONT"
         }, true).then(async (data) => {
             await Promise.all(data.WebACLs.map(webAcl => {
-                return sdkcall("WAF", "getWebACL", {
+                return sdkcall("WAFV2", "getWebACL", {
                     Scope: "CLOUDFRONT",
                     Id: webAcl.Id,
                     Name: webAcl.Name
@@ -19283,7 +19283,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
         await Promise.all(data.WebACLs.map(webAcl => {
-            return sdkcall("WAF", "getWebACL", {
+            return sdkcall("WAFV2", "getWebACL", {
                 Scope: "REGIONAL",
                 Id: webAcl.Id,
                 Name: webAcl.Name
@@ -19308,7 +19308,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             Scope: "CLOUDFRONT"
         }, true).then(async (data) => {
             await Promise.all(data.RuleGroups.map(ruleGroup => {
-                return sdkcall("WAF", "getRuleGroup", {
+                return sdkcall("WAFV2", "getRuleGroup", {
                     Scope: "CLOUDFRONT",
                     Id: ruleGroup.Id,
                     Name: ruleGroup.Name
@@ -19333,7 +19333,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
         await Promise.all(data.RuleGroups.map(ruleGroup => {
-            return sdkcall("WAF", "getRuleGroup", {
+            return sdkcall("WAFV2", "getRuleGroup", {
                 Scope: "REGIONAL",
                 Id: ruleGroup.Id,
                 Name: ruleGroup.Name
@@ -19358,7 +19358,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             Scope: "CLOUDFRONT"
         }, true).then(async (data) => {
             await Promise.all(data.IPSets.map(ipSet => {
-                return sdkcall("WAF", "getIPSet", {
+                return sdkcall("WAFV2", "getIPSet", {
                     Scope: "CLOUDFRONT",
                     Id: ipSet.Id,
                     Name: ipSet.Name
@@ -19383,7 +19383,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
         await Promise.all(data.IPSets.map(ipSet => {
-            return sdkcall("WAF", "getIPSet", {
+            return sdkcall("WAFV2", "getIPSet", {
                 Scope: "REGIONAL",
                 Id: ipSet.Id,
                 Name: ipSet.Name
@@ -19408,7 +19408,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             Scope: "CLOUDFRONT"
         }, true).then(async (data) => {
             await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
-                return sdkcall("WAF", "getRegexPatternSet", {
+                return sdkcall("WAFV2", "getRegexPatternSet", {
                     Scope: "CLOUDFRONT",
                     Id: regexPatternSet.Id,
                     Name: regexPatternSet.Name
@@ -19433,7 +19433,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
         await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
-            return sdkcall("WAF", "getRegexPatternSet", {
+            return sdkcall("WAFV2", "getRegexPatternSet", {
                 Scope: "REGIONAL",
                 Id: regexPatternSet.Id,
                 Name: regexPatternSet.Name

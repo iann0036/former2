@@ -19750,7 +19750,6 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "waf.v2ipset") {
                 reqParams.cfn['Name'] = obj.data.Name;
-                reqParams.cfn['Id'] = obj.data.Id;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['IPAddressVersion'] = obj.data.IPAddressVersion;
                 reqParams.cfn['Addresses'] = obj.data.Addresses;
@@ -19772,7 +19771,6 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "waf.v2regexpatternset") {
                 reqParams.cfn['Name'] = obj.data.Name;
-                reqParams.cfn['Id'] = obj.data.Id;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['RegularExpressionList'] = obj.data.RegularExpressionList;
                 reqParams.cfn['Scope'] = obj.data.Scope;
