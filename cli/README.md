@@ -6,9 +6,11 @@ The Former2 CLI allows you to use the [former2.com](https://former2.com) tool di
 
 ## Install
 
-npm install former2
+npm install -g former2
 
 ## Usage
+
+Former2 will load AWS credentials from your local credentials file, environment variables or [other available sources](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) per default precedence. It is recommended that you provide only read access with these credentials and suggest you assign the [ReadOnlyAccess](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/ReadOnlyAccess) policy.
 
 ### generate
 

@@ -1,7 +1,13 @@
 {
   "name": "former2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Command-line interface for the Former2.com tool",
+  "keywords": [
+    "aws",
+    "cloudformation",
+    "terraform",
+    "troposphere"
+  ],
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +21,6 @@
     "commander": "^4.0.1",
     "deepmerge": "^4.2.2",
     "logplease": "^1.2.15"
-  }
+  },
+  "bin": "./main.js"
 }

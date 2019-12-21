@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var AWS = require("aws-sdk");
 const fs = require('fs');
 const process = require('process');
