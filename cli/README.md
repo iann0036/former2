@@ -1,5 +1,7 @@
 # Former2 CLI
 
+<span class="badge-npmversion"><a href="https://npmjs.org/package/former2" title="View this project on NPM"><img src="https://img.shields.io/npm/v/former2.svg" alt="NPM version" /></a></span>
+
 The Former2 CLI allows you to use the [former2.com](https://former2.com) tool directly from your command line.
 
 :exclamation: **CAUTION:** The Former2 CLI is experimental. Use at your own risk.

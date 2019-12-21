@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**486/486 (100%)** Resources Covered
+**488/488 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -92,6 +92,7 @@
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CloudWatch::InsightRule* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
+| *AWS::CodeBuild::ReportGroup* | :thumbsup: |
 | *AWS::CodeBuild::SourceCredential* | :thumbsup: |
 | *AWS::CodeCommit::Repository* | :thumbsup: |
 | *AWS::CodeDeploy::Application* | :thumbsup: |
@@ -151,6 +152,7 @@
 | *AWS::EC2::EIPAssociation* | :thumbsup: |
 | *AWS::EC2::EgressOnlyInternetGateway* | :thumbsup: |
 | *AWS::EC2::FlowLog* | :thumbsup: |
+| *AWS::EC2::GatewayRouteTableAssociation* | :thumbsup: |
 | *AWS::EC2::Host* | :thumbsup: |
 | *AWS::EC2::Instance* | :thumbsup: |
 | *AWS::EC2::InternetGateway* | :thumbsup: |
@@ -493,10 +495,11 @@
 
 ## Terraform Coverage
 
-**298/521 (57%)** Resources Covered
+**298/533 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
+| *aws_accessanalyzer_analyzer* |  |
 | *aws_acm_certificate* | :thumbsup: |
 | *aws_acm_certificate_validation* |  |
 | *aws_acmpca_certificate_authority* |  |
@@ -656,6 +659,8 @@
 | *aws_dx_hosted_private_virtual_interface_accepter* | N/A |
 | *aws_dx_hosted_public_virtual_interface* | :thumbsup: |
 | *aws_dx_hosted_public_virtual_interface_accepter* | N/A |
+| *aws_dx_hosted_transit_virtual_interface* |  |
+| *aws_dx_hosted_transit_virtual_interface_accepter* |  |
 | *aws_dx_lag* | :thumbsup: |
 | *aws_dx_private_virtual_interface* | :thumbsup: |
 | *aws_dx_public_virtual_interface* | :thumbsup: |
@@ -682,6 +687,7 @@
 | *aws_ecr_lifecycle_policy* | :thumbsup: |
 | *aws_ecr_repository* | :thumbsup: |
 | *aws_ecr_repository_policy* | :thumbsup: |
+| *aws_ecs_capacity_provider* |  |
 | *aws_ecs_cluster* | :thumbsup: |
 | *aws_ecs_service* | :thumbsup: |
 | *aws_ecs_task_definition* | :thumbsup: |
@@ -691,6 +697,8 @@
 | *aws_eip* | :thumbsup: |
 | *aws_eip_association* | :thumbsup: |
 | *aws_eks_cluster* | :thumbsup: |
+| *aws_eks_fargate_profile* |  |
+| *aws_eks_node_group* |  |
 | *aws_elastic_beanstalk_application* | :thumbsup: |
 | *aws_elastic_beanstalk_application_version* | :thumbsup: |
 | *aws_elastic_beanstalk_configuration_template* | :thumbsup: |
@@ -730,6 +738,7 @@
 | *aws_glue_job* |  |
 | *aws_glue_security_configuration* |  |
 | *aws_glue_trigger* |  |
+| *aws_glue_workflow* |  |
 | *aws_guardduty_detector* | :thumbsup: |
 | *aws_guardduty_invite_accepter* |  |
 | *aws_guardduty_ipset* | :thumbsup: |
@@ -783,8 +792,10 @@
 | *aws_lambda_alias* | :thumbsup: |
 | *aws_lambda_event_source_mapping* | :thumbsup: |
 | *aws_lambda_function* | :thumbsup: |
+| *aws_lambda_function_event_invoke_config* |  |
 | *aws_lambda_layer_version* | :thumbsup: |
 | *aws_lambda_permission* | :thumbsup: |
+| *aws_lambda_provisioned_concurrency_config* |  |
 | *aws_launch_configuration* | :thumbsup: |
 | *aws_launch_template* | :thumbsup: |
 | *aws_lb* | :thumbsup: |
@@ -808,6 +819,7 @@
 | *aws_macie_member_account_association* | :thumbsup: |
 | *aws_macie_s3_bucket_association* | :thumbsup: |
 | *aws_main_route_table_association* |  |
+| *aws_media_convert_queue* |  |
 | *aws_media_package_channel* | :thumbsup: |
 | *aws_media_store_container* | :thumbsup: |
 | *aws_media_store_container_policy* | :thumbsup: |
@@ -862,6 +874,7 @@
 | *aws_pinpoint_sms_channel* | :thumbsup: |
 | *aws_placement_group* | :thumbsup: |
 | *aws_proxy_protocol_policy* |  |
+| *aws_qldb_ledger* |  |
 | *aws_quicksight_group* | :thumbsup: |
 | *aws_quicksight_user* |  |
 | *aws_ram_principal_association* |  |
@@ -1017,4 +1030,5 @@
 | *aws_wafregional_xss_match_set* | :thumbsup: |
 | *aws_worklink_fleet* | :thumbsup: |
 | *aws_worklink_website_certificate_authority_association* | :thumbsup: |
+| *aws_workspaces_ip_group* |  |
 | *aws_xray_sampling_rule* | :thumbsup: |

@@ -2873,6 +2873,52 @@ sections.push({
                 ]
             ]
         },
+        'Gateway Route Table Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Route Table Association ID',
+                        field: 'routetableassociationid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'routetableid',
+                        title: 'Route Table ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'gatewayid',
+                        title: 'Gateway ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Subnet IPv6 CIDR Blocks': {
             'columns': [
                 [
@@ -3381,6 +3427,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
@@ -3783,6 +3830,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').bootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
             routeTable.Routes.forEach(route => {
@@ -3802,15 +3850,27 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             if (routeTable.Associations) {
                 routeTable.Associations.forEach(association => {
-                    $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('append', [{
-                        f2id: association.RouteTableAssociationId,
-                        f2type: 'ec2.subnetroutetableassociation',
-                        f2data: association,
-                        f2region: region,
-                        routetableassociationid: association.RouteTableAssociationId,
-                        routetableid: association.RouteTableId,
-                        subnetid: association.SubnetId
-                    }]);
+                    if (association.SubnetId) {
+                        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('append', [{
+                            f2id: association.RouteTableAssociationId,
+                            f2type: 'ec2.subnetroutetableassociation',
+                            f2data: association,
+                            f2region: region,
+                            routetableassociationid: association.RouteTableAssociationId,
+                            routetableid: association.RouteTableId,
+                            subnetid: association.SubnetId
+                        }]);
+                    } else if (association.GatewayId) {
+                        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').bootstrapTable('append', [{
+                            f2id: association.RouteTableAssociationId,
+                            f2type: 'ec2.gatewayroutetableassociation',
+                            f2data: association,
+                            f2region: region,
+                            routetableassociationid: association.RouteTableAssociationId,
+                            routetableid: association.RouteTableId,
+                            gatewayid: association.GatewayId
+                        }]);
+                    }
                 });
             }
 
@@ -3844,6 +3904,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-routes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable');
+        unblockUI('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable');
     });
 
     await sdkcall("EC2", "describeTransitGateways", {
@@ -16962,6 +17023,53 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Report Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -16970,6 +17078,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     blockUI('#section-developertools-codebuild-projects-datatable');
     blockUI('#section-developertools-codebuild-sourcecredentials-datatable');
     blockUI('#section-developertools-codebuild-notificationrules-datatable');
+    blockUI('#section-developertools-codebuild-reportgroups-datatable');
 
     await sdkcall("CodeBuild", "listProjects", {
         // no params
@@ -17036,9 +17145,32 @@ async function updateDatatableDeveloperToolsCodeBuild() {
         }));
     }).catch(() => {});
 
+    await sdkcall("CodeBuild", "listReportGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-developertools-codebuild-reportgroups-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.reportGroups.map(reportGroup => {
+            return sdkcall("CodeBuild", "batchGetReportGroups", {
+                reportGroupArns: [reportGroup]
+            }, true).then((data) => {
+                $('#section-developertools-codebuild-reportgroups-datatable').bootstrapTable('append', [{
+                    f2id: data.reportGroups[0].arn,
+                    f2type: 'codebuild.reportgroup',
+                    f2data: data.reportGroups[0],
+                    f2region: region,
+                    name: data.reportGroups[0].name,
+                    type: data.reportGroups[0].type,
+                    creationtime: data.reportGroups[0].created
+                }]);
+            });
+        }));
+    }).catch(() => {});
+
     unblockUI('#section-developertools-codebuild-projects-datatable');
     unblockUI('#section-developertools-codebuild-sourcecredentials-datatable');
     unblockUI('#section-developertools-codebuild-notificationrules-datatable');
+    unblockUI('#section-developertools-codebuild-reportgroups-datatable');
 }
 
 /* ========================================================================== */

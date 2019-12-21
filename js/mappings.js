@@ -20058,6 +20058,48 @@ function performF2Mappings(objects) {
                     'type': 'AWS::EventSchemas::Schema',
                     'options': reqParams
                 });
+            } else if (obj.type == "codebuild.reportgroup") {
+                var s3destination = null;
+                if (obj.data.exportConfig.s3Destination) {
+                    s3destination = {
+                        'Bucket': obj.data.exportConfig.s3Destination.bucket,
+                        'EncryptionDisabled': obj.data.exportConfig.s3Destination.encryptionDisabled,
+                        'EncryptionKey': obj.data.exportConfig.s3Destination.encryptionKey,
+                        'Packaging': obj.data.exportConfig.s3Destination.packaging,
+                        'Path': obj.data.exportConfig.s3Destination.path
+                    };
+                }
+
+                reqParams.cfn['ExportConfig'] = {
+                    'ExportConfigType': obj.data.exportConfig.exportConfigType,
+                    'S3Destination': s3destination
+                };
+                reqParams.cfn['Name'] = obj.data.name;
+                reqParams.cfn['Type'] = obj.data.type;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('codebuild', obj.id),
+                    'region': obj.region,
+                    'service': 'codebuild',
+                    'type': 'AWS::CodeBuild::ReportGroup',
+                    'options': reqParams
+                });
+            } else if (obj.type == "ec2.gatewayroutetableassociation") {
+                reqParams.cfn['RouteTableId'] = obj.data.RouteTableId;
+                reqParams.tf['route_table_id'] = obj.data.RouteTableId;
+                reqParams.cfn['GatewayId'] = obj.data.GatewayId;
+                reqParams.tf['gateway_id'] = obj.data.GatewayId;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('ec2', obj.id),
+                    'region': obj.region,
+                    'service': 'ec2',
+                    'type': 'AWS::EC2::GatewayRouteTableAssociation',
+                    'terraformType': 'aws_route_table_association',
+                    'options': reqParams
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
