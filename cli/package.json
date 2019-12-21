@@ -1,6 +1,6 @@
 {
   "name": "former2",
-  "version": "0.1.1",
+  "version": "0.2.1",
   "description": "Command-line interface for the Former2.com tool",
   "keywords": [
     "aws",
@@ -10,6 +10,7 @@
   ],
   "main": "main.js",
   "scripts": {
+    "prepare": "cp ../js/deepmerge.js . && cp ../js/mappings.js . && cp ../js/datatables.js .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ian Mckay",

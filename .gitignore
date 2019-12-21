@@ -1,2 +1,5 @@
 notes.txt
 cli/node_modules
+cli/deepmerge.js
+cli/mappings.js
+cli/datatables.js

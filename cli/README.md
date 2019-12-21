@@ -6,7 +6,9 @@ The Former2 CLI allows you to use the [former2.com](https://former2.com) tool di
 
 ## Install
 
+```
 npm install -g former2
+```
 
 ## Usage
 
@@ -17,7 +19,10 @@ Former2 will load AWS credentials from your local credentials file, environment 
 The `generate` command will generate one or multiple outputs from all discovered resources and write them to the filename specified.
 
 ```
-former2 generate --output-cloudformation "cloudformation.yml" --output-terraform "terraform.hcl" --output-debug "debug.json"
+former2 generate \
+  --output-cloudformation "cloudformation.yml" \
+  --output-terraform "terraform.hcl" \
+  --output-debug "debug.json"
 ```
 
 ## Security

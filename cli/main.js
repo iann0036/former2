@@ -37,9 +37,9 @@ function sleep(ms) {
 var region = 'ap-southeast-2';
 var stack_parameters = [];
 
-eval(require('fs').readFileSync(__dirname + '/../js/deepmerge.js', 'utf8'));
-eval(require('fs').readFileSync(__dirname + '/../js/mappings.js', 'utf8'));
-eval(require('fs').readFileSync(__dirname + '/../js/datatables.js', 'utf8'));
+eval(require('fs').readFileSync(__dirname + '/deepmerge.js', 'utf8'));
+eval(require('fs').readFileSync(__dirname + '/mappings.js', 'utf8'));
+eval(require('fs').readFileSync(__dirname + '/datatables.js', 'utf8'));
 
 f2log = function(msg){};
 f2trace = function(err){};
