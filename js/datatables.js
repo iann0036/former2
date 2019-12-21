@@ -230,12 +230,12 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
             if (err) {
                 if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
                     if (backoff) {
-                        console.log("Too many requests, sleeping for " + backoff + "ms");
+                        f2log("Too many requests, sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
                         backoff *= 2;
                         backoff = Math.min(backoff, 120000);
                     } else {
-                        console.log("Too many requests, sleeping for 500ms");
+                        f2log("Too many requests, sleeping for 500ms");
                         await new Promise(resolve => setTimeout(resolve, 500));
                         backoff = 500 + Math.floor(Math.random() * 500);
                     }
@@ -246,18 +246,19 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     });
                 } else {
                     if (err.code == "NetworkingError") {
-                        console.log("Skipping " + svc + "." + method + " NetworkingError");
+                        f2log("Skipping " + svc + "." + method + " NetworkingError");
                     } else if (err.code == "AccessDeniedException") {
-                        console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                        f2log("Skipping " + svc + "." + method + " AccessDeniedException");
                     } else if (err.code == "UnknownError" && svc == "MediaStore") {
-                        console.log("Skipping " + svc + "." + method + " UnknownError");
+                        f2log("Skipping " + svc + "." + method + " UnknownError");
                     } else if (err.code == "ForbiddenException" && svc == "RoboMaker") {
-                        console.log("Skipping " + svc + "." + method + " ForbiddenException");
+                        f2log("Skipping " + svc + "." + method + " ForbiddenException");
                     } else if (err.code == "AccessDeniedException" && svc == "FSx") {
-                        console.log("Skipping " + svc + "." + method + " AccessDeniedException");
+                        f2log("Skipping " + svc + "." + method + " AccessDeniedException");
                     } else if (alert_on_errors) {
-                        console.log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
-                        console.trace(err);
+                        f2log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
+                        f2trace(err);
+
                         $.notify({
                             icon: 'font-icon font-icon-warning',
                             title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
@@ -7803,7 +7804,6 @@ async function updateDatatableStorageS3() {
         await sdkcall("S3Control", "listAccessPoints", {
             AccountId: accountId
         }, false).then(async (data) => {
-            console.log(data);
             await Promise.all(data.AccessPointList.map(accessPoint => {
                 return sdkcall("S3Control", "getAccessPoint", {
                     AccountId: accountId,
@@ -10167,33 +10167,35 @@ async function updateDatatableApplicationIntegrationSQS() {
         $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.QueueUrls.map(queueUrl => {
-            return sdkcall("SQS", "getQueueAttributes", {
-                QueueUrl: queueUrl,
-                AttributeNames: ['All']
-            }, true).then((data) => {
-                data['QueueUrl'] = queueUrl;
-                $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('append', [{
-                    f2id: queueUrl,
-                    f2type: 'sqs.queue',
-                    f2data: data,
-                    f2region: region,
-                    queueurl: queueUrl
-                }]);
-        
-                $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('append', [{
-                    f2id: queueUrl,
-                    f2type: 'sqs.queuepolicy',
-                    f2data: {
-                        'Policy': data.Attributes.Policy,
-                        'Queue': queueUrl
-                    },
-                    f2region: region,
-                    policy: data.Attributes.Policy,
-                    queueurl: queueUrl
-                }]);
-            }).catch(() => {});
-        }));
+        if (data.QueueUrls) {
+            await Promise.all(data.QueueUrls.map(queueUrl => {
+                return sdkcall("SQS", "getQueueAttributes", {
+                    QueueUrl: queueUrl,
+                    AttributeNames: ['All']
+                }, true).then((data) => {
+                    data['QueueUrl'] = queueUrl;
+                    $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('append', [{
+                        f2id: queueUrl,
+                        f2type: 'sqs.queue',
+                        f2data: data,
+                        f2region: region,
+                        queueurl: queueUrl
+                    }]);
+            
+                    $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('append', [{
+                        f2id: queueUrl,
+                        f2type: 'sqs.queuepolicy',
+                        f2data: {
+                            'Policy': data.Attributes.Policy,
+                            'Queue': queueUrl
+                        },
+                        f2region: region,
+                        policy: data.Attributes.Policy,
+                        queueurl: queueUrl
+                    }]);
+                }).catch(() => {});
+            }));
+        }
     });
 
     unblockUI('#section-applicationintegration-sqs-queues-datatable');
@@ -38674,7 +38676,6 @@ async function updateDatatableAnalyticsLakeFormation() {
             return sdkcall("LakeFormation", "describeResource", {
                 ResourceArn: resource.ResourceArn
             }, false).then(async (data) => {
-                console.log(data);
                 $('#section-analytics-lakeformation-resources-datatable').bootstrapTable('append', [{
                     f2id: data.ResourceInfo.ResourceArn,
                     f2type: 'lakeformation.resource',

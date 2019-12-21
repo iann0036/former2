@@ -1,3 +1,7 @@
+// Logging functions
+var f2log = function(msg) { console.log(msg); }
+var f2trace = function(msg) { console.log(msg); }
+
 /* ========================================================================== */
 // Mapping Helper Functions (from AWSConsoleRecorder)
 /* ========================================================================== */
@@ -108,7 +112,7 @@ function ensureInitDeclaredGo(service, region) {
     return '';
 }
 
-function processTfParameter(param, spacing, index) {
+function processTfParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -163,7 +167,7 @@ function processTfParameter(param, spacing, index) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processTfParameter(paramitem, spacing + 4, index));
+            paramitems.push(processTfParameter(paramitem, spacing + 4, index, tracked_resources));
         });
 
         return `[
@@ -177,7 +181,7 @@ function processTfParameter(param, spacing, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processTfParameter(param[key], spacing + 4, index);
+            var subvalue = processTfParameter(param[key], spacing + 4, index, tracked_resources);
             if (typeof subvalue !== "undefined") {
                 if (subvalue[0] == '{') {
                     paramitems.push(key + " " + subvalue);
@@ -354,7 +358,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
-function processCdktsParameter(param, spacing, index) {
+function processCdktsParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -403,7 +407,7 @@ function processCdktsParameter(param, spacing, index) {
         }
 
         param.forEach(paramitem => {
-            var item = processCdktsParameter(paramitem, spacing + 4, index);
+            var item = processCdktsParameter(paramitem, spacing + 4, index, tracked_resources);
             if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
@@ -416,7 +420,7 @@ function processCdktsParameter(param, spacing, index) {
     }
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
-            var item = processCdktsParameter(param[key], spacing + 4, index);
+            var item = processCdktsParameter(param[key], spacing + 4, index, tracked_resources);
             if (typeof item !== "undefined") {
                 paramitems.push(lcfirststr(key) + ": " + item);
             }
@@ -431,7 +435,7 @@ function processCdktsParameter(param, spacing, index) {
     return undefined;
 }
 
-function processTroposphereParameter(param, spacing, keyname, index) {
+function processTroposphereParameter(param, spacing, keyname, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -499,7 +503,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
         }
 
         param.forEach(paramitem => {
-            var item = processTroposphereParameter(paramitem, spacing + 4, keyname, index);
+            var item = processTroposphereParameter(paramitem, spacing + 4, keyname, index, tracked_resources);
             if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
@@ -528,7 +532,7 @@ function processTroposphereParameter(param, spacing, keyname, index) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key, index);
+            var item = processTroposphereParameter(param[key], spacing + 4, keyname + "." + key, index, tracked_resources);
             if (typeof item !== "undefined") {
                 paramitems.push(key + "=" + item);
             }
@@ -1139,8 +1143,6 @@ function getTropospherePropertyName(keyname) {
         }
     }
 
-    console.log("Unknown Troposphere mapping: " + keyname);
-
     return null;
 }
 
@@ -1465,7 +1467,7 @@ function lcfirststr(str) {
     return ret;
 }
 
-function outputMapTroposphere(index, service, type, options, region, was_blocked, logicalId) {
+function outputMapTroposphere(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
 
@@ -1494,7 +1496,7 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
     if (Object.keys(options).length) {
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
-                var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option, index);
+                var optionvalue = processTroposphereParameter(options[option], 4, troposervice + "." + option, index, tracked_resources);
                 if (typeof optionvalue !== "undefined") {
                     params += `,
     ${option}=${optionvalue}`;
@@ -1512,14 +1514,14 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
     return output;
 }
 
-function outputMapCdkts(index, service, type, options, region, was_blocked, logicalId) {
+function outputMapCdkts(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
 
     if (Object.keys(options).length) {
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
-                var optionvalue = processCdktsParameter(options[option], 12, index);
+                var optionvalue = processCdktsParameter(options[option], 12, index, tracked_resources);
                 if (typeof optionvalue !== "undefined") {
                     params += `
             ${lcfirststr(option)}: ${optionvalue},`;
@@ -1685,7 +1687,7 @@ ${cfnspacing}${cfnspacing}Properties:${params}
     return output;
 }
 
-function outputMapTf(index, service, type, options, region, was_blocked, logicalId) {
+function outputMapTf(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
 
@@ -1694,7 +1696,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
             if (typeof options[option] !== "undefined" && options[option] !== null) {
                 if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
                     for (var i=0; i<options[option].length; i++) {
-                        var optionvalue = processTfParameter(options[option][i], 4, index);
+                        var optionvalue = processTfParameter(options[option][i], 4, index, tracked_resources);
                         if (typeof optionvalue !== "undefined") {
                             if (optionvalue[0] == '{') {
                                 params += `
@@ -1708,7 +1710,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
 
                     }
                 } else {
-                    var optionvalue = processTfParameter(options[option], 4, index);
+                    var optionvalue = processTfParameter(options[option], 4, index, tracked_resources);
                     if (typeof optionvalue !== "undefined") {
                         if (optionvalue[0] == '{') {
                             params += `
@@ -1958,11 +1960,11 @@ ${cfnspacing}${cfnspacing}  - "`)}"
     for (var i=0; i<tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
-            compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
-            compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
         if (tracked_resources[i].terraformType) {
-            compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId);
+            compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
     }
     for (var i=0; i<tracked_resources.length; i++) {
@@ -20064,7 +20066,7 @@ function performF2Mappings(objects) {
                 },{
                     type: 'warning'
                 });
-                console.log(JSON.stringify(obj));
+                f2log(JSON.stringify(obj));
             }
         } catch(err) {
             $.notify({

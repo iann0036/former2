@@ -1080,7 +1080,7 @@ document.addEventListener('f2response', msg => {
         active_firefoxaddon_requests[detail.id](detail.data);
         delete active_firefoxaddon_requests[msg.id];
     } else {
-        console.warn("No callback found for request: " + detail.id);
+        f2log("No callback found for request: " + detail.id);
     }
 });
 
@@ -1285,7 +1285,6 @@ async function getResourceStackAssociation() {
     await sdkcall("CloudFormation", "listStacks", {
         StackStatusFilter: ["CREATE_COMPLETE", "ROLLBACK_IN_PROGRESS", "ROLLBACK_FAILED", "ROLLBACK_COMPLETE", "DELETE_FAILED", "UPDATE_IN_PROGRESS", "UPDATE_COMPLETE_CLEANUP_IN_PROGRESS", "UPDATE_COMPLETE", "UPDATE_ROLLBACK_IN_PROGRESS", "UPDATE_ROLLBACK_FAILED", "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS", "UPDATE_ROLLBACK_COMPLETE"]
     }, true).then(async (data) => {
-        console.log(data.StackSummaries);
         await Promise.all(data.StackSummaries.map(async (stack) => {
             await sdkcall("CloudFormation", "getTemplate", {
                 StackName: stack.StackId,
