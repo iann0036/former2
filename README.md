@@ -38,6 +38,10 @@ The following outputs are currently supported:
 * Troposphere
 * TypeScript CDK (Cfn Primitives)
 
+### Former2 CLI
+
+A command-line version of Former2 with limited functionality is available for installation. For more information, see the [CLI instructions](cli/README.md).
+
 ## Security
 
 Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
