@@ -38991,7 +38991,7 @@ sections.push({
     }
 });
 
-async function updateDatatableDatabaseQldb() {
+async function updateDatatableDatabaseQLDB() {
     blockUI('#section-database-qldb-ledgers-datatable');
 
     await sdkcall("QLDB", "listLedgers", {
