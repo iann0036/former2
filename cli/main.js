@@ -37,9 +37,9 @@ function sleep(ms) {
 var region = 'ap-southeast-2';
 var stack_parameters = [];
 
-eval(require('fs').readFileSync(__dirname + '/deepmerge.js', 'utf8'));
-eval(require('fs').readFileSync(__dirname + '/mappings.js', 'utf8'));
-eval(require('fs').readFileSync(__dirname + '/datatables.js', 'utf8'));
+eval(fs.readFileSync(__dirname + '/deepmerge.js', 'utf8'));
+eval(fs.readFileSync(__dirname + '/mappings.js', 'utf8'));
+eval(fs.readFileSync(__dirname + '/datatables.js', 'utf8'));
 
 f2log = function(msg){};
 f2trace = function(err){};
@@ -83,12 +83,23 @@ async function main(opts) {
         var output_objects = [];
 
         for (var i=0; i<cli_resources.length; i++) {
-            output_objects.push({
-                'id': cli_resources[i].f2id,
-                'type': cli_resources[i].f2type,
-                'data': cli_resources[i].f2data,
-                'region': cli_resources[i].f2region
-            });
+            if (opts.resourceFilter) {
+                if (JSON.stringify(cli_resources[i]).includes(opts.resourceFilter)) {
+                    output_objects.push({
+                        'id': cli_resources[i].f2id,
+                        'type': cli_resources[i].f2type,
+                        'data': cli_resources[i].f2data,
+                        'region': cli_resources[i].f2region
+                    });
+                }
+            } else {
+                output_objects.push({
+                    'id': cli_resources[i].f2id,
+                    'type': cli_resources[i].f2type,
+                    'data': cli_resources[i].f2data,
+                    'region': cli_resources[i].f2region
+                });
+            }
         }
 
         var tracked_resources = performF2Mappings(output_objects);
@@ -116,6 +127,7 @@ cliargs
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
+    .option('--resource-filter <value>', 'search filter for discovered resources')
     .action(opts => {
         validaction = true;
         main(opts);

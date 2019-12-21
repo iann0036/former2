@@ -22,7 +22,8 @@ The `generate` command will generate one or multiple outputs from all discovered
 former2 generate \
   --output-cloudformation "cloudformation.yml" \
   --output-terraform "terraform.hcl" \
-  --output-debug "debug.json"
+  --output-debug "debug.json" \
+  --resource-filter "myapp"
 ```
 
 ## Security
