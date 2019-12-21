@@ -2,7 +2,7 @@
 
 The Former2 CLI allows you to use the [former2.com](https://former2.com) tool directly from your command line.
 
-:exclamation: **CAUTION:** The Former2 CLI is experimmental. Use at your own risk.
+:exclamation: **CAUTION:** The Former2 CLI is experimental. Use at your own risk.
 
 ## Install
 
