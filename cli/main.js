@@ -3,6 +3,7 @@
 var AWS = require("aws-sdk");
 const fs = require('fs');
 const util = require('util');
+const path = require('path');
 const process = require('process');
 const deepmerge = require('deepmerge');
 const cliargs = require('commander');
@@ -32,38 +33,19 @@ $obj.prototype.bootstrapTable = function (action, data) {
 }
 $.notify = function () { }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-var region = 'ap-southeast-2';
+var region = process.env.AWS_DEFAULT_REGION || process.env.AWS_REGION || 'us-east-1';
 var stack_parameters = [];
-
-eval(fs.readFileSync(__dirname + '/deepmerge.js', 'utf8'));
-eval(fs.readFileSync(__dirname + '/mappings.js', 'utf8'));
-eval(fs.readFileSync(__dirname + '/datatables.js', 'utf8'));
+eval(fs.readFileSync(path.join(__dirname, 'deepmerge.js'), 'utf8'));
+eval(fs.readFileSync(path.join(__dirname, 'mappings.js'), 'utf8'));
+eval(fs.readFileSync(path.join(__dirname, 'datatables.js'), 'utf8'));
 
 f2log = function(msg){};
 f2trace = function(err){};
 
-var completed_sections = [];
-
 async function main(opts) {
     if (!opts.outputDebug && !opts.outputCloudformation && !opts.outputTerraform) {
-        console.warn("You must specify an output type");
-        return;
+        throw new Error('You must specify an output type');
     }
-
-    sections.forEach(async (section) => {
-        let dtname = 'updateDatatable' + nav(section.category) + nav(section.service);
-        let dtwork = eval(dtname);
-        try {
-            await dtwork();
-        } catch(err) {
-            awslog.warn(util.format("updateDatatable failed: %j", err));
-        } finally {
-            completed_sections.push(section);
-        }
-    });
 
     const b1 = new cliprogress.SingleBar({
         format: _colors.cyan('{bar}') + '  {percentage}% ({value}/{total} services completed)',
@@ -71,13 +53,28 @@ async function main(opts) {
         barIncompleteChar: '\u2591',
         hideCursor: false
     });
-    
+
     b1.start(sections.length, 0);
 
-    while (completed_sections.length < sections.length) {
-        await sleep(1000);
-        b1.update(completed_sections.length);
-    }
+    await Promise.all(
+        sections
+        .map(section => {
+            let dtname = 'updateDatatable' + nav(section.category) + nav(section.service);
+            return eval(dtname);
+        })
+        .map(work => {
+            return new Promise(async resolve => {
+                try {
+                    await work();
+                } catch(err) {
+                    awslog.warn(util.format("updateDatatable failed: %j", err));
+                } finally {
+                    b1.increment();
+                    resolve();
+                }
+            });
+        })
+    );
 
     b1.stop();
 
@@ -86,9 +83,7 @@ async function main(opts) {
     }
 
     if (opts.outputDebug) {
-        fs.writeFile(opts.outputDebug, JSON.stringify(cli_resources, null, 4), (err) => {
-            if (err) throw err;
-        });
+        fs.writeFile(opts.outputDebug, JSON.stringify(cli_resources, null, 4));
     }
 
     if (opts.outputCloudformation || opts.outputTerraform) {
@@ -118,20 +113,16 @@ async function main(opts) {
         var mapped_outputs = compileOutputs(tracked_resources, null);
 
         if (opts.outputCloudformation) {
-            fs.writeFile(opts.outputCloudformation, mapped_outputs['cfn'], (err) => {
-                if (err) throw err;
-            });
+            fs.writeFileSync(opts.outputCloudformation, mapped_outputs['cfn']);
         }
 
         if (opts.outputTerraform) {
-            fs.writeFile(opts.outputTerraform, mapped_outputs['tf'], (err) => {
-                if (err) throw err;
-            });
+            fs.writeFileSync(opts.outputTerraform, mapped_outputs['tf']);
         }
     }
 }
 
-var validaction = false;
+let validation = false;
 cliargs
     .version(pjson.version)
     .command('generate')
@@ -142,11 +133,11 @@ cliargs
     .option('--resource-filter <value>', 'search filter for discovered resources')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .action(opts => {
-        validaction = true;
+        validation = true;
         main(opts);
     });
 
 cliargs.parse(process.argv);
-if (!validaction) {
+if (!validation) {
     cliargs.help();
 }
