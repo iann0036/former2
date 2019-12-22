@@ -62,18 +62,18 @@ async function main(opts) {
             let dtname = 'updateDatatable' + nav(section.category) + nav(section.service);
             return eval(dtname);
         })
-        .map(work => {
-            return new Promise(async resolve => {
+        .map(work =>
+            new Promise(async resolve => {
                 try {
                     await work();
-                } catch(err) {
-                    awslog.warn(util.format("updateDatatable failed: %j", err));
+                } catch (err) {
+                    awslog.warn(util.format('updateDatatable failed: %j', err));
                 } finally {
                     b1.increment();
                     resolve();
                 }
-            });
-        })
+            })
+        )
     );
 
     b1.stop();
