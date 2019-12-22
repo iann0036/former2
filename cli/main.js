@@ -53,7 +53,7 @@ async function main(opts) {
         return;
     }
 
-    sections.forEach(async section => {
+    sections.forEach(async (section) => {
         let dtname = 'updateDatatable' + nav(section.category) + nav(section.service);
         let dtwork = eval(dtname);
         try {

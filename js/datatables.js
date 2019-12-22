@@ -6432,7 +6432,7 @@ async function updateDatatableComputeEC2() {
 
                 if (instance.ElasticGpuAssociations && instance.ElasticGpuAssociations.length) {
                     instance['ElasticGpus'] = [];
-                    instance.ElasticGpuAssociations.forEach(elasticGpuAssociation => {
+                    instance.ElasticGpuAssociations.forEach(async (elasticGpuAssociation) => {
                         await sdkcall("EC2", "describeElasticGpus", {
                             ElasticGpuIds: [elasticGpuAssociation.ElasticGpuId]
                         }, true).then((data) => {
