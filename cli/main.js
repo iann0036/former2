@@ -73,6 +73,10 @@ async function main(opts) {
 
     b1.stop();
 
+    if (opts.sortOutput) {
+        cli_resources = cli_resources.sort((a, b) => (a.f2id > b.f2id) ? 1 : -1);
+    }
+
     if (opts.outputDebug) {
         fs.writeFile(opts.outputDebug, JSON.stringify(cli_resources, null, 4), (err) => {
             if (err) throw err;
@@ -128,6 +132,7 @@ cliargs
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
     .option('--resource-filter <value>', 'search filter for discovered resources')
+    .option('--sort-output', 'sort resources by their ID before outputting')
     .action(opts => {
         validaction = true;
         main(opts);
