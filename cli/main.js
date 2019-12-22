@@ -83,7 +83,7 @@ async function main(opts) {
     }
 
     if (opts.outputDebug) {
-        fs.writeFile(opts.outputDebug, JSON.stringify(cli_resources, null, 4));
+        fs.writeFileSync(opts.outputDebug, JSON.stringify(cli_resources, null, 4));
     }
 
     if (opts.outputCloudformation || opts.outputTerraform) {
