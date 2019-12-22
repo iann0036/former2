@@ -3618,6 +3618,9 @@ function performF2Mappings(objects) {
                         reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
                     });
                 }
+                reqParams.cfn['MaxAllocatedStorage'] = obj.data.MaxAllocatedStorage;
+                reqParams.tf['max_allocated_storage'] = obj.data.MaxAllocatedStorage;
+                
 
                 /*
                 TODO:
@@ -3772,13 +3775,19 @@ function performF2Mappings(objects) {
                         reqParams.tf['tags'][tag['Key']] = tag['Value'];
                     });
                 }
-                
+                if (obj.data.ElasticGpus) {
+                    reqParams.cfn['ElasticGpuSpecifications'] = [];
+                    obj.data.ElasticGpus.forEach(elasticGpu => {
+                        reqParams.cfn['ElasticGpuSpecifications'].push({
+                            'Type': elasticGpu.ElasticGpuType
+                        });
+                    });
+                }
 
                 /*
                 TODO:
                 CreditSpecification: CreditSpecification
                 DisableApiTermination: Boolean
-                ElasticGpuSpecifications: [ ElasticGpuSpecification, ... ]
                 ElasticInferenceAccelerators: 
                     - ElasticInferenceAccelerator
                 InstanceInitiatedShutdownBehavior: String
@@ -7352,7 +7361,9 @@ function performF2Mappings(objects) {
                         'CopyTagsToBackups': obj.data.WindowsConfiguration.CopyTagsToBackups,
                         'DailyAutomaticBackupStartTime': obj.data.WindowsConfiguration.DailyAutomaticBackupStartTime,
                         'ThroughputCapacity': obj.data.WindowsConfiguration.ThroughputCapacity,
-                        'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime
+                        'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime,
+                        'DeploymentType': obj.data.WindowsConfiguration.DeploymentType,
+                        'PreferredSubnetId': obj.data.WindowsConfiguration.PreferredSubnetId
                     };
                 }
                 if (obj.data.LustreConfiguration) {
@@ -9765,6 +9776,8 @@ function performF2Mappings(objects) {
                     }
                 });
             } else if (obj.type == "ssm.document") {
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Content'] = obj.data.Content;
                 reqParams.tf['content'] = obj.data.Content;
                 reqParams.cfn['DocumentType'] = obj.data.DocumentType;
@@ -17962,6 +17975,7 @@ function performF2Mappings(objects) {
                         'StorageInfo': storageinfo,
                     };
                 }
+                reqParams.cfn['OpenMonitoring'] = obj.data.OpenMonitoring;
                 
                 tracked_resources.push({
                     'obj': obj,

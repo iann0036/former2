@@ -6430,6 +6430,17 @@ async function updateDatatableComputeEC2() {
                     }
                 });
 
+                if (instance.ElasticGpuAssociations && instance.ElasticGpuAssociations.length) {
+                    instance['ElasticGpus'] = [];
+                    instance.ElasticGpuAssociations.forEach(elasticGpuAssociation => {
+                        await sdkcall("EC2", "describeElasticGpus", {
+                            ElasticGpuIds: [elasticGpuAssociation.ElasticGpuId]
+                        }, true).then((data) => {
+                            instance['ElasticGpus'].push(data.ElasticGpuSet[0]);
+                        });
+                    });
+                }
+
                 $('#section-compute-ec2-instances-datatable').bootstrapTable('append', [{
                     f2id: instance.InstanceId,
                     f2type: 'ec2.instance',
