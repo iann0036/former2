@@ -133,6 +133,10 @@ cliargs
     .option('--resource-filter <value>', 'search filter for discovered resources')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .action(opts => {
+        // The followings are here to silence Node runtime complaining about event emitter listeners
+        // due to the number of TLS requests that suddenly go out to AWS APIs. This is harmless here
+        require('events').EventEmitter.defaultMaxListeners = 1000;
+        process.setMaxListeners(0);
         validation = true;
         main(opts);
     });
