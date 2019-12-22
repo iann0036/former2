@@ -2,6 +2,7 @@
 
 var AWS = require("aws-sdk");
 const fs = require('fs');
+const util = require('util');
 const process = require('process');
 const deepmerge = require('deepmerge');
 const cliargs = require('commander');
@@ -52,9 +53,16 @@ async function main(opts) {
         return;
     }
 
-    sections.forEach(section => {
+    sections.forEach(async section => {
         let dtname = 'updateDatatable' + nav(section.category) + nav(section.service);
-        eval("(async () => { try { await " + dtname + "(); } finally { completed_sections.push('" + section + "'); } })()");
+        let dtwork = eval(dtname);
+        try {
+            await dtwork();
+        } catch(err) {
+            awslog.warn(util.format("updateDatatable failed: %j", err));
+        } finally {
+            completed_sections.push(section);
+        }
     });
 
     const b1 = new cliprogress.SingleBar({
