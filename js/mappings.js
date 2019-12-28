@@ -13119,6 +13119,7 @@ function performF2Mappings(objects) {
                                     'Name': action.name,
                                     'OutputArtifacts': outputArtifacts,
                                     'Region': action.region,
+                                    'Namespace': action.namespace,
                                     'RoleArn': action.roleArn,
                                     'RunOrder': action.runOrder
                                 });
@@ -15573,6 +15574,18 @@ function performF2Mappings(objects) {
                 reqParams.tf['function_name'] = obj.data.FunctionArn;
                 reqParams.cfn['Enabled'] = (obj.data.State == "Enabled");
                 reqParams.tf['enabled'] = (obj.data.State == "Enabled");
+                reqParams.cfn['MaximumBatchingWindowInSeconds'] = obj.data.MaximumBatchingWindowInSeconds;
+                reqParams.cfn['ParallelizationFactor'] = obj.data.ParallelizationFactor;
+                if (obj.data.DestinationConfig && obj.data.DestinationConfig.OnFailure && obj.data.DestinationConfig.OnFailure.Destination) {
+                    reqParams.cfn['DestinationConfig'] = {
+                        'OnFailure': {
+                            'Destination': obj.data.DestinationConfig.OnFailure.Destination
+                        }
+                    };
+                }
+                reqParams.cfn['MaximumRecordAgeInSeconds'] = obj.data.MaximumRecordAgeInSeconds;
+                reqParams.cfn['BisectBatchOnFunctionError'] = obj.data.BisectBatchOnFunctionError;
+                reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
 
                 /*
                 TODO:
