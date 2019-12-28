@@ -8813,14 +8813,25 @@ function performF2Mappings(objects) {
                 reqParams.cfn['LogPaths'] = obj.data.LogPaths;
                 reqParams.cfn['EC2InstanceType'] = obj.data.InstanceType;
                 reqParams.tf['ec2_instance_type'] = obj.data.InstanceType;
+                reqParams.cfn['FleetType'] = obj.data.FleetType;
+                reqParams.cfn['ScriptId'] = obj.data.ScriptId;
+                reqParams.cfn['NewGameSessionProtectionPolicy'] = obj.data.NewGameSessionProtectionPolicy;
+                reqParams.cfn['ResourceCreationLimitPolicy'] = obj.data.ResourceCreationLimitPolicy;
+                reqParams.cfn['MetricGroups'] = obj.data.MetricGroups;
+                reqParams.cfn['InstanceRoleARN'] = obj.data.InstanceRoleArn;
+                reqParams.cfn['CertificateConfiguration'] = obj.data.CertificateConfiguration;
+                reqParams.cfn['RuntimeConfiguration'] = obj.data.RuntimeConfiguration;
+                if (obj.data.InstanceCounts) {
+                    reqParams.cfn['DesiredEC2Instances'] = obj.data.InstanceCounts.DESIRED;
+                    reqParams.cfn['MaxSize'] = obj.data.InstanceCounts.MAXIMUM;
+                    reqParams.cfn['MinSize'] = obj.data.InstanceCounts.MINIMUM;
+                }
+                reqParams.cfn['EC2InboundPermissions'] = obj.data.EC2InboundPermissions;
 
                 /*
                 TODO:
-                DesiredEC2Instances: Integer
-                EC2InboundPermissions:
-                    - EC2InboundPermission
-                MaxSize: Integer
-                MinSize: Integer
+                PeerVpcAwsAccountId: String
+                PeerVpcId: String
                 */
 
                 tracked_resources.push({
@@ -8837,11 +8848,8 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.Name;
                 reqParams.cfn['Version'] = obj.data.Version;
                 reqParams.tf['version'] = obj.data.Version;
-
-                /*
-                TODO:
-                StorageLocation
-                */
+                reqParams.cfn['OperatingSystem'] = obj.data.OperatingSystem;
+                reqParams.cfn['StorageLocation'] = obj.data.StorageLocation;
 
                 tracked_resources.push({
                     'obj': obj,

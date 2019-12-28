@@ -17824,33 +17824,65 @@ async function updateDatatableGameDevelopmentGameLift() {
     blockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
     blockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
 
-    await sdkcall("GameLift", "describeFleetAttributes", {
+    await sdkcall("GameLift", "listFleets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('removeAll');
 
-        data.FleetAttributes.forEach(fleet => {
-            $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('append', [{
-                f2id: fleet.FleetArn,
-                f2type: 'gamelift.fleet',
-                f2data: fleet,
-                f2region: region,
-                id: fleet.FleetId,
-                fleettype: fleet.FleetType,
-                instancetype: fleet.InstanceType,
-                name: fleet.Name
-            }]);
-        });
+        await Promise.all(data.FleetIds.map(async (fleetId) => {
+            await sdkcall("GameLift", "describeFleetAttributes", {
+                FleetIds: [fleetId]
+            }, true).then(async (data) => {
+                var fleet = data.FleetAttributes[0];
+
+                await sdkcall("GameLift", "listFleets", {
+                    FleetId: fleet.FleetId
+                }, false).then(data => {
+                    fleet['RuntimeConfiguration'] = data.RuntimeConfiguration;
+                }).catch(() => { });
+
+                await sdkcall("GameLift", "describeFleetCapacity", {
+                    FleetIds: [fleet.FleetId]
+                }, false).then(data => {
+                    if (data.FleetCapacity && data.FleetCapacity.length == 1) {
+                        fleet['InstanceCounts'] = data.FleetCapacity[0].InstanceCounts;
+                    }
+                }).catch(() => { });
+
+                await sdkcall("GameLift", "describeFleetPortSettings", {
+                    FleetId: fleet.FleetId
+                }, false).then(data => {
+                    fleet['EC2InboundPermissions'] = data.InboundPermissions;
+                }).catch(() => { });
+
+                $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('append', [{
+                    f2id: fleet.FleetArn,
+                    f2type: 'gamelift.fleet',
+                    f2data: fleet,
+                    f2region: region,
+                    id: fleet.FleetId,
+                    fleettype: fleet.FleetType,
+                    instancetype: fleet.InstanceType,
+                    name: fleet.Name
+                }]);
+            });
+        }));
 
         unblockUI('#section-gamedevelopment-gamelift-fleets-datatable');
     });
 
     await sdkcall("GameLift", "listBuilds", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('removeAll');
 
-        data.Builds.forEach(build => {
+        data.Builds.forEach(async (build) => {
+            await sdkcall("GameLift", "requestUploadCredentials", {
+                BuildId: build.BuildId
+            }, false).then((data) => {
+                build['StorageLocation'] = data['StorageLocation'];
+            }).catch(() => { });
+
             $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('append', [{
                 f2id: build.BuildId,
                 f2type: 'gamelift.build',
@@ -28891,7 +28923,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                                 }]);
                             });
                         });
-                        
+
                         return sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
                             UserPoolId: userPool.Id,
                             Username: user.Username
