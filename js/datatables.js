@@ -28870,8 +28870,8 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentityServiceProvider", "listUsers", {
                     UserPoolId: userPool.Id
                 }, true).then(async (data) => {
-                    await Promise.all(data.Users.map(user => {
-                        return sdkcall("CognitoIdentityServiceProvider", "adminListGroupsForUser", {
+                    await Promise.all(data.Users.map(async (user) => {
+                        await sdkcall("CognitoIdentityServiceProvider", "adminListGroupsForUser", {
                             UserPoolId: userPool.Id,
                             Username: user.Username
                         }, true).then((data) => {
@@ -28891,13 +28891,13 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                                 }]);
                             });
                         });
-
-                        /*
-                        TODO
-                        sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
+                        
+                        return sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
                             UserPoolId: userPool.Id,
                             Username: user.Username
                         }, true).then((data) => {
+                            data["UserPoolId"] = userPool.Id;
+
                             $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('append', [{
                                 f2id: data.Username,
                                 f2type: 'cognito.userpooluser',
@@ -28907,7 +28907,6 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                                 userpoolid: userPool.Id
                             }]);
                         });
-                        */
                     }));
                 }),
                 sdkcall("CognitoIdentityServiceProvider", "listGroups", {

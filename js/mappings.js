@@ -6253,7 +6253,8 @@ function performF2Mappings(objects) {
                 reqParams.tf['binary_media_types'] = obj.data.binaryMediaTypes;
                 if (obj.data.endpointConfiguration) {
                     reqParams.cfn['EndpointConfiguration'] = {
-                        'Types': obj.data.endpointConfiguration.types
+                        'Types': obj.data.endpointConfiguration.types,
+                        'VpcEndpointIds': obj.data.endpointConfiguration.vpcEndpointIds
                     };
                     reqParams.tf['endpoint_configuration'] = {
                         'types': obj.data.endpointConfiguration.types
@@ -7467,6 +7468,7 @@ function performF2Mappings(objects) {
                 Tags:
                     - Resource Tag
                 ValidationMethod: String
+                (recheck per Release History)
                 */
 
                 tracked_resources.push({
@@ -11586,16 +11588,16 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "cognito.userpooluser") {
                 reqParams.cfn['Username'] = obj.data.Username;
+                reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+                reqParams.cfn['UserAttributes'] = obj.data.UserAttributes;
 
                 /*
                 TODO:
+                ClientMetadata: Json
                 DesiredDeliveryMediums: 
                     - String
                 ForceAliasCreation: Boolean
-                UserAttributes: 
-                    - AttributeType
                 MessageAction: String
-                UserPoolId: String
                 ValidationData: 
                     - AttributeType
                 */
@@ -11653,6 +11655,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['GenerateSecret'] = true;
                     reqParams.tf['generate_secret'] = true;
                 }
+                reqParams.cfn['PreventUserExistenceErrors'] = obj.data.PreventUserExistenceErrors;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -13708,6 +13711,25 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['ApiId'] = obj.data.apiId;
                 reqParams.tf['api_id'] = obj.data.apiId;
+                if (obj.data.cachingConfig) {
+                    reqParams.cfn['CachingConfig'] = {
+                        'Ttl': obj.data.cachingConfig.ttl,
+                        'CachingKeys': obj.data.cachingConfig.cachingKeys
+                    };
+                }
+                if (obj.data.syncConfig) {
+                    var lambdaconflicthandlerconfig = null;
+                    if (obj.data.syncConfig.lambdaConflictHandlerConfig) {
+                        lambdaconflicthandlerconfig = {
+                            'LambdaConflictHandlerArn': obj.data.syncConfig.lambdaConflictHandlerConfig.lambdaConflictHandlerArn
+                        };
+                    }
+                    reqParams.cfn['SyncConfig'] = {
+                        'ConflictDetection': obj.data.syncConfig.conflictDetection,
+                        'ConflictHandler': obj.data.syncConfig.conflictHandler,
+                        'LambdaConflictHandlerConfig': lambdaconflicthandlerconfig
+                    };
+                }
 
                 /*
                 TODO:
@@ -13754,10 +13776,20 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ServiceRoleArn'] = obj.data.serviceRoleArn;
                 reqParams.tf['service_role_arn'] = obj.data.serviceRoleArn;
                 if (obj.data.dynamodbConfig) {
+                    var deltasyncconfig = null;
+                    if (obj.data.dynamodbConfig.deltaSyncConfig) {
+                        deltasyncconfig = {
+                            'BaseTableTTL': obj.data.dynamodbConfig.deltaSyncConfig.baseTableTTL,
+                            'DeltaSyncTableName': obj.data.dynamodbConfig.deltaSyncConfig.deltaSyncTableName,
+                            'DeltaSyncTableTTL': obj.data.dynamodbConfig.deltaSyncConfig.deltaSyncTableTTL
+                        };
+                    }
                     reqParams.cfn['DynamoDBConfig'] = {
                         'TableName': obj.data.dynamodbConfig.tableName,
                         'AwsRegion': obj.data.dynamodbConfig.awsRegion,
-                        'UseCallerCredentials': obj.data.dynamodbConfig.useCallerCredentials
+                        'UseCallerCredentials': obj.data.dynamodbConfig.useCallerCredentials,
+                        'Versioned': obj.data.dynamodbConfig.versioned,
+                        'DeltaSyncConfig': deltasyncconfig
                     };
                     reqParams.tf['dynamodb_config'] = {
                         'table_name': obj.data.dynamodbConfig.tableName,
@@ -14082,6 +14114,24 @@ function performF2Mappings(objects) {
             } else if (obj.type == "ecs.cluster") {
                 reqParams.cfn['ClusterName'] = obj.data.clusterName;
                 reqParams.tf['name'] = obj.data.clusterName;
+                if (obj.data.tags) {
+                    reqParams.cfn['Tags'] = [];
+                    obj.data.tags.forEach(tag => {
+                        reqParams.cfn['Tags'].push({
+                            'Name': tag.name,
+                            'Value': tag.value
+                        });
+                    });
+                }
+                if (obj.data.settings) {
+                    reqParams.cfn['ClusterSettings'] = [];
+                    obj.data.settings.forEach(setting => {
+                        reqParams.cfn['ClusterSettings'].push({
+                            'Name': setting.name,
+                            'Value': setting.value
+                        });
+                    });
+                }
 
                 tracked_resources.push({
                     'obj': obj,
@@ -14206,6 +14256,11 @@ function performF2Mappings(objects) {
                 reqParams.tf['health_check_grace_period_seconds'] = obj.data.healthCheckGracePeriodSeconds;
                 reqParams.cfn['SchedulingStrategy'] = obj.data.schedulingStrategy;
                 reqParams.tf['scheduling_strategy'] = obj.data.schedulingStrategy;
+                if (obj.data.deploymentController) {
+                    reqParams.cfn['DeploymentController'] = {
+                        'Type': obj.data.deploymentController.type
+                    };
+                }
 
                 tracked_resources.push({
                     'obj': obj,
@@ -14314,13 +14369,15 @@ function performF2Mappings(objects) {
                                 'Devices': devices,
                                 'InitProcessEnabled': containerDefinition.linuxParameters.initProcessEnabled,
                                 'SharedMemorySize': containerDefinition.linuxParameters.sharedMemorySize,
+                                'MaxSwap': containerDefinition.linuxParameters.maxSwap,
+                                'Swappiness': containerDefinition.linuxParameters.swappiness,
                                 'Tmpfs': tmpfs
                             }
                         }
                         var secrets = null;
-                        if (obj.data.secrets) {
+                        if (containerDefinition.secrets) {
                             secrets = [];
-                            obj.data.secrets.forEach(secret => {
+                            containerDefinition.secrets.forEach(secret => {
                                 secrets.push({
                                     'Name': secret.name,
                                     'ValueFrom': secret.valueFrom
@@ -14328,9 +14385,9 @@ function performF2Mappings(objects) {
                             });
                         }
                         var dependsOn = null;
-                        if (obj.data.dependsOn) {
+                        if (containerDefinition.dependsOn) {
                             dependsOn = [];
-                            obj.data.dependsOn.forEach(depends => {
+                            containerDefinition.dependsOn.forEach(depends => {
                                 dependsOn.push({
                                     'ContainerName': depends.containerName,
                                     'Condition': depends.condition
@@ -14338,9 +14395,9 @@ function performF2Mappings(objects) {
                             });
                         }
                         var extraHosts = null;
-                        if (obj.data.extraHosts) {
+                        if (containerDefinition.extraHosts) {
                             extraHosts = [];
-                            obj.data.extraHosts.forEach(extrahost => {
+                            containerDefinition.extraHosts.forEach(extrahost => {
                                 extraHosts.push({
                                     'Hostname': extrahost.hostname,
                                     'IpAddress': extrahost.ipAddress
@@ -14348,9 +14405,9 @@ function performF2Mappings(objects) {
                             });
                         }
                         var ulimits = null;
-                        if (obj.data.ulimits) {
+                        if (containerDefinition.ulimits) {
                             ulimits = [];
-                            obj.data.ulimits.forEach(ulimit => {
+                            containerDefinition.ulimits.forEach(ulimit => {
                                 ulimits.push({
                                     'Name': ulimit.name,
                                     'SoftLimit': ulimit.softLimit,
@@ -14359,20 +14416,27 @@ function performF2Mappings(objects) {
                             });
                         }
                         var logConfiguration = null;
-                        if (obj.data.logConfiguration) {
+                        if (containerDefinition.logConfiguration) {
                             logConfiguration = {
-                                'LogDriver': obj.data.logConfiguration.logDriver,
-                                'Options': obj.data.logConfiguration.options
+                                'LogDriver': containerDefinition.logConfiguration.logDriver,
+                                'Options': containerDefinition.logConfiguration.options
                             };
                         }
                         var healthCheck = null;
-                        if (obj.data.healthCheck) {
+                        if (containerDefinition.healthCheck) {
                             healthCheck = {
-                                'Command': obj.data.healthCheck.command,
-                                'Interval': obj.data.healthCheck.interval,
-                                'Timeout': obj.data.healthCheck.timeout,
-                                'Retries': obj.data.healthCheck.retries,
-                                'StartPeriod': obj.data.healthCheck.startPeriod
+                                'Command': containerDefinition.healthCheck.command,
+                                'Interval': containerDefinition.healthCheck.interval,
+                                'Timeout': containerDefinition.healthCheck.timeout,
+                                'Retries': containerDefinition.healthCheck.retries,
+                                'StartPeriod': containerDefinition.healthCheck.startPeriod
+                            };
+                        }
+                        var firelensConfiguration = null;
+                        if (containerDefinition.firelensConfiguration) {
+                            firelensConfiguration = {
+                                'Type': obj.data.firelensConfiguration.type,
+                                'Options': obj.data.firelensConfiguration.options
                             };
                         }
                         reqParams.cfn['ContainerDefinitions'].push({
@@ -14387,6 +14451,7 @@ function performF2Mappings(objects) {
                             'Environment': environment,
                             'Essential': containerDefinition.essential,
                             'ExtraHosts': extraHosts,
+                            'FirelensConfiguration': firelensConfiguration,
                             'HealthCheck': healthCheck,
                             'Hostname': containerDefinition.hostname,
                             'Image': containerDefinition.image,
@@ -14401,6 +14466,7 @@ function performF2Mappings(objects) {
                             'Privileged': containerDefinition.privileged,
                             'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
                             'RepositoryCredentials': repositoryCredentials,
+                            'Secrets': secrets,
                             'Ulimits': ulimits,
                             'User': containerDefinition.user,
                             'VolumesFrom': volumesFrom,
