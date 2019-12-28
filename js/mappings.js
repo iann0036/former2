@@ -1,6 +1,6 @@
 // Logging functions
-var f2log = function(msg) { console.log(msg); }
-var f2trace = function(msg) { console.log(msg); }
+var f2log = function (msg) { console.log(msg); }
+var f2trace = function (msg) { console.log(msg); }
 
 /* ========================================================================== */
 // Mapping Helper Functions (from AWSConsoleRecorder)
@@ -51,7 +51,7 @@ function MD5(e) {
     }
     var f = [],
         q, r, s, t, a, b, c, d;
-    e = function(a) {
+    e = function (a) {
         a = a.replace(/\r\n/g, "\n");
         for (var b = "", d = 0; d < a.length; d++) {
             var c = a.charCodeAt(d);
@@ -59,7 +59,7 @@ function MD5(e) {
         }
         return b
     }(e);
-    f = function(b) {
+    f = function (b) {
         var a, c = b.length;
         a = c + 8;
         for (var d = 16 * ((a - a % 64) / 64 + 1), e = Array(d - 1), f = 0, g = 0; g < c;) a = (g - g % 4) / 4, f = g % 4 * 8, e[a] |= b.charCodeAt(g) << f, g++;
@@ -102,7 +102,7 @@ ${service}_client = boto3.client('${service}', region_name='${region}')
 
 function ensureInitDeclaredGo(service, region) {
     if (!declared_services['go'].includes(service)) {
-        var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g,'');
+        var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g, '');
         declared_services['go'].push(service);
         return `
     ${service}svc := ${mappedservice}.New(session.New(&aws.Config{Region: aws.String("${region}")}))
@@ -123,7 +123,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -140,7 +140,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             return undefined;
         }
 
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -156,8 +156,8 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             string_return = "<<EOF\n" + string_return + "\nEOF";
             return string_return;
         }
-        
-        string_return = param.replace(/\"/g,`\\"`);
+
+        string_return = param.replace(/\"/g, `\\"`);
 
         return `"${string_return}"`;
     }
@@ -196,7 +196,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + `}`;
     }
-    
+
     return undefined;
 }
 
@@ -211,7 +211,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues) {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "!Ref " + tracked_resources[i].logicalId;
@@ -242,7 +242,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         }
 
         var pre_return_str = "";
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (
                     tracked_resources[i].returnValues.Ref == param &&
@@ -267,7 +267,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
-                    for (var j=0; j<10; j++) { // replace many
+                    for (var j = 0; j < 10; j++) { // replace many
                         pre_return_str = "!Sub ";
                         param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
                     }
@@ -279,7 +279,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
-                            for (var j=0; j<10; j++) { // replace many
+                            for (var j = 0; j < 10; j++) { // replace many
                                 pre_return_str = "!Sub ";
                                 param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
                             }
@@ -296,22 +296,22 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                 } else if (
                     param.includes(stack_parameter.default_value.toString())
                 ) {
-                    for (var j=0; j<10; j++) { // replace many
+                    for (var j = 0; j < 10; j++) { // replace many
                         pre_return_str = "!Sub ";
                         param = param.replace(stack_parameter.default_value.toString(), "${" + stack_parameter.name + "}");
                     }
                 }
             }
         }
-        
+
         var string_return = param;
 
         if (string_return.includes("\n")) {
             string_return = "|\n" + ' '.repeat(spacing + 4) + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4));
             return pre_return_str + string_return;
         }
-        
-        string_return = param.replace(/\"/g,`\\"`);
+
+        string_return = param.replace(/\"/g, `\\"`);
 
         return pre_return_str + `"${string_return}"`;
     }
@@ -329,7 +329,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing + 2) + "- " + paramitems.join(`
 ` + ' '.repeat(spacing + 2) + "- ");
         }
-        
+
         return `
 ` + ' '.repeat(spacing) + "- " + paramitems.join(`
 ` + ' '.repeat(spacing) + "- ");
@@ -354,7 +354,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing + cfnspacing.length) + paramitems.join(`
 ` + ' '.repeat(spacing + cfnspacing.length));
     }
-    
+
     return undefined;
 }
 
@@ -375,7 +375,7 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
             return undefined; // TODO: Fix this
         }
 
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return tracked_resources[i].logicalId + ".ref";
@@ -396,8 +396,8 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
             string_return = "`" + string_return + "`";
             return string_return;
         }
-        
-        string_return = param.replace(/\"/g,`\\"`);
+
+        string_return = param.replace(/\"/g, `\\"`);
 
         return `"${string_return}"`;
     }
@@ -431,7 +431,7 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + '}';
     }
-    
+
     return undefined;
 }
 
@@ -446,7 +446,7 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         return `False`;
     }
     if (typeof param == "number") {
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -471,7 +471,7 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             return undefined;
         }
 
-        for (var i=0; i<index; i++) { // correlate
+        for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -492,8 +492,8 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             string_return = "\"\"\"" + ' '.repeat(spacing + 4) + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4)) + "\n\"\"\"";
             return string_return;
         }
-        
-        string_return = param.replace(/'/g,`\\'`);
+
+        string_return = param.replace(/'/g, `\\'`);
 
         return `'${string_return}'`;
     }
@@ -543,13 +543,13 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + ')';
     }
-    
+
     return undefined;
 }
 
 function parseDynamoItem(obj) {
     var ret = {};
-    
+
     for (var key in obj) {
         if (obj[key].type == "String") {
             ret[obj[key].name] = obj[key].stringValue;
@@ -563,7 +563,7 @@ function parseDynamoItem(obj) {
             ret[obj[key].name] = obj[key].booleanValue;
         } else if (obj[key].type == "List") {
             ret[obj[key].name] = [];
-            for (var j=0; j<obj[key].listValues.length; j++) {
+            for (var j = 0; j < obj[key].listValues.length; j++) {
                 ret[obj[key].name].push(parseDynamoItem(obj[key].listValues[j]));
             }
         } else if (obj[key].type == "Map") {
@@ -574,12 +574,12 @@ function parseDynamoItem(obj) {
             ret[obj[key].name] = Number(obj[key].numberValue);
         } else if (obj[key].type == "NumberSet") {
             ret[obj[key].name] = [];
-            for (var j=0; j<obj[key].numberSetValues.length; j++) {
+            for (var j = 0; j < obj[key].numberSetValues.length; j++) {
                 ret[obj[key].name].push(Number(obj[key].numberSetValues[j]));
             }
         } else if (obj[key].type == "StringSet") {
             ret[obj[key].name] = [];
-            for (var j=0; j<obj[key].stringSetValues.length; j++) {
+            for (var j = 0; j < obj[key].stringSetValues.length; j++) {
                 ret[obj[key].name].push(obj[key].stringSetValues[j]);
             }
         }
@@ -1165,8 +1165,8 @@ function processJsParameter(param, spacing) {
             string_return = "`" + string_return + "`";
             return string_return;
         }
-        
-        string_return = param.replace(/\"/g,`\\"`);
+
+        string_return = param.replace(/\"/g, `\\"`);
 
         return `"${string_return}"`;
     }
@@ -1200,7 +1200,7 @@ function processJsParameter(param, spacing) {
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + '}';
     }
-    
+
     return undefined;
 }
 
@@ -1223,8 +1223,8 @@ function processBoto3Parameter(param, spacing) {
             string_return = "\"\"\"" + string_return.replace(/\n/g, `\n` + ' '.repeat(spacing + 4)) + "\n\"\"\"";
             return string_return;
         }
-        
-        string_return = param.replace(/'/g,`\\'`);
+
+        string_return = param.replace(/'/g, `\\'`);
 
         return `'${string_return}'`;
     }
@@ -1258,7 +1258,7 @@ function processBoto3Parameter(param, spacing) {
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + '}';
     }
-    
+
     return undefined;
 }
 
@@ -1268,11 +1268,11 @@ function deplural(str) {
     }
 
     if (str.endsWith("ies")) { // TODO: Fix very primitive checks
-        str = str.substring(0,str.length-3) + "y";
+        str = str.substring(0, str.length - 3) + "y";
     } else if (str.endsWith("ses")) {
-        str = str.substring(0,str.length-2);
+        str = str.substring(0, str.length - 2);
     } else if (str.endsWith("s") && !str.endsWith("ss")) {
-        str = str.substring(0,str.length-1);
+        str = str.substring(0, str.length - 1);
     }
 
     return str;
@@ -1299,8 +1299,8 @@ function processGoParameter(service, paramkey, param, spacing) {
             string_return = "aws.String(`" + string_return + "`)";
             return string_return;
         }
-        
-        string_return = param.replace(/\"/g,`\\"`);
+
+        string_return = param.replace(/\"/g, `\\"`);
 
         return `aws.String("${string_return}")`;
     }
@@ -1347,7 +1347,7 @@ function processGoParameter(service, paramkey, param, spacing) {
 ` + ' '.repeat(spacing + 4)) + `,
 ` + ' '.repeat(spacing) + '}';
     }
-    
+
     return undefined;
 }
 
@@ -1378,7 +1378,7 @@ function outputMapBoto3(service, method, options, region, was_blocked) {
 function outputMapGo(service, method, options, region, was_blocked) {
     var output = ensureInitDeclaredGo(service, region);
     var params = '';
-    var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g,'');
+    var mappedservice = mapServiceJs(service).toLowerCase().replace(/\-/g, '');
 
     if (Object.keys(options).length) {
         for (option in options) {
@@ -1434,10 +1434,10 @@ function getResourceName(service, requestId) {
     }
 
     var i = 1; // on purpose, 2 means second usage
-    var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0,7);
+    var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
 
     while (global_used_refs.includes(proposed)) {
-        proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0,7);
+        proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0, 7);
         i += 1;
     }
 
@@ -1459,7 +1459,7 @@ function lcfirststr(str) {
             ret += str[i].toLowerCase();
             i++;
         }
-        ret = ret.substring(0, ret.length-1) + ret.charAt(ret.length-1).toUpperCase() + str.substring(ret.length);
+        ret = ret.substring(0, ret.length - 1) + ret.charAt(ret.length - 1).toUpperCase() + str.substring(ret.length);
     } else {
         ret += str.substring(1);
     }
@@ -1548,7 +1548,7 @@ function outputMapIam(compiled_iam_outputs) {
     "Statement": [
 `;
 
-    for (var i=0; i<compiled_iam_outputs.length; i++) {
+    for (var i = 0; i < compiled_iam_outputs.length; i++) {
         if (compiled_iam_outputs[i].mapped) {
             compiled_iam_outputs[i].action = [...new Set(compiled_iam_outputs[i].action)]; // dedup
             if (compiled_iam_outputs[i].action.length == 1) {
@@ -1559,19 +1559,19 @@ function outputMapIam(compiled_iam_outputs) {
                 compiled_iam_outputs[i].resource = compiled_iam_outputs[i].resource[0];
             }
 
-            var sid = "mapped" + MD5(Math.random().toString()).substring(0,7);
+            var sid = "mapped" + MD5(Math.random().toString()).substring(0, 7);
 
             output += `        {
             "Sid": "${sid}",
-            "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
-            "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
+            "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g, ",\n                ").replace(/\[/g, "[\n                ").replace(/\]/g, "\n            ]")},
+            "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g, ",\n                ").replace(/\[/g, "[\n                ").replace(/\]/g, "\n            ]")},
             "Effect": ${JSON.stringify(compiled_iam_outputs[i].effect)}
         },
 `;
         }
     }
 
-    for (var i=0; i<compiled_iam_outputs.length; i++) {
+    for (var i = 0; i < compiled_iam_outputs.length; i++) {
         if (!compiled_iam_outputs[i].mapped) {
             compiled_iam_outputs[i].action = [...new Set(compiled_iam_outputs[i].action)]; // dedup
             if (compiled_iam_outputs[i].action.length == 1) {
@@ -1586,8 +1586,8 @@ function outputMapIam(compiled_iam_outputs) {
 
             output += `        {
             "Sid": "${sid}",
-            "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
-            "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g,",\n                ").replace(/\[/g,"[\n                ").replace(/\]/g,"\n            ]")},
+            "Action": ${JSON.stringify(compiled_iam_outputs[i].action).replace(/\,/g, ",\n                ").replace(/\[/g, "[\n                ").replace(/\]/g, "\n            ]")},
+            "Resource": ${JSON.stringify(compiled_iam_outputs[i].resource).replace(/\,/g, ",\n                ").replace(/\[/g, "[\n                ").replace(/\]/g, "\n            ]")},
             "Effect": ${JSON.stringify(compiled_iam_outputs[i].effect)}
         },
 `;
@@ -1621,7 +1621,7 @@ function compileMapIam(compiled_iam_outputs, service, method, options, region, w
             'effect': 'Allow'
         });
     } else {
-        for (var i=0; i<compiled_iam_outputs.length; i++) {
+        for (var i = 0; i < compiled_iam_outputs.length; i++) {
             if (compiled_iam_outputs[i].mapped == false) {
                 compiled_iam_outputs[i].action.push(service + ":" + method);
 
@@ -1640,7 +1640,7 @@ function compileMapIam(compiled_iam_outputs, service, method, options, region, w
 
     if (options.secondary) { // can be single object or array of objects
         if (Array.isArray(options.secondary)) {
-            for (var i=0; i<options.secondary.length; i++) {
+            for (var i = 0; i < options.secondary.length; i++) {
                 compiled_iam_outputs = compileMapIam(compiled_iam_outputs, service, method, options.secondary[i], region, was_blocked);
             }
         } else {
@@ -1695,7 +1695,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
                 if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
-                    for (var i=0; i<options[option].length; i++) {
+                    for (var i = 0; i < options[option].length; i++) {
                         var optionvalue = processTfParameter(options[option][i], 4, index, tracked_resources);
                         if (typeof optionvalue !== "undefined") {
                             if (optionvalue[0] == '{') {
@@ -1761,7 +1761,7 @@ function outputMapCli(service, method, options, region, was_blocked) {
                 } else {
                     var optionvalue = JSON.stringify(options[option]);
                     if (typeof options[option] == "object") {
-                        if (navigator.appVersion.indexOf("Win")!=-1) {
+                        if (navigator.appVersion.indexOf("Win") != -1) {
                             optionvalue = "\"" + optionvalue.replace(/\"/g, "\\\"") + "\"";
                         } else {
                             optionvalue = "'" + optionvalue + "'";
@@ -1799,12 +1799,12 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
         'cdkts': [],
         'troposphere': []
     };
-    for (var i=0; i<outputs.length; i++) {
+    for (var i = 0; i < outputs.length; i++) {
         if (!services['go'].includes(outputs[i].service)) {
             services['go'].push(outputs[i].service);
         }
     }
-    for (var i=0; i<tracked_resources.length; i++) {
+    for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type && !services['cdkts'].includes(tracked_resources[i].type.split("::")[1].toLowerCase())) {
             var troposervice = tracked_resources[i].type.split("::")[1].toLowerCase();
 
@@ -1823,7 +1823,7 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
 
     var has_cfn = false;
     var has_tf = false;
-    for (var i=0; i<tracked_resources.length; i++) {
+    for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             has_cfn = true;
         }
@@ -1851,7 +1851,7 @@ package main
 import (
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${mapServiceJs(service).toLowerCase().replace(/\-/g,'')}"`).join(`
+${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${mapServiceJs(service).toLowerCase().replace(/\-/g, '')}"`).join(`
 `)}
 )
 
@@ -1935,7 +1935,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
     go_first_output = true;
 
     var compiled_iam_outputs = [];
-    for (var i=0; i<outputs.length; i++) {
+    for (var i = 0; i < outputs.length; i++) {
         if (outputs[i].options.boto3) {
             compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
             compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
@@ -1957,7 +1957,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 }
 `;
 
-    for (var i=0; i<tracked_resources.length; i++) {
+    for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
             compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
@@ -1967,9 +1967,9 @@ ${cfnspacing}${cfnspacing}  - "`)}"
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
     }
-    for (var i=0; i<tracked_resources.length; i++) {
+    for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
-            compiled['cdkts'] = compiled['cdkts'].substring(0, compiled['cdkts'].length-1); // trim a newline
+            compiled['cdkts'] = compiled['cdkts'].substring(0, compiled['cdkts'].length - 1); // trim a newline
             compiled['cdkts'] += `
         new cdk.Output(this, '${tracked_resources[i].logicalId}Ref', { value: ${tracked_resources[i].logicalId}.ref, disableExport: true });`;
         }
@@ -2153,7 +2153,7 @@ function mapServiceJs(service) {
 }
 
 function lowerFirstChar(str) {
-    return str.substring(0,1).toLowerCase() + str.substring(1);
+    return str.substring(0, 1).toLowerCase() + str.substring(1);
 }
 
 function convertApiToCli(str) {
@@ -2161,12 +2161,12 @@ function convertApiToCli(str) {
     var character = '';
     var next_char = '';
     var prev_char = '';
-    var outputstr = str.substring(0,1).toLowerCase();
-    
+    var outputstr = str.substring(0, 1).toLowerCase();
+
     while (i <= str.length) {
         character = str.charAt(i);
-        next_char = str.charAt(i+1);
-        prev_char = str.charAt(i-1);
+        next_char = str.charAt(i + 1);
+        prev_char = str.charAt(i - 1);
         if (character == character.toUpperCase() && character != "" && (next_char != next_char.toUpperCase() || prev_char != prev_char.toUpperCase())) {
             outputstr += "-";
         }
@@ -2223,7 +2223,7 @@ function performF2Mappings(objects) {
                 'tf': {},
                 'iam': {}
             };
-            
+
             if (obj.type == "lambda.function") {
                 reqParams.cfn['Description'] = obj.data.Configuration.Description;
                 reqParams.tf['description'] = obj.data.Configuration.Description;
@@ -2252,7 +2252,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['s3_key'] = url.pathname;
                     reqParams.tf['s3_object_version'] = url.searchParams.get('versionId');
                 }
-                
+
                 reqParams.cfn['KmsKeyArn'] = obj.data.Configuration.KMSKeyArn;
                 reqParams.tf['kms_key_arn'] = obj.data.Configuration.KMSKeyArn;
                 reqParams.cfn['MemorySize'] = obj.data.Configuration.MemorySize;
@@ -2300,7 +2300,7 @@ function performF2Mappings(objects) {
                         reqParams.tf['layers'].push(layer.Arn);
                     });
                 }
-                
+
                 /*
                 TODO:
                 Tags: 
@@ -2488,7 +2488,7 @@ function performF2Mappings(objects) {
                                 });
                             });
                         }
-                        
+
                         lifecyclerules.push(lifecyclerule);
                     });
 
@@ -2581,7 +2581,7 @@ function performF2Mappings(objects) {
                             });
                         });
                     }
-                    
+
                     if (topicconfigurations.length || queueconfigurations.length || lambdafunctionconfigurations.length) {
                         reqParams.cfn['NotificationConfiguration'] = {
                             'TopicConfigurations': topicconfigurations,
@@ -2614,7 +2614,7 @@ function performF2Mappings(objects) {
                 if (obj.data.Website && obj.data.Website.IndexDocument) {
                     var errordocument = null;
                     var routingrules = null;
-                    
+
                     if (obj.data.Website.ErrorDocument) {
                         errordocument = obj.data.Website.ErrorDocument.Key;
                     }
@@ -2794,7 +2794,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['VpcId'] = obj.data.VpcId;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -2808,7 +2808,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['vpc_id'] = obj.data.VpcId;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -3620,7 +3620,7 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['MaxAllocatedStorage'] = obj.data.MaxAllocatedStorage;
                 reqParams.tf['max_allocated_storage'] = obj.data.MaxAllocatedStorage;
-                
+
 
                 /*
                 TODO:
@@ -4366,7 +4366,7 @@ function performF2Mappings(objects) {
                             'Primary': privateIpAddresses.Primary
                         });
                         reqParams.tf['private_ips'].push(privateIpAddresses.PrivateIpAddress);
-                    }); 
+                    });
                 }
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
                 reqParams.tf['subnet_id'] = obj.data.SubnetId;
@@ -4385,7 +4385,7 @@ function performF2Mappings(objects) {
                     obj.data.Groups.forEach(group => {
                         reqParams.cfn['GroupSet'].push(group.GroupId);
                         reqParams.tf['security_groups'].push(group.GroupId);
-                    }); 
+                    });
                 }
 
                 tracked_resources.push({
@@ -4761,7 +4761,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['family'] = obj.data.CacheParameterGroupFamily;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.tf['description'] = obj.data.Description;
-                
+
                 /*
                 TODO:
                 Properties
@@ -5004,7 +5004,7 @@ function performF2Mappings(objects) {
                 }
                 if (obj.data.CustomErrorResponses) {
                     reqParams.cfn.DistributionConfig['CustomErrorResponses'] = [];
-                    reqParams.tf['custom_error_response'] = []; 
+                    reqParams.tf['custom_error_response'] = [];
                     obj.data.CustomErrorResponses.Items.forEach(customerrorresponse => {
                         if (customerrorresponse.ResponseCode != "" && customerrorresponse.ResponsePagePath != "") {
                             reqParams.cfn.DistributionConfig['CustomErrorResponses'].push(customerrorresponse);
@@ -5165,7 +5165,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['snapshot_window'] = obj.data.SnapshotWindow;
                 reqParams.cfn['ClusterName'] = obj.data.CacheClusterId;
                 reqParams.tf['cluster_id'] = obj.data.CacheClusterId;
-                
+
                 /*
                 TODO:
                 AZMode: String
@@ -5353,7 +5353,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['cloud_watch_logs_role_arn'] = obj.data.CloudWatchLogsRoleArn;
                 reqParams.cfn['KMSKeyId'] = obj.data.KmsKeyId;
                 reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
-                
+
                 /*
                 TODO:
                 EventSelectors:
@@ -5591,7 +5591,7 @@ function performF2Mappings(objects) {
                         });
                     });
                 }
-                
+
                 /*
                 TODO:
                 HealthCheckGracePeriod: Integer
@@ -5601,7 +5601,7 @@ function performF2Mappings(objects) {
                 NotificationConfigurations:
                     - NotificationConfiguration
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('autoscaling', obj.id),
@@ -5652,7 +5652,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['associate_public_ip_address'] = obj.data.AssociatePublicIpAddress;
                 reqParams.cfn['PlacementTenancy'] = obj.data.PlacementTenancy;
                 reqParams.tf['placement_tenancy'] = obj.data.PlacementTenancy;
-                
+
                 /*
                 TODO:
                 InstanceId: String
@@ -6164,7 +6164,7 @@ function performF2Mappings(objects) {
                             'delete_on_termination': networkinterface.DeleteOnTermination,
                             'description': networkinterface.Description,
                             'device_index': networkinterface.DeviceIndex,
-                            'ipv6_addresses': networkinterface.Ipv6Addresses ? networkinterface.Ipv6Addresses.map(ipv6address => {return ipv6address.Ipv6Address}) : null,
+                            'ipv6_addresses': networkinterface.Ipv6Addresses ? networkinterface.Ipv6Addresses.map(ipv6address => { return ipv6address.Ipv6Address }) : null,
                             'ipv6_address_count': networkinterface.Ipv6AddressCount,
                             'network_interface_id': networkinterface.NetworkInterfaceId,
                             'private_ip_address': networkinterface.PrivateIpAddress,
@@ -6469,8 +6469,8 @@ function performF2Mappings(objects) {
                 reqParams.tf['authorizer_credentials'] = obj.data.authorizerCredentials;
                 reqParams.cfn['IdentitySource'] = obj.data.identitySource;
                 reqParams.tf['identity_source'] = obj.data.identitySource;
-                reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression.replace(/\\/g,`\\\\`);;
-                reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression.replace(/\\/g,`\\\\`);;
+                reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);;
+                reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);;
                 reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.authorizerResultTtlInSeconds;
                 reqParams.tf['authorizer_result_ttl_in_seconds'] = obj.data.authorizerResultTtlInSeconds;
 
@@ -6549,7 +6549,7 @@ function performF2Mappings(objects) {
                         'TimeoutInMillis': obj.data.methodIntegration.timeoutInMillis,
                         'Type': obj.data.methodIntegration.type,
                         'Uri': obj.data.methodIntegration.uri
-                    }                
+                    }
                 }
                 reqParams.cfn['AuthorizationScopes'] = obj.data.authorizationScopes;
                 reqParams.tf['authorization_scopes'] = obj.data.authorizationScopes;
@@ -6703,7 +6703,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "apigateway.clientcertificate") {
                 reqParams.cfn['Description'] = obj.data.description;
-               
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('apigateway', obj.id),
@@ -7783,7 +7783,7 @@ function performF2Mappings(objects) {
                                 'StateMachineName': action.stepFunctions.stateMachineName
                             };
                         }
-                        
+
                         actions.push(actionitem);
                     });
                 }
@@ -8006,7 +8006,7 @@ function performF2Mappings(objects) {
                         'Resource': obj.data.source.auth.resource
                     };
                 }
-                
+
                 reqParams.cfn['Name'] = obj.data.name;
                 reqParams.cfn['Description'] = obj.data.description;
                 reqParams.cfn['Source'] = {
@@ -13970,7 +13970,7 @@ function performF2Mappings(objects) {
                     reqParams.tf['principal_arn'] = allowedPrincipal.Principal;
 
                     tracked_resources.push({
-                    'obj': obj,
+                        'obj': obj,
                         'logicalId': getResourceName('ec2', obj.id),
                         'region': obj.region,
                         'service': 'ec2',
@@ -14351,7 +14351,7 @@ function performF2Mappings(objects) {
                             'PortMappings': portMappings,
                             'Privileged': containerDefinition.privileged,
                             'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
-                            'RepositoryCredentials': repositoryCredentials,      
+                            'RepositoryCredentials': repositoryCredentials,
                             'Ulimits': ulimits,
                             'User': containerDefinition.user,
                             'VolumesFrom': volumesFrom,
@@ -15844,7 +15844,7 @@ function performF2Mappings(objects) {
                         'target_tags': targettags
                     };
                 }
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -16429,7 +16429,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.connectionName;
                 reqParams.tf['bandwidth'] = obj.data.bandwidth;
                 reqParams.tf['location'] = obj.data.location;
-                
+
                 /*
                 TODO:
                 tags
@@ -16470,7 +16470,7 @@ function performF2Mappings(objects) {
                         reqParams.tf['route_filter_prefixes'].push(prefix.cidr);
                     });
                 }
-                
+
                 /*
                 TODO:
                 tags
@@ -16496,7 +16496,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['mtu'] = obj.data.mtu;
                 reqParams.tf['dx_gateway_id'] = obj.data.directConnectGatewayId;
                 reqParams.tf['vpn_gateway_id'] = obj.data.virtualGatewayId;
-                
+
                 /*
                 TODO:
                 tags
@@ -16575,7 +16575,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.lagName;
                 reqParams.tf['connections_bandwidth'] = obj.data.connectionsBandwidth;
                 reqParams.tf['location'] = obj.data.location;
-                
+
                 /*
                 TODO:
                 force_destroy
@@ -16772,7 +16772,7 @@ function performF2Mappings(objects) {
 
                 reqParams.tf['name'] = obj.data.BackupPlan.BackupPlanName;
                 reqParams.tf['rule'] = tfRules;
-                
+
                 /*
                 TODO:
                 BackupPlanTags: Json
@@ -17681,7 +17681,7 @@ function performF2Mappings(objects) {
                         'End': obj.data.QuietTime.End
                     };
                 }
-                
+
                 /*
                 TODO:
                 CloudWatchMetricsEnabled: Boolean
@@ -17976,7 +17976,7 @@ function performF2Mappings(objects) {
                     };
                 }
                 reqParams.cfn['OpenMonitoring'] = obj.data.OpenMonitoring;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('msk', obj.id),
@@ -18017,7 +18017,7 @@ function performF2Mappings(objects) {
                         'Tags': obj.data.Tags
                     }];
                 }
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -18031,7 +18031,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidr;
                 reqParams.cfn['TargetVpcSubnetId'] = obj.data.TargetSubnet;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -18043,7 +18043,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "ec2.clientvpntargetnetworkassociation") {
                 reqParams.cfn['ClientVpnEndpointId'] = obj.data.ClientVpnEndpointId;
                 reqParams.cfn['SubnetId'] = obj.data.TargetNetworkId;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -18058,7 +18058,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['AuthorizeAllGroups'] = obj.data.AuthorizeAllGroups;
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['TargetNetworkCidr'] = obj.data.TargetNetworkCidr;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -18074,7 +18074,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['TargetId'] = obj.data.TargetId;
                 reqParams.cfn['TargetType'] = obj.data.TargetType;
                 reqParams.cfn['TargetVersion'] = obj.data.TargetVersion;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('config', obj.id),
@@ -18085,7 +18085,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "macie.memberaccountassociation") {
                 reqParams.tf['member_account_id'] = obj.data.accountId;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('macie', obj.id),
@@ -18106,7 +18106,7 @@ function performF2Mappings(objects) {
                 SKIPPED:
                 member_account_id
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('macie', obj.id),
@@ -18117,7 +18117,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "securityhub.hub") {
                 reqParams.cfn['Tags'] = obj.data.Tags;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('securityhub', obj.id),
@@ -18130,7 +18130,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "medialive.inputsecuritygroup") {
                 reqParams.cfn['WhitelistRules'] = obj.data.WhitelistRules;
                 reqParams.cfn['Tags'] = obj.data.Tags;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('medialive', obj.id),
@@ -18149,7 +18149,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.cfn['RoleArn'] = obj.data.RoleArn;
                 reqParams.cfn['Tags'] = obj.data.Tags;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('medialive', obj.id),
@@ -18174,7 +18174,7 @@ function performF2Mappings(objects) {
                 Vpc: 
                     InputVpcRequest
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('medialive', obj.id),
@@ -18195,7 +18195,7 @@ function performF2Mappings(objects) {
                 device_ca_certificate
                 audit_stream_arn
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('worklink', obj.id),
@@ -18208,7 +18208,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['fleet_arn'] = obj.data.FleetArn;
                 reqParams.tf['certificate'] = obj.data.Certificate;
                 reqParams.tf['display_name '] = obj.data.DisplayName;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('worklink', obj.id),
@@ -18228,7 +18228,7 @@ function performF2Mappings(objects) {
                     };
                 }
                 reqParams.cfn['Dimensions'] = obj.data.Dimensions;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('cloudwatch', obj.id),
@@ -18660,7 +18660,7 @@ function performF2Mappings(objects) {
                 TODO:
                 Tags
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('iotevents', obj.id),
@@ -18688,7 +18688,7 @@ function performF2Mappings(objects) {
                 TODO:
                 Tags
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('iotevents', obj.id),
@@ -18701,7 +18701,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['quota_code'] = obj.data.QuotaCode;
                 reqParams.tf['service_code'] = obj.data.ServiceCode;
                 reqParams.tf['value'] = obj.data.DesiredValue;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('servicequotas', obj.id),
@@ -18715,7 +18715,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['aws_account_id'] = obj.data.AccountId;
                 reqParams.tf['description'] = obj.data.Description;
                 reqParams.tf['namespace'] = obj.data.Namespace;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('quicksight', obj.id),
@@ -18739,7 +18739,7 @@ function performF2Mappings(objects) {
                 if (Object.keys(obj.data.Attributes).length) {
                     reqParams.tf['attributes'] = obj.data.Attributes;
                 }
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('xray', obj.id),
@@ -18757,7 +18757,7 @@ function performF2Mappings(objects) {
                 key_name_prefix
                 public_key
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('ec2', obj.id),
@@ -18785,7 +18785,7 @@ function performF2Mappings(objects) {
                 TODO:
                 user_data
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('lightsail', obj.id),
@@ -18796,7 +18796,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "lightsail.domain") {
                 reqParams.tf['domain_name'] = obj.data.name;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('lightsail', obj.id),
@@ -18813,7 +18813,7 @@ function performF2Mappings(objects) {
                 SKIPPED:
                 pgp_key
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('lightsail', obj.id),
@@ -18824,7 +18824,7 @@ function performF2Mappings(objects) {
                 });
             } else if (obj.type == "lightsail.staticip") {
                 reqParams.tf['name'] = obj.data.name;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('lightsail', obj.id),
@@ -18836,7 +18836,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "lightsail.staticipattachment") {
                 reqParams.tf['static_ip_name'] = obj.data.name;
                 reqParams.tf['instance_name'] = obj.data.attachedTo;
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('lightsail', obj.id),
@@ -18855,13 +18855,13 @@ function performF2Mappings(objects) {
                 SKIPPED:
                 Code
                 */
-                
+
                 /*
                 TODO:
                 IsPrivate
                 RepositoryDescription
                 */
-                
+
                 tracked_resources.push({
                     'obj': obj,
                     'logicalId': getResourceName('codestar', obj.id),
@@ -19296,7 +19296,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['name'] = obj.data.Name;
                 reqParams.tf['activation_key'] = "REPLACEME";
                 reqParams.tf['ip_address'] = "REPLACEME";
-                
+
                 /*
                 TODO:
                 tags
@@ -19328,7 +19328,7 @@ function performF2Mappings(objects) {
                         'verify_mode': obj.data.Options.VerifyMode
                     };
                 }
-                
+
                 /*
                 TODO:
                 tags
@@ -19349,7 +19349,7 @@ function performF2Mappings(objects) {
                 };
                 reqParams.tf['efs_file_system_arn'] = obj.data.LocationArn;
                 reqParams.tf['subdirectory'] = obj.data.LocationUri;
-                
+
                 /*
                 TODO:
                 tags
@@ -19369,7 +19369,7 @@ function performF2Mappings(objects) {
                 };
                 reqParams.tf['server_hostname'] = obj.data.LocationArn;
                 reqParams.tf['subdirectory'] = obj.data.LocationUri;
-                
+
                 /*
                 TODO:
                 tags
@@ -19389,7 +19389,7 @@ function performF2Mappings(objects) {
                 };
                 reqParams.tf['s3_bucket_arn'] = obj.data.LocationArn;
                 reqParams.tf['subdirectory'] = obj.data.LocationUri;
-                
+
                 /*
                 TODO:
                 tags
@@ -19408,7 +19408,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['gateway_timezone'] = obj.data.GatewayTimezone;
                 reqParams.tf['gateway_type'] = obj.data.GatewayType;
                 reqParams.tf['activation_key'] = "REPLACEME";
-                
+
                 /*
                 TODO:
                 gateway_ip_address
@@ -19476,7 +19476,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.cfn['PricingPlan'] = obj.data.PricingPlan;
                 reqParams.cfn['Status'] = obj.data.Status;
-                
+
                 /*
                 TODO:
                 Tags
@@ -19495,7 +19495,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Name'] = obj.data.Name;
                 reqParams.cfn['Category'] = obj.data.Category;
                 reqParams.cfn['SettingsJson'] = obj.data.Settings;
-                
+
                 /*
                 TODO:
                 Tags: Json
@@ -19518,7 +19518,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Queue'] = obj.data.Queue;
                 reqParams.cfn['SettingsJson'] = obj.data.Settings;
                 reqParams.cfn['StatusUpdateInterval'] = obj.data.StatusUpdateInterval;
-                
+
                 /*
                 TODO:
                 Tags: Json
@@ -20119,17 +20119,17 @@ function performF2Mappings(objects) {
                     icon: 'font-icon font-icon-warning',
                     title: '<strong>No Mapping Available</strong>',
                     message: 'There is currently no mappings available for the <b>' + obj.type + '</b> type.'
-                },{
+                }, {
                     type: 'warning'
                 });
                 f2log(JSON.stringify(obj));
             }
-        } catch(err) {
+        } catch (err) {
             $.notify({
                 icon: 'font-icon font-icon-danger',
                 title: '<strong>Error</strong>',
                 message: err.toString()
-            },{
+            }, {
                 type: 'danger'
             });
             console.trace(err);

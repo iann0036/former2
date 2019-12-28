@@ -110,7 +110,7 @@ function recursivePrettyPrintMap(param, spacing) {
         if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
             return undefined;
         }
-        
+
         return param.replace(/\</g, "&lt;"); // TODO: Better sanitization here
     }
     if (Array.isArray(param)) {
@@ -143,7 +143,7 @@ function recursivePrettyPrintMap(param, spacing) {
 ` + '&nbsp;'.repeat(spacing + 4) + paramitems.join(`<br />
 ` + '&nbsp;'.repeat(spacing + 4));
     }
-    
+
     return undefined;
 }
 
@@ -152,10 +152,10 @@ function byteSizeFormatter(data) {
 
     if (bytes < 1024) {
         return bytes + " bytes";
-    } else if (bytes < 1024*1024) {
-        return (bytes/1024).toFixed(1) + " kB";
-    } else if (bytes < 1024*1024*1024) {
-        return (bytes/1024/1024).toFixed(1) + " MB";
+    } else if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + " kB";
+    } else if (bytes < 1024 * 1024 * 1024) {
+        return (bytes / 1024 / 1024).toFixed(1) + " MB";
     }
 
     return data;
@@ -174,7 +174,7 @@ function timeAgoFormatter(data) {
                 return "Just now"
             } else {
                 diff = Math.round(diff / times[t - 1][1])
-                return diff + " " + times[t - 1][0] + (diff == 1?" ago":"s ago")
+                return diff + " " + times[t - 1][0] + (diff == 1 ? " ago" : "s ago")
             }
         }
     }
@@ -210,23 +210,23 @@ function lambdaRuntimeFormatter(data) {
 /* ========================================================================== */
 
 function sdkcallwaiter(svc, method, params1, params2) {
-    return new Promise(function(resolve, reject) {
-        var service = new _AWS[svc]({region: region});
+    return new Promise(function (resolve, reject) {
+        var service = new _AWS[svc]({ region: region });
 
-        service[method].call(service, params1, params2, async function(err, data) {
+        service[method].call(service, params1, params2, async function (err, data) {
             resolve();
         });
     });
 }
 
 function sdkcall(svc, method, params, alert_on_errors, backoff) {
-    return new Promise(function(resolve, reject) {
-        var service = new AWS[svc]({region: region});
+    return new Promise(function (resolve, reject) {
+        var service = new AWS[svc]({ region: region });
         if (svc == "GlobalAccelerator") {
-            service = new AWS[svc]({region: 'us-west-2'});
+            service = new AWS[svc]({ region: 'us-west-2' });
         }
 
-        service[method].call(service, params, async function(err, data) {
+        service[method].call(service, params, async function (err, data) {
             if (err) {
                 if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
                     if (backoff) {
@@ -263,11 +263,11 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                             icon: 'font-icon font-icon-warning',
                             title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
                             message: err.message || JSON.stringify(err)
-                        },{
+                        }, {
                             type: 'danger'
                         });
                     }
-                    
+
                     reject(data);
                 }
             } else {
@@ -276,7 +276,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['NextToken'] = data.NextToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -285,7 +285,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['nextToken'] = data.nextToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -298,7 +298,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -307,7 +307,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['Marker'] = data.NextPageMarker;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -321,7 +321,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -334,7 +334,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -343,7 +343,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ContinuationToken'] = data.NextContinuationToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -352,7 +352,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['PaginationToken'] = data.PaginationToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -361,7 +361,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['marker'] = data.nextMarker;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -374,7 +374,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -383,7 +383,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['marker'] = data.marker;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -392,7 +392,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['position'] = data.position;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -401,7 +401,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['Marker'] = data[Object.keys(data)[0]]['NextMarker'];
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -410,7 +410,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['Token'] = data[Object.keys(data)[0]]['NextToken'];
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -419,7 +419,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartGlobalTableName'] = data.LastEvaluatedTableName;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -428,7 +428,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartTableName'] = data.LastEvaluatedTableName;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -437,7 +437,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartTableName'] = data.LastEvaluatedStreamArn;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -446,7 +446,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartDeliveryStreamName'] = data.DeliveryStreamNames[data.DeliveryStreamNames.length - 1];
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -455,7 +455,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartStreamName'] = data.StreamNames[data.StreamNames.length - 1];
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -464,7 +464,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     params['ExclusiveStartApplicationName'] = data.ApplicationSummaries[data.ApplicationSummaries.length - 1].ApplicationName;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
-                        
+
                         resolve(mergeddata);
                     }, data => {
                         reject(data);
@@ -944,7 +944,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Users.map(user => {
             $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
                 f2id: user.Arn,
@@ -1011,7 +1011,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Groups.map(group => {
             $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
                 f2id: group.Arn,
@@ -1063,7 +1063,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Roles.map(role => {
             if (role.Path.startsWith("/aws-service-role/")) {
                 $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
@@ -1128,7 +1128,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         Scope: 'Local'
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Policies.map(managedPolicy => {
             if (!managedPolicy.Arn.startsWith("arn:aws:iam::aws")) {
                 return sdkcall("IAM", "getPolicy", {
@@ -1161,7 +1161,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         // no params
     }, true).then((data) => {
         $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
-        
+
         data.InstanceProfiles.forEach(instanceProfile => {
             $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('append', [{
                 f2id: instanceProfile.Arn,
@@ -1179,7 +1179,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         type: 'ACCOUNT'
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').bootstrapTable('removeAll');
-        
+
         data.analyzers.forEach(async (analyzer) => {
             await sdkcall("AccessAnalyzer", "getAnalyzer", {
                 analyzerName: analyzer.name
@@ -1202,7 +1202,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }]);
             });
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
@@ -1337,7 +1337,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Keys.map(key => {
             return sdkcall("KMS", "describeKey", {
                 KeyId: key.KeyId
@@ -1379,7 +1379,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
         // no params
     }, true).then((data) => {
         $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('removeAll');
-        
+
         data.Aliases.forEach(alias => {
             if (!alias.AliasName.startsWith("alias/aws/")) {
                 $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('append', [{
@@ -3444,7 +3444,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('removeAll');
-        
+
         return Promise.all(data.Vpcs.map(vpc => {
             if (vpc.DhcpOptionsId) {
                 $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('append', [{
@@ -3476,11 +3476,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             });
 
             return sdkcall("EC2", "describeVpcAttribute", {
-                Attribute: "enableDnsSupport", 
+                Attribute: "enableDnsSupport",
                 VpcId: vpc.VpcId
             }, true).then(async (dnsSupport) => {
                 await sdkcall("EC2", "describeVpcAttribute", {
-                    Attribute: "enableDnsHostnames", 
+                    Attribute: "enableDnsHostnames",
                     VpcId: vpc.VpcId
                 }, true).then((dnsHostnames) => {
                     vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
@@ -3889,7 +3889,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }]);
                 });
             }
-            
+
             $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
                 f2id: routeTable.RouteTableId,
                 f2type: 'ec2.routetable',
@@ -3926,7 +3926,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgateways-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeTransitGatewayRouteTables", {
         // no params
@@ -4007,7 +4007,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeTransitGatewayVpcAttachments", {
         // no params
@@ -4027,7 +4027,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeVpcEndpoints", {
         // no params
@@ -4143,7 +4143,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ClientVpnEndpoints) {
             await Promise.all(data.ClientVpnEndpoints.map(async (endpoint) => {
                 $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('append', [{
@@ -4221,7 +4221,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeTrafficMirrorFilters", {
         // no params
@@ -4274,7 +4274,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable');
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeTrafficMirrorSessions", {
         // no params
@@ -4295,7 +4295,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
@@ -4315,7 +4315,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -6406,7 +6406,7 @@ async function updateDatatableComputeEC2() {
                 }
 
                 if (instance.BlockDeviceMappings) {
-                    for (var i=0; i<instance.BlockDeviceMappings.length; i++) {
+                    for (var i = 0; i < instance.BlockDeviceMappings.length; i++) {
                         if (instance.BlockDeviceMappings[i].Ebs && instance.BlockDeviceMappings[i].Ebs.VolumeId) {
                             await sdkcall("EC2", "describeVolumes", {
                                 VolumeIds: [instance.BlockDeviceMappings[i].Ebs.VolumeId]
@@ -6524,7 +6524,7 @@ async function updateDatatableComputeEC2() {
         // no params
     }, true).then((data) => {
         $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('removeAll');
-        
+
         data.LoadBalancerDescriptions.forEach(loadBalancer => {
             $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('append', [{
                 f2id: loadBalancer.LoadBalancerName,
@@ -6580,7 +6580,7 @@ async function updateDatatableComputeEC2() {
                         port: listener.Port,
                         protocol: listener.Protocol
                     }]);
-        
+
                     return Promise.all([
                         listener.Protocol.startsWith("HTTP") ? sdkcall("ELBv2", "describeListenerCertificates", {
                             ListenerArn: listener.ListenerArn
@@ -6829,7 +6829,7 @@ async function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-networkinterfaces-datatable');
         unblockUI('#section-compute-ec2-networkinterfaceattachments-datatable');
     });
-    
+
     sdkcall("EC2", "describeNetworkInterfacePermissions", {
         // no params
     }, true).then((data) => {
@@ -7013,7 +7013,7 @@ async function updateDatatableComputeEC2() {
         ServiceNamespace: "ec2"
     }, true).then(async (data) => {
         $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "ec2",
@@ -7042,7 +7042,7 @@ async function updateDatatableComputeEC2() {
         ServiceNamespace: "ec2"
     }, true).then(async (data) => {
         $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -7065,7 +7065,7 @@ async function updateDatatableComputeEC2() {
         // no params
     }, true).then(async (data) => {
         $('#section-compute-ec2-keypairs-datatable').bootstrapTable('removeAll');
-        
+
         if (data.KeyPairs) {
             data.KeyPairs.forEach(keypair => {
                 $('#section-compute-ec2-keypairs-datatable').bootstrapTable('append', [{
@@ -7484,7 +7484,7 @@ async function updateDatatableComputeLambda() {
                     FunctionName: lambdaFunction.FunctionArn
                 }, false).then((data) => {
                     var policy = JSON.parse(data.Policy);
-    
+
                     policy.Statement.forEach(statement => {
                         statement['FunctionName'] = lambdaFunction.FunctionArn;
                         $('#section-compute-lambda-permissions-datatable').bootstrapTable('append', [{
@@ -7495,7 +7495,7 @@ async function updateDatatableComputeLambda() {
                             functionname: statement.FunctionName
                         }]);
                     });
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Lambda", "listAliases", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, true).then((data) => {
@@ -7545,7 +7545,7 @@ async function updateDatatableComputeLambda() {
 
                         eventConfigIterator += 1;
                     });
-                }).catch(() => {})
+                }).catch(() => { })
             ]);
         }));
 
@@ -7588,7 +7588,7 @@ async function updateDatatableComputeLambda() {
                             VersionNumber: layerVersion.Version
                         }, false).then((data) => {
                             var policy = JSON.parse(data.Policy);
-    
+
                             policy.Statement.forEach(statement => {
                                 statement['LayerVersionArn'] = layerVersion.LayerVersionArn;
                                 $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('append', [{
@@ -7599,7 +7599,7 @@ async function updateDatatableComputeLambda() {
                                     layerversion: statement.LayerVersionArn
                                 }]);
                             });
-                        }).catch(() => {})
+                        }).catch(() => { })
                     ]);
                 }));
             });
@@ -7780,62 +7780,62 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['AccelerateConfiguration'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketEncryption", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Encryption'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketCors", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Cors'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketLifecycle", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Lifecycle'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketLogging", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Logging'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketNotificationConfiguration", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['NotificationConfiguration'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketReplication", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Replication'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketVersioning", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Versioning'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "getBucketWebsite", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Website'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "listBucketAnalyticsConfigurations", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['AnalyticsConfigurations'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "listBucketInventoryConfigurations", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['InventoryConfigurations'] = data;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("S3", "listBucketMetricsConfigurations", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['MetricsConfigurations'] = data;
-                }).catch(() => {})
+                }).catch(() => { })
             ]).then(async () => {
                 $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
                     f2id: bucket.Name,
@@ -7860,7 +7860,7 @@ async function updateDatatableStorageS3() {
                         policy: data.Policy,
                         policylength: data.Policy.length
                     }]);
-                }).catch(() => {});
+                }).catch(() => { });
             });
         }));
 
@@ -7900,7 +7900,7 @@ async function updateDatatableStorageS3() {
                     }]);
                 });
             }));
-        }).catch(() => {});
+        }).catch(() => { });
     });
 
     unblockUI('#section-storage-s3-accesspoints-datatable');
@@ -8625,7 +8625,7 @@ async function updateDatatableDatabaseRDS() {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
         $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "rds",
@@ -8654,7 +8654,7 @@ async function updateDatatableDatabaseRDS() {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
         $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -9031,7 +9031,7 @@ async function updateDatatableDatabaseElastiCache() {
                 description: securityGroup.Description
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-database-elasticache-securitygroups-datatable');
 }
@@ -9981,7 +9981,7 @@ async function updateDatatableDatabaseRedshift() {
                 description: securityGroup.Description
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-database-redshift-securitygroups-datatable');
 }
@@ -10124,7 +10124,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                         topicarn: topic.TopicArn,
                         displayname: topic.DisplayName
                     }]);
-            
+
                     $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('append', [{
                         f2id: topic.TopicArn,
                         f2type: 'sns.topicpolicy',
@@ -10253,7 +10253,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                         f2region: region,
                         queueurl: queueUrl
                     }]);
-            
+
                     $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('append', [{
                         f2id: queueUrl,
                         f2type: 'sqs.queuepolicy',
@@ -10265,7 +10265,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                         policy: data.Attributes.Policy,
                         queueurl: queueUrl
                     }]);
-                }).catch(() => {});
+                }).catch(() => { });
             }));
         }
     });
@@ -10538,7 +10538,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                 ApplicationName: application.ApplicationName
             }, false).then((data) => {
                 $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
-        
+
                 data.ConfigurationSettings.forEach(configurationTemplate => {
                     $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('append', [{
                         f2id: application.ApplicationName + configurationTemplate.TemplateName,
@@ -10552,7 +10552,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                         datecreated: configurationTemplate.DateCreated
                     }]);
                 });
-            }).catch(() => {});
+            }).catch(() => { });
         }));
 
         unblockUI('#section-compute-elasticbeanstalk-applications-datatable');
@@ -11977,7 +11977,7 @@ async function updateDatatableDatabaseDynamoDB() {
         ServiceNamespace: "dynamodb"
     }, true).then(async (data) => {
         $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "dynamodb",
@@ -12006,7 +12006,7 @@ async function updateDatatableDatabaseDynamoDB() {
         ServiceNamespace: "dynamodb"
     }, true).then(async (data) => {
         $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -12601,7 +12601,7 @@ async function updateDatatableAnalyticsKinesis() {
                     applicationcode: data.ApplicationDetail.ApplicationCode,
                     versionid: data.ApplicationDetail.ApplicationVersionId
                 }]);
-                
+
                 if (data.ApplicationDetail.OutputDescriptions) {
                     data.ApplicationDetail.OutputDescriptions.forEach(output => {
                         output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
@@ -12633,7 +12633,7 @@ async function updateDatatableAnalyticsKinesis() {
                 }
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-analytics-kinesis-analyticsapplications-datatable');
     unblockUI('#section-analytics-kinesis-analyticsapplicationoutputs-datatable');
@@ -12710,7 +12710,7 @@ async function updateDatatableAnalyticsKinesis() {
                 }
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
@@ -12794,9 +12794,9 @@ async function updateDatatableComputeECR() {
                     repositoryName: repository.repositoryName
                 }, true).then((data) => {
                     repository['policy'] = data.policyText;
-                    
-                }).catch(() => {});
-            }).catch(() => {});
+
+                }).catch(() => { });
+            }).catch(() => { });
 
             $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
                 f2id: repository.repositoryArn,
@@ -13496,7 +13496,7 @@ async function updateDatatableComputeECS() {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
         $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             await Promise.all(data.ScalableTargets.map(target => {
                 return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -13527,7 +13527,7 @@ async function updateDatatableComputeECS() {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
         $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalingPolicies) {
             data.ScalingPolicies.forEach(policy => {
                 $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -15068,7 +15068,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             }]);
                         });
                     }
-    
+
                     unblockUI('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable');
                 }),
                 sdkcall("APIGateway", "getDocumentationParts", {
@@ -15087,7 +15087,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             }]);
                         });
                     }
-    
+
                     unblockUI('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable');
                 }),
                 sdkcall("APIGateway", "getDocumentationVersions", {
@@ -15107,7 +15107,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             }]);
                         });
                     }
-    
+
                     unblockUI('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable');
                 }),
                 sdkcall("APIGateway", "getGatewayResponses", {
@@ -15127,7 +15127,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             }]);
                         });
                     }
-    
+
                     unblockUI('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable');
                 }),
                 sdkcall("APIGateway", "getStages", {
@@ -15192,7 +15192,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                                 });
                             }));
                         }
-    
+
                         resource['restApiId'] = api.id;
                         $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('append', [{
                             f2id: resource.id,
@@ -15205,7 +15205,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             path: resource.path
                         }]);
                     });
-    
+
                     unblockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
                     unblockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');
                 }),
@@ -15456,7 +15456,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
             }));
         });
     });
-    
+
     unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
@@ -15832,7 +15832,7 @@ async function updateDatatableStorageEFS() {
                 FileSystemId: fileSystem.FileSystemId
             }, true).then(async (data) => {
                 $('#section-storage-efs-mounttargets-datatable').bootstrapTable('removeAll');
-        
+
                 await Promise.all(data.MountTargets.map(mountTarget => {
                     return sdkcall("EC2", "describeNetworkInterfaces", {
                         NetworkInterfaceIds: [mountTarget.NetworkInterfaceId]
@@ -15945,7 +15945,7 @@ async function updateDatatableDeveloperToolsCloud9() {
                 });
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-developertools-cloud9-environments-datatable');
 }
@@ -16030,7 +16030,7 @@ async function updateDatatableStorageFSx() {
         // no params
     }, true).then((data) => {
         $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
-        
+
         data.FileSystems.forEach(fileSystem => {
             $('#section-storage-fsx-filesystems-datatable').bootstrapTable('append', [{
                 f2id: fileSystem.ResourceARN,
@@ -16044,7 +16044,7 @@ async function updateDatatableStorageFSx() {
                 filesystemtype: fileSystem.FileSystemType
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-storage-fsx-filesystems-datatable');
 }
@@ -16318,7 +16318,7 @@ async function updateDatatableDatabaseNeptune() {
         // no params
     }, true).then((data) => {
         $('#section-database-neptune-clusters-datatable').bootstrapTable('removeAll');
-        
+
         data.DBClusters.forEach(cluster => {
             $('#section-database-neptune-clusters-datatable').bootstrapTable('append', [{
                 f2id: cluster.DBClusterIdentifier,
@@ -16340,7 +16340,7 @@ async function updateDatatableDatabaseNeptune() {
         // no params
     }, true).then((data) => {
         $('#section-database-neptune-instances-datatable').bootstrapTable('removeAll');
-        
+
         data.DBInstances.forEach(instance => {
             $('#section-database-neptune-instances-datatable').bootstrapTable('append', [{
                 f2id: instance.DBInstanceIdentifier,
@@ -16361,7 +16361,7 @@ async function updateDatatableDatabaseNeptune() {
         // no params
     }, true).then((data) => {
         $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
-        
+
         data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
             $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('append', [{
                 f2id: clusterParameterGroup.DBClusterParameterGroupArn,
@@ -16381,7 +16381,7 @@ async function updateDatatableDatabaseNeptune() {
         // no params
     }, true).then((data) => {
         $('#section-database-neptune-parametergroups-datatable').bootstrapTable('removeAll');
-        
+
         data.DBParameterGroups.forEach(parameterGroup => {
             $('#section-database-neptune-parametergroups-datatable').bootstrapTable('append', [{
                 f2id: parameterGroup.DBParameterGroupArn,
@@ -16401,7 +16401,7 @@ async function updateDatatableDatabaseNeptune() {
         // no params
     }, true).then((data) => {
         $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
-        
+
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('append', [{
                 f2id: subnetGroup.DBSubnetGroupArn,
@@ -16650,7 +16650,7 @@ async function updateDatatableDatabaseDocumentDB() {
         // no params
     }, true).then((data) => {
         $('#section-database-documentdb-clusters-datatable').bootstrapTable('removeAll');
-        
+
         data.DBClusters.forEach(cluster => {
             $('#section-database-documentdb-clusters-datatable').bootstrapTable('append', [{
                 f2id: cluster.DBClusterIdentifier,
@@ -16672,7 +16672,7 @@ async function updateDatatableDatabaseDocumentDB() {
         // no params
     }, true).then((data) => {
         $('#section-database-documentdb-instances-datatable').bootstrapTable('removeAll');
-        
+
         data.DBInstances.forEach(instance => {
             $('#section-database-documentdb-instances-datatable').bootstrapTable('append', [{
                 f2id: instance.DBInstanceIdentifier,
@@ -16694,7 +16694,7 @@ async function updateDatatableDatabaseDocumentDB() {
         // no params
     }, true).then((data) => {
         $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
-        
+
         data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
             $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('append', [{
                 f2id: clusterParameterGroup.DBClusterParameterGroupArn,
@@ -16714,7 +16714,7 @@ async function updateDatatableDatabaseDocumentDB() {
         // no params
     }, true).then((data) => {
         $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
-        
+
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('append', [{
                 f2id: subnetGroup.DBSubnetGroupArn,
@@ -16834,7 +16834,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.repositories.map(repository => {
             return sdkcall("CodeCommit", "getRepository", {
                 repositoryName: repository.repositoryName
@@ -16875,7 +16875,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
                 }
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-developertools-codecommit-notificationrules-datatable');
 }
@@ -17095,7 +17095,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codebuild-projects-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.projects.map(project => {
             return sdkcall("CodeBuild", "batchGetProjects", {
                 names: [project]
@@ -17118,7 +17118,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('removeAll');
-        
+
         data.sourceCredentialsInfos.forEach(sourcecredentials => {
             $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('append', [{
                 f2id: sourcecredentials.arn,
@@ -17154,7 +17154,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                 }
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("CodeBuild", "listReportGroups", {
         // no params
@@ -17176,7 +17176,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-developertools-codebuild-projects-datatable');
     unblockUI('#section-developertools-codebuild-sourcecredentials-datatable');
@@ -17376,14 +17376,14 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.applications.map(application => {
             return Promise.all([
                 sdkcall("CodeDeploy", "listDeploymentGroups", {
                     applicationName: application
                 }, true).then((data) => {
                     $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('removeAll');
-                    
+
                     data.deploymentGroups.forEach(deploymentGroup => {
                         sdkcall("CodeDeploy", "getDeploymentGroup", {
                             applicationName: application,
@@ -17428,7 +17428,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.deploymentConfigsList.map(deploymentConfiguration => {
             return sdkcall("CodeDeploy", "getDeploymentConfig", {
                 deploymentConfigName: deploymentConfiguration
@@ -17808,7 +17808,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, true).then((data) => {
         $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('removeAll');
-        
+
         data.FleetAttributes.forEach(fleet => {
             $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('append', [{
                 f2id: fleet.FleetArn,
@@ -17829,7 +17829,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, true).then((data) => {
         $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('removeAll');
-        
+
         data.Builds.forEach(build => {
             $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('append', [{
                 f2id: build.BuildId,
@@ -17851,7 +17851,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, true).then((data) => {
         $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('removeAll');
-        
+
         data.Aliases.forEach(alias => {
             $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('append', [{
                 f2id: alias.AliasArn,
@@ -17871,7 +17871,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, true).then((data) => {
         $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('removeAll');
-        
+
         data.Scripts.forEach(script => {
             $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('append', [{
                 f2id: script.ScriptId,
@@ -17891,7 +17891,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, true).then((data) => {
         $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('removeAll');
-        
+
         data.GameSessionQueues.forEach(queue => {
             $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('append', [{
                 f2id: queue.GameSessionQueueArn,
@@ -17910,7 +17910,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         // no params
     }, false).then((data) => {
         $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('removeAll');
-        
+
         data.Configurations.forEach(configuration => {
             $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('append', [{
                 f2id: configuration.Name,
@@ -17924,13 +17924,13 @@ async function updateDatatableGameDevelopmentGameLift() {
         });
 
         unblockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("GameLift", "describeMatchmakingRuleSets", {
         // no params
     }, false).then((data) => {
         $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('removeAll');
-        
+
         data.RuleSets.forEach(ruleset => {
             $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('append', [{
                 f2id: ruleset.RuleSetName,
@@ -17943,7 +17943,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         });
 
         unblockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 }
 
 /* ========================================================================== */
@@ -18232,7 +18232,7 @@ async function updateDatatableCustomerEngagementSES() {
         }, true).then(async (data) => {
             $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
             $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
-            
+
             await Promise.all(data.ConfigurationSets.map(configurationSet => {
                 return sdkcall("SES", "describeConfigurationSet", {
                     ConfigurationSetName: configurationSet.Name
@@ -18268,7 +18268,7 @@ async function updateDatatableCustomerEngagementSES() {
             // no params
         }, true).then((data) => {
             $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
-            
+
             data.Filters.forEach(filter => {
                 $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('append', [{
                     f2id: filter.Name,
@@ -18288,7 +18288,7 @@ async function updateDatatableCustomerEngagementSES() {
             // no params
         }, true).then(async (data) => {
             $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
-            
+
             await Promise.all(data.RuleSets.map(ruleSet => {
                 $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('append', [{
                     f2id: ruleSet.Name,
@@ -18330,7 +18330,7 @@ async function updateDatatableCustomerEngagementSES() {
             // no params
         }, true).then(async (data) => {
             $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
-            
+
             await Promise.all(data.TemplatesMetadata.map(template => {
                 return sdkcall("SES", "getTemplate", {
                     TemplateName: template.Name
@@ -18436,7 +18436,7 @@ async function updateDatatableAWSCostManagementBudgets() {
             AccountId: accountId
         }, true).then(async (data) => {
             $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
-            
+
             if (data.Budgets) {
                 await Promise.all(data.Budgets.map(budget => {
                     return sdkcall("Budgets", "describeNotificationsForBudget", {
@@ -19446,7 +19446,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listRuleGroups", {
@@ -19496,7 +19496,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listIPSets", {
@@ -19546,7 +19546,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listRegexPatternSets", {
@@ -19596,13 +19596,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listWebACLs", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.WebACLs.map(webAcl => {
             return sdkcall("WAF", "getWebACL", {
                 WebACLId: webAcl.WebACLId
@@ -19620,13 +19620,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-webacls-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listRules", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
-        
+
         if (data.Rules) {
             await Promise.all(data.Rules.map(rule => {
                 return sdkcall("WAF", "getRule", {
@@ -19646,13 +19646,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-rules-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listXssMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
             return sdkcall("WAF", "getXssMatchSet", {
                 XssMatchSetId: xssMatchSet.XssMatchSetId
@@ -19669,13 +19669,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listIPSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.IPSets.map(ipSet => {
             return sdkcall("WAF", "getIPSet", {
                 IPSetId: ipSet.IPSetId
@@ -19692,13 +19692,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-ipsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listSizeConstraintSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
             return sdkcall("WAF", "getSizeConstraintSet", {
                 SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
@@ -19715,13 +19715,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listSqlInjectionMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
             return sdkcall("WAF", "getSqlInjectionMatchSet", {
                 SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
@@ -19738,13 +19738,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAF", "listByteMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
             return sdkcall("WAF", "getByteMatchSet", {
                 ByteMatchSetId: byteMatchSet.ByteMatchSetId
@@ -19761,7 +19761,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     // Regional
 
@@ -19770,7 +19770,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.WebACLs.map(webAcl => {
             return Promise.all([
                 sdkcall("WAFRegional", "getWebACL", {
@@ -19808,13 +19808,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable');
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listRules", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("WAFRegional", "getRule", {
                 RuleId: rule.RuleId
@@ -19832,13 +19832,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listXssMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
             return sdkcall("WAFRegional", "getXssMatchSet", {
                 XssMatchSetId: xssMatchSet.XssMatchSetId
@@ -19855,13 +19855,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listIPSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.IPSets.map(ipSet => {
             return sdkcall("WAFRegional", "getIPSet", {
                 IPSetId: ipSet.IPSetId
@@ -19878,13 +19878,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listSizeConstraintSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
             return sdkcall("WAFRegional", "getSizeConstraintSet", {
                 SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
@@ -19901,13 +19901,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listSqlInjectionMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
             return sdkcall("WAFRegional", "getSqlInjectionMatchSet", {
                 SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
@@ -19923,13 +19923,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listByteMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
             return sdkcall("WAFRegional", "getByteMatchSet", {
                 ByteMatchSetId: byteMatchSet.ByteMatchSetId
@@ -19946,13 +19946,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listGeoMatchSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.GeoMatchSets.map(geoMatchSet => {
             return sdkcall("WAFRegional", "getGeoMatchSet", {
                 GeoMatchSetId: geoMatchSet.GeoMatchSetId
@@ -19969,13 +19969,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listRegexPatternSets", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
             return sdkcall("WAFRegional", "getRegexPatternSet", {
                 RegexPatternSetId: regexPatternSet.RegexPatternSetId
@@ -19992,13 +19992,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("WAFRegional", "listRateBasedRules", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("WAFRegional", "getRateBasedRule", {
                 RuleId: rule.RuleId
@@ -20017,8 +20017,8 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         }));
 
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
-    }).catch(() => {});
-    
+    }).catch(() => { });
+
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
@@ -20099,7 +20099,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
         resourceOwner: 'SELF'
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.resourceShares.map(resourceShare => {
             resourceShare['principals'] = [];
             resourceShare['resourceArns'] = [];
@@ -20210,7 +20210,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.CertificateSummaryList.map(certificate => {
             return sdkcall("ACM", "describeCertificate", {
                 CertificateArn: certificate.CertificateArn
@@ -20337,7 +20337,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
         // no params
     }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.stateMachines.map(stateMachine => {
             return sdkcall("StepFunctions", "describeStateMachine", {
                 stateMachineArn: stateMachine.stateMachineArn
@@ -20360,7 +20360,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
         // no params
     }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('removeAll');
-        
+
         if (data.activities) {
             await Promise.all(data.activities.map(activity => {
                 return sdkcall("StepFunctions", "describeActivity", {
@@ -20558,7 +20558,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     }, true).then(async (data) => {
         $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-amazonmq-configurationassociations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.BrokerSummaries.map(brokerSummary => {
             return sdkcall("MQ", "describeBroker", {
                 BrokerId: brokerSummary.BrokerId
@@ -20599,7 +20599,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
         // no params
     }, true).then(async (data) => {
         $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Configurations.map(configuration => {
             return sdkcall("MQ", "describeConfiguration", {
                 ConfigurationId: configuration.Id
@@ -20620,7 +20620,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                         engineversion: data.EngineVersion,
                         description: data.Description
                     }]);
-                }).catch(() => {});
+                }).catch(() => { });
             });
         }));
 
@@ -20760,7 +20760,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
         $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.assessmentTargetArns.map(assessmentTargetArn => {
             return Promise.all([
                 sdkcall("Inspector", "describeAssessmentTargets", {
@@ -21020,7 +21020,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         // no params
     }, true).then(async (data) => {
         $('#section-developertools-codepipeline-pipelines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.pipelines.map(pipeline => {
             return sdkcall("CodePipeline", "getPipeline", {
                 name: pipeline.name
@@ -21043,7 +21043,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         // no params
     }, true).then((data) => {
         $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('removeAll');
-        
+
         data.webhooks.forEach(webhook => {
             $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('append', [{
                 f2id: webhook.arn,
@@ -21064,7 +21064,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         actionOwnerFilter: "Custom"
     }, true).then((data) => {
         $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('removeAll');
-        
+
         data.actionTypes.forEach(actionType => {
             $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('append', [{
                 f2id: MD5(JSON.stringify(actionType)),
@@ -21102,7 +21102,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
                 }
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-developertools-codepipeline-notificationrules-datatable');
 }
@@ -21314,7 +21314,7 @@ async function updateDatatableRoboticsRoboMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-fleets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.fleetDetails.map(fleet => {
             return sdkcall("RoboMaker", "describeFleet", {
                 fleet: fleet.arn
@@ -21329,7 +21329,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-robotics-robomaker-fleets-datatable');
 
@@ -21337,7 +21337,7 @@ async function updateDatatableRoboticsRoboMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-robots-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.robots.map(robot => {
             return sdkcall("RoboMaker", "describeRobot", {
                 robot: robot.arn
@@ -21354,7 +21354,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-robotics-robomaker-robots-datatable');
 
@@ -21362,7 +21362,7 @@ async function updateDatatableRoboticsRoboMaker() {
         versionQualifier: "ALL"
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.robotApplicationSummaries.map(robotApplication => {
             return sdkcall("RoboMaker", "describeRobotApplication", {
                 application: robotApplication.arn,
@@ -21379,7 +21379,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-robotics-robomaker-robotapplications-datatable');
 
@@ -21387,7 +21387,7 @@ async function updateDatatableRoboticsRoboMaker() {
         versionQualifier: "ALL"
     }, true).then(async (data) => {
         $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.simulationApplicationSummaries.map(simulationApplication => {
             return sdkcall("RoboMaker", "describeSimulationApplication", {
                 application: simulationApplication.arn,
@@ -21404,7 +21404,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-robotics-robomaker-simulationapplications-datatable');
 }
@@ -21772,7 +21772,7 @@ async function updateDatatableMobileAppSync() {
         $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-datasources-datatable').bootstrapTable('removeAll');
         $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.graphqlApis.map(graphqlApi => {
             return Promise.all([
                 sdkcall("AppSync", "listTypes", {
@@ -21857,7 +21857,7 @@ async function updateDatatableMobileAppSync() {
                             f2region: region,
                             id: apiKey.id,
                             description: apiKey.description,
-                            expiry: new Date(apiKey.expires*1000).toString()
+                            expiry: new Date(apiKey.expires * 1000).toString()
                         }]);
                     });
                 }),
@@ -21874,7 +21874,7 @@ async function updateDatatableMobileAppSync() {
                         f2region: region,
                         apiid: data.apiId
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("AppSync", "getApiCache", {
                     apiId: graphqlApi.apiId
                 }, false).then((data) => {
@@ -21889,7 +21889,7 @@ async function updateDatatableMobileAppSync() {
                         ttl: data.apiCache.ttl,
                         cachingbehaviour: data.apiCache.apiCachingBehavior
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("AppSync", "getGraphqlApi", {
                     apiId: graphqlApi.apiId
                 }, true).then((data) => {
@@ -21996,7 +21996,7 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
         // no params
     }, true).then((data) => {
         $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('removeAll');
-        
+
         data.DirectoryDescriptions.forEach(directory => {
             if (directory.Type == "SimpleAD") {
                 $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('append', [{
@@ -22109,7 +22109,7 @@ async function updateDatatableAnalyticsAthena() {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-athena-namedqueries-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.NamedQueryIds.map(namedQuery => {
             return sdkcall("Athena", "getNamedQuery", {
                 NamedQueryId: namedQuery
@@ -22204,7 +22204,7 @@ async function updateDatatableAnalyticsElasticsearch() {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-elasticsearch-domains-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.DomainNames.map(domainName => {
             return sdkcall("ES", "describeElasticsearchDomains", {
                 DomainNames: [domainName.DomainName]
@@ -22511,7 +22511,7 @@ async function updateDatatableInternetofThingsCore() {
     }, true).then(async (data) => {
         $('#section-internetofthings-core-things-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.things.map(thing => {
             if (thing.thingName) {
                 return Promise.all([
@@ -22561,7 +22561,7 @@ async function updateDatatableInternetofThingsCore() {
     }, true).then(async (data) => {
         $('#section-internetofthings-core-policies-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-core-policyprincipalattachments-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.policies.map(policy => {
             return Promise.all([
                 sdkcall("Iot", "listPolicyPrincipals", {
@@ -22605,7 +22605,7 @@ async function updateDatatableInternetofThingsCore() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-core-certificates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.certificates.map(certificate => {
             return sdkcall("Iot", "describeCertificate", {
                 certificateId: certificate.certificateId
@@ -22629,7 +22629,7 @@ async function updateDatatableInternetofThingsCore() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-core-topicrules-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.rules.map(rule => {
             return sdkcall("Iot", "getTopicRule", {
                 ruleName: rule.ruleName
@@ -22801,13 +22801,13 @@ async function updateDatatableInternetofThings1Click() {
     }, true).then(async (data) => {
         $('#section-internetofthings-1click-projects-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-1click-placements-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.projects.map(project => {
             return Promise.all([
                 sdkcall("IoT1ClickProjects", "listPlacements", {
                     projectName: project.projectName
                 }, true).then((data) => {
-                    
+
                     data.placements.forEach(placement => {
                         sdkcall("IoT1ClickProjects", "describePlacement", {
                             projectName: project.projectName,
@@ -22838,7 +22838,7 @@ async function updateDatatableInternetofThings1Click() {
                 })
             ]);
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-1click-projects-datatable');
     unblockUI('#section-internetofthings-1click-placements-datatable');
@@ -22847,7 +22847,7 @@ async function updateDatatableInternetofThings1Click() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-1click-devices-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Devices.map(device => {
             return sdkcall("IoT1ClickProjects", "describeDevice", {
                 DeviceId: device.DeviceId
@@ -22859,12 +22859,12 @@ async function updateDatatableInternetofThings1Click() {
                     f2region: region,
                     id: data.DeviceDescription.DeviceId,
                     enabled: data.DeviceDescription.Enabled,
-                    remaininglife: (data.DeviceDescription.RemainingLife*100) + "%",
+                    remaininglife: (data.DeviceDescription.RemainingLife * 100) + "%",
                     type: data.DeviceDescription.Type
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-1click-devices-datatable');
 }
@@ -22934,7 +22934,7 @@ async function updateDatatableManagementAndGovernanceAutoScaling() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-autoscaling-scalingplans-datatable').bootstrapTable('removeAll');
-        
+
         data.ScalingPlans.forEach(scalingPlan => {
             $('#section-managementandgovernance-autoscaling-scalingplans-datatable').bootstrapTable('append', [{
                 f2id: scalingPlan.ScalingPlanName,
@@ -23303,7 +23303,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ConfigRules.map(configRule => {
             $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('append', [{
                 f2id: configRule.ConfigRuleArn,
@@ -23320,7 +23320,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                 ConfigRuleNames: [configRule.ConfigRuleName]
             }, true).then((data) => {
                 $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('removeAll');
-                
+
                 data.RemediationConfigurations.forEach(remediationConfiguration => {
                     $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('append', [{
                         f2id: remediationConfiguration.ConfigRuleName + " " + remediationConfiguration.TargetId + " Remediation Configuration",
@@ -23333,7 +23333,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                         resourcetype: remediationConfiguration.ResourceType
                     }]);
                 });
-        
+
                 unblockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
             });
         }));
@@ -23345,7 +23345,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-config-configurationaggregators-datatable').bootstrapTable('removeAll');
-        
+
         data.ConfigurationAggregators.forEach(configurationAggregator => {
             $('#section-managementandgovernance-config-configurationaggregators-datatable').bootstrapTable('append', [{
                 f2id: configurationAggregator.ConfigurationAggregatorArn,
@@ -23364,7 +23364,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('removeAll');
-        
+
         data.OrganizationConfigRules.forEach(organizationConfigRule => {
             $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('append', [{
                 f2id: organizationConfigRule.OrganizationConfigRuleArn,
@@ -23384,7 +23384,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-config-configurationrecorder-datatable').bootstrapTable('removeAll');
-        
+
         data.ConfigurationRecorders.forEach(configurationRecorder => {
             $('#section-managementandgovernance-config-configurationrecorder-datatable').bootstrapTable('append', [{
                 f2id: configurationRecorder.name,
@@ -23402,7 +23402,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-config-aggregationauthorizations-datatable').bootstrapTable('removeAll');
-        
+
         data.AggregationAuthorizations.forEach(aggregationAuthorization => {
             $('#section-managementandgovernance-config-aggregationauthorizations-datatable').bootstrapTable('append', [{
                 f2id: aggregationAuthorization.AggregationAuthorizationArn,
@@ -23422,7 +23422,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-config-deliverychannels-datatable').bootstrapTable('removeAll');
-        
+
         data.DeliveryChannels.forEach(deliveryChannel => {
             $('#section-managementandgovernance-config-deliverychannels-datatable').bootstrapTable('append', [{
                 f2id: deliveryChannel.name,
@@ -23504,7 +23504,7 @@ async function updateDatatableAnalyticsDataPipeline() {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-datapipeline-pipelines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.pipelineIdList.map(pipeline => {
             return sdkcall("DataPipeline", "describePipelines", {
                 pipelineIds: [pipeline.id]
@@ -23605,7 +23605,7 @@ async function updateDatatableEndUserComputingWorkSpaces() {
         // no params
     }, true).then((data) => {
         $('#section-endusercomputing-workspaces-workspaces-datatable').bootstrapTable('removeAll');
-        
+
         data.Workspaces.forEach(workspace => {
             $('#section-endusercomputing-workspaces-workspaces-datatable').bootstrapTable('append', [{
                 f2id: workspace.WorkspaceId,
@@ -24073,7 +24073,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         }]
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.DocumentIdentifiers.map(document => {
             return sdkcall("SSM", "getDocument", {
                 Name: document.Name,
@@ -24091,7 +24091,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                     documentversion: document.DocumentVersion,
                     documenttype: document.DocumentType
                 }]);
-            }).catch(() => {});
+            }).catch(() => { });
         }));
 
         unblockUI('#section-managementandgovernance-systemsmanager-documents-datatable');
@@ -24101,7 +24101,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-parameters-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Parameters.map(parameter => {
             return sdkcall("SSM", "getParameter", {
                 Name: parameter.Name
@@ -24128,7 +24128,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         }]
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.BaselineIdentities.map(baseline => {
             return sdkcall("SSM", "getPatchBaseline", {
                 BaselineId: baseline.BaselineId
@@ -24153,7 +24153,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Associations.map(association => {
             return sdkcall("SSM", "describeAssociation", {
                 Name: association.Name,
@@ -24184,7 +24184,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.WindowIdentities.map(window => {
             return Promise.all([
                 sdkcall("SSM", "describeMaintenanceWindowTasks", {
@@ -24251,7 +24251,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('removeAll');
-        
+
         data.ResourceDataSyncItems.forEach(dataSync => {
             $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('append', [{
                 f2id: dataSync.SyncName,
@@ -24888,7 +24888,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioshares-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.PortfolioDetails.map(portfolio => {
             return Promise.all([
                 sdkcall("ServiceCatalog", "listPrincipalsForPortfolio", {
@@ -24934,7 +24934,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ProductViewDetails.map(productView => {
             return sdkcall("ServiceCatalog", "describeProductAsAdmin", {
                 Id: productView.ProductViewSummary.Id
@@ -24962,7 +24962,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         // no params
     }, true).then((data) => {
         $('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable').bootstrapTable('removeAll');
-        
+
         data.PortfolioDetails.forEach(portfolio => {
             $('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable').bootstrapTable('append', [{
                 f2id: portfolio.ARN,
@@ -24988,7 +24988,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ProvisionedProducts.map(provisionedProduct => {
             return Promise.all([
                 sdkcall("ServiceCatalog", "listPortfoliosForProduct", {
@@ -25017,7 +25017,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                                 }, true).then((data) => {
                                     data['PortfolioId'] = portfolio.Id;
                                     data['ProductId'] = provisionedProduct.Id;
-                                    
+
                                     if (data.ConstraintDetail.Type == "NOTIFICATION") {
                                         $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('append', [{
                                             f2id: data.ConstraintDetail.ConstraintId,
@@ -25065,7 +25065,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                 }, true).then((data) => {
                     if (data.ProvisionedProductDetail.Type == "CFN_STACK") {
                         data['Product'] = provisionedProduct;
-    
+
                         $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').bootstrapTable('append', [{
                             f2id: data.ProvisionedProductDetail.Arn,
                             f2type: 'servicecatalog.cloudformationprovisionedproduct',
@@ -25094,7 +25094,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     }, false).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-tagoptions-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.TagOptionDetails.map(tagOption => {
             return Promise.all([
                 sdkcall("ServiceCatalog", "listResourcesForTagOption", {
@@ -25130,7 +25130,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                 })
             ]);
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
@@ -25312,7 +25312,7 @@ async function updateDatatableInternetofThingsAnalytics() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-analytics-channels-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.channelSummaries.map(channel => {
             return sdkcall("IoTAnalytics", "describeChannel", {
                 channelName: channel.channelName
@@ -25327,7 +25327,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-analytics-channels-datatable');
 
@@ -25335,7 +25335,7 @@ async function updateDatatableInternetofThingsAnalytics() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-analytics-pipelines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.pipelineSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describePipeline", {
                 pipelineName: pipeline.pipelineName
@@ -25350,7 +25350,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-analytics-pipelines-datatable');
 
@@ -25358,7 +25358,7 @@ async function updateDatatableInternetofThingsAnalytics() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-analytics-datastores-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.datastoreSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describeDatastore", {
                 datastoreName: pipeline.datastoreName
@@ -25373,7 +25373,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-analytics-datastores-datatable');
 
@@ -25381,7 +25381,7 @@ async function updateDatatableInternetofThingsAnalytics() {
         // no params
     }, true).then(async (data) => {
         $('#section-internetofthings-analytics-datasets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.datasetSummaries.map(dataset => {
             return sdkcall("IoTAnalytics", "describeDataset", {
                 datasetName: dataset.datasetName
@@ -25396,7 +25396,7 @@ async function updateDatatableInternetofThingsAnalytics() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-analytics-datasets-datatable');
 }
@@ -25702,7 +25702,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
         $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Namespaces.map(namespace => {
             return sdkcall("ServiceDiscovery", "getNamespace", {
                 Id: namespace.Id
@@ -25755,7 +25755,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudmap-services-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Services.map(service => {
             return Promise.all([
                 sdkcall("ServiceDiscovery", "listInstances", {
@@ -26254,7 +26254,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-coderepositories-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.CodeRepositorySummaryList.map(coderepository => {
             return sdkcall("SageMaker", "describeCodeRepository", {
                 CodeRepositoryName: coderepository.CodeRepositoryName
@@ -26277,7 +26277,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-models-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Models.map(model => {
             return sdkcall("SageMaker", "describeModel", {
                 ModelName: model.ModelName
@@ -26300,7 +26300,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-endpoints-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Endpoints.map(endpoint => {
             return sdkcall("SageMaker", "describeEndpoint", {
                 EndpointName: endpoint.EndpointName
@@ -26324,7 +26324,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-endpointconfigs-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.EndpointConfigs.map(endpointConfig => {
             return sdkcall("SageMaker", "describeEndpointConfig", {
                 EndpointConfigName: endpointConfig.EndpointConfigName
@@ -26348,7 +26348,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-notebookinstances-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.NotebookInstances.map(notebookInstance => {
             return sdkcall("SageMaker", "describeNotebookInstance", {
                 NotebookInstanceName: notebookInstance.NotebookInstanceName
@@ -26374,7 +26374,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.NotebookInstanceLifecycleConfigs.map(notebookInstanceLifecycleConfig => {
             return sdkcall("SageMaker", "describeNotebookInstanceLifecycleConfig", {
                 NotebookInstanceLifecycleConfigName: notebookInstanceLifecycleConfig.NotebookInstanceLifecycleConfigName
@@ -26397,7 +26397,7 @@ async function updateDatatableMachineLearningSageMaker() {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "ecs",
@@ -26426,7 +26426,7 @@ async function updateDatatableMachineLearningSageMaker() {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
         $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -26449,7 +26449,7 @@ async function updateDatatableMachineLearningSageMaker() {
         // no params
     }, false).then(async (data) => {
         $('#section-machinelearning-sagemaker-workteams-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Workteams.map(workteam => {
             return sdkcall("SageMaker", "describeWorkteam", {
                 WorkteamName: workteam.WorkteamName
@@ -26467,7 +26467,7 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-workteams-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 }
 
 /* ========================================================================== */
@@ -26852,7 +26852,7 @@ async function updateDatatableAnalyticsEMR() {
         $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('removeAll');
         $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('removeAll');
         $('#section-analytics-emr-steps-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Clusters.map(cluster => {
             return Promise.all([
                 sdkcall("EMR", "listSteps", {
@@ -26932,7 +26932,7 @@ async function updateDatatableAnalyticsEMR() {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-emr-securityconfigurations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.SecurityConfigurations.map(securityConfiguration => {
             return sdkcall("EMR", "describeSecurityConfiguration", {
                 Name: securityConfiguration.Name
@@ -26955,7 +26955,7 @@ async function updateDatatableAnalyticsEMR() {
         ServiceNamespace: "elasticmapreduce"
     }, true).then(async (data) => {
         $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "elasticmapreduce",
@@ -26984,7 +26984,7 @@ async function updateDatatableAnalyticsEMR() {
         ServiceNamespace: "elasticmapreduce"
     }, true).then(async (data) => {
         $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -27176,7 +27176,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         $('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
-        
+
         if (data.SecretList) {
             await Promise.all(data.SecretList.map(secret => {
                 return Promise.all([
@@ -27198,7 +27198,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                             SecretId: secret.ARN
                         }, true).then((secretvalue) => {
                             data['SecretString'] = secretvalue.SecretString;
-        
+
                             $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
                                 f2id: data.ARN,
                                 f2type: 'secretsmanager.secret',
@@ -27209,7 +27209,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                                 kmskeyid: data.KmsKeyId
                             }]);
                         });
-        
+
                         if (data.RotationEnabled) {
                             $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
                                 f2id: data.ARN,
@@ -27877,7 +27877,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-databases-datatable').bootstrapTable('removeAll');
         $('#section-analytics-glue-tables-datatable').bootstrapTable('removeAll');
         $('#section-analytics-glue-partitions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.DatabaseList.map(database => {
             $('#section-analytics-glue-databases-datatable').bootstrapTable('append', [{
                 f2id: database.Name,
@@ -27923,13 +27923,13 @@ async function updateDatatableAnalyticsGlue() {
                 }));
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getCrawlers", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-crawlers-datatable').bootstrapTable('removeAll');
-        
+
         data.Crawlers.forEach(crawler => {
             $('#section-analytics-glue-crawlers-datatable').bootstrapTable('append', [{
                 f2id: crawler.Name,
@@ -27943,13 +27943,13 @@ async function updateDatatableAnalyticsGlue() {
                 version: crawler.Version
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getClassifiers", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-classifiers-datatable').bootstrapTable('removeAll');
-        
+
         data.Classifiers.forEach(classifier => {
             var name = null;
             var version = null;
@@ -27981,13 +27981,13 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             }
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getJobs", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-jobs-datatable').bootstrapTable('removeAll');
-        
+
         data.Jobs.forEach(job => {
             $('#section-analytics-glue-jobs-datatable').bootstrapTable('append', [{
                 f2id: job.Name,
@@ -27999,13 +27999,13 @@ async function updateDatatableAnalyticsGlue() {
                 workertype: job.WorkerType
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getTriggers", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-triggers-datatable').bootstrapTable('removeAll');
-        
+
         data.Triggers.forEach(trigger => {
             $('#section-analytics-glue-triggers-datatable').bootstrapTable('append', [{
                 f2id: trigger.Name,
@@ -28018,13 +28018,13 @@ async function updateDatatableAnalyticsGlue() {
                 schedule: trigger.Schedule
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getConnections", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-connections-datatable').bootstrapTable('removeAll');
-        
+
         data.ConnectionList.forEach(connection => {
             $('#section-analytics-glue-connections-datatable').bootstrapTable('append', [{
                 f2id: connection.Name,
@@ -28036,13 +28036,13 @@ async function updateDatatableAnalyticsGlue() {
                 type: connection.ConnectionType
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getMLTransforms", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('removeAll');
-        
+
         data.Transforms.forEach(transform => {
             $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('append', [{
                 f2id: transform.TransformId,
@@ -28055,13 +28055,13 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: transform.CreatedOn
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getDevEndpoints", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('removeAll');
-        
+
         data.DevEndpoints.forEach(devEndpoint => {
             $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('append', [{
                 f2id: devEndpoint.EndpointName,
@@ -28073,13 +28073,13 @@ async function updateDatatableAnalyticsGlue() {
                 availabilityzone: devEndpoint.AvailabilityZone
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "listWorkflows", {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-glue-workflows-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Workflows.map(workflow => {
             return sdkcall("Glue", "getWorkflow", {
                 Name: workflow
@@ -28095,13 +28095,13 @@ async function updateDatatableAnalyticsGlue() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getSecurityConfigurations", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('removeAll');
-        
+
         data.SecurityConfigurations.forEach(securityConfiguration => {
             $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('append', [{
                 f2id: securityConfiguration.EndpointName,
@@ -28112,13 +28112,13 @@ async function updateDatatableAnalyticsGlue() {
                 creationtime: devEndpoint.CreatedTimeStamp
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Glue", "getDataCatalogEncryptionSettings", {
         // no params
     }, true).then((data) => {
         $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('removeAll');
-        
+
         $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('append', [{
             f2id: 'GlueDataCatalogEncryptionSettingsCurrentAccount',
             f2type: 'glue.datacatalogencryptionsettings',
@@ -28126,7 +28126,7 @@ async function updateDatatableAnalyticsGlue() {
             f2region: region,
             catalogid: "(current account)"
         }]);
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-analytics-glue-databases-datatable');
     unblockUI('#section-analytics-glue-tables-datatable');
@@ -28693,7 +28693,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.IdentityPools.map(identityPool => {
             return Promise.all([
                 sdkcall("CognitoIdentity", "getIdentityPoolRoles", {
@@ -28746,7 +28746,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.UserPools.map(userPool => {
             return Promise.all([
                 userPool.Domain ? sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
@@ -28813,7 +28813,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         userpoolid: data.RiskConfiguration.UserPoolId,
                         clientid: data.RiskConfiguration.ClientId
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("CognitoIdentityServiceProvider", "getUICustomization", {
                     UserPoolId: userPool.Id
                 }, false).then((data) => {
@@ -28825,7 +28825,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         userpoolid: data.UICustomization.UserPoolId,
                         clientid: data.UICustomization.ClientId
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("CognitoIdentityServiceProvider", "listUserPoolClients", {
                     UserPoolId: userPool.Id
                 }, true).then(async (data) => {
@@ -28871,7 +28871,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                                 }]);
                             });
                         });
-    
+
                         /*
                         TODO
                         sdkcall("CognitoIdentityServiceProvider", "adminGetUser", {
@@ -29275,7 +29275,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
         $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.DetectorIds.map(detectorId => {
             return Promise.all([
                 sdkcall("GuardDuty", "listMembers", {
@@ -29958,7 +29958,7 @@ async function updateDatatableEndUserComputingAppStream() {
                 displayname: stack.DisplayName,
                 description: stack.Description
             }]);
-            
+
             await sdkcall("AppStream", "describeUserStackAssociations", {
                 StackName: stack.Name
             }, true).then((data) => {
@@ -30025,7 +30025,7 @@ async function updateDatatableEndUserComputingAppStream() {
         ServiceNamespace: "appstream"
     }, true).then(async (data) => {
         $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
                 ServiceNamespace: "appstream",
@@ -30054,7 +30054,7 @@ async function updateDatatableEndUserComputingAppStream() {
         ServiceNamespace: "appstream"
     }, true).then(async (data) => {
         $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
-        
+
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
                 $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
@@ -30447,7 +30447,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('removeAll');
-        
+
         data.Endpoints.forEach(endpoint => {
             $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('append', [{
                 f2id: endpoint.EndpointIdentifier,
@@ -30469,7 +30469,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('removeAll');
-        
+
         data.ReplicationInstances.forEach(replicationInstance => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('append', [{
                 f2id: replicationInstance.ReplicationInstanceIdentifier,
@@ -30491,7 +30491,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('removeAll');
-        
+
         data.ReplicationTasks.forEach(replicationTask => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('append', [{
                 f2id: replicationTask.ReplicationTaskIdentifier,
@@ -30513,7 +30513,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('removeAll');
-        
+
         data.ReplicationSubnetGroups.forEach(replicationSubnetGroup => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('append', [{
                 f2id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier,
@@ -30533,7 +30533,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('removeAll');
-        
+
         data.Certificates.forEach(certificate => {
             $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('append', [{
                 f2id: certificate.CertificateIdentifier,
@@ -30555,7 +30555,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         // no params
     }, true).then((data) => {
         $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('removeAll');
-        
+
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
             $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('append', [{
                 f2id: eventSubscriptions.CustSubscriptionId,
@@ -31343,7 +31343,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listConnectorDefinitionVersions", {
@@ -31392,7 +31392,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listCoreDefinitionVersions", {
@@ -31413,7 +31413,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }));
                 }),
                 sdkcall("Greengrass", "getCoreDefinition", {
@@ -31441,7 +31441,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listDeviceDefinitionVersions", {
@@ -31462,7 +31462,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }));
                 }),
                 sdkcall("Greengrass", "getDeviceDefinition", {
@@ -31490,7 +31490,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listFunctionDefinitionVersions", {
@@ -31511,7 +31511,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 definitionid: definition.Id
                             }]);
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }));
                 }),
                 sdkcall("Greengrass", "getFunctionDefinition", {
@@ -31539,7 +31539,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Groups.map(group => {
             return Promise.all([
                 sdkcall("Greengrass", "listGroupVersions", {
@@ -31560,7 +31560,7 @@ async function updateDatatableInternetofThingsGreengrass() {
                                 version: data.Version,
                                 groupid: group.Id
                             }]);
-                        }).catch(() => {});
+                        }).catch(() => { });
                     }));
                 }),
                 sdkcall("Greengrass", "getGroup", {
@@ -31588,7 +31588,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listLoggerDefinitionVersions", {
@@ -31637,7 +31637,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listResourceDefinitionVersions", {
@@ -31686,7 +31686,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     }, true).then(async (data) => {
         $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('removeAll');
         $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
                 sdkcall("Greengrass", "listSubscriptionDefinitionVersions", {
@@ -32027,7 +32027,7 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
         $('#section-networkingandcontentdelivery-appmesh-virtualnodes-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-appmesh-virtualrouters-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.meshes.map(mesh => {
             return Promise.all([
                 sdkcall("AppMesh", "describeMesh", {
@@ -32216,7 +32216,7 @@ async function updateDatatableMediaServicesElasticTranscoder() {
         // no params
     }, true).then(async (data) => {
         $('#section-mediaservices-elastictranscoder-pipelines-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Pipelines.map(pipeline => {
             return sdkcall("ElasticTranscoder", "readPipeline", {
                 Id: pipeline.Id
@@ -32295,7 +32295,7 @@ async function updateDatatableMediaServicesMediaPackage() {
         // no params
     }, true).then(async (data) => {
         $('#section-mediaservices-mediapackage-channels-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Channels.map(channel => {
             return sdkcall("MediaPackage", "describeChannel", {
                 Id: channel.Id
@@ -32412,7 +32412,7 @@ async function updateDatatableMediaServicesMediaStore() {
     }, true).then(async (data) => {
         $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('removeAll');
         $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Containers.map(container => {
             return Promise.all([
                 sdkcall("MediaStore", "describeContainer", {
@@ -32423,17 +32423,17 @@ async function updateDatatableMediaServicesMediaStore() {
                             ContainerName: container.Name
                         }, false).then((data) => {
                             containerdata['CorsPolicy'] = data.CorsPolicy;
-                        }).catch(() => {}),
+                        }).catch(() => { }),
                         sdkcall("MediaStore", "getLifecyclePolicy", {
                             ContainerName: container.Name
                         }, false).then((data) => {
                             containerdata['LifecyclePolicy'] = data.LifecyclePolicy;
-                        }).catch(() => {}),
+                        }).catch(() => { }),
                         sdkcall("MediaStore", "getContainerPolicy", {
                             ContainerName: container.Name
                         }, false).then((data) => {
                             containerdata['Policy'] = data.Policy;
-                        }).catch(() => {})
+                        }).catch(() => { })
                     ]);
 
                     $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('append', [{
@@ -32576,7 +32576,7 @@ async function updateDatatableStorageGlacier() {
     }, true).then(async (data) => {
         $('#section-storage-glacier-vaults-datatable').bootstrapTable('removeAll');
         $('#section-storage-glacier-vaultlocks-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.VaultList.map(vault => {
             return Promise.all([
                 sdkcall("Glacier", "getVaultAccessPolicy", {
@@ -32612,7 +32612,7 @@ async function updateDatatableStorageGlacier() {
                         vaultname: vault.VaultName,
                         creationtime: data.CreationDate
                     }]);
-                }).catch(() => {})
+                }).catch(() => { })
             ]);
         }));
 
@@ -32679,7 +32679,7 @@ async function updateDatatableMobileDeviceFarm() {
         // no params
     }, false).then(async (data) => {
         $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.projects.map(project => {
             return sdkcall("DeviceFarm", "getProject", {
                 arn: project.arn
@@ -32694,7 +32694,7 @@ async function updateDatatableMobileDeviceFarm() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-mobile-devicefarm-projects-datatable');
 }
@@ -32830,7 +32830,7 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').bootstrapTable('removeAll');
-        
+
         data.Clusters.forEach(cluster => {
             $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').bootstrapTable('append', [{
                 f2id: cluster.ClusterId,
@@ -33513,7 +33513,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-directconnect-connections-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.connections.map(connection => {
             $('#section-networkingandcontentdelivery-directconnect-connections-datatable').bootstrapTable('append', [{
                 f2id: connection.connectionId,
@@ -33532,7 +33532,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                 $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('removeAll');
                 $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').bootstrapTable('removeAll');
                 $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('removeAll');
-                
+
                 data.virtualInterfaces.forEach(virtualinterface => {
                     if (virtualinterface.virtualInterfaceType == "public") {
                         $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('append', [{
@@ -33585,7 +33585,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-directconnect-lags-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.lags.map(lag => {
             $('#section-networkingandcontentdelivery-directconnect-lags-datatable').bootstrapTable('append', [{
                 f2id: lag.lagId,
@@ -33617,7 +33617,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                     $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('removeAll');
                     $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').bootstrapTable('removeAll');
                     $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('removeAll');
-                    
+
                     data.virtualInterfaces.forEach(virtualinterface => {
                         if (virtualinterface.virtualInterfaceType == "public") {
                             $('#section-networkingandcontentdelivery-directconnect-hostedpublicvirtualinterfaces-datatable').bootstrapTable('append', [{
@@ -33673,7 +33673,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
         $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-directconnect-gatewayassociations-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.directConnectGateways.map(gateway => {
             $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').bootstrapTable('append', [{
                 f2id: gateway.directConnectGatewayId,
@@ -33792,7 +33792,7 @@ async function updateDatatableApplicationIntegrationSWF() {
         registrationStatus: 'REGISTERED'
     }, true).then(async (data) => {
         $('#section-applicationintegration-swf-domains-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.domainInfos.map(domain => {
             return sdkcall("SWF", "describeDomain", {
                 name: domain.name
@@ -33946,14 +33946,14 @@ async function updateDatatableStorageBackup() {
         // no params
     }, true).then(async (data) => {
         $('#section-storage-backup-backupvaults-datatable').bootstrapTable('removeAll');
-        
+
         data.BackupVaultList.forEach(async (backupvault) => {
             await Promise.all([
                 sdkcall("Backup", "getBackupVaultAccessPolicy", {
                     BackupVaultName: backupvault.BackupVaultName
                 }, false).then(async (data) => {
                     backupvault['AccessPolicy'] = data.Policy;
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Backup", "getBackupVaultNotifications", {
                     BackupVaultName: backupvault.BackupVaultName
                 }, false).then(async (data) => {
@@ -33961,7 +33961,7 @@ async function updateDatatableStorageBackup() {
                         'SNSTopicArn': data.SNSTopicArn,
                         'BackupVaultEvents': data.BackupVaultEvents
                     };
-                }).catch(() => {})
+                }).catch(() => { })
             ]);
 
             $('#section-storage-backup-backupvaults-datatable').bootstrapTable('append', [{
@@ -33983,12 +33983,12 @@ async function updateDatatableStorageBackup() {
     }, true).then(async (data) => {
         $('#section-storage-backup-backupplans-datatable').bootstrapTable('removeAll');
         $('#section-storage-backup-backupselections-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.BackupPlansList.map(async (backupplan) => {
             await sdkcall("Backup", "listBackupSelections", {
                 BackupPlanId: backupplan.BackupPlanId
             }, true).then(async (data) => {
-                
+
                 await Promise.all(data.BackupSelectionsList.map(backupselection => {
                     return sdkcall("Backup", "getBackupSelection", {
                         BackupPlanId: backupplan.BackupPlanId,
@@ -34202,7 +34202,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
         $('#section-migrationandtransfer-transfer-servers-datatable').bootstrapTable('removeAll');
         $('#section-migrationandtransfer-transfer-users-datatable').bootstrapTable('removeAll');
         $('#section-migrationandtransfer-transfer-sshkeys-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Servers.map(async (server) => {
             await sdkcall("Transfer", "listUsers", {
                 ServerId: server.ServerId
@@ -35371,7 +35371,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
         $('#section-customerengagement-pinpoint-gcmchannels-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-pinpoint-smschannels-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-pinpoint-voicechannels-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ApplicationsResponse.Item.map(app => {
             $('#section-customerengagement-pinpoint-apps-datatable').bootstrapTable('append', [{
                 f2id: app.Arn,
@@ -35394,7 +35394,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         name: app.Name,
                         id: app.Id
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getCampaigns", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35413,7 +35413,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                             }]);
                         });
                     }
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getSegments", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35432,7 +35432,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                             }]);
                         });
                     }
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getEventStream", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35444,7 +35444,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         appid: data.EventStream.ApplicationId,
                         destinationstreamarn: data.EventStream.DestinationStreamArn
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getAdmChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35458,7 +35458,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.ADMChannelResponse.Enabled,
                         creationtime: data.ADMChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getApnsChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35472,7 +35472,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.APNSChannelResponse.Enabled,
                         creationtime: data.APNSChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getApnsSandboxChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35486,7 +35486,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.APNSSandboxChannelResponse.Enabled,
                         creationtime: data.APNSSandboxChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getApnsVoipChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35500,7 +35500,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.APNSVoipChannelResponse.Enabled,
                         creationtime: data.APNSVoipChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getApnsVoipSandboxChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35514,7 +35514,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.APNSVoipSandboxChannelResponse.Enabled,
                         creationtime: data.APNSVoipSandboxChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getBaiduChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35528,7 +35528,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.BaiduChannelResponse.Enabled,
                         creationtime: data.BaiduChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getEmailChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35542,7 +35542,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.EmailChannelResponse.Enabled,
                         creationtime: data.EmailChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getGcmChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35556,7 +35556,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.GCMChannelResponse.Enabled,
                         creationtime: data.GCMChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getSmsChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35570,7 +35570,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.SMSChannelResponse.Enabled,
                         creationtime: data.SMSChannelResponse.CreationDate
                     }]);
-                }).catch(() => {}),
+                }).catch(() => { }),
                 sdkcall("Pinpoint", "getVoiceChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
@@ -35584,7 +35584,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                         enabled: data.VoiceChannelResponse.Enabled,
                         creationtime: data.VoiceChannelResponse.CreationDate
                     }]);
-                }).catch(() => {})
+                }).catch(() => { })
             ]);
         }));
 
@@ -35610,7 +35610,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
     }, true).then(async (data) => {
         $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ConfigurationSets.map(configurationset => {
             return sdkcall("PinpointEmail", "getConfigurationSet", {
                 ConfigurationSetName: configurationset
@@ -35622,13 +35622,13 @@ async function updateDatatableCustomerEngagementPinpoint() {
                     f2region: region,
                     name: data.ConfigurationSetName
                 }]);
-                
+
                 await sdkcall("PinpointEmail", "getConfigurationSetEventDestinations", {
                     ConfigurationSetName: data.ConfigurationSetName
                 }, true).then((data) => {
                     data.EventDestinations.forEach(eventdestination => {
                         eventdestination['ConfigurationSetName'] = configurationset;
-    
+
                         $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').bootstrapTable('append', [{
                             f2id: eventdestination.Name,
                             f2type: 'pinpoint.emailconfigurationseteventdestination',
@@ -35651,7 +35651,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
         // no params
     }, true).then(async (data) => {
         $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').bootstrapTable('removeAll');
-        
+
         data.DedicatedIpPools.forEach(dedicatedippool => {
             $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').bootstrapTable('append', [{
                 f2id: dedicatedippool,
@@ -35671,7 +35671,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
         // no params
     }, true).then(async (data) => {
         $('#section-customerengagement-pinpoint-emailidentities-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.EmailIdentities.map(emailidentity => {
             return sdkcall("PinpointEmail", "getEmailIdentity", {
                 EmailIdentity: emailidentity.IdentityName
@@ -35698,7 +35698,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
         $('#section-customerengagement-pinpoint-emailtemplates-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-pinpoint-smstemplates-datatable').bootstrapTable('removeAll');
         $('#section-customerengagement-pinpoint-pushtemplates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.TemplatesResponse.Item.map(template => {
             if (template.TemplateType == "EMAIL") {
                 return sdkcall("Pinpoint", "getEmailTemplate", {
@@ -35874,7 +35874,7 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
     }, false).then(async (data) => {
         $('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-licensemanager-associations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.LicenseConfigurations.map(licenseconfiguration => {
             return sdkcall("LicenseManager", "getLicenseConfiguration", {
                 LicenseConfigurationArn: licenseconfiguration.LicenseConfigurationArn
@@ -35912,7 +35912,7 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
 
         unblockUI('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable');
         unblockUI('#section-managementandgovernance-licensemanager-associations-datatable');
-    }).catch(() => {});
+    }).catch(() => { });
 }
 
 /* ========================================================================== */
@@ -36031,7 +36031,7 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
     }, false).then(async (data) => {
         $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').bootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Accelerators.map(accelerator => {
             return sdkcall("GlobalAccelerator", "describeAccelerator", {
                 AcceleratorArn: accelerator.AcceleratorArn
@@ -36071,7 +36071,7 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
                 });
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable');
     unblockUI('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable');
@@ -36134,7 +36134,7 @@ async function updateDatatableInternetofThingsThingsGraph() {
         // no params
     }, false).then(async (data) => {
         $('#section-internetofthings-thingsgraph-flowtemplates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.summaries.map(flowtemplate => {
             return sdkcall("IoTThingsGraph", "getFlowTemplate", {
                 id: flowtemplate.id
@@ -36149,7 +36149,7 @@ async function updateDatatableInternetofThingsThingsGraph() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-thingsgraph-flowtemplates-datatable');
 }
@@ -36395,7 +36395,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
         // no params
     }, false).then(async (data) => {
         $('#section-managementandgovernance-organizations-organization-datatable').bootstrapTable('removeAll');
-        
+
         if (data.Organization) {
             await sdkcall("Organizations", "listAWSServiceAccessForOrganization", {
                 // no params
@@ -36412,7 +36412,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                 masteraccountemail: data.Organization.MasterAccountEmail
             }]);
         }
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("STS", "getCallerIdentity", {
         // no params
@@ -36450,14 +36450,14 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                     });
                 }
             }
-        }).catch(() => {});
+        }).catch(() => { });
     });
 
     await sdkcall("Organizations", "listAccounts", {
         // no params
     }, false).then(async (data) => {
         $('#section-managementandgovernance-organizations-accounts-datatable').bootstrapTable('removeAll');
-        
+
         data.Accounts.forEach(account => {
             $('#section-managementandgovernance-organizations-accounts-datatable').bootstrapTable('append', [{
                 f2id: account.Arn,
@@ -36469,14 +36469,14 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                 email: account.Email
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Organizations", "listPolicies", {
         Filter: "SERVICE_CONTROL_POLICY"
     }, false).then(async (data) => {
         $('#section-managementandgovernance-organizations-policies-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-organizations-policyattachments-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Policies.map(async (policy) => {
             await sdkcall("Organizations", "describePolicy", {
                 PolicyId: policy.Id
@@ -36496,7 +36496,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                 }, false).then(async (data) => {
                     data.Targets.forEach(target => {
                         target['PolicyId'] = policy.Id;
-                        
+
                         $('#section-managementandgovernance-organizations-policyattachments-datatable').bootstrapTable('append', [{
                             f2id: target.Arn,
                             f2type: 'organizations.policyattachment',
@@ -36510,7 +36510,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                 });
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-managementandgovernance-organizations-organization-datatable');
     unblockUI('#section-managementandgovernance-organizations-organizationalunits-datatable');
@@ -36702,7 +36702,7 @@ async function updateDatatableMobileAmplify() {
         // no params
     }, false).then(async (data) => {
         $('#section-mobile-amplify-apps-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.apps.map(app => {
             return Promise.all([
                 sdkcall("Amplify", "getApp", {
@@ -36768,7 +36768,7 @@ async function updateDatatableMobileAmplify() {
                 })
             ]);
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-mobile-amplify-apps-datatable');
     unblockUI('#section-mobile-amplify-branches-datatable');
@@ -36840,7 +36840,7 @@ async function updateDatatableAnalyticsMSK() {
         // no params
     }, false).then(async (data) => {
         $('#section-analytics-msk-clusters-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.ClusterInfoList.map(cluster => {
             return sdkcall("Kafka", "describeCluster", {
                 ClusterArn: cluster.ClusterArn
@@ -36856,7 +36856,7 @@ async function updateDatatableAnalyticsMSK() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-analytics-msk-clusters-datatable');
 }
@@ -36870,7 +36870,7 @@ sections.push({
     'service': 'Macie',
     'resourcetypes': {
         'Member Account Associations': {
-            'terraformonly':  true,
+            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -36897,7 +36897,7 @@ sections.push({
             ]
         },
         'S3 Bucket Associations': {
-            'terraformonly':  true,
+            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -36946,7 +36946,7 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable').bootstrapTable('removeAll');
-        
+
         data.memberAccounts.forEach(memberAccount => {
             $('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable').bootstrapTable('append', [{
                 f2id: memberAccount.accountId,
@@ -36955,14 +36955,14 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
                 f2region: region,
                 accountid: memberAccount.accountId
             }]);
-        });    
-    }).catch(() => {});
+        });
+    }).catch(() => { });
 
     await sdkcall("Macie", "listS3Resources", {
         // no params
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable').bootstrapTable('removeAll');
-        
+
         data.s3Resources.forEach(s3Resource => {
             $('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable').bootstrapTable('append', [{
                 f2id: s3Resource.bucketName,
@@ -36972,8 +36972,8 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
                 bucketname: s3Resource.bucketName,
                 prefix: s3Resource.prefix
             }]);
-        });    
-    }).catch(() => {});
+        });
+    }).catch(() => { });
 
     unblockUI('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable');
     unblockUI('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable');
@@ -37032,8 +37032,8 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
             if (Object.keys(tagdata.Tags).length !== 0) {
                 tags = tagdata.Tags;
             }
-        }).catch(() => {});
-        
+        }).catch(() => { });
+
         $('#section-securityidentityandcompliance-securityhub-hub-datatable').bootstrapTable('append', [{
             f2id: data.HubArn,
             f2type: 'securityhub.hub',
@@ -37044,7 +37044,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
             f2link: 'https://console.aws.amazon.com/securityhub/home',
             arn: data.HubArn
         }]);
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-securityidentityandcompliance-securityhub-hub-datatable');
 }
@@ -37207,7 +37207,7 @@ async function updateDatatableMediaServicesMediaLive() {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-medialive-channels-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Channels.map(channel => {
             return sdkcall("MediaLive", "describeCluster", {
                 ChannelId: channel.Id
@@ -37223,13 +37223,13 @@ async function updateDatatableMediaServicesMediaLive() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("MediaLive", "listInputs", {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-medialive-inputs-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Inputs.map(input => {
             return sdkcall("MediaLive", "describeInput", {
                 InputId: input.Id
@@ -37246,13 +37246,13 @@ async function updateDatatableMediaServicesMediaLive() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("MediaLive", "listInputSecurityGroups", {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-medialive-inputsecuritygroups-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.InputSecurityGroups.map(inputsecuritygroup => {
             return sdkcall("MediaLive", "describeInputSecurityGroup", {
                 InputSecurityGroupId: inputsecuritygroup.Id
@@ -37273,7 +37273,7 @@ async function updateDatatableMediaServicesMediaLive() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-mediaservices-medialive-channels-datatable');
     unblockUI('#section-mediaservices-medialive-inputs-datatable');
@@ -37628,7 +37628,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
             if (registry.RegistryName.startsWith("aws.")) {
                 return Promise.resolve();
             }
-            
+
             return Promise.all([
                 sdkcall("Schemas", "describeRegistry", {
                     RegistryName: registry.RegistryName
@@ -37646,7 +37646,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                     RegistryName: registry.RegistryName
                 }, true).then(async (data) => {
                     $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
-            
+
                     await Promise.all(data.Schemas.map(async (schema) => {
                         return sdkcall("Schemas", "describeSchema", {
                             RegistryName: registry.RegistryName,
@@ -37668,7 +37668,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                 })
             ]);
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Schemas", "listDiscoverers", {
         // no params
@@ -37689,7 +37689,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
@@ -37848,7 +37848,7 @@ async function updateDatatableEndUserComputingWorkLink() {
                     FleetArn: fleet.FleetArn
                 }, true).then(async (data) => {
                     $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').bootstrapTable('removeAll');
-            
+
                     await Promise.all(data.WebsiteCertificateAuthorities.map(websiteca => {
                         return sdkcall("WorkLink", "describeWebsiteCertificateAuthority", {
                             FleetArn: fleet.FleetArn,
@@ -37871,7 +37871,7 @@ async function updateDatatableEndUserComputingWorkLink() {
                 });
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-endusercomputing-worklink-fleets-datatable');
     unblockUI('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable');
@@ -37996,7 +37996,7 @@ async function updateDatatableInternetofThingsEvents() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("IoTEvents", "listInputs", {
         // no params
@@ -38017,7 +38017,7 @@ async function updateDatatableInternetofThingsEvents() {
                 }]);
             });
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-internetofthings-events-detectormodels-datatable');
     unblockUI('#section-internetofthings-events-inputs-datatable');
@@ -38107,7 +38107,7 @@ async function updateDatatableOtherServiceQuotas() {
                 value: value
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-other-servicequotas-servicequotas-datatable');
 }
@@ -38191,7 +38191,7 @@ async function updateDatatableAnalyticsQuickSight() {
                     description: group.Description
                 }]);
             });
-        }).catch(() => {});
+        }).catch(() => { });
     });
 
     unblockUI('#section-analytics-quicksight-groups-datatable');
@@ -38292,7 +38292,7 @@ async function updateDatatableDeveloperToolsXRay() {
                 limit: "Limit to " + samplingrule.SamplingRule.ReservoirSize + " r/sec, then " + samplingrule.SamplingRule.FixedRate + "% fixed rate"
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-developertools-xray-samplingrules-datatable');
 }
@@ -38522,7 +38522,7 @@ async function updateDatatableComputeLightsail() {
                 publicipaddress: instance.publicIpAddress
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Lightsail", "getDomains", {
         // no params
@@ -38538,7 +38538,7 @@ async function updateDatatableComputeLightsail() {
                 domainname: domain.name
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Lightsail", "getKeyPairs", {
         // no params
@@ -38555,7 +38555,7 @@ async function updateDatatableComputeLightsail() {
                 fingerprint: keypair.fingerprint
             }]);
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("Lightsail", "getStaticIps", {
         // no params
@@ -38583,7 +38583,7 @@ async function updateDatatableComputeLightsail() {
                 }]);
             }
         });
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-compute-lightsail-instances-datatable');
     unblockUI('#section-compute-lightsail-domains-datatable');
@@ -38678,8 +38678,8 @@ async function updateDatatableDeveloperToolsCodeStar() {
                 }));
             });
         }));
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     unblockUI('#section-developertools-codestar-githubrepositories-datatable');
 }
@@ -38829,8 +38829,8 @@ async function updateDatatableAnalyticsLakeFormation() {
                 }]);
             });
         }));
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     await sdkcall("LakeFormation", "listPermissions", {
         // no params
@@ -38848,8 +38848,8 @@ async function updateDatatableAnalyticsLakeFormation() {
                 permissions: permission.Permissions
             }]);
         });
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     await sdkcall("LakeFormation", "getDataLakeSettings", {
         // no params
@@ -38870,8 +38870,8 @@ async function updateDatatableAnalyticsLakeFormation() {
             f2region: region,
             admins: datalakeadmins.join(",")
         }]);
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     unblockUI('#section-analytics-lakeformation-resources-datatable');
     unblockUI('#section-analytics-lakeformation-permissions-datatable');
@@ -39070,8 +39070,8 @@ async function updateDatatableBlockchainManagedBlockchain() {
                 });
             });
         }));
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     unblockUI('#section-blockchain-managedblockchain-members-datatable');
     unblockUI('#section-blockchain-managedblockchain-nodes-datatable');
@@ -39157,8 +39157,8 @@ async function updateDatatableDatabaseQLDB() {
                 }]);
             });
         }));
-        
-    }).catch(() => {});
+
+    }).catch(() => { });
 
     unblockUI('#section-database-qldb-ledgers-datatable');
 }
@@ -39399,7 +39399,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
         // no params
     }, true).then(async (data) => {
         $('#section-migrationandtransfer-datasync-agents-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Agents.map(agent => {
             return sdkcall("DataSync", "describeAgent", {
                 AgentArn: agent.AgentArn
@@ -39421,7 +39421,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
         // no params
     }, true).then(async (data) => {
         $('#section-migrationandtransfer-datasync-tasks-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Tasks.map(task => {
             return sdkcall("DataSync", "describeTask", {
                 TaskArn: task.TaskArn
@@ -39445,7 +39445,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
         $('#section-migrationandtransfer-datasync-efslocations-datatable').bootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-nfslocations-datatable').bootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-s3locations-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Locations.map(location => {
             if (location.LocationUri.split(":")[0] == "EFS") {
                 return sdkcall("DataSync", "describeLocationEfs", {
@@ -39564,7 +39564,7 @@ async function updateDatatableStorageStorageGateway() {
         // no params
     }, true).then(async (data) => {
         $('#section-storage-storagegateway-gateways-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Gateways.map(gateways => {
             return sdkcall("StorageGateway", "describeGatewayInformation", {
                 GatewayARN: gateway.GatewayARN
@@ -39751,7 +39751,7 @@ async function updateDatatableMediaServicesMediaConvert() {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-mediaconvert-queues-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Queues.map(queue => {
             if (queue.Type == "CUSTOM") {
                 return sdkcall("MediaConvert", "getQueue", {
@@ -39771,13 +39771,13 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return Promise.resolve();
             }
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("MediaConvert", "listPresets", {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-mediaconvert-presets-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.Presets.map(preset => {
             if (preset.Type == "CUSTOM") {
                 return sdkcall("MediaConvert", "getPreset", {
@@ -39796,13 +39796,13 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return Promise.resolve();
             }
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     await sdkcall("MediaConvert", "listJobTemplates", {
         // no params
     }, false).then(async (data) => {
         $('#section-mediaservices-mediaconvert-jobtemplates-datatable').bootstrapTable('removeAll');
-        
+
         await Promise.all(data.JobTemplates.map(jobTemplate => {
             if (jobTemplate.Type == "CUSTOM") {
                 return sdkcall("MediaConvert", "getJobTemplate", {
@@ -39823,7 +39823,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return Promise.resolve();
             }
         }));
-    }).catch(() => {});
+    }).catch(() => { });
 
     unblockUI('#section-mediaservices-mediaconvert-queues-datatable');
     unblockUI('#section-mediaservices-mediaconvert-presets-datatable');
