@@ -90,8 +90,8 @@ async function main(opts) {
         var output_objects = [];
 
         for (var i=0; i<cli_resources.length; i++) {
-            if (opts.resourceFilter) {
-                if (JSON.stringify(cli_resources[i]).includes(opts.resourceFilter)) {
+            if (opts.searchFilter) {
+                if (JSON.stringify(cli_resources[i]).includes(opts.searchFilter)) {
                     output_objects.push({
                         'id': cli_resources[i].f2id,
                         'type': cli_resources[i].f2type,
@@ -130,7 +130,7 @@ cliargs
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
-    .option('--resource-filter <value>', 'search filter for discovered resources')
+    .option('--search-filter <value>', 'search filter for discovered resources')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .action(opts => {
         // The followings are here to silence Node runtime complaining about event emitter listeners

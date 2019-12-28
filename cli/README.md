@@ -25,7 +25,8 @@ former2 generate \
   --output-cloudformation "cloudformation.yml" \
   --output-terraform "terraform.hcl" \
   --output-debug "debug.json" \
-  --resource-filter "myapp"
+  --search-filter "myapp" \
+  --sort-outputs
 ```
 
 ## Security
