@@ -4314,6 +4314,7 @@ function performF2Mappings(objects) {
                 reqParams.tf['instance'] = obj.data.InstanceId;
                 reqParams.cfn['PublicIpv4Pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
                 reqParams.tf['public_ipv4_pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
+                reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -9795,6 +9796,7 @@ function performF2Mappings(objects) {
                         'iops': obj.data.EBSOptions.Iops
                     };
                 }
+                reqParams.cfn['CognitoOptions'] = obj.data.CognitoOptions;
 
                 /*
                 TODO:
@@ -12236,6 +12238,7 @@ function performF2Mappings(objects) {
                     - String
                 Policies:
                     - Policies
+                Tags
                 */
 
                 tracked_resources.push({
@@ -12772,6 +12775,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RawMessageDelivery'] = obj.data.Attributes.RawMessageDelivery;
                 reqParams.tf['raw_message_delivery'] = obj.data.Attributes.RawMessageDelivery;
                 reqParams.cfn['Region'] = obj.data.TopicArn.split(":")[3];
+                reqParams.cfn['RedrivePolicy'] = obj.data.Attributes.RedrivePolicy;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -15802,10 +15806,14 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
                 reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
                 reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+                reqParams.cfn['CustomDomain'] = obj.data.CustomDomain;
+                reqParams.cfn['ServerName'] = obj.data.ServerName;
 
                 /*
                 TODO:
                 BackupId: String
+                CustomCertificate: String
+                CustomPrivateKey: String
                 */
 
                 tracked_resources.push({
@@ -19077,6 +19085,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Timeout'] = obj.data.Timeout;
                 reqParams.cfn['TransformParameters'] = obj.data.Parameters;
                 reqParams.cfn['WorkerType'] = obj.data.WorkerType;
+                reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
 
                 tracked_resources.push({
                     'obj': obj,
