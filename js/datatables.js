@@ -7462,7 +7462,7 @@ async function updateDatatableComputeLambda() {
         $('#section-compute-lambda-versions-datatable').bootstrapTable('removeAll');
         $('#section-compute-lambda-permissions-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.Functions.map(lambdaFunction => {
+        await Promise.all(data.Functions.map(async (lambdaFunction) => {
             return Promise.all([
                 sdkcall("Lambda", "getFunction", {
                     FunctionName: lambdaFunction.FunctionArn
@@ -7498,8 +7498,17 @@ async function updateDatatableComputeLambda() {
                 }).catch(() => { }),
                 sdkcall("Lambda", "listAliases", {
                     FunctionName: lambdaFunction.FunctionArn
-                }, true).then((data) => {
-                    data.Aliases.forEach(alias => {
+                }, true).then(async (data) => {
+                    await Promise.all(data.Aliases.map(async (alias) => {
+                        await sdkcall("Lambda", "getProvisionedConcurrencyConfig", {
+                            FunctionName: lambdaFunction.FunctionArn,
+                            Qualifier: alias.Name
+                        }, false).then((data) => {
+                            alias["ProvisionedConcurrencyConfig"] = {
+                                "ProvisionedConcurrentExecutions": data.AllocatedProvisionedConcurrentExecutions
+                            };
+                        }).catch(() => { });
+
                         $('#section-compute-lambda-aliases-datatable').bootstrapTable('append', [{
                             f2id: alias.AliasArn,
                             f2type: 'lambda.alias',
@@ -7510,21 +7519,32 @@ async function updateDatatableComputeLambda() {
                             functionversion: alias.FunctionVersion,
                             description: data.Description
                         }]);
-                    });
+                    }));
                 }),
                 sdkcall("Lambda", "listVersionsByFunction", {
                     FunctionName: lambdaFunction.FunctionArn
-                }, true).then((data) => {
-                    data.Versions.forEach(version => {
-                        $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
-                            f2id: version.FunctionArn + ":" + version.Version,
-                            f2type: 'lambda.version',
-                            f2data: version,
-                            f2region: region,
-                            version: version.Version,
-                            functionname: version.FunctionName
-                        }]);
-                    });
+                }, true).then(async (data) => {
+                    await Promise.all(data.Versions.map(async (version) => {
+                        if (version.Version != "$LATEST") {
+                            await sdkcall("Lambda", "getProvisionedConcurrencyConfig", {
+                                FunctionName: lambdaFunction.FunctionArn,
+                                Qualifier: version.Version
+                            }, false).then((data) => {
+                                version["ProvisionedConcurrencyConfig"] = {
+                                    "ProvisionedConcurrentExecutions": data.AllocatedProvisionedConcurrentExecutions
+                                };
+                            }).catch(() => { });
+
+                            $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
+                                f2id: version.FunctionArn + ":" + version.Version,
+                                f2type: 'lambda.version',
+                                f2data: version,
+                                f2region: region,
+                                version: version.Version,
+                                functionname: version.FunctionName
+                            }]);
+                        }
+                    }));
                 }),
                 sdkcall("Lambda", "listFunctionEventInvokeConfigs", {
                     FunctionName: lambdaFunction.FunctionArn

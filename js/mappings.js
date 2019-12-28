@@ -1,6 +1,6 @@
 // Logging functions
 var f2log = function (msg) { console.log(msg); }
-var f2trace = function (msg) { console.log(msg); }
+var f2trace = function (msg) { console.trace(msg); }
 
 /* ========================================================================== */
 // Mapping Helper Functions (from AWSConsoleRecorder)
@@ -3177,6 +3177,7 @@ function performF2Mappings(objects) {
                         reqParams.tf['routing_config']['additional_version_weights'][func_version] = obj.data.RoutingConfig.AdditionalVersionWeights[func_version];
                     }
                 }
+                reqParams.cfn['ProvisionedConcurrencyConfig'] = obj.data.ProvisionedConcurrencyConfig;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -6845,6 +6846,22 @@ function performF2Mappings(objects) {
                 reqParams.cfn['ProtocolType'] = obj.data.ProtocolType;
                 reqParams.cfn['RouteSelectionExpression'] = obj.data.RouteSelectionExpression;
                 reqParams.cfn['Version'] = obj.data.Version;
+                reqParams.cfn['CorsConfiguration'] = obj.data.CorsConfiguration;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                
+                /*
+                SKIPPED:
+                FailOnWarnings: Boolean
+                Body: Json
+                BodyS3Location: 
+                    BodyS3Location
+                BasePath: String
+
+                TODO:
+                CredentialsArn: String
+                RouteKey: String
+                Target: String
+                */
 
                 tracked_resources.push({
                     'obj': obj,
@@ -6867,6 +6884,8 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RouteSettings'] = obj.data.RouteSettings;
                 reqParams.cfn['DefaultRouteSettings'] = obj.data.DefaultRouteSettings;
                 reqParams.cfn['AccessLogSettings'] = obj.data.AccessLogSettings;
+                reqParams.cfn['AutoDeploy'] = obj.data.AutoDeploy;
+                reqParams.cfn['Tags'] = obj.data.Tags;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -6920,6 +6939,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['IdentitySource'] = obj.data.IdentitySource;
                 reqParams.cfn['IdentityValidationExpression'] = obj.data.IdentityValidationExpression;
                 reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['JwtConfiguration'] = obj.data.JwtConfiguration;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -6998,6 +7018,7 @@ function performF2Mappings(objects) {
                 reqParams.cfn['RequestTemplates'] = obj.data.RequestTemplates;
                 reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
                 reqParams.cfn['TimeoutInMillis'] = obj.data.TimeoutInMillis;
+                reqParams.cfn['PayloadFormatVersion'] = obj.data.PayloadFormatVersion;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -7515,6 +7536,29 @@ function performF2Mappings(objects) {
                 reqParams.tf['definition'] = obj.data.definition;
                 reqParams.cfn['RoleArn'] = obj.data.roleArn;
                 reqParams.tf['role_arn'] = obj.data.roleArn;
+                reqParams.cfn['StateMachineType'] = obj.data.type;
+                if (obj.data.loggingConfiguration) {
+                    var destinations = null;
+                    
+                    if (obj.data.loggingConfiguration.destinations) {
+                        destinations = [];
+                        obj.data.loggingConfiguration.destinations.forEach(destination => {
+                            if (destination.cloudWatchLogsLogGroup) {
+                                destinations.push({
+                                    'CloudWatchLogsLogGroup': {
+                                        'LogGroupArn': destination.cloudWatchLogsLogGroup.logGroupArn
+                                    }
+                                })
+                            }
+                        });
+                    }
+
+                    reqParams.cfn['LoggingConfiguration'] = {
+                        'Destinations': destinations,
+                        'IncludeExecutionData': obj.data.loggingConfiguration.includeExecutionData,
+                        'Level': obj.data.loggingConfiguration.level
+                    };
+                }
 
                 /*
                 TODO:
@@ -15432,6 +15476,7 @@ function performF2Mappings(objects) {
             } else if (obj.type == "lambda.version") {
                 reqParams.cfn['Description'] = obj.data.Description;
                 reqParams.cfn['FunctionName'] = obj.data.FunctionName;
+                reqParams.cfn['ProvisionedConcurrencyConfig'] = obj.data.ProvisionedConcurrencyConfig;
 
                 /*
                 TODO:
@@ -20132,7 +20177,7 @@ function performF2Mappings(objects) {
             }, {
                 type: 'danger'
             });
-            console.trace(err);
+            f2trace(err);
         }
     });
 
