@@ -3510,13 +3510,26 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
                 reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
+                if (obj.data.AssociatedRoles) {
+                    reqParams.cfn['AssociatedRoles'] = [];
+                    obj.data.AssociatedRoles.forEach(associatedRole => {
+                        reqParams.cfn['AssociatedRoles'].push({
+                            'RoleArn': associatedRole.RoleArn,
+                            'FeatureName': associatedRole.FeatureName
+                        });
+                    });
+                }
+                reqParams.cfn['EnableHttpEndpoint'] = obj.data.HttpEndpointEnabled;
 
                 /*
                 TODO:
-                SourceRegion: String
+                RestoreType: String
                 SnapshotIdentifier: String
-                Tags:
-                    - Resource Tag
+                SourceDBClusterIdentifier: String
+                SourceRegion: String
+                Tags: 
+                    - Tag
+                UseLatestRestorableTime: Boolean
                 */
 
                 tracked_resources.push({
@@ -3621,25 +3634,37 @@ function performF2Mappings(objects) {
                 }
                 reqParams.cfn['MaxAllocatedStorage'] = obj.data.MaxAllocatedStorage;
                 reqParams.tf['max_allocated_storage'] = obj.data.MaxAllocatedStorage;
-
+                if (obj.data.DBParameterGroups && obj.data.DBParameterGroups.length > 0) {
+                    reqParams.cfn['DBParameterGroupName'] = obj.data.DBParameterGroups[0].DBParameterGroupName;
+                }
+                if (obj.data.OptionGroupMemberships && obj.data.OptionGroupMemberships.length > 0) {
+                    reqParams.cfn['OptionGroupName'] = obj.data.OptionGroupMemberships[0].OptionGroupName;
+                }
+                if (obj.data.DomainMemberships && obj.data.DomainMemberships.length > 0) {
+                    reqParams.cfn['Domain'] = obj.data.DomainMemberships[0].Domain;
+                    reqParams.cfn['DomainIAMRoleName'] = obj.data.DomainMemberships[0].IAMRoleName;
+                }
+                reqParams.cfn['MonitoringRoleArn'] = obj.data.MonitoringRoleArn;
+                reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
+                if (obj.data.AssociatedRoles) {
+                    reqParams.cfn['AssociatedRoles'] = [];
+                    obj.data.AssociatedRoles.forEach(associatedRole => {
+                        reqParams.cfn['AssociatedRoles'].push({
+                            'RoleArn': associatedRole.RoleArn,
+                            'FeatureName': associatedRole.FeatureName
+                        });
+                    });
+                }
 
                 /*
                 TODO:
                 AllowMajorVersionUpgrade: Boolean
-                DBParameterGroupName: String
                 DBSnapshotIdentifier: String
                 DeleteAutomatedBackups: Boolean
-                Domain: String
-                DomainIAMRoleName: String
-                EnableCloudwatchLogsExports:
-                    - String
-                MasterUserPassword: String
-                MonitoringRoleArn: String
-                OptionGroupName: String
                 SourceDBInstanceIdentifier: String
                 SourceRegion: String
-                Tags:
-                    - Resource Tag
+                Tags: 
+                    - Tag
                 UseDefaultProcessorFeatures: Boolean
                 */
 
@@ -11874,6 +11899,7 @@ function performF2Mappings(objects) {
                         'SettingsGroup': obj.data.ApplicationSettings.SettingsGroup
                     };
                 }
+                reqParams.cfn['AccessEndpoints'] = obj.data.AccessEndpoints;
 
                 /*
                 TODO:
@@ -11901,10 +11927,11 @@ function performF2Mappings(objects) {
                 reqParams.cfn['EnableDefaultInternetAccess'] = obj.data.EnableDefaultInternetAccess;
                 reqParams.cfn['DomainJoinInfo'] = obj.data.DomainJoinInfo;
                 reqParams.cfn['AppstreamAgentVersion'] = obj.data.AppstreamAgentVersion;
+                reqParams.cfn['AccessEndpoints'] = obj.data.AccessEndpoints;
+                reqParams.cfn['ImageName'] = obj.data.ImageArn.split("/").pop();
 
                 /*
                 TODO:
-                ImageName: String
                 Tags
                 */
 
@@ -16168,34 +16195,43 @@ function performF2Mappings(objects) {
                 reqParams.cfn['MeshName'] = obj.data.meshName;
                 reqParams.cfn['RouteName'] = obj.data.routeName;
                 reqParams.cfn['VirtualRouterName'] = obj.data.virtualRouterName;
-                var httpRouteWeightedTargets = [];
-                obj.data.spec.httpRoute.action.weightedTargets.forEach(weightedTarget => {
-                    httpRouteWeightedTargets.push({
-                        'VirtualNode': weightedTarget.virtualNode,
-                        'Weight': weightedTarget.weight
+                var httpRoute = null;
+                if (obj.data.spec.httpRoute) {
+                    var httpRouteWeightedTargets = [];
+                    obj.data.spec.httpRoute.action.weightedTargets.forEach(weightedTarget => {
+                        httpRouteWeightedTargets.push({
+                            'VirtualNode': weightedTarget.virtualNode,
+                            'Weight': weightedTarget.weight
+                        });
                     });
-                });
-                var tcpRouteWeightedTargets = [];
-                obj.data.spec.tcpRoute.action.weightedTargets.forEach(weightedTarget => {
-                    tcpRouteWeightedTargets.push({
-                        'VirtualNode': weightedTarget.virtualNode,
-                        'Weight': weightedTarget.weight
-                    });
-                });
-                reqParams.cfn['Spec'] = {
-                    'HttpRoute': {
+                    httpRoute = {
                         'Action': {
                             'WeightedTargets': httpRouteWeightedTargets
                         },
                         'Match': {
                             'Prefix': obj.data.spec.httpRoute.match.prefix
                         }
-                    },
-                    'TcpRoute': {
+                    };
+                }
+                var tcpRoute = null;
+                if (obj.data.spec.tcpRoute) {
+                    var tcpRouteWeightedTargets = [];
+                    obj.data.spec.tcpRoute.action.weightedTargets.forEach(weightedTarget => {
+                        tcpRouteWeightedTargets.push({
+                            'VirtualNode': weightedTarget.virtualNode,
+                            'Weight': weightedTarget.weight
+                        });
+                    });
+                    tcpRoute = {
                         'Action': {
                             'WeightedTargets': tcpRouteWeightedTargets
                         }
-                    }
+                    };
+                }
+                reqParams.cfn['Spec'] = {
+                    'HttpRoute': httpRoute,
+                    'TcpRoute': tcpRoute,
+                    'Priority': obj.data.spec.priority
                 };
 
                 /*
