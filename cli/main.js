@@ -47,6 +47,15 @@ async function main(opts) {
         throw new Error('You must specify an output type');
     }
 
+    if (opts.profile) {
+        AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: opts.profile});
+    }
+
+    if (opts.region) {
+        AWS.config.update({region: opts.region});
+        region = opts.region;
+    }
+
     const b1 = new cliprogress.SingleBar({
         format: _colors.cyan('{bar}') + '  {percentage}% ({value}/{total} services completed)',
         barCompleteChar: '\u2588',
@@ -132,6 +141,8 @@ cliargs
     .option('--output-debug <filename>', 'filename for debug output (full)')
     .option('--search-filter <value>', 'search filter for discovered resources')
     .option('--sort-output', 'sort resources by their ID before outputting')
+    .option('--region <regionname>', 'overrides the default AWS region to scan')
+    .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
     .action(opts => {
         // The followings are here to silence Node runtime complaining about event emitter listeners
         // due to the number of TLS requests that suddenly go out to AWS APIs. This is harmless here
