@@ -13473,7 +13473,7 @@ async function updateDatatableComputeECS() {
                                     await sdkcall("ECS", "describeTaskSets", {
                                         cluster: clusterArn,
                                         service: serviceArn,
-                                        taskSets: data.services[0].taskSets
+                                        taskSets: data.services[0].taskSets.map((taskset) => taskset.taskSetArn)
                                     }, true).then((data) => {
                                         data.taskSets.forEach(taskset => {
                                             $('#section-compute-ecs-tasksets-datatable').bootstrapTable('append', [{
