@@ -4024,8 +4024,12 @@ function performF2Mappings(objects) {
                 reqParams.tf['description'] = obj.data.Description;
                 reqParams.cfn['Tier'] = obj.data.Tier;
                 reqParams.tf['tier'] = obj.data.Tier;
-                reqParams.cfn['CNAMEPrefix'] = new URL(obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
-                reqParams.tf['cname_prefix'] = new URL(obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
+                try {
+                    reqParams.cfn['CNAMEPrefix'] = new URL("https://" + obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
+                    reqParams.tf['cname_prefix'] = new URL("https://" + obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
+                } catch (err) {
+                    f2log("Could not determine CNAME prefix for Elastic Beanstalk");
+                }
 
                 /*
                 TODO:
