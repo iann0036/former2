@@ -342,6 +342,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         Object.keys(param).forEach(function (key) {
             var subvalue = processCfnParameter(param[key], spacing + cfnspacing.length, index, tracked_resources);
             if (typeof subvalue !== "undefined") {
+                if (!key.match(/^[a-zA-Z0-9-]+$/g)) {
+                    key = `"${key.replace(/"/g, "\\\"")}"`;
+                }
                 paramitems.push(key + ": " + subvalue);
             }
         });
@@ -1659,6 +1662,10 @@ function outputMapCfn(index, service, type, options, region, was_blocked, logica
         for (option in options) {
             if (options[option] !== undefined && options[option] !== null) {
                 var optionvalue = processCfnParameter(options[option], (cfnspacing.length * 3), index, tracked_resources);
+                
+                if (!option.match(/^[a-zA-Z0-9-]+$/g)) {
+                    option = `"${option.replace(/"/g, "\\\"")}"`;
+                }
 
                 if (optionvalue !== undefined) {
                     params += `
