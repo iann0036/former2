@@ -18686,6 +18686,44 @@ sections.push({
                 ]
             ]
         },
+        'V2 Web ACL Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Web ACL',
+                        field: 'webacl',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resourcearn',
+                        title: 'Resource ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Web ACLs': {
             'columns': [
                 [
@@ -19449,6 +19487,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('removeAll');
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listWebACLs", {
@@ -19480,6 +19519,44 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
         await Promise.all(data.WebACLs.map(webAcl => {
+            await sdkcall("WAFV2", "listResourcesForWebACL", {
+                WebACLArn: webAcl.ARN,
+                ResourceType: 'APPLICATION_LOAD_BALANCER'
+            }, true).then((data) => {
+                data.ResourceArns.forEach(resourceArn => {
+                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('append', [{
+                        f2id: webAcl.ARN + ' ' + resourceArn,
+                        f2type: 'waf.v2webaclassociation',
+                        f2data: {
+                            'WebACLArn': data.WebACL,
+                            'ResourceArn': resourceArn
+                        },
+                        f2region: region,
+                        webacl: webAcl.ARN,
+                        resourcearn: resourceArn
+                    }]);
+                });
+            }).catch(() => { });
+
+            await sdkcall("WAFV2", "listResourcesForWebACL", {
+                WebACLArn: webAcl.ARN,
+                ResourceType: 'API_GATEWAY'
+            }, true).then((data) => {
+                data.ResourceArns.forEach(resourceArn => {
+                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('append', [{
+                        f2id: webAcl.ARN + ' ' + resourceArn,
+                        f2type: 'waf.v2webaclassociation',
+                        f2data: {
+                            'WebACLArn': data.WebACL,
+                            'ResourceArn': resourceArn
+                        },
+                        f2region: region,
+                        webacl: webAcl.ARN,
+                        resourcearn: resourceArn
+                    }]);
+                });
+            }).catch(() => { });
+
             return sdkcall("WAFV2", "getWebACL", {
                 Scope: "REGIONAL",
                 Id: webAcl.Id,
@@ -20075,6 +20152,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable');
 }
 
 /* ========================================================================== */

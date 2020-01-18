@@ -3662,6 +3662,7 @@ function performF2Mappings(objects) {
                         });
                     });
                 }
+                reqParams.cfn['CACertificateIdentifier'] = obj.data.CACertificateIdentifier;
 
                 /*
                 TODO:
@@ -3732,6 +3733,7 @@ function performF2Mappings(objects) {
                     reqParams.cfn['Tenancy'] = obj.data.Placement.Tenancy;
                     reqParams.tf['tenancy'] = obj.data.Placement.Tenancy;
                     reqParams.cfn['HostId'] = obj.data.Placement.HostId;
+                    reqParams.cfn['HostResourceGroupArn'] = obj.data.Placement.HostResourceGroupArn;
                 }
                 reqParams.cfn['RamdiskId'] = obj.data.RamdiskId;
                 reqParams.cfn['SubnetId'] = obj.data.SubnetId;
@@ -3816,6 +3818,7 @@ function performF2Mappings(objects) {
                         });
                     });
                 }
+                reqParams.cfn['HibernationOptions'] = obj.data.HibernationOptions;
 
                 /*
                 TODO:
@@ -10178,6 +10181,22 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SyncFormat'] = obj.data.S3Destination.SyncFormat;
                 reqParams.cfn['BucketRegion'] = obj.data.S3Destination.Region;
                 reqParams.cfn['KMSKeyArn'] = obj.data.S3Destination.AWSKMSKeyARN;
+                reqParams.cfn['SyncType'] = obj.data.S3Destination.SyncType;
+                if (obj.data.S3Destination.SyncSource) {
+                    var awsorganizationssource = null;
+                    if (obj.data.S3Destination.SyncSource.AwsOrganizationsSource) {
+                        awsorganizationssource = {
+                            'OrganizationSourceType': obj.data.S3Destination.SyncSource.AwsOrganizationsSource.OrganizationSourceType,
+                            'OrganizationalUnits': obj.data.S3Destination.SyncSource.AwsOrganizationsSource.OrganizationalUnits.map(ou => ou.OrganizationalUnitId)
+                        };
+                    }
+                    reqParams.cfn['SyncSource'] = {
+                        'AwsOrganizationsSource': awsorganizationssource,
+                        'IncludeFutureRegions': obj.data.S3Destination.SyncSource.IncludeFutureRegions,
+                        'SourceRegions': obj.data.S3Destination.SyncSource.SourceRegions,
+                        'SourceType': obj.data.S3Destination.SyncSource.SourceType
+                    };
+                }
 
                 tracked_resources.push({
                     'obj': obj,
@@ -19257,6 +19276,16 @@ function performF2Mappings(objects) {
                         reqParams.cfn['Resource'] = {
                             'TableResource': obj.data.Resource.Table
                         };
+                    } else if (obj.data.Resource.DataLocation && obj.data.Resource.DataLocation.ResourceArn) {
+                        reqParams.cfn['Resource'] = {
+                            'DataLocationResource': {
+                                'S3Resource': obj.data.Resource.DataLocation.ResourceArn
+                            }
+                        };
+                    } else if (obj.data.Resource.TableWithColumnsResource) {
+                        reqParams.cfn['Resource'] = {
+                            'TableWithColumnsResource': obj.data.Resource.TableWithColumnsResource
+                        };
                     }
 
                     tracked_resources.push({
@@ -20470,6 +20499,18 @@ function performF2Mappings(objects) {
                     'service': 'ec2',
                     'type': 'AWS::EC2::GatewayRouteTableAssociation',
                     'terraformType': 'aws_route_table_association',
+                    'options': reqParams
+                });
+            } else if (obj.type == "waf.v2webaclassociation") {
+                reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
+                reqParams.cfn['WebACLArn'] = obj.data.WebACLArn;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('waf', obj.id),
+                    'region': obj.region,
+                    'service': 'waf',
+                    'type': 'AWS::WAFv2::WebACLAssociation',
                     'options': reqParams
                 });
             } else {

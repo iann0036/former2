@@ -1,6 +1,6 @@
 {
   "name": "former2",
-  "version": "0.2.11",
+  "version": "0.2.13",
   "description": "Command-line interface for the Former2.com tool",
   "keywords": [
     "aws",
@@ -16,10 +16,10 @@
   "author": "Ian Mckay",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.595.0",
-    "cli-progress": "^3.4.0",
+    "aws-sdk": "^2.606.0",
+    "cli-progress": "^3.5.0",
     "colors": "^1.4.0",
-    "commander": "^4.0.1",
+    "commander": "^4.1.0",
     "deepmerge": "^4.2.2",
     "logplease": "^1.2.15"
   },
