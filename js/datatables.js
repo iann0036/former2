@@ -19518,7 +19518,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFV2", "listWebACLs", {
         Scope: "REGIONAL"
     }, false).then(async (data) => {
-        await Promise.all(data.WebACLs.map(webAcl => {
+        await Promise.all(data.WebACLs.map(async (webAcl) => {
             await sdkcall("WAFV2", "listResourcesForWebACL", {
                 WebACLArn: webAcl.ARN,
                 ResourceType: 'APPLICATION_LOAD_BALANCER'
