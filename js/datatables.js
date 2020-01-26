@@ -24674,44 +24674,6 @@ sections.push({
                 ]
             ]
         },
-        'Portfolio Shares': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        formatter: primaryFieldFormatter,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
         'Accepted Portfolio Shares': {
             'columns': [
                 [
@@ -25133,7 +25095,6 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     blockUI('#section-managementandgovernance-servicecatalog-portfolios-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable');
-    blockUI('#section-managementandgovernance-servicecatalog-portfolioshares-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable');
@@ -25148,7 +25109,6 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-portfolioshares-datatable').bootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.PortfolioDetails.map(portfolio => {
@@ -25188,7 +25148,6 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         }));
 
         unblockUI('#section-managementandgovernance-servicecatalog-portfolios-datatable');
-        unblockUI('#section-managementandgovernance-servicecatalog-portfolioshares-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable');
     });
 
@@ -27135,7 +27094,7 @@ async function updateDatatableAnalyticsEMR() {
                 }),
                 sdkcall("EMR", "listInstanceFleets", {
                     ClusterId: cluster.Id
-                }, true).then((data) => {
+                }, false).then((data) => {
                     data.InstanceFleets.forEach(instanceFleet => {
                         step['ClusterId'] = cluster.Id;
                         $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('append', [{
@@ -27148,10 +27107,10 @@ async function updateDatatableAnalyticsEMR() {
                             instancefleettype: instanceFleet.InstanceFleetType
                         }]);
                     });
-                }),
+                }).catch(() => { }),
                 sdkcall("EMR", "listInstanceGroups", {
                     ClusterId: cluster.Id
-                }, true).then((data) => {
+                }, false).then((data) => {
                     data.InstanceGroups.forEach(instanceGroup => {
                         step['ClusterId'] = cluster.Id;
                         $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('append', [{
@@ -27166,7 +27125,7 @@ async function updateDatatableAnalyticsEMR() {
                             instancetype: instanceGroup.InstanceType
                         }]);
                     });
-                }),
+                }).catch(() => { }),
                 sdkcall("EMR", "describeCluster", {
                     ClusterId: cluster.Id
                 }, true).then((data) => {
@@ -27320,44 +27279,6 @@ sections.push({
                 ]
             ]
         },
-        'Secret Target Attachments': {
-            'columns': [
-                [
-                    {
-                        field: 'state',
-                        checkbox: true,
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle'
-                    },
-                    {
-                        title: 'Name',
-                        field: 'name',
-                        rowspan: 2,
-                        align: 'center',
-                        valign: 'middle',
-                        sortable: true,
-                        formatter: primaryFieldFormatter,
-                        footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
-                    }
-                ],
-                [
-                    {
-                        field: 'xxx',
-                        title: 'XXX',
-                        sortable: true,
-                        editable: true,
-                        footerFormatter: textFormatter,
-                        align: 'center'
-                    }
-                ]
-            ]
-        },
         'Resource Policies': {
             'columns': [
                 [
@@ -27427,7 +27348,6 @@ sections.push({
 
 async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
     blockUI('#section-securityidentityandcompliance-secretsmanager-secrets-datatable');
-    blockUI('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable');
     blockUI('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable');
     blockUI('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable');
 
@@ -27435,7 +27355,6 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
 
@@ -27488,7 +27407,6 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
         }
 
         unblockUI('#section-securityidentityandcompliance-secretsmanager-secrets-datatable');
-        unblockUI('#section-securityidentityandcompliance-secretsmanager-secrettargetattachments-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable');
         unblockUI('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable');
     });
