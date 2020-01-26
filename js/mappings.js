@@ -20552,6 +20552,122 @@ function performF2Mappings(objects) {
                     'type': 'AWS::ACMPCA::CertificateAuthorityActivation',
                     'options': reqParams
                 });
+            } else if (obj.type == "appconfig.application") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Name'] = obj.data.Name;
+
+                /*
+                TODO:
+                Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appconfig', obj.id),
+                    'region': obj.region,
+                    'service': 'appconfig',
+                    'type': 'AWS::AppConfig::Application',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id
+                    }
+                });
+            } else if (obj.type == "appconfig.configurationprofile") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['LocationUri'] = obj.data.LocationUri;
+                reqParams.cfn['RetrievalRoleArn'] = obj.data.RetrievalRoleArn;
+                reqParams.cfn['Validators'] = obj.data.Validators;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appconfig', obj.id),
+                    'region': obj.region,
+                    'service': 'appconfig',
+                    'type': 'AWS::AppConfig::ConfigurationProfile',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id
+                    }
+                });
+            } else if (obj.type == "appconfig.environment") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['Monitors'] = obj.data.Monitors;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appconfig', obj.id),
+                    'region': obj.region,
+                    'service': 'appconfig',
+                    'type': 'AWS::AppConfig::Environment',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id
+                    }
+                });
+            } else if (obj.type == "appconfig.deployment") {
+                reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['EnvironmentId'] = obj.data.EnvironmentId;
+                reqParams.cfn['DeploymentStrategyId'] = obj.data.DeploymentStrategyId;
+                reqParams.cfn['ConfigurationProfileId'] = obj.data.ConfigurationProfileId;
+                reqParams.cfn['ConfigurationVersion'] = obj.data.ConfigurationVersion;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appconfig', obj.id),
+                    'region': obj.region,
+                    'service': 'appconfig',
+                    'type': 'AWS::AppConfig::Deployment',
+                    'options': reqParams
+                });
+            } else if (obj.type == "appconfig.deploymentstrategy") {
+                reqParams.cfn['Description'] = obj.data.Description;
+                reqParams.cfn['Name'] = obj.data.Name;
+                reqParams.cfn['DeploymentDurationInMinutes'] = obj.data.DeploymentDurationInMinutes;
+                reqParams.cfn['FinalBakeTimeInMinutes'] = obj.data.FinalBakeTimeInMinutes;
+                reqParams.cfn['GrowthFactor'] = obj.data.GrowthFactor;
+                reqParams.cfn['GrowthType'] = obj.data.GrowthType;
+                reqParams.cfn['ReplicateTo'] = obj.data.ReplicateTo;
+
+                /*
+                TODO:
+                Tags: 
+                    - Tags
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('appconfig', obj.id),
+                    'region': obj.region,
+                    'service': 'appconfig',
+                    'type': 'AWS::AppConfig::DeploymentStrategy',
+                    'options': reqParams,
+                    'returnValues': {
+                        'Ref': obj.data.Id
+                    }
+                });
             } else {
                 $.notify({
                     icon: 'font-icon font-icon-warning',
