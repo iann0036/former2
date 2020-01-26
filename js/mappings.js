@@ -19822,6 +19822,8 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Tags'] = obj.data.tags;
                 reqParams.cfn['TemplateName'] = obj.data.TemplateName;
                 reqParams.cfn['TextPart'] = obj.data.TextPart;
+                reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
+                reqParams.cfn['DefaultSubstitutions'] = obj.data.DefaultSubstitutions;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -19835,6 +19837,8 @@ function performF2Mappings(objects) {
                 reqParams.cfn['Body'] = obj.data.Body;
                 reqParams.cfn['Tags'] = obj.data.tags;
                 reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+                reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
+                reqParams.cfn['DefaultSubstitutions'] = obj.data.DefaultSubstitutions;
 
                 tracked_resources.push({
                     'obj': obj,
@@ -19845,13 +19849,15 @@ function performF2Mappings(objects) {
                     'options': reqParams
                 });
             } else if (obj.type == "pinpoint.pushtemplate") {
-                reqParams.cfn['Tags'] = obj.data.tags;
+                reqParams.cfn['Tags'] = obj.data.tags; // wtf?
                 reqParams.cfn['ADM'] = obj.data.ADM;
                 reqParams.cfn['APNS'] = obj.data.APNS;
                 reqParams.cfn['Baidu'] = obj.data.Baidu;
                 reqParams.cfn['Default'] = obj.data.Default;
                 reqParams.cfn['GCM'] = obj.data.GCM;
                 reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+                reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
+                reqParams.cfn['DefaultSubstitutions'] = obj.data.DefaultSubstitutions;
 
                 tracked_resources.push({
                     'obj': obj,
