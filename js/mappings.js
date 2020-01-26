@@ -7495,10 +7495,13 @@ function performF2Mappings(objects) {
                 reqParams.cfn['SubjectAlternativeNames'] = obj.data.SubjectAlternativeNames;
                 reqParams.tf['subject_alternative_names'] = obj.data.SubjectAlternativeNames;
                 if (obj.data.DomainValidationOptions) {
-                    reqParams.cfn['DomainValidationOptions'] = {
-                        'DomainName': obj.data.DomainValidationOptions.DomainName,
-                        'ValidationDomain': obj.data.DomainValidationOptions.ValidationDomain
-                    };
+                    reqParams.cfn['DomainValidationOptions'] = [];
+                    obj.data.DomainValidationOptions.forEach(domainValidation => {
+                        reqParams.cfn['DomainValidationOptions'].push({
+                            'DomainName': obj.data.DomainValidationOptions.DomainName,
+                            'ValidationDomain': obj.data.DomainValidationOptions.ValidationDomain
+                        });
+                    });
                     reqParams.tf['validation_method'] = "DNS";
                 }
 
@@ -20511,6 +20514,42 @@ function performF2Mappings(objects) {
                     'region': obj.region,
                     'service': 'waf',
                     'type': 'AWS::WAFv2::WebACLAssociation',
+                    'options': reqParams
+                });
+            } else if (obj.type == "acm.pcacertificateauthority") {
+                reqParams.cfn['KeyAlgorithm'] = obj.data.CertificateAuthorityConfiguration.KeyAlgorithm;
+                reqParams.cfn['RevocationConfiguration'] = obj.data.RevocationConfiguration;
+                reqParams.cfn['SigningAlgorithm'] = obj.data.CertificateAuthorityConfiguration.SigningAlgorithm;
+                reqParams.cfn['Subject'] = obj.data.CertificateAuthorityConfiguration.Subject;
+                reqParams.cfn['Tags'] = obj.data.Tags;
+                reqParams.cfn['Type'] = obj.data.Type;
+                
+                /*
+                TODO:
+                Tags: 
+                    - Tag
+                */
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('acm', obj.id),
+                    'region': obj.region,
+                    'service': 'acm',
+                    'type': 'AWS::ACMPCA::CertificateAuthority',
+                    'options': reqParams
+                });
+            } else if (obj.type == "acm.pcacertificateauthorityactivation") {
+                reqParams.cfn['Certificate'] = obj.data.Certificate;
+                reqParams.cfn['CertificateAuthorityArn'] = obj.data.CertificateAuthorityArn;
+                reqParams.cfn['CertificateChain'] = obj.data.CertificateChain;
+                reqParams.cfn['Status'] = obj.data.Status;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('acm', obj.id),
+                    'region': obj.region,
+                    'service': 'acm',
+                    'type': 'AWS::ACMPCA::CertificateAuthorityActivation',
                     'options': reqParams
                 });
             } else {

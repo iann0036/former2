@@ -28,7 +28,8 @@ cfn_exceptions = {
     'Alexa::ASK::Skill': 'N/A',
     'AWS::ServiceCatalog::PortfolioShare': 'N/A',
     'AWS::SecretsManager::SecretTargetAttachment': 'N/A',
-    'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A'
+    'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A',
+    'AWS::ACMPCA::Certificate': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
