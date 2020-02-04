@@ -3116,11 +3116,16 @@ function performF2Mappings(objects) {
                 reqParams.tf['vpc_id'] = obj.data.VpcId;
                 reqParams.cfn['MapPublicIpOnLaunch'] = obj.data.MapPublicIpOnLaunch;
                 reqParams.tf['map_public_ip_on_launch'] = obj.data.MapPublicIpOnLaunch;
-                reqParams.cfn['AssignIpv6AddressOnCreation'] = obj.data.AssignIpv6AddressOnCreation;
-                reqParams.tf['assign_ipv6_address_on_creation'] = obj.data.AssignIpv6AddressOnCreation;
+                if (obj.data.AssignIpv6AddressOnCreation) {
+                    reqParams.cfn['AssignIpv6AddressOnCreation'] = obj.data.AssignIpv6AddressOnCreation;
+                    reqParams.tf['assign_ipv6_address_on_creation'] = obj.data.AssignIpv6AddressOnCreation;
+                    if (obj.data.Ipv6CidrBlockAssociationSet) {
+                        reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock;
+                        reqParams.tf['ipv6_cidr_block'] = obj.data.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock;
+                    }
+                }
 
                 /* TODO:
-                Ipv6CidrBlock: String
                 Tags:
                     - Resource Tag
                 */
