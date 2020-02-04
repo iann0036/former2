@@ -3506,8 +3506,13 @@ function performF2Mappings(objects) {
                 reqParams.tf['enabled_cloudwatch_logs_exports'] = obj.data.EnabledCloudwatchLogsExports;
                 reqParams.cfn['EngineMode'] = obj.data.EngineMode;
                 reqParams.tf['engine_mode'] = obj.data.EngineMode;
-                reqParams.cfn['ScalingConfiguration'] = obj.data.ScalingConfigurationInfo;
                 if (obj.data.ScalingConfigurationInfo) {
+                    reqParams.cfn['ScalingConfiguration'] = {
+                        'MinCapacity': obj.data.ScalingConfigurationInfo.MinCapacity,
+                        'MaxCapacity': obj.data.ScalingConfigurationInfo.MaxCapacity,
+                        'AutoPause': obj.data.ScalingConfigurationInfo.AutoPause,
+                        'SecondsUntilAutoPause': obj.data.ScalingConfigurationInfo.SecondsUntilAutoPause
+                    };
                     reqParams.tf['scaling_configuration'] = {
                         'min_capacity': obj.data.ScalingConfigurationInfo.MinCapacity,
                         'max_capacity': obj.data.ScalingConfigurationInfo.MaxCapacity,
