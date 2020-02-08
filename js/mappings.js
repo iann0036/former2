@@ -3,13 +3,14 @@ var f2log = function (msg) { console.log(msg); }
 var f2trace = function (msg) { console.trace(msg); }
 
 /* ========================================================================== */
-// Mapping Helper Functions (from AWSConsoleRecorder)
+// Mapping Helper Functions
 /* ========================================================================== */
 
 var outputs = [];
 var tracked_resources = [];
 var global_used_refs = [];
 var cfnspacing = "    ";
+var service_mapping_functions = [];
 
 function MD5(e) {
     function h(a, b) {
@@ -2231,7 +2232,16 @@ function performF2Mappings(objects) {
                 'iam': {}
             };
 
-            if (obj.type == "lambda.function") {
+            var service_mapping_success = false;
+            service_mapping_functions.forEach(service_mapping_function => {
+                if (service_mapping_function(reqParams, obj, tracked_resources)) {
+                    service_mapping_success = true;
+                }
+            });
+
+            if (service_mapping_success) {
+                ;
+            } else if (obj.type == "lambda.function") {
                 reqParams.cfn['Description'] = obj.data.Configuration.Description;
                 reqParams.tf['description'] = obj.data.Configuration.Description;
                 if (obj.data.Configuration.Environment && obj.data.Configuration.Environment.Variables) {
@@ -12297,184 +12307,6 @@ function performF2Mappings(objects) {
                     'options': reqParams,
                     'returnValues': {
                         'Ref': obj.data.policy.PolicyName
-                    }
-                });
-            } else if (obj.type == "iam.user") {
-                reqParams.cfn['Path'] = obj.data.Path;
-                reqParams.tf['path'] = obj.data.Path;
-                reqParams.cfn['UserName'] = obj.data.UserName;
-                reqParams.tf['name'] = obj.data.UserName;
-                if (obj.data.PermissionsBoundary) {
-                    reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
-                    reqParams.tf['permissions_boundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
-                }
-
-                /*
-                TODO:
-                Groups:
-                    - String
-                LoginProfile:
-                    LoginProfile Type
-                ManagedPolicyArns:
-                    - String
-                Policies:
-                    - Policies
-                Tags
-                */
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('iam', obj.id),
-                    'region': obj.region,
-                    'service': 'iam',
-                    'type': 'AWS::IAM::User',
-                    'terraformType': 'aws_iam_user',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Import': {
-                            'UserName': obj.data.UserName
-                        }
-                    }
-                });
-            } else if (obj.type == "iam.group") {
-                reqParams.cfn['Path'] = obj.data.Path;
-                reqParams.tf['path'] = obj.data.Path;
-                reqParams.cfn['GroupName'] = obj.data.GroupName;
-                reqParams.tf['name'] = obj.data.GroupName;
-
-                /*
-                TODO:
-                ManagedPolicyArns: [ String, ... ]
-                Policies:
-                    - Policies
-                */
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('iam', obj.id),
-                    'region': obj.region,
-                    'service': 'iam',
-                    'type': 'AWS::IAM::Group',
-                    'terraformType': 'aws_iam_group',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Import': {
-                            'GroupName': obj.data.GroupName
-                        }
-                    }
-                });
-            } else if (obj.type == "iam.role") {
-                reqParams.cfn['Path'] = obj.data.Path;
-                reqParams.tf['path'] = obj.data.Path;
-                reqParams.cfn['RoleName'] = obj.data.RoleName;
-                reqParams.tf['name'] = obj.data.RoleName;
-                reqParams.cfn['AssumeRolePolicyDocument'] = unescape(obj.data.AssumeRolePolicyDocument);
-                reqParams.tf['assume_role_policy'] = unescape(obj.data.AssumeRolePolicyDocument);
-                reqParams.cfn['MaxSessionDuration'] = obj.data.MaxSessionDuration;
-                reqParams.tf['max_session_duration'] = obj.data.MaxSessionDuration;
-                if (obj.data.PermissionsBoundary) {
-                    reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
-                    reqParams.tf['permissions_boundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
-                }
-
-                /*
-                TODO:
-                ManagedPolicyArns:
-                    - String
-                Policies:
-                    - Policies
-                */
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('iam', obj.id),
-                    'region': obj.region,
-                    'service': 'iam',
-                    'type': 'AWS::IAM::Role',
-                    'terraformType': 'aws_iam_role',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Ref': obj.data.RoleName,
-                        'GetAtt': {
-                            'Arn': obj.data.Arn,
-                            'RoleId': obj.data.RoleId
-                        },
-                        'Terraform': {
-                            'id': obj.data.Id,
-                            'name': obj.data.RoleName,
-                            'arn': obj.data.Arn
-                        },
-                        'Import': {
-                            'RoleName': obj.data.RoleName
-                        }
-                    }
-                });
-            } else if (obj.type == "iam.managedpolicy") {
-                reqParams.cfn['ManagedPolicyName'] = obj.data.PolicyName;
-                reqParams.tf['name'] = obj.data.PolicyName;
-                reqParams.cfn['Path'] = obj.data.Path;
-                reqParams.tf['path'] = obj.data.Path;
-                reqParams.cfn['Description'] = obj.data.Description;
-                reqParams.tf['description'] = obj.data.Description;
-                reqParams.cfn['PolicyDocument'] = unescape(obj.data.PolicyDocument);
-                reqParams.tf['policy'] = unescape(obj.data.PolicyDocument);
-
-                /*
-                TODO:
-                Groups:
-                    - String
-                Roles:
-                    - String
-                Users:
-                    - String
-                */
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('iam', obj.id),
-                    'region': obj.region,
-                    'service': 'iam',
-                    'type': 'AWS::IAM::ManagedPolicy',
-                    'terraformType': 'aws_iam_policy',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Ref': obj.data.Arn,
-                        'Terraform': {
-                            'id': obj.data.PolicyId,
-                            'arn': obj.data.Arn,
-                            'name': obj.data.PolicyName
-                        },
-                        'Import': {
-                            'PolicyArn': obj.data.Arn
-                        }
-                    }
-                });
-            } else if (obj.type == "iam.instanceprofile") {
-                reqParams.cfn['Path'] = obj.data.Path;
-                reqParams.tf['path'] = obj.data.Path;
-                reqParams.cfn['InstanceProfileName'] = obj.data.InstanceProfileName;
-                reqParams.tf['name'] = obj.data.InstanceProfileName;
-                if (obj.data.Roles) {
-                    reqParams.cfn['Roles'] = [];
-                    reqParams.tf['roles'] = [];
-                    obj.data.Roles.forEach(role => {
-                        reqParams.cfn['Roles'].push(role.Arn);
-                        reqParams.tf['roles'].push(role.Arn);
-                    });
-                }
-
-                tracked_resources.push({
-                    'obj': obj,
-                    'logicalId': getResourceName('iam', obj.id),
-                    'region': obj.region,
-                    'service': 'iam',
-                    'type': 'AWS::IAM::InstanceProfile',
-                    'terraformType': 'aws_iam_instance_profile',
-                    'options': reqParams,
-                    'returnValues': {
-                        'Import': {
-                            'InstanceProfileName': obj.data.InstanceProfileName
-                        }
                     }
                 });
             } else if (obj.type == "eventbridge.rule") {
