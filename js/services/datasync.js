@@ -335,7 +335,117 @@ async function updateDatatableMigrationAndTransferDataSync() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "datasync.agent") {
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['activation_key'] = "REPLACEME";
+        reqParams.tf['ip_address'] = "REPLACEME";
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id),
+            'region': obj.region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_agent',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.task") {
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['source_location_arn'] = obj.data.SourceLocationArn;
+        reqParams.tf['destination_location_arn'] = obj.data.DestinationLocationArn;
+        reqParams.tf['cloudwatch_log_group_arn'] = obj.data.CloudWatchLogGroupArn;
+        if (obj.data.Options) {
+            reqParams.tf['options'] = {
+                'atime': obj.data.Options.Atime,
+                'bytes_per_second': obj.data.Options.BytesPerSecond,
+                'gid': obj.data.Options.Gid,
+                'mtime': obj.data.Options.Mtime,
+                'posix_permissions': obj.data.Options.PosixPermissions,
+                'preserve_deleted_files': obj.data.Options.PreserveDeletedFiles,
+                'preserve_devices': obj.data.Options.PreserveDevices,
+                'uid': obj.data.Options.Uid,
+                'verify_mode': obj.data.Options.VerifyMode
+            };
+        }
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id),
+            'region': obj.region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_task',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locationefs") {
+        reqParams.tf['ec2_config'] = {
+            'security_group_arns': obj.data.Ec2Config.SecurityGroupArns,
+            'subnet_arn': obj.data.Ec2Config.SubnetArn
+        };
+        reqParams.tf['efs_file_system_arn'] = obj.data.LocationArn;
+        reqParams.tf['subdirectory'] = obj.data.LocationUri;
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id),
+            'region': obj.region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_efs',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locationnfs") {
+        reqParams.tf['on_prem_config'] = {
+            'agent_arns': obj.data.OnPremConfig.AgentArns
+        };
+        reqParams.tf['server_hostname'] = obj.data.LocationArn;
+        reqParams.tf['subdirectory'] = obj.data.LocationUri;
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id),
+            'region': obj.region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_nfs',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locations3") {
+        reqParams.tf['s3_config'] = {
+            'bucket_access_role_arn': obj.data.S3Config.BucketAccessRoleArn
+        };
+        reqParams.tf['s3_bucket_arn'] = obj.data.LocationArn;
+        reqParams.tf['subdirectory'] = obj.data.LocationUri;
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id),
+            'region': obj.region,
+            'service': 'datasync',
+            'terraformType': 'aws_datasync_location_s3',
+            'options': reqParams
+        });
     } else {
         return false;
     }

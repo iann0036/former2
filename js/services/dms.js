@@ -498,7 +498,165 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "dms.endpoint") {
+        reqParams.cfn['EndpointIdentifier'] = obj.data.EndpointIdentifier;
+        reqParams.cfn['EndpointType'] = obj.data.EndpointType;
+        reqParams.cfn['EngineName'] = obj.data.EngineName;
+        reqParams.cfn['Username'] = obj.data.Username;
+        reqParams.cfn['ServerName'] = obj.data.ServerName;
+        reqParams.cfn['Port'] = obj.data.Port;
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.cfn['ExtraConnectionAttributes'] = obj.data.ExtraConnectionAttributes;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['CertificateArn'] = obj.data.CertificateArn;
+        reqParams.cfn['SslMode'] = obj.data.SslMode;
+        reqParams.cfn['DynamoDbSettings'] = obj.data.DynamoDbSettings;
+        if (obj.data.S3Settings) {
+            reqParams.cfn['S3Settings'] = {
+                'BucketFolder': obj.data.S3Settings.BucketFolder,
+                'BucketName': obj.data.S3Settings.BucketName,
+                'CompressionType': obj.data.S3Settings.CompressionType,
+                'CsvDelimiter': obj.data.S3Settings.CsvDelimiter,
+                'CsvRowDelimiter': obj.data.S3Settings.CsvRowDelimiter,
+                'ExternalTableDefinition': obj.data.S3Settings.ExternalTableDefinition,
+                'ServiceAccessRoleArn': obj.data.S3Settings.ServiceAccessRoleArn
+            };
+        }
+        reqParams.cfn['MongoDbSettings'] = obj.data.MongoDbSettings;
+
+        /*
+        TODO:
+        Password: String
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::Endpoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "dms.replicationinstance") {
+        reqParams.cfn['ReplicationInstanceIdentifier'] = obj.data.ReplicationInstanceIdentifier;
+        reqParams.cfn['ReplicationInstanceClass'] = obj.data.ReplicationInstanceClass;
+        reqParams.cfn['AllocatedStorage'] = obj.data.AllocatedStorage;
+        if (obj.data.VpcSecurityGroups) {
+            reqParams.cfn['VpcSecurityGroupIds'] = [];
+            obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
+                reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup.VpcSecurityGroupId);
+            });
+        }
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        if (obj.data.ReplicationSubnetGroup) {
+            reqParams.cfn['ReplicationSubnetGroupIdentifier'] = obj.data.ReplicationSubnetGroup.ReplicationSubnetGroupIdentifier;
+        }
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['MultiAZ'] = obj.data.MultiAZ;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+
+        /*
+        TODO:
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::ReplicationInstance',
+            'options': reqParams
+        });
+    } else if (obj.type == "dms.replicationtask") {
+        reqParams.cfn['ReplicationTaskIdentifier'] = obj.data.ReplicationTaskIdentifier;
+        reqParams.cfn['SourceEndpointArn'] = obj.data.SourceEndpointArn;
+        reqParams.cfn['TargetEndpointArn'] = obj.data.TargetEndpointArn;
+        reqParams.cfn['ReplicationInstanceArn'] = obj.data.ReplicationInstanceArn;
+        reqParams.cfn['MigrationType'] = obj.data.MigrationType;
+        reqParams.cfn['TableMappings'] = obj.data.TableMappings;
+        reqParams.cfn['ReplicationTaskSettings'] = obj.data.ReplicationTaskSettings;
+        reqParams.cfn['CdcStartTime'] = obj.data.CdcStartPosition;
+
+        /*
+        TODO:
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::ReplicationTask',
+            'options': reqParams
+        });
+    } else if (obj.type == "dms.replicationsubnetgroup") {
+        reqParams.cfn['ReplicationSubnetGroupIdentifier'] = obj.data.ReplicationSubnetGroupIdentifier;
+        reqParams.cfn['ReplicationSubnetGroupDescription'] = obj.data.ReplicationSubnetGroupDescription;
+        if (obj.data.Subnets) {
+            reqParams.cfn['SubnetIds'] = [];
+            obj.data.Subnets.forEach(subnet => {
+                reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+            });
+        }
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::ReplicationSubnetGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "dms.certificate") {
+        reqParams.cfn['CertificateIdentifier'] = obj.data.CertificateIdentifier;
+        reqParams.cfn['CertificatePem'] = obj.data.CertificatePem;
+        reqParams.cfn['CertificateWallet'] = obj.data.CertificateWallet;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::Certificate',
+            'options': reqParams
+        });
+    } else if (obj.type == "dms.eventsubscription") {
+        reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
+        reqParams.cfn['SourceType'] = obj.data.SourceType;
+        reqParams.cfn['SourceIds'] = obj.data.SourceIdsList;
+        reqParams.cfn['EventCategories'] = obj.data.EventCategoriesList;
+        reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+        /*
+        TODO:
+        SubscriptionName: String
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dms', obj.id),
+            'region': obj.region,
+            'service': 'dms',
+            'type': 'AWS::DMS::EventSubscription',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -179,7 +179,55 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "kms.key") {
+        reqParams.cfn['Enabled'] = obj.data.Enabled;
+        reqParams.tf['is_enabled'] = obj.data.Enabled;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['KeyUsage'] = obj.data.KeyUsage;
+        reqParams.tf['key_usage'] = obj.data.KeyUsage;
+        reqParams.cfn['EnableKeyRotation'] = obj.data.KeyRotationEnabled;
+        reqParams.tf['enable_key_rotation'] = obj.data.KeyRotationEnabled;
+        reqParams.cfn['KeyPolicy'] = obj.data.Policy;
+        reqParams.tf['policy'] = obj.data.Policy;
+
+        /*
+        TODO:
+        PendingWindowInDays: Integer
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kms', obj.id),
+            'region': obj.region,
+            'service': 'kms',
+            'type': 'AWS::KMS::Key',
+            'terraformType': 'aws_kms_key',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.KeyId,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "kms.alias") {
+        reqParams.cfn['AliasName'] = obj.data.AliasArn;
+        reqParams.tf['name'] = obj.data.AliasArn;
+        reqParams.cfn['TargetKeyId'] = obj.data.TargetKeyId;
+        reqParams.tf['target_key_id'] = obj.data.TargetKeyId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kms', obj.id),
+            'region': obj.region,
+            'service': 'kms',
+            'type': 'AWS::KMS::Alias',
+            'terraformType': 'aws_kms_alias',
+            'options': reqParams
+        });
     } else {
         return false;
     }

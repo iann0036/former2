@@ -714,6 +714,153 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "lambda.version") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['FunctionName'] = obj.data.FunctionName;
+        reqParams.cfn['ProvisionedConcurrencyConfig'] = obj.data.ProvisionedConcurrencyConfig;
+
+        /*
+        TODO:
+        CodeSha256 : String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Version',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'FunctionArn': obj.data.FunctionArn + ":" + obj.data.Version
+                }
+            }
+        });
+    } else if (obj.type == "lambda.layerversion") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['CompatibleRuntimes'] = obj.data.CompatibleRuntimes;
+        reqParams.tf['compatible_runtimes'] = obj.data.CompatibleRuntimes;
+        reqParams.cfn['LicenseInfo'] = obj.data.LicenseInfo;
+        reqParams.tf['license_info'] = obj.data.LicenseInfo;
+        reqParams.cfn['LayerName'] = obj.data.LayerName;
+        reqParams.tf['layer_name'] = obj.data.LayerName;
+
+        /*
+        TODO:
+        Content: 
+            Content
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::LayerVersion',
+            'terraformType': 'aws_lambda_layer_version',
+            'options': reqParams
+        });
+    } else if (obj.type == "lambda.layerversionpermission") {
+        reqParams.cfn['Action'] = obj.data.Action;
+        reqParams.cfn['Principal'] = obj.data.Principal;
+        reqParams.cfn['LayerVersionArn'] = obj.data.LayerVersionArn;
+        if (obj.data.Condition && obj.data.Condition.StringEquals && obj.data.Condition.StringEquals['aws:PrincipalOrgID']) {
+            reqParams.cfn['OrganizationId'] = obj.data.Condition.StringEquals['aws:PrincipalOrgID'];
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::LayerVersionPermission',
+            'options': reqParams
+        });
+    } else if (obj.type == "lambda.permission") {
+        reqParams.cfn['Action'] = obj.data.Action;
+        reqParams.tf['action'] = obj.data.Action;
+        reqParams.cfn['FunctionName'] = obj.data.FunctionName;
+        reqParams.tf['function_name'] = obj.data.FunctionName;
+        reqParams.cfn['Principal'] = obj.data.Principal.Service || obj.data.Principal.AWS || obj.data.Principal;
+        reqParams.tf['principal'] = obj.data.Principal.Service || obj.data.Principal.AWS || obj.data.Principal;
+        if (obj.data.Condition && obj.data.Condition.ArnLike && obj.data.Condition.ArnLike['AWS:SourceArn']) {
+            reqParams.cfn['SourceArn'] = obj.data.Condition.ArnLike['AWS:SourceArn'];
+            reqParams.tf['source_arn'] = obj.data.Condition.ArnLike['AWS:SourceArn'];
+        }
+
+        /*
+        TODO:
+        EventSourceToken: String
+        SourceAccount: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Permission',
+            'terraformType': 'aws_lambda_permission',
+            'options': reqParams
+        });
+    } else if (obj.type == "lambda.eventsourcemapping") {
+        reqParams.cfn['BatchSize'] = obj.data.BatchSize;
+        reqParams.tf['batch_size'] = obj.data.BatchSize;
+        reqParams.cfn['EventSourceArn'] = obj.data.EventSourceArn;
+        reqParams.tf['event_source_arn'] = obj.data.EventSourceArn;
+        reqParams.cfn['FunctionName'] = obj.data.FunctionArn;
+        reqParams.tf['function_name'] = obj.data.FunctionArn;
+        reqParams.cfn['Enabled'] = (obj.data.State == "Enabled");
+        reqParams.tf['enabled'] = (obj.data.State == "Enabled");
+        reqParams.cfn['MaximumBatchingWindowInSeconds'] = obj.data.MaximumBatchingWindowInSeconds;
+        reqParams.cfn['ParallelizationFactor'] = obj.data.ParallelizationFactor;
+        if (obj.data.DestinationConfig && obj.data.DestinationConfig.OnFailure && obj.data.DestinationConfig.OnFailure.Destination) {
+            reqParams.cfn['DestinationConfig'] = {
+                'OnFailure': {
+                    'Destination': obj.data.DestinationConfig.OnFailure.Destination
+                }
+            };
+        }
+        reqParams.cfn['MaximumRecordAgeInSeconds'] = obj.data.MaximumRecordAgeInSeconds;
+        reqParams.cfn['BisectBatchOnFunctionError'] = obj.data.BisectBatchOnFunctionError;
+        reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
+
+        /*
+        TODO:
+        StartingPosition: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::EventSourceMapping',
+            'terraformType': 'aws_lambda_event_source_mapping',
+            'options': reqParams
+        });
+    } else if (obj.type == "lambda.eventinvokeconfig") {
+        reqParams.cfn['DestinationConfig'] = obj.data.DestinationConfig;
+        reqParams.cfn['FunctionName'] = obj.data.FunctionArn;
+        reqParams.cfn['MaximumEventAgeInSeconds'] = obj.data.MaximumEventAgeInSeconds;
+        reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
+        reqParams.cfn['Qualifier'] = obj.data.Qualifier;
+
+        /*
+        SKIPPED:
+        Qualifier: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::EventInvokeConfig',
+            'options': reqParams
+        });
     } else {
         return false;
     }

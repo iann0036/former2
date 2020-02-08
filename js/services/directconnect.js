@@ -870,7 +870,224 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "directconnect.connection") {
+        reqParams.tf['name'] = obj.data.connectionName;
+        reqParams.tf['bandwidth'] = obj.data.bandwidth;
+        reqParams.tf['location'] = obj.data.location;
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_connection',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.connectionassociation") {
+        reqParams.tf['connection_id'] = obj.data.connectionId;
+        reqParams.tf['lag_id'] = obj.data.lagId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_connection_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.publicvirtualinterface") {
+        reqParams.tf['address_family'] = obj.data.addressFamily;
+        reqParams.tf['bgp_asn'] = obj.data.asn;
+        reqParams.tf['connection_id'] = obj.data.connectionId;
+        reqParams.tf['name'] = obj.data.virtualInterfaceName;
+        reqParams.tf['vlan'] = obj.data.vlan;
+        reqParams.tf['amazon_address'] = obj.data.amazonAddress;
+        reqParams.tf['bgp_auth_key'] = obj.data.authKey;
+        reqParams.tf['customer_address'] = obj.data.customerAddress;
+        if (obj.data.routeFilterPrefixes) {
+            reqParams.tf['route_filter_prefixes'] = [];
+            obj.data.routeFilterPrefixes.forEach(prefix => {
+                reqParams.tf['route_filter_prefixes'].push(prefix.cidr);
+            });
+        }
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_public_virtual_interface',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.privatevirtualinterface") {
+        reqParams.tf['address_family'] = obj.data.addressFamily;
+        reqParams.tf['bgp_asn'] = obj.data.asn;
+        reqParams.tf['connection_id'] = obj.data.connectionId;
+        reqParams.tf['name'] = obj.data.virtualInterfaceName;
+        reqParams.tf['vlan'] = obj.data.vlan;
+        reqParams.tf['amazon_address'] = obj.data.amazonAddress;
+        reqParams.tf['bgp_auth_key'] = obj.data.authKey;
+        reqParams.tf['customer_address'] = obj.data.customerAddress;
+        reqParams.tf['mtu'] = obj.data.mtu;
+        reqParams.tf['dx_gateway_id'] = obj.data.directConnectGatewayId;
+        reqParams.tf['vpn_gateway_id'] = obj.data.virtualGatewayId;
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_private_virtual_interface',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.hostedpublicvirtualinterface") {
+        reqParams.tf['address_family'] = obj.data.addressFamily;
+        reqParams.tf['bgp_asn'] = obj.data.asn;
+        reqParams.tf['connection_id'] = obj.data.connectionId;
+        reqParams.tf['name'] = obj.data.virtualInterfaceName;
+        reqParams.tf['vlan'] = obj.data.vlan;
+        reqParams.tf['amazon_address'] = obj.data.amazonAddress;
+        reqParams.tf['bgp_auth_key'] = obj.data.authKey;
+        reqParams.tf['customer_address'] = obj.data.customerAddress;
+        if (obj.data.routeFilterPrefixes) {
+            reqParams.tf['route_filter_prefixes'] = [];
+            obj.data.routeFilterPrefixes.forEach(prefix => {
+                reqParams.tf['route_filter_prefixes'].push(prefix.cidr);
+            });
+        }
+        reqParams.tf['owner_account_id'] = obj.data.ownerAccount;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_hosted_public_virtual_interface',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.hostedprivatevirtualinterface") {
+        reqParams.tf['address_family'] = obj.data.addressFamily;
+        reqParams.tf['bgp_asn'] = obj.data.asn;
+        reqParams.tf['connection_id'] = obj.data.connectionId;
+        reqParams.tf['name'] = obj.data.virtualInterfaceName;
+        reqParams.tf['vlan'] = obj.data.vlan;
+        reqParams.tf['amazon_address'] = obj.data.amazonAddress;
+        reqParams.tf['bgp_auth_key'] = obj.data.authKey;
+        reqParams.tf['customer_address'] = obj.data.customerAddress;
+        reqParams.tf['mtu'] = obj.data.mtu;
+        reqParams.tf['owner_account_id'] = obj.data.ownerAccount;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_hosted_private_virtual_interface',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.bgppeer") {
+        reqParams.tf['address_family'] = obj.data.addressFamily;
+        reqParams.tf['bgp_asn'] = obj.data.asn;
+        reqParams.tf['virtual_interface_id'] = obj.data.virtualInterfaceId;
+        reqParams.tf['amazon_address'] = obj.data.amazonAddress;
+        reqParams.tf['bgp_auth_key'] = obj.data.authKey;
+        reqParams.tf['customer_address'] = obj.data.customerAddress;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_bgp_peer',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.lag") {
+        reqParams.tf['name'] = obj.data.lagName;
+        reqParams.tf['connections_bandwidth'] = obj.data.connectionsBandwidth;
+        reqParams.tf['location'] = obj.data.location;
+
+        /*
+        TODO:
+        force_destroy
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_lag',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.gateway") {
+        reqParams.tf['name'] = obj.data.directConnectGatewayName;
+        reqParams.tf['amazon_side_asn'] = obj.data.amazonSideAsn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directconnect', obj.id),
+            'region': obj.region,
+            'service': 'directconnect',
+            'terraformType': 'aws_dx_gateway',
+            'options': reqParams
+        });
+    } else if (obj.type == "directconnect.gatewayassociation") {
+        if (obj.data.associatedGateway.type == "virtualPrivateGateway") {
+            reqParams.tf['dx_gateway_id'] = obj.data.directConnectGatewayId;
+            reqParams.tf['vpn_gateway_id'] = obj.data.virtualGatewayId;
+            if (obj.data.allowedPrefixesToDirectConnectGateway) {
+                reqParams.tf['allowed_prefixes'] = [];
+                obj.data.allowedPrefixesToDirectConnectGateway.forEach(prefix => {
+                    reqParams.tf['allowed_prefixes'].push(prefix.cidr);
+                });
+            }
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('directconnect', obj.id),
+                'region': obj.region,
+                'service': 'directconnect',
+                'terraformType': 'aws_dx_gateway_association',
+                'options': reqParams
+            });
+        }
+    } else if (obj.type == "directconnect.gatewayassociationproposal") {
+        if (obj.data.associatedGateway.type == "virtualPrivateGateway") {
+            reqParams.tf['dx_gateway_id'] = obj.data.directConnectGatewayId;
+            reqParams.tf['vpn_gateway_id'] = obj.data.associatedGateway.id;
+            if (obj.data.requestedAllowedPrefixesToDirectConnectGateway) {
+                reqParams.tf['allowed_prefixes'] = [];
+                obj.data.requestedAllowedPrefixesToDirectConnectGateway.forEach(prefix => {
+                    reqParams.tf['allowed_prefixes'].push(prefix.cidr);
+                });
+            }
+            reqParams.tf['dx_gateway_owner_account_id'] = obj.data.associatedGateway.ownerAccount;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('directconnect', obj.id),
+                'region': obj.region,
+                'service': 'directconnect',
+                'terraformType': 'aws_dx_gateway_association_proposal',
+                'options': reqParams
+            });
+        }
     } else {
         return false;
     }

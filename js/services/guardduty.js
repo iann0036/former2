@@ -461,7 +461,131 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "guardduty.member") {
+        reqParams.cfn['DetectorId'] = obj.data.DetectorId;
+        reqParams.tf['detector_id'] = obj.data.DetectorId;
+        reqParams.cfn['Email'] = obj.data.Email;
+        reqParams.tf['email'] = obj.data.Email;
+        reqParams.cfn['MemberId'] = obj.data.AccountId;
+        reqParams.tf['account_id'] = obj.data.AccountId;
+
+        /*
+        TODO:
+        Status: String
+        Message: String
+        DisableEmailNotification: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Member',
+            'terraformType': 'aws_guardduty_member',
+            'options': reqParams
+        });
+    } else if (obj.type == "guardduty.filter") {
+        reqParams.cfn['Action'] = obj.data.Action;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Rank'] = obj.data.Rank;
+        reqParams.cfn['DetectorId'] = obj.data.DetectorId;
+        reqParams.cfn['FindingCriteria'] = obj.data.FindingCriteria;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Filter',
+            'options': reqParams
+        });
+    } else if (obj.type == "guardduty.ipset") {
+        reqParams.cfn['Format'] = obj.data.Format;
+        reqParams.tf['format'] = obj.data.Format;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.tf['location'] = obj.data.Location;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        if (obj.data.Status == "ACTIVE") {
+            reqParams.cfn['Activate'] = true;
+            reqParams.tf['activate'] = true;
+        } else {
+            reqParams.cfn['Activate'] = false;
+            reqParams.tf['activate'] = false;
+        }
+        reqParams.cfn['DetectorId'] = obj.data.DetectorId;
+        reqParams.tf['detector_id'] = obj.data.DetectorId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::IPSet',
+            'terraformType': 'aws_guardduty_ipset',
+            'options': reqParams
+        });
+    } else if (obj.type == "guardduty.threatintelset") {
+        reqParams.cfn['Format'] = obj.data.Format;
+        reqParams.tf['format'] = obj.data.Format;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.tf['location'] = obj.data.Location;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        if (obj.data.Status == "ACTIVE") {
+            reqParams.cfn['Activate'] = true;
+            reqParams.tf['activate'] = true;
+        } else {
+            reqParams.cfn['Activate'] = false;
+            reqParams.tf['activate'] = false;
+        }
+        reqParams.cfn['DetectorId'] = obj.data.DetectorId;
+        reqParams.tf['detector_id'] = obj.data.DetectorId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::ThreatIntelSet',
+            'terraformType': 'aws_guardduty_threatintelset',
+            'options': reqParams
+        });
+    } else if (obj.type == "guardduty.master") {
+        reqParams.cfn['DetectorId'] = obj.data.DetectorId;
+        reqParams.cfn['MasterId'] = obj.data.AccountId;
+        reqParams.cfn['InvitationId'] = obj.data.InvitationId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Master',
+            'options': reqParams
+        });
+    } else if (obj.type == "guardduty.detector") {
+        if (obj.data.Status == "ENABLED") {
+            reqParams.cfn['Enable'] = true;
+            reqParams.tf['enable'] = true;
+        } else {
+            reqParams.cfn['Enable'] = false;
+            reqParams.tf['enable'] = false;
+        }
+        reqParams.cfn['FindingPublishingFrequency'] = obj.data.FindingPublishingFrequency;
+        reqParams.tf['finding_publishing_frequency'] = obj.data.FindingPublishingFrequency;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('guardduty', obj.id),
+            'region': obj.region,
+            'service': 'guardduty',
+            'type': 'AWS::GuardDuty::Detector',
+            'terraformType': 'aws_guardduty_detector',
+            'options': reqParams
+        });
     } else {
         return false;
     }

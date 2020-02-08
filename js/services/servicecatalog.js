@@ -828,7 +828,239 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "servicecatalog.cloudformationproduct") {
+        reqParams.cfn['Name'] = obj.data.ProductViewDetail.ProductViewSummary.Name;
+        reqParams.cfn['Owner'] = obj.data.ProductViewDetail.ProductViewSummary.Owner;
+        reqParams.cfn['SupportDescription'] = obj.data.ProductViewDetail.ProductViewSummary.SupportDescription;
+        reqParams.cfn['Description'] = obj.data.ProductViewDetail.ProductViewSummary.ShortDescription;
+        reqParams.cfn['Distributor'] = obj.data.ProductViewDetail.ProductViewSummary.Distributor;
+        reqParams.cfn['SupportEmail'] = obj.data.ProductViewDetail.ProductViewSummary.SupportEmail;
+        reqParams.cfn['SupportUrl'] = obj.data.ProductViewDetail.ProductViewSummary.SupportUrl;
+        reqParams.cfn['AcceptLanguage'] = 'en'; // TODO: Check for others
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        /*
+        TODO:
+        ProvisioningArtifactParameters: 
+            - ProvisioningArtifactProperties
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::CloudFormationProduct',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.portfolio") {
+        reqParams.cfn['ProviderName'] = obj.data.PortfolioDetail.ProviderName;
+        reqParams.cfn['Description'] = obj.data.PortfolioDetail.Description;
+        reqParams.cfn['DisplayName'] = obj.data.PortfolioDetail.DisplayName;
+        reqParams.cfn['ProviderName'] = obj.data.PortfolioDetail.ProviderName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::Portfolio',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.portfolioprincipalassociation") {
+        reqParams.cfn['PrincipalARN'] = obj.data.principal.PrincipalARN;
+        reqParams.cfn['PrincipalType'] = obj.data.principal.PrincipalType;
+        reqParams.cfn['PortfolioId'] = obj.data.portfolio.Id;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::PortfolioPrincipalAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.launchnotificationconstraint") {
+        reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
+        reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
+        reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+        /*
+        TODO:
+        NotificationArns: 
+            - String
+        AcceptLanguage: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::LaunchNotificationConstraint',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.launchroleconstraint") {
+        reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
+        reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
+        reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        RoleArn: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::LaunchRoleConstraint',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.launchtemplateconstraint") {
+        reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
+        reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
+        reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        Rules: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::LaunchTemplateConstraint',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.stacksetconstraint") {
+        reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
+        reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
+        reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        AccountList: 
+            - String
+        AdminRole: String
+        ExecutionRole: String
+        RegionList: 
+            - String
+        StackInstanceControl: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::StackSetConstraint',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.acceptedportfolioshare") {
+        reqParams.cfn['PortfolioId'] = obj.data.portfolio.Id;
+
+        /*
+        TODO:
+        AcceptLanguage: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::AcceptedPortfolioShare',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.portfolioproductassociation") {
+        reqParams.cfn['PortfolioId'] = obj.data.portfolio.Id;
+        reqParams.cfn['ProductId'] = obj.data.product.Id;
+        reqParams.cfn[''] = obj.data;
+
+        /*
+        TODO:
+        SourcePortfolioId: String
+        AcceptLanguage: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::PortfolioProductAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.cloudformationprovisionedproduct") {
+        reqParams.cfn['ProvisionedProductName'] = obj.data.ProvisionedProductDetail.Name;
+        reqParams.cfn['ProductId'] = obj.data.ProvisionedProductDetail.ProductId;
+        reqParams.cfn['ProvisioningArtifactId'] = obj.data.ProvisionedProductDetail.ProvisioningArtifactId;
+        reqParams.cfn['ProductName'] = obj.data.Product.Name;
+
+        /*
+        TODO:
+        PathId: String
+        ProvisioningParameters: 
+            - ProvisioningParameter
+        ProvisioningArtifactName: String
+        NotificationArns: 
+            - String
+        AcceptLanguage: String
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::CloudFormationProvisionedProduct',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.tagoption") {
+        reqParams.cfn['Key'] = obj.data.Key;
+        reqParams.cfn['Value'] = obj.data.Value;
+        reqParams.cfn['Active'] = obj.data.Active;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::TagOption',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.tagoptionassociation") {
+        reqParams.cfn['TagOptionId'] = obj.data.tagoption.Id;
+        reqParams.cfn['ResourceId'] = obj.data.resource.Id;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::TagOptionAssociation',
+            'options': reqParams
+        });
     } else {
         return false;
     }

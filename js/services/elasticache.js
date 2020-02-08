@@ -495,6 +495,73 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "elasticache.replicationgroup") {
+        reqParams.cfn['ReplicationGroupId'] = obj.data.ReplicationGroupId;
+        reqParams.tf['replication_group_id'] = obj.data.ReplicationGroupId;
+        reqParams.cfn['ReplicationGroupDescription'] = obj.data.Description;
+        reqParams.tf['replication_group_description'] = obj.data.Description;
+        if (obj.data.NodeGroups) {
+            reqParams.cfn['NumNodeGroups'] = obj.data.NodeGroups.length;
+            reqParams.tf['cluster_mode'] = {
+                'num_node_groups': obj.data.NodeGroups.length
+            };
+        }
+        reqParams.cfn['SnapshottingClusterId'] = obj.data.SnapshottingClusterId;
+        reqParams.tf['snapshot_arns'] = [obj.data.SnapshottingClusterId];
+        reqParams.cfn['AutomaticFailoverEnabled'] = (obj.data.AutomaticFailover == "enabled");
+        reqParams.tf['automatic_failover_enabled'] = (obj.data.AutomaticFailover == "enabled");
+        if (obj.data.ConfigurationEndpoint) {
+            reqParams.cfn['Port'] = obj.data.ConfigurationEndpoint.Port;
+            reqParams.tf['port'] = obj.data.ConfigurationEndpoint.Port;
+        }
+        reqParams.cfn['SnapshotRetentionLimit'] = obj.data.SnapshotRetentionLimit;
+        reqParams.tf['snapshot_retention_limit'] = obj.data.SnapshotRetentionLimit;
+        reqParams.cfn['SnapshotWindow'] = obj.data.SnapshotWindow;
+        reqParams.tf['snapshot_window'] = obj.data.SnapshotWindow;
+        reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+        reqParams.tf['node_type'] = obj.data.CacheNodeType;
+        reqParams.cfn['TransitEncryptionEnabled'] = obj.data.TransitEncryptionEnabled;
+        reqParams.tf['transit_encryption_enabled'] = obj.data.TransitEncryptionEnabled;
+        reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.AtRestEncryptionEnabled;
+        reqParams.tf['at_rest_encryption_enabled'] = obj.data.AtRestEncryptionEnabled;
+
+        /*
+        TODO:
+        AuthToken: String
+        AutoMinorVersionUpgrade: Boolean
+        CacheParameterGroupName: String
+        CacheSecurityGroupNames:
+            - String
+        CacheSubnetGroupName: String
+        Engine: String
+        EngineVersion: String
+        NodeGroupConfiguration:
+            - NodeGroupConfiguration
+        NotificationTopicArn: String
+        NumCacheClusters: Integer
+        PreferredCacheClusterAZs:
+            - String
+        PreferredMaintenanceWindow: String
+        PrimaryClusterId: String
+        ReplicasPerNodeGroup: Integer
+        SecurityGroupIds:
+            - String
+        SnapshotArns:
+            - String
+        SnapshotName: String
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::ReplicationGroup',
+            'terraformType': 'aws_elasticache_replication_group',
+            'options': reqParams
+        });
     } else {
         return false;
     }

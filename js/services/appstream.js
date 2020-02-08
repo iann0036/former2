@@ -672,7 +672,152 @@ async function updateDatatableEndUserComputingAppStream() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "appstream.stackfleetassociation") {
+        reqParams.cfn['FleetName'] = obj.data.fleetname;
+        reqParams.cfn['StackName'] = obj.data.stackname;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::StackFleetAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.fleet") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['ImageName'] = obj.data.ImageName;
+        reqParams.cfn['ImageArn'] = obj.data.ImageArn;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.cfn['FleetType'] = obj.data.FleetType;
+        reqParams.cfn['MaxUserDurationInSeconds'] = obj.data.MaxUserDurationInSeconds;
+        reqParams.cfn['DisconnectTimeoutInSeconds'] = obj.data.DisconnectTimeoutInSeconds;
+        reqParams.cfn['VpcConfig'] = obj.data.VpcConfig;
+        reqParams.cfn['EnableDefaultInternetAccess'] = obj.data.EnableDefaultInternetAccess;
+        reqParams.cfn['DomainJoinInfo'] = obj.data.DomainJoinInfo;
+        if (obj.data.ComputeCapacityStatus) {
+            reqParams.cfn['ComputeCapacity'] = obj.data.ComputeCapacityStatus.Desired;
+        }
+
+        /*
+        TODO:
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Fleet',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.user") {
+        reqParams.cfn['UserName'] = obj.data.UserName;
+        reqParams.cfn['FirstName'] = obj.data.FirstName;
+        reqParams.cfn['LastName'] = obj.data.LastName;
+        reqParams.cfn['AuthenticationType'] = obj.data.AuthenticationType;
+
+        /*
+        TODO:
+        MessageAction: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::User',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.stack") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['StorageConnectors'] = obj.data.StorageConnectors;
+        reqParams.cfn['RedirectURL'] = obj.data.RedirectURL;
+        reqParams.cfn['FeedbackURL'] = obj.data.FeedbackURL;
+        reqParams.cfn['UserSettings'] = obj.data.UserSettings;
+        if (obj.data.ApplicationSettings) {
+            reqParams.cfn['ApplicationSettings'] = {
+                'Enabled': obj.data.ApplicationSettings.Enabled,
+                'SettingsGroup': obj.data.ApplicationSettings.SettingsGroup
+            };
+        }
+        reqParams.cfn['AccessEndpoints'] = obj.data.AccessEndpoints;
+
+        /*
+        TODO:
+        AttributesToDelete: 
+            - String
+        DeleteStorageConnectors: Boolean
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Stack',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.imagebuilder") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['ImageArn'] = obj.data.ImageArn;
+        reqParams.cfn['VpcConfig'] = obj.data.VpcConfig;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.cfn['EnableDefaultInternetAccess'] = obj.data.EnableDefaultInternetAccess;
+        reqParams.cfn['DomainJoinInfo'] = obj.data.DomainJoinInfo;
+        reqParams.cfn['AppstreamAgentVersion'] = obj.data.AppstreamAgentVersion;
+        reqParams.cfn['AccessEndpoints'] = obj.data.AccessEndpoints;
+        reqParams.cfn['ImageName'] = obj.data.ImageArn.split("/").pop();
+
+        /*
+        TODO:
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::ImageBuilder',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.directoryconfig") {
+        reqParams.cfn['DirectoryName'] = obj.data.DirectoryName;
+        reqParams.cfn['ServiceAccountCredentials'] = obj.data.ServiceAccountCredentials;
+        reqParams.cfn['OrganizationalUnitDistinguishedNames'] = obj.data.OrganizationalUnitDistinguishedNames;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::DirectoryConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.stackuserassociation") {
+        reqParams.cfn['StackName'] = obj.data.StackName;
+        reqParams.cfn['UserName'] = obj.data.UserName;
+        reqParams.cfn['AuthenticationType'] = obj.data.AuthenticationType;
+        reqParams.cfn['SendEmailNotification'] = obj.data.SendEmailNotification;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::StackUserAssociation',
+            'options': reqParams
+        });
     } else {
         return false;
     }

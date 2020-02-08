@@ -605,7 +605,257 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "cloudwatch.alarm") {
+        reqParams.cfn['AlarmName'] = obj.data.AlarmName;
+        reqParams.tf['alarm_name'] = obj.data.AlarmName;
+        reqParams.cfn['AlarmDescription'] = obj.data.AlarmDescription;
+        reqParams.tf['alarm_description'] = obj.data.AlarmDescription;
+        reqParams.cfn['ActionsEnabled'] = obj.data.ActionsEnabled;
+        reqParams.tf['actions_enabled'] = obj.data.ActionsEnabled;
+        reqParams.cfn['OKActions'] = obj.data.OKActions;
+        reqParams.tf['ok_actions'] = obj.data.OKActions;
+        reqParams.cfn['AlarmActions'] = obj.data.AlarmActions;
+        reqParams.tf['alarm_actions'] = obj.data.AlarmActions;
+        reqParams.cfn['InsufficientDataActions'] = obj.data.InsufficientDataActions;
+        reqParams.tf['insufficient_data_actions'] = obj.data.InsufficientDataActions;
+        reqParams.cfn['MetricName'] = obj.data.MetricName;
+        reqParams.tf['metric_name'] = obj.data.MetricName;
+        reqParams.cfn['Namespace'] = obj.data.Namespace;
+        reqParams.tf['namespace'] = obj.data.Namespace;
+        reqParams.cfn['Statistic'] = obj.data.Statistic;
+        reqParams.tf['statistic'] = obj.data.Statistic;
+        reqParams.cfn['ExtendedStatistic'] = obj.data.ExtendedStatistic;
+        reqParams.tf['extended_statistic'] = obj.data.ExtendedStatistic;
+        reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+        if (obj.data.Dimensions) {
+            reqParams.tf['dimensions'] = {};
+            obj.data.Dimensions.forEach(dimension => {
+                reqParams.tf['dimensions'][dimension.Name] = dimension.Value;
+            });
+        }
+        reqParams.cfn['Period'] = obj.data.Period;
+        reqParams.tf['period'] = obj.data.Period;
+        reqParams.cfn['Unit'] = obj.data.Unit;
+        reqParams.tf['unit'] = obj.data.Unit;
+        reqParams.cfn['EvaluationPeriods'] = obj.data.EvaluationPeriods;
+        reqParams.tf['evaluation_periods'] = obj.data.EvaluationPeriods;
+        reqParams.cfn['DatapointsToAlarm'] = obj.data.DatapointsToAlarm;
+        reqParams.tf['datapoints_to_alarm'] = obj.data.DatapointsToAlarm;
+        reqParams.cfn['Threshold'] = obj.data.Threshold;
+        reqParams.tf['threshold'] = obj.data.Threshold;
+        reqParams.cfn['ComparisonOperator'] = obj.data.ComparisonOperator;
+        reqParams.tf['comparison_operator'] = obj.data.ComparisonOperator;
+        reqParams.cfn['TreatMissingData'] = obj.data.TreatMissingData;
+        reqParams.tf['treat_missing_data'] = obj.data.TreatMissingData;
+        reqParams.cfn['EvaluateLowSampleCountPercentile'] = obj.data.EvaluateLowSampleCountPercentile;
+        reqParams.tf['evaluate_low_sample_count_percentiles'] = obj.data.EvaluateLowSampleCountPercentile;
+        reqParams.cfn['Metrics'] = obj.data.Metrics;
+        if (obj.data.Metrics) {
+            reqParams.tf['metric_query'] = [];
+            obj.data.Metrics.forEach(metric => {
+                metricstat = null;
+                if (metric.MetricStat) {
+                    metricstat = {
+                        'metric_name': metric.MetricStat.Metric.MetricName,
+                        'namespace': metric.MetricStat.Metric.Namespace,
+                        'dimensions': metric.MetricStat.Metric.Dimensions,
+                        'period': metric.MetricStat.Period,
+                        'stat': metric.MetricStat.Stat,
+                        'unit': metric.MetricStat.Unit
+                    };
+                }
+                reqParams.tf['metric_query'].push({
+                    'expression': metric.Expression,
+                    'id': metric.Id,
+                    'label': metric.Label,
+                    'metric': metric.MetricStat,
+                    'return_data': metric.ReturnData
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::Alarm',
+            'terraformType': 'aws_cloudwatch_metric_alarm',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AlarmName,
+                'GetAtt': {
+                    'Arn': obj.data.AlarmArn
+                },
+                'Import': {
+                    'AlarmName': obj.data.AlarmName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.destination") {
+        reqParams.cfn['DestinationName'] = obj.data.destinationName;
+        reqParams.tf['name'] = obj.data.destinationName;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.tf['role_arn'] = obj.data.roleArn;
+        reqParams.cfn['TargetArn'] = obj.data.targetArn;
+        reqParams.tf['target_arn'] = obj.data.targetArn;
+        reqParams.cfn['DestinationPolicy'] = obj.data.accessPolicy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Logs::Destination',
+            'terraformType': 'aws_cloudwatch_log_destination',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.logstream") {
+        reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+        reqParams.tf['log_group_name'] = obj.data.logGroupName;
+        reqParams.cfn['LogStreamName'] = obj.data.logStreamName;
+        reqParams.tf['name'] = obj.data.logStreamName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Logs::LogStream',
+            'terraformType': 'aws_cloudwatch_log_stream',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.subscriptionfilter") {
+        reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+        reqParams.tf['log_group_name'] = obj.data.logGroupName;
+        reqParams.cfn['FilterPattern'] = obj.data.filterPattern;
+        reqParams.tf['filter_pattern'] = obj.data.filterPattern;
+        reqParams.cfn['DestinationArn'] = obj.data.destinationArn;
+        reqParams.tf['destination_arn'] = obj.data.destinationArn;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.tf['role_arn'] = obj.data.roleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Logs::SubscriptionFilter',
+            'terraformType': 'aws_cloudwatch_log_subscription_filter',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'LogGroupName': obj.data.logGroupName,
+                    'FilterName': obj.data.filterName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.loggroup") {
+        reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+        reqParams.tf['name'] = obj.data.logGroupName;
+        reqParams.cfn['RetentionInDays'] = obj.data.retentionInDays;
+        reqParams.tf['retention_in_days'] = obj.data.retentionInDays;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Logs::LogGroup',
+            'terraformType': 'aws_cloudwatch_log_group',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'LogGroupName': obj.data.logGroupName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.metricfilter") {
+        reqParams.cfn['FilterPattern'] = obj.data.filterPattern;
+        reqParams.tf['pattern'] = obj.data.filterPattern;
+        reqParams.cfn['LogGroupName'] = obj.data.logGroupName;
+        reqParams.tf['log_group_name'] = obj.data.logGroupName;
+        if (obj.data.metricTransformations) {
+            reqParams.cfn['MetricTransformations'] = [];
+            reqParams.tf['metric_transformation'] = [];
+            obj.data.metricTransformations.forEach(metricTransformation => {
+                reqParams.cfn['MetricTransformations'].push({
+                    'MetricName': metricTransformation.metricName,
+                    'MetricNamespace': metricTransformation.metricNamespace,
+                    'MetricValue': metricTransformation.metricValue,
+                    'DefaultValue': metricTransformation.defaultValue,
+                });
+                reqParams.tf['metric_transformation'].push({
+                    'name': metricTransformation.metricName,
+                    'namespace': metricTransformation.metricNamespace,
+                    'value': metricTransformation.metricValue,
+                    'default_value': metricTransformation.defaultValue,
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Logs::MetricFilter',
+            'terraformType': 'aws_cloudwatch_log_metric_filter',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'FilterName': obj.data.filterName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.dashboard") {
+        reqParams.cfn['DashboardName'] = obj.data.DashboardName;
+        reqParams.tf['dashboard_name'] = obj.data.DashboardName;
+        reqParams.cfn['DashboardBody'] = obj.data.DashboardBody;
+        reqParams.tf['dashboard_body'] = obj.data.DashboardBody;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::Dashboard',
+            'terraformType': 'aws_cloudwatch_dashboard',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.anomalydetector") {
+        reqParams.cfn['MetricName'] = obj.data.MetricName;
+        reqParams.cfn['Namespace'] = obj.data.Namespace;
+        reqParams.cfn['Stat'] = obj.data.Stat;
+        if (obj.data.Configuration) {
+            reqParams.cfn['Configuration'] = {
+                'ExcludedTimeRanges': obj.data.Configuration.ExcludedTimeRanges,
+                'MetricTimeZone': obj.data.Configuration.MetricTimezone
+            };
+        }
+        reqParams.cfn['Dimensions'] = obj.data.Dimensions;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::AnomalyDetector',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.insightrule") {
+        reqParams.cfn['RuleBody'] = obj.data.Definition;
+        reqParams.cfn['RuleName'] = obj.data.Name;
+        reqParams.cfn['RuleState'] = obj.data.State;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::InsightRule',
+            'options': reqParams
+        });
     } else {
         return false;
     }

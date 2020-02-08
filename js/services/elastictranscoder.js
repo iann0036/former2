@@ -94,7 +94,61 @@ async function updateDatatableMediaServicesElasticTranscoder() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "elastictranscoder.pipeline") {
+        reqParams.tf['input_bucket'] = obj.data.InputBucket;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['role'] = obj.data.Role;
+        reqParams.tf['output_bucket'] = obj.data.OutputBucket;
+        reqParams.tf['aws_kms_key_arn'] = obj.data.AwsKmsKeyArn;
+        if (obj.data.ContentConfig) {
+            reqParams.tf['content_config'] = {
+                'bucket': obj.data.ContentConfig.Bucket,
+                'storage_class': obj.data.ContentConfig.StorageClass
+            };
+            if (obj.data.ContentConfig.Permissions) {
+                reqParams.tf['content_config_permissions'] = [];
+                obj.data.ContentConfig.Permissions.forEach(permission => {
+                    reqParams.tf['content_config_permissions'].push({
+                        'grantee_type': permission.GranteeType,
+                        'grantee': permission.Grantee,
+                        'access': permission.Access
+                    });
+                });
+            }
+        }
+        if (obj.data.Notifications) {
+            reqParams.tf['notifications'] = {
+                'completed': obj.data.Notifications.Completed,
+                'error': obj.data.Notifications.Error,
+                'progressing': obj.data.Notifications.Progressing,
+                'warning': obj.data.Notifications.Warning
+            };
+        }
+        if (obj.data.ThumbnailConfig) {
+            reqParams.tf['thumbnail_config'] = {
+                'bucket': obj.data.ThumbnailConfig.Bucket,
+                'storage_class': obj.data.ThumbnailConfig.StorageClass
+            };
+            if (obj.data.ThumbnailConfig.Permissions) {
+                reqParams.tf['thumbnail_config_permissions'] = [];
+                obj.data.ThumbnailConfig.Permissions.forEach(permission => {
+                    reqParams.tf['thumbnail_config_permissions'].push({
+                        'grantee_type': permission.GranteeType,
+                        'grantee': permission.Grantee,
+                        'access': permission.Access
+                    });
+                });
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elastictranscoder', obj.id),
+            'region': obj.region,
+            'service': 'elastictranscoder',
+            'terraformType': 'aws_elastictranscoder_pipeline',
+            'options': reqParams
+        });
     } else {
         return false;
     }

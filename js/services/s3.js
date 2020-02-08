@@ -604,6 +604,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_s3_bucket_policy',
             'options': reqParams
         });
+    } else if (obj.type == "s3.accesspoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Bucket'] = obj.data.Bucket;
+        reqParams.cfn['Policy'] = obj.data.Policy;
+        reqParams.cfn['AccountId'] = obj.data.AccountId;
+        reqParams.cfn['VpcConfiguration'] = obj.data.VpcConfiguration;
+        reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::AccessPoint',
+            'options': reqParams
+        });
     } else {
         return false;
     }

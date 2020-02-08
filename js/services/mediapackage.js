@@ -76,7 +76,24 @@ async function updateDatatableMediaServicesMediaPackage() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "mediapackage.channel") {
+        reqParams.tf['channel_id'] = obj.data.Id;
+        reqParams.tf['description'] = obj.data.Description;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediapackage', obj.id),
+            'region': obj.region,
+            'service': 'mediapackage',
+            'terraformType': 'aws_media_package_channel',
+            'options': reqParams
+        });
     } else {
         return false;
     }

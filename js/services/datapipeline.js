@@ -84,7 +84,38 @@ async function updateDatatableAnalyticsDataPipeline() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "datapipeline.pipeline") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.tags) {
+            reqParams.cfn['PipelineTags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['PipelineTags'].push({
+                    'Key': tag.key,
+                    'Value': tag.value
+                });
+            });
+        }
+
+        /*
+        TODO:
+        Activate: Boolean
+        ParameterObjects:
+            - Parameter object
+        ParameterValues:
+            - Parameter value
+        PipelineObjects:
+            - Pipeline object
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datapipeline', obj.id),
+            'region': obj.region,
+            'service': 'datapipeline',
+            'type': 'AWS::DataPipeline::Pipeline',
+            'options': reqParams
+        });
     } else {
         return false;
     }

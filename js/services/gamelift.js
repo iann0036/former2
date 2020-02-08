@@ -525,7 +525,147 @@ async function updateDatatableGameDevelopmentGameLift() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "gamelift.fleet") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['BuildId'] = obj.data.BuildId;
+        reqParams.tf['build_id'] = obj.data.BuildId;
+        reqParams.cfn['ServerLaunchPath'] = obj.data.ServerLaunchPath;
+        reqParams.cfn['ServerLaunchParameters'] = obj.data.ServerLaunchParameters;
+        reqParams.cfn['LogPaths'] = obj.data.LogPaths;
+        reqParams.cfn['EC2InstanceType'] = obj.data.InstanceType;
+        reqParams.tf['ec2_instance_type'] = obj.data.InstanceType;
+        reqParams.cfn['FleetType'] = obj.data.FleetType;
+        reqParams.cfn['ScriptId'] = obj.data.ScriptId;
+        reqParams.cfn['NewGameSessionProtectionPolicy'] = obj.data.NewGameSessionProtectionPolicy;
+        reqParams.cfn['ResourceCreationLimitPolicy'] = obj.data.ResourceCreationLimitPolicy;
+        reqParams.cfn['MetricGroups'] = obj.data.MetricGroups;
+        reqParams.cfn['InstanceRoleARN'] = obj.data.InstanceRoleArn;
+        reqParams.cfn['CertificateConfiguration'] = obj.data.CertificateConfiguration;
+        reqParams.cfn['RuntimeConfiguration'] = obj.data.RuntimeConfiguration;
+        if (obj.data.InstanceCounts) {
+            reqParams.cfn['DesiredEC2Instances'] = obj.data.InstanceCounts.DESIRED;
+            reqParams.cfn['MaxSize'] = obj.data.InstanceCounts.MAXIMUM;
+            reqParams.cfn['MinSize'] = obj.data.InstanceCounts.MINIMUM;
+        }
+        reqParams.cfn['EC2InboundPermissions'] = obj.data.EC2InboundPermissions;
+
+        /*
+        TODO:
+        PeerVpcAwsAccountId: String
+        PeerVpcId: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Fleet',
+            'terraformType': 'aws_gamelift_fleet',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.build") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Version'] = obj.data.Version;
+        reqParams.tf['version'] = obj.data.Version;
+        reqParams.cfn['OperatingSystem'] = obj.data.OperatingSystem;
+        reqParams.cfn['StorageLocation'] = obj.data.StorageLocation;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Build',
+            'terraformType': 'aws_gamelift_build',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.alias") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['RoutingStrategy'] = obj.data.RoutingStrategy;
+        reqParams.tf['routing_strategy'] = {
+            'message': obj.data.RoutingStrategy.Message,
+            'type': obj.data.RoutingStrategy.Type
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Alias',
+            'terraformType': 'aws_gamelift_alias',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.script") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Version'] = obj.data.Version;
+        reqParams.cfn['StorageLocation'] = obj.data.StorageLocation;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::Script',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.queue") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['TimeoutInSeconds'] = obj.data.TimeoutInSeconds;
+        reqParams.cfn['Destinations'] = obj.data.Destinations;
+        reqParams.cfn['PlayerLatencyPolicies'] = obj.data.PlayerLatencyPolicies;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::GameSessionQueue',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.matchmakingconfiguration") {
+        reqParams.cfn['AcceptanceRequired'] = obj.data.AcceptanceRequired;
+        reqParams.cfn['AcceptanceTimeoutSeconds'] = obj.data.AcceptanceTimeoutSeconds;
+        reqParams.cfn['AdditionalPlayerCount'] = obj.data.AdditionalPlayerCount;
+        reqParams.cfn['BackfillMode'] = obj.data.BackfillMode;
+        reqParams.cfn['CustomEventData'] = obj.data.CustomEventData;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['GameProperties'] = obj.data.GameProperties;
+        reqParams.cfn['GameSessionData'] = obj.data.GameSessionData;
+        reqParams.cfn['GameSessionQueueArns'] = obj.data.GameSessionQueueArns;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['NotificationTarget'] = obj.data.NotificationTarget;
+        reqParams.cfn['RequestTimeoutSeconds'] = obj.data.RequestTimeoutSeconds;
+        reqParams.cfn['RuleSetName'] = obj.data.RuleSetName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::MatchmakingConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.matchmakingruleset") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['RuleSetBody'] = obj.data.RuleSetBody;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::MatchmakingRuleSet',
+            'options': reqParams
+        });
     } else {
         return false;
     }

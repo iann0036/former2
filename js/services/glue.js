@@ -910,7 +910,315 @@ async function updateDatatableAnalyticsGlue() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "glue.database") {
+        reqParams.cfn['DatabaseInput'] = {
+            'Name': obj.data.Name,
+            'Description': obj.data.Description,
+            'LocationUri': obj.data.LocationUri,
+            'Parameters': obj.data.Parameters
+        };
+        reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Database',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.table") {
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+        reqParams.cfn['TableInput'] = {
+            'Owner': obj.data.Owner,
+            'ViewOriginalText': obj.data.ViewOriginalText,
+            'Description': obj.data.Description,
+            'TableType': obj.data.TableType,
+            'Parameters': obj.data.Parameters,
+            'ViewExpandedText': obj.data.ViewExpandedText,
+            'StorageDescriptor': obj.data.StorageDescriptor,
+            'PartitionKeys': obj.data.PartitionKeys,
+            'Retention': obj.data.Retention,
+            'Name': obj.data.Name
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Table',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.partition") {
+        reqParams.cfn['TableName'] = obj.data.TableName;
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+        reqParams.cfn['PartitionInput'] = {
+            'Parameters': obj.data.Parameters,
+            'StorageDescriptor': obj.data.StorageDescriptor
+        };
+
+        /*
+        TODO:
+        PartitionInput:
+            Values
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Partition',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.crawler") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Role'] = obj.data.Role;
+        if (obj.data.Targets) {
+            reqParams.cfn['Targets'] = {
+                'S3Targets': obj.data.Targets.S3Targets,
+                'JdbcTargets': obj.data.Targets.JdbcTargets
+            };
+        }
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Classifiers'] = obj.data.Classifiers;
+        reqParams.cfn['SchemaChangePolicy'] = obj.data.SchemaChangePolicy;
+        reqParams.cfn['TablePrefix'] = obj.data.TablePrefix;
+        if (obj.data.Schedule) {
+            reqParams.cfn['Schedule'] = {
+                'ScheduleExpression': obj.data.Schedule.ScheduleExpression
+            };
+        }
+        reqParams.cfn['Configuration'] = obj.data.Configuration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Crawler',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.classifier") {
+        if (obj.data.GrokClassifier) {
+            reqParams.cfn['GrokClassifier'] = {
+                'CustomPatterns': obj.data.GrokClassifier.CustomPatterns,
+                'GrokPattern': obj.data.GrokClassifier.GrokPattern,
+                'Classification': obj.data.GrokClassifier.Classification,
+                'Name': obj.data.GrokClassifier.Name
+            };
+        }
+        if (obj.data.XMLClassifier) {
+            reqParams.cfn['XMLClassifier'] = {
+                'RowTag': obj.data.XMLClassifier.RowTag,
+                'Classification': obj.data.XMLClassifier.Classification,
+                'Name': obj.data.XMLClassifier.Name
+            };
+        }
+        if (obj.data.JsonClassifier) {
+            reqParams.cfn['JsonClassifier'] = {
+                'JsonPath': obj.data.JsonClassifier.JsonPath,
+                'Name': obj.data.JsonClassifier.Name
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Classifier',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.job") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['LogUri'] = obj.data.LogUri;
+        reqParams.cfn['Role'] = obj.data.Role;
+        reqParams.cfn['ExecutionProperty'] = obj.data.ExecutionProperty;
+        reqParams.cfn['Command'] = obj.data.Command;
+        reqParams.cfn['DefaultArguments'] = obj.data.DefaultArguments;
+        reqParams.cfn['Connections'] = obj.data.Connections;
+        reqParams.cfn['MaxRetries'] = obj.data.MaxRetries;
+        reqParams.cfn['AllocatedCapacity'] = obj.data.AllocatedCapacity;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Job',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.trigger") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Schedule'] = obj.data.Schedule;
+        if (obj.data.actions) {
+            reqParams.cfn['Actions'] = [];
+            obj.data.actions.forEach(action => {
+                reqParams.cfn['Actions'].push({
+                    'JobName': action.JobName,
+                    'Arguments': action.Arguments
+                });
+            });
+        }
+        if (obj.data.Predicate) {
+            var conditions = null;
+            if (obj.data.Predicate.Conditions) {
+                conditions = [];
+                obj.data.Predicate.Conditions.forEach(condition => {
+                    if (condition.State == "SUCCEEDED") {
+                        conditions.push({
+                            'LogicalOperator': condition.LogicalOperator,
+                            'JobName': condition.JobName,
+                            'State': 'SUCCEEDED'
+                            //'State': condition.State
+                        });
+                    }
+                });
+            }
+            reqParams.cfn['Predicate'] = {
+                'Logical': obj.data.Predicate.Logical,
+                'Conditions': conditions
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Trigger',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.connection") {
+        reqParams.cfn['ConnectionInput'] = {
+            'Description': obj.data.Description,
+            'ConnectionType': obj.data.ConnectionType,
+            'MatchCriteria': obj.data.MatchCriteria,
+            'PhysicalConnectionRequirements': obj.data.PhysicalConnectionRequirements,
+            'ConnectionProperties': obj.data.ConnectionProperties,
+            'Name': obj.data.Name
+        };
+        reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Connection',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.devendpoint") {
+        reqParams.cfn['EndpointName'] = obj.data.EndpointName;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.cfn['NumberOfNodes'] = obj.data.NumberOfNodes;
+        reqParams.cfn['ExtraPythonLibsS3Path'] = obj.data.ExtraPythonLibsS3Path;
+        reqParams.cfn['ExtraJarsS3Path'] = obj.data.ExtraJarsS3Path;
+        reqParams.cfn['PublicKey'] = obj.data.PublicKey;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::DevEndpoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.securityconfiguration") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.EncryptionConfiguration) {
+            reqParams.cfn['EncryptionConfiguration'] = {
+                'CloudWatchEncryption': obj.data.CloudWatchEncryption,
+                'JobBookmarksEncryption': obj.data.JobBookmarksEncryption,
+                'S3Encryptions': obj.data.S3Encryption
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::SecurityConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.datacatalogencryptionsettings") {
+        reqParams.cfn['CatalogId'] = "!Ref \"AWS::AccountId\"";
+        if (obj.data.DataCatalogEncryptionSettings) {
+            var connectionpasswordencryption = null;
+            if (obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption) {
+                connectionpasswordencryption = {
+                    'ReturnConnectionPasswordEncrypted': obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption.ReturnConnectionPasswordEncrypted,
+                    'KmsKeyId': obj.data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption.AwsKmsKeyId
+                };
+            }
+            reqParams.cfn['DataCatalogEncryptionSettings'] = {
+                'EncryptionAtRest': obj.data.DataCatalogEncryptionSettings.EncryptionAtRest,
+                'ConnectionPasswordEncryption': connectionpasswordencryption
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::DataCatalogEncryptionSettings',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.mltransform") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        if (obj.data.InputRecordTables) {
+            reqParams.cfn['InputRecordTables'] = {
+                'GlueTables': obj.data.InputRecordTables
+            };
+        }
+        reqParams.cfn['MaxCapacity'] = obj.data.MaxCapacity;
+        reqParams.cfn['MaxRetries'] = obj.data.MaxRetries;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['NumberOfWorkers'] = obj.data.NumberOfWorkers;
+        reqParams.cfn['Role'] = obj.data.Role;
+        reqParams.cfn['Timeout'] = obj.data.Timeout;
+        reqParams.cfn['TransformParameters'] = obj.data.Parameters;
+        reqParams.cfn['WorkerType'] = obj.data.WorkerType;
+        reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::MLTransform',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.workflow") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DefaultRunProperties'] = obj.data.DefaultRunProperties;
+
+        /*
+        TODO:
+        Tags: Json
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Workflow',
+            'options': reqParams
+        });
     } else {
         return false;
     }

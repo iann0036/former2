@@ -669,7 +669,178 @@ async function updateDatatableMachineLearningSageMaker() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "sagemaker.model") {
+        reqParams.cfn['ModelName'] = obj.data.ModelName;
+        if (obj.data.PrimaryContainer) {
+            reqParams.cfn['PrimaryContainer'] = {
+                'ContainerHostname': obj.data.PrimaryContainer.ContainerHostname,
+                'Environment': obj.data.PrimaryContainer.Environment,
+                'ModelDataUrl': obj.data.PrimaryContainer.ModelDataUrl,
+                'Image': obj.data.PrimaryContainer.Image
+            };
+        }
+        if (obj.data.Containers) {
+            reqParams.cfn['Containers'] = [];
+            obj.data.Containers.forEach(container => {
+                reqParams.cfn['Containers'] = {
+                    'ContainerHostname': container.ContainerHostname,
+                    'Environment': container.Environment,
+                    'ModelDataUrl': container.ModelDataUrl,
+                    'Image': container.Image
+                };
+            });
+        }
+        reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+        reqParams.cfn['VpcConfig'] = obj.data.VpcConfig;
+
+        /*
+        TODO:
+        Tags: 
+            - Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Model',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.endpoint") {
+        reqParams.cfn['EndpointName'] = obj.data.EndpointName;
+        reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Endpoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.endpointconfig") {
+        reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        if (obj.data.ProductionVariants) {
+            reqParams.cfn['ProductionVariants'] = [];
+            obj.data.ProductionVariants.forEach(productionVariant => {
+                reqParams.cfn['ProductionVariants'].push({
+                    'VariantName': productionVariant.VariantName,
+                    'ModelName': productionVariant.ModelName,
+                    'InitialInstanceCount': productionVariant.InitialInstanceCount,
+                    'InstanceType': productionVariant.InstanceType,
+                    'InitialVariantWeight': productionVariant.InitialVariantWeight
+                });
+            });
+        }
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::EndpointConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.notebookinstance") {
+        reqParams.cfn['NotebookInstanceName'] = obj.data.NotebookInstanceName;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroups;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['LifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+        reqParams.cfn['DirectInternetAccess'] = obj.data.DirectInternetAccess;
+        reqParams.cfn['VolumeSizeInGB'] = obj.data.VolumeSizeInGB;
+        reqParams.cfn['RootAccess'] = obj.data.RootAccess;
+
+        /*
+        TODO:
+        Tags: 
+            - Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::NotebookInstance',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.notebookinstancelifecycleconfig") {
+        reqParams.cfn['NotebookInstanceLifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+        reqParams.cfn['OnCreate'] = obj.data.OnCreate;
+        reqParams.cfn['OnStart'] = obj.data.OnStart;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::NotebookInstanceLifecycleConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.coderepository") {
+        reqParams.cfn['CodeRepositoryName'] = obj.data.CodeRepositoryName;
+        reqParams.cfn['Definition'] = {
+            'RepositoryUrl': obj.data.GitConfig.RepositoryUrl,
+            'Branch': obj.data.GitConfig.Branch,
+            'SecretArn': obj.data.GitConfig.SecretArn
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::CodeRepository',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.workteam") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['WorkteamName'] = obj.data.WorkteamName;
+        if (obj.data.MemberDefinitions) {
+            reqParams.cfn['MemberDefinitions'] = [];
+            obj.data.MemberDefinitions.forEach(memberdefinition => {
+                reqParams.cfn['MemberDefinitions'].push({
+                    'CognitoMemberDefinition': {
+                        'CognitoClientId': memberdefinition.CognitoMemberDefinition.ClientId,
+                        'CognitoUserGroup': memberdefinition.CognitoMemberDefinition.UserGroup,
+                        'CognitoUserPool': memberdefinition.CognitoMemberDefinition.UserPool
+                    }
+                });
+            });
+        }
+        reqParams.cfn['NotificationConfiguration'] = obj.data.NotificationConfiguration;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Workteam',
+            'options': reqParams
+        });
     } else {
         return false;
     }

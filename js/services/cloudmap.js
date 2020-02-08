@@ -398,7 +398,118 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "servicediscovery.httpnamespace") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicediscovery', obj.id),
+            'region': obj.region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::HttpNamespace',
+            'terraformType': 'aws_service_discovery_http_namespace',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicediscovery.privatednsnamespace") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+
+        /*
+        TODO:
+        Vpc
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicediscovery', obj.id),
+            'region': obj.region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::PrivateDnsNamespace',
+            'terraformType': 'aws_service_discovery_private_dns_namespace',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicediscovery.publicdnsnamespace") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicediscovery', obj.id),
+            'region': obj.region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::PublicDnsNamespace',
+            'terraformType': 'aws_service_discovery_public_dns_namespace',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicediscovery.service") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['NamespaceId'] = obj.data.NamespaceId;
+        if (obj.data.DnsConfig) {
+            var tfdnsrecords = [];
+            obj.data.DnsConfig.DnsRecords.forEach(dnsrecord => {
+                tfdnsrecords.push({
+                    'ttl': dnsrecord.TTL,
+                    'type': dnsrecord.Type
+                });
+            });
+            reqParams.cfn['DnsConfig'] = {
+                'DnsRecords': obj.data.DnsConfig.DnsRecords,
+                'NamespaceId': obj.data.DnsConfig.NamespaceId,
+                'RoutingPolicy': obj.data.DnsConfig.RoutingPolicy
+            };
+            reqParams.tf['dns_config'] = {
+                'dns_records': tfdnsrecords,
+                'namespace_id': obj.data.DnsConfig.NamespaceId,
+                'routing_policy': obj.data.DnsConfig.RoutingPolicy
+            };
+        }
+        reqParams.cfn['HealthCheckConfig'] = obj.data.HealthCheckConfig;
+        if (obj.data.HealthCheckConfig) {
+            reqParams.tf['health_check_config'] = {
+                'failure_threshold': obj.data.HealthCheckConfig.FailureThreshold,
+                'resource_path': obj.data.HealthCheckConfig.ResourcePath,
+                'type': obj.data.HealthCheckConfig.Type
+            };
+        }
+        reqParams.cfn['HealthCheckCustomConfig'] = obj.data.HealthCheckCustomConfig;
+        if (obj.data.HealthCheckCustomConfig) {
+            reqParams.tf['health_check_custom_config'] = {
+                'failure_threshold': obj.data.HealthCheckCustomConfig.FailureThreshold
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicediscovery', obj.id),
+            'region': obj.region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::Service',
+            'terraformType': 'aws_service_discovery_service',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicediscovery.instance") {
+        reqParams.cfn['InstanceId'] = obj.data.Id;
+        reqParams.cfn['InstanceAttributes'] = obj.data.Attributes;
+        reqParams.cfn['ServiceId'] = obj.data.ServiceId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicediscovery', obj.id),
+            'region': obj.region,
+            'service': 'servicediscovery',
+            'type': 'AWS::ServiceDiscovery::Instance',
+            'options': reqParams
+        });
     } else {
         return false;
     }

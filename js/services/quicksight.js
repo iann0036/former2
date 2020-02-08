@@ -84,7 +84,20 @@ async function updateDatatableAnalyticsQuickSight() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "quicksight.group") {
+        reqParams.tf['group_name'] = obj.data.GroupName;
+        reqParams.tf['aws_account_id'] = obj.data.AccountId;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.tf['namespace'] = obj.data.Namespace;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('quicksight', obj.id),
+            'region': obj.region,
+            'service': 'quicksight',
+            'terraformType': 'aws_quicksight_group',
+            'options': reqParams
+        });
     } else {
         return false;
     }

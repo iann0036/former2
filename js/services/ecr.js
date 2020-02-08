@@ -95,7 +95,70 @@ async function updateDatatableComputeECR() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "ecr.repository") {
+        reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
+        reqParams.tf['name'] = obj.data.repositoryName;
+        reqParams.cfn['LifecyclePolicy'] = {
+            'LifecyclePolicyText': obj.data.lifecyclePolicyText,
+            'RegistryId': obj.data.registryId
+        };
+        reqParams.cfn['RepositoryPolicyText'] = obj.data.policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ecr', obj.id),
+            'region': obj.region,
+            'service': 'ecr',
+            'type': 'AWS::ECR::Repository',
+            'terraformType': 'aws_ecr_repository',
+            'options': reqParams
+        });
+
+        if (obj.data.policy) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.tf['repository'] = obj.data.repositoryName;
+            reqParams.tf['policy'] = obj.data.policy;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('ecr', obj.id),
+                'region': obj.region,
+                'service': 'ecr',
+                'terraformType': 'aws_ecr_repository_policy',
+                'options': reqParams
+            });
+        }
+
+        if (obj.data.lifecyclePolicyText) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.tf['repository'] = obj.data.repositoryName;
+            reqParams.tf['policy'] = obj.data.lifecyclePolicyText;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('ecr', obj.id),
+                'region': obj.region,
+                'service': 'ecr',
+                'terraformType': 'aws_ecr_lifecycle_policy',
+                'options': reqParams
+            });
+        }
     } else {
         return false;
     }

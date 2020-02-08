@@ -152,7 +152,35 @@ async function updateDatatableMediaServicesMediaStore() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "mediastore.container") {
+        reqParams.cfn['ContainerName'] = obj.data.Container.Name;
+        reqParams.tf['name'] = obj.data.Container.Name;
+        reqParams.cfn['AccessLoggingEnabled'] = obj.data.Container.AccessLoggingEnabled;
+        reqParams.cfn['CorsPolicy'] = obj.data.CorsPolicy;
+        reqParams.cfn['LifecyclePolicy'] = obj.data.LifecyclePolicy;
+        reqParams.cfn['Policy'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediastore', obj.id),
+            'region': obj.region,
+            'service': 'mediastore',
+            'type': 'AWS::MediaStore::Container',
+            'terraformType': 'aws_media_store_container',
+            'options': reqParams
+        });
+    } else if (obj.type == "mediastore.containerpolicy") {
+        reqParams.tf['container_name'] = obj.data.ContainerName;
+        reqParams.tf['policy'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediastore', obj.id),
+            'region': obj.region,
+            'service': 'mediastore',
+            'terraformType': 'aws_media_store_container_policy',
+            'options': reqParams
+        });
     } else {
         return false;
     }

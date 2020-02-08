@@ -402,7 +402,13 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         await Promise.all(data.ResolverEndpoints.map(resolverEndpoint => {
             return sdkcall("Route53Resolver", "getResolverEndpoint", {
                 ResolverEndpointId: resolverEndpoint.Id
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                await sdkcall("Route53Resolver", "listResolverEndpointIpAddresses", {
+                    ResolverEndpointId: resolverEndpoint.Id
+                }, true).then(async (ipaddressdata) => {
+                    data.ResolverEndpoint['IpAddresses'] = ipaddressdata.IpAddresses;
+                }).catch(() => { });
+
                 $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('append', [{
                     f2id: data.ResolverEndpoint.Arn,
                     f2type: 'route53.resolverendpoint',
@@ -643,6 +649,90 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.Id
             }
+        });
+    } else if (obj.type == "route53.resolverendpoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.tf['security_group_ids'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['Direction'] = obj.data.Direction;
+        reqParams.tf['direction'] = obj.data.Direction;
+        if (obj.data.IpAddresses) {
+            reqParams.cfn['IpAddresses'] = [];
+            obj.data.IpAddresses.forEach(ipaddress => {
+                reqParams.cfn['IpAddresses'].push({
+                    'Ip': ipaddress.Ip,
+                    'SubnetId': ipaddress.SubnetId
+                });
+            });
+        }
+
+        /*
+        TODO:
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverEndpoint',
+            'terraformType': 'aws_route53_resolver_endpoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverrule") {
+        reqParams.cfn['DomainName'] = obj.data.DomainName;
+        reqParams.tf['domain_name'] = obj.data.DomainName;
+        reqParams.cfn['RuleType'] = obj.data.RuleType;
+        reqParams.tf['rule_type'] = obj.data.RuleType;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['TargetIps'] = obj.data.TargetIps;
+        if (obj.data.TargetIps) {
+            reqParams.tf['target_ip'] = [];
+            obj.data.TargetIps.forEach(targetip => {
+                reqParams.tf['target_ip'].push({
+                    'ip': targetip.Ip,
+                    'port': targetip.Port
+                });
+            });
+        }
+        reqParams.cfn['ResolverEndpointId'] = obj.data.ResolverEndpointId;
+        reqParams.tf['resolver_endpoint_id'] = obj.data.ResolverEndpointId;
+
+        /*
+        TODO:
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverRule',
+            'terraformType': 'aws_route53_resolver_rule',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverruleassociation") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['ResolverRuleId'] = obj.data.ResolverRuleId;
+        reqParams.tf['resolver_rule_id'] = obj.data.ResolverRuleId;
+        reqParams.cfn['VPCId'] = obj.data.VPCId;
+        reqParams.tf['vpc_id'] = obj.data.VPCId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverRuleAssociation',
+            'terraformType': 'aws_route53_resolver_rule_association',
+            'options': reqParams
         });
     } else {
         return false;

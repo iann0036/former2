@@ -609,6 +609,118 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "dynamodb.acceleratorcluster") {
+        reqParams.cfn['ClusterName'] = obj.data.ClusterName;
+        reqParams.tf['cluster_name'] = obj.data.ClusterName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['NodeType'] = obj.data.NodeType;
+        reqParams.tf['node_type'] = obj.data.NodeType;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        if (obj.data.NotificationConfiguration) {
+            reqParams.cfn['NotificationTopicARN'] = obj.data.NotificationConfiguration.TopicArn;
+            reqParams.tf['notification_topic_arn'] = obj.data.NotificationConfiguration.TopicArn;
+        }
+        reqParams.cfn['SubnetGroupName'] = obj.data.SubnetGroup;
+        reqParams.tf['subnet_group_name'] = obj.data.SubnetGroup;
+        if (obj.data.SecurityGroups) {
+            reqParams.cfn['SecurityGroupIds'] = [];
+            reqParams.tf['security_group_ids'] = [];
+            obj.data.SecurityGroups.forEach(securityGroup => {
+                reqParams.cfn['SecurityGroupIds'].push(securityGroup.SecurityGroupIdentifier);
+                reqParams.tf['security_group_ids'].push(securityGroup.SecurityGroupIdentifier);
+            });
+        }
+        reqParams.cfn['IAMRoleARN'] = obj.data.IamRoleArn;
+        reqParams.tf['iam_role_arn'] = obj.data.IamRoleArn;
+        if (obj.data.ParameterGroup) {
+            reqParams.cfn['ParameterGroupName'] = obj.data.ParameterGroup.ParameterGroupName;
+            reqParams.tf['parameter_group_name'] = obj.data.ParameterGroup.ParameterGroupName;
+        }
+        if (obj.data.SSEDescription) {
+            reqParams.cfn['SSESpecification'] = {
+                'SSEEnabled': (obj.data.SSEDescription.Status == "ENABLED")
+            };
+            reqParams.tf['server_side_encryption'] = {
+                'enabled': (obj.data.SSEDescription.Status == "ENABLED")
+            };
+        }
+        if (obj.data.Nodes) {
+            reqParams.cfn['AvailabilityZones'] = [];
+            reqParams.tf['availability_zones '] = [];
+            obj.data.Nodes.forEach(node => {
+                if (!reqParams.cfn['AvailabilityZones'].includes(node.AvailabilityZone)) {
+                    reqParams.cfn['AvailabilityZones'].push(node.AvailabilityZone);
+                    reqParams.tf['availability_zones '].push(node.AvailabilityZone);
+                }
+            });
+        }
+
+        /*
+        TODO:
+        ReplicationFactor: Integer
+        Tags: { String:String, ... }
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dynamodb', obj.id),
+            'region': obj.region,
+            'service': 'dynamodb',
+            'type': 'AWS::DAX::Cluster',
+            'terraformType': 'aws_dax_cluster',
+            'options': reqParams
+        });
+    } else if (obj.type == "dynamodb.acceleratorparametergroup") {
+        reqParams.cfn['ParameterGroupName'] = obj.data.ParameterGroupName;
+        reqParams.tf['name'] = obj.data.ParameterGroupName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        if (obj.data.Parameters) {
+            reqParams.cfn['ParameterNameValues'] = {};
+            reqParams.tf['parameters'] = [];
+            obj.data.Parameters.forEach(parameter => {
+                reqParams.cfn['ParameterNameValues'][parameter.ParameterName] = parameter.ParameterValue;
+                reqParams.tf['parameters'].push({
+                    'name': parameter.ParameterName,
+                    'value': parameter.ParameterValue
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dynamodb', obj.id),
+            'region': obj.region,
+            'service': 'dynamodb',
+            'type': 'AWS::DAX::ParameterGroup',
+            'terraformType': 'aws_dax_parameter_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "dynamodb.acceleratorsubnetgroup") {
+        reqParams.cfn['SubnetGroupName'] = obj.data.SubnetGroupName;
+        reqParams.tf['name'] = obj.data.SubnetGroupName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        if (obj.data.Subnets) {
+            reqParams.cfn['SubnetIds'] = [];
+            reqParams.tf['subnet_ids'] = [];
+            obj.data.Subnets.forEach(subnet => {
+                reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dynamodb', obj.id),
+            'region': obj.region,
+            'service': 'dynamodb',
+            'type': 'AWS::DAX::SubnetGroup',
+            'terraformType': 'aws_dax_subnet_group',
+            'options': reqParams
+        });
     } else {
         return false;
     }

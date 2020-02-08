@@ -186,7 +186,60 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "inspector.resourcegroup") {
+        if (obj.data.tags) {
+            reqParams.cfn['ResourceGroupTags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['ResourceGroupTags'].push({
+                    'Key': tag.key,
+                    'Value': tag.value
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('inspector', obj.id),
+            'region': obj.region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::ResourceGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "inspector.assessmenttarget") {
+        reqParams.cfn['AssessmentTargetName'] = obj.data.name;
+        reqParams.cfn['ResourceGroupArn'] = obj.data.resourceGroupArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('inspector', obj.id),
+            'region': obj.region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::AssessmentTarget',
+            'options': reqParams
+        });
+    } else if (obj.type == "inspector.assessmenttemplate") {
+        reqParams.cfn['AssessmentTemplateName'] = obj.data.name;
+        reqParams.cfn['AssessmentTargetArn'] = obj.data.assessmentTargetArn;
+        reqParams.cfn['DurationInSeconds'] = obj.data.durationInSeconds;
+        reqParams.cfn['RulesPackageArns'] = obj.data.rulesPackageArns;
+        if (obj.data.userAttributesForFindings) {
+            reqParams.cfn['UserAttributesForFindings'] = [];
+            obj.data.userAttributesForFindings.forEach(userAttributesForFindings => {
+                reqParams.cfn['UserAttributesForFindings'].push({
+                    'Key': userAttributesForFindings.key,
+                    'Value': userAttributesForFindings.value
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('inspector', obj.id),
+            'region': obj.region,
+            'service': 'inspector',
+            'type': 'AWS::Inspector::AssessmentTemplate',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -175,7 +175,62 @@ async function updateDatatableStorageEFS() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "efs.filesystem") {
+        reqParams.cfn['PerformanceMode'] = obj.data.PerformanceMode;
+        reqParams.tf['performance_mode'] = obj.data.PerformanceMode;
+        reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+        reqParams.tf['encrypted'] = obj.data.Encrypted;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['ThroughputMode'] = obj.data.ThroughputMode;
+        reqParams.tf['throughput_mode'] = obj.data.ThroughputMode;
+        reqParams.cfn['ProvisionedThroughputInMibps'] = obj.data.ProvisionedThroughputInMibps;
+        reqParams.tf['provisioned_throughput_in_mibps'] = obj.data.ProvisionedThroughputInMibps;
+        reqParams.cfn['FileSystemTags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('efs', obj.id),
+            'region': obj.region,
+            'service': 'efs',
+            'type': 'AWS::EFS::FileSystem',
+            'terraformType': 'aws_efs_file_system',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.FileSystemId
+            }
+        });
+    } else if (obj.type == "efs.mounttarget") {
+        reqParams.cfn['FileSystemId'] = obj.data.FileSystemId;
+        reqParams.tf['file_system_id'] = obj.data.FileSystemId;
+        reqParams.cfn['IpAddress'] = obj.data.IpAddress;
+        reqParams.tf['ip_address'] = obj.data.IpAddress;
+        reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+        reqParams.tf['security_groups'] = obj.data.SecurityGroups;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('efs', obj.id),
+            'region': obj.region,
+            'service': 'efs',
+            'type': 'AWS::EFS::MountTarget',
+            'terraformType': 'aws_efs_mount_target',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.MountTargetId,
+                'GetAtt': {
+                    'IpAddress': obj.data.IpAddress
+                }
+            }
+        });
     } else {
         return false;
     }

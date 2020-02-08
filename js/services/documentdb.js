@@ -312,7 +312,139 @@ async function updateDatatableDatabaseDocumentDB() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "documentdb.cluster") {
+        reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+        reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
+        reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+        reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+        reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+        reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
+        reqParams.cfn['DBClusterParameterGroupName'] = obj.data.DBClusterParameterGroup;
+        reqParams.tf['db_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
+        reqParams.cfn['DBSubnetGroupName'] = obj.data.DBClusterParameterGroupName;
+        reqParams.tf['db_subnet_group_name'] = obj.data.DBClusterParameterGroupName;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.tf['engine_version'] = obj.data.EngineVersion;
+        reqParams.cfn['Port'] = obj.data.Port;
+        reqParams.tf['port'] = obj.data.Port;
+        reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+        reqParams.tf['master_username'] = obj.data.MasterUsername;
+        reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+        reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        if (obj.data.VpcSecurityGroups) {
+            reqParams.cfn['VpcSecurityGroupIds'] = [];
+            reqParams.tf['vpc_security_group_ids'] = [];
+            obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
+                reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup['VpcSecurityGroupId']);
+                reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup['VpcSecurityGroupId']);
+            });
+        }
+        reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+        reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+
+        /*
+        TODO:
+        MasterUserPassword: String
+        SnapshotIdentifier: String
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('docdb', obj.id),
+            'region': obj.region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBCluster',
+            'terraformType': 'aws_docdb_cluster',
+            'options': reqParams
+        });
+    } else if (obj.type == "documentdb.instance") {
+        reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
+        reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
+        reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
+        reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+        reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
+
+        /*
+        TODO:
+        Tags:
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('docdb', obj.id),
+            'region': obj.region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBInstance',
+            'terraformType': 'aws_docdb_cluster_instance',
+            'options': reqParams
+        });
+    } else if (obj.type == "documentdb.clusterparametergroup") {
+        reqParams.cfn['Name'] = obj.data.DBClusterParameterGroupName;
+        reqParams.tf['name'] = obj.data.DBClusterParameterGroupName;
+        reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+        reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+
+        /*
+        TODO:
+        Parameters: Json
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('docdb', obj.id),
+            'region': obj.region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBClusterParameterGroup',
+            'terraformType': 'aws_docdb_cluster_parameter_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "documentdb.subnetgroup") {
+        reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+        reqParams.tf['name'] = obj.data.DBSubnetGroupName;
+        reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+        reqParams.tf['description'] = obj.data.DBSubnetGroupDescription;
+        if (obj.data.Subnets) {
+            reqParams.cfn['SubnetIds'] = [];
+            reqParams.tf['subnet_ids'] = [];
+            obj.data.Subnets.forEach(subnet => {
+                reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+                reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
+            });
+        }
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('docdb', obj.id),
+            'region': obj.region,
+            'service': 'docdb',
+            'type': 'AWS::DocDB::DBSubnetGroup',
+            'terraformType': 'aws_docdb_subnet_group',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -152,7 +152,41 @@ async function updateDatatableStorageGlacier() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "glacier.vault") {
+        reqParams.tf['name'] = obj.data.VaultName;
+        reqParams.tf['access_policy'] = obj.data.AccessPolicy;
+        if (obj.data.NotificationConfig) {
+            reqParams.tf['notification'] = {
+                'events': obj.data.NotificationConfig.Events,
+                'sns_topic': obj.data.NotificationConfig.SNSTopic
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glacier', obj.id),
+            'region': obj.region,
+            'service': 'glacier',
+            'terraformType': 'aws_glacier_vault',
+            'options': reqParams
+        });
+    } else if (obj.type == "glacier.vaultlock") {
+        var completelock = false;
+        if (obj.data.State == "Locked") {
+            completelock = true;
+        }
+        reqParams.tf['vault_name'] = obj.data.VaultName;
+        reqParams.tf['complete_lock'] = completelock;
+        reqParams.tf['policy'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glacier', obj.id),
+            'region': obj.region,
+            'service': 'glacier',
+            'terraformType': 'aws_glacier_vault_lock',
+            'options': reqParams
+        });
     } else {
         return false;
     }

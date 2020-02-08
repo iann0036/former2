@@ -917,6 +917,120 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "iam.accesskey") {
+        reqParams.cfn['Status'] = obj.data.Status;
+        reqParams.tf['status'] = obj.data.Status;
+        reqParams.cfn['UserName'] = obj.data.UserName;
+        reqParams.tf['user'] = obj.data.UserName;
+
+        /*
+        SKIPPED:
+        Serial
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::AccessKey',
+            'terraformType': 'aws_iam_access_key',
+            'options': reqParams
+        });
+    } else if (obj.type == "iam.policy") {
+        var terraformType = null;
+
+        reqParams.cfn['PolicyDocument'] = unescape(obj.data.document);
+        reqParams.tf['policy'] = unescape(obj.data.document);
+        if (obj.data.type == "user") {
+            reqParams.cfn['Users'] = [obj.data.username];
+            terraformType = "aws_iam_user_policy";
+            reqParams.tf['user'] = obj.data.username;
+        } else if (obj.data.type == "group") {
+            reqParams.cfn['Groups'] = [obj.data.groupname];
+            terraformType = "aws_iam_group_policy";
+            reqParams.tf['group'] = obj.data.groupname;
+        } else if (obj.data.type == "role") {
+            reqParams.cfn['Roles'] = [obj.data.rolename];
+            terraformType = "aws_iam_role_policy";
+            reqParams.tf['role'] = obj.data.rolename;
+        }
+        reqParams.cfn['PolicyName'] = obj.data.policy.PolicyName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::Policy',
+            'terraformType': terraformType,
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.policy.PolicyName
+            }
+        });
+    } else if (obj.type == "iam.servicelinkedrole") {
+        reqParams.cfn['AWSServiceName'] = obj.data.Path.split("/")[2];
+        reqParams.tf['aws_service_name'] = obj.data.Path.split("/")[2];
+        if (obj.data.RoleName.includes("_") && !obj.data.Path.endsWith(".application-autoscaling.amazonaws.com/") && !obj.data.Path.endsWith(".autoscaling-plans.amazonaws.com/")) {
+            var suffixparts = obj.data.RoleName.split("_");
+            suffixparts.shift();
+            reqParams.cfn['CustomSuffix'] = suffixparts.join("_");
+            reqParams.tf['custom_suffix'] = suffixparts.join("_");
+        }
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::ServiceLinkedRole',
+            'terraformType': 'aws_iam_service_linked_role',
+            'options': reqParams
+        });
+    } else if (obj.type == "iam.accessanalyzer") {
+        reqParams.cfn['AnalyzerName'] = obj.data.name;
+        reqParams.cfn['Type'] = obj.data.type;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+        if (obj.data.archiveRules) {
+            reqParams.cfn['ArchiveRules'] = [];
+            obj.data.archiveRules.forEach(archiveRule => {
+                var filters = [];
+                Object.keys(archiveRule.filter).forEach(filterProp => {
+                    filters.push({
+                        'Contains': archiveRule.filter[filterProp].contains,
+                        'Eq': archiveRule.filter[filterProp].eq,
+                        'Exists': archiveRule.filter[filterProp].exists,
+                        'Neq': archiveRule.filter[filterProp].neq,
+                        'Property': filterProp
+                    });
+                });
+
+                reqParams.cfn['ArchiveRules'].push({
+                    'Filters': filters,
+                    'RuleName': archiveRule.ruleName
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('accessanalyzer', obj.id),
+            'region': obj.region,
+            'service': 'accessanalyzer',
+            'type': 'AWS::AccessAnalyzer::Analyzer',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -372,6 +372,69 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "autoscaling.scalingplan") {
+        reqParams.cfn['ApplicationSource'] = obj.data.ApplicationSource;
+        reqParams.cfn['ScalingInstructions'] = [];
+        obj.data.ScalingInstructions.forEach(scalingInstruction => {
+            reqParams.cfn['ScalingInstructions'].push({
+                'ServiceNamespace': scalingInstruction.ServiceNamespace,
+                'ResourceId': scalingInstruction.ResourceId,
+                'ScalableDimension': scalingInstruction.ScalableDimension,
+                'MinCapacity': scalingInstruction.MinCapacity,
+                'MaxCapacity': scalingInstruction.MaxCapacity,
+                'TargetTrackingConfigurations': scalingInstruction.TargetTrackingConfigurations,
+                'PredefinedLoadMetricSpecification': scalingInstruction.PredefinedLoadMetricSpecification,
+                'CustomizedLoadMetricSpecification': scalingInstruction.CustomizedLoadMetricSpecification,
+                'ScheduledActionBufferTime': scalingInstruction.ScheduledActionBufferTime,
+                'PredictiveScalingMaxCapacityBehavior': scalingInstruction.PredictiveScalingMaxCapacityBehavior,
+                'PredictiveScalingMaxCapacityBuffer': scalingInstruction.PredictiveScalingMaxCapacityBuffer,
+                'PredictiveScalingMode': scalingInstruction.PredictiveScalingMode,
+                'ScalingPolicyUpdateBehavior': scalingInstruction.ScalingPolicyUpdateBehavior,
+                'DisableDynamicScaling': scalingInstruction.DisableDynamicScaling
+            });
+        });
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('autoscaling', obj.id),
+            'region': obj.region,
+            'service': 'autoscaling',
+            'type': 'AWS::AutoScalingPlans::ScalingPlan',
+            'options': reqParams
+        });
+    } else if (obj.type == "autoscaling.lifecyclehook") {
+        reqParams.cfn['LifecycleHookName'] = obj.data.LifecycleHookName;
+        reqParams.tf['name'] = obj.data.LifecycleHookName;
+        reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+        reqParams.tf['autoscaling_group_name'] = obj.data.AutoScalingGroupName;
+        reqParams.cfn['NotificationTargetARN'] = obj.data.NotificationTargetARN;
+        reqParams.tf['notification_target_arn'] = obj.data.NotificationTargetARN;
+        reqParams.cfn['NotificationMetadata'] = obj.data.NotificationMetadata;
+        reqParams.tf['notification_metadata'] = obj.data.NotificationMetadata;
+        reqParams.cfn['RoleARN'] = obj.data.RoleARN;
+        reqParams.tf['role_arn'] = obj.data.RoleARN;
+        reqParams.cfn['HeartbeatTimeout'] = obj.data.HeartbeatTimeout;
+        reqParams.tf['heartbeat_timeout'] = obj.data.HeartbeatTimeout;
+        reqParams.cfn['DefaultResult'] = obj.data.DefaultResult;
+        reqParams.tf['default_result'] = obj.data.DefaultResult;
+        reqParams.cfn['LifecycleTransition'] = obj.data.LifecycleTransition;
+        reqParams.tf['lifecycle_transition'] = obj.data.LifecycleTransition;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('autoscaling', obj.id),
+            'region': obj.region,
+            'service': 'autoscaling',
+            'type': 'AWS::AutoScaling::LifecycleHook',
+            'terraformType': 'aws_autoscaling_lifecycle_hook',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'AutoScalingGroupName': obj.data.AutoScalingGroupName,
+                    'LifecycleHookName': obj.data.LifecycleHookName
+                }
+            }
+        });
     } else {
         return false;
     }

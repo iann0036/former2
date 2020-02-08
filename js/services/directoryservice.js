@@ -112,7 +112,84 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "directoryservice.simplead") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['ShortName'] = obj.data.ShortName;
+        reqParams.tf['short_name'] = obj.data.ShortName;
+        reqParams.cfn['Size'] = obj.data.Size;
+        reqParams.tf['size'] = obj.data.Size;
+        if (obj.data.Alias && obj.data.Alias != obj.data.DirectoryId) {
+            reqParams.cfn['CreateAlias'] = true;
+            reqParams.tf['alias'] = obj.data.Alias;
+        }
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['EnableSso'] = obj.data.SsoEnabled;
+        reqParams.tf['enable_sso'] = obj.data.SsoEnabled;
+        if (obj.data.VpcSettings) {
+            reqParams.cfn['VpcSettings'] = {
+                'VpcId': obj.data.VpcSettings.VpcId,
+                'SubnetIds': obj.data.VpcSettings.SubnetIds
+            };
+            reqParams.tf['vpc_settings'] = {
+                'vpc_id': obj.data.VpcSettings.VpcId,
+                'subnet_ids': obj.data.VpcSettings.SubnetIds
+            };
+        }
+
+        /*
+        TODO:
+        Password: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directoryservice', obj.id),
+            'region': obj.region,
+            'service': 'directoryservice',
+            'type': 'AWS::DirectoryService::SimpleAD',
+            'terraformType': 'aws_directory_service_directory',
+            'options': reqParams
+        });
+    } else if (obj.type == "directoryservice.microsoftad") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['ShortName'] = obj.data.ShortName;
+        reqParams.tf['short_name'] = obj.data.ShortName;
+        reqParams.cfn['Edition'] = obj.data.Edition;
+        reqParams.tf['edition'] = obj.data.Edition;
+        if (obj.data.Alias && obj.data.Alias != obj.data.DirectoryId) {
+            reqParams.cfn['CreateAlias'] = true;
+            reqParams.tf['alias'] = obj.data.Alias;
+        }
+        reqParams.cfn['EnableSso'] = obj.data.SsoEnabled;
+        reqParams.tf['enable_sso'] = obj.data.SsoEnabled;
+        if (obj.data.VpcSettings) {
+            reqParams.cfn['VpcSettings'] = {
+                'VpcId': obj.data.VpcSettings.VpcId,
+                'SubnetIds': obj.data.VpcSettings.SubnetIds
+            };
+            reqParams.tf['vpc_settings'] = {
+                'vpc_id': obj.data.VpcSettings.VpcId,
+                'subnet_ids': obj.data.VpcSettings.SubnetIds
+            };
+        }
+
+        /*
+        TODO:
+        Password: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('directoryservice', obj.id),
+            'region': obj.region,
+            'service': 'directoryservice',
+            'type': 'AWS::DirectoryService::MicrosoftAD',
+            'terraformType': 'aws_directory_service_directory',
+            'options': reqParams
+        });
     } else {
         return false;
     }

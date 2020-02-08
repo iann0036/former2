@@ -112,7 +112,40 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "ram.resourceshare") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['AllowExternalPrincipals'] = obj.data.allowExternalPrincipals;
+        reqParams.tf['allow_external_principals'] = obj.data.allowExternalPrincipals;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['tags'] = {};
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag.key,
+                    'Value': tag.value
+                });
+                reqParams.tf['tags'][tag.key] = tag.value;
+            });
+        }
+        reqParams.cfn['Principals'] = obj.data.principals;
+        reqParams.cfn['ResourceArns'] = obj.data.resourceArns;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ram', obj.id),
+            'region': obj.region,
+            'service': 'ram',
+            'type': 'AWS::RAM::ResourceShare',
+            'terraformType': 'aws_ram_resource_share',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.name,
+                'GetAtt': {
+                    'Arn': obj.data.resourceShareArn
+                }
+            }
+        });
     } else {
         return false;
     }

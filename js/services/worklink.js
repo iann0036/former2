@@ -177,7 +177,40 @@ async function updateDatatableEndUserComputingWorkLink() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "worklink.fleet") {
+        reqParams.tf['name'] = obj.data.FleetName;
+        reqParams.tf['display_name'] = obj.data.DisplayName;
+        reqParams.tf['optimize_for_end_user_location '] = obj.data.OptimizeForEndUserLocation;
+
+        /*
+        TODO:
+        network
+        identity_provider
+        device_ca_certificate
+        audit_stream_arn
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('worklink', obj.id),
+            'region': obj.region,
+            'service': 'worklink',
+            'terraformType': 'aws_worklink_fleet',
+            'options': reqParams
+        });
+    } else if (obj.type == "worklink.websitecertificateauthority") {
+        reqParams.tf['fleet_arn'] = obj.data.FleetArn;
+        reqParams.tf['certificate'] = obj.data.Certificate;
+        reqParams.tf['display_name '] = obj.data.DisplayName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('worklink', obj.id),
+            'region': obj.region,
+            'service': 'worklink',
+            'terraformType': 'aws_worklink_website_certificate_authority_association',
+            'options': reqParams
+        });
     } else {
         return false;
     }

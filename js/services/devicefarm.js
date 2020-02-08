@@ -77,7 +77,17 @@ async function updateDatatableMobileDeviceFarm() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "devicefarm.project") {
+        reqParams.tf['name'] = obj.data.name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('devicefarm', obj.id),
+            'region': obj.region,
+            'service': 'devicefarm',
+            'terraformType': 'aws_devicefarm_project',
+            'options': reqParams
+        });
     } else {
         return false;
     }

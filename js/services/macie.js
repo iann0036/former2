@@ -117,7 +117,38 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "macie.memberaccountassociation") {
+        reqParams.tf['member_account_id'] = obj.data.accountId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('macie', obj.id),
+            'region': obj.region,
+            'service': 'macie',
+            'terraformType': 'aws_macie_member_account_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "macie.s3bucketassociation") {
+        reqParams.tf['bucket_name'] = obj.data.bucketName;
+        reqParams.tf['prefix'] = obj.data.prefix;
+        reqParams.tf['classification_type'] = {
+            'continuous': obj.data.classificationType.continuous,
+            'one_time': obj.data.classificationType.oneTime
+        };
+
+        /*
+        SKIPPED:
+        member_account_id
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('macie', obj.id),
+            'region': obj.region,
+            'service': 'macie',
+            'terraformType': 'aws_macie_s3_bucket_association',
+            'options': reqParams
+        });
     } else {
         return false;
     }

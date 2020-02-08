@@ -150,7 +150,83 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "stepfunctions.statemachine") {
+        reqParams.cfn['StateMachineName'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['DefinitionString'] = obj.data.definition;
+        reqParams.tf['definition'] = obj.data.definition;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.tf['role_arn'] = obj.data.roleArn;
+        reqParams.cfn['StateMachineType'] = obj.data.type;
+        if (obj.data.loggingConfiguration) {
+            var destinations = null;
+            
+            if (obj.data.loggingConfiguration.destinations) {
+                destinations = [];
+                obj.data.loggingConfiguration.destinations.forEach(destination => {
+                    if (destination.cloudWatchLogsLogGroup) {
+                        destinations.push({
+                            'CloudWatchLogsLogGroup': {
+                                'LogGroupArn': destination.cloudWatchLogsLogGroup.logGroupArn
+                            }
+                        })
+                    }
+                });
+            }
+
+            reqParams.cfn['LoggingConfiguration'] = {
+                'Destinations': destinations,
+                'IncludeExecutionData': obj.data.loggingConfiguration.includeExecutionData,
+                'Level': obj.data.loggingConfiguration.level
+            };
+        }
+
+        /*
+        TODO:
+        Tags: 
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('stepfunctions', obj.id),
+            'region': obj.region,
+            'service': 'stepfunctions',
+            'type': 'AWS::StepFunctions::StateMachine',
+            'terraformType': 'aws_sfn_state_machine',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.stateMachineArn,
+                'GetAtt': {
+                    'Name': obj.data.name
+                }
+            }
+        });
+    } else if (obj.type == "stepfunctions.activity") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('stepfunctions', obj.id),
+            'region': obj.region,
+            'service': 'stepfunctions',
+            'type': 'AWS::StepFunctions::Activity',
+            'terraformType': 'aws_sfn_activity',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.activityArn,
+                'GetAtt': {
+                    'Name': obj.data.name
+                }
+            }
+        });
     } else {
         return false;
     }

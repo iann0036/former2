@@ -69,7 +69,18 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "securityhub.hub") {
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('securityhub', obj.id),
+            'region': obj.region,
+            'service': 'securityhub',
+            'type': 'AWS::SecurityHub::Hub',
+            'terraformType': 'aws_securityhub_account',
+            'options': reqParams
+        });
     } else {
         return false;
     }

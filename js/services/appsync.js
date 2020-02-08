@@ -506,7 +506,289 @@ async function updateDatatableMobileAppSync() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "appsync.resolver") {
+        reqParams.cfn['TypeName'] = obj.data.typeName;
+        reqParams.tf['type'] = obj.data.typeName;
+        reqParams.cfn['FieldName'] = obj.data.fieldName;
+        reqParams.tf['field'] = obj.data.fieldName;
+        reqParams.cfn['DataSourceName'] = obj.data.dataSourceName;
+        reqParams.tf['data_source'] = obj.data.dataSourceName;
+        reqParams.cfn['RequestMappingTemplate'] = obj.data.requestMappingTemplate;
+        reqParams.tf['request_template'] = obj.data.requestMappingTemplate;
+        reqParams.cfn['ResponseMappingTemplate'] = obj.data.responseMappingTemplate;
+        reqParams.tf['response_template'] = obj.data.responseMappingTemplate;
+        reqParams.cfn['Kind'] = obj.data.kind;
+        if (obj.data.pipelineConfig) {
+            reqParams.cfn['PipelineConfig'] = {
+                'Functions': obj.data.pipelineConfig.functions
+            };
+        }
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+        reqParams.tf['api_id'] = obj.data.apiId;
+        if (obj.data.cachingConfig) {
+            reqParams.cfn['CachingConfig'] = {
+                'Ttl': obj.data.cachingConfig.ttl,
+                'CachingKeys': obj.data.cachingConfig.cachingKeys
+            };
+        }
+        if (obj.data.syncConfig) {
+            var lambdaconflicthandlerconfig = null;
+            if (obj.data.syncConfig.lambdaConflictHandlerConfig) {
+                lambdaconflicthandlerconfig = {
+                    'LambdaConflictHandlerArn': obj.data.syncConfig.lambdaConflictHandlerConfig.lambdaConflictHandlerArn
+                };
+            }
+            reqParams.cfn['SyncConfig'] = {
+                'ConflictDetection': obj.data.syncConfig.conflictDetection,
+                'ConflictHandler': obj.data.syncConfig.conflictHandler,
+                'LambdaConflictHandlerConfig': lambdaconflicthandlerconfig
+            };
+        }
+
+        /*
+        TODO:
+        ResponseMappingTemplateS3Location: String
+        RequestMappingTemplateS3Location: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::Resolver',
+            'terraformType': 'aws_appsync_resolver',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.graphqlschema") {
+        var definition = String.fromCharCode.apply(null, obj.data.schema.data);
+        reqParams.cfn['Definition'] = definition;
+        reqParams.tf['definition'] = definition;
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+        reqParams.tf['api_id'] = obj.data.apiId;
+
+        /*
+        SKIPPED
+        DefinitionS3Location
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::GraphQLSchema',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.datasource") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.tf['description'] = obj.data.description;
+        reqParams.cfn['Type'] = obj.data.type;
+        reqParams.tf['type'] = obj.data.type;
+        reqParams.cfn['ServiceRoleArn'] = obj.data.serviceRoleArn;
+        reqParams.tf['service_role_arn'] = obj.data.serviceRoleArn;
+        if (obj.data.dynamodbConfig) {
+            var deltasyncconfig = null;
+            if (obj.data.dynamodbConfig.deltaSyncConfig) {
+                deltasyncconfig = {
+                    'BaseTableTTL': obj.data.dynamodbConfig.deltaSyncConfig.baseTableTTL,
+                    'DeltaSyncTableName': obj.data.dynamodbConfig.deltaSyncConfig.deltaSyncTableName,
+                    'DeltaSyncTableTTL': obj.data.dynamodbConfig.deltaSyncConfig.deltaSyncTableTTL
+                };
+            }
+            reqParams.cfn['DynamoDBConfig'] = {
+                'TableName': obj.data.dynamodbConfig.tableName,
+                'AwsRegion': obj.data.dynamodbConfig.awsRegion,
+                'UseCallerCredentials': obj.data.dynamodbConfig.useCallerCredentials,
+                'Versioned': obj.data.dynamodbConfig.versioned,
+                'DeltaSyncConfig': deltasyncconfig
+            };
+            reqParams.tf['dynamodb_config'] = {
+                'table_name': obj.data.dynamodbConfig.tableName,
+                'region': obj.data.dynamodbConfig.awsRegion,
+                'use_caller_credentials': obj.data.dynamodbConfig.useCallerCredentials
+            };
+        }
+        if (obj.data.lambdaConfig) {
+            reqParams.cfn['LambdaConfig'] = {
+                'LambdaFunctionArn': obj.data.lambdaConfig.lambdaFunctionArn
+            };
+            reqParams.tf['lambda_config'] = {
+                'function_arn': obj.data.lambdaConfig.lambdaFunctionArn
+            };
+        }
+        if (obj.data.elasticsearchConfig) {
+            reqParams.cfn['ElasticsearchConfig'] = {
+                'Endpoint': obj.data.elasticsearchConfig.endpoint,
+                'AwsRegion': obj.data.elasticsearchConfig.awsRegion
+            };
+            reqParams.tf['elasticsearch_config'] = {
+                'endpoint': obj.data.elasticsearchConfig.endpoint,
+                'region': obj.data.elasticsearchConfig.awsRegion
+            };
+        }
+        if (obj.data.httpConfig) {
+            var authorizationConfig = null;
+            if (obj.data.httpConfig.authorizationConfig) {
+                var awsIamConfig = null;
+                if (obj.data.httpConfig.authorizationConfig.awsIamConfig) {
+                    awsIamConfig = {
+                        'SigningRegion': obj.data.httpConfig.authorizationConfig.awsIamConfig.signingRegion,
+                        'SigningServiceName': obj.data.httpConfig.authorizationConfig.awsIamConfig.signingServiceName
+                    };
+                }
+                authorizationConfig = {
+                    'AuthorizationType': obj.data.httpConfig.authorizationType,
+                    'AwsIamConfig': awsIamConfig
+                };
+            }
+            reqParams.cfn['HttpConfig'] = {
+                'AuthorizationConfig': authorizationConfig,
+                'Endpoint': obj.data.httpConfig.endpoint
+            };
+            reqParams.tf['http_config'] = {
+                'endpoint': obj.data.httpConfig.endpoint
+            };
+        }
+        if (obj.data.relationalDatabaseConfig) {
+            var rdsHttpEndpointConfig = null;
+            if (obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig) {
+                rdsHttpEndpointConfig = {
+                    'AwsRegion': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.awsRegion,
+                    'DbClusterIdentifier': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.dbClusterIdentifier,
+                    'DatabaseName': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.databaseName,
+                    'Schema': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.schema,
+                    'AwsSecretStoreArn': obj.data.relationalDatabaseConfig.rdsHttpEndpointConfig.awsSecretStoreArn
+                };
+            }
+            reqParams.cfn['RelationalDatabaseConfig'] = {
+                'RelationalDatabaseSourceType': obj.data.relationalDatabaseConfig.relationalDatabaseSourceType,
+                'RdsHttpEndpointConfig': rdsHttpEndpointConfig
+            };
+        }
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+        reqParams.tf['api_id'] = obj.data.apiId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::DataSource',
+            'terraformType': 'aws_appsync_datasource',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.functionconfiguration") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['DataSourceName'] = obj.data.dataSourceName;
+        reqParams.cfn['RequestMappingTemplate'] = obj.data.requestMappingTemplate;
+        reqParams.cfn['ResponseMappingTemplate'] = obj.data.responseMappingTemplate;
+        reqParams.cfn['FunctionVersion'] = obj.data.functionVersion;
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+
+        /*
+        TODO:
+        RequestMappingTemplateS3Location: String
+        ResponseMappingTemplateS3Location: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::FunctionConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.apikey") {
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.tf['description'] = obj.data.description;
+        reqParams.cfn['Expires'] = obj.data.expires;
+        reqParams.tf['expires'] = obj.data.expires;
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+        reqParams.tf['api_id'] = obj.data.apiId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::ApiKey',
+            'terraformType': 'aws_appsync_api_key',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.graphqlapi") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['AuthenticationType'] = obj.data.authenticationType;
+        reqParams.tf['authentication_type'] = obj.data.authenticationType;
+        if (obj.data.logConfig) {
+            reqParams.cfn['LogConfig'] = {
+                'FieldLogLevel': obj.data.logConfig.fieldLogLevel,
+                'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn
+            };
+            reqParams.tf['log_config'] = {
+                'field_log_level': obj.data.logConfig.fieldLogLevel,
+                'cloudwatch_logs_role_arn': obj.data.logConfig.cloudWatchLogsRoleArn
+            };
+        }
+        if (obj.data.userPoolConfig) {
+            reqParams.cfn['UserPoolConfig'] = {
+                'AppIdClientRegex': obj.data.userPoolConfig.appIdClientRegex,
+                'UserPoolId': obj.data.userPoolConfig.userPoolId,
+                'AwsRegion': obj.data.userPoolConfig.awsRegion,
+                'DefaultAction': obj.data.userPoolConfig.defaultAction
+            };
+            reqParams.tf['user_pool_config'] = {
+                'app_id_client_regex': obj.data.userPoolConfig.appIdClientRegex,
+                'user_pool_id': obj.data.userPoolConfig.userPoolId,
+                'aws_region': obj.data.userPoolConfig.awsRegion,
+                'default_action': obj.data.userPoolConfig.defaultAction
+            };
+        }
+        if (obj.data.openIDConnectConfig) {
+            reqParams.cfn['OpenIDConnectConfig'] = {
+                'Issuer': obj.data.openIDConnectConfig.issuer,
+                'ClientId': obj.data.openIDConnectConfig.clientId,
+                'IatTTL': obj.data.openIDConnectConfig.iatTTL,
+                'AuthTTL': obj.data.openIDConnectConfig.authTTL
+            };
+            reqParams.tf['openid_connect_config'] = {
+                'issuer': obj.data.openIDConnectConfig.issuer,
+                'client_id': obj.data.openIDConnectConfig.clientId,
+                'iat_ttl': obj.data.openIDConnectConfig.iatTTL,
+                'auth_ttl': obj.data.openIDConnectConfig.authTTL
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::GraphQLApi',
+            'terraformType': 'aws_appsync_graphql_api',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.apicache") {
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+        reqParams.cfn['Ttl'] = obj.data.ttl;
+        reqParams.cfn['ApiCachingBehavior'] = obj.data.apiCachingBehavior;
+        reqParams.cfn['TransitEncryptionEnabled'] = obj.data.transitEncryptionEnabled;
+        reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.atRestEncryptionEnabled;
+        reqParams.cfn['Type'] = obj.data.type;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::ApiCache',
+            'options': reqParams
+        });
     } else {
         return false;
     }

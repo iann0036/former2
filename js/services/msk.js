@@ -85,7 +85,48 @@ async function updateDatatableAnalyticsMSK() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "msk.cluster") {
+        reqParams.cfn['ClusterName'] = obj.data.ClusterName;
+        reqParams.cfn['NumberOfBrokerNodes'] = obj.data.NumberOfBrokerNodes;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['EnhancedMonitoring'] = obj.data.EnhancedMonitoring;
+        reqParams.cfn['EncryptionInfo'] = obj.data.EncryptionInfo;
+        if (obj.data.CurrentBrokerSoftwareInfo) {
+            reqParams.cfn['KafkaVersion'] = obj.data.CurrentBrokerSoftwareInfo.KafkaVersion;
+            reqParams.cfn['ConfigurationInfo'] = {
+                'Arn': obj.data.CurrentBrokerSoftwareInfo.ConfigurationArn,
+                'Revision': obj.data.CurrentBrokerSoftwareInfo.ConfigurationRevision
+            };
+        }
+        reqParams.cfn['ClientAuthentication'] = obj.data.ClientAuthentication;
+        if (obj.data.BrokerNodeGroupInfo) {
+            var storageinfo = null;
+            if (obj.data.BrokerNodeGroupInfo.StorageInfo) {
+                storageinfo = {
+                    'EBSStorageInfo': obj.data.BrokerNodeGroupInfo.StorageInfo.EbsStorageInfo
+                };
+            }
+            reqParams.cfn['BrokerNodeGroupInfo'] = {
+                'BrokerAZDistribution': obj.data.BrokerNodeGroupInfo.BrokerAZDistribution,
+                'ClientSubnets': obj.data.BrokerNodeGroupInfo.ClientSubnets,
+                'InstanceType': obj.data.BrokerNodeGroupInfo.InstanceType,
+                'SecurityGroups': obj.data.BrokerNodeGroupInfo.SecurityGroups,
+                'StorageInfo': storageinfo,
+            };
+        }
+        reqParams.cfn['OpenMonitoring'] = obj.data.OpenMonitoring;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('msk', obj.id),
+            'region': obj.region,
+            'service': 'msk',
+            'type': 'AWS::MSK::Cluster',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ClusterArn
+            }
+        });
     } else {
         return false;
     }

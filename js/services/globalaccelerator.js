@@ -161,7 +161,48 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "globalaccelerator.accelerator") {
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['ip_address_type'] = obj.data.IpAddressType;
+        reqParams.tf['enabled'] = obj.data.Enabled;
+        if (obj.data.Attributes) {
+            reqParams.tf['attributes'] = {
+                'flow_logs_enabled': obj.data.Attributes.FlowLogsEnabled,
+                'flow_logs_s3_bucket': obj.data.Attributes.FlowLogsS3Bucket,
+                'flow_logs_s3_prefix': obj.data.Attributes.FlowLogsS3Prefix
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('globalaccelerator', obj.id),
+            'region': obj.region,
+            'service': 'globalaccelerator',
+            'terraformType': 'aws_globalaccelerator_accelerator',
+            'options': reqParams
+        });
+    } else if (obj.type == "globalaccelerator.listener") {
+        reqParams.tf['accelerator_arn'] = obj.data.AcceleratorArn;
+        reqParams.tf['client_affinity'] = obj.data.ClientAffinity;
+        reqParams.tf['protocol'] = obj.data.Protocol;
+        if (obj.data.PortRanges) {
+            reqParams.tf['port_range'] = [];
+            obj.data.PortRanges.forEach(portrange => {
+                reqParams.tf['port_range'].append({
+                    'from_port': portrange.FromPort,
+                    'to_port': portrange.ToPort
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('globalaccelerator', obj.id),
+            'region': obj.region,
+            'service': 'globalaccelerator',
+            'terraformType': 'aws_globalaccelerator_listener',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -99,7 +99,30 @@ async function updateDatatableDeveloperToolsXRay() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "xray.samplingrule") {
+        reqParams.tf['rule_name'] = obj.data.RuleName;
+        reqParams.tf['resource_arn'] = obj.data.ResourceARN;
+        reqParams.tf['priority'] = obj.data.Priority;
+        reqParams.tf['fixed_rate'] = obj.data.FixedRate;
+        reqParams.tf['reservoir_size'] = obj.data.ReservoirSize;
+        reqParams.tf['service_name'] = obj.data.ServiceName;
+        reqParams.tf['service_type'] = obj.data.ServiceType;
+        reqParams.tf['host'] = obj.data.Host;
+        reqParams.tf['http_method'] = obj.data.HTTPMethod;
+        reqParams.tf['url_path'] = obj.data.URLPath;
+        reqParams.tf['version'] = obj.data.Version;
+        if (Object.keys(obj.data.Attributes).length) {
+            reqParams.tf['attributes'] = obj.data.Attributes;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('xray', obj.id),
+            'region': obj.region,
+            'service': 'xray',
+            'terraformType': 'aws_xray_sampling_rule',
+            'options': reqParams
+        });
     } else {
         return false;
     }

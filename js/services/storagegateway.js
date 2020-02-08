@@ -85,7 +85,29 @@ async function updateDatatableStorageStorageGateway() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "storagegateway.gateway") {
+        reqParams.tf['gateway_name'] = obj.data.GatewayName;
+        reqParams.tf['gateway_timezone'] = obj.data.GatewayTimezone;
+        reqParams.tf['gateway_type'] = obj.data.GatewayType;
+        reqParams.tf['activation_key'] = "REPLACEME";
+
+        /*
+        TODO:
+        gateway_ip_address
+        media_changer_type
+        tape_drive_type
+        smb_active_directory_settings
+        smb_guest_password
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('storagegateway', obj.id),
+            'region': obj.region,
+            'service': 'storagegateway',
+            'terraformType': 'aws_storagegateway_gateway',
+            'options': reqParams
+        });
     } else {
         return false;
     }

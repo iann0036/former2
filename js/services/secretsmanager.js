@@ -186,7 +186,92 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "secretsmanager.secret") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        reqParams.cfn['SecretString'] = obj.data.SecretString;
+
+        /*
+        SKIPPED:
+        GenerateSecretString: 
+            GenerateSecretString
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('secretsmanager', obj.id),
+            'region': obj.region,
+            'service': 'secretsmanager',
+            'type': 'AWS::SecretsManager::Secret',
+            'terraformType': 'aws_secretsmanager_secret',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ARN
+            }
+        });
+
+        reqParams = {
+            'boto3': {},
+            'go': {},
+            'cfn': {},
+            'cli': {},
+            'tf': {},
+            'iam': {}
+        };
+
+        reqParams.tf['secret_id'] = obj.data.ARN
+        reqParams.tf['secret_string'] = obj.data.SecretString;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('secretsmanager', obj.id),
+            'region': obj.region,
+            'service': 'secretsmanager',
+            'terraformType': 'aws_secretsmanager_secret_version',
+            'options': reqParams
+        });
+    } else if (obj.type == "secretsmanager.rotationschedule") {
+        reqParams.cfn['SecretId'] = obj.data.ARN;
+        reqParams.cfn['RotationLambdaARN'] = obj.data.RotationLambdaARN;
+        reqParams.cfn['RotationRules'] = obj.data.RotationRules;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('secretsmanager', obj.id),
+            'region': obj.region,
+            'service': 'secretsmanager',
+            'type': 'AWS::SecretsManager::RotationSchedule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ARN
+            }
+        });
+    } else if (obj.type == "secretsmanager.resourcepolicy") {
+        reqParams.cfn['SecretId'] = obj.data.ARN;
+        reqParams.cfn['ResourcePolicy'] = obj.data.ResourcePolicy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('secretsmanager', obj.id),
+            'region': obj.region,
+            'service': 'secretsmanager',
+            'type': 'AWS::SecretsManager::ResourcePolicy',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ARN
+            }
+        });
     } else {
         return false;
     }

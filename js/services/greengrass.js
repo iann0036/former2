@@ -1157,7 +1157,238 @@ async function updateDatatableInternetofThingsGreengrass() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "greengrass.connectordefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::ConnectorDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.connectordefinitionversion") {
+        reqParams.cfn['ConnectorDefinitionId'] = obj.data.ConnectorDefinitionId;
+        reqParams.cfn['Connectors'] = obj.data.Definition.Connectors;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::ConnectorDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.coredefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::CoreDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.coredefinitionversion") {
+        reqParams.cfn['CoreDefinitionId'] = obj.data.CoreDefinitionId;
+        reqParams.cfn['Cores'] = obj.data.Definition.Cores;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::CoreDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.devicedefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::DeviceDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.devicedefinitionversion") {
+        reqParams.cfn['DeviceDefinitionId'] = obj.data.DeviceDefinitionId;
+        reqParams.cfn['Devices'] = obj.data.Definition.Devices;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::DeviceDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.functiondefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::FunctionDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.functiondefinitionversion") {
+        reqParams.cfn['DefaultConfig'] = obj.data.DefaultConfig;
+        reqParams.cfn['FunctionDefinitionId'] = obj.data.FunctionDefinitionId;
+        reqParams.cfn['Functions'] = obj.data.Definition.Functions;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::FunctionDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.group") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        RoleArn
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::Group',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.groupversion") {
+        reqParams.cfn['GroupId'] = obj.data.Id;
+        reqParams.cfn['LoggerDefinitionVersionArn'] = obj.data.Definition.LoggerDefinitionVersionArn;
+        reqParams.cfn['DeviceDefinitionVersionArn'] = obj.data.Definition.DeviceDefinitionVersionArn;
+        reqParams.cfn['FunctionDefinitionVersionArn'] = obj.data.Definition.FunctionDefinitionVersionArn;
+        reqParams.cfn['CoreDefinitionVersionArn'] = obj.data.Definition.CoreDefinitionVersionArn;
+        reqParams.cfn['ResourceDefinitionVersionArn'] = obj.data.Definition.ResourceDefinitionVersionArn;
+        reqParams.cfn['ConnectorDefinitionVersionArn'] = obj.data.Definition.ConnectorDefinitionVersionArn;
+        reqParams.cfn['SubscriptionDefinitionVersionArn'] = obj.data.Definition.SubscriptionDefinitionVersionArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::GroupVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.loggerdefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::LoggerDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.loggerdefinitionversion") {
+        reqParams.cfn['LoggerDefinitionId'] = obj.data.LoggerDefinitionId;
+        reqParams.cfn['Loggers'] = obj.data.Definition.Loggers;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::LoggerDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.resourcedefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::ResourceDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.resourcedefinitionversion") {
+        reqParams.cfn['ResourceDefinitionId'] = obj.data.ResourceDefinitionId;
+        reqParams.cfn['Resources'] = obj.data.Definition.Resources;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::ResourceDefinitionVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.subscriptiondefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        /*
+        TODO:
+        InitialVersion
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::SubscriptionDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "greengrass.subscriptiondefinitionversion") {
+        reqParams.cfn['SubscriptionDefinitionId'] = obj.data.SubscriptionDefinitionId;
+        reqParams.cfn['Subscriptions'] = obj.data.Definition.Subscriptions;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::Greengrass::SubscriptionDefinitionVersion',
+            'options': reqParams
+        });
     } else {
         return false;
     }

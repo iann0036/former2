@@ -102,7 +102,25 @@ async function updateDatatableAnalyticsAthena() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "athena.namedquery") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Database'] = obj.data.Database;
+        reqParams.tf['database'] = obj.data.Database;
+        reqParams.cfn['QueryString'] = obj.data.QueryString;
+        reqParams.tf['query'] = obj.data.QueryString;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('athena', obj.id),
+            'region': obj.region,
+            'service': 'athena',
+            'type': 'AWS::Athena::NamedQuery',
+            'terraformType': 'aws_athena_named_query',
+            'options': reqParams
+        });
     } else {
         return false;
     }

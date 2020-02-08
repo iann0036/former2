@@ -98,7 +98,29 @@ async function updateDatatableEndUserComputingWorkSpaces() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "workspaces.workspace") {
+        reqParams.cfn['DirectoryId'] = obj.data.DirectoryId;
+        reqParams.cfn['UserName'] = obj.data.UserName;
+        reqParams.cfn['BundleId'] = obj.data.BundleId;
+        reqParams.cfn['VolumeEncryptionKey'] = obj.data.VolumeEncryptionKey;
+        reqParams.cfn['UserVolumeEncryptionEnabled'] = obj.data.UserVolumeEncryptionEnabled;
+        reqParams.cfn['RootVolumeEncryptionEnabled'] = obj.data.RootVolumeEncryptionEnabled;
+        reqParams.cfn['WorkspaceProperties'] = obj.data.WorkspaceProperties;
+
+        /*
+        TODO:
+        Tags:
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('workspaces', obj.id),
+            'region': obj.region,
+            'service': 'workspaces',
+            'type': 'AWS::WorkSpaces::Workspace',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -364,7 +364,88 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "organizations.organization") {
+        if (obj.data.EnabledServicePrincipals) {
+            reqParams.tf['aws_service_access_principals'] = [];
+            obj.data.EnabledServicePrincipals.forEach(principal => {
+                reqParams.tf['aws_service_access_principals'].push(principal.ServicePrincipal);
+            });
+        }
+        if (obj.data.AvailablePolicyTypes) {
+            reqParams.tf['enabled_policy_types'] = [];
+            obj.data.AvailablePolicyTypes.forEach(policytype => {
+                if (policytype.Status == "ENABLED") {
+                    reqParams.tf['enabled_policy_types'].push(policytype.Type);
+                }
+            });
+        }
+        reqParams.tf['feature_set'] = obj.data.FeatureSet;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('organizations', obj.id),
+            'region': obj.region,
+            'service': 'organizations',
+            'terraformType': 'aws_organizations_organization',
+            'options': reqParams
+        });
+    } else if (obj.type == "organizations.organizationalunit") {
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['parent_id'] = obj.data.ParentId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('organizations', obj.id),
+            'region': obj.region,
+            'service': 'organizations',
+            'terraformType': 'aws_organizations_organizational_unit',
+            'options': reqParams
+        });
+    } else if (obj.type == "organizations.account") {
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['email'] = obj.data.Email;
+
+        /*
+        TODO:
+        iam_user_access_to_billing
+        parent_id
+        role_name
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('organizations', obj.id),
+            'region': obj.region,
+            'service': 'organizations',
+            'terraformType': 'aws_organizations_account',
+            'options': reqParams
+        });
+    } else if (obj.type == "organizations.policy") {
+        reqParams.tf['content'] = obj.data.Content;
+        reqParams.tf['name'] = obj.data.PolicySummary.Name;
+        reqParams.tf['description'] = obj.data.PolicySummary.Description;
+        reqParams.tf['type'] = obj.data.PolicySummary.Type;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('organizations', obj.id),
+            'region': obj.region,
+            'service': 'organizations',
+            'terraformType': 'aws_organizations_policy',
+            'options': reqParams
+        });
+    } else if (obj.type == "organizations.policyattachment") {
+        reqParams.tf['policy_id'] = obj.data.PolicyId;
+        reqParams.tf['target_id'] = obj.data.TargetId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('organizations', obj.id),
+            'region': obj.region,
+            'service': 'organizations',
+            'terraformType': 'aws_organizations_policy_attachment',
+            'options': reqParams
+        });
     } else {
         return false;
     }

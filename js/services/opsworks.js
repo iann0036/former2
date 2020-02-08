@@ -907,6 +907,74 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_opsworks_instance',
             'options': reqParams
         });
+    } else if (obj.type == "opsworks.volume") {
+        reqParams.cfn['Ec2VolumeId'] = obj.data.Ec2VolumeId;
+        reqParams.cfn['MountPoint'] = obj.data.MountPoint;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['StackId'] = obj.data.StackId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Volume',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.userprofile") {
+        reqParams.cfn['AllowSelfManagement'] = obj.data.AllowSelfManagement;
+        reqParams.tf['allow_self_management'] = obj.data.AllowSelfManagement;
+        reqParams.cfn['IamUserArn'] = obj.data.IamUserArn;
+        reqParams.tf['user_arn'] = obj.data.IamUserArn;
+        reqParams.cfn['SshPublicKey'] = obj.data.SshPublicKey;
+        reqParams.tf['ssh_public_key'] = obj.data.SshPublicKey;
+        reqParams.cfn['SshUsername'] = obj.data.SshUsername;
+        reqParams.tf['ssh_username'] = obj.data.SshUsername;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::UserProfile',
+            'terraformType': 'aws_opsworks_user_profile',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.configurationmanagementserver") {
+        reqParams.cfn['AssociatePublicIpAddress'] = obj.data.AssociatePublicIpAddress;
+        reqParams.cfn['BackupRetentionCount'] = obj.data.BackupRetentionCount;
+        reqParams.cfn['ServerName'] = obj.data.ServerName;
+        reqParams.cfn['DisableAutomatedBackup'] = obj.data.DisableAutomatedBackup;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.cfn['EngineModel'] = obj.data.EngineModel;
+        reqParams.cfn['EngineAttributes'] = obj.data.EngineAttributes;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['InstanceProfileArn'] = obj.data.InstanceProfileArn;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.cfn['KeyPair'] = obj.data.KeyPair;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        reqParams.cfn['CustomDomain'] = obj.data.CustomDomain;
+        reqParams.cfn['ServerName'] = obj.data.ServerName;
+
+        /*
+        TODO:
+        BackupId: String
+        CustomCertificate: String
+        CustomPrivateKey: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorksCM::Server',
+            'options': reqParams
+        });
     } else {
         return false;
     }

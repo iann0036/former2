@@ -244,7 +244,67 @@ async function updateDatatableMediaServicesMediaConvert() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "mediaconvert.queue") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['PricingPlan'] = obj.data.PricingPlan;
+        reqParams.cfn['Status'] = obj.data.Status;
+
+        /*
+        TODO:
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediaconvert', obj.id),
+            'region': obj.region,
+            'service': 'mediaconvert',
+            'type': 'AWS::MediaConvert::Queue',
+            'options': reqParams
+        });
+    } else if (obj.type == "mediaconvert.preset") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Category'] = obj.data.Category;
+        reqParams.cfn['SettingsJson'] = obj.data.Settings;
+
+        /*
+        TODO:
+        Tags: Json
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediaconvert', obj.id),
+            'region': obj.region,
+            'service': 'mediaconvert',
+            'type': 'AWS::MediaConvert::Preset',
+            'options': reqParams
+        });
+    } else if (obj.type == "mediaconvert.jobtemplate") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Category'] = obj.data.Category;
+        reqParams.cfn['AccelerationSettings'] = obj.data.AccelerationSettings;
+        reqParams.cfn['Priority'] = obj.data.Priority;
+        reqParams.cfn['Queue'] = obj.data.Queue;
+        reqParams.cfn['SettingsJson'] = obj.data.Settings;
+        reqParams.cfn['StatusUpdateInterval'] = obj.data.StatusUpdateInterval;
+
+        /*
+        TODO:
+        Tags: Json
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('mediaconvert', obj.id),
+            'region': obj.region,
+            'service': 'mediaconvert',
+            'type': 'AWS::MediaConvert::JobTemplate',
+            'options': reqParams
+        });
     } else {
         return false;
     }

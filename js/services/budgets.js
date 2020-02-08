@@ -114,7 +114,61 @@ async function updateDatatableAWSCostManagementBudgets() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "budgets.budget") {
+        reqParams.cfn['Budget'] = {
+            'BudgetLimit': obj.data.BudgetLimit,
+            'TimePeriod': obj.data.TimePeriod,
+            'TimeUnit': obj.data.TimeUnit,
+            'CostFilters': obj.data.CostFilters,
+            'BudgetName': obj.data.BudgetName,
+            'CostTypes': obj.data.CostTypes,
+            'BudgetType': obj.data.BudgetType
+        };
+        if (obj.data.BudgetLimit) {
+            reqParams.tf['limit_amount'] = obj.data.BudgetLimit.Amount;
+            reqParams.tf['limit_unit'] = obj.data.BudgetLimit.Unit;
+        }
+        if (obj.data.TimePeriod) {
+            reqParams.tf['time_period_end'] = obj.data.TimePeriod.End;
+            reqParams.tf['time_period_start'] = obj.data.TimePeriod.Start;
+        }
+        reqParams.tf['time_unit'] = obj.data.TimeUnit;
+        reqParams.tf['cost_filters'] = obj.data.CostFilters;
+        reqParams.tf['name'] = obj.data.BudgetName;
+        if (obj.data.CostTypes) {
+            reqParams.tf['cost_types'] = {
+                'include_support': obj.data.CostTypes.IncludeSupport,
+                'include_other_subscription': obj.data.CostTypes.IncludeOtherSubscription,
+                'include_tax': obj.data.CostTypes.IncludeTax,
+                'include_subscription': obj.data.CostTypes.IncludeSubscription,
+                'use_blended': obj.data.CostTypes.UseBlended,
+                'include_upfront': obj.data.CostTypes.IncludeUpfront,
+                'include_discount': obj.data.CostTypes.IncludeDiscount,
+                'include_credit': obj.data.CostTypes.IncludeCredit,
+                'include_recurring': obj.data.CostTypes.IncludeRecurring,
+                'use_amortized': obj.data.CostTypes.UseAmortized,
+                'include_refund': obj.data.CostTypes.IncludeRefund
+            }
+        }
+        reqParams.tf['budget_type'] = obj.data.BudgetType;
+
+        /*
+        TODO:
+        NotificationsWithSubscribers
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('budgets', obj.id),
+            'region': obj.region,
+            'service': 'budgets',
+            'type': 'AWS::Budgets::Budget',
+            'terraformType': 'aws_budgets_budget',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.BudgetName
+            }
+        });
     } else {
         return false;
     }

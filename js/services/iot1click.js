@@ -219,7 +219,52 @@ async function updateDatatableInternetofThings1Click() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "iot1click.project") {
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['PlacementTemplate'] = {
+            'DefaultAttributes': obj.data.placementTemplate.defaultAttributes,
+            'DeviceTemplates': obj.data.placementTemplate.deviceTemplates
+        };
+        reqParams.cfn['ProjectName'] = obj.data.projectName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot1click', obj.id),
+            'region': obj.region,
+            'service': 'iot1click',
+            'type': 'AWS::IoT1Click::Project',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot1click.placement") {
+        reqParams.cfn['Attributes'] = obj.data.attributes;
+        reqParams.cfn['PlacementName'] = obj.data.placementName;
+        reqParams.cfn['ProjectName'] = obj.data.projectName;
+
+        /*
+        TODO:
+        AssociatedDevices
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot1click', obj.id),
+            'region': obj.region,
+            'service': 'iot1click',
+            'type': 'AWS::IoT1Click::Placement',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot1click.device") {
+        reqParams.cfn['DeviceId'] = obj.data.DeviceId;
+        reqParams.cfn['Enabled'] = obj.data.Enabled;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot1click', obj.id),
+            'region': obj.region,
+            'service': 'iot1click',
+            'type': 'AWS::IoT1Click::Device',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -255,7 +255,126 @@ async function updateDatatableMobileAmplify() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "amplify.app") {
+        reqParams.cfn['Name'] = obj.data.name;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                reqParams.cfn['Tags'].push({
+                    'Key': k,
+                    'Value': obj.data.tags[k]
+                });
+            }
+        }
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Repository'] = obj.data.repository;
+        reqParams.cfn['IAMServiceRole'] = obj.data.iamServiceRoleArn;
+        if (obj.data.environmentVariables) {
+            reqParams.cfn['EnvironmentVariables'] = [];
+            for (var k in obj.data.environmentVariables) {
+                reqParams.cfn['EnvironmentVariables'].push({
+                    'Name': k,
+                    'Value': obj.data.environmentVariables[k]
+                });
+            }
+        }
+        if (obj.data.basicAuthCredentials) {
+            var creds = window.atob(obj.data.basicAuthCredentials.split(" ").pop()).split(":");
+
+            reqParams.cfn['BasicAuthConfig'] = {
+                'EnableBasicAuth': obj.data.enableBasicAuth,
+                'Username': creds[0],
+                'Password': creds[1]
+            };
+        }
+        if (obj.data.customRules) {
+            reqParams.cfn['CustomRules'] = [];
+            obj.data.customRules.forEach(customrule => {
+                reqParams.cfn['CustomRules'].push({
+                    'Source': customrule.source,
+                    'Target': customrule.target,
+                    'Condition': customrule.condition,
+                    'Status': customrule.status
+                });
+            });
+        }
+        reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
+
+        /*
+        TODO:
+        AccessToken: String
+        OauthToken: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amplify', obj.id),
+            'region': obj.region,
+            'service': 'amplify',
+            'type': 'AWS::Amplify::App',
+            'options': reqParams
+        });
+    } else if (obj.type == "amplify.branch") {
+        reqParams.cfn['BranchName'] = obj.data.branchName;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                reqParams.cfn['Tags'].push({
+                    'Key': k,
+                    'Value': obj.data.tags[k]
+                });
+            }
+        }
+        reqParams.cfn['Stage'] = obj.data.stage;
+        if (obj.data.environmentVariables) {
+            reqParams.cfn['EnvironmentVariables'] = [];
+            for (var k in obj.data.environmentVariables) {
+                reqParams.cfn['EnvironmentVariables'].push({
+                    'Name': k,
+                    'Value': obj.data.environmentVariables[k]
+                });
+            }
+        }
+        if (obj.data.basicAuthCredentials) {
+            var creds = window.atob(obj.data.basicAuthCredentials.split(" ").pop()).split(":");
+
+            reqParams.cfn['BasicAuthConfig'] = {
+                'EnableBasicAuth': obj.data.enableBasicAuth,
+                'Username': creds[0],
+                'Password': creds[1]
+            };
+        }
+        reqParams.cfn['AppId'] = obj.data.appId;
+        reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amplify', obj.id),
+            'region': obj.region,
+            'service': 'amplify',
+            'type': 'AWS::Amplify::Branch',
+            'options': reqParams
+        });
+    } else if (obj.type == "amplify.domain") {
+        reqParams.cfn['AppId'] = obj.data.appId;
+        reqParams.cfn['DomainName'] = obj.data.domainName;
+        reqParams.cfn['SubDomainSettings'] = [];
+        obj.data.subDomains.forEach(subdomain => {
+            reqParams.cfn['SubDomainSettings'].push({
+                'Prefix': subdomain.subDomainSetting.prefix,
+                'BranchName': subdomain.subDomainSetting.branchName,
+            });
+        });
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amplify', obj.id),
+            'region': obj.region,
+            'service': 'amplify',
+            'type': 'AWS::Amplify::Domain',
+            'options': reqParams
+        });
     } else {
         return false;
     }

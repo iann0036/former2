@@ -148,7 +148,35 @@ async function updateDatatableDeveloperToolsCodeCommit() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "codecommit.repository") {
+        reqParams.cfn['RepositoryDescription'] = obj.data.repositoryDescription;
+        reqParams.tf['description'] = obj.data.repositoryDescription;
+        reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
+        reqParams.tf['repository_name'] = obj.data.repositoryName;
+
+        /*
+        TODO:
+        Triggers
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('codecommit', obj.id),
+            'region': obj.region,
+            'service': 'codecommit',
+            'type': 'AWS::CodeCommit::Repository',
+            'terraformType': 'aws_codecommit_repository',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.repositoryId,
+                'GetAtt': {
+                    'Arn': obj.data.Arn,
+                    'CloneUrlHttp': obj.data.cloneUrlHttp,
+                    'CloneUrlSsh': obj.data.cloneUrlSsh,
+                    'Name': obj.data.repositoryName
+                }
+            }
+        });
     } else {
         return false;
     }

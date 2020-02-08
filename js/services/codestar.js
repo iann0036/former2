@@ -91,7 +91,31 @@ async function updateDatatableDeveloperToolsCodeStar() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "codestar.githubrepository") {
+        reqParams.cfn['EnableIssues'] = true;
+        reqParams.cfn['RepositoryAccessToken'] = 'REPLACEME';
+        reqParams.cfn['RepositoryName'] = obj.data.Repo;
+        reqParams.cfn['RepositoryOwner'] = obj.data.Owner;
+
+        /*
+        SKIPPED:
+        Code
+        */
+
+        /*
+        TODO:
+        IsPrivate
+        RepositoryDescription
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('codestar', obj.id),
+            'region': obj.region,
+            'service': 'codestar',
+            'type': 'AWS::CodeStar::GitHubRepository',
+            'options': reqParams
+        });
     } else {
         return false;
     }

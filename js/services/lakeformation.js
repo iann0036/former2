@@ -193,7 +193,68 @@ async function updateDatatableAnalyticsLakeFormation() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "lakeformation.resource") {
+        reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        /*
+        TODO:
+        UseServiceLinkedRole
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lakeformation', obj.id),
+            'region': obj.region,
+            'service': 'lakeformation',
+            'type': 'AWS::LakeFormation::Resource',
+            'options': reqParams
+        });
+    } else if (obj.type == "lakeformation.permission") {
+        if (obj.data.Resource && (obj.data.Resource.Database || obj.data.Resource.Table)) {
+            reqParams.cfn['DataLakePrincipal'] = obj.data.Principal;
+            reqParams.cfn['Permissions'] = obj.data.Permissions;
+            reqParams.cfn['PermissionsWithGrantOption'] = obj.data.PermissionsWithGrantOption;
+            if (obj.data.Resource.Database) {
+                reqParams.cfn['Resource'] = {
+                    'DatabaseResource': obj.data.Resource.Database
+                };
+            } else if (obj.data.Resource.Table) {
+                reqParams.cfn['Resource'] = {
+                    'TableResource': obj.data.Resource.Table
+                };
+            } else if (obj.data.Resource.DataLocation && obj.data.Resource.DataLocation.ResourceArn) {
+                reqParams.cfn['Resource'] = {
+                    'DataLocationResource': {
+                        'S3Resource': obj.data.Resource.DataLocation.ResourceArn
+                    }
+                };
+            } else if (obj.data.Resource.TableWithColumnsResource) {
+                reqParams.cfn['Resource'] = {
+                    'TableWithColumnsResource': obj.data.Resource.TableWithColumnsResource
+                };
+            }
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('lakeformation', obj.id),
+                'region': obj.region,
+                'service': 'lakeformation',
+                'type': 'AWS::LakeFormation::Permissions',
+                'options': reqParams
+            });
+        }
+    } else if (obj.type == "lakeformation.datalakesettings") {
+        reqParams.cfn['Admins'] = obj.data.DataLakeAdmins;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lakeformation', obj.id),
+            'region': obj.region,
+            'service': 'lakeformation',
+            'type': 'AWS::LakeFormation::DataLakeSettings',
+            'options': reqParams
+        });
     } else {
         return false;
     }

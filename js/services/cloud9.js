@@ -87,7 +87,41 @@ async function updateDatatableDeveloperToolsCloud9() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "cloud9.environment") {
+        if (obj.data.type == "ec2") {
+            reqParams.cfn['Name'] = obj.data.name;
+            reqParams.tf['name'] = obj.data.name;
+            reqParams.cfn['Description'] = obj.data.description;
+            reqParams.tf['description'] = obj.data.description;
+            reqParams.cfn['OwnerArn'] = obj.data.ownerArn;
+            reqParams.tf['owner_arn'] = obj.data.ownerArn;
+
+            /*
+            TODO:
+            Repositories: 
+                - Repository
+            AutomaticStopTimeMinutes: Integer
+            InstanceType: String
+            SubnetId: String
+            */
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('cloud9', obj.id),
+                'region': obj.region,
+                'service': 'cloud9',
+                'type': 'AWS::Cloud9::EnvironmentEC2',
+                'terraformType': 'aws_cloud9_environment_ec2',
+                'options': reqParams,
+                'returnValues': {
+                    'Ref': obj.data.id,
+                    'GetAtt': {
+                        'Arn': obj.data.arn,
+                        'Name': obj.data.name
+                    }
+                }
+            });
+        }
     } else {
         return false;
     }

@@ -301,7 +301,131 @@ async function updateDatatableRoboticsRoboMaker() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "robomaker.robot") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['GreengrassGroupId'] = obj.data.greengrassGroupId;
+        reqParams.cfn['Architecture'] = obj.data.architecture;
+        reqParams.cfn['Fleet'] = obj.data.fleetArn;
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('robomaker', obj.id),
+            'region': obj.region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::Robot',
+            'options': reqParams
+        });
+    } else if (obj.type == "robomaker.fleet") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('robomaker', obj.id),
+            'region': obj.region,
+            'service': 'robomaker',
+            'type': 'AWS::RoboMaker::Fleet',
+            'options': reqParams
+        });
+    } else if (obj.type == "robomaker.robotapplication") {
+        if (obj.data.version == "$LATEST") {
+            reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+            reqParams.cfn['Name'] = obj.data.name;
+            if (obj.data.robotSoftwareSuite) {
+                reqParams.cfn['RobotSoftwareSuite'] = {
+                    'Name': obj.data.robotSoftwareSuite.name,
+                    'Version': obj.data.robotSoftwareSuite.version
+                };
+            }
+            if (obj.data.sources) {
+                reqParams.cfn['Sources'] = [];
+                obj.data.sources.forEach(source => {
+                    reqParams.cfn['Sources'].push({
+                        'Architecture': source.architecture,
+                        'S3Bucket': source.s3Bucket,
+                        'S3Key': source.s3Key
+                    });
+                });
+            }
+            reqParams.cfn['Tags'] = obj.data.tags;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('robomaker', obj.id),
+                'region': obj.region,
+                'service': 'robomaker',
+                'type': 'AWS::RoboMaker::RobotApplication',
+                'options': reqParams
+            });
+        } else {
+            reqParams.cfn['Application'] = obj.data.arn;
+            reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('robomaker', obj.id),
+                'region': obj.region,
+                'service': 'robomaker',
+                'type': 'AWS::RoboMaker::RobotApplicationVersion',
+                'options': reqParams
+            });
+        }
+    } else if (obj.type == "robomaker.simulationapplication") {
+        if (obj.data.version == "$LATEST") {
+            reqParams.cfn['Name'] = obj.data.name;
+            if (obj.data.robotSoftwareSuite) {
+                reqParams.cfn['RobotSoftwareSuite'] = {
+                    'Name': obj.data.robotSoftwareSuite.name,
+                    'Version': obj.data.robotSoftwareSuite.version
+                };
+            }
+            if (obj.data.simulationSoftwareSuite) {
+                reqParams.cfn['SimulationSoftwareSuite'] = {
+                    'Name': obj.data.simulationSoftwareSuite.name,
+                    'Version': obj.data.simulationSoftwareSuite.version
+                };
+            }
+            if (obj.data.renderingEngine) {
+                reqParams.cfn['RenderingEngine'] = {
+                    'Name': obj.data.renderingEngine.name,
+                    'Version': obj.data.renderingEngine.version
+                };
+            }
+            if (obj.data.sources) {
+                reqParams.cfn['Sources'] = [];
+                obj.data.sources.forEach(source => {
+                    reqParams.cfn['Sources'].push({
+                        'Architecture': source.architecture,
+                        'S3Bucket': source.s3Bucket,
+                        'S3Key': source.s3Key
+                    });
+                });
+            }
+            reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+            reqParams.cfn['Tags'] = obj.data.tags;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('robomaker', obj.id),
+                'region': obj.region,
+                'service': 'robomaker',
+                'type': 'AWS::RoboMaker::SimulationApplication',
+                'options': reqParams
+            });
+        } else {
+            reqParams.cfn['Application'] = obj.data.arn;
+            reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('robomaker', obj.id),
+                'region': obj.region,
+                'service': 'robomaker',
+                'type': 'AWS::RoboMaker::SimulationApplicationVersion',
+                'options': reqParams
+            });
+        }
     } else {
         return false;
     }

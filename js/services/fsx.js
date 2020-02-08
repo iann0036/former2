@@ -98,7 +98,51 @@ async function updateDatatableStorageFSx() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "fsx.filesystem") {
+        reqParams.cfn['FileSystemType'] = obj.data.FileSystemType;
+        reqParams.cfn['StorageCapacity'] = obj.data.StorageCapacity;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.WindowsConfiguration) {
+            reqParams.cfn['WindowsConfiguration'] = {
+                'ActiveDirectoryId': obj.data.WindowsConfiguration.ActiveDirectoryId,
+                'AutomaticBackupRetentionDays': obj.data.WindowsConfiguration.AutomaticBackupRetentionDays,
+                'CopyTagsToBackups': obj.data.WindowsConfiguration.CopyTagsToBackups,
+                'DailyAutomaticBackupStartTime': obj.data.WindowsConfiguration.DailyAutomaticBackupStartTime,
+                'ThroughputCapacity': obj.data.WindowsConfiguration.ThroughputCapacity,
+                'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime,
+                'DeploymentType': obj.data.WindowsConfiguration.DeploymentType,
+                'PreferredSubnetId': obj.data.WindowsConfiguration.PreferredSubnetId
+            };
+        }
+        if (obj.data.LustreConfiguration) {
+            reqParams.cfn['LustreConfiguration'] = {
+                'ExportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath,
+                'ImportedFileChunkSize': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize,
+                'ImportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath,
+                'WeeklyMaintenanceStartTime': obj.data.LustreConfiguration.WeeklyMaintenanceStartTime
+            };
+        }
+
+        /*
+        TODO:
+        BackupId: String
+        SecurityGroupIds: 
+            - String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('fsx', obj.id),
+            'region': obj.region,
+            'service': 'fsx',
+            'type': 'AWS::FSx::FileSystem',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.FileSystemId
+            }
+        });
     } else {
         return false;
     }

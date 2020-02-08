@@ -225,6 +225,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_sns_topic_policy',
             'options': reqParams
         });
+    } else if (obj.type == "sns.subscription") {
+        reqParams.cfn['TopicArn'] = obj.data.TopicArn;
+        reqParams.tf['topic_arn'] = obj.data.TopicArn;
+        reqParams.cfn['DeliveryPolicy'] = obj.data.Attributes.DeliveryPolicy;
+        reqParams.tf['delivery_policy'] = obj.data.Attributes.DeliveryPolicy;
+        reqParams.cfn['FilterPolicy'] = obj.data.Attributes.FilterPolicy;
+        reqParams.tf['filter_policy'] = obj.data.Attributes.FilterPolicy;
+        reqParams.cfn['Endpoint'] = obj.data.Endpoint;
+        reqParams.tf['endpoint'] = obj.data.Endpoint;
+        reqParams.cfn['Protocol'] = obj.data.Protocol;
+        reqParams.tf['protocol'] = obj.data.Protocol;
+        reqParams.cfn['RawMessageDelivery'] = obj.data.Attributes.RawMessageDelivery;
+        reqParams.tf['raw_message_delivery'] = obj.data.Attributes.RawMessageDelivery;
+        reqParams.cfn['Region'] = obj.data.TopicArn.split(":")[3];
+        reqParams.cfn['RedrivePolicy'] = obj.data.Attributes.RedrivePolicy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sns', obj.id),
+            'region': obj.region,
+            'service': 'sns',
+            'type': 'AWS::SNS::Subscription',
+            'terraformType': 'aws_sns_topic_subscription',
+            'options': reqParams
+        });
     } else {
         return false;
     }

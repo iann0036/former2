@@ -726,6 +726,363 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "kinesis.streamconsumer") {
+        reqParams.cfn['ConsumerName'] = obj.data.ConsumerName;
+        reqParams.cfn['StreamARN'] = obj.data.StreamARN;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::Kinesis::StreamConsumer',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsapplication") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['ApplicationDescription'] = obj.data.ApplicationDescription;
+        reqParams.cfn['ApplicationCode'] = obj.data.ApplicationCode;
+        if (obj.data.InputDescriptions) {
+            reqParams.cfn['Inputs'] = [];
+            obj.data.InputDescriptions.forEach(input => {
+                var inputProcessingConfiguration = null;
+                if (input.InputProcessingConfigurationDescription && input.InputProcessingConfigurationDescription.InputLambdaProcessorDescription) {
+                    inputProcessingConfiguration = {
+                        'InputLambdaProcessor': {
+                            'ResourceARN': input.InputProcessingConfigurationDescription.InputLambdaProcessorDescription.ResourceARN,
+                            'RoleARN': input.InputProcessingConfigurationDescription.InputLambdaProcessorDescription.RoleARN
+                        }
+                    };
+                }
+                reqParams.cfn['Inputs'].push({
+                    'NamePrefix': input.NamePrefix,
+                    'InputParallelism': input.InputParallelism,
+                    'InputSchema': input.InputSchema,
+                    'KinesisFirehoseInput': input.KinesisFirehoseInputDescription,
+                    'KinesisStreamsInput': input.KinesisStreamsInputDescription,
+                    'InputProcessingConfiguration': inputProcessingConfiguration
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalytics::Application',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsapplicationoutput") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['Output'] = {
+            'Name': obj.data.Name,
+            'KinesisStreamsOutput': obj.data.KinesisStreamsOutputDescription,
+            'KinesisFirehoseOutput': obj.data.KinesisFirehoseOutputDescription,
+            'LambdaOutput': obj.data.LambdaOutputDescription,
+            'DestinationSchema': obj.data.DestinationSchema
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalytics::ApplicationOutput',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsapplicationreferencedatasource") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['ReferenceDataSource'] = {
+            'TableName': obj.data.TableName,
+            'S3ReferenceDataSource': obj.data.S3ReferenceDataSourceDescription,
+            'ReferenceSchema': obj.data.ReferenceSchema
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalytics::ApplicationReferenceDataSource',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsv2application") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['ApplicationDescription'] = obj.data.ApplicationDescription;
+        reqParams.cfn['ServiceExecutionRole'] = obj.data.ServiceExecutionRole;
+        reqParams.cfn['RuntimeEnvironment'] = obj.data.RuntimeEnvironment;
+        if (obj.data.ApplicationConfigurationDescription) {
+            var sqlApplicationConfiguration = null;
+            if (obj.data.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription && obj.data.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.InputDescriptions) {
+                var inputs = [];
+                obj.data.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.InputDescriptions.forEach(input => {
+                    var inputProcessingConfiguration = null;
+                    if (input.InputProcessingConfigurationDescription && input.InputProcessingConfigurationDescription.InputLambdaProcessorDescription) {
+                        inputProcessingConfiguration = {
+                            'InputLambdaProcessor': {
+                                'ResourceARN': input.InputProcessingConfigurationDescription.InputLambdaProcessorDescription.ResourceARN
+                            }
+                        };
+                    }
+                    var kinesisStreamsInput = null;
+                    if (input.KinesisStreamsInputDescription) {
+                        kinesisStreamsInput = {
+                            'ResourceARN': input.KinesisStreamsInputDescription.ResourceARN
+                        };
+                    }
+                    var kinesisFirehoseInput = null;
+                    if (input.KinesisFirehoseInputDescription) {
+                        kinesisFirehoseInput = {
+                            'ResourceARN': input.KinesisFirehoseInputDescription.ResourceARN
+                        };
+                    }
+                    inputs.push({
+                        'NamePrefix': input.NamePrefix,
+                        'InputSchema': input.InputSchema,
+                        'KinesisStreamsInput': kinesisStreamsInput,
+                        'KinesisFirehoseInput': kinesisFirehoseInput,
+                        'InputProcessingConfiguration': inputProcessingConfiguration,
+                        'InputParallelism': input.InputParallelism
+                    });
+                });
+                sqlApplicationConfiguration = {
+                    'Inputs': inputs
+                };
+            }
+            var applicationCodeConfiguration = null;
+            if (obj.data.ApplicationConfigurationDescription.ApplicationCodeConfigurationDescription) {
+                var codeContent = null;
+                if (obj.data.ApplicationConfigurationDescription.ApplicationCodeConfigurationDescription.CodeContentDescription) {
+                    /*
+                    SKIPPED:
+                    ZipFileContent
+                    */
+                    codeContent = {
+                        'TextContent': obj.data.ApplicationConfigurationDescription.ApplicationCodeConfigurationDescription.CodeContentDescription.TextContent,
+                        'S3ContentLocation': obj.data.ApplicationConfigurationDescription.ApplicationCodeConfigurationDescription.CodeContentDescription.S3ApplicationCodeLocationDescription
+                    };
+                }
+                applicationCodeConfiguration = {
+                    'CodeContentType': obj.data.ApplicationConfigurationDescription.ApplicationCodeConfigurationDescription.CodeContentType,
+                    'CodeContent': codeContent
+                };
+            }
+            var flinkApplicationConfiguration = null;
+            if (obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription) {
+                var parallelismConfiguration = null;
+                if (obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.ParallelismConfigurationDescription) {
+                    parallelismConfiguration = {
+                        'ConfigurationType': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.ParallelismConfigurationDescription.ConfigurationType,
+                        'ParallelismPerKPU': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.ParallelismConfigurationDescription.ParallelismPerKPU,
+                        'AutoScalingEnabled': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.ParallelismConfigurationDescription.AutoScalingEnabled,
+                        'Parallelism': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.ParallelismConfigurationDescription.Parallelism
+                    };
+                }
+                flinkApplicationConfiguration = {
+                    'CheckpointConfiguration': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.CheckpointConfigurationDescription,
+                    'ParallelismConfiguration': parallelismConfiguration,
+                    'MonitoringConfiguration': obj.data.ApplicationConfigurationDescription.FlinkApplicationConfigurationDescription.MonitoringConfigurationDescription
+                };
+            }
+            var environmentProperties = null;
+            if (obj.data.ApplicationConfigurationDescription.EnvironmentPropertyDescriptions && obj.data.ApplicationConfigurationDescription.EnvironmentPropertyDescriptions.PropertyGroupDescriptions) {
+                environmentProperties = {
+                    'PropertyGroups': []
+                };
+                obj.data.ApplicationConfigurationDescription.EnvironmentPropertyDescriptions.PropertyGroupDescriptions.forEach(propertyGroup => {
+                    environmentProperties.PropertyGroups.push({
+                        'PropertyMap': propertyGroup.PropertyMap,
+                        'PropertyGroupId': propertyGroup.PropertyGroupId
+                    });
+                });
+            }
+            reqParams.cfn['ApplicationConfiguration'] = {
+                'ApplicationCodeConfiguration': applicationCodeConfiguration,
+                'EnvironmentProperties': environmentProperties,
+                'FlinkApplicationConfiguration': flinkApplicationConfiguration,
+                'SqlApplicationConfiguration': sqlApplicationConfiguration,
+                'ApplicationSnapshotConfiguration': obj.data.ApplicationConfigurationDescription.ApplicationSnapshotConfigurationDescription
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalyticsV2::Application',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsv2applicationoutput") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['Output'] = {
+            'Name': obj.data.Name,
+            'KinesisStreamsOutput': obj.data.KinesisStreamsOutputDescription,
+            'KinesisFirehoseOutput': obj.data.KinesisFirehoseOutputDescription,
+            'LambdaOutput': obj.data.LambdaOutputDescription,
+            'DestinationSchema': obj.data.DestinationSchema
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalyticsV2::ApplicationOutput',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsv2applicationreferencedatasource") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['ReferenceDataSource'] = {
+            'TableName': obj.data.TableName,
+            'S3ReferenceDataSource': obj.data.S3ReferenceDataSourceDescription,
+            'ReferenceSchema': obj.data.ReferenceSchema
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.analyticsv2applicationcloudwatchloggingoption") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.cfn['CloudWatchLoggingOption'] = {
+            'LogStreamARN': obj.data.LogStreamARN
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.firehosedeliverystream") {
+        reqParams.cfn['DeliveryStreamName'] = obj.data.DeliveryStreamName;
+        reqParams.cfn['DeliveryStreamType'] = obj.data.DeliveryStreamType;
+        if (obj.data.Source && obj.data.Source.KinesisStreamSourceDescription) {
+            reqParams.cfn['KinesisStreamSourceConfiguration'] = {
+                'KinesisStreamARN': obj.data.Source.KinesisStreamSourceDescription.KinesisStreamARN,
+                'RoleARN': obj.data.Source.KinesisStreamSourceDescription.RoleARN
+            };
+        }
+        obj.data.Destinations.forEach(destination => {
+            if (destination.S3DestinationDescription) {
+                reqParams.cfn['S3DestinationConfiguration'] = {
+                    'BucketARN': destination.S3DestinationDescription.BucketARN,
+                    'BufferingHints': destination.S3DestinationDescription.BufferingHints,
+                    'CloudWatchLoggingOptions': destination.S3DestinationDescription.CloudWatchLoggingOptions,
+                    'CompressionFormat': destination.S3DestinationDescription.CompressionFormat,
+                    'EncryptionConfiguration': destination.S3DestinationDescription.EncryptionConfiguration,
+                    'Prefix': destination.S3DestinationDescription.Prefix,
+                    'RoleARN': destination.S3DestinationDescription.RoleARN
+                };
+            }
+            if (destination.ExtendedS3DestinationDescription) {
+                reqParams.cfn['ExtendedS3DestinationConfiguration'] = {
+                    'BucketARN': destination.ExtendedS3DestinationDescription.BucketARN,
+                    'BufferingHints': destination.ExtendedS3DestinationDescription.BufferingHints,
+                    'CloudWatchLoggingOptions': destination.ExtendedS3DestinationDescription.CloudWatchLoggingOptions,
+                    'CompressionFormat': destination.ExtendedS3DestinationDescription.CompressionFormat,
+                    'EncryptionConfiguration': destination.ExtendedS3DestinationDescription.EncryptionConfiguration,
+                    'Prefix': destination.ExtendedS3DestinationDescription.Prefix,
+                    'RoleARN': destination.ExtendedS3DestinationDescription.RoleARN,
+                    'ProcessingConfiguration': destination.ExtendedS3DestinationDescription.ProcessingConfiguration,
+                    'S3BackupConfiguration': destination.ExtendedS3DestinationDescription.S3BackupConfiguration,
+                    'S3BackupMode': destination.ExtendedS3DestinationDescription.S3BackupMode
+                };
+            }
+            if (destination.RedshiftDestinationDescription) {
+                var s3Configuration = null;
+                if (destination.RedshiftDestinationDescription.S3DestinationDescription) {
+                    s3Configuration = {
+                        'BucketARN': destination.RedshiftDestinationDescription.S3DestinationDescription.BucketARN,
+                        'BufferingHints': destination.RedshiftDestinationDescription.S3DestinationDescription.BufferingHints,
+                        'CloudWatchLoggingOptions': destination.RedshiftDestinationDescription.S3DestinationDescription.CloudWatchLoggingOptions,
+                        'CompressionFormat': destination.RedshiftDestinationDescription.S3DestinationDescription.CompressionFormat,
+                        'EncryptionConfiguration': destination.RedshiftDestinationDescription.S3DestinationDescription.EncryptionConfiguration,
+                        'Prefix': destination.RedshiftDestinationDescription.S3DestinationDescription.Prefix,
+                        'RoleARN': destination.RedshiftDestinationDescription.S3DestinationDescription.RoleARN
+                    };
+                }
+                reqParams.cfn['RedshiftDestinationConfiguration'] = {
+                    'CloudWatchLoggingOptions': destination.RedshiftDestinationDescription.CloudWatchLoggingOptions,
+                    'ClusterJDBCURL': destination.RedshiftDestinationDescription.ClusterJDBCURL,
+                    'CopyCommand': destination.RedshiftDestinationDescription.CopyCommand,
+                    'Password': destination.RedshiftDestinationDescription.Password,
+                    'ProcessingConfiguration': destination.RedshiftDestinationDescription.ProcessingConfiguration,
+                    'RoleARN': destination.RedshiftDestinationDescription.RoleARN,
+                    'S3Configuration': s3Configuration,
+                    'Username': destination.RedshiftDestinationDescription.Username
+                };
+            }
+            if (destination.ElasticsearchDestinationDescription) {
+                var s3Configuration = null;
+                if (destination.ElasticsearchDestinationDescription.S3DestinationDescription) {
+                    s3Configuration = {
+                        'BucketARN': destination.ElasticsearchDestinationDescription.S3DestinationDescription.BucketARN,
+                        'BufferingHints': destination.ElasticsearchDestinationDescription.S3DestinationDescription.BufferingHints,
+                        'CloudWatchLoggingOptions': destination.ElasticsearchDestinationDescription.S3DestinationDescription.CloudWatchLoggingOptions,
+                        'CompressionFormat': destination.ElasticsearchDestinationDescription.S3DestinationDescription.CompressionFormat,
+                        'EncryptionConfiguration': destination.ElasticsearchDestinationDescription.S3DestinationDescription.EncryptionConfiguration,
+                        'Prefix': destination.ElasticsearchDestinationDescription.S3DestinationDescription.Prefix,
+                        'RoleARN': destination.ElasticsearchDestinationDescription.S3DestinationDescription.RoleARN
+                    };
+                }
+                reqParams.cfn['ElasticsearchDestinationConfiguration'] = {
+                    'BufferingHints': destination.ElasticsearchDestinationDescription.BufferingHints,
+                    'CloudWatchLoggingOptions': destination.ElasticsearchDestinationDescription.CloudWatchLoggingOptions,
+                    'DomainARN': destination.ElasticsearchDestinationDescription.DomainARN,
+                    'IndexName': destination.ElasticsearchDestinationDescription.IndexName,
+                    'IndexRotationPeriod': destination.ElasticsearchDestinationDescription.IndexRotationPeriod,
+                    'ProcessingConfiguration': destination.ElasticsearchDestinationDescription.ProcessingConfiguration,
+                    'RetryOptions': destination.ElasticsearchDestinationDescription.RetryOptions,
+                    'RoleARN': destination.ElasticsearchDestinationDescription.RoleARN,
+                    'S3BackupMode': destination.ElasticsearchDestinationDescription.S3BackupMode,
+                    'S3Configuration': s3Configuration,
+                    'TypeName': destination.ElasticsearchDestinationDescription.TypeName
+                };
+            }
+            if (destination.ElasticsearchDestinationDescription) {
+                var s3Configuration = null;
+                if (destination.SplunkDestinationDescription.S3DestinationDescription) {
+                    s3Configuration = {
+                        'BucketARN': destination.SplunkDestinationDescription.S3DestinationDescription.BucketARN,
+                        'BufferingHints': destination.SplunkDestinationDescription.S3DestinationDescription.BufferingHints,
+                        'CloudWatchLoggingOptions': destination.SplunkDestinationDescription.S3DestinationDescription.CloudWatchLoggingOptions,
+                        'CompressionFormat': destination.SplunkDestinationDescription.S3DestinationDescription.CompressionFormat,
+                        'EncryptionConfiguration': destination.SplunkDestinationDescription.S3DestinationDescription.EncryptionConfiguration,
+                        'Prefix': destination.SplunkDestinationDescription.S3DestinationDescription.Prefix,
+                        'RoleARN': destination.SplunkDestinationDescription.S3DestinationDescription.RoleARN
+                    };
+                }
+                reqParams.cfn['SplunkDestinationConfiguration'] = {
+                    'CloudWatchLoggingOptions': destination.SplunkDestinationDescription.CloudWatchLoggingOptions,
+                    'HECAcknowledgmentTimeoutInSeconds': destination.SplunkDestinationDescription.HECAcknowledgmentTimeoutInSeconds,
+                    'HECEndpoint': destination.SplunkDestinationDescription.HECEndpoint,
+                    'HECEndpointType': destination.SplunkDestinationDescription.HECEndpointType,
+                    'HECToken': destination.SplunkDestinationDescription.HECToken,
+                    'ProcessingConfiguration': destination.SplunkDestinationDescription.ProcessingConfiguration,
+                    'RetryOptions': destination.SplunkDestinationDescription.RetryOptions,
+                    'S3BackupMode': destination.SplunkDestinationDescription.S3BackupMode,
+                    'S3Configuration': s3Configuration
+                };
+            }
+        });
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisFirehose::DeliveryStream',
+            'options': reqParams
+        });
     } else {
         return false;
     }

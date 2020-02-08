@@ -294,7 +294,85 @@ async function updateDatatableComputeLightsail() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "lightsail.instance") {
+        reqParams.tf['name'] = obj.data.name;
+        if (obj.data.location) {
+            reqParams.tf['availability_zone'] = obj.data.location.availabilityZone;
+        }
+        reqParams.tf['blueprint_id'] = obj.data.blueprintId;
+        reqParams.tf['bundle_id'] = obj.data.bundleId;
+        reqParams.tf['key_pair_name'] = obj.data.sshKeyName;
+        if (obj.data.tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.tags.forEach(tag => {
+                reqParams.tf['tags'][tag['key']] = tag['value'];
+            });
+        }
+
+        /*
+        TODO:
+        user_data
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id),
+            'region': obj.region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_instance',
+            'options': reqParams
+        });
+    } else if (obj.type == "lightsail.domain") {
+        reqParams.tf['domain_name'] = obj.data.name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id),
+            'region': obj.region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_domain',
+            'options': reqParams
+        });
+    } else if (obj.type == "lightsail.keypair") {
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.tf['public_key'] = 'REPLACEME';
+
+        /*
+        SKIPPED:
+        pgp_key
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id),
+            'region': obj.region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_key_pair',
+            'options': reqParams
+        });
+    } else if (obj.type == "lightsail.staticip") {
+        reqParams.tf['name'] = obj.data.name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id),
+            'region': obj.region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_static_ip',
+            'options': reqParams
+        });
+    } else if (obj.type == "lightsail.staticipattachment") {
+        reqParams.tf['static_ip_name'] = obj.data.name;
+        reqParams.tf['instance_name'] = obj.data.attachedTo;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id),
+            'region': obj.region,
+            'service': 'lightsail',
+            'terraformType': 'aws_lightsail_static_ip_attachment',
+            'options': reqParams
+        });
     } else {
         return false;
     }

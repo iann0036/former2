@@ -76,7 +76,21 @@ async function updateDatatableApplicationIntegrationSWF() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "swf.domain") {
+        reqParams.tf['name'] = obj.data.domainInfo.name;
+        reqParams.tf['description'] = obj.data.domainInfo.description;
+        if (obj.data.configuration) {
+            reqParams.tf['workflow_execution_retention_period_in_days'] = obj.data.configuration.workflowExecutionRetentionPeriodInDays;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('swf', obj.id),
+            'region': obj.region,
+            'service': 'swf',
+            'terraformType': 'aws_swf_domain',
+            'options': reqParams
+        });
     } else {
         return false;
     }

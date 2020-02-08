@@ -85,7 +85,28 @@ async function updateDatatableDatabaseQLDB() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "qldb.ledger") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.cfn['PermissionsMode'] = 'ALLOW_ALL';
+
+        /*
+        TODO:
+        DeletionProtection: Boolean
+        Name: String
+        PermissionsMode: String
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('qldb', obj.id),
+            'region': obj.region,
+            'service': 'qldb',
+            'type': 'AWS::QLDB::Ledger',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -198,7 +198,68 @@ async function updateDatatableBlockchainManagedBlockchain() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "managedblockchain.node") {
+        reqParams.cfn['MemberId'] = obj.data.MemberId;
+        reqParams.cfn['NetworkId'] = obj.data.NetworkId;
+        reqParams.cfn['NodeConfiguration'] = {
+            'AvailabilityZone': obj.data.AvailabilityZone,
+            'InstanceType': obj.data.InstanceType
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('managedblockchain', obj.id),
+            'region': obj.region,
+            'service': 'managedblockchain',
+            'type': 'AWS::ManagedBlockchain::Node',
+            'options': reqParams
+        });
+    } else if (obj.type == "managedblockchain.member") {
+        reqParams.cfn['NetworkId'] = obj.data.NetworkId;
+        var adminusername = 'REPLACEME';
+        if (obj.data.FrameworkAttributes && obj.data.FrameworkAttributes.Fabric) {
+            adminusername = obj.data.FrameworkAttributes.Fabric.AdminUsername;
+        }
+        reqParams.cfn['MemberConfiguration'] = {
+            'Description': obj.data.Description,
+            'MemberFrameworkConfiguration': {
+                'MemberFabricConfiguration': {
+                    'AdminUsername': adminusername,
+                    'AdminPassword': 'REPLACEME'
+                }
+            },
+            'Name': obj.data.Name
+        };
+        var networkframeworkconfiguration = null;
+        if (obj.data.NetworkDetails.FrameworkAttributes && obj.data.NetworkDetails.FrameworkAttributes.Fabric) {
+            networkframeworkconfiguration = {
+                'NetworkFabricConfiguration': {
+                    'Edition': obj.data.NetworkDetails.FrameworkAttributes.Fabric.Edition
+                }
+            };
+        }
+        reqParams.cfn['NetworkConfiguration'] = {
+            'Description': obj.data.NetworkDetails.Description,
+            'Framework': obj.data.NetworkDetails.Framework,
+            'FrameworkVersion': obj.data.NetworkDetails.FrameworkVersion,
+            'Name': obj.data.NetworkDetails.Name,
+            'NetworkFrameworkConfiguration': networkframeworkconfiguration,
+            'VotingPolicy': obj.data.NetworkDetails.VotingPolicy
+        };
+
+        /*
+        TODO
+        InvitationId: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('managedblockchain', obj.id),
+            'region': obj.region,
+            'service': 'managedblockchain',
+            'type': 'AWS::ManagedBlockchain::Member',
+            'options': reqParams
+        });
     } else {
         return false;
     }

@@ -76,7 +76,23 @@ async function updateDatatableInternetofThingsThingsGraph() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "iotthingsgraph.flowtemplate") {
+        if (obj.data.definition) {
+            reqParams.cfn['CompatibleNamespaceVersion'] = obj.data.validatedNamespaceVersion;
+            reqParams.cfn['Definition'] = {
+                'Language': obj.data.definition.language,
+                'Text': obj.data.definition.text
+            };
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('iotthingsgraph', obj.id),
+                'region': obj.region,
+                'service': 'iotthingsgraph',
+                'type': 'AWS::IoTThingsGraph::FlowTemplate',
+                'options': reqParams
+            });
+        }
     } else {
         return false;
     }

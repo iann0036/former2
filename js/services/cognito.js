@@ -794,7 +794,393 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "cognito.identitypool") {
+        reqParams.cfn['IdentityPoolName'] = obj.data.IdentityPoolName;
+        reqParams.tf['identity_pool_name'] = obj.data.IdentityPoolName;
+        reqParams.cfn['AllowUnauthenticatedIdentities'] = obj.data.AllowUnauthenticatedIdentities;
+        reqParams.tf['allow_unauthenticated_identities'] = obj.data.AllowUnauthenticatedIdentities;
+        reqParams.cfn['SupportedLoginProviders'] = obj.data.SupportedLoginProviders;
+        reqParams.tf['supported_login_providers'] = obj.data.SupportedLoginProviders;
+        reqParams.cfn['DeveloperProviderName'] = obj.data.DeveloperProviderName;
+        reqParams.tf['developer_provider_name'] = obj.data.DeveloperProviderName;
+        reqParams.cfn['OpenIdConnectProviderARNs'] = obj.data.OpenIdConnectProviderARNs;
+        reqParams.tf['openid_connect_provider_arns'] = obj.data.OpenIdConnectProviderARNs;
+        reqParams.cfn['CognitoIdentityProviders'] = obj.data.CognitoIdentityProviders;
+        if (obj.data.CognitoIdentityProviders) {
+            reqParams.tf['cognito_identity_providers'] = [];
+            obj.data.CognitoIdentityProviders.forEach(cognitoidentityprovider => {
+                reqParams.tf['cognito_identity_providers'].push({
+                    'client_id': cognitoidentityprovider.ClientId,
+                    'provider_name': cognitoidentityprovider.ProviderName,
+                    'server_side_token_check': cognitoidentityprovider.ServerSideTokenCheck
+                });
+            });
+        }
+        reqParams.cfn['SamlProviderARNs'] = obj.data.SamlProviderARNs;
+        reqParams.tf['saml_provider_arns'] = obj.data.SamlProviderARNs;
+
+        /*
+        TODO:
+        CognitoStreams: 
+            - CognitoStreams
+        PushSync: 
+            - PushSync
+        CognitoEvents: 
+            String: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::IdentityPool',
+            'terraformType': 'aws_cognito_identity_pool',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.identitypoolroleattachment") {
+        reqParams.cfn['IdentityPoolId'] = obj.data.IdentityPoolId;
+        reqParams.tf['identity_pool_id'] = obj.data.IdentityPoolId;
+        reqParams.cfn['RoleMappings'] = obj.data.RoleMappings;
+        if (obj.data.RoleMappings) {
+            reqParams.tf['role_mapping'] = [];
+            Object.keys(obj.data.RoleMappings).forEach(rolemapping => {
+                var mappingrules = null;
+                if (obj.data.RoleMappings[rolemapping].RulesConfiguration && obj.data.RoleMappings[rolemapping].RulesConfiguration.Rules) {
+                    mappingrules = [];
+                    obj.data.RoleMappings[rolemapping].RulesConfiguration.Rules.forEach(mappingrule => {
+                        mappingrules.push({
+                            'claim': mappingrule.Claim,
+                            'match_type': mappingrule.MatchType,
+                            'role_arn': mappingrule.RoleARN,
+                            'value': mappingrule.Value
+                        });
+                    });
+                }
+                reqParams.tf['role_mapping'].push({
+                    'identity_provider': rolemapping,
+                    'ambiguous_role_resolution': obj.data.RoleMappings[rolemapping].AmbiguousRoleResolution,
+                    'type': obj.data.RoleMappings[rolemapping].Type,
+                    'mapping_rule': mappingrules
+                });
+            });
+        }
+        reqParams.cfn['Roles'] = obj.data.Roles;
+        reqParams.tf['roles'] = obj.data.Roles;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::IdentityPoolRoleAttachment',
+            'terraformType': 'aws_cognito_identity_pool_roles_attachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpool") {
+        reqParams.cfn['UserPoolName'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Policies'] = obj.data.Policies;
+        if (obj.data.Policies && obj.data.Policies.PasswordPolicy) {
+            reqParams.tf['password_policy'] = {
+                'minimum_length': obj.data.Policies.PasswordPolicy.MinimumLength,
+                'require_lowercase': obj.data.Policies.PasswordPolicy.RequireLowercase,
+                'require_numbers': obj.data.Policies.PasswordPolicy.RequireNumbers,
+                'require_symbols': obj.data.Policies.PasswordPolicy.RequireSymbols,
+                'require_uppercase': obj.data.Policies.PasswordPolicy.RequireUppercase
+            };
+        }
+        if (obj.data.LambdaConfig) {
+            reqParams.cfn['LambdaConfig'] = {
+                'CreateAuthChallenge': obj.data.LambdaConfig.CreateAuthChallenge,
+                'CustomMessage': obj.data.LambdaConfig.CustomMessage,
+                'DefineAuthChallenge': obj.data.LambdaConfig.DefineAuthChallenge,
+                'PostAuthentication': obj.data.LambdaConfig.PostAuthentication,
+                'PostConfirmation': obj.data.LambdaConfig.PostConfirmation,
+                'PreAuthentication': obj.data.LambdaConfig.PreAuthentication,
+                'PreSignUp': obj.data.LambdaConfig.PreSignUp,
+                'VerifyAuthChallengeResponse': obj.data.LambdaConfig.VerifyAuthChallengeResponse
+            };
+            reqParams.tf['lambda_config'] = {
+                'create_auth_challenge': obj.data.LambdaConfig.CreateAuthChallenge,
+                'custom_message': obj.data.LambdaConfig.CustomMessage,
+                'define_auth_challenge': obj.data.LambdaConfig.DefineAuthChallenge,
+                'post_authentication': obj.data.LambdaConfig.PostAuthentication,
+                'post_confirmation': obj.data.LambdaConfig.PostConfirmation,
+                'pre_authentication': obj.data.LambdaConfig.PreAuthentication,
+                'pre_sign_up': obj.data.LambdaConfig.PreSignUp,
+                'verify_auth_challenge_response': obj.data.LambdaConfig.VerifyAuthChallengeResponse
+            };
+        }
+        reqParams.cfn['Schema'] = obj.data.SchemaAttributes;
+        if (obj.data.SchemaAttributes) {
+            reqParams.tf['schema'] = [];
+            obj.data.SchemaAttributes.forEach(schemaattribute => {
+                var numberattributeconstraints = null;
+                if (schemaattribute.NumberAttributeConstraints) {
+                    numberattributeconstraints = {
+                        'max_value': schemaattribute.NumberAttributeConstraints.MaxValue,
+                        'min_value': schemaattribute.NumberAttributeConstraints.MinValue
+                    };
+                }
+                var stringattributeconstraints = null;
+                if (schemaattribute.StringAttributeConstraints) {
+                    stringattributeconstraints = {
+                        'max_length': schemaattribute.StringAttributeConstraints.MaxLength,
+                        'min_length': schemaattribute.StringAttributeConstraints.MinLength
+                    };
+                }
+                reqParams.tf['schema'].push({
+                    'attribute_data_type': schemaattribute.AttributeDataType,
+                    'developer_only_attribute': schemaattribute.DeveloperOnlyAttribute,
+                    'mutable': schemaattribute.Mutable,
+                    'name': schemaattribute.Name,
+                    'number_attribute_constraints': numberattributeconstraints,
+                    'string_attribute_constraints': stringattributeconstraints,
+                    'required': schemaattribute.Required
+                });
+            });
+        }
+        reqParams.cfn['AutoVerifiedAttributes'] = obj.data.AutoVerifiedAttributes;
+        reqParams.tf['auto_verified_attributes'] = obj.data.AutoVerifiedAttributes;
+        reqParams.cfn['AliasAttributes'] = obj.data.AliasAttributes;
+        reqParams.tf['alias_attributes'] = obj.data.AliasAttributes;
+        reqParams.cfn['UsernameAttributes'] = obj.data.UsernameAttributes;
+        reqParams.tf['username_attributes'] = obj.data.UsernameAttributes;
+        reqParams.cfn['SmsVerificationMessage'] = obj.data.SmsVerificationMessage;
+        reqParams.tf['sms_verification_message'] = obj.data.SmsVerificationMessage;
+        reqParams.cfn['EmailVerificationMessage'] = obj.data.EmailVerificationMessage;
+        reqParams.tf['email_verification_message'] = obj.data.EmailVerificationMessage;
+        reqParams.cfn['EmailVerificationSubject'] = obj.data.EmailVerificationSubject;
+        reqParams.tf['email_verification_subject'] = obj.data.EmailVerificationSubject;
+        reqParams.cfn['SmsAuthenticationMessage'] = obj.data.SmsAuthenticationMessage;
+        reqParams.tf['sms_authentication_message'] = obj.data.SmsAuthenticationMessage;
+        reqParams.cfn['MfaConfiguration'] = obj.data.MfaConfiguration;
+        reqParams.tf['mfa_configuration'] = obj.data.MfaConfiguration;
+        reqParams.cfn['DeviceConfiguration'] = obj.data.DeviceConfiguration;
+        if (obj.data.DeviceConfiguration) {
+            reqParams.tf['device_configuration'] = {
+                'challenge_required_on_new_device': obj.data.DeviceConfiguration.ChallengeRequiredOnNewDevice,
+                'device_only_remembered_on_user_prompt': obj.data.DeviceConfiguration.DeviceOnlyRememberedOnUserPrompt
+            };
+        }
+        reqParams.cfn['EmailConfiguration'] = obj.data.EmailConfiguration;
+        if (obj.data.EmailConfiguration) {
+            reqParams.tf['email_configuration'] = {
+                'reply_to_email_address': obj.data.EmailConfiguration.ReplyToEmailAddress,
+                'source_arn': obj.data.EmailConfiguration.SourceArn
+            };
+        }
+        reqParams.cfn['SmsConfiguration'] = obj.data.SmsConfiguration;
+        if (obj.data.SmsConfiguration) {
+            reqParams.tf['sms_configuration'] = {
+                'external_id': obj.data.SmsConfiguration.ExternalId,
+                'sns_caller_arn': obj.data.SmsConfiguration.SnsCallerArn
+            };
+        }
+        reqParams.cfn['AdminCreateUserConfig'] = obj.data.AdminCreateUserConfig;
+        if (obj.data.AdminCreateUserConfig) {
+            var invitemessagetemplate = null;
+            if (obj.data.AdminCreateUserConfig.InviteMessageTemplate) {
+                invitemessagetemplate = {
+                    'email_message': obj.data.AdminCreateUserConfig.InviteMessageTemplate.EmailMessage,
+                    'email_subject': obj.data.AdminCreateUserConfig.InviteMessageTemplate.EmailSubject,
+                    'sms_message': obj.data.AdminCreateUserConfig.InviteMessageTemplate.SMSMessage
+                };
+            }
+            reqParams.tf['admin_create_user_config'] = {
+                'allow_admin_create_user_only': obj.data.AdminCreateUserConfig.AllowAdminCreateUserOnly,
+                'invite_message_template': invitemessagetemplate,
+                'unused_account_validity_days': obj.data.AdminCreateUserConfig.UnusedAccountValidityDays
+            };
+        }
+        reqParams.cfn['UserPoolTags'] = obj.data.UserPoolTags;
+        if (obj.data.UserPoolTags) {
+            reqParams.tf['tags'] = {};
+            Object.keys(obj.data.UserPoolTags).forEach(tag => {
+                reqParams.tf['tags'][tag] = obj.data.UserPoolTags[tag];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPool',
+            'terraformType': 'aws_cognito_user_pool',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                },
+                'Terraform': {
+                    'id': obj.data.Id,
+                    'arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "cognito.userpooluser") {
+        reqParams.cfn['Username'] = obj.data.Username;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+        reqParams.cfn['UserAttributes'] = obj.data.UserAttributes;
+
+        /*
+        TODO:
+        ClientMetadata: Json
+        DesiredDeliveryMediums: 
+            - String
+        ForceAliasCreation: Boolean
+        MessageAction: String
+        ValidationData: 
+            - AttributeType
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolUser',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpoolgroup") {
+        reqParams.cfn['GroupName'] = obj.data.GroupName;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Precedence'] = obj.data.Precedence;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpoolusertogroupattachment") {
+        reqParams.cfn['GroupName'] = obj.data.group.GroupName;
+        reqParams.cfn['Username'] = obj.data.user.Username;
+        reqParams.cfn['UserPoolId'] = obj.data.userpoolid;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolUserToGroupAttachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpoolclient") {
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+        reqParams.tf['user_pool_id'] = obj.data.UserPoolId;
+        reqParams.cfn['ClientName'] = obj.data.ClientName;
+        reqParams.tf['name'] = obj.data.ClientName;
+        reqParams.cfn['RefreshTokenValidity'] = obj.data.RefreshTokenValidity;
+        reqParams.tf['refresh_token_validity'] = obj.data.RefreshTokenValidity;
+        reqParams.cfn['ReadAttributes'] = obj.data.ReadAttributes;
+        reqParams.tf['read_attributes'] = obj.data.ReadAttributes;
+        reqParams.cfn['WriteAttributes'] = obj.data.WriteAttributes;
+        reqParams.tf['write_attributes'] = obj.data.WriteAttributes;
+        reqParams.cfn['ExplicitAuthFlows'] = obj.data.ExplicitAuthFlows;
+        reqParams.tf['explicit_auth_flows'] = obj.data.ExplicitAuthFlows;
+        if (obj.data.ClientSecret && obj.data.ClientSecret.length > 0) {
+            reqParams.cfn['GenerateSecret'] = true;
+            reqParams.tf['generate_secret'] = true;
+        }
+        reqParams.cfn['PreventUserExistenceErrors'] = obj.data.PreventUserExistenceErrors;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolClient',
+            'terraformType': 'aws_cognito_user_pool_client',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpooldomain") {
+        reqParams.cfn['Domain'] = obj.data.Domain;
+        reqParams.cfn['CustomDomainConfig'] = obj.data.CustomDomainConfig;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolDomain',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Domain
+            }
+        });
+    } else if (obj.type == "cognito.userpoolresourceserver") {
+        reqParams.cfn['Identifier'] = obj.data.Identifier;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+        reqParams.cfn['Scopes'] = obj.data.Scopes;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolResourceServer',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Identifier
+            }
+        });
+    } else if (obj.type == "cognito.userpoolidentityprovider") {
+        reqParams.cfn['AttributeMapping'] = obj.data.AttributeMapping;
+        reqParams.cfn['IdpIdentifiers'] = obj.data.IdpIdentifiers;
+        reqParams.cfn['ProviderDetails'] = obj.data.ProviderDetails;
+        reqParams.cfn['ProviderName'] = obj.data.ProviderName;
+        reqParams.cfn['ProviderType'] = obj.data.ProviderType;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolIdentityProvider',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ProviderName
+            }
+        });
+    } else if (obj.type == "cognito.userpoolriskconfigurationattachment") {
+        reqParams.cfn['AccountTakeoverRiskConfiguration'] = obj.data.AccountTakeoverRiskConfiguration;
+        reqParams.cfn['ClientId'] = obj.data.ClientId;
+        reqParams.cfn['CompromisedCredentialsRiskConfiguration'] = obj.data.CompromisedCredentialsRiskConfiguration;
+        reqParams.cfn['RiskExceptionConfiguration'] = obj.data.RiskExceptionConfiguration;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolRiskConfigurationAttachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "cognito.userpooluicustomizationattachment") {
+        reqParams.cfn['ClientId'] = obj.data.ClientId;
+        reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
+        reqParams.cfn['CSS'] = obj.data.CSS;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cognito', obj.id),
+            'region': obj.region,
+            'service': 'cognito',
+            'type': 'AWS::Cognito::UserPoolUICustomizationAttachment',
+            'options': reqParams
+        });
     } else {
         return false;
     }

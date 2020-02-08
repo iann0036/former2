@@ -418,7 +418,264 @@ async function updateDatatableApplicationIntegrationEventBridge() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "eventbridge.rule") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['EventPattern'] = obj.data.EventPattern;
+        reqParams.tf['event_pattern'] = obj.data.EventPattern;
+        reqParams.cfn['ScheduleExpression'] = obj.data.ScheduleExpression;
+        reqParams.tf['schedule_expression'] = obj.data.ScheduleExpression;
+        reqParams.cfn['State'] = obj.data.State;
+        if (obj.data.Targets) {
+            reqParams.cfn['Targets'] = [];
+            obj.data.Targets.forEach(target => {
+                var ecsParameters = null;
+                if (target.EcsParameters) {
+                    ecsParameters = {
+                        'TaskDefinitionArn': target.EcsParameters.TaskDefinitionArn,
+                        'TaskCount': target.EcsParameters.TaskCount
+                    };
+                }
+                reqParams.cfn['Targets'].push({
+                    'Arn': target.Arn,
+                    'EcsParameters': ecsParameters,
+                    'Id': target.Id,
+                    'Input': target.Input,
+                    'InputPath': target.InputPath,
+                    'InputTransformer': target.InputTransformer,
+                    'KinesisParameters': target.KinesisParameters,
+                    'RoleArn': target.RoleArn,
+                    'RunCommandParameters': target.RunCommandParameters,
+                    'SqsParameters': target.SqsParameters
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('events', obj.id),
+            'region': obj.region,
+            'service': 'events',
+            'type': 'AWS::Events::Rule',
+            'terraformType': 'aws_cloudwatch_event_rule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                },
+                'Import': {
+                    'Name': obj.data.Name
+                }
+            }
+        });
+
+        if (obj.data.Targets) {
+            obj.data.Targets.forEach(target => {
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.tf['rule'] = obj.data.Name;
+                reqParams.tf['target_id'] = obj.data.Id;
+                reqParams.tf['arn'] = obj.data.Arn;
+                reqParams.tf['input'] = obj.data.Input;
+                reqParams.tf['input_path'] = obj.data.InputPath;
+                reqParams.tf['role_arn'] = obj.data.RoleArn;
+                if (target.InputTransformer) {
+                    reqParams.tf['input_transformer'] = {
+                        'input_paths': obj.data.InputTransformer.InputPathsMap,
+                        'input_template': obj.data.InputTransformer.InputTemplate
+                    };
+                }
+                if (target.EcsParameters) {
+                    var networkconfiguration = null;
+                    if (target.EcsParameters.NetworkConfiguration && target.EcsParameters.NetworkConfiguration.awsvpcConfiguration) {
+                        networkconfiguration = {
+                            'subnets': target.EcsParameters.NetworkConfiguration.awsvpcConfiguration.Subnets,
+                            'security_groups': target.EcsParameters.NetworkConfiguration.awsvpcConfiguration.SecurityGroups,
+                            'assign_public_ip': target.EcsParameters.NetworkConfiguration.awsvpcConfiguration.AssignPublicIp
+                        };
+                    }
+                    reqParams.tf['ecs_target'] = {
+                        'task_definition_arn': target.EcsParameters.TaskDefinitionArn,
+                        'task_count': target.EcsParameters.TaskCount,
+                        'network_configuration': networkconfiguration,
+                        'platform_version': target.EcsParameters.PlatformVersion,
+                        'task_count': target.EcsParameters.Group
+                    };
+                }
+                if (target.KinesisParameters) {
+                    reqParams.tf['kinesis_target'] = {
+                        'partition_key_path': target.KinesisParameters.PartitionKeyPath
+                    };
+                }
+                if (target.RunCommandParameters) {
+                    reqParams.tf['run_command_targets'] = [];
+                    target.RunCommandParameters.RunCommandTargets.forEach(runcommandtarget => {
+                        reqParams.tf['run_command_targets'].push({
+                            'key': runcommandtarget.Key,
+                            'values': runcommandtarget.Values
+                        });
+                    });
+                }
+                if (target.EcsParameters) {
+                    reqParams.tf['ecs_target'] = {
+                        'task_definition_arn': target.EcsParameters.TaskDefinitionArn,
+                        'task_count': target.EcsParameters.TaskCount
+                    };
+                }
+                if (target.BatchParameters) {
+                    var arraysize = null;
+                    if (target.BatchParameters.ArrayProperties) {
+                        arraysize = target.BatchParameters.ArrayProperties.Size;
+                    }
+                    var attempts = null;
+                    if (target.BatchParameters.RetryStrategy) {
+                        attempts = target.BatchParameters.RetryStrategy.Attempts;
+                    }
+                    reqParams.tf['batch_target'] = {
+                        'job_definition': target.BatchParameters.JobDefinition,
+                        'job_name': target.BatchParameters.JobName,
+                        'array_size': arraysize,
+                        'job_attempts': attempts
+                    };
+                }
+                if (target.SqsParameters) {
+                    reqParams.tf['sqs_target'] = {
+                        'message_group_id': target.SqsParameters.MessageGroupId
+                    };
+                }
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'region': obj.region,
+                    'service': 'cloudwatch',
+                    'terraformType': 'aws_cloudwatch_event_target',
+                    'options': reqParams
+                });
+            });
+        }
+    } else if (obj.type == "eventbridge.eventbuspolicy") {
+        reqParams.cfn['Action'] = obj.data.Action;
+        if (obj.data.Condition && obj.data.Condition.StringEquals && obj.data.Condition.StringEquals['aws:PrincipalOrgID']) {
+            reqParams.cfn['Condition'] = {
+                'Key': 'aws:PrincipalOrgID',
+                'Type': 'StringEquals',
+                'Value': obj.data.Condition.StringEquals['aws:PrincipalOrgID']
+            };
+        }
+        reqParams.cfn['Principal'] = "*";
+        if (obj.data.Principal && obj.data.Principal.AWS) {
+            reqParams.cfn['Principal'] = obj.data.Principal.AWS;
+        }
+        reqParams.cfn['StatementId'] = obj.data.Sid;
+        reqParams.cfn['EventBusName'] = obj.data.EventBusName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::EventBusPolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.eventbus") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.Name.startsWith('aws.partner/')) {
+            reqParams.cfn['EventSourceName'] = obj.data.Name;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::EventBus',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Arn': obj.data.Arn,
+                    'Name': obj.data.Name,
+                    'Policy': obj.data.Policy
+                }
+            }
+        });
+    } else if (obj.type == "eventbridge.schemaregistry") {
+        reqParams.cfn['RegistryName'] = obj.data.RegistryName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::EventSchemas::Registry',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.schemadiscoverer") {
+        reqParams.cfn['SourceArn'] = obj.data.SourceArn;
+        reqParams.cfn['Description'] = obj.data.Description;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::EventSchemas::Discoverer',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.schema") {
+        reqParams.cfn['Content'] = obj.data.Content;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['RegistryName'] = obj.data.RegistryName;
+        reqParams.cfn['SchemaName'] = obj.data.SchemaName;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::EventSchemas::Schema',
+            'options': reqParams
+        });
     } else {
         return false;
     }

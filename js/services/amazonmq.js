@@ -244,7 +244,103 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "amazonmq.broker") {
+        reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.cfn['BrokerName'] = obj.data.BrokerName;
+        reqParams.cfn['DeploymentMode'] = obj.data.DeploymentMode;
+        reqParams.cfn['EngineType'] = obj.data.EngineType;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['HostInstanceType'] = obj.data.HostInstanceType;
+        reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+        if (obj.data.Configurations && obj.data.Configurations.Current) {
+            reqParams.cfn['Configuration'] = {
+                'Id': obj.data.Configurations.Current.Id,
+                'Revision': obj.data.Configurations.Current.Revision
+            };
+        }
+        reqParams.cfn['MaintenanceWindowStartTime'] = obj.data.MaintenanceWindowStartTime;
+        if (obj.data.Logs) {
+            reqParams.cfn['Logs'] = {
+                'Audit': obj.data.Logs.Audit,
+                'General': obj.data.Logs.General
+            };
+        }
+        reqParams.cfn['SecurityGroups'] = obj.data.SecurityGroups;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
+            });
+        }
+        if (obj.data.Users) {
+            reqParams.cfn['Users'] = [];
+            obj.data.Users.forEach(user => {
+                reqParams.cfn['Users'].push({
+                    'Username': user.Username
+                });
+            });
+        }
+
+        /*
+        TODO:
+        Users: 
+            - User
+                Password
+                Groups
+                ConsoleAccess
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amazonmq', obj.id),
+            'region': obj.region,
+            'service': 'amazonmq',
+            'type': 'AWS::AmazonMQ::Broker',
+            'options': reqParams
+        });
+    } else if (obj.type == "amazonmq.configuration") {
+        reqParams.cfn['Data'] = obj.data.Data;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['EngineType'] = obj.data.EngineType;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amazonmq', obj.id),
+            'region': obj.region,
+            'service': 'amazonmq',
+            'type': 'AWS::AmazonMQ::Configuration',
+            'options': reqParams
+        });
+    } else if (obj.type == "amazonmq.configurationassociation") {
+        reqParams.cfn['Broker'] = obj.data.Broker;
+        reqParams.cfn['Configuration'] = {
+            'Id': obj.data.Configuration.Id,
+            'Revision': obj.data.Configuration.Revision
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amazonmq', obj.id),
+            'region': obj.region,
+            'service': 'amazonmq',
+            'type': 'AWS::AmazonMQ::ConfigurationAssociation',
+            'options': reqParams
+        });
     } else {
         return false;
     }

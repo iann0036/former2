@@ -531,6 +531,66 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "cloudfront.originaccessidentity") {
+        if (obj.data.Comment) {
+            reqParams.cfn['CloudFrontOriginAccessIdentityConfig'] = {
+                'Comment': obj.data.Comment
+            };
+            reqParams.tf['comment'] = obj.data.Comment;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
+            'terraformType': 'aws_cloudfront_origin_access_identity',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id,
+                'GetAtt': {
+                    'S3CanonicalUserId': obj.data.S3CanonicalUserId
+                }
+            }
+        });
+    } else if (obj.type == "cloudfront.streamingdistribution") {
+        var aliases = null;
+        if (obj.data.Aliases) {
+            aliases = obj.data.Aliases.Items
+        };
+        var trustedSigners = null;
+        if (obj.data.TrustedSigners) {
+            trustedSigners = {
+                'Enabled': obj.data.TrustedSigners.Enabled,
+                'AwsAccountNumbers': obj.data.TrustedSigners.Items
+            };
+        }
+        reqParams.cfn['StreamingDistributionConfig'] = {
+            'Aliases': aliases,
+            'Comment': obj.data.Comment,
+            'Enabled': obj.data.Enabled,
+            'PriceClass': obj.data.PriceClass,
+            'S3Origin': obj.data.S3Origin,
+            'TrustedSigners': trustedSigners
+        };
+
+        /*
+        TODO:
+        StreamingDistributionConfig:
+            Logging
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::StreamingDistribution',
+            'options': reqParams
+        });
     } else {
         return false;
     }

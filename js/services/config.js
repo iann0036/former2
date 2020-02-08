@@ -488,7 +488,198 @@ async function updateDatatableManagementAndGovernanceConfig() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "config.configrule") {
+        reqParams.cfn['ConfigRuleName'] = obj.data.ConfigRuleName;
+        reqParams.tf['name'] = obj.data.ConfigRuleName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Scope'] = obj.data.Scope;
+        if (obj.data.Scope) {
+            reqParams.tf['scope'] = {
+                'compliance_resource_id': obj.data.Scope.ComplianceResourceId,
+                'compliance_resource_types': obj.data.Scope.ComplianceResourceTypes,
+                'tag_key': obj.data.Scope.TagKey,
+                'tag_value': obj.data.Scope.TagValue
+            };
+        }
+        reqParams.cfn['Source'] = obj.data.Source;
+        if (obj.data.Source) {
+            var sourcedetail = null;
+            if (obj.data.Source.SourceDetails) {
+                sourcedetail = {
+                    'event_source': obj.data.Source.SourceDetails.EventSource,
+                    'maximum_execution_frequency': obj.data.Source.SourceDetails.MaximumExecutionFrequency,
+                    'message_type': obj.data.Source.SourceDetails.MessageType
+                };
+            }
+            reqParams.tf['source'] = {
+                'owner': obj.data.Source.Owner,
+                'source_identifier': obj.data.Source.SourceIdentifier,
+                'source_detail': sourcedetail
+            };
+        }
+        reqParams.cfn['InputParameters'] = obj.data.InputParameters;
+        reqParams.tf['input_parameters'] = obj.data.InputParameters;
+        reqParams.cfn['MaximumExecutionFrequency'] = obj.data.MaximumExecutionFrequency;
+        reqParams.tf['maximum_execution_frequency'] = obj.data.MaximumExecutionFrequency;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigRule',
+            'terraformType': 'aws_config_config_rule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConfigRuleName,
+                'GetAtt': {
+                    'Arn': obj.data.ConfigRuleArn,
+                    //'Compliance.Type': obj.data.,
+                    'ConfigRuleId': obj.data.ConfigRuleId
+                }
+            }
+        });
+    } else if (obj.type == "config.configurationaggregator") {
+        reqParams.cfn['ConfigurationAggregatorName'] = obj.data.ConfigurationAggregatorName;
+        reqParams.tf['name'] = obj.data.ConfigurationAggregatorName;
+        if (obj.data.AccountAggregationSources) {
+            reqParams.cfn['AccountAggregationSources'] = [];
+            reqParams.tf['account_aggregation_source'] = [];
+            obj.data.AccountAggregationSources.forEach(accountAggregationSource => {
+                reqParams.cfn['AccountAggregationSources'].push({
+                    'AllAwsRegions': accountAggregationSource.AllAwsRegions,
+                    'AwsRegions': accountAggregationSource.AwsRegions,
+                    'AccountIds': accountAggregationSource.AccountIds
+                });
+                reqParams.tf['account_aggregation_source'].push({
+                    'all_regions': accountAggregationSource.AllAwsRegions,
+                    'regions': accountAggregationSource.AwsRegions,
+                    'account_ids': accountAggregationSource.AccountIds
+                });
+            });
+        }
+        if (obj.data.OrganizationAggregationSource) {
+            reqParams.cfn['OrganizationAggregationSource'] = {
+                'AllAwsRegions': obj.data.OrganizationAggregationSource.AllAwsRegions,
+                'AwsRegions': obj.data.OrganizationAggregationSource.AwsRegions,
+                'RoleArn': obj.data.OrganizationAggregationSource.RoleArn
+            };
+            reqParams.tf['organization_aggregation_source'] = {
+                'all_regions': obj.data.OrganizationAggregationSource.AllAwsRegions,
+                'regions': obj.data.OrganizationAggregationSource.AwsRegions,
+                'role_arn': obj.data.OrganizationAggregationSource.RoleArn
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigurationAggregator',
+            'terraformType': 'aws_config_configuration_aggregator',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.configurationrecorder") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        if (obj.data.recordingGroup) {
+            reqParams.cfn['RecordingGroup'] = {
+                'AllSupported': obj.data.recordingGroup.allSupported,
+                'IncludeGlobalResourceTypes': obj.data.recordingGroup.includeGlobalResourceTypes,
+                'ResourceTypes': obj.data.recordingGroup.resourceTypes
+            };
+            reqParams.tf['recording_group'] = {
+                'all_supported': obj.data.recordingGroup.allSupported,
+                'include_global_resource_types': obj.data.recordingGroup.includeGlobalResourceTypes,
+                'resource_types': obj.data.recordingGroup.resourceTypes
+            };
+        }
+        reqParams.cfn['RoleARN'] = obj.data.roleARN;
+        reqParams.tf['role_arn'] = obj.data.roleARN;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::ConfigurationRecorder',
+            'terraformType': 'aws_config_configuration_recorder',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.aggregationauthorization") {
+        reqParams.cfn['AuthorizedAccountId'] = obj.data.AuthorizedAccountId;
+        reqParams.tf['account_id'] = obj.data.AuthorizedAccountId;
+        reqParams.cfn['AuthorizedAwsRegion'] = obj.data.AuthorizedAwsRegion;
+        reqParams.tf['region'] = obj.data.AuthorizedAwsRegion;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::AggregationAuthorization',
+            'terraformType': 'aws_config_aggregate_authorization',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.deliverychannel") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['S3BucketName'] = obj.data.s3BucketName;
+        reqParams.tf['s3_bucket_name'] = obj.data.s3BucketName;
+        reqParams.cfn['S3KeyPrefix'] = obj.data.s3KeyPrefix;
+        reqParams.tf['s3_key_prefix'] = obj.data.s3KeyPrefix;
+        reqParams.cfn['SnsTopicARN'] = obj.data.snsTopicARN;
+        reqParams.tf['sns_topic_arn'] = obj.data.snsTopicARN;
+        if (obj.data.configSnapshotDeliveryProperties) {
+            reqParams.cfn['ConfigSnapshotDeliveryProperties'] = {
+                'DeliveryFrequency': obj.data.configSnapshotDeliveryProperties.deliveryFrequency
+            };
+            reqParams.tf['snapshot_delivery_properties'] = {
+                'delivery_frequency': obj.data.configSnapshotDeliveryProperties.deliveryFrequency
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::DeliveryChannel',
+            'terraformType': 'aws_config_delivery_channel',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.remediationconfiguration") {
+        reqParams.cfn['ConfigRuleName'] = obj.data.ConfigRuleName;
+        reqParams.cfn['Parameters'] = obj.data.Parameters;
+        reqParams.cfn['ResourceType'] = obj.data.ResourceType;
+        reqParams.cfn['TargetId'] = obj.data.TargetId;
+        reqParams.cfn['TargetType'] = obj.data.TargetType;
+        reqParams.cfn['TargetVersion'] = obj.data.TargetVersion;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::RemediationConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.organizationconfigrule") {
+        reqParams.cfn['ExcludedAccounts'] = obj.data.ExcludedAccounts;
+        reqParams.cfn['OrganizationConfigRuleName'] = obj.data.OrganizationConfigRuleName;
+        reqParams.cfn['OrganizationManagedRuleMetadata'] = obj.data.OrganizationManagedRuleMetadata;
+        reqParams.cfn['OrganizationCustomRuleMetadata'] = obj.data.OrganizationCustomRuleMetadata;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::OrganizationConfigRule',
+            'options': reqParams
+        });
     } else {
         return false;
     }

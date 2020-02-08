@@ -94,7 +94,96 @@ async function updateDatatableAnalyticsElasticsearch() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "elasticsearch.domain") {
+        reqParams.cfn['DomainName'] = obj.data.DomainName;
+        reqParams.tf['domain_name'] = obj.data.DomainName;
+        reqParams.cfn['ElasticsearchVersion'] = obj.data.ElasticsearchVersion;
+        reqParams.tf['elasticsearch_version'] = obj.data.ElasticsearchVersion;
+        if (obj.data.ElasticsearchClusterConfig) {
+            reqParams.cfn['ElasticsearchClusterConfig'] = {
+                'DedicatedMasterCount': obj.data.ElasticsearchClusterConfig.DedicatedMasterCount,
+                'DedicatedMasterEnabled': obj.data.ElasticsearchClusterConfig.DedicatedMasterEnabled,
+                'DedicatedMasterType': obj.data.ElasticsearchClusterConfig.DedicatedMasterType,
+                'InstanceCount': obj.data.ElasticsearchClusterConfig.InstanceCount,
+                'InstanceType': obj.data.ElasticsearchClusterConfig.InstanceType,
+                'ZoneAwarenessEnabled': obj.data.ElasticsearchClusterConfig.ZoneAwarenessEnabled
+            };
+            reqParams.tf['cluster_config'] = {
+                'dedicated_master_count': obj.data.ElasticsearchClusterConfig.DedicatedMasterCount,
+                'dedicated_master_enabled': obj.data.ElasticsearchClusterConfig.DedicatedMasterEnabled,
+                'dedicated_master_type': obj.data.ElasticsearchClusterConfig.DedicatedMasterType,
+                'nstance_count': obj.data.ElasticsearchClusterConfig.InstanceCount,
+                'instance_type': obj.data.ElasticsearchClusterConfig.InstanceType,
+                'zone_awareness_enabled': obj.data.ElasticsearchClusterConfig.ZoneAwarenessEnabled
+            };
+        }
+        reqParams.cfn['AccessPolicies'] = obj.data.AccessPolicies;
+        reqParams.tf['access_policies '] = obj.data.AccessPolicies;
+        reqParams.cfn['SnapshotOptions'] = obj.data.SnapshotOptions;
+        if (obj.data.SnapshotOptions) {
+            reqParams.cfn['snapshot_options'] = {
+                'automated_snapshot_start_hour': obj.data.SnapshotOptions.AutomatedSnapshotStartHour
+            };
+        }
+        if (obj.data.VPCOptions) {
+            reqParams.cfn['VPCOptions'] = {
+                'SecurityGroupIds': obj.data.VPCOptions.SecurityGroupIds,
+                'SubnetIds': obj.data.VPCOptions.SubnetIds
+            };
+            reqParams.tf['vpc_options'] = {
+                'security_group_ids': obj.data.VPCOptions.SecurityGroupIds,
+                'subnet_ids': obj.data.VPCOptions.SubnetIds
+            };
+        }
+        reqParams.cfn['EncryptionAtRestOptions'] = obj.data.EncryptionAtRestOptions;
+        if (obj.data.EncryptionAtRestOptions) {
+            reqParams.tf['encrypt_at_rest'] = {
+                'enabled': obj.data.EncryptionAtRestOptions.Enabled,
+                'kms_key_id': obj.data.EncryptionAtRestOptions.KmsKeyId
+            };
+        }
+        reqParams.cfn['NodeToNodeEncryptionOptions'] = obj.data.NodeToNodeEncryptionOptions;
+        if (obj.data.NodeToNodeEncryptionOptions) {
+            reqParams.tf['node_to_node_encryption'] = {
+                'enabled': obj.data.NodeToNodeEncryptionOptions.Enabled
+            };
+        }
+        reqParams.cfn['AdvancedOptions'] = obj.data.AdvancedOptions;
+        reqParams.tf['advanced_options'] = obj.data.AdvancedOptions;
+        reqParams.cfn['EBSOptions'] = obj.data.EBSOptions;
+        if (obj.data.EBSOptions) {
+            reqParams.tf['ebs_options'] = {
+                'ebs_enabled': obj.data.EBSOptions.EBSEnabled,
+                'volume_type': obj.data.EBSOptions.VolumeType,
+                'volume_size': obj.data.EBSOptions.VolumeSize,
+                'iops': obj.data.EBSOptions.Iops
+            };
+        }
+        reqParams.cfn['CognitoOptions'] = obj.data.CognitoOptions;
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticsearch', obj.id),
+            'region': obj.region,
+            'service': 'elasticsearch',
+            'type': 'AWS::Elasticsearch::Domain',
+            'terraformType': 'aws_elasticsearch_domain',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DomainName,
+                'GetAtt': {
+                    'Arn': obj.data.ARN,
+                    'DomainArn': obj.data.ARN,
+                    'DomainEndpoint': obj.data.Endpoint
+                }
+            }
+        });
     } else {
         return false;
     }

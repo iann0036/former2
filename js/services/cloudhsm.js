@@ -164,7 +164,38 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    
+    if (obj.type == "cloudhsm.cluster") {
+        reqParams.tf['source_backup_identifier'] = obj.data.SourceBackupId;
+        reqParams.tf['hsm_type'] = obj.data.HsmType;
+        reqParams.tf['subnet_ids'] = Object.values(obj.data.SubnetMapping);
+
+        /*
+        TODO:
+        tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudhsm', obj.id),
+            'region': obj.region,
+            'service': 'cloudhsm',
+            'terraformType': 'aws_cloudhsm_v2_cluster',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudhsm.hsm") {
+        reqParams.tf['cluster_id'] = obj.data.ClusterId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.tf['ip_address'] = obj.data.EniIp;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudhsm', obj.id),
+            'region': obj.region,
+            'service': 'cloudhsm',
+            'terraformType': 'aws_cloudhsm_v2_hsm',
+            'options': reqParams
+        });
     } else {
         return false;
     }
