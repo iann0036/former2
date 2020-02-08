@@ -2283,7 +2283,158 @@ async function updateDatatableComputeEC2() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    if (obj.type == "ec2.placementgroup") {
+    if (obj.type == "ec2.instance") {
+        reqParams.cfn['ImageId'] = obj.data.ImageId;
+        reqParams.tf['ami'] = obj.data.ImageId;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.tf['instance_type'] = obj.data.InstanceType;
+        reqParams.cfn['KernelId'] = obj.data.KernelId;
+        reqParams.cfn['KeyName'] = obj.data.KeyName;
+        reqParams.tf['key_name'] = obj.data.KeyName;
+        if (obj.data.Placement) {
+            reqParams.cfn['AvailabilityZone'] = obj.data.Placement.AvailabilityZone;
+            reqParams.tf['availability_zone'] = obj.data.Placement.AvailabilityZone;
+            reqParams.cfn['Affinity'] = obj.data.Placement.Affinity;
+            reqParams.cfn['PlacementGroupName'] = (obj.data.Placement.GroupName == "" ? null : obj.data.Placement.GroupName);
+            reqParams.tf['placement_group'] = (obj.data.Placement.GroupName == "" ? null : obj.data.Placement.GroupName);
+            reqParams.cfn['Tenancy'] = obj.data.Placement.Tenancy;
+            reqParams.tf['tenancy'] = obj.data.Placement.Tenancy;
+            reqParams.cfn['HostId'] = obj.data.Placement.HostId;
+            reqParams.cfn['HostResourceGroupArn'] = obj.data.Placement.HostResourceGroupArn;
+        }
+        reqParams.cfn['RamdiskId'] = obj.data.RamdiskId;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
+        reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+        reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
+        if (obj.data.NetworkInterfaces) {
+            reqParams.cfn['SecurityGroupIds'] = [];
+            reqParams.tf['vpc_security_group_ids'] = [];
+            obj.data.NetworkInterfaces.forEach(networkInterface => {
+                if (networkInterface.Groups) {
+                    networkInterface.Groups.forEach(securityGroup => {
+                        reqParams.cfn['SecurityGroupIds'].push(securityGroup.GroupId);
+                        reqParams.tf['vpc_security_group_ids'].push(securityGroup.GroupId);
+                    });
+                }
+            });
+        }
+        reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
+        reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
+        if (obj.data.BlockDeviceMappings) {
+            reqParams.cfn['BlockDeviceMappings'] = [];
+            reqParams.tf['ebs_block_device'] = [];
+            obj.data.BlockDeviceMappings.forEach(blockDeviceMapping => {
+                var ebs = null;
+                if (blockDeviceMapping.Ebs && blockDeviceMapping.Ebs.VolumeId) {
+                    ebs = {
+                        'Encrypted': blockDeviceMapping.Ebs.Encrypted,
+                        'VolumeSize': blockDeviceMapping.Ebs.Size,
+                        'SnapshotId': blockDeviceMapping.Ebs.SnapshotId,
+                        'Iops': (blockDeviceMapping.Ebs.VolumeType == "io1") ? blockDeviceMapping.Ebs.Iops : null,
+                        'VolumeType': blockDeviceMapping.Ebs.VolumeType,
+                        'DeleteOnTermination': blockDeviceMapping.Ebs.DeleteOnTermination
+                    };
+                    if (blockDeviceMapping.DeviceName != "/dev/sda1" && blockDeviceMapping.DeviceName != "/dev/xvda") {
+                        reqParams.tf['ebs_block_device'].push({
+                            'device_name': blockDeviceMapping.DeviceName,
+                            'encrypted': blockDeviceMapping.Ebs.Encrypted,
+                            'volume_size': blockDeviceMapping.Ebs.Size,
+                            'snapshot_id': blockDeviceMapping.Ebs.SnapshotId,
+                            'iops': (blockDeviceMapping.Ebs.VolumeType == "io1") ? blockDeviceMapping.Ebs.Iops : null,
+                            'volume_type': blockDeviceMapping.Ebs.VolumeType,
+                            'delete_on_termination': blockDeviceMapping.Ebs.DeleteOnTermination
+                        });
+                    } else {
+                        reqParams.tf['root_block_device'] = {
+                            'volume_size': blockDeviceMapping.Ebs.Size,
+                            'iops': (blockDeviceMapping.Ebs.VolumeType == "io1") ? blockDeviceMapping.Ebs.Iops : null,
+                            'volume_type': blockDeviceMapping.Ebs.VolumeType,
+                            'delete_on_termination': blockDeviceMapping.Ebs.DeleteOnTermination
+                        };
+                    }
+                }
+                reqParams.cfn['BlockDeviceMappings'].push({
+                    'DeviceName': blockDeviceMapping.DeviceName,
+                    'Ebs': ebs
+                });
+            });
+        }
+        reqParams.cfn['UserData'] = obj.data.UserData;
+        reqParams.tf['user_data'] = obj.data.UserData;
+        if (obj.data.IamInstanceProfile) {
+            reqParams.cfn['IamInstanceProfile'] = obj.data.IamInstanceProfile.Arn.split("/").pop();
+            reqParams.tf['iam_instance_profile'] = obj.data.IamInstanceProfile.Arn.split("/").pop();
+        }
+        if (obj.data.Monitoring && obj.data.Monitoring.State == "enabled") {
+            reqParams.cfn['Monitoring'] = true;
+            reqParams.tf['monitoring'] = true;
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        if (obj.data.ElasticGpus) {
+            reqParams.cfn['ElasticGpuSpecifications'] = [];
+            obj.data.ElasticGpus.forEach(elasticGpu => {
+                reqParams.cfn['ElasticGpuSpecifications'].push({
+                    'Type': elasticGpu.ElasticGpuType
+                });
+            });
+        }
+        reqParams.cfn['HibernationOptions'] = obj.data.HibernationOptions;
+
+        /*
+        TODO:
+        CreditSpecification: CreditSpecification
+        DisableApiTermination: Boolean
+        ElasticInferenceAccelerators: 
+            - ElasticInferenceAccelerator
+        InstanceInitiatedShutdownBehavior: String
+        Ipv6AddressCount: Integer
+        Ipv6Addresses:
+            - IPv6 Address Type
+        LaunchTemplate: LaunchTemplateSpecification
+        LicenseSpecifications: 
+            - LicenseSpecification
+        NetworkInterfaces: 
+            - EC2 Network Interface
+        PrivateIpAddress: String
+        SecurityGroups: 
+            - String
+        SsmAssociations: 
+            - SSMAssociation
+        Volumes: 
+            - EC2 MountPoint
+        AdditionalInfo: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Instance',
+            'terraformType': 'aws_instance',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.InstanceId,
+                'GetAtt': {
+                    'AvailabilityZone': obj.data.Placement.AvailabilityZone,
+                    'PrivateDnsName': obj.data.PrivateDnsName,
+                    'PublicDnsName': obj.data.PublicDnsName,
+                    'PrivateIp': obj.data.PrivateIpAddress,
+                    'PublicIp': obj.data.PublicIpAddress
+                },
+                'Import': {
+                    'InstanceId': obj.data.InstanceId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.placementgroup") {
         reqParams.cfn['Strategy'] = obj.data.Strategy;
         reqParams.tf['strategy'] = obj.data.Strategy;
         reqParams.tf['name'] = obj.data.GroupName;
