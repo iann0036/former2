@@ -4726,7 +4726,13 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         await Promise.all(data.ResolverEndpoints.map(resolverEndpoint => {
             return sdkcall("Route53Resolver", "getResolverEndpoint", {
                 ResolverEndpointId: resolverEndpoint.Id
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                await sdkcall("Route53Resolver", "listResolverEndpointIpAddresses", {
+                    ResolverEndpointId: resolverEndpoint.Id
+                }, true).then(async (ipaddressdata) => {
+                    data.ResolverEndpoint['IpAddresses'] = ipaddressdata.IpAddresses;
+                }).catch(() => { });
+
                 $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('append', [{
                     f2id: data.ResolverEndpoint.Arn,
                     f2type: 'route53.resolverendpoint',

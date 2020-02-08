@@ -14663,11 +14663,18 @@ function performF2Mappings(objects) {
                 reqParams.tf['security_group_ids'] = obj.data.SecurityGroupIds;
                 reqParams.cfn['Direction'] = obj.data.Direction;
                 reqParams.tf['direction'] = obj.data.Direction;
+                if (obj.data.IpAddresses) {
+                    reqParams.cfn['IpAddresses'] = [];
+                    obj.data.IpAddresses.forEach(ipaddress => {
+                        reqParams.cfn['IpAddresses'].push({
+                            'Ip': ipaddress.Ip,
+                            'SubnetId': ipaddress.SubnetId
+                        });
+                    });
+                }
 
                 /*
                 TODO:
-                IpAddresses: 
-                    - IpAddressRequest
                 Tags: 
                     - Resource Tag
                 */
