@@ -1,9 +1,12 @@
 ## CloudFormation Resource Coverage
 
-**488/488 (100%)** Resources Covered
+**497/497 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
+| *AWS::ACMPCA::Certificate* | N/A |
+| *AWS::ACMPCA::CertificateAuthority* | :thumbsup: |
+| *AWS::ACMPCA::CertificateAuthorityActivation* | :thumbsup: |
 | *AWS::AccessAnalyzer::Analyzer* | :thumbsup: |
 | *AWS::AmazonMQ::Broker* | :thumbsup: |
 | *AWS::AmazonMQ::Configuration* | :thumbsup: |
@@ -41,6 +44,11 @@
 | *AWS::ApiGatewayV2::Route* | :thumbsup: |
 | *AWS::ApiGatewayV2::RouteResponse* | :thumbsup: |
 | *AWS::ApiGatewayV2::Stage* | :thumbsup: |
+| *AWS::AppConfig::Application* | :thumbsup: |
+| *AWS::AppConfig::ConfigurationProfile* | :thumbsup: |
+| *AWS::AppConfig::Deployment* | :thumbsup: |
+| *AWS::AppConfig::DeploymentStrategy* | :thumbsup: |
+| *AWS::AppConfig::Environment* | :thumbsup: |
 | *AWS::AppMesh::Mesh* | :thumbsup: |
 | *AWS::AppMesh::Route* | :thumbsup: |
 | *AWS::AppMesh::VirtualNode* | :thumbsup: |
@@ -490,6 +498,7 @@
 | *AWS::WAFv2::RegexPatternSet* | :thumbsup: |
 | *AWS::WAFv2::RuleGroup* | :thumbsup: |
 | *AWS::WAFv2::WebACL* | :thumbsup: |
+| *AWS::WAFv2::WebACLAssociation* | :thumbsup: |
 | *AWS::WorkSpaces::Workspace* | :thumbsup: |
 | *Alexa::ASK::Skill* | N/A |
 

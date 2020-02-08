@@ -2234,8 +2234,19 @@ function performF2Mappings(objects) {
 
             var service_mapping_success = false;
             service_mapping_functions.forEach(service_mapping_function => {
-                if (service_mapping_function(reqParams, obj, tracked_resources)) {
-                    service_mapping_success = true;
+                try {
+                    if (service_mapping_function(reqParams, obj, tracked_resources)) {
+                        service_mapping_success = true;
+                    }
+                } catch (err) {
+                    $.notify({
+                        icon: 'font-icon font-icon-danger',
+                        title: '<strong>Error</strong>',
+                        message: err.toString()
+                    }, {
+                        type: 'danger'
+                    });
+                    f2trace(err);
                 }
             });
 

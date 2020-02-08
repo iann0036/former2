@@ -10,7 +10,7 @@
   ],
   "main": "main.js",
   "scripts": {
-    "prepare": "cp ../js/deepmerge.js . && cp ../js/mappings.js . && cp ../js/datatables.js .",
+    "prepare": "cp -f ../js/deepmerge.js . && cp -f ../js/mappings.js . && cp -f ../js/datatables.js . && cp -r ../js/services .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ian Mckay",

@@ -38,6 +38,10 @@ var stack_parameters = [];
 eval(fs.readFileSync(path.join(__dirname, 'deepmerge.js'), 'utf8'));
 eval(fs.readFileSync(path.join(__dirname, 'mappings.js'), 'utf8'));
 eval(fs.readFileSync(path.join(__dirname, 'datatables.js'), 'utf8'));
+var items = fs.readdirSync(path.join(__dirname, 'services'));
+for (var i=0; i<items.length; i++) {
+    eval(fs.readFileSync(path.join(__dirname, 'services', items[i]), 'utf8'));
+};
 
 f2log = function(msg){};
 f2trace = function(err){};
@@ -143,13 +147,18 @@ cliargs
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
-    .action(opts => {
+    .action(async (opts) => {
         // The followings are here to silence Node runtime complaining about event emitter listeners
         // due to the number of TLS requests that suddenly go out to AWS APIs. This is harmless here
         require('events').EventEmitter.defaultMaxListeners = 1000;
         process.setMaxListeners(0);
         validation = true;
-        main(opts);
+        try {
+            await main(opts);
+        } catch(err) {
+            console.log("\nERROR: " + err.message + "\n")
+            cliargs.help();
+        }
     });
 
 cliargs.parse(process.argv);
