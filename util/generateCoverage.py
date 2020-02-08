@@ -48,11 +48,12 @@ with open("util/tf_resources.txt", "r") as f:
     for line in lines:
         tf_resources.append(line)
 
-with open("js/mappings.js", "r") as f:
-    text = f.read()
-    lines = text.splitlines()
-    cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
-    tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
+for servicefilename in os.listdir("js/services"):
+    with open("js/services/" + servicefilename, "r") as f:
+        text = f.read()
+        lines = text.splitlines()
+        cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
+        tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
 
 for cfntype, _ in cfn_spec.items():
     cfn_types.append(cfntype)
