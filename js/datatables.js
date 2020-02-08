@@ -477,4 +477,4 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
     });
 }
 
-// Service-specific mappings are defined in services/
+// Service-specific mappings are now defined in services/
