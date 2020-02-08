@@ -289,3 +289,12 @@ async function updateDatatableDeveloperToolsCodePipeline() {
 
     unblockUI('#section-developertools-codepipeline-notificationrules-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

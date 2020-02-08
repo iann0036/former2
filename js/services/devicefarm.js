@@ -75,3 +75,12 @@ async function updateDatatableMobileDeviceFarm() {
 
     unblockUI('#section-mobile-devicefarm-projects-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

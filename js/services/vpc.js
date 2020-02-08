@@ -2922,3 +2922,606 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "ec2.vpc") {
+        reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+        reqParams.tf['cidr_block'] = obj.data.CidrBlock;
+        reqParams.cfn['EnableDnsSupport'] = obj.data.EnableDnsSupport;
+        reqParams.tf['enable_dns_support'] = obj.data.EnableDnsSupport;
+        reqParams.cfn['EnableDnsHostnames'] = obj.data.EnableDnsHostnames;
+        reqParams.tf['enable_dns_hostnames'] = obj.data.EnableDnsHostnames;
+        reqParams.cfn['InstanceTenancy'] = obj.data.InstanceTenancy;
+        reqParams.tf['instance_tenancy'] = obj.data.InstanceTenancy;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        var attrCidrBlockAssociations = null;
+        var attrIpv6CidrBlockAssociations = null;
+        /*
+        var attrCidrBlockAssociations = [];
+        obj.data.CidrBlockAssociationSet.forEach(cidrBlockAssociation => {
+            if (obj.data.CidrBlock != cidrBlockAssociation.CidrBlock) {
+                attrCidrBlockAssociations.push(cidrBlockAssociation.AssociationId);
+            }
+        });
+
+        var attrIpv6CidrBlockAssociations = [];
+        obj.data.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
+            attrIpv6CidrBlockAssociations.push(ipv6CidrBlockAssociation.Ipv6CidrBlock);
+        });
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPC',
+            'terraformType': 'aws_vpc',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VpcId,
+                'GetAtt': {
+                    'CidrBlock': obj.data.CidrBlock,
+                    'CidrBlockAssociations': attrCidrBlockAssociations,
+                    'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
+                    /*
+                    TODO:
+                    DefaultNetworkAcl
+                    DefaultSecurityGroup
+                    */
+                },
+                'Terraform': {
+                    'id': obj.data.VpcId,
+                    'cidr_block': obj.data.CidrBlock
+                },
+                'Import': {
+                    'VpcId': obj.data.VpcId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.vpccidrblock") {
+        reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+        reqParams.tf['cidr_block'] = obj.data.CidrBlock;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+
+        /*
+        TODO:
+        AmazonProvidedIpv6CidrBlock: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCCidrBlock',
+            'terraformType': 'aws_vpc_ipv4_cidr_block_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.dhcpoptionsassociation") {
+        reqParams.cfn['DhcpOptionsId'] = obj.data.DhcpOptionsId;
+        reqParams.tf['dhcp_options_id'] = obj.data.DhcpOptionsId;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCDHCPOptionsAssociation',
+            'terraformType': 'aws_vpc_dhcp_options_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.egressonlyinternetgateway") {
+        if (obj.data.Attachments) {
+            reqParams.cfn['VpcId'] = obj.data.Attachments[0].VpcId;
+            reqParams.tf['vpc_id'] = obj.data.Attachments[0].VpcId;
+        }
+
+        // TODO: Check for multiple
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EgressOnlyInternetGateway',
+            'terraformType': 'aws_egress_only_internet_gateway',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.EgressOnlyInternetGatewayId
+            }
+        });
+    } else if (obj.type == "ec2.internetgateway") {
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        if (obj.data.Attachments) {
+            reqParams.tf['vpc_id'] = obj.data.Attachments[0].VpcId;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::InternetGateway',
+            'terraformType': 'aws_internet_gateway',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.InternetGatewayId,
+                'Import': {
+                    'InternetGatewayId': obj.data.InternetGatewayId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.gatewayattachment") {
+        if (obj.data.InternetGatewayId) {
+            reqParams.cfn['InternetGatewayId'] = obj.data.InternetGatewayId;
+            reqParams.cfn['VpcId'] = obj.data.VpcId;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('ec2', obj.id),
+                'region': obj.region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::VPCGatewayAttachment',
+                'options': reqParams
+            });
+        } else {
+            reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+            reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
+            reqParams.cfn['VpcId'] = obj.data.VpcId;
+            reqParams.tf['vpc_id'] = obj.data.VpcId;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('ec2', obj.id),
+                'region': obj.region,
+                'service': 'ec2',
+                'type': 'AWS::EC2::VPCGatewayAttachment',
+                'terraformType': 'aws_vpn_gateway_attachment',
+                'options': reqParams
+            });
+        }
+    } else if (obj.type == "ec2.dhcpoptions") {
+        obj.data.DhcpConfigurations.forEach(dhcpConfiguration => {
+            if (dhcpConfiguration.Key == "domain-name") {
+                reqParams.cfn['DomainName'] = dhcpConfiguration.Values[0].Value;
+                reqParams.tf['domain_name'] = dhcpConfiguration.Values[0].Value;
+            } else if (dhcpConfiguration.Key == "domain-name-servers") {
+                reqParams.cfn['DomainNameServers'] = [];
+                reqParams.tf['domain_name_servers'] = [];
+                if (dhcpConfiguration.Values[0].Value != "AmazonProvidedDNS") {
+                    dhcpConfiguration.Values.forEach(dhcpConfigurationValue => {
+                        reqParams.cfn['DomainNameServers'].push(dhcpConfigurationValue['Value']);
+                        reqParams.tf['domain_name_servers'].push(dhcpConfigurationValue['Value']);
+                    });
+                }
+            }
+        });
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        /*
+        TODO:
+        NetbiosNameServers:
+            - String
+        NetbiosNodeType: Number
+        NtpServers:
+            - String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::DHCPOptions',
+            'terraformType': 'aws_vpc_dhcp_options',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DhcpOptionsId
+            }
+        });
+    } else if (obj.type == "ec2.vpnconnection") {
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.tf['type'] = obj.data.Type;
+        if (obj.data.Options) {
+            reqParams.cfn['StaticRoutesOnly'] = obj.data.Options.StaticRoutesOnly;
+            reqParams.tf['static_routes_only'] = obj.data.Options.StaticRoutesOnly;
+        }
+        reqParams.cfn['CustomerGatewayId'] = obj.data.CustomerGatewayId;
+        reqParams.tf['customer_gateway_id'] = obj.data.CustomerGatewayId;
+        reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+        reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        /*
+        TODO:
+        VpnTunnelOptionsSpecifications: 
+            - VpnTunnelOptionsSpecification
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNConnection',
+            'terraformType': 'aws_vpn_connection',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VpnConnectionId
+            }
+        });
+    } else if (obj.type == "ec2.vpnconnectionroute") {
+        reqParams.cfn['VpnConnectionId'] = obj.data.VpnConnectionId;
+        reqParams.tf['vpn_connection_id'] = obj.data.VpnConnectionId;
+        reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
+        reqParams.tf['destination_cidr_block'] = obj.data.DestinationCidrBlock;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNConnectionRoute',
+            'terraformType': 'aws_vpn_connection_route',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.virtualprivategatewayroutepropagation") {
+        reqParams.cfn['VpnGatewayId'] = obj.data.VpnGatewayId;
+        reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
+        reqParams.cfn['RouteTableIds'] = [obj.data.RouteTableId];
+        reqParams.tf['route_table_id'] = obj.data.RouteTableId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNGatewayRoutePropagation',
+            'terraformType': 'aws_vpn_gateway_route_propagation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.peeringconnection") {
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        reqParams.cfn['PeerVpcId'] = obj.data.AccepterVpcInfo.VpcId;
+        reqParams.tf['peer_vpc_id'] = obj.data.AccepterVpcInfo.VpcId;
+        reqParams.cfn['PeerOwnerId'] = obj.data.AccepterVpcInfo.OwnerId;
+        reqParams.tf['peer_owner_id'] = obj.data.AccepterVpcInfo.OwnerId;
+        reqParams.cfn['PeerRegion'] = obj.data.AccepterVpcInfo.Region;
+        reqParams.tf['peer_region'] = obj.data.AccepterVpcInfo.Region;
+        reqParams.cfn['VpcId'] = obj.data.RequesterVpcInfo.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.RequesterVpcInfo.VpcId;
+
+        /*
+        TODO:
+        PeerRoleArn:  String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPCPeeringConnection',
+            'terraformType': 'aws_vpc_peering_connection',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.routetable") {
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::RouteTable',
+            'terraformType': 'aws_route_table',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.RouteTableId,
+                'Import': {
+                    'RouteTableId': obj.data.RouteTableId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkacl") {
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkAcl',
+            'terraformType': 'aws_network_acl',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.NetworkAclId,
+                'Import': {
+                    'NetworkAclId': obj.data.NetworkAclId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkaclentry") {
+        reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+        reqParams.tf['cidr_block'] = obj.data.CidrBlock;
+        reqParams.cfn['Egress'] = obj.data.Egress;
+        reqParams.tf['egress'] = obj.data.Egress;
+        reqParams.cfn['Icmp'] = obj.data.IcmpTypeCode;
+        reqParams.tf['icmp_type'] = obj.data.IcmpTypeCode;
+        reqParams.tf['icmp_code'] = obj.data.IcmpTypeCode;
+        reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlock;
+        reqParams.tf['ipv6_cidr_block'] = obj.data.Ipv6CidrBlock;
+        reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;
+        reqParams.tf['network_acl_id'] = obj.data.NetworkAclId;
+        reqParams.cfn['PortRange'] = obj.data.PortRange;
+        if (obj.data.PortRange) {
+            reqParams.tf['from_port'] = obj.data.PortRange.FromPort;
+            reqParams.tf['to_port'] = obj.data.PortRange.ToPort;
+        }
+        reqParams.cfn['Protocol'] = obj.data.Protocol;
+        reqParams.tf['protocol'] = obj.data.Protocol;
+        reqParams.cfn['RuleAction'] = obj.data.RuleAction;
+        reqParams.tf['rule_action'] = obj.data.RuleAction;
+        reqParams.cfn['RuleNumber'] = obj.data.RuleNumber;
+        reqParams.tf['rule_number'] = obj.data.RuleNumber;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkAclEntry',
+            'terraformType': 'aws_network_acl_rule',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.vpngateway") {
+        reqParams.cfn['AmazonSideAsn'] = obj.data.AmazonSideAsn;
+        reqParams.tf['amazon_side_asn'] = obj.data.AmazonSideAsn;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        if (obj.data.VpcAttachments) {
+            reqParams.tf['vpc_id'] = obj.data.VpcAttachments[0].VpcId
+        }
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VPNGateway',
+            'terraformType': 'aws_vpn_gateway',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VpnGatewayId
+            }
+        });
+    } else if (obj.type == "ec2.customergateway") {
+        reqParams.cfn['BgpAsn'] = obj.data.BgpAsn;
+        reqParams.tf['bgp_asn'] = obj.data.BgpAsn;
+        reqParams.cfn['IpAddress'] = obj.data.IpAddress;
+        reqParams.tf['ip_address'] = obj.data.IpAddress;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.tf['type'] = obj.data.Type;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::CustomerGateway',
+            'terraformType': 'aws_customer_gateway',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.CustomerGatewayId
+            }
+        });
+    } else if (obj.type == "ec2.subnet") {
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.cfn['CidrBlock'] = obj.data.CidrBlock;
+        reqParams.tf['cidr_block'] = obj.data.CidrBlock;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['MapPublicIpOnLaunch'] = obj.data.MapPublicIpOnLaunch;
+        reqParams.tf['map_public_ip_on_launch'] = obj.data.MapPublicIpOnLaunch;
+        if (obj.data.AssignIpv6AddressOnCreation) {
+            reqParams.cfn['AssignIpv6AddressOnCreation'] = obj.data.AssignIpv6AddressOnCreation;
+            reqParams.tf['assign_ipv6_address_on_creation'] = obj.data.AssignIpv6AddressOnCreation;
+            if (obj.data.Ipv6CidrBlockAssociationSet) {
+                reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock;
+                reqParams.tf['ipv6_cidr_block'] = obj.data.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock;
+            }
+        }
+
+        /* TODO:
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Subnet',
+            'terraformType': 'aws_subnet',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SubnetId,
+                'GetAtt': {
+                    'AvailabilityZone': obj.data.AvailabilityZone,
+                    'VpcId': obj.data.VpcId
+                },
+                'Import': {
+                    'SubnetId': obj.data.SubnetId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.elasticip") {
+        reqParams.cfn['Domain'] = obj.data.Domain;
+        reqParams.tf['vpc'] = (obj.data.Domain == "vpc");
+        reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+        reqParams.tf['instance'] = obj.data.InstanceId;
+        reqParams.cfn['PublicIpv4Pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
+        reqParams.tf['public_ipv4_pool'] = (obj.data.PublicIpv4Pool != "amazon") ? obj.data.PublicIpv4Pool : null;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EIP',
+            'terraformType': 'aws_eip',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PublicIp,
+                'GetAtt': {
+                    'AllocationId': obj.data.AllocationId
+                },
+                'Import': {
+                    'PublicIp': obj.data.PublicIp
+                }
+            }
+        });
+    } else if (obj.type == "ec2.elasticipassociation") {
+        reqParams.cfn['AllocationId'] = obj.data.AllocationId;
+        reqParams.tf['allocation_id'] = obj.data.AllocationId;
+        reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+        reqParams.tf['instance_id'] = obj.data.InstanceId;
+        reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+        reqParams.tf['network_interface_id'] = obj.data.NetworkInterfaceId;
+        reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+        reqParams.tf['private_ip_address'] = obj.data.PrivateIpAddress;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EIPAssociation',
+            'terraformType': 'aws_eip_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.networkinterface") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Ipv6Addresses'] = obj.data.Ipv6Addresses;
+        reqParams.cfn['PrivateIpAddress'] = obj.data.PrivateIpAddress;
+        reqParams.tf['private_ips'] = [obj.data.PrivateIpAddress];
+        if (obj.data.PrivateIpAddresses) {
+            reqParams.cfn['PrivateIpAddresses'] = [];
+            reqParams.tf['private_ips'] = [];
+            obj.data.PrivateIpAddresses.forEach(privateIpAddresses => {
+                reqParams.cfn['PrivateIpAddresses'].push({
+                    'PrivateIpAddress': privateIpAddresses.PrivateIpAddress,
+                    'Primary': privateIpAddresses.Primary
+                });
+                reqParams.tf['private_ips'].push(privateIpAddresses.PrivateIpAddress);
+            });
+        }
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
+        reqParams.cfn['SourceDestCheck'] = obj.data.SourceDestCheck;
+        reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
+        reqParams.cfn['Tags'] = obj.data.TagSet;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        if (obj.data.Groups) {
+            reqParams.cfn['GroupSet'] = [];
+            reqParams.tf['security_groups'] = [];
+            obj.data.Groups.forEach(group => {
+                reqParams.cfn['GroupSet'].push(group.GroupId);
+                reqParams.tf['security_groups'].push(group.GroupId);
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInterface',
+            'terraformType': 'aws_network_interface',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'NetworkInterfaceId': obj.data.NetworkInterfaceId
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

@@ -471,3 +471,147 @@ async function updateDatatableDatabaseDynamoDB() {
         unblockUI('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "dynamodb.table") {
+        reqParams.cfn['AttributeDefinitions'] = obj.data.AttributeDefinitions;
+        if (obj.data.AttributeDefinitions) {
+            reqParams.tf['attribute'] = [];
+            obj.data.AttributeDefinitions.forEach(attributedefinition => {
+                reqParams.tf['attribute'].push({
+                    'name': attributedefinition.AttributeName,
+                    'type': attributedefinition.AttributeType
+                });
+            });
+        }
+        if (obj.data.BillingModeSummary) {
+            reqParams.cfn['BillingMode'] = obj.data.BillingModeSummary.BillingMode;
+            reqParams.tf['billing_mode'] = obj.data.BillingModeSummary.BillingMode;
+        }
+        reqParams.cfn['TableName'] = obj.data.TableName;
+        reqParams.tf['name'] = obj.data.TableName;
+        reqParams.cfn['KeySchema'] = obj.data.KeySchema;
+        if (obj.data.KeySchema) {
+            obj.data.KeySchema.forEach(keyschema => {
+                if (keyschema.KeyType == "HASH") {
+                    reqParams.tf['hash_key'] = keyschema.AttributeName;
+                } else if (keyschema.KeyType == "RANGE") {
+                    reqParams.tf['range_key'] = keyschema.AttributeName;
+                }
+            });
+        }
+        if (obj.data.ProvisionedThroughput && obj.data.ProvisionedThroughput.ReadCapacityUnits > 0) {
+            reqParams.cfn['ProvisionedThroughput'] = {
+                'ReadCapacityUnits': obj.data.ProvisionedThroughput.ReadCapacityUnits,
+                'WriteCapacityUnits': obj.data.ProvisionedThroughput.WriteCapacityUnits
+            };
+            reqParams.tf['read_capacity'] = obj.data.ProvisionedThroughput.ReadCapacityUnits;
+            reqParams.tf['write_capacity'] = obj.data.ProvisionedThroughput.WriteCapacityUnits;
+        }
+        if (obj.data.LocalSecondaryIndexes) {
+            reqParams.cfn['LocalSecondaryIndexes'] = [];
+            reqParams.tf['local_secondary_index'] = [];
+            obj.data.LocalSecondaryIndexes.forEach(index => {
+                reqParams.cfn['LocalSecondaryIndexes'].push({
+                    'IndexName': index.IndexName,
+                    'KeySchema': index.KeySchema,
+                    'Projection': index.Projection
+                });
+                var rangekey = null;
+                index.KeySchema.forEach(keyschema => {
+                    if (keyschema.KeyType == "RANGE") {
+                        rangekey = keyschema.AttributeName;
+                    }
+                });
+                reqParams.tf['local_secondary_index'].push({
+                    'name': index.IndexName,
+                    'range_key': rangekey,
+                    'projection_type': index.Projection.ProjectionType,
+                    'non_key_attributes': index.Projection.NonKeyAttributes
+                });
+            });
+        }
+        if (obj.data.GlobalSecondaryIndexes) {
+            reqParams.cfn['GlobalSecondaryIndexes'] = [];
+            reqParams.tf['global_secondary_index'] = [];
+            obj.data.GlobalSecondaryIndexes.forEach(index => {
+                reqParams.cfn['GlobalSecondaryIndexes'].push({
+                    'IndexName': index.IndexName,
+                    'KeySchema': index.KeySchema,
+                    'Projection': index.Projection,
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': index.ProvisionedThroughput.ReadCapacityUnits,
+                        'WriteCapacityUnits': index.ProvisionedThroughput.WriteCapacityUnits
+                    }
+                });
+                var hashkey = null;
+                var rangekey = null;
+                index.KeySchema.forEach(keyschema => {
+                    if (keyschema.KeyType == "HASH") {
+                        hashkey = keyschema.AttributeName;
+                    } else if (keyschema.KeyType == "RANGE") {
+                        rangekey = keyschema.AttributeName;
+                    }
+                });
+                reqParams.tf['global_secondary_index'].push({
+                    'name': index.IndexName,
+                    'hash_key': hashkey,
+                    'range_key': rangekey,
+                    'projection_type': index.Projection.ProjectionType,
+                    'non_key_attributes': index.Projection.NonKeyAttributes,
+                    'read_capacity': index.ProvisionedThroughput.ReadCapacityUnits,
+                    'write_capacity': index.ProvisionedThroughput.WriteCapacityUnits
+                });
+            });
+        }
+        if (obj.data.StreamSpecification) {
+            reqParams.cfn['StreamSpecification'] = {
+                'StreamViewType': obj.data.StreamSpecification.StreamViewType
+            };
+            reqParams.tf['stream_enabled'] = true;
+            reqParams.tf['stream_view_type'] = obj.data.StreamSpecification.StreamViewType;
+        }
+        if (obj.data.SSEDescription) {
+            reqParams.cfn['SSESpecification'] = {
+                'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E")
+            };
+            reqParams.tf['server_side_encryption'] = {
+                'enabled': (obj.data.SSEDescription.Status[0] == "E")
+            };
+        }
+
+        /*
+        TODO:
+        PointInTimeRecoverySpecification: 
+            PointInTimeRecoverySpecification
+        Tags: 
+            - Resource Tag
+        TimeToLiveSpecification: 
+            TimeToLiveSpecification
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dynamodb', obj.id),
+            'region': obj.region,
+            'service': 'dynamodb',
+            'type': 'AWS::DynamoDB::Table',
+            'terraformType': 'aws_dynamodb_table',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TableName,
+                'GetAtt': {
+                    'Arn': obj.data.TableArn,
+                    'StreamArn': obj.data.LatestStreamArn
+                },
+                'Import': {
+                    'TableName': obj.data.TableName
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

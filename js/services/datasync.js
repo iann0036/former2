@@ -333,3 +333,12 @@ async function updateDatatableMigrationAndTransferDataSync() {
     unblockUI('#section-migrationandtransfer-datasync-nfslocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-s3locations-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

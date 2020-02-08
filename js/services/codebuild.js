@@ -301,3 +301,12 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     unblockUI('#section-developertools-codebuild-notificationrules-datatable');
     unblockUI('#section-developertools-codebuild-reportgroups-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

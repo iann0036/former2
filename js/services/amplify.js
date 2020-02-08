@@ -253,3 +253,12 @@ async function updateDatatableMobileAmplify() {
     unblockUI('#section-mobile-amplify-branches-datatable');
     unblockUI('#section-mobile-amplify-domains-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

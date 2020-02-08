@@ -175,3 +175,12 @@ async function updateDatatableEndUserComputingWorkLink() {
     unblockUI('#section-endusercomputing-worklink-fleets-datatable');
     unblockUI('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

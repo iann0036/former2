@@ -399,3 +399,12 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
     unblockUI('#section-managementandgovernance-appconfig-deployments-datatable');
     unblockUI('#section-managementandgovernance-appconfig-deploymentstrategies-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

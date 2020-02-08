@@ -268,3 +268,345 @@ async function updateDatatableStorageS3() {
 
     unblockUI('#section-storage-s3-accesspoints-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "s3.bucket") {
+        reqParams.cfn['BucketName'] = obj.data.Name;
+        reqParams.tf['bucket'] = obj.data.Name;
+        if (obj.data.AccelerateConfiguration && obj.data.AccelerateConfiguration.Status) {
+            reqParams.cfn['AccelerateConfiguration'] = {
+                'AccelerationStatus': obj.data.AccelerateConfiguration.Status
+            };
+        }
+        if (obj.data.Encryption && obj.data.Encryption.ServerSideEncryptionConfiguration) {
+            reqParams.cfn['BucketEncryption'] = {
+                'ServerSideEncryptionConfiguration': obj.data.Encryption.ServerSideEncryptionConfiguration.Rules
+            };
+        }
+        if (obj.data.Lifecycle && obj.data.Lifecycle.Rules) {
+            var lifecyclerules = [];
+
+            obj.data.Lifecycle.Rules.forEach(rule => {
+                var lifecyclerule = {
+                    'AbortIncompleteMultipartUpload': rule.AbortIncompleteMultipartUpload,
+                    'Id': rule.ID,
+                    'Prefix': rule.Prefix,
+                    'Status': rule.Status
+                };
+
+                if (rule.Expiration) {
+                    if (rule.Expiration.Date) {
+                        lifecyclerule['ExpirationDate'] = rule.Expiration.Date.toISOString();
+                    }
+                    lifecyclerule['ExpirationInDays'] = rule.Expiration.Days;
+                }
+
+                if (rule.NoncurrentVersionExpiration) {
+                    lifecyclerule['NoncurrentVersionExpirationInDays'] = rule.NoncurrentVersionExpiration.NoncurrentDays;
+                }
+
+                if (rule.NoncurrentVersionTransitions) {
+                    lifecyclerule['NoncurrentVersionTransitions'] = [];
+                    rule.NoncurrentVersionTransitions.forEach(transition => {
+                        lifecyclerule['NoncurrentVersionTransitions'].push({
+                            'TransitionInDays': transition.NoncurrentDays,
+                            'StorageClass': transition.StorageClass
+                        });
+                    });
+                }
+
+                if (rule.Filter && rule.Filter.Tag) {
+                    lifecyclerule['TagFilters'] = [rule.Filter.Tag];
+                    if (rule.Filter.And && rule.Filter.And.Tags) {
+                        lifecyclerule['TagFilters'] = lifecyclerule['TagFilters'].concat(rule.Filter.And.Tags);
+                    }
+                }
+
+                if (rule.Transitions) {
+                    lifecyclerule['Transitions'] = [];
+                    rule.Transitions.forEach(transition => {
+                        var transitiondate = null;
+                        if (transition.Date) {
+                            transitiondate = transition.Date.toISOString();
+                        }
+                        lifecyclerule['Transitions'].push({
+                            'TransitionInDays': transition.Days,
+                            'TransitionDate': transitiondate,
+                            'StorageClass': transition.StorageClass
+                        });
+                    });
+                }
+
+                lifecyclerules.push(lifecyclerule);
+            });
+
+            reqParams.cfn['LifecycleConfiguration'] = {
+                'Rules': lifecyclerules
+            };
+        }
+        if (obj.data.Cors && obj.data.Cors.CORSRules) {
+            var corsrules = [];
+            obj.data.Cors.CORSRules.forEach(corsrule => {
+                corsrules.push({
+                    'AllowedHeaders': corsrule.AllowedHeaders,
+                    'AllowedMethods': corsrule.AllowedMethods,
+                    'AllowedOrigins': corsrule.AllowedOrigins,
+                    'ExposedHeaders': corsrule.ExposedHeaders,
+                    'MaxAgeSeconds': corsrule.MaxAge
+                });
+            });
+            reqParams.cfn['CorsConfiguration'] = {
+                'CorsRules': corsrules
+            };
+        }
+        if (obj.data.Logging && obj.data.Logging.LoggingEnabled) {
+            reqParams.cfn['LoggingConfiguration'] = {
+                'DestinationBucketName': obj.data.Logging.LoggingEnabled.TargetBucket,
+                'LogFilePrefix': obj.data.Logging.LoggingEnabled.TargetPrefix
+            };
+        }
+        if (obj.data.NotificationConfiguration && (obj.data.NotificationConfiguration.TopicConfigurations || obj.data.NotificationConfiguration.QueueConfigurations || obj.data.NotificationConfiguration.LambdaFunctionConfigurations)) {
+            var topicconfigurations = null;
+            var queueconfigurations = null;
+            var lambdafunctionconfigurations = null;
+            if (obj.data.NotificationConfiguration.TopicConfigurations) {
+                topicconfigurations = [];
+                obj.data.NotificationConfiguration.TopicConfigurations.forEach(configuration => {
+                    var filter = null;
+                    if (configuration.Filter && configuration.Filter.Key && configuration.Filter.Key.FilterRules) {
+                        filter = {
+                            'S3Key': {
+                                'Rules': configuration.Filter.Key.FilterRules
+                            }
+                        };
+                    }
+                    configuration.Events.forEach(event => {
+                        topicconfigurations.push({
+                            'Event': event,
+                            'Filter': filter,
+                            'Topic': configuration.TopicArn
+                        });
+                    });
+                });
+            }
+            if (obj.data.NotificationConfiguration.QueueConfigurations) {
+                queueconfigurations = [];
+                obj.data.NotificationConfiguration.QueueConfigurations.forEach(configuration => {
+                    var filter = null;
+                    if (configuration.Filter && configuration.Filter.Key && configuration.Filter.Key.FilterRules) {
+                        filter = {
+                            'S3Key': {
+                                'Rules': configuration.Filter.Key.FilterRules
+                            }
+                        };
+                    }
+                    configuration.Events.forEach(event => {
+                        queueconfigurations.push({
+                            'Event': event,
+                            'Filter': filter,
+                            'Queue': configuration.QueueArn
+                        });
+                    });
+                });
+            }
+            if (obj.data.NotificationConfiguration.LambdaFunctionConfigurations) {
+                lambdafunctionconfigurations = [];
+                obj.data.NotificationConfiguration.LambdaFunctionConfigurations.forEach(configuration => {
+                    var filter = null;
+                    if (configuration.Filter && configuration.Filter.Key && configuration.Filter.Key.FilterRules) {
+                        filter = {
+                            'S3Key': {
+                                'Rules': configuration.Filter.Key.FilterRules
+                            }
+                        };
+                    }
+                    configuration.Events.forEach(event => {
+                        lambdafunctionconfigurations.push({
+                            'Event': event,
+                            'Filter': filter,
+                            'Function': configuration.LambdaFunctionArn
+                        });
+                    });
+                });
+            }
+
+            if (topicconfigurations.length || queueconfigurations.length || lambdafunctionconfigurations.length) {
+                reqParams.cfn['NotificationConfiguration'] = {
+                    'TopicConfigurations': topicconfigurations,
+                    'QueueConfigurations': queueconfigurations,
+                    'LambdaConfigurations': lambdafunctionconfigurations
+                };
+            }
+        }
+        if (obj.data.Replication && obj.data.Replication.ReplicationConfiguration) {
+            var rules = [];
+            obj.data.Replication.ReplicationConfiguration.Rules.forEach(rule => {
+                rules.push({
+                    'Id': rule.ID,
+                    'Prefix': rule.Prefix,
+                    'Status': rule.Status,
+                    'Destination': rule.Destination,
+                    'SourceSelectionCriteria': rule.SourceSelectionCriteria
+                });
+            });
+            reqParams.cfn['ReplicationConfiguration'] = {
+                'Role': obj.data.Replication.ReplicationConfiguration.Role,
+                'Rules': rules
+            };
+        }
+        if (obj.data.Versioning && obj.data.Versioning.Status) {
+            reqParams.cfn['VersioningConfiguration'] = {
+                'Status': obj.data.Versioning.Status
+            };
+        }
+        if (obj.data.Website && obj.data.Website.IndexDocument) {
+            var errordocument = null;
+            var routingrules = null;
+
+            if (obj.data.Website.ErrorDocument) {
+                errordocument = obj.data.Website.ErrorDocument.Key;
+            }
+            if (obj.data.Website.RoutingRules) {
+                routingrules = [];
+                obj.data.Website.RoutingRules.forEach(routingrule => {
+                    routingrules.push({
+                        'RedirectRule': routingrule.Redirect,
+                        'RoutingRuleCondition': routingrule.Condition
+                    });
+                });
+            }
+
+            reqParams.cfn['WebsiteConfiguration'] = {
+                'IndexDocument': obj.data.Website.IndexDocument.Suffix,
+                'RedirectAllRequestsTo': obj.data.Website.RedirectAllRequestsTo,
+                'ErrorDocument': errordocument,
+                'RoutingRules': routingrules
+            };
+        }
+        if (obj.data.AnalyticsConfigurations && obj.data.AnalyticsConfigurations.AnalyticsConfigurationList) {
+            reqParams.cfn['AnalyticsConfigurations'] = [];
+            obj.data.AnalyticsConfigurations.AnalyticsConfigurationList.forEach(config => {
+                var prefix = null;
+                var tagfilters = null;
+                var storageclassanalysis = null;
+                if (config.Filter) {
+                    if (config.Filter.Tag) {
+                        tagfilters = [config.Filter.Tag];
+                        if (config.Filter.And && config.Filter.And.Tags) {
+                            tagfilters = tagfilters.concat(config.Filter.And.Tags);
+                        }
+                    }
+                    prefix = config.Filter.Prefix;
+                }
+                if (config.StorageClassAnalysis.DataExport) {
+                    storageclassanalysis = {
+                        'DataExport': {
+                            'OutputSchemaVersion': config.StorageClassAnalysis.DataExport.OutputSchemaVersion,
+                            'Destination': {
+                                'BucketAccountId': config.StorageClassAnalysis.DataExport.Destination.S3BucketDestination.BucketAccountId,
+                                'BucketArn': config.StorageClassAnalysis.DataExport.Destination.S3BucketDestination.Bucket,
+                                'Format': config.StorageClassAnalysis.DataExport.Destination.S3BucketDestination.Format,
+                                'Prefix': config.StorageClassAnalysis.DataExport.Destination.S3BucketDestination.Prefix
+                            }
+                        }
+                    };
+                }
+                reqParams.cfn['AnalyticsConfigurations'].push({
+                    'Id': config.Id,
+                    'Prefix': prefix,
+                    'TagFilters': tagfilters,
+                    'StorageClassAnalysis': storageclassanalysis
+                });
+            });
+        }
+        if (obj.data.InventoryConfigurations && obj.data.InventoryConfigurations.InventoryConfigurationList) {
+            reqParams.cfn['InventoryConfigurations'] = [];
+            obj.data.InventoryConfigurations.InventoryConfigurationList.forEach(config => {
+                var prefix = null;
+                if (config.Filter) {
+                    prefix = config.Filter.Prefix;
+                }
+
+                reqParams.cfn['InventoryConfigurations'].push({
+                    'Destination': {
+                        'BucketAccountId': config.Destination.S3BucketDestination.AccountId,
+                        'BucketArn': config.Destination.S3BucketDestination.Bucket,
+                        'Format': config.Destination.S3BucketDestination.Format,
+                        'Prefix': config.Destination.S3BucketDestination.Prefix
+                    },
+                    'Enabled': config.IsEnabled,
+                    'Id': config.Id,
+                    'IncludedObjectVersions': config.IncludedObjectVersions,
+                    'OptionalFields': config.OptionalFields,
+                    'Prefix': prefix,
+                    'ScheduleFrequency': config.Schedule.Frequency
+                });
+            });
+        }
+        if (obj.data.MetricsConfigurations && obj.data.MetricsConfigurations.MetricsConfigurationList) {
+            reqParams.cfn['MetricsConfigurations'] = [];
+            obj.data.MetricsConfigurations.MetricsConfigurationList.forEach(config => {
+                var prefix = null;
+                var tagfilters = null;
+                if (config.Filter) {
+                    if (config.Filter.Tag) {
+                        tagfilters = [config.Filter.Tag];
+                        if (config.Filter.And && config.Filter.And.Tags) {
+                            tagfilters = tagfilters.concat(config.Filter.And.Tags);
+                        }
+                    }
+                    prefix = config.Filter.Prefix;
+                }
+                reqParams.cfn['MetricsConfigurations'].push({
+                    'Id': config.Id,
+                    'Prefix': prefix,
+                    'TagFilters': tagfilters
+                });
+            });
+        }
+
+        /*
+        TODO:
+        AccessControl: String
+        PublicAccessBlockConfiguration: 
+            PublicAccessBlockConfiguration
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::Bucket',
+            'terraformType': 'aws_s3_bucket',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'Import': {
+                    'BucketName': obj.data.Name
+                }
+            }
+        });
+    } else if (obj.type == "s3.bucketpolicy") {
+        reqParams.cfn['Bucket'] = obj.data.Bucket;
+        reqParams.tf['bucket'] = obj.data.Bucket;
+        reqParams.cfn['PolicyDocument'] = JSON.parse(obj.data.Policy);
+        reqParams.tf['policy'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::BucketPolicy',
+            'terraformType': 'aws_s3_bucket_policy',
+            'options': reqParams
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

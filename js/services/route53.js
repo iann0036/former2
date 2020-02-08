@@ -474,3 +474,179 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         unblockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "route53.record") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.tf['type'] = obj.data.Type;
+        reqParams.cfn['SetIdentifier'] = obj.data.SetIdentifier;
+        reqParams.tf['set_identifier'] = obj.data.SetIdentifier;
+        reqParams.cfn['Weight'] = obj.data.Weight;
+        if (obj.data.Weight) {
+            reqParams.tf['weighted_routing_policy'] = {
+                'weight': obj.data.Weight
+            };
+        }
+        reqParams.cfn['Region'] = obj.data.Region;
+        if (obj.data.Region) {
+            reqParams.tf['latency_routing_policy'] = {
+                'region': obj.data.Region
+            };
+        }
+        reqParams.cfn['Failover'] = obj.data.Failover;
+        if (obj.data.Failover) {
+            reqParams.tf['failover_routing_policy'] = {
+                'type': obj.data.Failover
+            };
+        }
+        reqParams.cfn['MultiValueAnswer'] = obj.data.MultiValueAnswer;
+        reqParams.tf['multivalue_answer_routing_policy'] = obj.data.MultiValueAnswer;
+        reqParams.cfn['TTL'] = obj.data.TTL;
+        reqParams.tf['ttl'] = obj.data.TTL;
+        reqParams.cfn['HealthCheckId'] = obj.data.HealthCheckId;
+        reqParams.tf['health_check_id'] = obj.data.HealthCheckId;
+        if (obj.data.ResourceRecords) {
+            reqParams.cfn['ResourceRecords'] = [];
+            reqParams.tf['records'] = [];
+            obj.data.ResourceRecords.forEach(resourceRecord => {
+                reqParams.cfn['ResourceRecords'].push(resourceRecord['Value']);
+                reqParams.tf['records'].push(resourceRecord['Value']);
+            });
+        }
+        reqParams.cfn['AliasTarget'] = obj.data.AliasTarget;
+        if (obj.data.AliasTarget) {
+            reqParams.tf['alias'] = {
+                'name': obj.data.AliasTarget.DNSName,
+                'zone_id': obj.data.AliasTarget.HostedZoneId,
+                'evaluate_target_health': obj.data.AliasTarget.EvaluateTargetHealth
+            };
+        }
+        reqParams.cfn['HostedZoneId'] = obj.data.HostedZoneId;
+        reqParams.tf['zone_id'] = obj.data.HostedZoneId;
+        reqParams.cfn['GeoLocation'] = obj.data.GeoLocation;
+        if (obj.data.GeoLocation) {
+            reqParams.tf['geolocation_routing_policy'] = {
+                'continent': obj.data.GeoLocation.ContinentCode,
+                'country': obj.data.GeoLocation.CountryCode,
+                'subdivision': obj.data.GeoLocation.SubdivisionCode
+            };
+        }
+
+        /*
+        TODO:
+        Comment: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::RecordSet',
+            'terraformType': 'aws_route53_record',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name
+            }
+        });
+    } else if (obj.type == "route53.hostedzone") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        if (obj.data.Config && obj.data.Config.Comment) {
+            reqParams.cfn['HostedZoneConfig'] = {
+                'Comment': obj.data.Config.Comment
+            };
+            reqParams.tf['comment'] = obj.data.Config.Comment;
+        }
+
+        /*
+        TODO:
+        HostedZoneTags:
+            - HostedZoneTags
+        QueryLoggingConfig: 
+            QueryLoggingConfig
+        VPCs:
+            - HostedZoneVPCs 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::HostedZone',
+            'terraformType': 'aws_route53_zone',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id.split("/").pop(),
+                'Import': {
+                    'HostedZoneId': obj.data.Id.split("/").pop()
+                }
+                /*
+                TODO:
+                NameServers
+                */
+            }
+        });
+    } else if (obj.type == "route53.healthcheck") {
+        reqParams.cfn['HealthCheckConfig'] = {
+            'AlarmIdentifier': obj.data.HealthCheckConfig.AlarmIdentifier,
+            'ChildHealthChecks': obj.data.HealthCheckConfig.ChildHealthChecks,
+            'EnableSNI': obj.data.HealthCheckConfig.EnableSNI,
+            'FailureThreshold': obj.data.HealthCheckConfig.FailureThreshold,
+            'FullyQualifiedDomainName': obj.data.HealthCheckConfig.FullyQualifiedDomainName,
+            'HealthThreshold': obj.data.HealthCheckConfig.HealthThreshold,
+            'InsufficientDataHealthStatus': obj.data.HealthCheckConfig.InsufficientDataHealthStatus,
+            'Inverted': obj.data.HealthCheckConfig.Inverted,
+            'IPAddress': obj.data.HealthCheckConfig.IPAddress,
+            'MeasureLatency': obj.data.HealthCheckConfig.MeasureLatency,
+            'Port': obj.data.HealthCheckConfig.Port,
+            'Regions': obj.data.HealthCheckConfig.Regions,
+            'RequestInterval': obj.data.HealthCheckConfig.RequestInterval,
+            'ResourcePath': obj.data.HealthCheckConfig.ResourcePath,
+            'SearchString': obj.data.HealthCheckConfig.SearchString,
+            'Type': obj.data.HealthCheckConfig.Type
+        };
+        reqParams.tf['cloudwatch_alarm_name'] = obj.data.HealthCheckConfig.AlarmIdentifier;
+        reqParams.tf['child_healthchecks'] = obj.data.HealthCheckConfig.ChildHealthChecks;
+        reqParams.tf['enable_sni'] = obj.data.HealthCheckConfig.EnableSNI;
+        reqParams.tf['failure_threshold'] = obj.data.HealthCheckConfig.FailureThreshold;
+        reqParams.tf['fqdn'] = obj.data.HealthCheckConfig.FullyQualifiedDomainName;
+        reqParams.tf['child_health_threshold'] = obj.data.HealthCheckConfig.HealthThreshold;
+        reqParams.tf['insufficient_data_health_status'] = obj.data.HealthCheckConfig.InsufficientDataHealthStatus;
+        reqParams.tf['invert_healthcheck'] = obj.data.HealthCheckConfig.Inverted;
+        reqParams.tf['ip_address'] = obj.data.HealthCheckConfig.IPAddress;
+        reqParams.tf['measure_latency'] = obj.data.HealthCheckConfig.MeasureLatency;
+        reqParams.tf['port'] = obj.data.HealthCheckConfig.Port;
+        reqParams.tf['regions'] = obj.data.HealthCheckConfig.Regions;
+        reqParams.tf['request_interval'] = obj.data.HealthCheckConfig.RequestInterval;
+        reqParams.tf['resource_path'] = obj.data.HealthCheckConfig.ResourcePath;
+        reqParams.tf['search_string'] = obj.data.HealthCheckConfig.SearchString;
+        reqParams.tf['type'] = obj.data.HealthCheckConfig.Type;
+
+        /*
+        TODO:
+        HealthCheckTags:
+            - HealthCheckTags 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::HealthCheck',
+            'terraformType': 'aws_route53_health_check',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

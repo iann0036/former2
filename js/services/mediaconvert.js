@@ -242,3 +242,12 @@ async function updateDatatableMediaServicesMediaConvert() {
     unblockUI('#section-mediaservices-mediaconvert-presets-datatable');
     unblockUI('#section-mediaservices-mediaconvert-jobtemplates-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

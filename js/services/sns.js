@@ -177,3 +177,57 @@ async function updateDatatableApplicationIntegrationSNS() {
         unblockUI('#section-applicationintegration-sns-subscriptions-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "sns.topic") {
+        reqParams.cfn['DisplayName'] = obj.data.Attributes.DisplayName;
+        reqParams.tf['display_name'] = obj.data.Attributes.DisplayName;
+        reqParams.cfn['TopicName'] = obj.data.Attributes.TopicArn.split(':').pop();
+        reqParams.tf['name'] = obj.data.Attributes.TopicArn.split(':').pop();
+
+        /*
+        TODO:
+        KmsMasterKeyId: String
+        Subscription:
+            - SNS Subscription
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sns', obj.id),
+            'region': obj.region,
+            'service': 'sns',
+            'type': 'AWS::SNS::Topic',
+            'terraformType': 'aws_sns_topic',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TopicArn,
+                'GetAtt': {
+                    'TopicName': obj.data.Attributes.TopicArn.split(':').pop()
+                },
+                'Import': {
+                    'TopicArn': obj.data.TopicArn
+                }
+            }
+        });
+    } else if (obj.type == "sns.topicpolicy") {
+        reqParams.cfn['PolicyDocument'] = obj.data.Policy;
+        reqParams.tf['policy'] = obj.data.Policy;
+        reqParams.cfn['Topics'] = [obj.data.Topic];
+        reqParams.tf['arn'] = obj.data.Topic;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sns', obj.id),
+            'region': obj.region,
+            'service': 'sns',
+            'type': 'AWS::SNS::TopicPolicy',
+            'terraformType': 'aws_sns_topic_policy',
+            'options': reqParams
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

@@ -143,3 +143,12 @@ async function updateDatatableInternetofThingsEvents() {
     unblockUI('#section-internetofthings-events-detectormodels-datatable');
     unblockUI('#section-internetofthings-events-inputs-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

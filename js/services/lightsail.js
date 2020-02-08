@@ -292,3 +292,12 @@ async function updateDatatableComputeLightsail() {
     unblockUI('#section-compute-lightsail-staticips-datatable');
     unblockUI('#section-compute-lightsail-staticipattachments-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

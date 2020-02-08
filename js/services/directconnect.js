@@ -868,3 +868,12 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
     unblockUI('#section-networkingandcontentdelivery-directconnect-hostedpublicvifs-datatable');
     unblockUI('#section-networkingandcontentdelivery-directconnect-hostedprivatevifs-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

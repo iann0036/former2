@@ -238,3 +238,12 @@ async function updateDatatableMigrationAndTransferTransfer() {
         unblockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

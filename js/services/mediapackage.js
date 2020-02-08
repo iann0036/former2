@@ -74,3 +74,12 @@ async function updateDatatableMediaServicesMediaPackage() {
         unblockUI('#section-mediaservices-mediapackage-channels-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

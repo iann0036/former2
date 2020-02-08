@@ -826,3 +826,12 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

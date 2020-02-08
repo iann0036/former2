@@ -359,3 +359,145 @@ async function updateDatatableDatabaseElastiCache() {
 
     unblockUI('#section-database-elasticache-securitygroups-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "elasticache.subnetgroup") {
+        reqParams.cfn['Description'] = obj.data.CacheSubnetGroupDescription;
+        reqParams.tf['description'] = obj.data.CacheSubnetGroupDescription;
+        reqParams.cfn['name'] = obj.data.CacheSubnetGroupName;
+        reqParams.tf['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+        reqParams.cfn['SubnetIds'] = [];
+        reqParams.tf['subnet_ids'] = [];
+        obj.data.Subnets.forEach(subnet => {
+            reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+            reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
+        });
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::SubnetGroup',
+            'terraformType': 'aws_elasticache_subnet_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.parametergroup") {
+        reqParams.cfn['CacheParameterGroupFamily'] = obj.data.CacheParameterGroupFamily;
+        reqParams.tf['family'] = obj.data.CacheParameterGroupFamily;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+
+        /*
+        TODO:
+        Properties
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::ParameterGroup',
+            'terraformType': 'aws_elasticache_parameter_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.securitygroup") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['name'] = obj.data.CacheSecurityGroupName;
+        reqParams.tf['description'] = obj.data.Description;
+        if (obj.data.EC2SecurityGroups) {
+            reqParams.tf['security_group_names'] = [];
+            obj.data.EC2SecurityGroups.forEach(securitygroup => {
+                reqParams.tf['security_group_names'].push(securitygroup.EC2SecurityGroupName);
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::SecurityGroup',
+            'terraformType': 'aws_elasticache_security_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.cluster") {
+        reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+        reqParams.tf['node_type'] = obj.data.CacheNodeType;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.tf['engine'] = obj.data.Engine;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.tf['engine_version'] = obj.data.EngineVersion;
+        reqParams.cfn['NumCacheNodes'] = obj.data.NumCacheNodes;
+        reqParams.tf['num_cache_nodes'] = obj.data.NumCacheNodes;
+        reqParams.cfn['PreferredAvailabilityZone'] = obj.data.PreferredAvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.PreferredAvailabilityZone;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['NotificationTopicArn'] = obj.data.NotificationConfiguration.TopicArn;
+        reqParams.tf['notification_topic_arn'] = obj.data.NotificationConfiguration.TopicArn;
+        if (obj.data.CacheSecurityGroups) {
+            reqParams.cfn['CacheSecurityGroupNames'] = [];
+            reqParams.tf['security_group_names'] = [];
+            obj.data.CacheSecurityGroups.forEach(securityGroup => {
+                reqParams.cfn['CacheSecurityGroupNames'].push(securityGroup.CacheSecurityGroupName);
+                reqParams.tf['security_group_names'].push(securityGroup.CacheSecurityGroupName);
+            });
+        }
+        reqParams.cfn['CacheParameterGroupName'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
+        reqParams.tf['parameter_group_name'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
+        reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
+        reqParams.tf['subnet_group_name'] = obj.data.CacheSubnetGroupName;
+        reqParams.cfn['Port'] = obj.data.CacheNodes[0].Endpoint.Port;
+        reqParams.tf['port'] = obj.data.CacheNodes[0].Endpoint.Port;
+        reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+        if (obj.data.SecurityGroups) {
+            reqParams.cfn['VpcSecurityGroupIds'] = [];
+            reqParams.tf['security_group_ids'] = [];
+            obj.data.SecurityGroups.forEach(securityGroup => {
+                reqParams.cfn['VpcSecurityGroupIds'].push(securityGroup.SecurityGroupId);
+                reqParams.tf['security_group_ids'].push(securityGroup.SecurityGroupId);
+            });
+        }
+        reqParams.cfn['SnapshotRetentionLimit'] = obj.data.SnapshotRetentionLimit;
+        reqParams.tf['snapshot_retention_limit'] = obj.data.SnapshotRetentionLimit;
+        reqParams.cfn['SnapshotWindow'] = obj.data.SnapshotWindow;
+        reqParams.tf['snapshot_window'] = obj.data.SnapshotWindow;
+        reqParams.cfn['ClusterName'] = obj.data.CacheClusterId;
+        reqParams.tf['cluster_id'] = obj.data.CacheClusterId;
+
+        /*
+        TODO:
+        AZMode: String
+        PreferredAvailabilityZones:
+            - String
+        SnapshotArns:
+            - String
+        SnapshotName: String
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::CacheCluster',
+            'terraformType': 'aws_elasticache_cluster',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.CacheClusterId,
+                'GetAtt': {
+                    'ConfigurationEndpoint.Address': (obj.data.ConfigurationEndpoint ? obj.data.ConfigurationEndpoint.Address : null),
+                    'ConfigurationEndpoint.Port': (obj.data.ConfigurationEndpoint ? obj.data.ConfigurationEndpoint.Port : null)
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

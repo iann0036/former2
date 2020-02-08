@@ -184,3 +184,12 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
         unblockUI('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

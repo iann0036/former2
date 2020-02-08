@@ -409,3 +409,12 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
     unblockUI('#section-networkingandcontentdelivery-appmesh-virtualrouters-datatable');
     unblockUI('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

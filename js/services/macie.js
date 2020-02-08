@@ -115,3 +115,12 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
     unblockUI('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable');
     unblockUI('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

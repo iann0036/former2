@@ -2281,3 +2281,326 @@ async function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-keypairs-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "ec2.placementgroup") {
+        reqParams.cfn['Strategy'] = obj.data.Strategy;
+        reqParams.tf['strategy'] = obj.data.Strategy;
+        reqParams.tf['name'] = obj.data.GroupName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::PlacementGroup',
+            'terraformType': 'aws_placement_group',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GroupName
+            }
+        });
+    } else if (obj.type == "elbv2.targetgroup") {
+        var matcherHttpCode = null;
+        if (obj.data.Matcher) {
+            matcherHttpCode = obj.data.Matcher.HttpCode;
+        }
+        reqParams.tf['health_check'] = {
+            'interval': obj.data.HealthCheckIntervalSeconds,
+            'path': obj.data.HealthCheckPath,
+            'port': obj.data.HealthCheckPort,
+            'protocol': obj.data.HealthCheckProtocol,
+            'timeout': obj.data.HealthCheckTimeoutSeconds,
+            'unhealthy_threshold': obj.data.UnhealthyThresholdCount,
+            'healthy_threshold': obj.data.HealthyThresholdCount,
+            'matcher': matcherHttpCode
+        };
+        reqParams.cfn['HealthCheckIntervalSeconds'] = obj.data.HealthCheckIntervalSeconds;
+        reqParams.cfn['HealthCheckPath'] = obj.data.HealthCheckPath;
+        reqParams.cfn['Port'] = obj.data.Port;
+        reqParams.tf['port'] = obj.data.Port;
+        reqParams.cfn['Protocol'] = obj.data.Protocol;
+        reqParams.tf['protocol'] = obj.data.Protocol;
+        reqParams.cfn['HealthCheckPort'] = obj.data.HealthCheckPort;
+        reqParams.cfn['HealthCheckProtocol'] = obj.data.HealthCheckProtocol;
+        reqParams.cfn['HealthCheckTimeoutSeconds'] = obj.data.HealthCheckTimeoutSeconds;
+        reqParams.cfn['UnhealthyThresholdCount'] = obj.data.UnhealthyThresholdCount;
+        reqParams.cfn['TargetType'] = obj.data.TargetType;
+        reqParams.tf['target_type'] = obj.data.TargetType;
+        reqParams.cfn['Matcher'] = obj.data.Matcher;
+        reqParams.cfn['HealthyThresholdCount'] = obj.data.HealthyThresholdCount;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['Name'] = obj.data.TargetGroupName;
+        reqParams.tf['name'] = obj.data.TargetGroupName;
+        reqParams.cfn['HealthCheckEnabled'] = obj.data.HealthCheckEnabled;
+        reqParams.cfn['TargetGroupAttributes'] = obj.data.TargetGroupAttributes;
+        if (obj.data.Targets) {
+            reqParams.cfn['Targets'] = [];
+            obj.data.Targets.forEach(target => {
+                if (target.Target) {
+                    reqParams.cfn['Targets'].push(target.Target);
+                }
+            });
+        }
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elbv2', obj.id),
+            'region': obj.region,
+            'service': 'elbv2',
+            'type': 'AWS::ElasticLoadBalancingV2::TargetGroup',
+            'terraformType': 'aws_lb_target_group',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TargetGroupArn,
+                'GetAtt': {
+                    'TargetGroupName': obj.data.TargetGroupName
+                }
+            }
+        });
+    } else if (obj.type == "ec2.volume") {
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.cfn['Encrypted'] = obj.data.Encrypted;
+        reqParams.tf['encrypted'] = obj.data.Encrypted;
+        reqParams.cfn['Iops'] = (obj.data.VolumeType == "io1") ? obj.data.Iops : null;
+        reqParams.tf['iops'] = (obj.data.VolumeType == "io1") ? obj.data.Iops : null;
+        reqParams.cfn['Size'] = obj.data.Size;
+        reqParams.tf['size'] = obj.data.Size;
+        reqParams.cfn['VolumeType'] = obj.data.VolumeType;
+        reqParams.tf['type'] = obj.data.VolumeType;
+        reqParams.cfn['SnapshotId'] = (obj.data.SnapshotId == "") ? null : obj.data.SnapshotId;
+        reqParams.tf['snapshot_id'] = (obj.data.SnapshotId == "") ? null : obj.data.SnapshotId;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        /*
+        TODO:
+        AutoEnableIO: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::Volume',
+            'terraformType': 'aws_ebs_volume',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VolumeId,
+                'Import': {
+                    'VolumeId': obj.data.VolumeId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.volumeattachment") {
+        reqParams.cfn['VolumeId'] = obj.data.VolumeId;
+        reqParams.tf['volume_id'] = obj.data.VolumeId;
+        reqParams.cfn['InstanceId'] = obj.data.InstanceId;
+        reqParams.tf['instance_id'] = obj.data.InstanceId;
+        reqParams.cfn['Device'] = obj.data.Device;
+        reqParams.tf['device_name'] = obj.data.Device;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::VolumeAttachment',
+            'terraformType': 'aws_volume_attachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.securitygroup") {
+        reqParams.cfn['GroupDescription'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['GroupName'] = obj.data.GroupName;
+        reqParams.tf['name'] = obj.data.GroupName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        if (obj.data.IpPermissions) {
+            reqParams.cfn['SecurityGroupIngress'] = [];
+            reqParams.tf['ingress'] = [];
+            obj.data.IpPermissions.forEach(ipPermission => {
+                if (ipPermission.IpRanges) {
+                    ipPermission.IpRanges.forEach(ipRange => {
+                        reqParams.cfn['SecurityGroupIngress'].push({
+                            'CidrIp': ipRange.CidrIp,
+                            'Description': ipRange.Description,
+                            'FromPort': ipPermission.FromPort,
+                            'IpProtocol': ipPermission.IpProtocol,
+                            'ToPort': ipPermission.ToPort
+                        });
+                        reqParams.tf['ingress'].push({
+                            'cidr_blocks': [ipRange.CidrIp],
+                            'description': ipRange.Description,
+                            'from_port': ipPermission.FromPort,
+                            'protocol': ipPermission.IpProtocol,
+                            'to_port': ipPermission.ToPort
+                        });
+                    });
+                }
+                if (ipPermission.Ipv6Ranges) {
+                    ipPermission.Ipv6Ranges.forEach(ipv6Range => {
+                        reqParams.cfn['SecurityGroupIngress'].push({
+                            'CidrIpv6': ipv6Range.CidrIpv6,
+                            'Description': ipv6Range.Description,
+                            'FromPort': ipPermission.FromPort,
+                            'IpProtocol': ipPermission.IpProtocol,
+                            'ToPort': ipPermission.ToPort
+                        });
+                        reqParams.tf['ingress'].push({
+                            'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
+                            'description': ipv6Range.Description,
+                            'from_port': ipPermission.FromPort,
+                            'protocol': ipPermission.IpProtocol,
+                            'to_port': ipPermission.ToPort
+                        });
+                    });
+                }
+                if (ipPermission.UserIdGroupPairs) {
+                    ipPermission.UserIdGroupPairs.forEach(userIdGroupPair => {
+                        reqParams.cfn['SecurityGroupIngress'].push({
+                            'SourceSecurityGroupId': userIdGroupPair.GroupId,
+                            'SourceSecurityGroupName': userIdGroupPair.GroupName,
+                            'SourceSecurityGroupOwnerId': userIdGroupPair.UserId,
+                            'Description': userIdGroupPair.Description,
+                            'FromPort': ipPermission.FromPort,
+                            'IpProtocol': ipPermission.IpProtocol,
+                            'ToPort': ipPermission.ToPort
+                        });
+                        reqParams.tf['ingress'].push({
+                            'security_groups': [userIdGroupPair.GroupId || userIdGroupPair.GroupName],
+                            'description': userIdGroupPair.Description,
+                            'from_port': ipPermission.FromPort,
+                            'protocol': ipPermission.IpProtocol,
+                            'to_port': ipPermission.ToPort
+                        });
+                    });
+                }
+            });
+        }
+        if (obj.data.IpPermissionsEgress) {
+            reqParams.cfn['SecurityGroupEgress'] = [];
+            reqParams.tf['egress'] = [];
+            obj.data.IpPermissionsEgress.forEach(ipPermissionsEgress => {
+                if (ipPermissionsEgress.IpRanges) {
+                    ipPermissionsEgress.IpRanges.forEach(ipRange => {
+                        reqParams.cfn['SecurityGroupEgress'].push({
+                            'CidrIp': ipRange.CidrIp,
+                            'Description': ipRange.Description,
+                            'FromPort': ipPermissionsEgress.FromPort,
+                            'IpProtocol': ipPermissionsEgress.IpProtocol,
+                            'ToPort': ipPermissionsEgress.ToPort
+                        });
+                        reqParams.tf['egress'].push({
+                            'cidr_blocks': [ipRange.CidrIp],
+                            'description': ipRange.Description,
+                            'from_port': ipPermissionsEgress.FromPort,
+                            'protocol': ipPermissionsEgress.IpProtocol,
+                            'to_port': ipPermissionsEgress.ToPort
+                        });
+                    });
+                }
+                if (ipPermissionsEgress.Ipv6Ranges) {
+                    ipPermissionsEgress.Ipv6Ranges.forEach(ipv6Range => {
+                        reqParams.cfn['SecurityGroupEgress'].push({
+                            'CidrIpv6': ipv6Range.CidrIpv6,
+                            'Description': ipv6Range.Description,
+                            'FromPort': ipPermissionsEgress.FromPort,
+                            'IpProtocol': ipPermissionsEgress.IpProtocol,
+                            'ToPort': ipPermissionsEgress.ToPort
+                        });
+                        reqParams.tf['egress'].push({
+                            'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
+                            'description': ipv6Range.Description,
+                            'from_port': ipPermissionsEgress.FromPort,
+                            'protocol': ipPermissionsEgress.IpProtocol,
+                            'to_port': ipPermissionsEgress.ToPort
+                        });
+                    });
+                }
+                if (ipPermissionsEgress.UserIdGroupPairs) {
+                    ipPermissionsEgress.UserIdGroupPairs.forEach(userIdGroupPair => {
+                        reqParams.cfn['SecurityGroupEgress'].push({
+                            'DestinationSecurityGroupId': userIdGroupPair.GroupId,
+                            'Description': ipv6Range.Description,
+                            'FromPort': ipPermissionsEgress.FromPort,
+                            'IpProtocol': ipPermissionsEgress.IpProtocol,
+                            'ToPort': ipPermissionsEgress.ToPort
+                        });
+                        reqParams.tf['egress'].push({
+                            'security_groups': [userIdGroupPair.GroupId],
+                            'description': ipv6Range.Description,
+                            'from_port': ipPermissionsEgress.FromPort,
+                            'protocol': ipPermissionsEgress.IpProtocol,
+                            'to_port': ipPermissionsEgress.ToPort
+                        });
+                    });
+                }
+                if (ipPermissionsEgress.PrefixListIds) {
+                    ipPermissionsEgress.PrefixListIds.forEach(prefixListId => {
+                        reqParams.cfn['SecurityGroupEgress'].push({
+                            'DestinationPrefixListId': prefixListId.PrefixListId,
+                            'Description': prefixListId.Description,
+                            'FromPort': ipPermissionsEgress.FromPort,
+                            'IpProtocol': ipPermissionsEgress.IpProtocol,
+                            'ToPort': ipPermissionsEgress.ToPort
+                        });
+                        reqParams.tf['egress'].push({
+                            'prefix_list_ids': [prefixListId.PrefixListId],
+                            'description': prefixListId.Description,
+                            'from_port': ipPermissionsEgress.FromPort,
+                            'protocol': ipPermissionsEgress.IpProtocol,
+                            'to_port': ipPermissionsEgress.ToPort
+                        });
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::SecurityGroup',
+            'terraformType': 'aws_security_group',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GroupId,
+                'Terraform': {
+                    'id': obj.data.GroupId
+                },
+                'Import': {
+                    'GroupId': obj.data.GroupId
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

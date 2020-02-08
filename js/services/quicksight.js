@@ -82,3 +82,12 @@ async function updateDatatableAnalyticsQuickSight() {
 
     unblockUI('#section-analytics-quicksight-groups-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

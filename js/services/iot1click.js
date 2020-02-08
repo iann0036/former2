@@ -217,3 +217,12 @@ async function updateDatatableInternetofThings1Click() {
 
     unblockUI('#section-internetofthings-1click-devices-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

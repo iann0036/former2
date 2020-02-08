@@ -1920,3 +1920,12 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

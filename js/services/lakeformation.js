@@ -191,3 +191,12 @@ async function updateDatatableAnalyticsLakeFormation() {
     unblockUI('#section-analytics-lakeformation-permissions-datatable');
     unblockUI('#section-analytics-lakeformation-datalakesettings-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

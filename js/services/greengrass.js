@@ -1155,3 +1155,12 @@ async function updateDatatableInternetofThingsGreengrass() {
         unblockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

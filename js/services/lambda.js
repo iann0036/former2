@@ -569,3 +569,154 @@ async function updateDatatableComputeLambda() {
         unblockUI('#section-compute-lambda-eventsourcemappings-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "lambda.function") {
+        reqParams.cfn['Description'] = obj.data.Configuration.Description;
+        reqParams.tf['description'] = obj.data.Configuration.Description;
+        if (obj.data.Configuration.Environment && obj.data.Configuration.Environment.Variables) {
+            reqParams.cfn['Environment'] = {
+                'Variables': obj.data.Configuration.Environment.Variables
+            };
+            reqParams.tf['environment'] = {
+                'variables': obj.data.Configuration.Environment.Variables
+            };
+        }
+        reqParams.cfn['FunctionName'] = obj.data.Configuration.FunctionName;
+        reqParams.tf['function_name'] = obj.data.Configuration.FunctionName;
+        reqParams.cfn['Handler'] = obj.data.Configuration.Handler;
+        reqParams.tf['handler'] = obj.data.Configuration.Handler;
+
+        if (obj.data.Code && obj.data.Code.RepositoryType == "S3") {
+            var url = new URL(obj.data.Code.Location);
+
+            reqParams.cfn['Code'] = {
+                'S3Bucket': url.host.split(".")[0],
+                'S3Key': url.pathname,
+                'S3ObjectVersion': url.searchParams.get('versionId')
+            };
+            reqParams.tf['s3_bucket'] = url.host.split(".")[0];
+            reqParams.tf['s3_key'] = url.pathname;
+            reqParams.tf['s3_object_version'] = url.searchParams.get('versionId');
+        }
+
+        reqParams.cfn['KmsKeyArn'] = obj.data.Configuration.KMSKeyArn;
+        reqParams.tf['kms_key_arn'] = obj.data.Configuration.KMSKeyArn;
+        reqParams.cfn['MemorySize'] = obj.data.Configuration.MemorySize;
+        reqParams.tf['memory_size'] = obj.data.Configuration.MemorySize;
+        reqParams.cfn['ReservedConcurrentExecutions'] = obj.data.Configuration.ReservedConcurrentExecutions;
+        reqParams.tf['reserved_concurrent_executions'] = obj.data.Configuration.ReservedConcurrentExecutions;
+        reqParams.cfn['Role'] = obj.data.Configuration.Role;
+        reqParams.tf['role'] = obj.data.Configuration.Role;
+        reqParams.cfn['Runtime'] = obj.data.Configuration.Runtime;
+        reqParams.tf['runtime'] = obj.data.Configuration.Runtime;
+        reqParams.cfn['Timeout'] = obj.data.Configuration.Timeout;
+        reqParams.tf['timeout'] = obj.data.Configuration.Timeout;
+        if (obj.data.Configuration.TracingConfig) {
+            reqParams.cfn['TracingConfig'] = obj.data.Configuration.TracingConfig;
+            reqParams.tf['tracing_config'] = {
+                'mode': obj.data.Configuration.TracingConfig.Mode
+            };
+        }
+
+        if (obj.data.Configuration.VpcConfig && obj.data.Configuration.VpcConfig.SubnetIds && obj.data.Configuration.VpcConfig.SubnetIds.length > 0) {
+            reqParams.cfn['VpcConfig'] = {
+                'SubnetIds': obj.data.Configuration.VpcConfig.SubnetIds,
+                'SecurityGroupIds': obj.data.Configuration.VpcConfig.SecurityGroupIds
+            };
+            reqParams.tf['vpc_config'] = {
+                'subnet_ids': obj.data.Configuration.VpcConfig.SubnetIds,
+                'security_group_ids': obj.data.Configuration.VpcConfig.SecurityGroupIds
+            };
+        }
+
+        if (obj.data.Configuration.DeadLetterConfig) {
+            reqParams.cfn['DeadLetterConfig'] = {
+                'TargetArn': obj.data.Configuration.DeadLetterConfig.TargetArn
+            };
+            reqParams.tf['dead_letter_config'] = {
+                'target_arn': obj.data.Configuration.DeadLetterConfig.TargetArn
+            };
+        }
+
+        if (obj.data.Configuration.Layers) {
+            reqParams.cfn['Layers'] = [];
+            reqParams.tf['layers'] = [];
+            obj.data.Configuration.Layers.forEach(layer => {
+                reqParams.cfn['Layers'].push(layer.Arn);
+                reqParams.tf['layers'].push(layer.Arn);
+            });
+        }
+
+        /*
+        TODO:
+        Tags: 
+            Resource Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Function',
+            'terraformType': 'aws_lambda_function',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Configuration.FunctionName,
+                'GetAtt': {
+                    'Arn': obj.data.Configuration.FunctionArn
+                },
+                'Import': {
+                    'FunctionName': obj.data.Configuration.FunctionName
+                }
+            }
+        });
+    } else if (obj.type == "lambda.alias") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        var split = obj.data.AliasArn.split(":");
+        reqParams.cfn['FunctionName'] = split[split.length - 2];
+        reqParams.tf['function_name'] = split[split.length - 2];
+        reqParams.cfn['FunctionVersion'] = obj.data.FunctionVersion;
+        reqParams.tf['function_version'] = obj.data.FunctionVersion;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        if (obj.data.RoutingConfig && obj.data.RoutingConfig.AdditionalVersionWeights) {
+            reqParams.cfn['RoutingConfig'] = {
+                'AdditionalVersionWeights': []
+            };
+            reqParams.tf['routing_config'] = {
+                'additional_version_weights': {}
+            };
+            for (var func_version in obj.data.RoutingConfig.AdditionalVersionWeights) {
+                reqParams.cfn['RoutingConfig']['AdditionalVersionWeights'].push({
+                    FunctionVersion: func_version,
+                    FunctionWeight: obj.data.RoutingConfig.AdditionalVersionWeights[func_version]
+                });
+                reqParams.tf['routing_config']['additional_version_weights'][func_version] = obj.data.RoutingConfig.AdditionalVersionWeights[func_version];
+            }
+        }
+        reqParams.cfn['ProvisionedConcurrencyConfig'] = obj.data.ProvisionedConcurrencyConfig;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Alias',
+            'terraformType': 'aws_lambda_alias',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AliasArn,
+                'Import': {
+                    'AliasArn': obj.data.AliasArn
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

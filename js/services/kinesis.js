@@ -689,3 +689,46 @@ async function updateDatatableAnalyticsKinesis() {
     unblockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "kinesis.stream") {
+        reqParams.cfn['Name'] = obj.data.StreamName;
+        reqParams.tf['name'] = obj.data.StreamName;
+        reqParams.cfn['RetentionPeriodHours'] = obj.data.RetentionPeriodHours;
+        reqParams.tf['retention_period'] = obj.data.RetentionPeriodHours;
+        reqParams.cfn['StreamEncryption'] = {
+            'EncryptionType': obj.data.EncryptionType,
+            'KeyId': obj.data.KeyId
+        };
+        reqParams.tf['encryption_type'] = obj.data.EncryptionType;
+        reqParams.tf['kms_key_id'] = obj.data.KeyId;
+        reqParams.cfn['ShardCount'] = obj.data.Shards.length;
+        reqParams.tf['shard_count'] = obj.data.Shards.length;
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::Kinesis::Stream',
+            'terraformType': 'aws_kinesis_stream',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.StreamName,
+                'GetAtt': {
+                    'Arn': obj.data.StreamARN
+                }
+            }
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

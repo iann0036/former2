@@ -765,3 +765,446 @@ async function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "rds.cluster") {
+        reqParams.cfn['AvailabilityZones'] = obj.data.AvailabilityZones;
+        reqParams.tf['availability_zones'] = obj.data.AvailabilityZones;
+        reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+        reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.tf['database_name'] = obj.data.DatabaseName;
+        reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+        reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
+        reqParams.cfn['DBClusterParameterGroup'] = obj.data.DBClusterParameterGroup;
+        reqParams.tf['db_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
+        reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup;
+        reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.tf['engine'] = obj.data.Engine;
+        reqParams.cfn['Port'] = obj.data.Port;
+        reqParams.tf['port'] = obj.data.Port;
+        reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+        reqParams.tf['master_username'] = obj.data.MasterUsername;
+        reqParams.cfn['MasterUserPassword'] = "REPLACEME"; // TODO: Fix
+        reqParams.tf['master_password'] = "REPLACEME";
+        reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+        reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['ReplicationSourceIdentifier'] = obj.data.ReplicationSourceIdentifier;
+        reqParams.tf['replication_source_identifier'] = obj.data.ReplicationSourceIdentifier;
+        if (obj.data.VpcSecurityGroups) {
+            reqParams.cfn['VpcSecurityGroupIds'] = [];
+            reqParams.tf['vpc_security_group_ids'] = [];
+            obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
+                reqParams.cfn['VpcSecurityGroupIds'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
+            });
+        }
+        reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+        reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.tf['engine_version'] = obj.data.EngineVersion;
+        reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        reqParams.cfn['BacktrackWindow'] = obj.data.BacktrackWindow;
+        reqParams.tf['backtrack_window'] = obj.data.BacktrackWindow;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports; // TODO: WTF? Lol.
+        reqParams.tf['enabled_cloudwatch_logs_exports'] = obj.data.EnabledCloudwatchLogsExports;
+        reqParams.cfn['EngineMode'] = obj.data.EngineMode;
+        reqParams.tf['engine_mode'] = obj.data.EngineMode;
+        if (obj.data.ScalingConfigurationInfo) {
+            reqParams.cfn['ScalingConfiguration'] = {
+                'MinCapacity': obj.data.ScalingConfigurationInfo.MinCapacity,
+                'MaxCapacity': obj.data.ScalingConfigurationInfo.MaxCapacity,
+                'AutoPause': obj.data.ScalingConfigurationInfo.AutoPause,
+                'SecondsUntilAutoPause': obj.data.ScalingConfigurationInfo.SecondsUntilAutoPause
+            };
+            reqParams.tf['scaling_configuration'] = {
+                'min_capacity': obj.data.ScalingConfigurationInfo.MinCapacity,
+                'max_capacity': obj.data.ScalingConfigurationInfo.MaxCapacity,
+                'auto_pause': obj.data.ScalingConfigurationInfo.AutoPause,
+                'seconds_until_auto_pause': obj.data.ScalingConfigurationInfo.SecondsUntilAutoPause
+            };
+        }
+        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'RoleArn': associatedRole.RoleArn,
+                    'FeatureName': associatedRole.FeatureName
+                });
+            });
+        }
+        reqParams.cfn['EnableHttpEndpoint'] = obj.data.HttpEndpointEnabled;
+
+        /*
+        TODO:
+        RestoreType: String
+        SnapshotIdentifier: String
+        SourceDBClusterIdentifier: String
+        SourceRegion: String
+        Tags: 
+            - Tag
+        UseLatestRestorableTime: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBCluster',
+            'terraformType': 'aws_rds_cluster',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DBClusterIdentifier,
+                'GetAtt': {
+                    'Endpoint.Address': obj.data.Endpoint,
+                    'Endpoint.Port': obj.data.Port,
+                    'ReadEndpoint.Address': obj.data.ReaderEndpoint
+                },
+                'Import': {
+                    'DBClusterIdentifier': obj.data.DBClusterIdentifier
+                }
+            }
+        });
+    } else if (obj.type == "rds.instance") {
+        reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
+        reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
+        reqParams.cfn['AllocatedStorage'] = obj.data.AllocatedStorage;
+        reqParams.tf['allocated_storage'] = obj.data.AllocatedStorage;
+        reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
+        reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.tf['engine'] = obj.data.Engine;
+        reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+        reqParams.tf['username'] = obj.data.MasterUsername;
+        reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+        reqParams.tf['password'] = 'REPLACEME';
+        reqParams.cfn['DBName'] = obj.data.DBName;
+        reqParams.tf['name'] = obj.data.DBName;
+        reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+        reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
+        reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+        reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.cfn['MultiAZ'] = obj.data.MultiAZ;
+        reqParams.tf['multi_az'] = obj.data.MultiAZ;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.tf['engine_version'] = obj.data.EngineVersion;
+        reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
+        reqParams.cfn['LicenseModel'] = obj.data.LicenseModel;
+        reqParams.tf['license_model'] = obj.data.LicenseModel;
+        reqParams.cfn['Iops'] = obj.data.Iops;
+        reqParams.tf['iops'] = obj.data.Iops;
+        reqParams.cfn['CharacterSetName'] = obj.data.CharacterSetName;
+        reqParams.tf['character_set_name'] = obj.data.CharacterSetName;
+        reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+        reqParams.tf['publicly_accessible'] = obj.data.PubliclyAccessible;
+        reqParams.cfn['StorageType'] = obj.data.StorageType;
+        reqParams.tf['storage_type'] = obj.data.StorageType;
+        reqParams.cfn['Port'] = obj.data.Endpoint.Port;
+        reqParams.tf['port'] = obj.data.Endpoint.Port;
+        reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
+        reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
+        reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+        reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['CopyTagsToSnapshot'] = obj.data.CopyTagsToSnapshot;
+        reqParams.tf['copy_tags_to_snapshot'] = obj.data.CopyTagsToSnapshot;
+        reqParams.cfn['MonitoringInterval'] = obj.data.MonitoringInterval;
+        reqParams.tf['monitoring_interval'] = obj.data.MonitoringInterval;
+        reqParams.cfn['PromotionTier'] = obj.data.PromotionTier;
+        reqParams.cfn['Timezone'] = obj.data.Timezone;
+        reqParams.tf['timezone'] = obj.data.Timezone;
+        reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        reqParams.cfn['EnablePerformanceInsights'] = obj.data.PerformanceInsightsEnabled;
+        reqParams.cfn['PerformanceInsightsKMSKeyId'] = obj.data.PerformanceInsightsKMSKeyId;
+        reqParams.cfn['PerformanceInsightsRetentionPeriod'] = obj.data.PerformanceInsightsRetentionPeriod;
+        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
+        reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
+        reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
+        reqParams.cfn['ProcessorFeatures'] = obj.data.ProcessorFeatures;
+        if (obj.data.DBSecurityGroups) {
+            reqParams.cfn['DBSecurityGroups'] = [];
+            reqParams.tf['security_group_names'] = [];
+            obj.data.DBSecurityGroups.forEach(dbSecurityGroup => {
+                reqParams.cfn['DBSecurityGroups'].push(dbSecurityGroup.DBSecurityGroupName);
+                reqParams.tf['security_group_names'].push(dbSecurityGroup.DBSecurityGroupName);
+            });
+        }
+        if (obj.data.VpcSecurityGroups) {
+            reqParams.cfn['VPCSecurityGroups'] = [];
+            reqParams.tf['vpc_security_group_ids'] = [];
+            obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
+                reqParams.cfn['VPCSecurityGroups'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
+            });
+        }
+        reqParams.cfn['MaxAllocatedStorage'] = obj.data.MaxAllocatedStorage;
+        reqParams.tf['max_allocated_storage'] = obj.data.MaxAllocatedStorage;
+        if (obj.data.DBParameterGroups && obj.data.DBParameterGroups.length > 0) {
+            reqParams.cfn['DBParameterGroupName'] = obj.data.DBParameterGroups[0].DBParameterGroupName;
+        }
+        if (obj.data.OptionGroupMemberships && obj.data.OptionGroupMemberships.length > 0) {
+            reqParams.cfn['OptionGroupName'] = obj.data.OptionGroupMemberships[0].OptionGroupName;
+        }
+        if (obj.data.DomainMemberships && obj.data.DomainMemberships.length > 0) {
+            reqParams.cfn['Domain'] = obj.data.DomainMemberships[0].Domain;
+            reqParams.cfn['DomainIAMRoleName'] = obj.data.DomainMemberships[0].IAMRoleName;
+        }
+        reqParams.cfn['MonitoringRoleArn'] = obj.data.MonitoringRoleArn;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'RoleArn': associatedRole.RoleArn,
+                    'FeatureName': associatedRole.FeatureName
+                });
+            });
+        }
+        reqParams.cfn['CACertificateIdentifier'] = obj.data.CACertificateIdentifier;
+
+        /*
+        TODO:
+        AllowMajorVersionUpgrade: Boolean
+        DBSnapshotIdentifier: String
+        DeleteAutomatedBackups: Boolean
+        SourceDBInstanceIdentifier: String
+        SourceRegion: String
+        Tags: 
+            - Tag
+        UseDefaultProcessorFeatures: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBInstance',
+            'terraformType': (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") ? 'aws_db_instance' : 'aws_rds_cluster_instance',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DBInstanceIdentifier,
+                'GetAtt': {
+                    'Endpoint.Address': obj.data.Endpoint.Address,
+                    'Endpoint.Port': obj.data.Endpoint.Port
+                },
+                'Import': {
+                    'DBInstanceIdentifier': obj.data.DBInstanceIdentifier
+                }
+            }
+        });
+    } else if (obj.type == "rds.eventsubscription") {
+        reqParams.cfn['SourceType'] = obj.data.SourceType;
+        reqParams.tf['source_type'] = obj.data.SourceType;
+        reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
+        reqParams.tf['sns_topic'] = obj.data.SnsTopicArn;
+        reqParams.cfn['SourceIds'] = obj.data.SourceIdsList;
+        reqParams.tf['source_ids'] = obj.data.SourceIdsList;
+        reqParams.cfn['EventCategories'] = obj.data.EventCategoriesList;
+        reqParams.tf['event_categories'] = obj.data.EventCategoriesList;
+        reqParams.cfn['Enabled'] = obj.data.Enabled;
+        reqParams.tf['enabled'] = obj.data.Enabled;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::EventSubscription',
+            'terraformType': 'aws_db_event_subscription',
+            'options': reqParams
+        });
+    } else if (obj.type == "rds.subnetgroup") {
+        reqParams.cfn['DBSubnetGroupDescription'] = obj.data.DBSubnetGroupDescription;
+        reqParams.tf['description'] = obj.data.DBSubnetGroupDescription;
+        reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroupName;
+        reqParams.tf['name'] = obj.data.DBSubnetGroupName;
+        reqParams.cfn['SubnetIds'] = [];
+        reqParams.tf['subnet_ids'] = [];
+        obj.data.Subnets.forEach(subnet => {
+            reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
+            reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
+        });
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBSubnetGroup',
+            'terraformType': 'aws_db_subnet_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "rds.clusterparametergroup") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+        reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
+
+        /*
+        TODO:
+        Parameters:
+        - Parameter
+        Tags:
+        - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBClusterParameterGroup',
+            'terraformType': 'aws_rds_cluster_parameter_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "rds.parametergroup") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
+        reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
+
+        /*
+        TODO:
+        Parameters:
+        - Parameter
+        Tags:
+        - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBParameterGroup',
+            'terraformType': 'aws_db_parameter_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "rds.optiongroup") {
+        reqParams.cfn['EngineName'] = obj.data.EngineName;
+        reqParams.tf['engine_name'] = obj.data.EngineName;
+        reqParams.cfn['MajorEngineVersion'] = obj.data.MajorEngineVersion;
+        reqParams.tf['major_engine_version'] = obj.data.MajorEngineVersion;
+        reqParams.cfn['OptionGroupDescription'] = obj.data.OptionGroupDescription;
+        reqParams.tf['option_group_description'] = obj.data.OptionGroupDescription;
+        if (obj.data.Options) {
+            reqParams.cfn['OptionConfigurations'] = [];
+            reqParams.tf['option'] = [];
+            obj.data.Options.forEach(option => {
+                var optionSettings = null;
+                var tfOptionSettings = null;
+                if (option.OptionSettings) {
+                    optionSettings = [];
+                    tfOptionSettings = {};
+                    option.OptionSettings.forEach(optionSetting => {
+                        optionSettings.push({
+                            'Name': optionSetting.Name,
+                            'Value': optionSetting.Value
+                        });
+                        tfOptionSettings.push({
+                            'name': optionSetting.Name,
+                            'value': optionSetting.Value
+                        });
+                    });
+                }
+                var dbSecurityGroupMemberships = null;
+                if (option.DBSecurityGroupMemberships) {
+                    dbSecurityGroupMemberships = [];
+                    option.DBSecurityGroupMemberships.forEach(dbSecurityGroupMembership => {
+                        dbSecurityGroupMemberships.push(dbSecurityGroupMembership.DBSecurityGroupName);
+                    });
+                }
+                var vpcSecurityGroupMemberships = null;
+                if (option.VpcSecurityGroupMemberships) {
+                    vpcSecurityGroupMemberships = [];
+                    option.VpcSecurityGroupMemberships.forEach(vpcSecurityGroupMembership => {
+                        vpcSecurityGroupMemberships.push(vpcSecurityGroupMembership.VpcSecurityGroupId);
+                    });
+                }
+                reqParams.cfn['OptionConfigurations'].push({
+                    'DBSecurityGroupMemberships': dbSecurityGroupMemberships,
+                    'OptionName': option.OptionName,
+                    'OptionSettings': optionSettings,
+                    'OptionVersion': option.OptionVersion,
+                    'Port': option.Port,
+                    'VpcSecurityGroupMemberships': vpcSecurityGroupMemberships
+                });
+                reqParams.tf['option'].push({
+                    'db_security_group_memberships': dbSecurityGroupMemberships,
+                    'option_name': option.OptionName,
+                    'option_settings': optionSettings,
+                    'version': option.OptionVersion,
+                    'port': option.Port,
+                    'vpc_security_group_memberships': vpcSecurityGroupMemberships
+                });
+            });
+        }
+
+        /*
+        TODO:
+        Tags:
+            - Resource Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::OptionGroup',
+            'terraformType': 'aws_db_option_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "rds.securitygroup") {
+        reqParams.cfn['GroupDescription'] = obj.data.DBSecurityGroupDescription;
+        reqParams.tf['description'] = obj.data.DBSecurityGroupDescription;
+        reqParams.cfn['EC2VpcId'] = obj.data.VpcId;
+
+        /*
+        TODO:
+        DBSecurityGroupIngress:
+            - RDS Security Group Rule
+        Tags:
+            - Resource Tag 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBSecurityGroup',
+            'terraformType': 'aws_db_security_group',
+            'options': reqParams
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

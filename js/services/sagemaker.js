@@ -667,3 +667,12 @@ async function updateDatatableMachineLearningSageMaker() {
         unblockUI('#section-machinelearning-sagemaker-workteams-datatable');
     }).catch(() => { });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

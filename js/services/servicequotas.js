@@ -86,3 +86,12 @@ async function updateDatatableOtherServiceQuotas() {
 
     unblockUI('#section-other-servicequotas-servicequotas-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

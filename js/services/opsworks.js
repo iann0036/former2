@@ -655,3 +655,261 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
         unblockUI('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable');
     });
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    if (obj.type == "opsworks.stack") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.tf['region'] = obj.data.Region;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['ServiceRoleArn'] = obj.data.ServiceRoleArn;
+        reqParams.tf['service_role_arn'] = obj.data.ServiceRoleArn;
+        reqParams.cfn['DefaultInstanceProfileArn'] = obj.data.DefaultInstanceProfileArn;
+        reqParams.tf['default_instance_profile_arn'] = obj.data.DefaultInstanceProfileArn;
+        reqParams.cfn['DefaultOs'] = obj.data.DefaultOs;
+        reqParams.tf['default_os'] = obj.data.DefaultOs;
+        reqParams.cfn['HostnameTheme'] = obj.data.HostnameTheme;
+        reqParams.tf['hostname_theme'] = obj.data.HostnameTheme;
+        reqParams.cfn['DefaultAvailabilityZone'] = obj.data.DefaultAvailabilityZone;
+        reqParams.tf['default_availability_zone'] = obj.data.DefaultAvailabilityZone;
+        reqParams.cfn['DefaultSubnetId'] = obj.data.DefaultSubnetId;
+        reqParams.tf['default_subnet_id'] = obj.data.DefaultSubnetId;
+        reqParams.cfn['CustomJson'] = obj.data.CustomJson;
+        reqParams.tf['custom_json'] = obj.data.CustomJson;
+        reqParams.cfn['ConfigurationManager'] = obj.data.ConfigurationManager;
+        if (obj.data.ConfigurationManager) {
+            reqParams.tf['configuration_manager_name'] = obj.data.ConfigurationManager.Name;
+            reqParams.tf['configuration_manager_version'] = obj.data.ConfigurationManager.Version;
+        }
+        reqParams.cfn['ChefConfiguration'] = obj.data.ChefConfiguration;
+        if (obj.data.ChefConfiguration) {
+            reqParams.tf['berkshelf_version'] = obj.data.ChefConfiguration.BerkshelfVersion;
+            reqParams.tf['manage_berkshelf'] = obj.data.ChefConfiguration.ManageBerkshelf;
+        }
+        reqParams.cfn['UseCustomCookbooks'] = obj.data.UseCustomCookbooks;
+        reqParams.tf['use_custom_cookbooks'] = obj.data.UseCustomCookbooks;
+        reqParams.cfn['UseOpsworksSecurityGroups'] = obj.data.UseOpsworksSecurityGroups;
+        reqParams.tf['use_opsworks_security_groups'] = obj.data.UseOpsworksSecurityGroups;
+        reqParams.cfn['CustomCookbooksSource'] = obj.data.CustomCookbooksSource;
+        if (obj.data.CustomCookbooksSource) {
+            reqParams.tf['custom_cookbooks_source'] = {
+                'type': obj.data.CustomCookbooksSource.Type,
+                'url': obj.data.CustomCookbooksSource.Url,
+                'username': obj.data.CustomCookbooksSource.Username,
+                'password': obj.data.CustomCookbooksSource.Password,
+                'ssh_key': obj.data.CustomCookbooksSource.SshKey,
+                'revision': obj.data.CustomCookbooksSource.Revision
+            };
+        }
+        reqParams.cfn['DefaultSshKeyName'] = obj.data.DefaultSshKeyName;
+        reqParams.tf['default_ssh_key_name'] = obj.data.DefaultSshKeyName;
+        reqParams.cfn['DefaultRootDeviceType'] = obj.data.DefaultRootDeviceType;
+        reqParams.tf['default_root_device_type'] = obj.data.DefaultRootDeviceType;
+        reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+        reqParams.tf['agent_version'] = obj.data.AgentVersion;
+        reqParams.cfn['Attributes'] = obj.data.Attributes;
+
+        /*
+        TODO:
+        CloneAppIds: 
+        - String
+        ClonePermissions: Boolean
+        EcsClusterArn: String
+        ElasticIps: 
+        - ElasticIp
+        RdsDbInstances: 
+        - RdsDbInstance
+        SourceStackId: String
+        Tags: 
+        - Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Stack',
+            'terraformType': 'aws_opsworks_stack',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.app") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['Shortname'] = obj.data.Shortname;
+        reqParams.tf['short_name'] = obj.data.Shortname;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['DataSources'] = obj.data.DataSources;
+        if (obj.data.DataSources) { // TODO: more than one?
+            reqParams.tf['data_source_type'] = obj.data.DataSources[0].Type;
+            reqParams.tf['data_source_arn'] = obj.data.DataSources[0].Arn;
+            reqParams.tf['data_source_database_name'] = obj.data.DataSources[0].DatabaseName;
+        }
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.tf['type'] = obj.data.Type;
+        reqParams.cfn['StackId'] = obj.data.StackId;
+        reqParams.tf['stack_id'] = obj.data.StackId;
+        reqParams.cfn['AppSource'] = obj.data.AppSource;
+        if (obj.data.AppSource) {
+            reqParams.tf['app_source'] = {
+                'type': obj.data.AppSource.Type,
+                'url': obj.data.AppSource.Url,
+                'username': obj.data.AppSource.Username,
+                'password': obj.data.AppSource.Password,
+                'ssh_key': obj.data.AppSource.SshKey,
+                'revision': obj.data.AppSource.Revision
+            };
+        }
+        reqParams.cfn['Domains'] = obj.data.Domains;
+        reqParams.tf['domains'] = obj.data.Domains;
+        reqParams.cfn['EnableSsl'] = obj.data.EnableSsl;
+        reqParams.tf['enable_ssl'] = obj.data.EnableSsl;
+        reqParams.cfn['SslConfiguration'] = obj.data.SslConfiguration;
+        if (obj.data.SslConfiguration) {
+            reqParams.tf['ssl_configuration'] = {
+                'private_key': obj.data.SslConfiguration.PrivateKey,
+                'certificate': obj.data.SslConfiguration.Certificate,
+                'chain': obj.data.SslConfiguration.Chain
+            };
+        }
+        reqParams.cfn['Attributes'] = obj.data.Attributes;
+        reqParams.cfn['Environment'] = obj.data.Environment;
+        if (obj.data.Environment) {
+            reqParams.tf['environment'] = [];
+            obj.data.Environment.forEach(environment => {
+                reqParams.tf['environment'].push({
+                    'key': environment.Key,
+                    'value': environment.Value,
+                    'secure': environment.Secure
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::App',
+            'terraformType': 'aws_opsworks_application',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.layer") {
+        reqParams.cfn['StackId'] = obj.data.StackId;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Shortname'] = obj.data.Shortname;
+        reqParams.cfn['Attributes'] = obj.data.Attributes;
+        reqParams.cfn['CustomInstanceProfileArn'] = obj.data.CustomInstanceProfileArn;
+        reqParams.cfn['CustomJson'] = obj.data.CustomJson;
+        reqParams.cfn['CustomSecurityGroupIds'] = obj.data.CustomSecurityGroupIds;
+        reqParams.cfn['Packages'] = obj.data.Packages;
+        reqParams.cfn['VolumeConfigurations'] = obj.data.VolumeConfigurations;
+        reqParams.cfn['EnableAutoHealing'] = obj.data.EnableAutoHealing;
+        reqParams.cfn['AutoAssignElasticIps'] = obj.data.AutoAssignElasticIps;
+        reqParams.cfn['AutoAssignPublicIps'] = obj.data.AutoAssignPublicIps;
+        reqParams.cfn['CustomRecipes'] = obj.data.CustomRecipes;
+        reqParams.cfn['InstallUpdatesOnBoot'] = obj.data.InstallUpdatesOnBoot;
+        if (obj.data.LifecycleEventConfiguration && obj.data.LifecycleEventConfiguration.Shutdown) {
+            reqParams.cfn['LifecycleEventConfiguration'] = {
+                'ShutdownEventConfiguration': obj.data.LifecycleEventConfiguration.Shutdown
+            };
+        }
+
+        /*
+        TODO:
+        LifecycleEventConfiguration:
+            LifeCycleEventConfiguration
+        LoadBasedAutoScaling:
+            LoadBasedAutoScaling
+        Tags: 
+        - Tags 
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Layer',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.elbattachment") {
+        reqParams.cfn['ElasticLoadBalancerName'] = obj.data.ElasticLoadBalancerName;
+        reqParams.cfn['LayerId'] = obj.data.LayerId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::ElasticLoadBalancerAttachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "opsworks.instance") {
+        reqParams.cfn['AgentVersion'] = obj.data.AgentVersion;
+        reqParams.tf['agent_version'] = obj.data.AgentVersion;
+        reqParams.cfn['AmiId'] = obj.data.AmiId;
+        reqParams.tf['ami_id'] = obj.data.AmiId;
+        reqParams.cfn['Architecture'] = obj.data.Architecture;
+        reqParams.tf['architecture'] = obj.data.Architecture;
+        reqParams.cfn['AutoScalingType'] = obj.data.AutoScalingType;
+        reqParams.tf['auto_scaling_type'] = obj.data.AutoScalingType;
+        reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
+        reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
+        reqParams.cfn['BlockDeviceMappings'] = obj.data.BlockDeviceMappings;
+        //reqParams.tf[''] = obj.data.BlockDeviceMappings; TODO
+        reqParams.cfn['EbsOptimized'] = obj.data.EbsOptimized;
+        reqParams.tf['ebs_optimized'] = obj.data.EbsOptimized;
+        if (obj.data.ElasticIp) {
+            reqParams.cfn['ElasticIps'] = [obj.data.ElasticIp];
+            reqParams.tf['ElasticIps'] = [obj.data.ElasticIp];
+        }
+        reqParams.cfn['Hostname'] = obj.data.Hostname;
+        reqParams.tf['hostname'] = obj.data.Hostname;
+        reqParams.cfn['InstallUpdatesOnBoot'] = obj.data.InstallUpdatesOnBoot;
+        reqParams.tf['install_updates_on_boot'] = obj.data.InstallUpdatesOnBoot;
+        reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.tf['instance_type'] = obj.data.InstanceType;
+        reqParams.cfn['LayerIds'] = obj.data.LayerIds;
+        reqParams.tf['layer_ids'] = obj.data.LayerIds;
+        reqParams.cfn['Os'] = obj.data.Os;
+        reqParams.tf['os'] = obj.data.Os;
+        reqParams.cfn['RootDeviceType'] = obj.data.RootDeviceType;
+        reqParams.tf['root_device_type'] = obj.data.RootDeviceType;
+        reqParams.cfn['SshKeyName'] = obj.data.SshKeyName;
+        reqParams.tf['ssh_key_name'] = obj.data.SshKeyName;
+        reqParams.cfn['StackId'] = obj.data.StackId;
+        reqParams.tf['stack_id'] = obj.data.StackId;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
+        reqParams.cfn['Tenancy'] = obj.data.Tenancy;
+        reqParams.tf['tenancy'] = obj.data.Tenancy;
+        reqParams.cfn['VirtualizationType'] = obj.data.VirtualizationType;
+        reqParams.tf['virtualization_type'] = obj.data.VirtualizationType;
+
+        /*
+        TODO:
+        TimeBasedAutoScaling:
+            TimeBasedAutoScaling
+        Volumes: 
+        - String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('opsworks', obj.id),
+            'region': obj.region,
+            'service': 'opsworks',
+            'type': 'AWS::OpsWorks::Instance',
+            'terraformType': 'aws_opsworks_instance',
+            'options': reqParams
+        });
+    } else {
+        return false;
+    }
+
+    return true;
+});

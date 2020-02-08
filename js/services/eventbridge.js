@@ -416,3 +416,12 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
     unblockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});

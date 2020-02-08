@@ -243,7 +243,6 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     });
 }
 
-/*
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     
     } else {
@@ -252,4 +251,3 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
     return true;
 });
-*/

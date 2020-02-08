@@ -85,3 +85,12 @@ async function updateDatatableDeveloperToolsCloud9() {
 
     unblockUI('#section-developertools-cloud9-environments-datatable');
 }
+
+service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+    
+    } else {
+        return false;
+    }
+
+    return true;
+});
