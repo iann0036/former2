@@ -531,3 +531,5 @@ aws_dx_hosted_transit_virtual_interface_accepter
 aws_glue_workflow
 aws_eks_node_group
 aws_qldb_ledger
+aws_workspaces_directory
+aws_datasync_location_smb

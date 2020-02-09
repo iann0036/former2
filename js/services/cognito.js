@@ -1001,6 +1001,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag] = obj.data.UserPoolTags[tag];
             });
         }
+        reqParams.cfn['AccountRecoverySetting'] = obj.data.AccountRecoverySetting;
 
         tracked_resources.push({
             'obj': obj,

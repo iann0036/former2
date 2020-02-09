@@ -504,7 +504,7 @@
 
 ## Terraform Coverage
 
-**298/533 (55%)** Resources Covered
+**298/535 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -624,6 +624,7 @@
 | *aws_datasync_location_efs* | :thumbsup: |
 | *aws_datasync_location_nfs* | :thumbsup: |
 | *aws_datasync_location_s3* | :thumbsup: |
+| *aws_datasync_location_smb* |  |
 | *aws_datasync_task* | :thumbsup: |
 | *aws_dax_cluster* | :thumbsup: |
 | *aws_dax_parameter_group* | :thumbsup: |
@@ -1039,5 +1040,6 @@
 | *aws_wafregional_xss_match_set* | :thumbsup: |
 | *aws_worklink_fleet* | :thumbsup: |
 | *aws_worklink_website_certificate_authority_association* | :thumbsup: |
+| *aws_workspaces_directory* |  |
 | *aws_workspaces_ip_group* |  |
 | *aws_xray_sampling_rule* | :thumbsup: |

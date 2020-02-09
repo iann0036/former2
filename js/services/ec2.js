@@ -2835,6 +2835,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ec2.launchtemplate") {
         reqParams.cfn['LaunchTemplateName'] = obj.data.LaunchTemplateName;
         reqParams.tf['name'] = obj.data.LaunchTemplateName;
+
+        var metadataoptions = null;
+        if (obj.data.LaunchTemplateData.MetadataOptions) {
+            metadataoptions = {
+                'HttpEndpoint': obj.data.LaunchTemplateData.MetadataOptions.HttpEndpoint,
+                'HttpPutResponseHopLimit': obj.data.LaunchTemplateData.MetadataOptions.HttpPutResponseHopLimit,
+                'HttpTokens': obj.data.LaunchTemplateData.MetadataOptions.HttpTokens
+            };
+        }
+
         reqParams.cfn['LaunchTemplateData'] = {
             'SecurityGroups': obj.data.LaunchTemplateData.SecurityGroups,
             'TagSpecifications': obj.data.LaunchTemplateData.TagSpecifications,
@@ -2848,6 +2858,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'KeyName': obj.data.LaunchTemplateData.KeyName,
             'DisableApiTermination': obj.data.LaunchTemplateData.DisableApiTermination,
             'ElasticGpuSpecifications': obj.data.LaunchTemplateData.ElasticGpuSpecifications,
+            'ElasticInferenceAccelerators': obj.data.LaunchTemplateData.ElasticInferenceAccelerators,
             'Placement': obj.data.LaunchTemplateData.Placement,
             'InstanceMarketOptions': obj.data.LaunchTemplateData.InstanceMarketOptions,
             'NetworkInterfaces': obj.data.LaunchTemplateData.NetworkInterfaces,
@@ -2855,7 +2866,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'InstanceType': obj.data.LaunchTemplateData.InstanceType,
             'RamDiskId': obj.data.LaunchTemplateData.RamDiskId,
             'Monitoring': obj.data.LaunchTemplateData.Monitoring,
-            'CreditSpecification': obj.data.LaunchTemplateData.CreditSpecification
+            'CreditSpecification': obj.data.LaunchTemplateData.CreditSpecification,
+            'MetadataOptions': metadataoptions
         };
         reqParams.tf['security_group_names'] = obj.data.LaunchTemplateData.SecurityGroups;
         if (obj.data.LaunchTemplateData.TagSpecifications) {

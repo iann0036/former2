@@ -763,6 +763,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'auth_ttl': obj.data.openIDConnectConfig.authTTL
             };
         }
+        reqParams.cfn['XrayEnabled'] = obj.data.xrayEnabled;
 
         tracked_resources.push({
             'obj': obj,

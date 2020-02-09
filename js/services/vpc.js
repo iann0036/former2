@@ -3960,6 +3960,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Tags': obj.data.Tags
             }];
         }
+        reqParams.cfn['VpnPort'] = obj.data.VpnPort;
 
         tracked_resources.push({
             'obj': obj,
