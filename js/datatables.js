@@ -221,9 +221,9 @@ function sdkcallwaiter(svc, method, params1, params2) {
 
 function sdkcall(svc, method, params, alert_on_errors, backoff) {
     return new Promise(function (resolve, reject) {
-        var service = new AWS[svc]({ region: region });
+        var service = new AWS[svc]({ region: region, customUserAgent: 'former2/latest' });
         if (svc == "GlobalAccelerator") {
-            service = new AWS[svc]({ region: 'us-west-2' });
+            service = new AWS[svc]({ region: 'us-west-2', customUserAgent: 'former2/latest' });
         }
 
         service[method].call(service, params, async function (err, data) {
