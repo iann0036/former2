@@ -3114,10 +3114,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['security_groups'] = obj.data.SecurityGroups;
         reqParams.cfn['IpAddressType'] = obj.data.IpAddressType;
         reqParams.tf['ip_address_type'] = obj.data.IpAddressType;
-        reqParams.cfn['LoadBalancerAttributes'] = obj.data.Attributes;
         if (obj.data.Attributes) {
+            reqParams.cfn['LoadBalancerAttributes'] = [];
             reqParams.tf['access_logs'] = null;
             obj.data.Attributes.forEach(attribute => {
+                if (attribute.Value != "") {
+                    reqParams.cfn['LoadBalancerAttributes'].push(attribute);
+                }
+
                 if (attribute.Key == "access_logs.s3.enabled") {
                     if (!reqParams.tf['access_logs']) {
                         reqParams.tf['access_logs'] = {};
