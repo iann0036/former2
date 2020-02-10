@@ -34,7 +34,7 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'state',
+                        field: 'xstate',
                         title: 'State',
                         sortable: true,
                         editable: true,
@@ -226,7 +226,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
                     f2data: data.Server,
                     f2region: region,
                     id: data.Server.ServerId,
-                    state: data.Server.State,
+                    xstate: data.Server.State,
                     usercount: data.Server.UserCount,
                     endpointtype: data.Server.EndpointType
                 }]);

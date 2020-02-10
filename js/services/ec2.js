@@ -112,7 +112,7 @@ sections.push({
                         align: 'center'
                     },
                     {
-                        field: 'state',
+                        field: 'xstate',
                         title: 'State',
                         sortable: true,
                         editable: true,
@@ -1000,7 +1000,7 @@ sections.push({
                         align: 'center'
                     },
                     {
-                        field: 'state',
+                        field: 'xstate',
                         title: 'State',
                         sortable: true,
                         editable: true,
@@ -1671,7 +1671,7 @@ async function updateDatatableComputeEC2() {
                 f2region: region,
                 hostid: host.HostId,
                 availabilityzone: host.AvailabilityZone,
-                state: host.State
+                xstate: host.State
             }]);
         });
 
@@ -1979,7 +1979,7 @@ async function updateDatatableComputeEC2() {
                         volumeid: attachment.VolumeId,
                         device: attachment.Device,
                         instanceid: attachment.InstanceId,
-                        state: attachment.State
+                        xstate: attachment.State
                     }]);
                 });
             }

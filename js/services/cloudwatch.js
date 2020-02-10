@@ -392,7 +392,7 @@ sections.push({
                 ],
                 [
                     {
-                        field: 'state',
+                        field: 'xstate',
                         title: 'State',
                         sortable: true,
                         editable: true,
@@ -592,7 +592,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 f2data: insightRule,
                 f2region: region,
                 name: insightRule.Name,
-                state: insightRule.State
+                xstate: insightRule.State
             }]);
         });
     });
