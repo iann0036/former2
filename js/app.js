@@ -979,6 +979,10 @@ $(document).ready(function(){
         }
     });
 
+    $('#import-download-template').off('click').on('click', function() {
+        downloadImportTemplate($('#import-stackname').val(), $('#import-deletionpolicy').val());
+    });
+
     /* ========================================================================== */
     // Misc
     /* ========================================================================== */
@@ -1362,6 +1366,39 @@ eligibleImportResources = {
     'AWS::IAM::User': {'importProperties': ['UserName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
     'AWS::IAM::ManagedPolicy': {'importProperties': ['PolicyArn'], 'capabilities': ['CAPABILITY_NAMED_IAM']}
 };
+
+async function downloadImportTemplate(stack_name, deletion_policy) {
+    var importable_resources = [];
+    var resources_to_import = [];
+    tracked_resources.forEach(res => {
+        if ('type' in res && res['type'] in eligibleImportResources) {
+            importable_resources.push(res);
+            var resource_identifier = {};
+            eligibleImportResources[res.type].importProperties.forEach(prop => {
+                resource_identifier[prop] = res.returnValues.Import[prop];
+            });
+            resources_to_import.push({
+                'LogicalResourceId': res.logicalId,
+                'ResourceIdentifier': resource_identifier,
+                'ResourceType': res.type
+            });
+        }
+    });
+
+    if (stack_name == "") {
+        stack_name = "template";
+    }
+
+    var mapped_cfn_output = compileOutputs(importable_resources, deletion_policy)['cfn'];
+    
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(mapped_cfn_output));
+    element.setAttribute('download', stack_name + ".yaml");
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
 
 async function importResources(stack_name, deletion_policy) {
     var importable_resources = [];
