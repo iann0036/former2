@@ -2385,26 +2385,28 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             if (networkAcl.Entries) {
                 networkAcl.Entries.forEach(entry => {
-                    entry['NetworkAclId'] = networkAcl.NetworkAclId;
-                    var range = "";
-                    if (entry.PortRange) {
-                        range = entry.PortRange.From;
-                        if (entry.PortRange.From != entry.PortRange.To) {
-                            range = entry.PortRange.From + "-" + entry.PortRange.To;
+                    if (entry.RuleNumber < 32767) {
+                        entry['NetworkAclId'] = networkAcl.NetworkAclId;
+                        var range = "";
+                        if (entry.PortRange) {
+                            range = entry.PortRange.From;
+                            if (entry.PortRange.From != entry.PortRange.To) {
+                                range = entry.PortRange.From + "-" + entry.PortRange.To;
+                            }
                         }
+                        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
+                            f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
+                            f2type: 'ec2.networkaclentry',
+                            f2data: entry,
+                            f2region: region,
+                            networkaclid: entry.NetworkAclId,
+                            cidrblocks: (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || ""),
+                            egress: entry.Egress,
+                            protocol: entry.Protocol,
+                            action: entry.RuleAction,
+                            range: range
+                        }]);
                     }
-                    $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
-                        f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
-                        f2type: 'ec2.networkaclentry',
-                        f2data: entry,
-                        f2region: region,
-                        networkaclid: entry.NetworkAclId,
-                        cidrblocks: (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || ""),
-                        egress: entry.Egress,
-                        protocol: entry.Protocol,
-                        action: entry.RuleAction,
-                        range: range
-                    }]);
                 });
             }
 
@@ -3309,8 +3311,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['from_port'] = obj.data.PortRange.FromPort;
             reqParams.tf['to_port'] = obj.data.PortRange.ToPort;
         }
-        reqParams.cfn['Protocol'] = obj.data.Protocol;
-        reqParams.tf['protocol'] = obj.data.Protocol;
+        if (obj.data.Protocol) {
+            reqParams.cfn['Protocol'] = parseInt(obj.data.Protocol);
+            reqParams.tf['protocol'] = parseInt(obj.data.Protocol);
+        }
         reqParams.cfn['RuleAction'] = obj.data.RuleAction;
         reqParams.tf['rule_action'] = obj.data.RuleAction;
         reqParams.cfn['RuleNumber'] = obj.data.RuleNumber;
@@ -3354,8 +3358,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         });
     } else if (obj.type == "ec2.customergateway") {
-        reqParams.cfn['BgpAsn'] = obj.data.BgpAsn;
-        reqParams.tf['bgp_asn'] = obj.data.BgpAsn;
+        if (obj.data.BgpAsn) {
+            reqParams.cfn['BgpAsn'] = parseInt(obj.data.BgpAsn);
+            reqParams.tf['bgp_asn'] = parseInt(obj.data.BgpAsn);
+        }
         reqParams.cfn['IpAddress'] = obj.data.IpAddress;
         reqParams.tf['ip_address'] = obj.data.IpAddress;
         reqParams.cfn['Type'] = obj.data.Type;
