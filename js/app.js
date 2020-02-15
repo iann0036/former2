@@ -840,7 +840,7 @@ $(document).ready(function(){
                     $('#scan-account').html('Scan Again');
                 }
 
-                var nextdt = datatablefuncs.pop();
+                var nextdt = datatablefuncs.shift();
                 if (nextdt) {
                     processDatatable(nextdt);
                 }
@@ -848,7 +848,7 @@ $(document).ready(function(){
         }
 
         for (var i=0; i<MAX_DT_SCANS; i++) {
-            processDatatable(datatablefuncs.pop());
+            processDatatable(datatablefuncs.shift());
         }
     });
 
