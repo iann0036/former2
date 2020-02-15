@@ -110,7 +110,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codestar', obj.id),
+            'logicalId': getResourceName('codestar', obj.id, 'AWS::CodeStar::GitHubRepository'),
             'region': obj.region,
             'service': 'codestar',
             'type': 'AWS::CodeStar::GitHubRepository',

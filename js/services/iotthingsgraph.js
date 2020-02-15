@@ -86,7 +86,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('iotthingsgraph', obj.id),
+                'logicalId': getResourceName('iotthingsgraph', obj.id, 'AWS::IoTThingsGraph::FlowTemplate'),
                 'region': obj.region,
                 'service': 'iotthingsgraph',
                 'type': 'AWS::IoTThingsGraph::FlowTemplate',

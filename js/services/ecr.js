@@ -106,7 +106,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecr', obj.id),
+            'logicalId': getResourceName('ecr', obj.id, 'AWS::ECR::Repository'),
             'region': obj.region,
             'service': 'ecr',
             'type': 'AWS::ECR::Repository',
@@ -129,7 +129,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ecr', obj.id),
+                'logicalId': getResourceName('ecr', obj.id, 'AWS::ECR::RepositoryPolicy'), // not real resource type
                 'region': obj.region,
                 'service': 'ecr',
                 'terraformType': 'aws_ecr_repository_policy',
@@ -152,7 +152,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ecr', obj.id),
+                'logicalId': getResourceName('ecr', obj.id, 'AWS::ECR::LifecyclePolicy'), // not real resource type
                 'region': obj.region,
                 'service': 'ecr',
                 'terraformType': 'aws_ecr_lifecycle_policy',

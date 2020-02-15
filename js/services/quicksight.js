@@ -92,7 +92,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('quicksight', obj.id),
+            'logicalId': getResourceName('quicksight', obj.id, 'AWS::QuickSight::Group'),
             'region': obj.region,
             'service': 'quicksight',
             'terraformType': 'aws_quicksight_group',

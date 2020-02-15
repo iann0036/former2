@@ -161,7 +161,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codecommit', obj.id),
+            'logicalId': getResourceName('codecommit', obj.id, 'AWS::CodeCommit::Repository'),
             'region': obj.region,
             'service': 'codecommit',
             'type': 'AWS::CodeCommit::Repository',

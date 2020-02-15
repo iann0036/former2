@@ -1958,7 +1958,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::RestApi'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::RestApi',
@@ -2044,7 +2044,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Stage'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Stage',
@@ -2073,7 +2073,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Deployment'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Deployment',
@@ -2097,7 +2097,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Resource'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Resource',
@@ -2125,7 +2125,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Model'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Model',
@@ -2163,7 +2163,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Authorizer'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Authorizer',
@@ -2243,7 +2243,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Method'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Method',
@@ -2272,7 +2272,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::GatewayResponse'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::GatewayResponse',
@@ -2290,7 +2290,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::DocumentationVersion'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::DocumentationVersion',
@@ -2321,7 +2321,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::DocumentationPart'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::DocumentationPart',
@@ -2340,7 +2340,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::RequestValidator'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::RequestValidator',
@@ -2359,7 +2359,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::Account'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::Account',
@@ -2382,7 +2382,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::ApiKey'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::ApiKey',
@@ -2393,7 +2393,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::ClientCertificate'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::ClientCertificate',
@@ -2417,7 +2417,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::DomainName'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::DomainName',
@@ -2436,7 +2436,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::BasePathMapping'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::BasePathMapping',
@@ -2484,7 +2484,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::UsagePlan'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::UsagePlan',
@@ -2500,7 +2500,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::UsagePlanKey'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::UsagePlanKey',
@@ -2517,7 +2517,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigateway', obj.id),
+            'logicalId': getResourceName('apigateway', obj.id, 'AWS::ApiGateway::VpcLink'),
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::VpcLink',
@@ -2551,7 +2551,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Api'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Api',
@@ -2575,7 +2575,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Stage'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Stage',
@@ -2595,7 +2595,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Deployment'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Deployment',
@@ -2610,7 +2610,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Model'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Model',
@@ -2629,7 +2629,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Authorizer'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Authorizer',
@@ -2645,7 +2645,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::RouteResponse'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::RouteResponse',
@@ -2667,7 +2667,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Route'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Route',
@@ -2684,7 +2684,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::IntegrationResponse'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::IntegrationResponse',
@@ -2708,7 +2708,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::Integration'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Integration',
@@ -2729,7 +2729,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::DomainName'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::DomainName',
@@ -2743,7 +2743,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apigatewayv2', obj.id),
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::ApiMapping'),
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::ApiMapping',

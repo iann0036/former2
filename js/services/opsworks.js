@@ -727,7 +727,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::Stack'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::Stack',
@@ -789,7 +789,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::App'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::App',
@@ -830,7 +830,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::Layer'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::Layer',
@@ -842,7 +842,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::ElasticLoadBalancerAttachment'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::ElasticLoadBalancerAttachment',
@@ -900,7 +900,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::Instance'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::Instance',
@@ -915,7 +915,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::Volume'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::Volume',
@@ -933,7 +933,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorks::UserProfile'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorks::UserProfile',
@@ -969,7 +969,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('opsworks', obj.id),
+            'logicalId': getResourceName('opsworks', obj.id, 'AWS::OpsWorksCM::Server'),
             'region': obj.region,
             'service': 'opsworks',
             'type': 'AWS::OpsWorksCM::Server',

@@ -95,7 +95,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicequotas', obj.id),
+            'logicalId': getResourceName('servicequotas', obj.id, 'AWS::ServiceQuotas::ServiceQuota'), // not real resource type
             'region': obj.region,
             'service': 'servicequotas',
             'terraformType': 'aws_servicequotas_service_quota',

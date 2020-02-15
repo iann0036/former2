@@ -533,7 +533,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::Endpoint'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::Endpoint',
@@ -568,7 +568,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::ReplicationInstance'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::ReplicationInstance',
@@ -592,7 +592,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::ReplicationTask'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::ReplicationTask',
@@ -616,7 +616,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::ReplicationSubnetGroup'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::ReplicationSubnetGroup',
@@ -629,7 +629,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::Certificate'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::Certificate',
@@ -651,7 +651,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dms', obj.id),
+            'logicalId': getResourceName('dms', obj.id, 'AWS::DMS::EventSubscription'),
             'region': obj.region,
             'service': 'dms',
             'type': 'AWS::DMS::EventSubscription',

@@ -383,7 +383,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id),
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Organization'), // not real resource type
             'region': obj.region,
             'service': 'organizations',
             'terraformType': 'aws_organizations_organization',
@@ -395,7 +395,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id),
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::OrganizationalUnit'), // not real resource type
             'region': obj.region,
             'service': 'organizations',
             'terraformType': 'aws_organizations_organizational_unit',
@@ -414,7 +414,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id),
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Account'), // not real resource type
             'region': obj.region,
             'service': 'organizations',
             'terraformType': 'aws_organizations_account',
@@ -428,7 +428,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id),
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Policy'), // not real resource type
             'region': obj.region,
             'service': 'organizations',
             'terraformType': 'aws_organizations_policy',
@@ -440,7 +440,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id),
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::PolicyAttachment'), // not real resource type
             'region': obj.region,
             'service': 'organizations',
             'terraformType': 'aws_organizations_policy_attachment',

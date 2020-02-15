@@ -356,7 +356,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('docdb', obj.id),
+            'logicalId': getResourceName('docdb', obj.id, 'AWS::DocDB::DBCluster'),
             'region': obj.region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBCluster',
@@ -385,7 +385,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('docdb', obj.id),
+            'logicalId': getResourceName('docdb', obj.id, 'AWS::DocDB::DBInstance'),
             'region': obj.region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBInstance',
@@ -409,7 +409,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('docdb', obj.id),
+            'logicalId': getResourceName('docdb', obj.id, 'AWS::DocDB::DBClusterParameterGroup'),
             'region': obj.region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBClusterParameterGroup',
@@ -438,7 +438,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('docdb', obj.id),
+            'logicalId': getResourceName('docdb', obj.id, 'AWS::DocDB::DBSubnetGroup'),
             'region': obj.region,
             'service': 'docdb',
             'type': 'AWS::DocDB::DBSubnetGroup',

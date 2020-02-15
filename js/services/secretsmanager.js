@@ -210,7 +210,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('secretsmanager', obj.id),
+            'logicalId': getResourceName('secretsmanager', obj.id, 'AWS::SecretsManager::Secret'),
             'region': obj.region,
             'service': 'secretsmanager',
             'type': 'AWS::SecretsManager::Secret',
@@ -235,7 +235,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('secretsmanager', obj.id),
+            'logicalId': getResourceName('secretsmanager', obj.id, 'AWS::SecretsManager::SecretVersion'), // not real resource type
             'region': obj.region,
             'service': 'secretsmanager',
             'terraformType': 'aws_secretsmanager_secret_version',
@@ -248,7 +248,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('secretsmanager', obj.id),
+            'logicalId': getResourceName('secretsmanager', obj.id, 'AWS::SecretsManager::RotationSchedule'),
             'region': obj.region,
             'service': 'secretsmanager',
             'type': 'AWS::SecretsManager::RotationSchedule',
@@ -263,7 +263,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('secretsmanager', obj.id),
+            'logicalId': getResourceName('secretsmanager', obj.id, 'AWS::SecretsManager::ResourcePolicy'),
             'region': obj.region,
             'service': 'secretsmanager',
             'type': 'AWS::SecretsManager::ResourcePolicy',

@@ -208,7 +208,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('managedblockchain', obj.id),
+            'logicalId': getResourceName('managedblockchain', obj.id, 'AWS::ManagedBlockchain::Node'),
             'region': obj.region,
             'service': 'managedblockchain',
             'type': 'AWS::ManagedBlockchain::Node',
@@ -254,7 +254,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('managedblockchain', obj.id),
+            'logicalId': getResourceName('managedblockchain', obj.id, 'AWS::ManagedBlockchain::Member'),
             'region': obj.region,
             'service': 'managedblockchain',
             'type': 'AWS::ManagedBlockchain::Member',

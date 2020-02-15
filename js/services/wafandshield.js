@@ -1806,7 +1806,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::WebACL'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::WebACL',
@@ -1835,7 +1835,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::Rule'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::Rule',
@@ -1864,7 +1864,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::XssMatchSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::XssMatchSet',
@@ -1890,7 +1890,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::IPSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::IPSet',
@@ -1921,7 +1921,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::SizeConstraintSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::SizeConstraintSet',
@@ -1950,7 +1950,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::SqlInjectionMatchSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::SqlInjectionMatchSet',
@@ -1987,7 +1987,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAF::ByteMatchSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAF::ByteMatchSet',
@@ -2033,7 +2033,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::WebACL'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::WebACL',
@@ -2051,7 +2051,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::WebACLAssociation'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::WebACLAssociation',
@@ -2077,7 +2077,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::Rule'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::Rule',
@@ -2106,7 +2106,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::XssMatchSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::XssMatchSet',
@@ -2132,7 +2132,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::IPSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::IPSet',
@@ -2163,7 +2163,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::SizeConstraintSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::SizeConstraintSet',
@@ -2192,7 +2192,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::SqlInjectionMatchSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::SqlInjectionMatchSet',
@@ -2229,7 +2229,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::ByteMatchSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::ByteMatchSet',
@@ -2255,7 +2255,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::GeoMatchSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::GeoMatchSet',
@@ -2270,7 +2270,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::RegexPatternSet'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::RegexPatternSet',
@@ -2303,7 +2303,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('wafregional', obj.id),
+            'logicalId': getResourceName('wafregional', obj.id, 'AWS::WAFRegional::RateBasedRule'),
             'region': obj.region,
             'service': 'wafregional',
             'type': 'AWS::WAFRegional::RateBasedRule',
@@ -2325,7 +2325,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::IPSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::IPSet',
@@ -2345,7 +2345,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::RegexPatternSet'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::RegexPatternSet',
@@ -2411,7 +2411,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::WebACL'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::WebACL',
@@ -2469,7 +2469,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::RuleGroup'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::RuleGroup',
@@ -2481,7 +2481,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('waf', obj.id),
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::WebACLAssociation'),
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::WebACLAssociation',
@@ -2508,7 +2508,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('fms', obj.id),
+            'logicalId': getResourceName('fms', obj.id, 'AWS::FMS::Policy'),
             'region': obj.region,
             'service': 'fms',
             'type': 'AWS::FMS::Policy',
@@ -2520,7 +2520,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('fms', obj.id),
+            'logicalId': getResourceName('fms', obj.id, 'AWS::FMS::NotificationChannel'),
             'region': obj.region,
             'service': 'fms',
             'type': 'AWS::FMS::NotificationChannel',

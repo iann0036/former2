@@ -176,7 +176,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudhsm', obj.id),
+            'logicalId': getResourceName('cloudhsm', obj.id, 'AWS::CloudHSMv2::Cluster'), // not real resource type
             'region': obj.region,
             'service': 'cloudhsm',
             'terraformType': 'aws_cloudhsm_v2_cluster',
@@ -190,7 +190,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudhsm', obj.id),
+            'logicalId': getResourceName('cloudhsm', obj.id, 'AWS::CloudHSMv2::HSM'), // not real resource type
             'region': obj.region,
             'service': 'cloudhsm',
             'terraformType': 'aws_cloudhsm_v2_hsm',

@@ -145,7 +145,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directoryservice', obj.id),
+            'logicalId': getResourceName('directoryservice', obj.id, 'AWS::DirectoryService::SimpleAD'),
             'region': obj.region,
             'service': 'directoryservice',
             'type': 'AWS::DirectoryService::SimpleAD',
@@ -183,7 +183,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directoryservice', obj.id),
+            'logicalId': getResourceName('directoryservice', obj.id, 'AWS::DirectoryService::MicrosoftAD'),
             'region': obj.region,
             'service': 'directoryservice',
             'type': 'AWS::DirectoryService::MicrosoftAD',

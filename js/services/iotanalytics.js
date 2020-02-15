@@ -281,7 +281,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotanalytics', obj.id),
+            'logicalId': getResourceName('iotanalytics', obj.id, 'AWS::IoTAnalytics::Channel'),
             'region': obj.region,
             'service': 'iotanalytics',
             'type': 'AWS::IoTAnalytics::Channel',
@@ -382,7 +382,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotanalytics', obj.id),
+            'logicalId': getResourceName('iotanalytics', obj.id, 'AWS::IoTAnalytics::Pipeline'),
             'region': obj.region,
             'service': 'iotanalytics',
             'type': 'AWS::IoTAnalytics::Pipeline',
@@ -492,7 +492,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotanalytics', obj.id),
+            'logicalId': getResourceName('iotanalytics', obj.id, 'AWS::IoTAnalytics::Dataset'),
             'region': obj.region,
             'service': 'iotanalytics',
             'type': 'AWS::IoTAnalytics::Dataset',
@@ -515,7 +515,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotanalytics', obj.id),
+            'logicalId': getResourceName('iotanalytics', obj.id, 'AWS::IoTAnalytics::Datastore'),
             'region': obj.region,
             'service': 'iotanalytics',
             'type': 'AWS::IoTAnalytics::Datastore',

@@ -2414,7 +2414,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::Instance'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::Instance',
@@ -2441,7 +2441,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::PlacementGroup'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::PlacementGroup',
@@ -2503,7 +2503,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elbv2', obj.id),
+            'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancingV2::TargetGroup'),
             'region': obj.region,
             'service': 'elbv2',
             'type': 'AWS::ElasticLoadBalancingV2::TargetGroup',
@@ -2546,7 +2546,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::Volume'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::Volume',
@@ -2569,7 +2569,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VolumeAttachment'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VolumeAttachment',
@@ -2733,7 +2733,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::SecurityGroup'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::SecurityGroup',
@@ -2820,7 +2820,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elb', obj.id),
+            'logicalId': getResourceName('elb', obj.id, 'AWS::ElasticLoadBalancing::LoadBalancer'),
             'region': obj.region,
             'service': 'elb',
             'type': 'AWS::ElasticLoadBalancing::LoadBalancer',
@@ -2965,7 +2965,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::LaunchTemplate'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LaunchTemplate',
@@ -2984,7 +2984,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::Host'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::Host',
@@ -3073,7 +3073,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::SpotFleet'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::SpotFleet',
@@ -3157,7 +3157,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elbv2', obj.id),
+            'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancingV2::LoadBalancer'),
             'region': obj.region,
             'service': 'elbv2',
             'type': 'AWS::ElasticLoadBalancingV2::LoadBalancer',
@@ -3189,7 +3189,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('elbv2', obj.id),
+                'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancingV2::ListenerCertificate'),
                 'region': obj.region,
                 'service': 'elbv2',
                 'type': 'AWS::ElasticLoadBalancingV2::ListenerCertificate',
@@ -3211,7 +3211,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
                 tracked_resources.push({
                     'obj': obj,
-                    'logicalId': getResourceName('elbv2', obj.id),
+                    'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancerV2::ListenerCertificate'), // not real resource type
                     'region': obj.region,
                     'service': 'elbv2',
                     'terraformType': 'aws_lb_listener_certificate',
@@ -3339,7 +3339,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elbv2', obj.id),
+            'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancingV2::Listener'),
             'region': obj.region,
             'service': 'elbv2',
             'type': 'AWS::ElasticLoadBalancingV2::Listener',
@@ -3376,7 +3376,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('elbv2', obj.id),
+                'logicalId': getResourceName('elbv2', obj.id, 'AWS::ElasticLoadBalancingV2::ListenerRule'),
                 'region': obj.region,
                 'service': 'elbv2',
                 'type': 'AWS::ElasticLoadBalancingV2::ListenerRule',
@@ -3449,7 +3449,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::DLM::LifecyclePolicy'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::DLM::LifecyclePolicy',
@@ -3479,7 +3479,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::CapacityReservation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::CapacityReservation',
@@ -3552,7 +3552,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EC2Fleet'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::EC2Fleet',
@@ -3587,7 +3587,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('applicationautoscaling', obj.id),
+            'logicalId': getResourceName('applicationautoscaling', obj.id, 'AWS::ApplicationAutoScaling::ScalableTarget'),
             'region': obj.region,
             'service': 'applicationautoscaling',
             'type': 'AWS::ApplicationAutoScaling::ScalableTarget',
@@ -3661,7 +3661,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('applicationautoscaling', obj.id),
+            'logicalId': getResourceName('applicationautoscaling', obj.id, 'AWS::ApplicationAutoScaling::ScalingPolicy'),
             'region': obj.region,
             'service': 'applicationautoscaling',
             'type': 'AWS::ApplicationAutoScaling::ScalingPolicy',
@@ -3679,7 +3679,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::KeyPair'), // not real resource type
             'region': obj.region,
             'service': 'ec2',
             'terraformType': 'aws_key_pair',

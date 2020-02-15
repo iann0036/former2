@@ -847,7 +847,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::CloudFormationProduct'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::CloudFormationProduct',
@@ -867,7 +867,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::Portfolio'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::Portfolio',
@@ -885,7 +885,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::PortfolioPrincipalAssociation'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::PortfolioPrincipalAssociation',
@@ -905,7 +905,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::LaunchNotificationConstraint'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::LaunchNotificationConstraint',
@@ -924,7 +924,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::LaunchRoleConstraint'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::LaunchRoleConstraint',
@@ -943,7 +943,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::LaunchTemplateConstraint'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::LaunchTemplateConstraint',
@@ -968,7 +968,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::StackSetConstraint'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::StackSetConstraint',
@@ -984,7 +984,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::AcceptedPortfolioShare'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::AcceptedPortfolioShare',
@@ -1003,7 +1003,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::PortfolioProductAssociation'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::PortfolioProductAssociation',
@@ -1030,7 +1030,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::CloudFormationProvisionedProduct'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::CloudFormationProvisionedProduct',
@@ -1043,7 +1043,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::TagOption'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::TagOption',
@@ -1055,7 +1055,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicecatalog', obj.id),
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::TagOptionAssociation'),
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::TagOptionAssociation',

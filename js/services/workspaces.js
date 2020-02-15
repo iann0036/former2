@@ -115,7 +115,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('workspaces', obj.id),
+            'logicalId': getResourceName('workspaces', obj.id, 'AWS::WorkSpaces::Workspace'),
             'region': obj.region,
             'service': 'workspaces',
             'type': 'AWS::WorkSpaces::Workspace',

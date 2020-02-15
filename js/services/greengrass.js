@@ -1167,7 +1167,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::ConnectorDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::ConnectorDefinition',
@@ -1179,7 +1179,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::ConnectorDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::ConnectorDefinitionVersion',
@@ -1195,7 +1195,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::CoreDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::CoreDefinition',
@@ -1207,7 +1207,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::CoreDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::CoreDefinitionVersion',
@@ -1223,7 +1223,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::DeviceDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::DeviceDefinition',
@@ -1235,7 +1235,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::DeviceDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::DeviceDefinitionVersion',
@@ -1251,7 +1251,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::FunctionDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::FunctionDefinition',
@@ -1264,7 +1264,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::FunctionDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::FunctionDefinitionVersion',
@@ -1281,7 +1281,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::Group'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::Group',
@@ -1299,7 +1299,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::GroupVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::GroupVersion',
@@ -1315,7 +1315,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::LoggerDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::LoggerDefinition',
@@ -1327,7 +1327,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::LoggerDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::LoggerDefinitionVersion',
@@ -1343,7 +1343,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::ResourceDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::ResourceDefinition',
@@ -1355,7 +1355,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::ResourceDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::ResourceDefinitionVersion',
@@ -1371,7 +1371,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::SubscriptionDefinition'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::SubscriptionDefinition',
@@ -1383,7 +1383,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('greengrass', obj.id),
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::Greengrass::SubscriptionDefinitionVersion'),
             'region': obj.region,
             'service': 'greengrass',
             'type': 'AWS::Greengrass::SubscriptionDefinitionVersion',

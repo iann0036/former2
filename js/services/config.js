@@ -658,7 +658,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::ConfigRule'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConfigRule',
@@ -707,7 +707,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::ConfigurationAggregator'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConfigurationAggregator',
@@ -734,7 +734,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::ConfigurationRecorder'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConfigurationRecorder',
@@ -749,7 +749,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::AggregationAuthorization'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::AggregationAuthorization',
@@ -776,7 +776,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::DeliveryChannel'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::DeliveryChannel',
@@ -793,7 +793,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::RemediationConfiguration'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::RemediationConfiguration',
@@ -807,7 +807,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::OrganizationConfigRule'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::OrganizationConfigRule',
@@ -827,7 +827,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::ConformancePack'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConformancePack',
@@ -848,7 +848,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('config', obj.id),
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::OrganizationConformancePack'),
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::OrganizationConformancePack',

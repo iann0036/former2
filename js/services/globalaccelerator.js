@@ -175,7 +175,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('globalaccelerator', obj.id),
+            'logicalId': getResourceName('globalaccelerator', obj.id, 'AWS::GlobalAccelerator::Accelerator'), // not real resource type
             'region': obj.region,
             'service': 'globalaccelerator',
             'terraformType': 'aws_globalaccelerator_accelerator',
@@ -197,7 +197,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('globalaccelerator', obj.id),
+            'logicalId': getResourceName('globalaccelerator', obj.id, 'AWS::GlobalAccelerator::Listener'), // not real resource type
             'region': obj.region,
             'service': 'globalaccelerator',
             'terraformType': 'aws_globalaccelerator_listener',

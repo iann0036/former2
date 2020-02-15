@@ -592,7 +592,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecs', obj.id),
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::Cluster'),
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::Cluster',
@@ -721,7 +721,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecs', obj.id),
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::Service'),
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::Service',
@@ -1019,7 +1019,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecs', obj.id),
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::TaskDefinition'),
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::TaskDefinition',
@@ -1042,7 +1042,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecs', obj.id),
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::PrimaryTaskSet'),
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::PrimaryTaskSet',
@@ -1095,7 +1095,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ecs', obj.id),
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::TaskSet'),
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::TaskSet',

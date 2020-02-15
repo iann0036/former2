@@ -169,7 +169,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticsearch', obj.id),
+            'logicalId': getResourceName('elasticsearch', obj.id, 'AWS::Elasticsearch::Domain'),
             'region': obj.region,
             'service': 'elasticsearch',
             'type': 'AWS::Elasticsearch::Domain',

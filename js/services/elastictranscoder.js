@@ -143,7 +143,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elastictranscoder', obj.id),
+            'logicalId': getResourceName('elastictranscoder', obj.id, 'AWS::ElasticTranscoder::Pipeline'), // not real resource type
             'region': obj.region,
             'service': 'elastictranscoder',
             'terraformType': 'aws_elastictranscoder_pipeline',

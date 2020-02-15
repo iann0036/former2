@@ -341,7 +341,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id),
+            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::ApplicationVersion'),
             'region': obj.region,
             'service': 'elasticbeanstalk',
             'type': 'AWS::ElasticBeanstalk::ApplicationVersion',
@@ -382,7 +382,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id),
+            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::Environment'),
             'region': obj.region,
             'service': 'elasticbeanstalk',
             'type': 'AWS::ElasticBeanstalk::Environment',
@@ -420,7 +420,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id),
+            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::ConfigurationTemplate'),
             'region': obj.region,
             'service': 'elasticbeanstalk',
             'type': 'AWS::ElasticBeanstalk::ConfigurationTemplate',

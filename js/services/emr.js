@@ -571,7 +571,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('emr', obj.id),
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::Cluster'),
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMR::Cluster',
@@ -592,7 +592,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('emr', obj.id),
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::Step'),
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMR::Step',
@@ -644,7 +644,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('emr', obj.id),
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::InstanceFleetConfig'),
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMR::InstanceFleetConfig',
@@ -693,7 +693,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('emr', obj.id),
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::InstanceGroupConfig'),
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMR::InstanceGroupConfig',
@@ -705,7 +705,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('emr', obj.id),
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::SecurityConfiguration'),
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMR::SecurityConfiguration',

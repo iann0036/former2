@@ -192,7 +192,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('worklink', obj.id),
+            'logicalId': getResourceName('worklink', obj.id, 'AWS::WorkLink::Fleet'), // not real resource type
             'region': obj.region,
             'service': 'worklink',
             'terraformType': 'aws_worklink_fleet',
@@ -205,7 +205,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('worklink', obj.id),
+            'logicalId': getResourceName('worklink', obj.id, 'AWS::WorkLink::WebsiteCertificateAuthorityAssociation'), // not real resource type
             'region': obj.region,
             'service': 'worklink',
             'terraformType': 'aws_worklink_website_certificate_authority_association',

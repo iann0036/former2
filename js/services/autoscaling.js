@@ -148,7 +148,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::ScalingPolicy'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::ScalingPolicy',
@@ -179,7 +179,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::ScheduledAction'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::ScheduledAction',
@@ -303,7 +303,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::AutoScalingGroup'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::AutoScalingGroup',
@@ -359,7 +359,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::LaunchConfiguration'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::LaunchConfiguration',
@@ -396,7 +396,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScalingPlans::ScalingPlan'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScalingPlans::ScalingPlan',
@@ -422,7 +422,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('autoscaling', obj.id),
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::LifecycleHook'),
             'region': obj.region,
             'service': 'autoscaling',
             'type': 'AWS::AutoScaling::LifecycleHook',

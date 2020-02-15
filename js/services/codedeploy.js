@@ -275,7 +275,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codedeploy', obj.id),
+            'logicalId': getResourceName('codedeploy', obj.id, 'AWS::CodeDeploy::Application'),
             'region': obj.region,
             'service': 'codedeploy',
             'type': 'AWS::CodeDeploy::Application',
@@ -396,7 +396,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codedeploy', obj.id),
+            'logicalId': getResourceName('codedeploy', obj.id, 'AWS::CodeDeploy::DeploymentGroup'),
             'region': obj.region,
             'service': 'codedeploy',
             'type': 'AWS::CodeDeploy::DeploymentGroup',
@@ -421,7 +421,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codedeploy', obj.id),
+            'logicalId': getResourceName('codedeploy', obj.id, 'AWS::CodeDeploy::DeploymentConfig'),
             'region': obj.region,
             'service': 'codedeploy',
             'type': 'AWS::CodeDeploy::DeploymentConfig',

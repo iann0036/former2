@@ -10,7 +10,7 @@ var outputs = [];
 var tracked_resources = [];
 var global_used_refs = [];
 var cfnspacing = "    ";
-var logicalidstrategy = "serviceprefixed";
+var logicalidstrategy = "serviceprefixhashsuffix";
 var service_mapping_functions = [];
 
 function MD5(e) {
@@ -1433,17 +1433,58 @@ ${service}.${method}(${params});${was_blocked ? ' // blocked' : ''}`;
     return output;
 }
 
-function getResourceName(service, requestId) {
+function getResourceName(service, requestId, cfntype) {
     if (!requestId) {
         console.trace("No request ID found for " + service);
+        requestId = ""
     }
 
-    var i = 1; // on purpose, 2 means second usage
-    var proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
+    var i = 2; // on purpose, 2 means second usage
+    var proposed = ""
 
-    while (global_used_refs.includes(proposed)) {
-        proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0, 7);
-        i += 1;
+    if (logicalidstrategy == "shorttypeprefixhashsuffix") {
+        shorttype = cfntype.split("::").pop();
+
+        proposed = shorttype + MD5(requestId).substring(0, 7);
+
+        while (global_used_refs.includes(proposed)) {
+            proposed = shorttype + MD5(requestId + i).substring(0, 7);
+            i += 1;
+        }
+    } else if (logicalidstrategy == "longtypeprefixhashsuffix") {
+        longtype = cfntype.split("::")[1] + cfntype.split("::").pop();
+
+        proposed = longtype + MD5(requestId).substring(0, 7);
+
+        while (global_used_refs.includes(proposed)) {
+            proposed = longtype + MD5(requestId + i).substring(0, 7);
+            i += 1;
+        }
+    } else if (logicalidstrategy == "shorttypeprefixoptionalindexsuffix") {
+        shorttype = cfntype.split("::").pop();
+
+        proposed = shorttype;
+
+        while (global_used_refs.includes(proposed)) {
+            proposed = shorttype + i;
+            i += 1;
+        }
+    } else if (logicalidstrategy == "longtypeprefixoptionalindexsuffix") {
+        longtype = cfntype.split("::")[1] + cfntype.split("::").pop();
+
+        proposed = longtype;
+
+        while (global_used_refs.includes(proposed)) {
+            proposed = longtype + i;
+            i += 1;
+        }
+    } else { // serviceprefixhashsuffix
+        proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
+
+        while (global_used_refs.includes(proposed)) {
+            proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0, 7);
+            i += 1;
+        }
     }
 
     global_used_refs.push(proposed);

@@ -1512,7 +1512,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::PinpointEmail::ConfigurationSet'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::PinpointEmail::ConfigurationSet',
@@ -1567,7 +1567,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::PinpointEmail::ConfigurationSetEventDestination'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::PinpointEmail::ConfigurationSetEventDestination',
@@ -1584,7 +1584,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::PinpointEmail::DedicatedIpPool'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::PinpointEmail::DedicatedIpPool',
@@ -1611,7 +1611,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::PinpointEmail::Identity'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::PinpointEmail::Identity',
@@ -1622,7 +1622,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::App'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::App',
@@ -1640,7 +1640,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::ADMChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::ADMChannel',
@@ -1663,7 +1663,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::APNSChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::APNSChannel',
@@ -1686,7 +1686,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::APNSSandboxChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::APNSSandboxChannel',
@@ -1709,7 +1709,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::APNSVoipChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::APNSVoipChannel',
@@ -1732,7 +1732,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::APNSVoipSandboxChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::APNSVoipSandboxChannel',
@@ -1750,7 +1750,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::BaiduChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::BaiduChannel',
@@ -1771,7 +1771,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::EmailChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::EmailChannel',
@@ -1789,7 +1789,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::GCMChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::GCMChannel',
@@ -1807,7 +1807,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::SMSChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::SMSChannel',
@@ -1820,7 +1820,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::VoiceChannel'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::VoiceChannel',
@@ -1836,7 +1836,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::EventStream'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::EventStream',
@@ -1874,7 +1874,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::ApplicationSettings'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::ApplicationSettings',
@@ -1909,7 +1909,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::Campaign'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::Campaign',
@@ -1923,7 +1923,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::Segment'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::Segment',
@@ -1940,7 +1940,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::EmailTemplate'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::EmailTemplate',
@@ -1955,7 +1955,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::SmsTemplate'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::SmsTemplate',
@@ -1974,7 +1974,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('pinpoint', obj.id),
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::PushTemplate'),
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::PushTemplate',

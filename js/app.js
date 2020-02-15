@@ -1062,10 +1062,17 @@ $(document).ready(function(){
         }
     });
 
-    var logicalidstrategy = window.localStorage.getItem('logicalidstrategy') || 'serviceprefixed';
+    logicalidstrategy = window.localStorage.getItem('logicalidstrategy') || 'serviceprefixhashsuffix';
+    $('#logicalidstrategy').val(logicalidstrategy).trigger('change');
     $('#logicalidstrategy').change(function() {
         window.localStorage.setItem('logicalidstrategy', $(this).val());
         logicalidstrategy = $(this).val();
+
+        // Clear resource state
+        output_objects = [];
+        regenerateOutputs();
+        $('#generate-outputs').text("Generate");
+        $('#generate-outputs').attr('disabled', 'disabled');
     });
 
     if (window.localStorage.getItem('relatedresourcessetting') == "true") {

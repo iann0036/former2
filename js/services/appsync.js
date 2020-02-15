@@ -553,7 +553,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::Resolver'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::Resolver',
@@ -574,7 +574,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::GraphQLSchema'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::GraphQLSchema',
@@ -673,7 +673,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::DataSource'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::DataSource',
@@ -697,7 +697,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::FunctionConfiguration'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::FunctionConfiguration',
@@ -713,7 +713,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::ApiKey'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::ApiKey',
@@ -767,7 +767,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::GraphQLApi'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::GraphQLApi',
@@ -784,7 +784,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appsync', obj.id),
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::ApiCache'),
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::ApiCache',

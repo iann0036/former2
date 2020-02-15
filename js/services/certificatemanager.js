@@ -251,7 +251,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('acm', obj.id),
+            'logicalId': getResourceName('acm', obj.id, 'AWS::CertificateManager::Certificate'),
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::CertificateManager::Certificate',
@@ -277,7 +277,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('acm', obj.id),
+            'logicalId': getResourceName('acm', obj.id, 'AWS::ACMPCA::CertificateAuthority'),
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthority',
@@ -291,7 +291,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('acm', obj.id),
+            'logicalId': getResourceName('acm', obj.id, 'AWS::ACMPCA::CertificateAuthorityActivation'),
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthorityActivation',

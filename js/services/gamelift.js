@@ -560,7 +560,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::Fleet'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::Fleet',
@@ -577,7 +577,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::Build'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::Build',
@@ -597,7 +597,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::Alias'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::Alias',
@@ -611,7 +611,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::Script'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::Script',
@@ -625,7 +625,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::GameSessionQueue'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::GameSessionQueue',
@@ -648,7 +648,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::MatchmakingConfiguration'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::MatchmakingConfiguration',
@@ -660,7 +660,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('gamelift', obj.id),
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::MatchmakingRuleSet'),
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::MatchmakingRuleSet',

@@ -182,7 +182,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('licensemanager', obj.id),
+            'logicalId': getResourceName('licensemanager', obj.id, 'AWS::LicenseManager::LicenseConfiguration'), // not real resource type
             'region': obj.region,
             'service': 'licensemanager',
             'terraformType': 'aws_licensemanager_license_configuration',
@@ -194,7 +194,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('licensemanager', obj.id),
+            'logicalId': getResourceName('licensemanager', obj.id, 'AWS::LicenseManager::Association'), // not real resource type
             'region': obj.region,
             'service': 'licensemanager',
             'terraformType': 'aws_licensemanager_association',

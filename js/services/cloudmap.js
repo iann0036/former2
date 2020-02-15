@@ -406,7 +406,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicediscovery', obj.id),
+            'logicalId': getResourceName('servicediscovery', obj.id, 'AWS::ServiceDiscovery::HttpNamespace'),
             'region': obj.region,
             'service': 'servicediscovery',
             'type': 'AWS::ServiceDiscovery::HttpNamespace',
@@ -426,7 +426,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicediscovery', obj.id),
+            'logicalId': getResourceName('servicediscovery', obj.id, 'AWS::ServiceDiscovery::PrivateDnsNamespace'),
             'region': obj.region,
             'service': 'servicediscovery',
             'type': 'AWS::ServiceDiscovery::PrivateDnsNamespace',
@@ -441,7 +441,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicediscovery', obj.id),
+            'logicalId': getResourceName('servicediscovery', obj.id, 'AWS::ServiceDiscovery::PublicDnsNamespace'),
             'region': obj.region,
             'service': 'servicediscovery',
             'type': 'AWS::ServiceDiscovery::PublicDnsNamespace',
@@ -490,7 +490,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicediscovery', obj.id),
+            'logicalId': getResourceName('servicediscovery', obj.id, 'AWS::ServiceDiscovery::Service'),
             'region': obj.region,
             'service': 'servicediscovery',
             'type': 'AWS::ServiceDiscovery::Service',
@@ -504,7 +504,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('servicediscovery', obj.id),
+            'logicalId': getResourceName('servicediscovery', obj.id, 'AWS::ServiceDiscovery::Instance'),
             'region': obj.region,
             'service': 'servicediscovery',
             'type': 'AWS::ServiceDiscovery::Instance',

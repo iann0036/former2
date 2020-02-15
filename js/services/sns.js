@@ -194,7 +194,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sns', obj.id),
+            'logicalId': getResourceName('sns', obj.id, 'AWS::SNS::Topic'),
             'region': obj.region,
             'service': 'sns',
             'type': 'AWS::SNS::Topic',
@@ -218,7 +218,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sns', obj.id),
+            'logicalId': getResourceName('sns', obj.id, 'AWS::SNS::TopicPolicy'),
             'region': obj.region,
             'service': 'sns',
             'type': 'AWS::SNS::TopicPolicy',
@@ -243,7 +243,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sns', obj.id),
+            'logicalId': getResourceName('sns', obj.id, 'AWS::SNS::Subscription'),
             'region': obj.region,
             'service': 'sns',
             'type': 'AWS::SNS::Subscription',

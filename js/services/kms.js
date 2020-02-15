@@ -200,7 +200,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kms', obj.id),
+            'logicalId': getResourceName('kms', obj.id, 'AWS::KMS::Key'),
             'region': obj.region,
             'service': 'kms',
             'type': 'AWS::KMS::Key',
@@ -221,7 +221,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kms', obj.id),
+            'logicalId': getResourceName('kms', obj.id, 'AWS::KMS::Alias'),
             'region': obj.region,
             'service': 'kms',
             'type': 'AWS::KMS::Alias',

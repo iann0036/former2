@@ -277,7 +277,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('batch', obj.id),
+            'logicalId': getResourceName('batch', obj.id, 'AWS::Batch::ComputeEnvironment'),
             'region': obj.region,
             'service': 'batch',
             'type': 'AWS::Batch::ComputeEnvironment',
@@ -303,7 +303,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('batch', obj.id),
+            'logicalId': getResourceName('batch', obj.id, 'AWS::Batch::JobQueue'),
             'region': obj.region,
             'service': 'batch',
             'type': 'AWS::Batch::JobQueue',
@@ -493,7 +493,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('batch', obj.id),
+            'logicalId': getResourceName('batch', obj.id, 'AWS::Batch::JobDefinition'),
             'region': obj.region,
             'service': 'batch',
             'type': 'AWS::Batch::JobDefinition',

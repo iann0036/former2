@@ -110,7 +110,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datapipeline', obj.id),
+            'logicalId': getResourceName('datapipeline', obj.id, 'AWS::DataPipeline::Pipeline'),
             'region': obj.region,
             'service': 'datapipeline',
             'type': 'AWS::DataPipeline::Pipeline',

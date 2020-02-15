@@ -310,7 +310,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('robomaker', obj.id),
+            'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::Robot'),
             'region': obj.region,
             'service': 'robomaker',
             'type': 'AWS::RoboMaker::Robot',
@@ -322,7 +322,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('robomaker', obj.id),
+            'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::Fleet'),
             'region': obj.region,
             'service': 'robomaker',
             'type': 'AWS::RoboMaker::Fleet',
@@ -352,7 +352,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('robomaker', obj.id),
+                'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::RobotApplication'),
                 'region': obj.region,
                 'service': 'robomaker',
                 'type': 'AWS::RoboMaker::RobotApplication',
@@ -364,7 +364,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('robomaker', obj.id),
+                'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::RobotApplicationVersion'),
                 'region': obj.region,
                 'service': 'robomaker',
                 'type': 'AWS::RoboMaker::RobotApplicationVersion',
@@ -407,7 +407,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('robomaker', obj.id),
+                'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::SimulationApplication'),
                 'region': obj.region,
                 'service': 'robomaker',
                 'type': 'AWS::RoboMaker::SimulationApplication',
@@ -419,7 +419,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('robomaker', obj.id),
+                'logicalId': getResourceName('robomaker', obj.id, 'AWS::RoboMaker::SimulationApplicationVersion'),
                 'region': obj.region,
                 'service': 'robomaker',
                 'type': 'AWS::RoboMaker::SimulationApplicationVersion',

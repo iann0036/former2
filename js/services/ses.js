@@ -436,7 +436,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ConfigurationSetEventDestination'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ConfigurationSetEventDestination',
@@ -449,7 +449,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ConfigurationSet'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ConfigurationSet',
@@ -464,7 +464,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ReceiptFilter'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ReceiptFilter',
@@ -575,7 +575,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ReceiptRule'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ReceiptRule',
@@ -588,7 +588,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ReceiptRuleSet'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ReceiptRuleSet',
@@ -604,7 +604,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ses', obj.id),
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::Template'),
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::Template',

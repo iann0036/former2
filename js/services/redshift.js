@@ -377,7 +377,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('redshift', obj.id),
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::Cluster'),
             'region': obj.region,
             'service': 'redshift',
             'type': 'AWS::Redshift::Cluster',
@@ -410,7 +410,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('redshift', obj.id),
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::ClusterSubnetGroup'),
             'region': obj.region,
             'service': 'redshift',
             'type': 'AWS::Redshift::ClusterSubnetGroup',
@@ -432,7 +432,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('redshift', obj.id),
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::ClusterParameterGroup'),
             'region': obj.region,
             'service': 'redshift',
             'type': 'AWS::Redshift::ClusterParameterGroup',
@@ -446,7 +446,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('redshift', obj.id),
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::ClusterSecurityGroup'),
             'region': obj.region,
             'service': 'redshift',
             'type': 'AWS::Redshift::ClusterSecurityGroup',

@@ -257,7 +257,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediaconvert', obj.id),
+            'logicalId': getResourceName('mediaconvert', obj.id, 'AWS::MediaConvert::Queue'),
             'region': obj.region,
             'service': 'mediaconvert',
             'type': 'AWS::MediaConvert::Queue',
@@ -276,7 +276,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediaconvert', obj.id),
+            'logicalId': getResourceName('mediaconvert', obj.id, 'AWS::MediaConvert::Preset'),
             'region': obj.region,
             'service': 'mediaconvert',
             'type': 'AWS::MediaConvert::Preset',
@@ -299,7 +299,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediaconvert', obj.id),
+            'logicalId': getResourceName('mediaconvert', obj.id, 'AWS::MediaConvert::JobTemplate'),
             'region': obj.region,
             'service': 'mediaconvert',
             'type': 'AWS::MediaConvert::JobTemplate',

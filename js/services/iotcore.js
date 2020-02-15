@@ -431,7 +431,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Thing'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::Thing',
@@ -452,7 +452,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::ThingPrincipalAttachment'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::ThingPrincipalAttachment',
@@ -467,7 +467,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Policy'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::Policy',
@@ -482,7 +482,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::PolicyPrincipalAttachment'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::PolicyPrincipalAttachment',
@@ -500,7 +500,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Certificate'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::Certificate',
@@ -751,7 +751,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot', obj.id),
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::TopicRule'),
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::TopicRule',

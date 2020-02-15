@@ -375,7 +375,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticache', obj.id),
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::SubnetGroup'),
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::SubnetGroup',
@@ -395,7 +395,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticache', obj.id),
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::ParameterGroup'),
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::ParameterGroup',
@@ -415,7 +415,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticache', obj.id),
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::SecurityGroup'),
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::SecurityGroup',
@@ -481,7 +481,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticache', obj.id),
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::CacheCluster'),
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::CacheCluster',
@@ -555,7 +555,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticache', obj.id),
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::ReplicationGroup'),
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::ReplicationGroup',

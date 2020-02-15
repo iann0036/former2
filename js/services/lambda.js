@@ -656,7 +656,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::Function'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::Function',
@@ -701,7 +701,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::Alias'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::Alias',
@@ -726,7 +726,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::Version'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::Version',
@@ -755,7 +755,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::LayerVersion'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::LayerVersion',
@@ -772,7 +772,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::LayerVersionPermission'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::LayerVersionPermission',
@@ -798,7 +798,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::Permission'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::Permission',
@@ -834,7 +834,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::EventSourceMapping'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::EventSourceMapping',
@@ -855,7 +855,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lambda', obj.id),
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::EventInvokeConfig'),
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::EventInvokeConfig',

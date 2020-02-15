@@ -856,7 +856,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBCluster'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBCluster',
@@ -993,7 +993,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBInstance'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBInstance',
@@ -1024,7 +1024,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::EventSubscription'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::EventSubscription',
@@ -1052,7 +1052,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBSubnetGroup'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBSubnetGroup',
@@ -1075,7 +1075,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBClusterParameterGroup'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBClusterParameterGroup',
@@ -1098,7 +1098,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBParameterGroup'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBParameterGroup',
@@ -1173,7 +1173,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::OptionGroup'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::OptionGroup',
@@ -1195,7 +1195,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBSecurityGroup'),
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBSecurityGroup',

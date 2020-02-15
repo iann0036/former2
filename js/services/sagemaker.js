@@ -701,7 +701,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Model'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Model',
@@ -719,7 +719,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Endpoint'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Endpoint',
@@ -749,7 +749,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::EndpointConfig'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::EndpointConfig',
@@ -775,7 +775,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::NotebookInstance'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::NotebookInstance',
@@ -788,7 +788,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::NotebookInstanceLifecycleConfig'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::NotebookInstanceLifecycleConfig',
@@ -804,7 +804,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::CodeRepository'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::CodeRepository',
@@ -835,7 +835,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Workteam'),
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Workteam',

@@ -409,7 +409,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('neptune', obj.id),
+            'logicalId': getResourceName('neptune', obj.id, 'AWS::Neptune::DBCluster'),
             'region': obj.region,
             'service': 'neptune',
             'type': 'AWS::Neptune::DBCluster',
@@ -445,7 +445,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('neptune', obj.id),
+            'logicalId': getResourceName('neptune', obj.id, 'AWS::Neptune::DBInstance'),
             'region': obj.region,
             'service': 'neptune',
             'type': 'AWS::Neptune::DBInstance',
@@ -469,7 +469,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('neptune', obj.id),
+            'logicalId': getResourceName('neptune', obj.id, 'AWS::Neptune::DBClusterParameterGroup'),
             'region': obj.region,
             'service': 'neptune',
             'type': 'AWS::Neptune::DBClusterParameterGroup',
@@ -493,7 +493,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('neptune', obj.id),
+            'logicalId': getResourceName('neptune', obj.id, 'AWS::Neptune::DBParameterGroup'),
             'region': obj.region,
             'service': 'neptune',
             'type': 'AWS::Neptune::DBParameterGroup',
@@ -522,7 +522,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('neptune', obj.id),
+            'logicalId': getResourceName('neptune', obj.id, 'AWS::Neptune::DBSubnetGroup'),
             'region': obj.region,
             'service': 'neptune',
             'type': 'AWS::Neptune::DBSubnetGroup',

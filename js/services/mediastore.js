@@ -162,7 +162,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediastore', obj.id),
+            'logicalId': getResourceName('mediastore', obj.id, 'AWS::MediaStore::Container'),
             'region': obj.region,
             'service': 'mediastore',
             'type': 'AWS::MediaStore::Container',
@@ -175,7 +175,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediastore', obj.id),
+            'logicalId': getResourceName('mediastore', obj.id, 'AWS::MediaStore::ContainerPolicy'), // not real resource type
             'region': obj.region,
             'service': 'mediastore',
             'terraformType': 'aws_media_store_container_policy',

@@ -118,7 +118,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('msk', obj.id),
+            'logicalId': getResourceName('msk', obj.id, 'AWS::MSK::Cluster'),
             'region': obj.region,
             'service': 'msk',
             'type': 'AWS::MSK::Cluster',

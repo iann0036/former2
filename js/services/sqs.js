@@ -139,7 +139,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sqs', obj.id),
+            'logicalId': getResourceName('sqs', obj.id, 'AWS::SQS::Queue'),
             'region': obj.region,
             'service': 'sqs',
             'type': 'AWS::SQS::Queue',
@@ -163,7 +163,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sqs', obj.id),
+            'logicalId': getResourceName('sqs', obj.id, 'AWS::SQS::QueuePolicy'),
             'region': obj.region,
             'service': 'sqs',
             'type': 'AWS::SQS::QueuePolicy',
@@ -184,7 +184,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id),
+            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::Application'),
             'region': obj.region,
             'service': 'elasticbeanstalk',
             'type': 'AWS::ElasticBeanstalk::Application',

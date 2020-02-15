@@ -921,7 +921,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Database'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Database',
@@ -945,7 +945,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Table'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Table',
@@ -968,7 +968,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Partition'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Partition',
@@ -997,7 +997,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Crawler'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Crawler',
@@ -1028,7 +1028,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Classifier'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Classifier',
@@ -1048,7 +1048,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Job'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Job',
@@ -1091,7 +1091,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Trigger'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Trigger',
@@ -1110,7 +1110,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Connection'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Connection',
@@ -1128,7 +1128,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::DevEndpoint'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::DevEndpoint',
@@ -1146,7 +1146,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::SecurityConfiguration'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::SecurityConfiguration',
@@ -1170,7 +1170,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::DataCatalogEncryptionSettings'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::DataCatalogEncryptionSettings',
@@ -1195,7 +1195,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::MLTransform'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::MLTransform',
@@ -1213,7 +1213,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glue', obj.id),
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Workflow'),
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Workflow',

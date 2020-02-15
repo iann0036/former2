@@ -571,7 +571,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotevents', obj.id),
+            'logicalId': getResourceName('iotevents', obj.id, 'AWS::IoTEvents::DetectorModel'),
             'region': obj.region,
             'service': 'iotevents',
             'type': 'AWS::IoTEvents::DetectorModel',
@@ -599,7 +599,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iotevents', obj.id),
+            'logicalId': getResourceName('iotevents', obj.id, 'AWS::IoTEvents::Input'),
             'region': obj.region,
             'service': 'iotevents',
             'type': 'AWS::IoTEvents::Input',

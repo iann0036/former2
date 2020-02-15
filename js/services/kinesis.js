@@ -713,7 +713,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::Kinesis::Stream'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::Kinesis::Stream',
@@ -732,7 +732,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::Kinesis::StreamConsumer'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::Kinesis::StreamConsumer',
@@ -767,7 +767,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalytics::Application'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalytics::Application',
@@ -785,7 +785,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalytics::ApplicationOutput'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalytics::ApplicationOutput',
@@ -801,7 +801,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalytics::ApplicationReferenceDataSource'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalytics::ApplicationReferenceDataSource',
@@ -908,7 +908,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalyticsV2::Application'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalyticsV2::Application',
@@ -926,7 +926,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalyticsV2::ApplicationOutput'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalyticsV2::ApplicationOutput',
@@ -942,7 +942,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource',
@@ -956,7 +956,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption',
@@ -1077,7 +1077,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('kinesis', obj.id),
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisFirehose::DeliveryStream'),
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisFirehose::DeliveryStream',

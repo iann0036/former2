@@ -164,7 +164,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glacier', obj.id),
+            'logicalId': getResourceName('glacier', obj.id, 'AWS::Glacier::Vault'), // not real resource type
             'region': obj.region,
             'service': 'glacier',
             'terraformType': 'aws_glacier_vault',
@@ -181,7 +181,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('glacier', obj.id),
+            'logicalId': getResourceName('glacier', obj.id, 'AWS::Glacier::VaultLock'), // not real resource type
             'region': obj.region,
             'service': 'glacier',
             'terraformType': 'aws_glacier_vault_lock',

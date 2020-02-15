@@ -437,7 +437,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codepipeline', obj.id),
+            'logicalId': getResourceName('codepipeline', obj.id, 'AWS::CodePipeline::Pipeline'),
             'region': obj.region,
             'service': 'codepipeline',
             'type': 'AWS::CodePipeline::Pipeline',
@@ -492,7 +492,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codepipeline', obj.id),
+            'logicalId': getResourceName('codepipeline', obj.id, 'AWS::CodePipeline::Webhook'),
             'region': obj.region,
             'service': 'codepipeline',
             'type': 'AWS::CodePipeline::Webhook',
@@ -546,7 +546,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codepipeline', obj.id),
+            'logicalId': getResourceName('codepipeline', obj.id, 'AWS::CodePipeline::CustomActionType'),
             'region': obj.region,
             'service': 'codepipeline',
             'type': 'AWS::CodePipeline::CustomActionType',

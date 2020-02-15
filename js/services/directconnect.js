@@ -882,7 +882,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::Connection'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_connection',
@@ -894,7 +894,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::Association'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_connection_association',
@@ -923,7 +923,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::PublicVirtualInterface'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_public_virtual_interface',
@@ -949,7 +949,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::PrivateVirtualInterface'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_private_virtual_interface',
@@ -974,7 +974,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::HostedPublicVirtualInterface'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_hosted_public_virtual_interface',
@@ -994,7 +994,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::HostedPrivateVirtualInterface'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_hosted_private_virtual_interface',
@@ -1010,7 +1010,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::BGPPeer'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_bgp_peer',
@@ -1029,7 +1029,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::LAG'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_lag',
@@ -1041,7 +1041,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('directconnect', obj.id),
+            'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::Gateway'), // not real resource type
             'region': obj.region,
             'service': 'directconnect',
             'terraformType': 'aws_dx_gateway',
@@ -1060,7 +1060,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('directconnect', obj.id),
+                'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::GatewayAssociation'), // not real resource type
                 'region': obj.region,
                 'service': 'directconnect',
                 'terraformType': 'aws_dx_gateway_association',
@@ -1081,7 +1081,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('directconnect', obj.id),
+                'logicalId': getResourceName('directconnect', obj.id, 'AWS::DirectConnect::AssociationProposal'), // not real resource type
                 'region': obj.region,
                 'service': 'directconnect',
                 'terraformType': 'aws_dx_gateway_association_proposal',

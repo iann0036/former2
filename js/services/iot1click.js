@@ -229,7 +229,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot1click', obj.id),
+            'logicalId': getResourceName('iot1click', obj.id, 'AWS::IoT1Click::Project'),
             'region': obj.region,
             'service': 'iot1click',
             'type': 'AWS::IoT1Click::Project',
@@ -247,7 +247,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot1click', obj.id),
+            'logicalId': getResourceName('iot1click', obj.id, 'AWS::IoT1Click::Placement'),
             'region': obj.region,
             'service': 'iot1click',
             'type': 'AWS::IoT1Click::Placement',
@@ -259,7 +259,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iot1click', obj.id),
+            'logicalId': getResourceName('iot1click', obj.id, 'AWS::IoT1Click::Device'),
             'region': obj.region,
             'service': 'iot1click',
             'type': 'AWS::IoT1Click::Device',

@@ -122,7 +122,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('macie', obj.id),
+            'logicalId': getResourceName('macie', obj.id, 'AWS::Macie::MemberAccountAssociation'), // not real resource type
             'region': obj.region,
             'service': 'macie',
             'terraformType': 'aws_macie_member_account_association',
@@ -143,7 +143,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('macie', obj.id),
+            'logicalId': getResourceName('macie', obj.id, 'AWS::Macie::S3BucketAssociation'), // not real resource type
             'region': obj.region,
             'service': 'macie',
             'terraformType': 'aws_macie_s3_bucket_association',

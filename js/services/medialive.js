@@ -236,7 +236,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('medialive', obj.id),
+            'logicalId': getResourceName('medialive', obj.id, 'AWS::MediaLive::InputSecurityGroup'),
             'region': obj.region,
             'service': 'medialive',
             'type': 'AWS::MediaLive::InputSecurityGroup',
@@ -255,7 +255,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('medialive', obj.id),
+            'logicalId': getResourceName('medialive', obj.id, 'AWS::MediaLive::Channel'),
             'region': obj.region,
             'service': 'medialive',
             'type': 'AWS::MediaLive::Channel',
@@ -280,7 +280,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('medialive', obj.id),
+            'logicalId': getResourceName('medialive', obj.id, 'AWS::MediaLive::Input'),
             'region': obj.region,
             'service': 'medialive',
             'type': 'AWS::MediaLive::Input',

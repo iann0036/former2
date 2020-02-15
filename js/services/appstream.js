@@ -678,7 +678,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::StackFleetAssociation'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::StackFleetAssociation',
@@ -708,7 +708,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::Fleet'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::Fleet',
@@ -727,7 +727,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::User'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::User',
@@ -759,7 +759,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::Stack'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::Stack',
@@ -785,7 +785,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::ImageBuilder'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::ImageBuilder',
@@ -798,7 +798,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::DirectoryConfig'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::DirectoryConfig',
@@ -812,7 +812,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appstream', obj.id),
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::StackUserAssociation'),
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::StackUserAssociation',

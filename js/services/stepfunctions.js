@@ -189,7 +189,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('stepfunctions', obj.id),
+            'logicalId': getResourceName('stepfunctions', obj.id, 'AWS::StepFunctions::StateMachine'),
             'region': obj.region,
             'service': 'stepfunctions',
             'type': 'AWS::StepFunctions::StateMachine',
@@ -214,7 +214,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('stepfunctions', obj.id),
+            'logicalId': getResourceName('stepfunctions', obj.id, 'AWS::StepFunctions::Activity'),
             'region': obj.region,
             'service': 'stepfunctions',
             'type': 'AWS::StepFunctions::Activity',

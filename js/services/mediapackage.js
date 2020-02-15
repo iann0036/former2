@@ -88,7 +88,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('mediapackage', obj.id),
+            'logicalId': getResourceName('mediapackage', obj.id, 'AWS::MediaPackage::Channel'), // not real resource type
             'region': obj.region,
             'service': 'mediapackage',
             'terraformType': 'aws_media_package_channel',

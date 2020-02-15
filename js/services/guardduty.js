@@ -478,7 +478,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::Member'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::Member',
@@ -495,7 +495,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::Filter'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::Filter',
@@ -520,7 +520,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::IPSet'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::IPSet',
@@ -546,7 +546,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::ThreatIntelSet'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::ThreatIntelSet',
@@ -560,7 +560,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::Master'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::Master',
@@ -579,7 +579,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('guardduty', obj.id),
+            'logicalId': getResourceName('guardduty', obj.id, 'AWS::GuardDuty::Detector'),
             'region': obj.region,
             'service': 'guardduty',
             'type': 'AWS::GuardDuty::Detector',

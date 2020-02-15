@@ -273,7 +273,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('transfer', obj.id),
+            'logicalId': getResourceName('transfer', obj.id, 'AWS::Transfer::Server'),
             'region': obj.region,
             'service': 'transfer',
             'type': 'AWS::Transfer::Server',
@@ -315,7 +315,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('transfer', obj.id),
+            'logicalId': getResourceName('transfer', obj.id, 'AWS::Transfer::User'),
             'region': obj.region,
             'service': 'transfer',
             'type': 'AWS::Transfer::User',
@@ -336,7 +336,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('transfer', obj.id),
+            'logicalId': getResourceName('transfer', obj.id, 'AWS::Transfer::SshKey'), // not real resource type
             'region': obj.region,
             'service': 'transfer',
             'terraformType': 'aws_transfer_ssh_key',

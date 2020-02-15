@@ -308,7 +308,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amplify', obj.id),
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::Amplify::App'),
             'region': obj.region,
             'service': 'amplify',
             'type': 'AWS::Amplify::App',
@@ -350,7 +350,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amplify', obj.id),
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::Amplify::Branch'),
             'region': obj.region,
             'service': 'amplify',
             'type': 'AWS::Amplify::Branch',
@@ -369,7 +369,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amplify', obj.id),
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::Amplify::Domain'),
             'region': obj.region,
             'service': 'amplify',
             'type': 'AWS::Amplify::Domain',

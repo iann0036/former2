@@ -547,7 +547,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::RecordSet'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53::RecordSet',
@@ -579,7 +579,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::HostedZone'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53::HostedZone',
@@ -640,7 +640,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::HealthCheck'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53::HealthCheck',
@@ -675,7 +675,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverEndpoint'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53Resolver::ResolverEndpoint',
@@ -710,7 +710,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverRule'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53Resolver::ResolverRule',
@@ -727,7 +727,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('route53', obj.id),
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverRuleAssociation'),
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53Resolver::ResolverRuleAssociation',

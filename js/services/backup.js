@@ -229,7 +229,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('backup', obj.id),
+            'logicalId': getResourceName('backup', obj.id, 'AWS::Backup::BackupVault'),
             'region': obj.region,
             'service': 'backup',
             'type': 'AWS::Backup::BackupVault',
@@ -294,7 +294,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('backup', obj.id),
+            'logicalId': getResourceName('backup', obj.id, 'AWS::Backup::BackupPlan'),
             'region': obj.region,
             'service': 'backup',
             'type': 'AWS::Backup::BackupPlan',
@@ -330,7 +330,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('backup', obj.id),
+            'logicalId': getResourceName('backup', obj.id, 'AWS::Backup::BackupSelection'),
             'region': obj.region,
             'service': 'backup',
             'type': 'AWS::Backup::BackupSelection',

@@ -576,7 +576,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('s3', obj.id),
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::Bucket'),
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::Bucket',
@@ -597,7 +597,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('s3', obj.id),
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::BucketPolicy'),
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::BucketPolicy',
@@ -614,7 +614,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('s3', obj.id),
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::AccessPoint'),
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::AccessPoint',

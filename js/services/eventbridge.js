@@ -455,7 +455,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('events', obj.id),
+            'logicalId': getResourceName('events', obj.id, 'AWS::Events::Rule'),
             'region': obj.region,
             'service': 'events',
             'type': 'AWS::Events::Rule',
@@ -556,7 +556,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
                 tracked_resources.push({
                     'obj': obj,
-                    'logicalId': getResourceName('cloudwatch', obj.id),
+                    'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::EventTarget'), // not real resource type
                     'region': obj.region,
                     'service': 'cloudwatch',
                     'terraformType': 'aws_cloudwatch_event_target',
@@ -582,7 +582,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('eventbridge', obj.id),
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::EventBusPolicy'),
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::Events::EventBusPolicy',
@@ -596,7 +596,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('eventbridge', obj.id),
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::EventBus'),
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::Events::EventBus',
@@ -625,7 +625,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('eventbridge', obj.id),
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::EventSchemas::Registry'),
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::EventSchemas::Registry',
@@ -646,7 +646,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('eventbridge', obj.id),
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::EventSchemas::Discoverer'),
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::EventSchemas::Discoverer',
@@ -670,7 +670,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('eventbridge', obj.id),
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::EventSchemas::Schema'),
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::EventSchemas::Schema',

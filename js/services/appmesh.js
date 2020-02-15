@@ -427,7 +427,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appmesh', obj.id),
+            'logicalId': getResourceName('appmesh', obj.id, 'AWS::AppMesh::Mesh'),
             'region': obj.region,
             'service': 'appmesh',
             'type': 'AWS::AppMesh::Mesh',
@@ -457,7 +457,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appmesh', obj.id),
+            'logicalId': getResourceName('appmesh', obj.id, 'AWS::AppMesh::VirtualRouter'),
             'region': obj.region,
             'service': 'appmesh',
             'type': 'AWS::AppMesh::VirtualRouter',
@@ -684,7 +684,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appmesh', obj.id),
+            'logicalId': getResourceName('appmesh', obj.id, 'AWS::AppMesh::Route'),
             'region': obj.region,
             'service': 'appmesh',
             'type': 'AWS::AppMesh::Route',
@@ -712,7 +712,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appmesh', obj.id),
+            'logicalId': getResourceName('appmesh', obj.id, 'AWS::AppMesh::VirtualService'),
             'region': obj.region,
             'service': 'appmesh',
             'type': 'AWS::AppMesh::VirtualService',
@@ -772,7 +772,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appmesh', obj.id),
+            'logicalId': getResourceName('appmesh', obj.id, 'AWS::AppMesh::VirtualNode'),
             'region': obj.region,
             'service': 'appmesh',
             'type': 'AWS::AppMesh::VirtualNode',

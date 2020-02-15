@@ -658,7 +658,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::Document'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::Document',
@@ -681,7 +681,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::Parameter'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::Parameter',
@@ -753,7 +753,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::PatchBaseline'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::PatchBaseline',
@@ -798,7 +798,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::Association'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::Association',
@@ -832,7 +832,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::MaintenanceWindow'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::MaintenanceWindow',
@@ -861,7 +861,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::MaintenanceWindowTarget'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::MaintenanceWindowTarget',
@@ -930,7 +930,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::MaintenanceWindowTask'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::MaintenanceWindowTask',
@@ -971,7 +971,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ssm', obj.id),
+            'logicalId': getResourceName('ssm', obj.id, 'AWS::SSM::ResourceDataSync'),
             'region': obj.region,
             'service': 'ssm',
             'type': 'AWS::SSM::ResourceDataSync',

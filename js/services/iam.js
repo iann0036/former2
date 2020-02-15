@@ -764,7 +764,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::User'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::User',
@@ -791,7 +791,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::Group'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::Group',
@@ -827,7 +827,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::Role'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::Role',
@@ -871,7 +871,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::ManagedPolicy'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::ManagedPolicy',
@@ -905,7 +905,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::InstanceProfile'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::InstanceProfile',
@@ -930,7 +930,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::AccessKey'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::AccessKey',
@@ -959,7 +959,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::Policy'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::Policy',
@@ -983,7 +983,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::ServiceLinkedRole'),
             'region': obj.region,
             'service': 'iam',
             'type': 'AWS::IAM::ServiceLinkedRole',
@@ -1025,7 +1025,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('accessanalyzer', obj.id),
+            'logicalId': getResourceName('accessanalyzer', obj.id, 'AWS::AccessAnalyzer::Analyzer'),
             'region': obj.region,
             'service': 'accessanalyzer',
             'type': 'AWS::AccessAnalyzer::Analyzer',

@@ -196,7 +196,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('efs', obj.id),
+            'logicalId': getResourceName('efs', obj.id, 'AWS::EFS::FileSystem'),
             'region': obj.region,
             'service': 'efs',
             'type': 'AWS::EFS::FileSystem',
@@ -218,7 +218,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('efs', obj.id),
+            'logicalId': getResourceName('efs', obj.id, 'AWS::EFS::MountTarget'),
             'region': obj.region,
             'service': 'efs',
             'type': 'AWS::EFS::MountTarget',

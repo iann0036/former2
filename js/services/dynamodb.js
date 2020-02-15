@@ -592,7 +592,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dynamodb', obj.id),
+            'logicalId': getResourceName('dynamodb', obj.id, 'AWS::DynamoDB::Table'),
             'region': obj.region,
             'service': 'dynamodb',
             'type': 'AWS::DynamoDB::Table',
@@ -665,7 +665,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dynamodb', obj.id),
+            'logicalId': getResourceName('dynamodb', obj.id, 'AWS::DAX::Cluster'),
             'region': obj.region,
             'service': 'dynamodb',
             'type': 'AWS::DAX::Cluster',
@@ -691,7 +691,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dynamodb', obj.id),
+            'logicalId': getResourceName('dynamodb', obj.id, 'AWS::DAX::ParameterGroup'),
             'region': obj.region,
             'service': 'dynamodb',
             'type': 'AWS::DAX::ParameterGroup',
@@ -714,7 +714,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('dynamodb', obj.id),
+            'logicalId': getResourceName('dynamodb', obj.id, 'AWS::DAX::SubnetGroup'),
             'region': obj.region,
             'service': 'dynamodb',
             'type': 'AWS::DAX::SubnetGroup',

@@ -470,7 +470,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codebuild', obj.id),
+            'logicalId': getResourceName('codebuild', obj.id, 'AWS::CodeBuild::Project'),
             'region': obj.region,
             'service': 'codebuild',
             'type': 'AWS::CodeBuild::Project',
@@ -496,7 +496,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codebuild', obj.id),
+            'logicalId': getResourceName('codebuild', obj.id, 'AWS::CodeBuild::SourceCredential'),
             'region': obj.region,
             'service': 'codebuild',
             'type': 'AWS::CodeBuild::SourceCredential',
@@ -526,7 +526,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codestarnotifications', obj.id),
+            'logicalId': getResourceName('codestarnotifications', obj.id, 'AWS::CodeStarNotifications::NotificationRule'),
             'region': obj.region,
             'service': 'codestarnotifications',
             'type': 'AWS::CodeStarNotifications::NotificationRule',
@@ -553,7 +553,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codebuild', obj.id),
+            'logicalId': getResourceName('codebuild', obj.id, 'AWS::CodeBuild::ReportGroup'),
             'region': obj.region,
             'service': 'codebuild',
             'type': 'AWS::CodeBuild::ReportGroup',

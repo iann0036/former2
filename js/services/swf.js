@@ -85,7 +85,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('swf', obj.id),
+            'logicalId': getResourceName('swf', obj.id, 'AWS::SWF::Domain'), // not real resource type
             'region': obj.region,
             'service': 'swf',
             'terraformType': 'aws_swf_domain',

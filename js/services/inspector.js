@@ -199,7 +199,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('inspector', obj.id),
+            'logicalId': getResourceName('inspector', obj.id, 'AWS::Inspector::ResourceGroup'),
             'region': obj.region,
             'service': 'inspector',
             'type': 'AWS::Inspector::ResourceGroup',
@@ -211,7 +211,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('inspector', obj.id),
+            'logicalId': getResourceName('inspector', obj.id, 'AWS::Inspector::AssessmentTarget'),
             'region': obj.region,
             'service': 'inspector',
             'type': 'AWS::Inspector::AssessmentTarget',
@@ -234,7 +234,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('inspector', obj.id),
+            'logicalId': getResourceName('inspector', obj.id, 'AWS::Inspector::AssessmentTemplate'),
             'region': obj.region,
             'service': 'inspector',
             'type': 'AWS::Inspector::AssessmentTemplate',

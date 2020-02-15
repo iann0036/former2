@@ -134,7 +134,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('fsx', obj.id),
+            'logicalId': getResourceName('fsx', obj.id, 'AWS::FSx::FileSystem'),
             'region': obj.region,
             'service': 'fsx',
             'type': 'AWS::FSx::FileSystem',

@@ -3095,7 +3095,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPC'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPC',
@@ -3135,7 +3135,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCCidrBlock'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCCidrBlock',
@@ -3150,7 +3150,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCDHCPOptionsAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCDHCPOptionsAssociation',
@@ -3167,7 +3167,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EgressOnlyInternetGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::EgressOnlyInternetGateway',
@@ -3191,7 +3191,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::InternetGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::InternetGateway',
@@ -3211,7 +3211,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ec2', obj.id),
+                'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCGatewayAttachment'),
                 'region': obj.region,
                 'service': 'ec2',
                 'type': 'AWS::EC2::VPCGatewayAttachment',
@@ -3225,7 +3225,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ec2', obj.id),
+                'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCGatewayAttachment'),
                 'region': obj.region,
                 'service': 'ec2',
                 'type': 'AWS::EC2::VPCGatewayAttachment',
@@ -3268,7 +3268,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::DHCPOptions'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::DHCPOptions',
@@ -3305,7 +3305,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPNConnection'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPNConnection',
@@ -3323,7 +3323,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPNConnectionRoute'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPNConnectionRoute',
@@ -3338,7 +3338,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPNGatewayRoutePropagation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPNGatewayRoutePropagation',
@@ -3369,7 +3369,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCPeeringConnection'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCPeeringConnection',
@@ -3389,7 +3389,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::RouteTable'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::RouteTable',
@@ -3415,7 +3415,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkAcl'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NetworkAcl',
@@ -3456,7 +3456,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkAclEntry'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NetworkAclEntry',
@@ -3481,7 +3481,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPNGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPNGateway',
@@ -3510,7 +3510,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::CustomerGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::CustomerGateway',
@@ -3545,7 +3545,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::Subnet'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::Subnet',
@@ -3573,7 +3573,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EIP'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::EIP',
@@ -3601,7 +3601,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EIPAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::EIPAssociation',
@@ -3647,7 +3647,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInterface'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NetworkInterface',
@@ -3681,7 +3681,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::Route'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::Route',
@@ -3715,7 +3715,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGateway',
@@ -3743,7 +3743,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayRoute'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGatewayRoute',
@@ -3758,7 +3758,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayRouteTableAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGatewayRouteTableAssociation',
@@ -3773,7 +3773,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayRouteTablePropagation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGatewayRouteTablePropagation',
@@ -3793,7 +3793,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayRouteTable'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGatewayRouteTable',
@@ -3826,7 +3826,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayAttachment'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGatewayAttachment',
@@ -3859,7 +3859,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCEndpoint'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCEndpoint',
@@ -3874,7 +3874,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCEndpointConnectionNotification'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCEndpointConnectionNotification',
@@ -3889,7 +3889,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCEndpointServicePermissions'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::VPCEndpointServicePermissions',
@@ -3911,7 +3911,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ec2', obj.id),
+                'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EndpointServiceAllowedPrincipal'), // not real resource type
                 'region': obj.region,
                 'service': 'ec2',
                 'terraformType': 'aws_vpc_endpoint_service_allowed_principal',
@@ -3927,7 +3927,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('ec2', obj.id),
+                'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::VPCEndpointService'),
                 'region': obj.region,
                 'service': 'ec2',
                 'type': 'AWS::EC2::VPCEndpointService',
@@ -3957,7 +3957,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NatGateway'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NatGateway',
@@ -3977,7 +3977,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInterfacePermission'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NetworkInterfacePermission',
@@ -4007,7 +4007,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::FlowLog'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::FlowLog',
@@ -4020,7 +4020,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::SubnetNetworkAclAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::SubnetNetworkAclAssociation',
@@ -4034,7 +4034,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::SubnetRouteTableAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::SubnetRouteTableAssociation',
@@ -4047,7 +4047,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::SubnetCidrBlock'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::SubnetCidrBlock',
@@ -4064,7 +4064,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInterfaceAttachment'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::NetworkInterfaceAttachment',
@@ -4104,7 +4104,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::ClientVpnEndpoint'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::ClientVpnEndpoint',
@@ -4118,7 +4118,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::ClientVpnRoute'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::ClientVpnRoute',
@@ -4130,7 +4130,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::ClientVpnTargetNetworkAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::ClientVpnTargetNetworkAssociation',
@@ -4145,7 +4145,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::ClientVpnAuthorizationRule'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::ClientVpnAuthorizationRule',
@@ -4158,7 +4158,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TrafficMirrorFilter'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TrafficMirrorFilter',
@@ -4181,7 +4181,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TrafficMirrorFilterRule'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TrafficMirrorFilterRule',
@@ -4202,7 +4202,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TrafficMirrorSession'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TrafficMirrorSession',
@@ -4219,7 +4219,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TrafficMirrorTarget'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::TrafficMirrorTarget',
@@ -4236,7 +4236,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::GatewayRouteTableAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::GatewayRouteTableAssociation',
@@ -4250,7 +4250,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::LocalGatewayRoute'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRoute',
@@ -4263,7 +4263,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id),
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::LocalGatewayRouteTableVPCAssociation'),
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRouteTableVPCAssociation',

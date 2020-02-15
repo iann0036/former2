@@ -831,7 +831,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::IdentityPool'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::IdentityPool',
@@ -870,7 +870,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::IdentityPoolRoleAttachment'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::IdentityPoolRoleAttachment',
@@ -1005,7 +1005,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPool'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPool',
@@ -1040,7 +1040,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolUser'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolUser',
@@ -1055,7 +1055,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolGroup'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolGroup',
@@ -1068,7 +1068,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolUserToGroupAttachment'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolUserToGroupAttachment',
@@ -1095,7 +1095,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolClient'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolClient',
@@ -1109,7 +1109,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolDomain'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolDomain',
@@ -1126,7 +1126,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolResourceServer'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolResourceServer',
@@ -1145,7 +1145,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolIdentityProvider'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolIdentityProvider',
@@ -1163,7 +1163,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolRiskConfigurationAttachment'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolRiskConfigurationAttachment',
@@ -1176,7 +1176,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cognito', obj.id),
+            'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPoolUICustomizationAttachment'),
             'region': obj.region,
             'service': 'cognito',
             'type': 'AWS::Cognito::UserPoolUICustomizationAttachment',

@@ -347,7 +347,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datasync', obj.id),
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::Agent'), // not real resource type
             'region': obj.region,
             'service': 'datasync',
             'terraformType': 'aws_datasync_agent',
@@ -379,7 +379,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datasync', obj.id),
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::Task'), // not real resource type
             'region': obj.region,
             'service': 'datasync',
             'terraformType': 'aws_datasync_task',
@@ -400,7 +400,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datasync', obj.id),
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationEFS'), // not real resource type
             'region': obj.region,
             'service': 'datasync',
             'terraformType': 'aws_datasync_location_efs',
@@ -420,7 +420,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datasync', obj.id),
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationNFS'), // not real resource type
             'region': obj.region,
             'service': 'datasync',
             'terraformType': 'aws_datasync_location_nfs',
@@ -440,7 +440,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('datasync', obj.id),
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationS3'), // not real resource type
             'region': obj.region,
             'service': 'datasync',
             'terraformType': 'aws_datasync_location_s3',

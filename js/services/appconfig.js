@@ -412,7 +412,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appconfig', obj.id),
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::Application'),
             'region': obj.region,
             'service': 'appconfig',
             'type': 'AWS::AppConfig::Application',
@@ -437,7 +437,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appconfig', obj.id),
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::ConfigurationProfile'),
             'region': obj.region,
             'service': 'appconfig',
             'type': 'AWS::AppConfig::ConfigurationProfile',
@@ -460,7 +460,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appconfig', obj.id),
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::Environment'),
             'region': obj.region,
             'service': 'appconfig',
             'type': 'AWS::AppConfig::Environment',
@@ -485,7 +485,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appconfig', obj.id),
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::Deployment'),
             'region': obj.region,
             'service': 'appconfig',
             'type': 'AWS::AppConfig::Deployment',
@@ -508,7 +508,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('appconfig', obj.id),
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::DeploymentStrategy'),
             'region': obj.region,
             'service': 'appconfig',
             'type': 'AWS::AppConfig::DeploymentStrategy',

@@ -133,7 +133,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ram', obj.id),
+            'logicalId': getResourceName('ram', obj.id, 'AWS::RAM::ResourceShare'),
             'region': obj.region,
             'service': 'ram',
             'type': 'AWS::RAM::ResourceShare',

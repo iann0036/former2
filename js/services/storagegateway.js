@@ -102,7 +102,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('storagegateway', obj.id),
+            'logicalId': getResourceName('storagegateway', obj.id, 'AWS::StorageGateway::Gateway'), // not real resource type
             'region': obj.region,
             'service': 'storagegateway',
             'terraformType': 'aws_storagegateway_gateway',

@@ -159,7 +159,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('budgets', obj.id),
+            'logicalId': getResourceName('budgets', obj.id, 'AWS::Budgets::Budget'),
             'region': obj.region,
             'service': 'budgets',
             'type': 'AWS::Budgets::Budget',

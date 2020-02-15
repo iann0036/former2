@@ -676,7 +676,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::Alarm'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::Alarm',
@@ -703,7 +703,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Logs::Destination'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Logs::Destination',
@@ -718,7 +718,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Logs::LogStream'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Logs::LogStream',
@@ -737,7 +737,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Logs::SubscriptionFilter'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Logs::SubscriptionFilter',
@@ -758,7 +758,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Logs::LogGroup'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Logs::LogGroup',
@@ -796,7 +796,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Logs::MetricFilter'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Logs::MetricFilter',
@@ -816,7 +816,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::Dashboard'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::Dashboard',
@@ -837,7 +837,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::AnomalyDetector'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::AnomalyDetector',
@@ -850,7 +850,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudwatch', obj.id),
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::InsightRule'),
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::InsightRule',

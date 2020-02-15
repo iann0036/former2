@@ -518,7 +518,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudfront', obj.id),
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::Distribution'),
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::Distribution',
@@ -541,7 +541,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudfront', obj.id),
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::CloudFrontOriginAccessIdentity'),
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::CloudFrontOriginAccessIdentity',
@@ -585,7 +585,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('cloudfront', obj.id),
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::StreamingDistribution'),
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::StreamingDistribution',

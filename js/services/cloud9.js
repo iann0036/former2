@@ -107,7 +107,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('cloud9', obj.id),
+                'logicalId': getResourceName('cloud9', obj.id, 'AWS::Cloud9::EnvironmentEC2'),
                 'region': obj.region,
                 'service': 'cloud9',
                 'type': 'AWS::Cloud9::EnvironmentEC2',

@@ -204,7 +204,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lakeformation', obj.id),
+            'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::Resource'),
             'region': obj.region,
             'service': 'lakeformation',
             'type': 'AWS::LakeFormation::Resource',
@@ -237,7 +237,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
             tracked_resources.push({
                 'obj': obj,
-                'logicalId': getResourceName('lakeformation', obj.id),
+                'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::Permissions'),
                 'region': obj.region,
                 'service': 'lakeformation',
                 'type': 'AWS::LakeFormation::Permissions',
@@ -249,7 +249,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lakeformation', obj.id),
+            'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::DataLakeSettings'),
             'region': obj.region,
             'service': 'lakeformation',
             'type': 'AWS::LakeFormation::DataLakeSettings',

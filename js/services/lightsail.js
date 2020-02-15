@@ -316,7 +316,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id),
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Instance'), // not real resource type
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_instance',
@@ -327,7 +327,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id),
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Domain'), // not real resource type
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_domain',
@@ -344,7 +344,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id),
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::KeyPair'), // not real resource type
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_key_pair',
@@ -355,7 +355,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id),
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::StaticIp'), // not real resource type
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_static_ip',
@@ -367,7 +367,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id),
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::StaticIpAttachment'), // not real resource type
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_static_ip_attachment',

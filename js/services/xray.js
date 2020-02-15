@@ -117,7 +117,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('xray', obj.id),
+            'logicalId': getResourceName('xray', obj.id, 'AWS::Xray::SamplingRule'), // not real resource type
             'region': obj.region,
             'service': 'xray',
             'terraformType': 'aws_xray_sampling_rule',

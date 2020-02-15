@@ -296,7 +296,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amazonmq', obj.id),
+            'logicalId': getResourceName('amazonmq', obj.id, 'AWS::AmazonMQ::Broker'),
             'region': obj.region,
             'service': 'amazonmq',
             'type': 'AWS::AmazonMQ::Broker',
@@ -320,7 +320,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amazonmq', obj.id),
+            'logicalId': getResourceName('amazonmq', obj.id, 'AWS::AmazonMQ::Configuration'),
             'region': obj.region,
             'service': 'amazonmq',
             'type': 'AWS::AmazonMQ::Configuration',
@@ -335,7 +335,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amazonmq', obj.id),
+            'logicalId': getResourceName('amazonmq', obj.id, 'AWS::AmazonMQ::ConfigurationAssociation'),
             'region': obj.region,
             'service': 'amazonmq',
             'type': 'AWS::AmazonMQ::ConfigurationAssociation',

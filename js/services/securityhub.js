@@ -74,7 +74,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('securityhub', obj.id),
+            'logicalId': getResourceName('securityhub', obj.id, 'AWS::SecurityHub::Hub'),
             'region': obj.region,
             'service': 'securityhub',
             'type': 'AWS::SecurityHub::Hub',
