@@ -824,18 +824,32 @@ $(document).ready(function(){
             }
         });
 
-        $('#scan-account').html('Scanning... (0/' + datatablefuncs.length + ')');
+        var totaldatatables = datatablefuncs.length;
 
-        datatablefuncs.forEach(async func => {
-            await window[func]().catch(err => {});
-            completeddatatablecalls += 1;
-            $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + datatablefuncs.length + ')');
-            if (completeddatatablecalls == datatablefuncs.length) {
-                visited_sections.push("all");
-                $('#scan-account').removeAttr('disabled');
-                $('#scan-account').html('Scan Again');
-            }
-        });
+        $('#scan-account').html('Scanning... (0/' + totaldatatables + ')');
+
+        var MAX_DT_SCANS = 10;
+
+        function processDatatable(dt) {
+            window[dt]().catch(err => {}).finally(() => {
+                completeddatatablecalls += 1;
+                $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + totaldatatables + ')');
+                if (completeddatatablecalls == totaldatatables) {
+                    visited_sections.push("all");
+                    $('#scan-account').removeAttr('disabled');
+                    $('#scan-account').html('Scan Again');
+                }
+
+                var nextdt = datatablefuncs.pop();
+                if (nextdt) {
+                    processDatatable(nextdt);
+                }
+            });
+        }
+
+        for (var i=0; i<MAX_DT_SCANS; i++) {
+            processDatatable(datatablefuncs.pop());
+        }
     });
 
     $('#add-all-resources').on('click', () => {
