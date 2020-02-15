@@ -3008,7 +3008,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeLocalGatewayRouteTables", {
         // no params
-    }, false).then((data) => {
+    }, false).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.LocalGatewayRouteTables.map(async (localgatewayroutetable) => {
