@@ -1080,7 +1080,7 @@ $(document).ready(function(){
         }
     });
 
-    logicalidstrategy = window.localStorage.getItem('logicalidstrategy') || 'serviceprefixhashsuffix';
+    logicalidstrategy = window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix';
     $('#logicalidstrategy').val(logicalidstrategy).trigger('change');
     $('#logicalidstrategy').change(function() {
         window.localStorage.setItem('logicalidstrategy', $(this).val());

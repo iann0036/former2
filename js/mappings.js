@@ -10,7 +10,7 @@ var outputs = [];
 var tracked_resources = [];
 var global_used_refs = [];
 var cfnspacing = "    ";
-var logicalidstrategy = "serviceprefixhashsuffix";
+var logicalidstrategy = "longtypeprefixoptionalindexsuffix";
 var service_mapping_functions = [];
 
 function MD5(e) {
@@ -1469,7 +1469,7 @@ function getResourceName(service, requestId, cfntype) {
             proposed = shorttype + i;
             i += 1;
         }
-    } else if (logicalidstrategy == "longtypeprefixoptionalindexsuffix") {
+    } else if (logicalidstrategy == "longtypeprefixoptionalindexsuffix" || !logicalidstrategy) {
         longtype = cfntype.split("::")[1] + cfntype.split("::").pop();
 
         proposed = longtype;
@@ -1478,7 +1478,7 @@ function getResourceName(service, requestId, cfntype) {
             proposed = longtype + i;
             i += 1;
         }
-    } else { // serviceprefixhashsuffix
+    } else if (logicalidstrategy == "serviceprefixhashsuffix") {
         proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
 
         while (global_used_refs.includes(proposed)) {
