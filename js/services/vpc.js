@@ -1990,6 +1990,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Local Gateway Routes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Destination CIDR Block',
+                        field: 'destinationcidrblock',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'routetableid',
+                        title: 'Route Table ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'virtualinterfacegroupid',
+                        title: 'Virtual Interface Group ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Local Gateway Route Table VPC Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'VPC ID',
+                        field: 'vpcid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'routetableid',
+                        title: 'Route Table ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2038,6 +2122,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -2920,9 +3006,57 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         unblockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
     }).catch(() => { });
 
+    await sdkcall("EC2", "describeLocalGatewayRouteTables", {
+        // no params
+    }, false).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.LocalGatewayRouteTables.map(async (localgatewayroutetable) => {
+            await sdkcall("EC2", "searchLocalGatewayRoutes", {
+                LocalGatewayRouteTableId: localgatewayroutetable.LocalGatewayRouteTableId,
+                Filters: []
+            }, false).then((data) => {
+                data.Routes.forEach(route => {
+                    $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('append', [{
+                        f2id: route.DestinationCidrBlock + " " + route.LocalGatewayVirtualInterfaceGroupId + " " + route.LocalGatewayRouteTableId,
+                        f2type: 'ec2.localgatewayroute',
+                        f2data: route,
+                        f2region: region,
+                        destinationcidrblock: route.DestinationCidrBlock,
+                        virtualinterfacegroupid: route.LocalGatewayVirtualInterfaceGroupId,
+                        routetableid: route.LocalGatewayRouteTableId
+                    }]);
+                });
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
+    }).catch(() => { });
+            
+    await sdkcall("EC2", "describeLocalGatewayRouteTableVpcAssociations", {
+        // no params
+    }, false).then((data) => {
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('removeAll');
+
+        data.LocalGatewayRouteTableVpcAssociations.forEach(association => {
+            $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('append', [{
+                f2id: association.LocalGatewayRouteTableVpcAssociationId,
+                f2type: 'ec2.localgatewayroutetablevpcassociation',
+                f2data: association,
+                f2region: region,
+                vpcid: association.VpcId,
+                routetableid: association.LocalGatewayRouteTableId
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
+    }).catch(() => { });
+
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -4107,6 +4241,32 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ec2',
             'type': 'AWS::EC2::GatewayRouteTableAssociation',
             'terraformType': 'aws_route_table_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.localgatewayroute") {
+        reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
+        reqParams.cfn['LocalGatewayRouteTableId'] = obj.data.LocalGatewayRouteTableId;
+        reqParams.cfn['LocalGatewayVirtualInterfaceGroupId'] = obj.data.LocalGatewayVirtualInterfaceGroupId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::LocalGatewayRoute',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.localgatewayroutetablevpcassociation") {
+        reqParams.cfn['LocalGatewayRouteTableId'] = obj.data.LocalGatewayRouteTableId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::LocalGatewayRouteTableVPCAssociation',
             'options': reqParams
         });
     } else {
