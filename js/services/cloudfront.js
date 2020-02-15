@@ -176,6 +176,26 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
 
+    await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
+        // no params
+    }, true).then((data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('removeAll');
+
+        data.CloudFrontOriginAccessIdentityList.Items.forEach(oai => {
+            $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('append', [{
+                f2id: oai.Id,
+                f2type: 'cloudfront.originaccessidentity',
+                f2data: oai,
+                f2region: region,
+                id: oai.Id,
+                s3canonicaluserid: oai.S3CanonicalUserId,
+                comment: oai.Comment
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
+    });
+
     await sdkcall("CloudFront", "listDistributions", {
         // no params
     }, true).then((data) => {
@@ -217,26 +237,6 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
-    });
-
-    await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
-        // no params
-    }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('removeAll');
-
-        data.CloudFrontOriginAccessIdentityList.Items.forEach(oai => {
-            $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('append', [{
-                f2id: oai.Id,
-                f2type: 'cloudfront.originaccessidentity',
-                f2data: oai,
-                f2region: region,
-                id: oai.Id,
-                s3canonicaluserid: oai.S3CanonicalUserId,
-                comment: oai.Comment
-            }]);
-        });
-
-        unblockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
     });
 }
 
