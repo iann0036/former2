@@ -935,6 +935,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Firewall Manager Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resourcetype',
+                        title: 'Resource Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'servicesecuritytype',
+                        title: 'Service Security Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Firewall Manager Notification Channel': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Topic ARN',
+                        field: 'topicarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolename',
+                        title: 'Role Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -962,12 +1046,16 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagernotificationchannel-datatable');
 
     $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('removeAll');
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listWebACLs", {
@@ -1628,11 +1716,57 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
         unblockUI('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable');
     }).catch(() => { });
 
+    await sdkcall("FMS", "listPolicies", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.PolicyList.map(policy => {
+            return sdkcall("FMS", "getPolicy", {
+                PolicyId: policy.PolicyId
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('append', [{
+                    f2id: data.Policy.PolicyId,
+                    f2type: 'fms.policy',
+                    f2data: data.Policy,
+                    f2region: region,
+                    name: data.Policy.PolicyName,
+                    resourcetype: data.Policy.ResourceType,
+                    servicesecuritytype: data.Policy.SecurityServicePolicyData.Type
+                }]);
+            });
+        }));
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable');
+    }).catch(() => { });
+
+    await sdkcall("FMS", "getNotificationChannel", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('removeAll');
+        
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('append', [{
+            f2id: 'FMSNotificationChannel',
+            f2type: 'fms.notificationchannel',
+            f2data: {
+                'SnsTopicArn': data.SnsTopicArn,
+                'SnsRoleName': data.SnsRoleName
+            },
+            f2region: region,
+            topicarn: data.SnsTopicArn,
+            rolename: data.SnsRoleName
+        }]);
+
+        unblockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable');
+    }).catch(() => { });
+
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2351,6 +2485,45 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::WebACLAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "fms.policy") {
+        reqParams.cfn['PolicyName'] = obj.data.PolicyName;
+        reqParams.cfn['SecurityServicePolicyData'] = obj.data.SecurityServicePolicyData;
+        reqParams.cfn['ResourceType'] = obj.data.ResourceType;
+        reqParams.cfn['ResourceTypeList'] = obj.data.ResourceTypeList;
+        reqParams.cfn['ResourceTags'] = obj.data.ResourceTags;
+        reqParams.cfn['ExcludeResourceTags'] = obj.data.ExcludeResourceTags;
+        reqParams.cfn['RemediationEnabled'] = obj.data.RemediationEnabled;
+        reqParams.cfn['IncludeMap'] = obj.data.IncludeMap;
+        reqParams.cfn['ExcludeMap'] = obj.data.ExcludeMap;
+        reqParams.cfn['PolicyName'] = obj.data.PolicyName;
+
+        /*
+        TODO:
+        DeleteAllPolicyResources: Boolean
+        Tags: 
+            - PolicyTag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('fms', obj.id),
+            'region': obj.region,
+            'service': 'fms',
+            'type': 'AWS::FMS::Policy',
+            'options': reqParams
+        });
+    } else if (obj.type == "fms.notificationchannel") {
+        reqParams.cfn['SnsRoleName'] = obj.data.SnsRoleName;
+        reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('fms', obj.id),
+            'region': obj.region,
+            'service': 'fms',
+            'type': 'AWS::FMS::NotificationChannel',
             'options': reqParams
         });
     } else {

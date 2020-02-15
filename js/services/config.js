@@ -333,6 +333,98 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Conformance Packs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'deliverybucket',
+                        title: 'Delivery Bucket',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deliverykeyprefix',
+                        title: 'Delivery Key Prefix',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Organization Conformance Packs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'deliverybucket',
+                        title: 'Delivery Bucket',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deliverykeyprefix',
+                        title: 'Delivery Key Prefix',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -345,6 +437,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     blockUI('#section-managementandgovernance-config-configurationrecorder-datatable');
     blockUI('#section-managementandgovernance-config-aggregationauthorizations-datatable');
     blockUI('#section-managementandgovernance-config-deliverychannels-datatable');
+    blockUI('#section-managementandgovernance-config-conformancepacks-datatable');
 
     await sdkcall("ConfigService", "describeConfigRules", {
         // no params
@@ -484,6 +577,46 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-deliverychannels-datatable');
+    });
+
+    await sdkcall("ConfigService", "describeConformancePacks", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-config-conformancepacks-datatable').bootstrapTable('removeAll');
+
+        data.ConformancePackDetails.forEach(conformancepack => {
+            $('#section-managementandgovernance-config-conformancepacks-datatable').bootstrapTable('append', [{
+                f2id: conformancepack.ConformancePackArn,
+                f2type: 'config.conformancepack',
+                f2data: conformancepack,
+                f2region: region,
+                name: conformancepack.ConformancePackName,
+                deliverybucket: conformancepack.DeliveryS3Bucket,
+                deliverykeyprefix: conformancepack.DeliveryS3KeyPrefix
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-config-conformancepacks-datatable');
+    });
+
+    await sdkcall("ConfigService", "describeOrganizationConformancePacks", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-config-organizationconformancepacks-datatable').bootstrapTable('removeAll');
+
+        data.OrganizationConformancePackDetails.forEach(conformancepack => {
+            $('#section-managementandgovernance-config-organizationconformancepacks-datatable').bootstrapTable('append', [{
+                f2id: conformancepack.OrganizationConformancePackArn,
+                f2type: 'config.organizationconformancepack',
+                f2data: conformancepack,
+                f2region: region,
+                name: conformancepack.OrganizationConformancePackName,
+                deliverybucket: conformancepack.DeliveryS3Bucket,
+                deliverykeyprefix: conformancepack.DeliveryS3KeyPrefix
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-config-organizationconformancepacks-datatable');
     });
 }
 
@@ -678,6 +811,47 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::OrganizationConfigRule',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.conformancepack") {
+        reqParams.cfn['ConformancePackName'] = obj.data.ConformancePackName;
+        reqParams.cfn['DeliveryS3Bucket'] = obj.data.DeliveryS3Bucket;
+        reqParams.cfn['DeliveryS3KeyPrefix'] = obj.data.DeliveryS3KeyPrefix;
+        reqParams.cfn['ConformancePackInputParameters'] = obj.data.ConformancePackInputParameters;
+
+        /*
+        TODO:
+        TemplateBody: String
+        TemplateS3Uri: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::ConformancePack',
+            'options': reqParams
+        });
+    } else if (obj.type == "config.organizationnconformancepack") {
+        reqParams.cfn['OrganizationConformancePackName'] = obj.data.OrganizationConformancePackName;
+        reqParams.cfn['DeliveryS3Bucket'] = obj.data.DeliveryS3Bucket;
+        reqParams.cfn['DeliveryS3KeyPrefix'] = obj.data.DeliveryS3KeyPrefix;
+        reqParams.cfn['ConformancePackInputParameters'] = obj.data.ConformancePackInputParameters;
+        reqParams.cfn['ExcludedAccounts'] = obj.data.ExcludedAccounts;
+
+        /*
+        TODO:
+        TemplateBody: String
+        TemplateS3Uri: String
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::OrganizationConformancePack',
             'options': reqParams
         });
     } else {

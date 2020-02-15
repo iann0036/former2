@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**497/503 (98%)** Resources Covered
+**503/503 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -127,10 +127,10 @@
 | *AWS::Config::ConfigRule* | :thumbsup: |
 | *AWS::Config::ConfigurationAggregator* | :thumbsup: |
 | *AWS::Config::ConfigurationRecorder* | :thumbsup: |
-| *AWS::Config::ConformancePack* |  |
+| *AWS::Config::ConformancePack* | :thumbsup: |
 | *AWS::Config::DeliveryChannel* | :thumbsup: |
 | *AWS::Config::OrganizationConfigRule* | :thumbsup: |
-| *AWS::Config::OrganizationConformancePack* |  |
+| *AWS::Config::OrganizationConformancePack* | :thumbsup: |
 | *AWS::Config::RemediationConfiguration* | :thumbsup: |
 | *AWS::DAX::Cluster* | :thumbsup: |
 | *AWS::DAX::ParameterGroup* | :thumbsup: |
@@ -167,8 +167,8 @@
 | *AWS::EC2::Instance* | :thumbsup: |
 | *AWS::EC2::InternetGateway* | :thumbsup: |
 | *AWS::EC2::LaunchTemplate* | :thumbsup: |
-| *AWS::EC2::LocalGatewayRoute* |  |
-| *AWS::EC2::LocalGatewayRouteTableVPCAssociation* |  |
+| *AWS::EC2::LocalGatewayRoute* | :thumbsup: |
+| *AWS::EC2::LocalGatewayRouteTableVPCAssociation* | :thumbsup: |
 | *AWS::EC2::NatGateway* | :thumbsup: |
 | *AWS::EC2::NetworkAcl* | :thumbsup: |
 | *AWS::EC2::NetworkAclEntry* | :thumbsup: |
@@ -249,8 +249,8 @@
 | *AWS::Events::EventBus* | :thumbsup: |
 | *AWS::Events::EventBusPolicy* | :thumbsup: |
 | *AWS::Events::Rule* | :thumbsup: |
-| *AWS::FMS::NotificationChannel* |  |
-| *AWS::FMS::Policy* |  |
+| *AWS::FMS::NotificationChannel* | :thumbsup: |
+| *AWS::FMS::Policy* | :thumbsup: |
 | *AWS::FSx::FileSystem* | :thumbsup: |
 | *AWS::GameLift::Alias* | :thumbsup: |
 | *AWS::GameLift::Build* | :thumbsup: |
