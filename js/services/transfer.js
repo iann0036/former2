@@ -249,7 +249,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['logging_role'] = obj.data.LoggingRole;
         if (obj.data.EndpointDetails) {
             reqParams.cfn['EndpointDetails'] = {
-                'VpcEndpointId': obj.data.EndpointDetails.VpcEndpointId
+                'AddressAllocationIds': obj.data.EndpointDetails.AddressAllocationIds,
+                'SubnetIds': obj.data.EndpointDetails.SubnetIds,
+                'VpcEndpointId': obj.data.EndpointDetails.VpcEndpointId,
+                'VpcId': obj.data.EndpointDetails.VpcId
             };
             reqParams.tf['endpoint_details'] = {
                 'vpc_endpoint_id': obj.data.EndpointDetails.VpcEndpointId
@@ -292,6 +295,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['server_id'] = obj.data.ServerId;
         reqParams.cfn['HomeDirectory'] = obj.data.User.HomeDirectory;
         reqParams.tf['home_directory'] = obj.data.User.HomeDirectory;
+        reqParams.cfn['HomeDirectoryMappings'] = obj.data.User.HomeDirectoryMappings;
+        reqParams.cfn['HomeDirectoryType'] = obj.data.User.HomeDirectoryType;
         reqParams.cfn['Policy'] = obj.data.User.Policy;
         reqParams.tf['policy'] = obj.data.User.Policy;
         reqParams.cfn['Role'] = obj.data.User.Role;
