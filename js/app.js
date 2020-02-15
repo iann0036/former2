@@ -831,6 +831,8 @@ $(document).ready(function(){
         var MAX_DT_SCANS = 10;
 
         function processDatatable(dt) {
+            // var starttime = new Date();
+
             window[dt]().catch(err => {}).finally(() => {
                 completeddatatablecalls += 1;
                 $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + totaldatatables + ')');
@@ -839,6 +841,8 @@ $(document).ready(function(){
                     $('#scan-account').removeAttr('disabled');
                     $('#scan-account').html('Scan Again');
                 }
+
+                // console.log("Finished " + dt + " - " + Math.ceil((new Date() - starttime)/1000)); // for performance testing
 
                 var nextdt = datatablefuncs.shift();
                 if (nextdt) {

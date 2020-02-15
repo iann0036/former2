@@ -444,197 +444,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
 
-    await sdkcall("IAM", "listGroups", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Groups.map(async (group) => {
-            await sdkcall("IAM", "listAttachedGroupPolicies", {
-                GroupName: group.GroupName
-            }, true).then((attachedpolicies) => {
-                group['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
-
-                $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
-                    f2id: group.Arn,
-                    f2type: 'iam.group',
-                    f2data: group,
-                    f2region: region,
-                    f2link: 'https://console.aws.amazon.com/iam/home?#/groups/' + group.GroupName,
-                    name: group.GroupName,
-                    id: group.GroupId,
-                    path: group.Path
-                }]);
-            });
-
-            return sdkcall("IAM", "listGroupPolicies", {
-                GroupName: group.GroupName
-            }, true).then(async (data) => {
-                await Promise.all(data.PolicyNames.map(policyname => {
-                    return sdkcall("IAM", "getGroupPolicy", {
-                        PolicyName: policyname,
-                        GroupName: group.GroupName
-                    }, true).then(async (policydata) => {
-                        $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                            f2id: group.GroupName + " " + policyname + " Group Inline Policy",
-                            f2type: 'iam.policy',
-                            f2data: {
-                                'type': 'group',
-                                'groupname': group.GroupName,
-                                'policyname': policyname,
-                                'document': policydata.PolicyDocument
-                            },
-                            f2region: region,
-                            name: policyname,
-                            owner: group.GroupName,
-                            type: "Group"
-                        }]);
-                    });
-                }));
-            });
-        }));
-    });
-
-    await sdkcall("IAM", "listUsers", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Users.map(async (user) => {
-            await Promise.all([
-                sdkcall("IAM", "listAttachedUserPolicies", {
-                    UserName: user.UserName
-                }, true).then((attachedpolicies) => {
-                    user['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
-                }),
-                sdkcall("IAM", "listGroupsForUser", {
-                    UserName: user.UserName
-                }, true).then((groups) => {
-                    user['Groups'] = groups.Groups.map(group => group.GroupName);
-                })
-            ]);
-
-            $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
-                f2id: user.Arn,
-                f2type: 'iam.user',
-                f2data: user,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/iam/home?#/users/' + user.UserName,
-                username: user.UserName,
-                path: user.Path,
-                id: user.UserId
-            }]);
-
-            await sdkcall("IAM", "listAccessKeys", {
-                UserName: user.UserName
-            }, true).then((data) => {
-                data.AccessKeyMetadata.forEach(accessKey => {
-                    $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
-                        f2id: accessKey.AccessKeyId,
-                        f2type: 'iam.accesskey',
-                        f2data: accessKey,
-                        f2region: region,
-                        id: accessKey.AccessKeyId,
-                        username: accessKey.UserName
-                    }]);
-                });
-            });
-            
-            return sdkcall("IAM", "listUserPolicies", {
-                UserName: user.UserName
-            }, true).then(async (data) => {
-                await Promise.all(data.PolicyNames.map(policyname => {
-                    return sdkcall("IAM", "getUserPolicy", {
-                        PolicyName: policyname,
-                        UserName: user.UserName
-                    }, true).then(async (policydata) => {
-                        $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                            f2id: user.UserName + " " + policyname + " User Inline Policy",
-                            f2type: 'iam.policy',
-                            f2data: {
-                                'type': 'user',
-                                'username': user.UserName,
-                                'policyname': policyname,
-                                'document': policydata.PolicyDocument
-                            },
-                            f2region: region,
-                            name: policyname,
-                            owner: user.UserName,
-                            type: "User"
-                        }]);
-                    });
-                }));
-            });
-        }));
-    });
-
-    await sdkcall("IAM", "listRoles", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Roles.map(async (role) => {
-            if (role.Path.startsWith("/aws-service-role/")) {
-                $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
-                    f2id: role.Arn,
-                    f2type: 'iam.servicelinkedrole',
-                    f2data: role,
-                    f2region: region,
-                    name: role.RoleName,
-                    path: role.Path,
-                    id: role.RoleId,
-                    description: role.Description
-                }]);
-            } else {
-                await sdkcall("IAM", "listAttachedRolePolicies", {
-                    RoleName: role.RoleName
-                }, true).then((attachedpolicies) => {
-                    role['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
-
-                    $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
-                        f2id: role.Arn,
-                        f2type: 'iam.role',
-                        f2data: role,
-                        f2region: region,
-                        f2link: 'https://console.aws.amazon.com/iam/home?#/roles/' + role.RoleName,
-                        name: role.RoleName,
-                        path: role.Path,
-                        id: role.RoleId,
-                        description: role.Description
-                    }]);
-                });
-            }
-
-            return sdkcall("IAM", "listRolePolicies", {
-                RoleName: role.RoleName
-            }, true).then(async (data) => {
-                await Promise.all(data.PolicyNames.map(policyname => {
-                    return sdkcall("IAM", "getRolePolicy", {
-                        PolicyName: policyname,
-                        RoleName: role.RoleName
-                    }, true).then(async (policydata) => {
-                        $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                            f2id: role.RoleName + " " + policyname + " Role Inline Policy",
-                            f2type: 'iam.policy',
-                            f2data: {
-                                'type': 'role',
-                                'rolename': role.RoleName,
-                                'policyname': policyname,
-                                'document': policydata.PolicyDocument
-                            },
-                            f2region: region,
-                            name: policyname,
-                            owner: role.RoleName,
-                            type: "Role"
-                        }]);
-                    });
-                }));
-            });
-        }));
-    });
-
     await sdkcall("IAM", "listPolicies", {
         Scope: 'Local'
     }, true).then(async (data) => {
@@ -667,6 +476,198 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             return Promise.resolve();
         }));
     });
+
+    await Promise.all([
+        sdkcall("IAM", "listGroups", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
+
+            await Promise.all(data.Groups.map(async (group) => {
+                await sdkcall("IAM", "listAttachedGroupPolicies", {
+                    GroupName: group.GroupName
+                }, true).then((attachedpolicies) => {
+                    group['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
+
+                    $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
+                        f2id: group.Arn,
+                        f2type: 'iam.group',
+                        f2data: group,
+                        f2region: region,
+                        f2link: 'https://console.aws.amazon.com/iam/home?#/groups/' + group.GroupName,
+                        name: group.GroupName,
+                        id: group.GroupId,
+                        path: group.Path
+                    }]);
+                });
+
+                return sdkcall("IAM", "listGroupPolicies", {
+                    GroupName: group.GroupName
+                }, true).then(async (data) => {
+                    await Promise.all(data.PolicyNames.map(policyname => {
+                        return sdkcall("IAM", "getGroupPolicy", {
+                            PolicyName: policyname,
+                            GroupName: group.GroupName
+                        }, true).then(async (policydata) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: group.GroupName + " " + policyname + " Group Inline Policy",
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'group',
+                                    'groupname': group.GroupName,
+                                    'policyname': policyname,
+                                    'document': policydata.PolicyDocument
+                                },
+                                f2region: region,
+                                name: policyname,
+                                owner: group.GroupName,
+                                type: "Group"
+                            }]);
+                        });
+                    }));
+                });
+            }));
+
+            await sdkcall("IAM", "listUsers", {
+                // no params
+            }, true).then(async (data) => {
+                $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
+                $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
+
+                await Promise.all(data.Users.map(async (user) => {
+                    await Promise.all([
+                        sdkcall("IAM", "listAttachedUserPolicies", {
+                            UserName: user.UserName
+                        }, true).then((attachedpolicies) => {
+                            user['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
+                        }),
+                        sdkcall("IAM", "listGroupsForUser", {
+                            UserName: user.UserName
+                        }, true).then((groups) => {
+                            user['Groups'] = groups.Groups.map(group => group.GroupName);
+                        })
+                    ]);
+
+                    $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
+                        f2id: user.Arn,
+                        f2type: 'iam.user',
+                        f2data: user,
+                        f2region: region,
+                        f2link: 'https://console.aws.amazon.com/iam/home?#/users/' + user.UserName,
+                        username: user.UserName,
+                        path: user.Path,
+                        id: user.UserId
+                    }]);
+
+                    await sdkcall("IAM", "listAccessKeys", {
+                        UserName: user.UserName
+                    }, true).then((data) => {
+                        data.AccessKeyMetadata.forEach(accessKey => {
+                            $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
+                                f2id: accessKey.AccessKeyId,
+                                f2type: 'iam.accesskey',
+                                f2data: accessKey,
+                                f2region: region,
+                                id: accessKey.AccessKeyId,
+                                username: accessKey.UserName
+                            }]);
+                        });
+                    });
+                    
+                    return sdkcall("IAM", "listUserPolicies", {
+                        UserName: user.UserName
+                    }, true).then(async (data) => {
+                        await Promise.all(data.PolicyNames.map(policyname => {
+                            return sdkcall("IAM", "getUserPolicy", {
+                                PolicyName: policyname,
+                                UserName: user.UserName
+                            }, true).then(async (policydata) => {
+                                $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                    f2id: user.UserName + " " + policyname + " User Inline Policy",
+                                    f2type: 'iam.policy',
+                                    f2data: {
+                                        'type': 'user',
+                                        'username': user.UserName,
+                                        'policyname': policyname,
+                                        'document': policydata.PolicyDocument
+                                    },
+                                    f2region: region,
+                                    name: policyname,
+                                    owner: user.UserName,
+                                    type: "User"
+                                }]);
+                            });
+                        }));
+                    });
+                }));
+            });
+        }),
+        sdkcall("IAM", "listRoles", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
+            $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
+
+            await Promise.all(data.Roles.map(async (role) => {
+                if (role.Path.startsWith("/aws-service-role/")) {
+                    $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
+                        f2id: role.Arn,
+                        f2type: 'iam.servicelinkedrole',
+                        f2data: role,
+                        f2region: region,
+                        name: role.RoleName,
+                        path: role.Path,
+                        id: role.RoleId,
+                        description: role.Description
+                    }]);
+                } else {
+                    await sdkcall("IAM", "listAttachedRolePolicies", {
+                        RoleName: role.RoleName
+                    }, true).then((attachedpolicies) => {
+                        role['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
+
+                        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
+                            f2id: role.Arn,
+                            f2type: 'iam.role',
+                            f2data: role,
+                            f2region: region,
+                            f2link: 'https://console.aws.amazon.com/iam/home?#/roles/' + role.RoleName,
+                            name: role.RoleName,
+                            path: role.Path,
+                            id: role.RoleId,
+                            description: role.Description
+                        }]);
+                    });
+                }
+
+                return sdkcall("IAM", "listRolePolicies", {
+                    RoleName: role.RoleName
+                }, true).then(async (data) => {
+                    await Promise.all(data.PolicyNames.map(policyname => {
+                        return sdkcall("IAM", "getRolePolicy", {
+                            PolicyName: policyname,
+                            RoleName: role.RoleName
+                        }, true).then(async (policydata) => {
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                f2id: role.RoleName + " " + policyname + " Role Inline Policy",
+                                f2type: 'iam.policy',
+                                f2data: {
+                                    'type': 'role',
+                                    'rolename': role.RoleName,
+                                    'policyname': policyname,
+                                    'document': policydata.PolicyDocument
+                                },
+                                f2region: region,
+                                name: policyname,
+                                owner: role.RoleName,
+                                type: "Role"
+                            }]);
+                        });
+                    }));
+                });
+            }));
+        })
+    ]);
 
     await sdkcall("IAM", "listInstanceProfiles", {
         // no params
