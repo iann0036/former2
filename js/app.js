@@ -1061,6 +1061,13 @@ $(document).ready(function(){
             cfnspacing = "    ";
         }
     });
+
+    var logicalidstrategy = window.localStorage.getItem('logicalidstrategy') || 'serviceprefixed';
+    $('#logicalidstrategy').change(function() {
+        window.localStorage.setItem('logicalidstrategy', $(this).val());
+        logicalidstrategy = $(this).val();
+    });
+
     if (window.localStorage.getItem('relatedresourcessetting') == "true") {
         $('#relatedresourcessetting').prop('checked', true);
     }

@@ -10,6 +10,7 @@ var outputs = [];
 var tracked_resources = [];
 var global_used_refs = [];
 var cfnspacing = "    ";
+var logicalidstrategy = "serviceprefixed";
 var service_mapping_functions = [];
 
 function MD5(e) {
