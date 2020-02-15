@@ -444,6 +444,57 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
     $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
 
+    await sdkcall("IAM", "listGroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.Groups.map(async (group) => {
+            await sdkcall("IAM", "listAttachedGroupPolicies", {
+                GroupName: group.GroupName
+            }, true).then((attachedpolicies) => {
+                group['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
+
+                $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
+                    f2id: group.Arn,
+                    f2type: 'iam.group',
+                    f2data: group,
+                    f2region: region,
+                    f2link: 'https://console.aws.amazon.com/iam/home?#/groups/' + group.GroupName,
+                    name: group.GroupName,
+                    id: group.GroupId,
+                    path: group.Path
+                }]);
+            });
+
+            return sdkcall("IAM", "listGroupPolicies", {
+                GroupName: group.GroupName
+            }, true).then(async (data) => {
+                await Promise.all(data.PolicyNames.map(policyname => {
+                    return sdkcall("IAM", "getGroupPolicy", {
+                        PolicyName: policyname,
+                        GroupName: group.GroupName
+                    }, true).then(async (policydata) => {
+                        $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                            f2id: group.GroupName + " " + policyname + " Group Inline Policy",
+                            f2type: 'iam.policy',
+                            f2data: {
+                                'type': 'group',
+                                'groupname': group.GroupName,
+                                'policyname': policyname,
+                                'document': policydata.PolicyDocument
+                            },
+                            f2region: region,
+                            name: policyname,
+                            owner: group.GroupName,
+                            type: "Group"
+                        }]);
+                    });
+                }));
+            });
+        }));
+    });
+
     await sdkcall("IAM", "listUsers", {
         // no params
     }, true).then(async (data) => {
@@ -511,57 +562,6 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                             name: policyname,
                             owner: user.UserName,
                             type: "User"
-                        }]);
-                    });
-                }));
-            });
-        }));
-    });
-
-    await sdkcall("IAM", "listGroups", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
-
-        await Promise.all(data.Groups.map(async (group) => {
-            await sdkcall("IAM", "listAttachedGroupPolicies", {
-                GroupName: group.GroupName
-            }, true).then((attachedpolicies) => {
-                group['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
-
-                $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
-                    f2id: group.Arn,
-                    f2type: 'iam.group',
-                    f2data: group,
-                    f2region: region,
-                    f2link: 'https://console.aws.amazon.com/iam/home?#/groups/' + group.GroupName,
-                    name: group.GroupName,
-                    id: group.GroupId,
-                    path: group.Path
-                }]);
-            });
-
-            return sdkcall("IAM", "listGroupPolicies", {
-                GroupName: group.GroupName
-            }, true).then(async (data) => {
-                await Promise.all(data.PolicyNames.map(policyname => {
-                    return sdkcall("IAM", "getGroupPolicy", {
-                        PolicyName: policyname,
-                        GroupName: group.GroupName
-                    }, true).then(async (policydata) => {
-                        $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
-                            f2id: group.GroupName + " " + policyname + " Group Inline Policy",
-                            f2type: 'iam.policy',
-                            f2data: {
-                                'type': 'group',
-                                'groupname': group.GroupName,
-                                'policyname': policyname,
-                                'document': policydata.PolicyDocument
-                            },
-                            f2region: region,
-                            name: policyname,
-                            owner: group.GroupName,
-                            type: "Group"
                         }]);
                     });
                 }));
