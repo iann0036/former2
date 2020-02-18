@@ -119,7 +119,7 @@ async function updateDatatableStorageGlacier() {
                     }, true).then((data) => {
                         vault['NotificationConfig'] = data.vaultNotificationConfig;
 
-                        $('#section-storage-glacier-vaults-datatable').bootstrapTable('append', [{
+                        $('#section-storage-glacier-vaults-datatable').deferredBootstrapTable('append', [{
                             f2id: vault.VaultARN,
                             f2type: 'glacier.vault',
                             f2data: vault,
@@ -134,7 +134,7 @@ async function updateDatatableStorageGlacier() {
                     VaultName: vault.VaultName
                 }, false).then((data) => {
                     data['VaultName'] = vault.VaultName;
-                    $('#section-storage-glacier-vaultlocks-datatable').bootstrapTable('append', [{
+                    $('#section-storage-glacier-vaultlocks-datatable').deferredBootstrapTable('append', [{
                         f2id: vault.VaultName + " VaultLock",
                         f2type: 'glacier.vaultlock',
                         f2data: data,

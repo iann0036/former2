@@ -1069,7 +1069,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }, true).then((data) => {
                     data.WebACL['Scope'] = "CLOUDFRONT";
 
-                    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').deferredBootstrapTable('append', [{
                         f2id: data.WebACL.ARN,
                         f2type: 'waf.v2webacl',
                         f2data: data.WebACL,
@@ -1092,7 +1092,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 ResourceType: 'APPLICATION_LOAD_BALANCER'
             }, true).then((data) => {
                 data.ResourceArns.forEach(resourceArn => {
-                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: webAcl.ARN + ' ' + resourceArn,
                         f2type: 'waf.v2webaclassociation',
                         f2data: {
@@ -1111,7 +1111,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 ResourceType: 'API_GATEWAY'
             }, true).then((data) => {
                 data.ResourceArns.forEach(resourceArn => {
-                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: webAcl.ARN + ' ' + resourceArn,
                         f2type: 'waf.v2webaclassociation',
                         f2data: {
@@ -1132,7 +1132,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             }, true).then((data) => {
                 data.WebACL['Scope'] = "REGIONAL";
 
-                $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').deferredBootstrapTable('append', [{
                     f2id: data.WebACL.ARN,
                     f2type: 'waf.v2webacl',
                     f2data: data.WebACL,
@@ -1157,7 +1157,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }, true).then((data) => {
                     data.RuleGroup['Scope'] = "CLOUDFRONT";
 
-                    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').deferredBootstrapTable('append', [{
                         f2id: data.RuleGroup.ARN,
                         f2type: 'waf.v2rulegroup',
                         f2data: data.RuleGroup,
@@ -1182,7 +1182,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             }, true).then((data) => {
                 data.RuleGroup['Scope'] = "REGIONAL";
 
-                $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').deferredBootstrapTable('append', [{
                     f2id: data.RuleGroup.ARN,
                     f2type: 'waf.v2rulegroup',
                     f2data: data.RuleGroup,
@@ -1207,7 +1207,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }, true).then((data) => {
                     data.IPSet['Scope'] = "CLOUDFRONT";
 
-                    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.IPSet.ARN,
                         f2type: 'waf.v2ipset',
                         f2data: data.IPSet,
@@ -1232,7 +1232,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             }, true).then((data) => {
                 data.IPSet['Scope'] = "REGIONAL";
 
-                $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.IPSet.ARN,
                     f2type: 'waf.v2ipset',
                     f2data: data.IPSet,
@@ -1257,7 +1257,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 }, true).then((data) => {
                     data.RegexPatternSet['Scope'] = "CLOUDFRONT";
 
-                    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.RegexPatternSet.ARN,
                         f2type: 'waf.v2regexpatternset',
                         f2data: data.RegexPatternSet,
@@ -1282,7 +1282,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             }, true).then((data) => {
                 data.RegexPatternSet['Scope'] = "REGIONAL";
 
-                $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.RegexPatternSet.ARN,
                     f2type: 'waf.v2regexpatternset',
                     f2data: data.RegexPatternSet,
@@ -1304,7 +1304,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getWebACL", {
                 WebACLId: webAcl.WebACLId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').deferredBootstrapTable('append', [{
                     f2id: data.WebACL.WebACLId,
                     f2type: 'waf.webacl',
                     f2data: data.WebACL,
@@ -1329,7 +1329,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 return sdkcall("WAF", "getRule", {
                     RuleId: rule.RuleId
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-rules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Rule.RuleId,
                         f2type: 'waf.rule',
                         f2data: data.Rule,
@@ -1354,7 +1354,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getXssMatchSet", {
                 XssMatchSetId: xssMatchSet.XssMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.XssMatchSet.XssMatchSetId,
                     f2type: 'waf.xssmatchset',
                     f2data: data.XssMatchSet,
@@ -1377,7 +1377,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getIPSet", {
                 IPSetId: ipSet.IPSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.IPSet.IPSetId,
                     f2type: 'waf.ipset',
                     f2data: data.IPSet,
@@ -1400,7 +1400,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getSizeConstraintSet", {
                 SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.SizeConstraintSet.SizeConstraintSetId,
                     f2type: 'waf.sizeconstraintset',
                     f2data: data.SizeConstraintSet,
@@ -1423,7 +1423,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getSqlInjectionMatchSet", {
                 SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
                     f2type: 'waf.sqlinjectionmatchset',
                     f2data: data.SqlInjectionMatchSet,
@@ -1446,7 +1446,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAF", "getByteMatchSet", {
                 ByteMatchSetId: byteMatchSet.ByteMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ByteMatchSet.ByteMatchSetId,
                     f2type: 'waf.bytematchset',
                     f2data: data.ByteMatchSet,
@@ -1473,7 +1473,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 sdkcall("WAFRegional", "getWebACL", {
                     WebACLId: webAcl.WebACLId
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').deferredBootstrapTable('append', [{
                         f2id: data.WebACL.WebACLId,
                         f2type: 'wafregional.webacl',
                         f2data: data.WebACL,
@@ -1487,7 +1487,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     WebACLId: webAcl.WebACLId
                 }, true).then((data) => {
                     data.ResourceArns.forEach(resourceArn => {
-                        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').deferredBootstrapTable('append', [{
                             f2id: resourceArn,
                             f2type: 'wafregional.webaclassociation',
                             f2data: {
@@ -1516,7 +1516,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getRule", {
                 RuleId: rule.RuleId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Rule.RuleId,
                     f2type: 'wafregional.rule',
                     f2data: data.Rule,
@@ -1540,7 +1540,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getXssMatchSet", {
                 XssMatchSetId: xssMatchSet.XssMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.XssMatchSet.XssMatchSetId,
                     f2type: 'wafregional.xssmatchset',
                     f2data: data.XssMatchSet,
@@ -1563,7 +1563,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getIPSet", {
                 IPSetId: ipSet.IPSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.IPSet.IPSetId,
                     f2type: 'wafregional.ipset',
                     f2data: data.IPSet,
@@ -1586,7 +1586,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getSizeConstraintSet", {
                 SizeConstraintSetId: sizeConstraintSet.SizeConstraintSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.SizeConstraintSet.SizeConstraintSetId,
                     f2type: 'wafregional.sizeconstraintset',
                     f2data: data.SizeConstraintSet,
@@ -1609,7 +1609,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getSqlInjectionMatchSet", {
                 SqlInjectionMatchSetId: sqlInjectionMatchSet.SqlInjectionMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.SqlInjectionMatchSet.SqlInjectionMatchSetId,
                     f2type: 'wafregional.sqlinjectionmatchset',
                     f2data: data.SqlInjectionMatchSet,
@@ -1631,7 +1631,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getByteMatchSet", {
                 ByteMatchSetId: byteMatchSet.ByteMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ByteMatchSet.ByteMatchSetId,
                     f2type: 'wafregional.bytematchset',
                     f2data: data.ByteMatchSet,
@@ -1654,7 +1654,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getGeoMatchSet", {
                 GeoMatchSetId: geoMatchSet.GeoMatchSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.GeoMatchSet.GeoMatchSetId,
                     f2type: 'wafregional.geomatchset',
                     f2data: data.GeoMatchSet,
@@ -1677,7 +1677,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getRegexPatternSet", {
                 RegexPatternSetId: regexPatternSet.RegexPatternSetId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.RegexPatternSet.RegexPatternSetId,
                     f2type: 'wafregional.regexpatternset',
                     f2data: data.RegexPatternSet,
@@ -1700,7 +1700,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("WAFRegional", "getRateBasedRule", {
                 RuleId: rule.RuleId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Rule.RegexPatternSetId,
                     f2type: 'wafregional.ratebasedrule',
                     f2data: data.Rule,
@@ -1725,7 +1725,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("FMS", "getPolicy", {
                 PolicyId: policy.PolicyId
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Policy.PolicyId,
                     f2type: 'fms.policy',
                     f2data: data.Policy,
@@ -1745,7 +1745,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     }, false).then(async (data) => {
         $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('removeAll');
         
-        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('append', [{
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').deferredBootstrapTable('append', [{
             f2id: 'FMSNotificationChannel',
             f2type: 'fms.notificationchannel',
             f2data: {

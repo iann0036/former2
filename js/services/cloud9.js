@@ -68,7 +68,7 @@ async function updateDatatableDeveloperToolsCloud9() {
                 environmentIds: [environmentId]
             }, true).then((data) => {
                 data.environments.forEach(environment => {
-                    $('#section-developertools-cloud9-environments-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-cloud9-environments-datatable').deferredBootstrapTable('append', [{
                         f2id: environment.arn,
                         f2type: 'cloud9.environment',
                         f2data: environment,

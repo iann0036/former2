@@ -150,7 +150,7 @@ async function updateDatatableBlockchainManagedBlockchain() {
                             }, false).then(async (data) => {
                                 data.Member['NetworkDetails'] = networkdetails.Network;
 
-                                $('#section-blockchain-managedblockchain-members-datatable').bootstrapTable('append', [{
+                                $('#section-blockchain-managedblockchain-members-datatable').deferredBootstrapTable('append', [{
                                     f2id: data.Member.Id,
                                     f2type: 'managedblockchain.member',
                                     f2data: data.Member,
@@ -171,7 +171,7 @@ async function updateDatatableBlockchainManagedBlockchain() {
                                         MemberId: member.Id,
                                         NodeId: node.Id
                                     }, false).then(async (data) => {
-                                        $('#section-blockchain-managedblockchain-nodes-datatable').bootstrapTable('append', [{
+                                        $('#section-blockchain-managedblockchain-nodes-datatable').deferredBootstrapTable('append', [{
                                             f2id: data.Node.Id,
                                             f2type: 'managedblockchain.node',
                                             f2data: data.Node,

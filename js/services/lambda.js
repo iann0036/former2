@@ -382,7 +382,7 @@ async function updateDatatableComputeLambda() {
                 sdkcall("Lambda", "getFunction", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, true).then((data) => {
-                    $('#section-compute-lambda-functions-datatable').bootstrapTable('append', [{
+                    $('#section-compute-lambda-functions-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Configuration.FunctionArn,
                         f2type: 'lambda.function',
                         f2data: data,
@@ -402,7 +402,7 @@ async function updateDatatableComputeLambda() {
 
                     policy.Statement.forEach(statement => {
                         statement['FunctionName'] = lambdaFunction.FunctionArn;
-                        $('#section-compute-lambda-permissions-datatable').bootstrapTable('append', [{
+                        $('#section-compute-lambda-permissions-datatable').deferredBootstrapTable('append', [{
                             f2id: statement.FunctionName,
                             f2type: 'lambda.permission',
                             f2data: statement,
@@ -424,7 +424,7 @@ async function updateDatatableComputeLambda() {
                             };
                         }).catch(() => { });
 
-                        $('#section-compute-lambda-aliases-datatable').bootstrapTable('append', [{
+                        $('#section-compute-lambda-aliases-datatable').deferredBootstrapTable('append', [{
                             f2id: alias.AliasArn,
                             f2type: 'lambda.alias',
                             f2data: alias,
@@ -450,7 +450,7 @@ async function updateDatatableComputeLambda() {
                                 };
                             }).catch(() => { });
 
-                            $('#section-compute-lambda-versions-datatable').bootstrapTable('append', [{
+                            $('#section-compute-lambda-versions-datatable').deferredBootstrapTable('append', [{
                                 f2id: version.FunctionArn + ":" + version.Version,
                                 f2type: 'lambda.version',
                                 f2data: version,
@@ -468,7 +468,7 @@ async function updateDatatableComputeLambda() {
 
                     var eventConfigIterator = 1;
                     data.FunctionEventInvokeConfigs.forEach(config => {
-                        $('#section-compute-lambda-eventinvokeconfigs-datatable').bootstrapTable('append', [{
+                        $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('append', [{
                             f2id: config.FunctionArn + " Event Config " + eventConfigIterator,
                             f2type: 'lambda.eventinvokeconfig',
                             f2data: config,
@@ -508,7 +508,7 @@ async function updateDatatableComputeLambda() {
                             VersionNumber: layerVersion.Version
                         }, true).then((data) => {
                             data['LayerName'] = layer.LayerName;
-                            $('#section-compute-lambda-layerversions-datatable').bootstrapTable('append', [{
+                            $('#section-compute-lambda-layerversions-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.LayerVersionArn,
                                 f2type: 'lambda.layerversion',
                                 f2data: data,
@@ -526,7 +526,7 @@ async function updateDatatableComputeLambda() {
 
                             policy.Statement.forEach(statement => {
                                 statement['LayerVersionArn'] = layerVersion.LayerVersionArn;
-                                $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('append', [{
+                                $('#section-compute-lambda-layerversionpermissions-datatable').deferredBootstrapTable('append', [{
                                     f2id: statement.LayerVersionArn,
                                     f2type: 'lambda.layerversionpermission',
                                     f2data: statement,
@@ -553,7 +553,7 @@ async function updateDatatableComputeLambda() {
             return sdkcall("Lambda", "getEventSourceMapping", {
                 UUID: eventSourceMapping.UUID
             }, true).then((data) => {
-                $('#section-compute-lambda-eventsourcemappings-datatable').bootstrapTable('append', [{
+                $('#section-compute-lambda-eventsourcemappings-datatable').deferredBootstrapTable('append', [{
                     f2id: data.UUID,
                     f2type: 'lambda.eventsourcemapping',
                     f2data: data,

@@ -129,7 +129,7 @@ async function updateDatatableStorageEFS() {
         $('#section-storage-efs-filesystems-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.FileSystems.map(fileSystem => {
-            $('#section-storage-efs-filesystems-datatable').bootstrapTable('append', [{
+            $('#section-storage-efs-filesystems-datatable').deferredBootstrapTable('append', [{
                 f2id: fileSystem.FileSystemId,
                 f2type: 'efs.filesystem',
                 f2data: fileSystem,
@@ -154,7 +154,7 @@ async function updateDatatableStorageEFS() {
                             mountTarget['SecurityGroups'].push(group.GroupId);
                         });
 
-                        $('#section-storage-efs-mounttargets-datatable').bootstrapTable('append', [{
+                        $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('append', [{
                             f2id: mountTarget.MountTargetId,
                             f2type: 'efs.mounttarget',
                             f2data: mountTarget,

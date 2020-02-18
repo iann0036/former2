@@ -60,7 +60,7 @@ async function updateDatatableInternetofThingsThingsGraph() {
             return sdkcall("IoTThingsGraph", "getFlowTemplate", {
                 id: flowtemplate.id
             }, true).then(async (data) => {
-                $('#section-internetofthings-thingsgraph-flowtemplates-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-thingsgraph-flowtemplates-datatable').deferredBootstrapTable('append', [{
                     f2id: data.description.summary.arn,
                     f2type: 'iotthingsgraph.flowtemplate',
                     f2data: data.description,

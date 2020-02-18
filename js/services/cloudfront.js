@@ -182,7 +182,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('removeAll');
 
         data.CloudFrontOriginAccessIdentityList.Items.forEach(oai => {
-            $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').deferredBootstrapTable('append', [{
                 f2id: oai.Id,
                 f2type: 'cloudfront.originaccessidentity',
                 f2data: oai,
@@ -202,7 +202,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('removeAll');
 
         data.DistributionList.Items.forEach(distribution => {
-            $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
                 f2id: distribution.ARN,
                 f2type: 'cloudfront.distribution',
                 f2data: distribution,
@@ -224,7 +224,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').bootstrapTable('removeAll');
 
         data.StreamingDistributionList.Items.forEach(distribution => {
-            $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').deferredBootstrapTable('append', [{
                 f2id: distribution.ARN,
                 f2type: 'cloudfront.streamingdistribution',
                 f2data: distribution,

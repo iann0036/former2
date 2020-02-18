@@ -239,7 +239,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
             return sdkcall("DataSync", "describeAgent", {
                 AgentArn: agent.AgentArn
             }, true).then((data) => {
-                $('#section-migrationandtransfer-datasync-agents-datatable').bootstrapTable('append', [{
+                $('#section-migrationandtransfer-datasync-agents-datatable').deferredBootstrapTable('append', [{
                     f2id: data.AgentArn,
                     f2type: 'datasync.agent',
                     f2data: data,
@@ -261,7 +261,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
             return sdkcall("DataSync", "describeTask", {
                 TaskArn: task.TaskArn
             }, true).then((data) => {
-                $('#section-migrationandtransfer-datasync-tasks-datatable').bootstrapTable('append', [{
+                $('#section-migrationandtransfer-datasync-tasks-datatable').deferredBootstrapTable('append', [{
                     f2id: data.TaskArn,
                     f2type: 'datasync.task',
                     f2data: data,
@@ -286,7 +286,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
                 return sdkcall("DataSync", "describeLocationEfs", {
                     LocationArn: location.LocationArn
                 }, true).then((data) => {
-                    $('#section-migrationandtransfer-datasync-efslocations-datatable').bootstrapTable('append', [{
+                    $('#section-migrationandtransfer-datasync-efslocations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.LocationArn,
                         f2type: 'datasync.locationefs',
                         f2data: data,
@@ -299,7 +299,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
                 return sdkcall("DataSync", "describeLocationNfs", {
                     LocationArn: location.LocationArn
                 }, true).then((data) => {
-                    $('#section-migrationandtransfer-datasync-nfslocations-datatable').bootstrapTable('append', [{
+                    $('#section-migrationandtransfer-datasync-nfslocations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.LocationArn,
                         f2type: 'datasync.locationnfs',
                         f2data: data,
@@ -312,7 +312,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
                 return sdkcall("DataSync", "describeLocationS3", {
                     LocationArn: location.LocationArn
                 }, true).then((data) => {
-                    $('#section-migrationandtransfer-datasync-s3locations-datatable').bootstrapTable('append', [{
+                    $('#section-migrationandtransfer-datasync-s3locations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.LocationArn,
                         f2type: 'datasync.locations3',
                         f2data: data,

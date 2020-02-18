@@ -291,7 +291,7 @@ async function updateDatatableCustomerEngagementSES() {
                 }, true).then((data) => {
                     data.EventDestinations.forEach(eventDestination => {
                         eventDestination['ConfigurationSetName'] = configurationSet.Name;
-                        $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('append', [{
+                        $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('append', [{
                             f2id: eventDestination.Name,
                             f2type: 'ses.eventdestination',
                             f2data: eventDestination,
@@ -302,7 +302,7 @@ async function updateDatatableCustomerEngagementSES() {
                         }]);
                     });
 
-                    $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('append', [{
+                    $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ConfigurationSet.Name,
                         f2type: 'ses.configurationset',
                         f2data: data,
@@ -322,7 +322,7 @@ async function updateDatatableCustomerEngagementSES() {
             $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
 
             data.Filters.forEach(filter => {
-                $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('append', [{
+                $('#section-customerengagement-ses-receiptfilters-datatable').deferredBootstrapTable('append', [{
                     f2id: filter.Name,
                     f2type: 'ses.receiptfilter',
                     f2data: filter,
@@ -342,7 +342,7 @@ async function updateDatatableCustomerEngagementSES() {
             $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
 
             await Promise.all(data.RuleSets.map(ruleSet => {
-                $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('append', [{
+                $('#section-customerengagement-ses-receiptrulesets-datatable').deferredBootstrapTable('append', [{
                     f2id: ruleSet.Name,
                     f2type: 'ses.receiptruleset',
                     f2data: ruleSet,
@@ -359,7 +359,7 @@ async function updateDatatableCustomerEngagementSES() {
                         rule['After'] = previousRuleName;
                         previousRuleName = rule.Name;
                         rule['RuleSetName'] = ruleSet.Name;
-                        $('#section-customerengagement-ses-receiptrules-datatable').bootstrapTable('append', [{
+                        $('#section-customerengagement-ses-receiptrules-datatable').deferredBootstrapTable('append', [{
                             f2id: rule.Name,
                             f2type: 'ses.receiptrule',
                             f2data: rule,
@@ -387,7 +387,7 @@ async function updateDatatableCustomerEngagementSES() {
                 return sdkcall("SES", "getTemplate", {
                     TemplateName: template.Name
                 }, true).then((data) => {
-                    $('#section-customerengagement-ses-templates-datatable').bootstrapTable('append', [{
+                    $('#section-customerengagement-ses-templates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Template.TemplateName,
                         f2type: 'ses.template',
                         f2data: data,

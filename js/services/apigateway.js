@@ -1343,7 +1343,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     await sdkcall("APIGateway", "getAccount", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('append', [{
+        $('#section-networkingandcontentdelivery-apigateway-account-datatable').deferredBootstrapTable('append', [{
             f2id: data.cloudwatchRoleArn || (region + "-account"),
             f2type: 'apigateway.account',
             f2data: data,
@@ -1358,7 +1358,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then(async (data) => {
         await Promise.all(data.items.map(domainName => {
-            $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').deferredBootstrapTable('append', [{
                 f2id: domainName.domainName,
                 f2type: 'apigateway.domainname',
                 f2data: domainName,
@@ -1375,7 +1375,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 data.items.forEach(basePathMapping => {
                     basePathMapping['domainName'] = domainName.domainName;
 
-                    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').deferredBootstrapTable('append', [{
                         f2id: basePathMapping.basePath,
                         f2type: 'apigateway.basepathmapping',
                         f2data: basePathMapping,
@@ -1395,7 +1395,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then((data) => {
         data.items.forEach(clientCertificate => {
-            $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').deferredBootstrapTable('append', [{
                 f2id: clientCertificate.clientCertificateId,
                 f2type: 'apigateway.clientcertificate',
                 f2data: clientCertificate,
@@ -1413,7 +1413,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then((data) => {
         data.items.forEach(apiKey => {
-            $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').deferredBootstrapTable('append', [{
                 f2id: apiKey.id,
                 f2type: 'apigateway.apikey',
                 f2data: apiKey,
@@ -1433,7 +1433,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then((data) => {
         data.items.forEach(vpcLink => {
-            $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').deferredBootstrapTable('append', [{
                 f2id: vpcLink.id,
                 f2type: 'apigateway.vpclink',
                 f2data: vpcLink,
@@ -1451,7 +1451,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then(async (data) => {
         await Promise.all(data.items.map(usagePlan => {
-            $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').deferredBootstrapTable('append', [{
                 f2id: usagePlan.id,
                 f2type: 'apigateway.usageplan',
                 f2data: usagePlan,
@@ -1466,7 +1466,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 usagePlanId: usagePlan.id
             }, true).then((data) => {
                 data.items.forEach(usagePlanKey => {
-                    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').deferredBootstrapTable('append', [{
                         f2id: usagePlanKey.id,
                         f2type: 'apigateway.usageplankey',
                         f2data: usagePlanKey,
@@ -1487,7 +1487,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then(async (data) => {
         await Promise.all(data.items.map(api => {
-            $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').deferredBootstrapTable('append', [{
                 f2id: api.id,
                 f2type: 'apigateway.restapi',
                 f2data: api,
@@ -1506,7 +1506,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     if (data.item) {
                         data.item.forEach(requestValidator => {
                             requestValidator['restApiId'] = api.id;
-                            $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').deferredBootstrapTable('append', [{
                                 f2id: requestValidator.id,
                                 f2type: 'apigateway.requestvalidator',
                                 f2data: requestValidator,
@@ -1528,7 +1528,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     if (data.item) {
                         data.item.forEach(documentationPart => {
                             documentationPart['restApiId'] = api.id;
-                            $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').deferredBootstrapTable('append', [{
                                 f2id: documentationPart.id,
                                 f2type: 'apigateway.documentationpart',
                                 f2data: documentationPart,
@@ -1547,7 +1547,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     if (data.item) {
                         data.item.forEach(documentationVersion => {
                             documentationVersion['restApiId'] = api.id;
-                            $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').deferredBootstrapTable('append', [{
                                 f2id: documentationVersion.version,
                                 f2type: 'apigateway.documentationversion',
                                 f2data: documentationVersion,
@@ -1567,7 +1567,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     if (data.item) {
                         data.item.forEach(gatewayResponse => {
                             gatewayResponse['restApiId'] = api.id;
-                            $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').deferredBootstrapTable('append', [{
                                 f2id: gatewayResponse.responseType,
                                 f2type: 'apigateway.gatewayresponse',
                                 f2data: gatewayResponse,
@@ -1586,7 +1586,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.item.forEach(stage => {
                         stage['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').deferredBootstrapTable('append', [{
                             f2id: stage.stageName,
                             f2type: 'apigateway.stage',
                             f2data: stage,
@@ -1605,7 +1605,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.items.forEach(deployment => {
                         deployment['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').deferredBootstrapTable('append', [{
                             f2id: deployment.id,
                             f2type: 'apigateway.deployment',
                             f2data: deployment,
@@ -1631,7 +1631,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                                 }, true).then((data) => {
                                     data['restApiId'] = api.id;
                                     data['resourceId'] = resource.id;
-                                    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('append', [{
+                                    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').deferredBootstrapTable('append', [{
                                         f2id: resource.id + "-" + data.httpMethod,
                                         f2type: 'apigateway.method',
                                         f2data: data,
@@ -1645,7 +1645,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                         }
 
                         resource['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('append', [{
                             f2id: resource.id,
                             f2type: 'apigateway.resource',
                             f2data: resource,
@@ -1665,7 +1665,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.items.forEach(model => {
                         model['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-models-datatable').deferredBootstrapTable('append', [{
                             f2id: model.id,
                             f2type: 'apigateway.model',
                             f2data: model,
@@ -1683,7 +1683,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.items.forEach(authorizer => {
                         authorizer['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').deferredBootstrapTable('append', [{
                             f2id: authorizer.id,
                             f2type: 'apigateway.authorizer',
                             f2data: authorizer,
@@ -1706,7 +1706,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then(async (data) => {
         await Promise.all(data.Items.map(api => {
-            $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('append', [{
                 f2id: api.ApiId,
                 f2type: 'apigatewayv2.api',
                 f2data: api,
@@ -1723,7 +1723,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.Items.forEach(stage => {
                         stage['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-stages-datatable').deferredBootstrapTable('append', [{
                             f2id: stage.StageName,
                             f2type: 'apigatewayv2.stage',
                             f2data: stage,
@@ -1741,7 +1741,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.Items.forEach(deployment => {
                         deployment['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').deferredBootstrapTable('append', [{
                             f2id: deployment.DeploymentId,
                             f2type: 'apigatewayv2.deployment',
                             f2data: deployment,
@@ -1758,7 +1758,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.Items.forEach(model => {
                         model['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-models-datatable').deferredBootstrapTable('append', [{
                             f2id: model.ModelId,
                             f2type: 'apigatewayv2.model',
                             f2data: model,
@@ -1775,7 +1775,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then((data) => {
                     data.Items.forEach(authorizer => {
                         authorizer['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').deferredBootstrapTable('append', [{
                             f2id: authorizer.AuthorizerId,
                             f2type: 'apigatewayv2.authorizer',
                             f2data: authorizer,
@@ -1792,7 +1792,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then(async (data) => {
                     await Promise.all(data.Items.map(route => {
                         route['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-routes-datatable').deferredBootstrapTable('append', [{
                             f2id: route.RouteId,
                             f2type: 'apigatewayv2.route',
                             f2data: route,
@@ -1810,7 +1810,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             data.Items.forEach(routeResponse => {
                                 routeResponse['ApiId'] = api.ApiId;
                                 routeResponse['RouteId'] = route.RouteId;
-                                $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-apigateway-routes-datatable').deferredBootstrapTable('append', [{
                                     f2id: routeResponse.RouteResponseId,
                                     f2type: 'apigatewayv2.routeresponse',
                                     f2data: routeResponse,
@@ -1829,7 +1829,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 }, true).then(async (data) => {
                     await Promise.all(data.Items.map(integration => {
                         integration['ApiId'] = api.ApiId;
-                        $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').deferredBootstrapTable('append', [{
                             f2id: integration.IntegrationId,
                             f2type: 'apigatewayv2.integration',
                             f2data: integration,
@@ -1849,7 +1849,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                             data.Items.forEach(integrationResponse => {
                                 integrationResponse['ApiId'] = api.ApiId;
                                 integrationResponse['IntegrationId'] = integration.IntegrationId;
-                                $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').deferredBootstrapTable('append', [{
                                     f2id: integrationResponse.IntegrationResponseId,
                                     f2type: 'apigatewayv2.integrationresponse',
                                     f2data: integrationResponse,
@@ -1875,7 +1875,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     certificatename = domainName.DomainNameConfigurations[0].CertificateName;
                 }
 
-                $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').deferredBootstrapTable('append', [{
                     f2id: domainName.DomainName,
                     f2type: 'apigatewayv2.domainname',
                     f2data: domainName,
@@ -1892,7 +1892,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     data.Items.forEach(apimapping => {
                         apimapping['DomainName'] = domainName.DomainName;
 
-                        $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').deferredBootstrapTable('append', [{
                             f2id: apimapping.ApiMappingId,
                             f2type: 'apigatewayv2.apimapping',
                             f2data: apimapping,

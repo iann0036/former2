@@ -123,7 +123,7 @@ async function updateDatatableComputeEKS() {
                 sdkcall("EKS", "describeCluster", {
                     name: cluster
                 }, true).then((data) => {
-                    $('#section-compute-eks-clusters-datatable').bootstrapTable('append', [{
+                    $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('append', [{
                         f2id: data.cluster.arn,
                         f2type: 'eks.cluster',
                         f2data: data.cluster,
@@ -142,7 +142,7 @@ async function updateDatatableComputeEKS() {
                             clusterName: cluster,
                             nodegroupName: nodegroup
                         }, true).then((data) => {
-                            $('#section-compute-eks-nodegroups-datatable').bootstrapTable('append', [{
+                            $('#section-compute-eks-nodegroups-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.nodegroup.nodegroupArn,
                                 f2type: 'eks.nodegroup',
                                 f2data: data.nodegroup,

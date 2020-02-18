@@ -106,7 +106,7 @@ async function updateDatatableInternetofThingsEvents() {
             return sdkcall("IoTEvents", "describeDetectorModel", {
                 detectorModelName: detectorModel.detectorModelName
             }, true).then(data => {
-                $('#section-internetofthings-events-detectormodels-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-events-detectormodels-datatable').deferredBootstrapTable('append', [{
                     f2id: data.detectorModel.detectorModelConfiguration.detectorModelArn,
                     f2type: 'iotevents.detectormodel',
                     f2data: data.detectorModel,
@@ -128,7 +128,7 @@ async function updateDatatableInternetofThingsEvents() {
             return sdkcall("IoTEvents", "describeInput", {
                 inputName: input.inputName
             }, true).then(data => {
-                $('#section-internetofthings-events-inputs-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-events-inputs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.input.inputConfiguration.inputArn,
                     f2type: 'iotevents.input',
                     f2data: data.input,

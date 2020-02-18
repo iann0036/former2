@@ -187,7 +187,7 @@ async function updateDatatableMobileAmplify() {
                 sdkcall("Amplify", "getApp", {
                     appId: app.appId
                 }, true).then(async (data) => {
-                    $('#section-mobile-amplify-apps-datatable').bootstrapTable('append', [{
+                    $('#section-mobile-amplify-apps-datatable').deferredBootstrapTable('append', [{
                         f2id: data.app.appArn,
                         f2type: 'amplify.app',
                         f2data: data.app,
@@ -209,7 +209,7 @@ async function updateDatatableMobileAmplify() {
                         }, true).then(async (data) => {
                             data.branch['appId'] = app.appId;
 
-                            $('#section-mobile-amplify-branches-datatable').bootstrapTable('append', [{
+                            $('#section-mobile-amplify-branches-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.branch.appArn,
                                 f2type: 'amplify.branch',
                                 f2data: data.branch,
@@ -233,7 +233,7 @@ async function updateDatatableMobileAmplify() {
                             data.domainAssociation['appId'] = app.appId;
                             data.domainAssociation['domainName'] = domain.domainName;
 
-                            $('#section-mobile-amplify-domains-datatable').bootstrapTable('append', [{
+                            $('#section-mobile-amplify-domains-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.domainAssociation.domainAssociationArn,
                                 f2type: 'amplify.domain',
                                 f2data: data.domainAssociation,

@@ -185,7 +185,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
                         ServerId: server.ServerId,
                         UserName: user.UserName
                     }, true).then(async (data) => {
-                        $('#section-migrationandtransfer-transfer-users-datatable').bootstrapTable('append', [{
+                        $('#section-migrationandtransfer-transfer-users-datatable').deferredBootstrapTable('append', [{
                             f2id: data.User.Arn,
                             f2type: 'transfer.user',
                             f2data: data,
@@ -198,7 +198,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
 
                         if (data.User.SshPublicKeys) {
                             data.User.SshPublicKeys.forEach(sshkey => {
-                                $('#section-migrationandtransfer-transfer-users-datatable').bootstrapTable('append', [{
+                                $('#section-migrationandtransfer-transfer-users-datatable').deferredBootstrapTable('append', [{
                                     f2id: sshkey.SshPublicKeyId,
                                     f2type: 'transfer.sshkey',
                                     f2data: {
@@ -220,7 +220,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
             return sdkcall("Transfer", "describeServer", {
                 ServerId: server.ServerId
             }, true).then(async (data) => {
-                $('#section-migrationandtransfer-transfer-servers-datatable').bootstrapTable('append', [{
+                $('#section-migrationandtransfer-transfer-servers-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Server.Arn,
                     f2type: 'transfer.server',
                     f2data: data.Server,

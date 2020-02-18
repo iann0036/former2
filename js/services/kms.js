@@ -136,7 +136,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
                             keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
                         });
 
-                        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-kms-keys-datatable').deferredBootstrapTable('append', [{
                             f2id: keydata.KeyMetadata.Arn,
                             f2type: 'kms.key',
                             f2data: keydata.KeyMetadata,
@@ -163,7 +163,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
 
         data.Aliases.forEach(alias => {
             if (!alias.AliasName.startsWith("alias/aws/")) {
-                $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-kms-aliases-datatable').deferredBootstrapTable('append', [{
                     f2id: alias.AliasArn,
                     f2type: 'kms.alias',
                     f2data: alias,

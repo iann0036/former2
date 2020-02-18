@@ -129,7 +129,7 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
             return sdkcall("LicenseManager", "getLicenseConfiguration", {
                 LicenseConfigurationArn: licenseconfiguration.LicenseConfigurationArn
             }, true).then(async (data) => {
-                $('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable').deferredBootstrapTable('append', [{
                     f2id: data.LicenseConfigurationArn,
                     f2type: 'licensemanager.licenseconfiguration',
                     f2data: data,
@@ -146,7 +146,7 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
                     data.LicenseConfigurationAssociations.forEach(association => {
                         association['LicenseConfigurationArn'] = licenseconfiguration.LicenseConfigurationArn;
 
-                        $('#section-managementandgovernance-licensemanager-associations-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-licensemanager-associations-datatable').deferredBootstrapTable('append', [{
                             f2id: licenseconfiguration.LicenseConfigurationId + " " + association.ResourceArn,
                             f2type: 'licensemanager.association',
                             f2data: association,

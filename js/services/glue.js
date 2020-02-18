@@ -645,7 +645,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-partitions-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.DatabaseList.map(database => {
-            $('#section-analytics-glue-databases-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-databases-datatable').deferredBootstrapTable('append', [{
                 f2id: database.Name,
                 f2type: 'glue.database',
                 f2data: database,
@@ -659,7 +659,7 @@ async function updateDatatableAnalyticsGlue() {
                 DatabaseName: database.Name
             }, true).then(async (data) => {
                 await Promise.all(data.TableList.map(table => {
-                    $('#section-analytics-glue-tables-datatable').bootstrapTable('append', [{
+                    $('#section-analytics-glue-tables-datatable').deferredBootstrapTable('append', [{
                         f2id: table.Name,
                         f2type: 'glue.table',
                         f2data: table,
@@ -675,7 +675,7 @@ async function updateDatatableAnalyticsGlue() {
                         TableName: table.Name
                     }, true).then((data) => {
                         data.Partitions.forEach(partition => {
-                            $('#section-analytics-glue-partitions-datatable').bootstrapTable('append', [{
+                            $('#section-analytics-glue-partitions-datatable').deferredBootstrapTable('append', [{
                                 f2id: JSON.stringify(partition), // TODO: Better id?
                                 f2type: 'glue.partition',
                                 f2data: partition,
@@ -697,7 +697,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-crawlers-datatable').bootstrapTable('removeAll');
 
         data.Crawlers.forEach(crawler => {
-            $('#section-analytics-glue-crawlers-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-crawlers-datatable').deferredBootstrapTable('append', [{
                 f2id: crawler.Name,
                 f2type: 'glue.crawler',
                 f2data: crawler,
@@ -736,7 +736,7 @@ async function updateDatatableAnalyticsGlue() {
                 type = "JSON";
             }
             if (name) {
-                $('#section-analytics-glue-classifiers-datatable').bootstrapTable('append', [{
+                $('#section-analytics-glue-classifiers-datatable').deferredBootstrapTable('append', [{
                     f2id: name,
                     f2type: 'glue.classifier',
                     f2data: classifier,
@@ -755,7 +755,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-jobs-datatable').bootstrapTable('removeAll');
 
         data.Jobs.forEach(job => {
-            $('#section-analytics-glue-jobs-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-jobs-datatable').deferredBootstrapTable('append', [{
                 f2id: job.Name,
                 f2type: 'glue.job',
                 f2data: job,
@@ -773,7 +773,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-triggers-datatable').bootstrapTable('removeAll');
 
         data.Triggers.forEach(trigger => {
-            $('#section-analytics-glue-triggers-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-triggers-datatable').deferredBootstrapTable('append', [{
                 f2id: trigger.Name,
                 f2type: 'glue.trigger',
                 f2data: trigger,
@@ -792,7 +792,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-connections-datatable').bootstrapTable('removeAll');
 
         data.ConnectionList.forEach(connection => {
-            $('#section-analytics-glue-connections-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-connections-datatable').deferredBootstrapTable('append', [{
                 f2id: connection.Name,
                 f2type: 'glue.connection',
                 f2data: connection,
@@ -810,7 +810,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('removeAll');
 
         data.Transforms.forEach(transform => {
-            $('#section-analytics-glue-mltransforms-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-mltransforms-datatable').deferredBootstrapTable('append', [{
                 f2id: transform.TransformId,
                 f2type: 'glue.mltransform',
                 f2data: transform,
@@ -829,7 +829,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('removeAll');
 
         data.DevEndpoints.forEach(devEndpoint => {
-            $('#section-analytics-glue-devendpoints-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-devendpoints-datatable').deferredBootstrapTable('append', [{
                 f2id: devEndpoint.EndpointName,
                 f2type: 'glue.devendpoint',
                 f2data: devEndpoint,
@@ -850,7 +850,7 @@ async function updateDatatableAnalyticsGlue() {
             return sdkcall("Glue", "getWorkflow", {
                 Name: workflow
             }, true).then((data) => {
-                $('#section-analytics-glue-workflows-datatable').bootstrapTable('append', [{
+                $('#section-analytics-glue-workflows-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Workflow.Name,
                     f2type: 'glue.workflow',
                     f2data: devEndpoint,
@@ -869,7 +869,7 @@ async function updateDatatableAnalyticsGlue() {
         $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('removeAll');
 
         data.SecurityConfigurations.forEach(securityConfiguration => {
-            $('#section-analytics-glue-securityconfigurations-datatable').bootstrapTable('append', [{
+            $('#section-analytics-glue-securityconfigurations-datatable').deferredBootstrapTable('append', [{
                 f2id: securityConfiguration.EndpointName,
                 f2type: 'glue.securityconfiguration',
                 f2data: securityConfiguration,
@@ -885,7 +885,7 @@ async function updateDatatableAnalyticsGlue() {
     }, true).then((data) => {
         $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('removeAll');
 
-        $('#section-analytics-glue-datacatalogencryptionsettings-datatable').bootstrapTable('append', [{
+        $('#section-analytics-glue-datacatalogencryptionsettings-datatable').deferredBootstrapTable('append', [{
             f2id: 'GlueDataCatalogEncryptionSettingsCurrentAccount',
             f2type: 'glue.datacatalogencryptionsettings',
             f2data: data,

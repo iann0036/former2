@@ -133,7 +133,7 @@ async function updateDatatableEndUserComputingWorkLink() {
             return sdkcall("WorkLink", "describeFleetMetadata", {
                 FleetArn: fleet.FleetArn
             }, true).then(async (data) => {
-                $('#section-endusercomputing-worklink-fleets-datatable').bootstrapTable('append', [{
+                $('#section-endusercomputing-worklink-fleets-datatable').deferredBootstrapTable('append', [{
                     f2id: fleet.FleetArn,
                     f2type: 'worklink.fleet',
                     f2data: data,
@@ -153,7 +153,7 @@ async function updateDatatableEndUserComputingWorkLink() {
                             FleetArn: fleet.FleetArn,
                             WebsiteCaId: websiteca.WebsiteCaId
                         }, true).then(async (data) => {
-                            $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').bootstrapTable('append', [{
+                            $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').deferredBootstrapTable('append', [{
                                 f2id: fleet.FleetArn,
                                 f2type: 'worklink.websitecertificateauthority',
                                 f2data: {

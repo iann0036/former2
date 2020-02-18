@@ -162,7 +162,7 @@ async function updateDatatableInternetofThings1Click() {
                             projectName: project.projectName,
                             placementName: placement.placementName
                         }, true).then((data) => {
-                            $('#section-internetofthings-1click-placements-datatable').bootstrapTable('append', [{
+                            $('#section-internetofthings-1click-placements-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.placement.placementName,
                                 f2type: 'iot1click.placement',
                                 f2data: data.placement,
@@ -176,7 +176,7 @@ async function updateDatatableInternetofThings1Click() {
                 sdkcall("IoT1ClickProjects", "describeProject", {
                     projectName: project.projectName
                 }, true).then((data) => {
-                    $('#section-internetofthings-1click-projects-datatable').bootstrapTable('append', [{
+                    $('#section-internetofthings-1click-projects-datatable').deferredBootstrapTable('append', [{
                         f2id: data.project.projectName,
                         f2type: 'iot1click.project',
                         f2data: data.project,
@@ -201,7 +201,7 @@ async function updateDatatableInternetofThings1Click() {
             return sdkcall("IoT1ClickProjects", "describeDevice", {
                 DeviceId: device.DeviceId
             }, true).then((data) => {
-                $('#section-internetofthings-1click-devices-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-1click-devices-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DeviceDescription.DeviceId,
                     f2type: 'iot1click.device',
                     f2data: data.DeviceDescription,

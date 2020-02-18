@@ -179,7 +179,7 @@ async function updateDatatableInternetofThingsAnalytics() {
             return sdkcall("IoTAnalytics", "describeChannel", {
                 channelName: channel.channelName
             }, true).then((data) => {
-                $('#section-internetofthings-analytics-channels-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-analytics-channels-datatable').deferredBootstrapTable('append', [{
                     f2id: data.channel.arn,
                     f2type: 'iotanalytics.channel',
                     f2data: data.channel,
@@ -202,7 +202,7 @@ async function updateDatatableInternetofThingsAnalytics() {
             return sdkcall("IoTAnalytics", "describePipeline", {
                 pipelineName: pipeline.pipelineName
             }, true).then((data) => {
-                $('#section-internetofthings-analytics-pipelines-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-analytics-pipelines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.pipeline.arn,
                     f2type: 'iotanalytics.pipeline',
                     f2data: data.pipeline,
@@ -225,7 +225,7 @@ async function updateDatatableInternetofThingsAnalytics() {
             return sdkcall("IoTAnalytics", "describeDatastore", {
                 datastoreName: pipeline.datastoreName
             }, true).then((data) => {
-                $('#section-internetofthings-analytics-datastores-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-analytics-datastores-datatable').deferredBootstrapTable('append', [{
                     f2id: data.datastore.arn,
                     f2type: 'iotanalytics.datastore',
                     f2data: data.datastore,
@@ -248,7 +248,7 @@ async function updateDatatableInternetofThingsAnalytics() {
             return sdkcall("IoTAnalytics", "describeDataset", {
                 datasetName: dataset.datasetName
             }, true).then((data) => {
-                $('#section-internetofthings-analytics-datasets-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-analytics-datasets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.dataset.arn,
                     f2type: 'iotanalytics.dataset',
                     f2data: data.dataset,

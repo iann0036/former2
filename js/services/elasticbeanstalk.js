@@ -248,7 +248,7 @@ async function updateDatatableComputeElasticBeanstalk() {
         $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Applications.map(application => {
-            $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('append', [{
+            $('#section-compute-elasticbeanstalk-applications-datatable').deferredBootstrapTable('append', [{
                 f2id: application.ApplicationName,
                 f2type: 'elasticbeanstalk.application',
                 f2data: application,
@@ -264,7 +264,7 @@ async function updateDatatableComputeElasticBeanstalk() {
                 $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
 
                 data.ConfigurationSettings.forEach(configurationTemplate => {
-                    $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('append', [{
+                    $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: application.ApplicationName + configurationTemplate.TemplateName,
                         f2type: 'elasticbeanstalk.configurationtemplate',
                         f2data: configurationTemplate,
@@ -289,7 +289,7 @@ async function updateDatatableComputeElasticBeanstalk() {
         $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('removeAll');
 
         data.ApplicationVersions.forEach(applicationVersion => {
-            $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('append', [{
+            $('#section-compute-elasticbeanstalk-applicationversions-datatable').deferredBootstrapTable('append', [{
                 f2id: applicationVersion.ApplicationName + applicationVersion.VersionLabel,
                 f2type: 'elasticbeanstalk.applicationversion',
                 f2data: applicationVersion,
@@ -310,7 +310,7 @@ async function updateDatatableComputeElasticBeanstalk() {
         $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('removeAll');
 
         data.Environments.forEach(environment => {
-            $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('append', [{
+            $('#section-compute-elasticbeanstalk-environments-datatable').deferredBootstrapTable('append', [{
                 f2id: environment.EnvironmentId,
                 f2type: 'elasticbeanstalk.environment',
                 f2data: environment,

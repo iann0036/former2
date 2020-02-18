@@ -82,7 +82,7 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
         $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('removeAll');
 
         data.trailList.forEach(trail => {
-            $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('append', [{
                 f2id: trail.TrailARN,
                 f2type: 'cloudtrail.trail',
                 f2data: trail,

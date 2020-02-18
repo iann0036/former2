@@ -68,7 +68,7 @@ async function updateDatatableDatabaseQLDB() {
             return sdkcall("QLDB", "describeLedger", {
                 Name: ledger.Name
             }, false).then(async (data) => {
-                $('#section-database-qldb-ledgers-datatable').bootstrapTable('append', [{
+                $('#section-database-qldb-ledgers-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'qldb.ledger',
                     f2data: data,

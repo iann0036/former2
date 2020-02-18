@@ -232,7 +232,7 @@ async function updateDatatableDatabaseDocumentDB() {
         $('#section-database-documentdb-clusters-datatable').bootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
-            $('#section-database-documentdb-clusters-datatable').bootstrapTable('append', [{
+            $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: cluster.DBClusterIdentifier,
                 f2type: 'documentdb.cluster',
                 f2data: cluster,
@@ -254,7 +254,7 @@ async function updateDatatableDatabaseDocumentDB() {
         $('#section-database-documentdb-instances-datatable').bootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
-            $('#section-database-documentdb-instances-datatable').bootstrapTable('append', [{
+            $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('append', [{
                 f2id: instance.DBInstanceIdentifier,
                 f2type: 'documentdb.instance',
                 f2data: instance,
@@ -276,7 +276,7 @@ async function updateDatatableDatabaseDocumentDB() {
         $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
 
         data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
-            $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: clusterParameterGroup.DBClusterParameterGroupArn,
                 f2type: 'documentdb.clusterparametergroup',
                 f2data: clusterParameterGroup,
@@ -296,7 +296,7 @@ async function updateDatatableDatabaseDocumentDB() {
         $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
-            $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: subnetGroup.DBSubnetGroupArn,
                 f2type: 'documentdb.subnetgroup',
                 f2data: subnetGroup,

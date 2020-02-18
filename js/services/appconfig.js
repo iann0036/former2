@@ -289,7 +289,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
             await sdkcall("AppConfig", "getApplication", {
                 ApplicationId: item.Id
             }, true).then(async (data) => {
-                $('#section-managementandgovernance-appconfig-applications-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-appconfig-applications-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Id,
                     f2type: 'appconfig.application',
                     f2data: data,
@@ -308,7 +308,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
                         ApplicationId: item.Id,
                         EnvironmentId: environmentitem.Id
                     }, true).then(async (data) => {
-                        $('#section-managementandgovernance-appconfig-environments-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-appconfig-environments-datatable').deferredBootstrapTable('append', [{
                             f2id: data.Id,
                             f2type: 'appconfig.environment',
                             f2data: data,
@@ -330,7 +330,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
                                 EnvironmentId: environmentitem.Id,
                                 DeploymentNumber: deploymentitem.DeploymentNumber
                             }, true).then(async (data) => {
-                                $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').bootstrapTable('append', [{
+                                $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').deferredBootstrapTable('append', [{
                                     f2id: item.Id + " " + environmentitem.Id + " " + data.DeploymentNumber,
                                     f2type: 'appconfig.deployment',
                                     f2data: data,
@@ -355,7 +355,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
                         ApplicationId: item.Id,
                         ConfigurationProfileId: configprofileitem.Id
                     }, true).then(async (data) => {
-                        $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').deferredBootstrapTable('append', [{
                             f2id: data.Id,
                             f2type: 'appconfig.configurationprofile',
                             f2data: data,
@@ -380,7 +380,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
             return sdkcall("AppConfig", "getDeploymentStrategy", {
                 DeploymentStrategyId: deploymentstrategyitem.Id
             }, true).then(async (data) => {
-                $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Id,
                     f2type: 'appconfig.deploymentstrategy',
                     f2data: data,

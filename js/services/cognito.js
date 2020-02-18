@@ -559,7 +559,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         roles = Object.values(data.Roles).join(", ");
                     }
 
-                    $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').deferredBootstrapTable('append', [{
                         f2id: data.IdentityPoolId,
                         f2type: 'cognito.identitypoolroleattachment',
                         f2data: data,
@@ -571,7 +571,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentity", "describeIdentityPool", {
                     IdentityPoolId: identityPool.IdentityPoolId
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-identitypools-datatable').deferredBootstrapTable('append', [{
                         f2id: data.IdentityPoolId,
                         f2type: 'cognito.identitypool',
                         f2data: data,
@@ -607,7 +607,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 userPool.Domain ? sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
                     Domain: userPool.Domain
                 }, true).then(async (data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
                         f2id: data.DomainDescription.Domain,
                         f2type: 'cognito.userpooldomain',
                         f2data: data.DomainDescription,
@@ -625,7 +625,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             UserPoolId: resourceServer.UserPoolId,
                             Identifier: resourceServer.Identifier
                         }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.ResourceServer.Identifier,
                                 f2type: 'cognito.userpoolresourceserver',
                                 f2data: data.ResourceServer,
@@ -645,7 +645,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             UserPoolId: userPool.Id,
                             ProviderName: provider.ProviderName
                         }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.IdentityProvider.ProviderName,
                                 f2type: 'cognito.userpoolidentityprovider',
                                 f2data: data.IdentityProvider,
@@ -660,7 +660,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentityServiceProvider", "describeRiskConfiguration", {
                     UserPoolId: userPool.Id
                 }, false).then((data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').deferredBootstrapTable('append', [{
                         f2id: data.RiskConfiguration.UserPoolId + " " + data.RiskConfiguration.ClientId,
                         f2type: 'cognito.userpoolriskconfigurationattachment',
                         f2data: data.RiskConfiguration,
@@ -672,7 +672,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentityServiceProvider", "getUICustomization", {
                     UserPoolId: userPool.Id
                 }, false).then((data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').deferredBootstrapTable('append', [{
                         f2id: data.UICustomization.UserPoolId + " " + data.UICustomization.ClientId,
                         f2type: 'cognito.userpooluicustomizationattachment',
                         f2data: data.UICustomization,
@@ -689,7 +689,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             UserPoolId: userPool.Id,
                             ClientId: userPoolClient.ClientId
                         }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.UserPoolClient.ClientId,
                                 f2type: 'cognito.userpoolclient',
                                 f2data: data.UserPoolClient,
@@ -711,7 +711,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             Username: user.Username
                         }, true).then((data) => {
                             data.Groups.forEach(group => {
-                                $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').bootstrapTable('append', [{
+                                $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').deferredBootstrapTable('append', [{
                                     f2id: user.Username + group.GroupName,
                                     f2type: 'cognito.userpoolusertogroupattachment',
                                     f2data: {
@@ -733,7 +733,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         }, true).then((data) => {
                             data["UserPoolId"] = userPool.Id;
 
-                            $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Username,
                                 f2type: 'cognito.userpooluser',
                                 f2data: data,
@@ -752,7 +752,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             UserPoolId: userPool.Id,
                             GroupName: group.GroupName
                         }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Group.GroupName,
                                 f2type: 'cognito.userpoolgroup',
                                 f2data: data.Group,
@@ -768,7 +768,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 sdkcall("CognitoIdentityServiceProvider", "describeUserPool", {
                     UserPoolId: userPool.Id
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cognito-userpools-datatable').deferredBootstrapTable('append', [{
                         f2id: data.UserPool.Arn,
                         f2type: 'cognito.userpool',
                         f2data: data.UserPool,

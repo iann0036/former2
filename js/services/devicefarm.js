@@ -61,7 +61,7 @@ async function updateDatatableMobileDeviceFarm() {
             return sdkcall("DeviceFarm", "getProject", {
                 arn: project.arn
             }, false).then((data) => {
-                $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('append', [{
+                $('#section-mobile-devicefarm-projects-datatable').deferredBootstrapTable('append', [{
                     f2id: data.project.arn,
                     f2type: 'devicefarm.project',
                     f2data: data.project,

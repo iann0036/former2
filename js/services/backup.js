@@ -150,7 +150,7 @@ async function updateDatatableStorageBackup() {
                 }).catch(() => { })
             ]);
 
-            $('#section-storage-backup-backupvaults-datatable').bootstrapTable('append', [{
+            $('#section-storage-backup-backupvaults-datatable').deferredBootstrapTable('append', [{
                 f2id: backupvault.BackupVaultArn,
                 f2type: 'backup.backupvault',
                 f2data: backupvault,
@@ -180,7 +180,7 @@ async function updateDatatableStorageBackup() {
                         BackupPlanId: backupplan.BackupPlanId,
                         SelectionId: backupselection.SelectionId
                     }, true).then(async (data) => {
-                        $('#section-storage-backup-backupplans-datatable').bootstrapTable('append', [{
+                        $('#section-storage-backup-backupplans-datatable').deferredBootstrapTable('append', [{
                             f2id: backupselection.SelectionId,
                             f2type: 'backup.backupselection',
                             f2data: data,
@@ -195,7 +195,7 @@ async function updateDatatableStorageBackup() {
             return sdkcall("Backup", "getBackupPlan", {
                 BackupPlanId: backupplan.BackupPlanId
             }, true).then(async (data) => {
-                $('#section-storage-backup-backupplans-datatable').bootstrapTable('append', [{
+                $('#section-storage-backup-backupplans-datatable').deferredBootstrapTable('append', [{
                     f2id: backupplan.BackupPlanArn,
                     f2type: 'backup.backupplan',
                     f2data: data,

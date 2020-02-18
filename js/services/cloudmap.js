@@ -305,7 +305,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                 Id: namespace.Id
             }, true).then((data) => {
                 if (data.Namespace.Type == "HTTP") {
-                    $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Namespace.Arn,
                         f2type: 'servicediscovery.httpnamespace',
                         f2data: data.Namespace,
@@ -317,7 +317,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         creationtime: data.Namespace.CreateDate
                     }]);
                 } else if (data.Namespace.Type == "DNS_PUBLIC") {
-                    $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Namespace.Arn,
                         f2type: 'servicediscovery.publicdnsnamespace',
                         f2data: data.Namespace,
@@ -328,7 +328,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                         creationtime: data.Namespace.CreateDate
                     }]);
                 } else if (data.Namespace.Type == "DNS_PRIVATE") {
-                    $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Namespace.Arn,
                         f2type: 'servicediscovery.privatednsnamespace',
                         f2data: data.Namespace,
@@ -364,7 +364,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                             ServiceId: service.Id
                         }, true).then((data) => {
                             data.Instance['ServiceId'] = service.Id;
-                            $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Instance.Id,
                                 f2type: 'servicediscovery.instance',
                                 f2data: data.Instance,
@@ -377,7 +377,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
                 sdkcall("ServiceDiscovery", "getService", {
                     Id: service.Id
                 }, true).then((data) => {
-                    $('#section-networkingandcontentdelivery-cloudmap-services-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-cloudmap-services-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Service.Arn,
                         f2type: 'servicediscovery.service',
                         f2data: data.Service,

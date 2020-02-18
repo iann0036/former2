@@ -341,7 +341,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                     DetectorId: detectorId
                 }, true).then((data) => {
                     data.Members.forEach(member => {
-                        $('#section-securityidentityandcompliance-guardduty-members-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-guardduty-members-datatable').deferredBootstrapTable('append', [{
                             f2id: member.AccountId,
                             f2type: 'guardduty.member',
                             f2data: member,
@@ -363,7 +363,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                             FilterName: filterName
                         }, true).then((data) => {
                             data['DetectorId'] = detectorId;
-                            $('#section-securityidentityandcompliance-guardduty-filters-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-guardduty-filters-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Name,
                                 f2type: 'guardduty.filter',
                                 f2data: data,
@@ -386,7 +386,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                             IpSetId: ipSetId
                         }, true).then((data) => {
                             data['DetectorId'] = detectorId;
-                            $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Name,
                                 f2type: 'guardduty.ipset',
                                 f2data: data,
@@ -408,7 +408,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                             ThreatIntelSetId: threatIntelSetId
                         }, true).then((data) => {
                             data['DetectorId'] = detectorId;
-                            $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Name,
                                 f2type: 'guardduty.threatintelset',
                                 f2data: data,
@@ -426,7 +426,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                 }, true).then((data) => {
                     if (data.Master) {
                         data.Master['DetectorId'] = detectorId;
-                        $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-guardduty-master-datatable').deferredBootstrapTable('append', [{
                             f2id: data.Master.AccountId,
                             f2type: 'guardduty.master',
                             f2data: data,
@@ -439,7 +439,7 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
                 sdkcall("GuardDuty", "getDetector", {
                     DetectorId: detectorId
                 }, true).then((data) => {
-                    $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-guardduty-detectors-datatable').deferredBootstrapTable('append', [{
                         f2id: detectorId,
                         f2type: 'guardduty.detector',
                         f2data: data,

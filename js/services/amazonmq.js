@@ -179,7 +179,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                 BrokerId: brokerSummary.BrokerId
             }, true).then((data) => {
                 if (data.Configurations && data.Configurations.Current) {
-                    $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Configurations.Current.Id,
                         f2type: 'amazonmq.configurationassociation',
                         f2data: {
@@ -192,7 +192,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                     }]);
                 }
 
-                $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('append', [{
                     f2id: data.BrokerArn,
                     f2type: 'amazonmq.broker',
                     f2data: data,
@@ -225,7 +225,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                 }, false).then((revisiondata) => {
                     data['Data'] = revisiondata.Data;
 
-                    $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-amazonmq-configurations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'amazonmq.configuration',
                         f2data: data,

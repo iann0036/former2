@@ -80,7 +80,7 @@ async function updateDatatableStorageFSx() {
         $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
 
         data.FileSystems.forEach(fileSystem => {
-            $('#section-storage-fsx-filesystems-datatable').bootstrapTable('append', [{
+            $('#section-storage-fsx-filesystems-datatable').deferredBootstrapTable('append', [{
                 f2id: fileSystem.ResourceARN,
                 f2type: 'fsx.filesystem',
                 f2data: fileSystem,

@@ -388,7 +388,7 @@ async function updateDatatableAnalyticsEMR() {
                 }, true).then((data) => {
                     data.Steps.forEach(step => {
                         step['ClusterId'] = cluster.Id;
-                        $('#section-analytics-emr-steps-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-emr-steps-datatable').deferredBootstrapTable('append', [{
                             f2id: step.Id,
                             f2type: 'emr.step',
                             f2data: step,
@@ -404,7 +404,7 @@ async function updateDatatableAnalyticsEMR() {
                 }, false).then((data) => {
                     data.InstanceFleets.forEach(instanceFleet => {
                         step['ClusterId'] = cluster.Id;
-                        $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-emr-instancefleetconfigs-datatable').deferredBootstrapTable('append', [{
                             f2id: instanceFleet.Id,
                             f2type: 'emr.instancefleetconfig',
                             f2data: instanceFleet,
@@ -420,7 +420,7 @@ async function updateDatatableAnalyticsEMR() {
                 }, false).then((data) => {
                     data.InstanceGroups.forEach(instanceGroup => {
                         step['ClusterId'] = cluster.Id;
-                        $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-emr-instancegroupconfigs-datatable').deferredBootstrapTable('append', [{
                             f2id: instanceGroup.Id,
                             f2type: 'emr.instancegroupconfig',
                             f2data: instanceGroup,
@@ -436,7 +436,7 @@ async function updateDatatableAnalyticsEMR() {
                 sdkcall("EMR", "describeCluster", {
                     ClusterId: cluster.Id
                 }, true).then((data) => {
-                    $('#section-analytics-emr-clusters-datatable').bootstrapTable('append', [{
+                    $('#section-analytics-emr-clusters-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Cluster.Id,
                         f2type: 'emr.cluster',
                         f2data: data.Cluster,
@@ -465,7 +465,7 @@ async function updateDatatableAnalyticsEMR() {
             return sdkcall("EMR", "describeSecurityConfiguration", {
                 Name: securityConfiguration.Name
             }, true).then((data) => {
-                $('#section-analytics-emr-securityconfigurations-datatable').bootstrapTable('append', [{
+                $('#section-analytics-emr-securityconfigurations-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Name,
                     f2type: 'emr.securityconfiguration',
                     f2data: data,
@@ -492,7 +492,7 @@ async function updateDatatableAnalyticsEMR() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -515,7 +515,7 @@ async function updateDatatableAnalyticsEMR() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,

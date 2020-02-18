@@ -203,7 +203,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                             applicationName: application,
                             deploymentGroupName: deploymentGroup
                         }, true).then((data) => {
-                            $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('append', [{
+                            $('#section-developertools-codedeploy-deploymentgroups-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.deploymentGroupInfo.deploymentGroupId,
                                 f2type: 'codedeploy.deploymentgroup',
                                 f2data: data.deploymentGroupInfo,
@@ -220,7 +220,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                 sdkcall("CodeDeploy", "getApplication", {
                     applicationName: application
                 }, true).then((data) => {
-                    $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-codedeploy-applications-datatable').deferredBootstrapTable('append', [{
                         f2id: data.application.applicationId,
                         f2type: 'codedeploy.application',
                         f2data: data.application,
@@ -248,7 +248,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
                 deploymentConfigName: deploymentConfiguration
             }, true).then((data) => {
                 if (!data.deploymentConfigInfo.deploymentConfigName.startsWith("CodeDeployDefault.")) {
-                    $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-codedeploy-deploymentconfigurations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.deploymentConfigInfo.deploymentConfigId,
                         f2type: 'codedeploy.deploymentconfiguration',
                         f2data: data.deploymentConfigInfo,

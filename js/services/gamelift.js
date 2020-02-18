@@ -381,7 +381,7 @@ async function updateDatatableGameDevelopmentGameLift() {
                     fleet['EC2InboundPermissions'] = data.InboundPermissions;
                 }).catch(() => { });
 
-                $('#section-gamedevelopment-gamelift-fleets-datatable').bootstrapTable('append', [{
+                $('#section-gamedevelopment-gamelift-fleets-datatable').deferredBootstrapTable('append', [{
                     f2id: fleet.FleetArn,
                     f2type: 'gamelift.fleet',
                     f2data: fleet,
@@ -409,7 +409,7 @@ async function updateDatatableGameDevelopmentGameLift() {
                 build['StorageLocation'] = data['StorageLocation'];
             }).catch(() => { });
 
-            $('#section-gamedevelopment-gamelift-builds-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-builds-datatable').deferredBootstrapTable('append', [{
                 f2id: build.BuildId,
                 f2type: 'gamelift.build',
                 f2data: build,
@@ -431,7 +431,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('removeAll');
 
         data.Aliases.forEach(alias => {
-            $('#section-gamedevelopment-gamelift-aliases-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-aliases-datatable').deferredBootstrapTable('append', [{
                 f2id: alias.AliasArn,
                 f2type: 'gamelift.alias',
                 f2data: alias,
@@ -451,7 +451,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('removeAll');
 
         data.Scripts.forEach(script => {
-            $('#section-gamedevelopment-gamelift-scripts-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-scripts-datatable').deferredBootstrapTable('append', [{
                 f2id: script.ScriptId,
                 f2type: 'gamelift.script',
                 f2data: script,
@@ -471,7 +471,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('removeAll');
 
         data.GameSessionQueues.forEach(queue => {
-            $('#section-gamedevelopment-gamelift-queues-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-queues-datatable').deferredBootstrapTable('append', [{
                 f2id: queue.GameSessionQueueArn,
                 f2type: 'gamelift.queue',
                 f2data: queue,
@@ -490,7 +490,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('removeAll');
 
         data.Configurations.forEach(configuration => {
-            $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable').deferredBootstrapTable('append', [{
                 f2id: configuration.Name,
                 f2type: 'gamelift.matchmakingconfiguration',
                 f2data: configuration,
@@ -510,7 +510,7 @@ async function updateDatatableGameDevelopmentGameLift() {
         $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('removeAll');
 
         data.RuleSets.forEach(ruleset => {
-            $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').bootstrapTable('append', [{
+            $('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable').deferredBootstrapTable('append', [{
                 f2id: ruleset.RuleSetName,
                 f2type: 'gamelift.matchmakingruleset',
                 f2data: ruleset,

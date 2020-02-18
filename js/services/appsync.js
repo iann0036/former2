@@ -375,7 +375,7 @@ async function updateDatatableMobileAppSync() {
                         }, true).then((data) => {
                             data.resolvers.forEach(resolver => {
                                 resolver['apiId'] = graphqlApi.apiId;
-                                $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('append', [{
+                                $('#section-mobile-appsync-resolvers-datatable').deferredBootstrapTable('append', [{
                                     f2id: resolver.resolverArn,
                                     f2type: 'appsync.resolver',
                                     f2data: resolver,
@@ -399,7 +399,7 @@ async function updateDatatableMobileAppSync() {
                             name: dataSource.name
                         }, true).then((data) => {
                             data['apiId'] = graphqlApi.apiId;
-                            $('#section-mobile-appsync-datasources-datatable').bootstrapTable('append', [{
+                            $('#section-mobile-appsync-datasources-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.dataSource.dataSourceArn,
                                 f2type: 'appsync.datasource',
                                 f2data: data.dataSource,
@@ -420,7 +420,7 @@ async function updateDatatableMobileAppSync() {
                             functionId: appSyncFunction.functionId
                         }, true).then((data) => {
                             data['apiId'] = graphqlApi.apiId;
-                            $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('append', [{
+                            $('#section-mobile-appsync-functionconfigurations-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.functionConfiguration.functionArn,
                                 f2type: 'appsync.functionconfiguration',
                                 f2data: data.functionConfiguration,
@@ -439,7 +439,7 @@ async function updateDatatableMobileAppSync() {
                 }, true).then((data) => {
                     data.apiKeys.forEach(apiKey => {
                         apiKey['apiId'] = graphqlApi.apiId;
-                        $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('append', [{
+                        $('#section-mobile-appsync-apikeys-datatable').deferredBootstrapTable('append', [{
                             f2id: apiKey.id,
                             f2type: 'appsync.apikey',
                             f2data: apiKey,
@@ -456,7 +456,7 @@ async function updateDatatableMobileAppSync() {
                 }, false).then((data) => {
                     data['apiId'] = graphqlApi.apiId;
 
-                    $('#section-mobile-appsync-graphqlschemas-datatable').bootstrapTable('append', [{
+                    $('#section-mobile-appsync-graphqlschemas-datatable').deferredBootstrapTable('append', [{
                         f2id: data.apiId + " Schema",
                         f2type: 'appsync.graphqlschema',
                         f2data: data,
@@ -469,7 +469,7 @@ async function updateDatatableMobileAppSync() {
                 }, false).then((data) => {
                     data.apiCache['apiId'] = graphqlApi.apiId;
 
-                    $('#section-mobile-appsync-apicaches-datatable').bootstrapTable('append', [{
+                    $('#section-mobile-appsync-apicaches-datatable').deferredBootstrapTable('append', [{
                         f2id: data.apiCache.apiId + " Cache",
                         f2type: 'appsync.apicache',
                         f2data: data.apiCache,
@@ -482,7 +482,7 @@ async function updateDatatableMobileAppSync() {
                 sdkcall("AppSync", "getGraphqlApi", {
                     apiId: graphqlApi.apiId
                 }, true).then((data) => {
-                    $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('append', [{
+                    $('#section-mobile-appsync-graphqlapis-datatable').deferredBootstrapTable('append', [{
                         f2id: data.graphqlApi.apiId,
                         f2type: 'appsync.graphqlapi',
                         f2data: data.graphqlApi,

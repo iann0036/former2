@@ -80,7 +80,7 @@ async function updateDatatableEndUserComputingWorkSpaces() {
         $('#section-endusercomputing-workspaces-workspaces-datatable').bootstrapTable('removeAll');
 
         data.Workspaces.forEach(workspace => {
-            $('#section-endusercomputing-workspaces-workspaces-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-workspaces-workspaces-datatable').deferredBootstrapTable('append', [{
                 f2id: workspace.WorkspaceId,
                 f2type: 'workspaces.workspace',
                 f2data: workspace,

@@ -445,7 +445,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.ConfigRules.map(configRule => {
-            $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-configrules-datatable').deferredBootstrapTable('append', [{
                 f2id: configRule.ConfigRuleArn,
                 f2type: 'config.configrule',
                 f2data: configRule,
@@ -462,7 +462,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                 $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('removeAll');
 
                 data.RemediationConfigurations.forEach(remediationConfiguration => {
-                    $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('append', [{
+                    $('#section-managementandgovernance-config-remediationconfiguraions-datatable').deferredBootstrapTable('append', [{
                         f2id: remediationConfiguration.ConfigRuleName + " " + remediationConfiguration.TargetId + " Remediation Configuration",
                         f2type: 'config.remediationconfiguration',
                         f2data: remediationConfiguration,
@@ -487,7 +487,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-configurationaggregators-datatable').bootstrapTable('removeAll');
 
         data.ConfigurationAggregators.forEach(configurationAggregator => {
-            $('#section-managementandgovernance-config-configurationaggregators-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-configurationaggregators-datatable').deferredBootstrapTable('append', [{
                 f2id: configurationAggregator.ConfigurationAggregatorArn,
                 f2type: 'config.configurationaggregator',
                 f2data: configurationAggregator,
@@ -506,7 +506,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('removeAll');
 
         data.OrganizationConfigRules.forEach(organizationConfigRule => {
-            $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-organizationconfigrules-datatable').deferredBootstrapTable('append', [{
                 f2id: organizationConfigRule.OrganizationConfigRuleArn,
                 f2type: 'config.organizationconfigrule',
                 f2data: organizationConfigRule,
@@ -526,7 +526,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-configurationrecorder-datatable').bootstrapTable('removeAll');
 
         data.ConfigurationRecorders.forEach(configurationRecorder => {
-            $('#section-managementandgovernance-config-configurationrecorder-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-configurationrecorder-datatable').deferredBootstrapTable('append', [{
                 f2id: configurationRecorder.name,
                 f2type: 'config.configurationrecorder',
                 f2data: configurationRecorder,
@@ -544,7 +544,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-aggregationauthorizations-datatable').bootstrapTable('removeAll');
 
         data.AggregationAuthorizations.forEach(aggregationAuthorization => {
-            $('#section-managementandgovernance-config-aggregationauthorizations-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-aggregationauthorizations-datatable').deferredBootstrapTable('append', [{
                 f2id: aggregationAuthorization.AggregationAuthorizationArn,
                 f2type: 'config.aggregationauthorization',
                 f2data: aggregationAuthorization,
@@ -564,7 +564,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-deliverychannels-datatable').bootstrapTable('removeAll');
 
         data.DeliveryChannels.forEach(deliveryChannel => {
-            $('#section-managementandgovernance-config-deliverychannels-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-deliverychannels-datatable').deferredBootstrapTable('append', [{
                 f2id: deliveryChannel.name,
                 f2type: 'config.deliverychannel',
                 f2data: deliveryChannel,
@@ -585,7 +585,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-conformancepacks-datatable').bootstrapTable('removeAll');
 
         data.ConformancePackDetails.forEach(conformancepack => {
-            $('#section-managementandgovernance-config-conformancepacks-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-conformancepacks-datatable').deferredBootstrapTable('append', [{
                 f2id: conformancepack.ConformancePackArn,
                 f2type: 'config.conformancepack',
                 f2data: conformancepack,
@@ -605,7 +605,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         $('#section-managementandgovernance-config-organizationconformancepacks-datatable').bootstrapTable('removeAll');
 
         data.OrganizationConformancePackDetails.forEach(conformancepack => {
-            $('#section-managementandgovernance-config-organizationconformancepacks-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-config-organizationconformancepacks-datatable').deferredBootstrapTable('append', [{
                 f2id: conformancepack.OrganizationConformancePackArn,
                 f2type: 'config.organizationconformancepack',
                 f2data: conformancepack,

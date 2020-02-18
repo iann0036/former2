@@ -78,7 +78,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                     AttributeNames: ['All']
                 }, true).then((data) => {
                     data['QueueUrl'] = queueUrl;
-                    $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-sqs-queues-datatable').deferredBootstrapTable('append', [{
                         f2id: queueUrl,
                         f2type: 'sqs.queue',
                         f2data: data,
@@ -86,7 +86,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                         queueurl: queueUrl
                     }]);
 
-                    $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: queueUrl,
                         f2type: 'sqs.queuepolicy',
                         f2data: {

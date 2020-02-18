@@ -119,7 +119,7 @@ async function updateDatatableMediaServicesMediaStore() {
                         }).catch(() => { })
                     ]);
 
-                    $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('append', [{
+                    $('#section-mediaservices-mediastore-containers-datatable').deferredBootstrapTable('append', [{
                         f2id: containerdata.Container.ARN,
                         f2type: 'mediastore.container',
                         f2data: containerdata,
@@ -129,7 +129,7 @@ async function updateDatatableMediaServicesMediaStore() {
                     }]);
 
                     if (containerdata.Policy) {
-                        $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('append', [{
+                        $('#section-mediaservices-mediastore-containerpolicies-datatable').deferredBootstrapTable('append', [{
                             f2id: container.Name + " Policy",
                             f2type: 'mediastore.containerpolicy',
                             f2data: {

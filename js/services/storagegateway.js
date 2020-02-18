@@ -68,7 +68,7 @@ async function updateDatatableStorageStorageGateway() {
             return sdkcall("StorageGateway", "describeGatewayInformation", {
                 GatewayARN: gateway.GatewayARN
             }, true).then(async (data) => {
-                $('#section-storage-storagegateway-gateways-datatable').bootstrapTable('append', [{
+                $('#section-storage-storagegateway-gateways-datatable').deferredBootstrapTable('append', [{
                     f2id: data.GatewayARN,
                     f2type: 'storagegateway.gateway',
                     f2data: data,

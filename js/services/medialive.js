@@ -161,7 +161,7 @@ async function updateDatatableMediaServicesMediaLive() {
             return sdkcall("MediaLive", "describeCluster", {
                 ChannelId: channel.Id
             }, true).then(async (data) => {
-                $('#section-mediaservices-medialive-channels-datatable').bootstrapTable('append', [{
+                $('#section-mediaservices-medialive-channels-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'medialive.channel',
                     f2data: data,
@@ -183,7 +183,7 @@ async function updateDatatableMediaServicesMediaLive() {
             return sdkcall("MediaLive", "describeInput", {
                 InputId: input.Id
             }, true).then(async (data) => {
-                $('#section-mediaservices-medialive-inputs-datatable').bootstrapTable('append', [{
+                $('#section-mediaservices-medialive-inputs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'medialive.input',
                     f2data: data,
@@ -212,7 +212,7 @@ async function updateDatatableMediaServicesMediaLive() {
                     inputs = data.Inputs.join(", ");
                 }
 
-                $('#section-mediaservices-medialive-inputsecuritygroups-datatable').bootstrapTable('append', [{
+                $('#section-mediaservices-medialive-inputsecuritygroups-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'medialive.inputsecuritygroup',
                     f2data: data,

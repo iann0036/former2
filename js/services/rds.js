@@ -552,7 +552,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-clusters-datatable').bootstrapTable('removeAll');
 
         data.DBClusters.forEach(dbCluster => {
-            $('#section-database-rds-clusters-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: dbCluster.DBClusterIdentifier,
                 f2type: 'rds.cluster',
                 f2data: dbCluster,
@@ -574,7 +574,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-instances-datatable').bootstrapTable('removeAll');
 
         data.DBInstances.forEach(dbInstance => {
-            $('#section-database-rds-instances-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-instances-datatable').deferredBootstrapTable('append', [{
                 f2id: dbInstance.DBInstanceIdentifier,
                 f2type: 'rds.instance',
                 f2data: dbInstance,
@@ -597,7 +597,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
-            $('#section-database-rds-subnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-subnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: subnetGroup.DBSubnetGroupArn,
                 f2type: 'rds.subnetgroup',
                 f2data: subnetGroup,
@@ -617,7 +617,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
 
         data.DBParameterGroups.forEach(parameterGroup => {
-            $('#section-database-rds-parametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: parameterGroup.DBParameterGroupArn,
                 f2type: 'rds.parametergroup',
                 f2data: parameterGroup,
@@ -637,7 +637,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('removeAll');
 
         data.DBClusterParameterGroups.forEach(parameterGroup => {
-            $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: parameterGroup.DBClusterParameterGroupName,
                 f2type: 'rds.clusterparametergroup',
                 f2data: parameterGroup,
@@ -657,7 +657,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-optiongroups-datatable').bootstrapTable('removeAll');
 
         data.OptionGroupsList.forEach(optionGroup => {
-            $('#section-database-rds-optiongroups-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('append', [{
                 f2id: optionGroup.OptionGroupName,
                 f2type: 'rds.optiongroup',
                 f2data: optionGroup,
@@ -678,7 +678,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-securitygroups-datatable').bootstrapTable('removeAll');
 
         data.DBSecurityGroups.forEach(securityGroup => {
-            $('#section-database-rds-securitygroups-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-securitygroups-datatable').deferredBootstrapTable('append', [{
                 f2id: securityGroup.DBSecurityGroupName,
                 f2type: 'rds.securitygroup',
                 f2data: securityGroup,
@@ -698,7 +698,7 @@ async function updateDatatableDatabaseRDS() {
         $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('removeAll');
 
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
-            $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('append', [{
+            $('#section-database-rds-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
                 f2id: eventSubscriptions.EventSubscriptionArn,
                 f2type: 'rds.eventsubscription',
                 f2data: eventSubscriptions,
@@ -726,7 +726,7 @@ async function updateDatatableDatabaseRDS() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-database-rds-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -749,7 +749,7 @@ async function updateDatatableDatabaseRDS() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,

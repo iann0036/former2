@@ -76,7 +76,7 @@ async function updateDatatableMediaServicesElasticTranscoder() {
             return sdkcall("ElasticTranscoder", "readPipeline", {
                 Id: pipeline.Id
             }, true).then((data) => {
-                $('#section-mediaservices-elastictranscoder-pipelines-datatable').bootstrapTable('append', [{
+                $('#section-mediaservices-elastictranscoder-pipelines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Pipeline.Arn,
                     f2type: 'elastictranscoder.pipeline',
                     f2data: data.Pipeline,

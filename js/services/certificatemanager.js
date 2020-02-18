@@ -162,7 +162,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
             return sdkcall("ACM", "describeCertificate", {
                 CertificateArn: certificate.CertificateArn
             }, true).then((data) => {
-                $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Certificate.CertificateArn,
                     f2type: 'acm.certificate',
                     f2data: data.Certificate,
@@ -187,7 +187,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
             return sdkcall("ACMPCA", "describeCertificateAuthority", {
                 CertificateAuthorityArn: certificateAuthority.Arn
             }, true).then(async (data) => {
-                $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').deferredBootstrapTable('append', [{
                     f2id: data.CertificateAuthority.Arn,
                     f2type: 'acm.pcacertificateauthority',
                     f2data: data.CertificateAuthority,
@@ -201,7 +201,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
                     await sdkcall("ACMPCA", "getCertificateAuthorityCertificate", {
                         CertificateAuthorityArn: certificateAuthority.Arn
                     }, true).then(async (certdata) => {
-                        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable').deferredBootstrapTable('append', [{
                             f2id: data.CertificateAuthority.Arn + " Activation",
                             f2type: 'acm.pcacertificateauthorityactivation',
                             f2data: {

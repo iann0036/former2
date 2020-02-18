@@ -210,7 +210,7 @@ async function updateDatatableRoboticsRoboMaker() {
             return sdkcall("RoboMaker", "describeFleet", {
                 fleet: fleet.arn
             }, true).then((data) => {
-                $('#section-robotics-robomaker-fleets-datatable').bootstrapTable('append', [{
+                $('#section-robotics-robomaker-fleets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.arn,
                     f2type: 'robomaker.fleet',
                     f2data: data,
@@ -233,7 +233,7 @@ async function updateDatatableRoboticsRoboMaker() {
             return sdkcall("RoboMaker", "describeRobot", {
                 robot: robot.arn
             }, true).then((data) => {
-                $('#section-robotics-robomaker-robots-datatable').bootstrapTable('append', [{
+                $('#section-robotics-robomaker-robots-datatable').deferredBootstrapTable('append', [{
                     f2id: data.arn,
                     f2type: 'robomaker.robot',
                     f2data: data,
@@ -259,7 +259,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 application: robotApplication.arn,
                 applicationVersion: robotApplication.version
             }, true).then((data) => {
-                $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('append', [{
+                $('#section-robotics-robomaker-robotapplications-datatable').deferredBootstrapTable('append', [{
                     f2id: data.arn + data.revisionId,
                     f2type: 'robomaker.robotapplication',
                     f2data: data,
@@ -284,7 +284,7 @@ async function updateDatatableRoboticsRoboMaker() {
                 application: simulationApplication.arn,
                 applicationVersion: simulationApplication.version
             }, true).then((data) => {
-                $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('append', [{
+                $('#section-robotics-robomaker-simulationapplications-datatable').deferredBootstrapTable('append', [{
                     f2id: data.arn + data.revisionId,
                     f2type: 'robomaker.simulationapplication',
                     f2data: data,

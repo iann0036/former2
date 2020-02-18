@@ -60,7 +60,7 @@ async function updateDatatableMediaServicesMediaPackage() {
             return sdkcall("MediaPackage", "describeChannel", {
                 Id: channel.Id
             }, true).then((data) => {
-                $('#section-mediaservices-mediapackage-channels-datatable').bootstrapTable('append', [{
+                $('#section-mediaservices-mediapackage-channels-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'mediapackage.channel',
                     f2data: data,

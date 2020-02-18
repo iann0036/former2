@@ -131,7 +131,7 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
         $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').bootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
-            $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').bootstrapTable('append', [{
+            $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: cluster.ClusterId,
                 f2type: 'cloudhsm.cluster',
                 f2data: cluster,
@@ -144,7 +144,7 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
 
             if (cluster.Hsms) {
                 cluster.Hsms.forEach(hsm => {
-                    $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').deferredBootstrapTable('append', [{
                         f2id: hsm.HsmId,
                         f2type: 'cloudhsm.hsm',
                         f2data: hsm,

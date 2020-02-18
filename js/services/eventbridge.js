@@ -279,7 +279,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                     Rule: data.Name
                 }, true).then((targets) => {
                     data['Targets'] = targets.Targets;
-                    $('#section-applicationintegration-eventbridge-rules-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-eventbridge-rules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'eventbridge.rule',
                         f2data: data,
@@ -307,7 +307,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                 Name: eventBus.Name
             }, true).then(async (data) => {
                 if (data.Name != "default") {
-                    $('#section-applicationintegration-eventbridge-eventbuses-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-eventbridge-eventbuses-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'eventbridge.eventbus',
                         f2data: data,
@@ -324,7 +324,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                         statement["EventBusName"] = data.Name;
                     }
 
-                    $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'eventbridge.eventbuspolicy',
                         f2data: statement,
@@ -351,7 +351,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                 sdkcall("Schemas", "describeRegistry", {
                     RegistryName: registry.RegistryName
                 }, true).then(async (data) => {
-                    $('#section-applicationintegration-eventbridge-schemaregistries-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-eventbridge-schemaregistries-datatable').deferredBootstrapTable('append', [{
                         f2id: data.RegistryArn,
                         f2type: 'eventbridge.schemaregistry',
                         f2data: data,
@@ -372,7 +372,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                         }, true).then(async (data) => {
                             data['RegistryName'] = registry.RegistryName;
 
-                            $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('append', [{
+                            $('#section-applicationintegration-eventbridge-schemas-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.SchemaArn,
                                 f2type: 'eventbridge.schema',
                                 f2data: data,
@@ -397,7 +397,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
             return sdkcall("Schemas", "describeDiscoverer", {
                 DiscovererId: discoverer.DiscovererId
             }, true).then(async (data) => {
-                $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DiscovererArn,
                     f2type: 'eventbridge.schemadiscoverer',
                     f2data: data,

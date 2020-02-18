@@ -459,7 +459,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                         VersionId: policydata.Policy.DefaultVersionId
                     }, true).then((data) => {
                         managedPolicy['PolicyDocument'] = data.PolicyVersion.Document;
-                        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').deferredBootstrapTable('append', [{
                             f2id: managedPolicy.Arn,
                             f2type: 'iam.managedpolicy',
                             f2data: managedPolicy,
@@ -489,7 +489,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 }, true).then((attachedpolicies) => {
                     group['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
 
-                    $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-iam-groups-datatable').deferredBootstrapTable('append', [{
                         f2id: group.Arn,
                         f2type: 'iam.group',
                         f2data: group,
@@ -509,7 +509,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                             PolicyName: policyname,
                             GroupName: group.GroupName
                         }, true).then(async (policydata) => {
-                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').deferredBootstrapTable('append', [{
                                 f2id: group.GroupName + " " + policyname + " Group Inline Policy",
                                 f2type: 'iam.policy',
                                 f2data: {
@@ -548,7 +548,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                         })
                     ]);
 
-                    $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-iam-users-datatable').deferredBootstrapTable('append', [{
                         f2id: user.Arn,
                         f2type: 'iam.user',
                         f2data: user,
@@ -563,7 +563,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                         UserName: user.UserName
                     }, true).then((data) => {
                         data.AccessKeyMetadata.forEach(accessKey => {
-                            $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-iam-accesskeys-datatable').deferredBootstrapTable('append', [{
                                 f2id: accessKey.AccessKeyId,
                                 f2type: 'iam.accesskey',
                                 f2data: accessKey,
@@ -582,7 +582,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                                 PolicyName: policyname,
                                 UserName: user.UserName
                             }, true).then(async (policydata) => {
-                                $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                                $('#section-securityidentityandcompliance-iam-policies-datatable').deferredBootstrapTable('append', [{
                                     f2id: user.UserName + " " + policyname + " User Inline Policy",
                                     f2type: 'iam.policy',
                                     f2data: {
@@ -610,7 +610,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
 
             await Promise.all(data.Roles.map(async (role) => {
                 if (role.Path.startsWith("/aws-service-role/")) {
-                    $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
                         f2id: role.Arn,
                         f2type: 'iam.servicelinkedrole',
                         f2data: role,
@@ -626,7 +626,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     }, true).then((attachedpolicies) => {
                         role['AttachedPolicies'] = attachedpolicies.AttachedPolicies;
 
-                        $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-iam-roles-datatable').deferredBootstrapTable('append', [{
                             f2id: role.Arn,
                             f2type: 'iam.role',
                             f2data: role,
@@ -648,7 +648,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                             PolicyName: policyname,
                             RoleName: role.RoleName
                         }, true).then(async (policydata) => {
-                            $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-iam-policies-datatable').deferredBootstrapTable('append', [{
                                 f2id: role.RoleName + " " + policyname + " Role Inline Policy",
                                 f2type: 'iam.policy',
                                 f2data: {
@@ -675,7 +675,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
 
         data.InstanceProfiles.forEach(instanceProfile => {
-            $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('append', [{
+            $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').deferredBootstrapTable('append', [{
                 f2id: instanceProfile.Arn,
                 f2type: 'iam.instanceprofile',
                 f2data: instanceProfile,
@@ -704,7 +704,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     }
                 });
 
-                $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').deferredBootstrapTable('append', [{
                     f2id: data.analyzer.arn,
                     f2type: 'iam.accessanalyzer',
                     f2data: data.analyzer,

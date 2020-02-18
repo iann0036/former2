@@ -482,7 +482,7 @@ async function updateDatatableEndUserComputingAppStream() {
         $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Fleets.map(fleet => {
-            $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-appstream-fleets-datatable').deferredBootstrapTable('append', [{
                 f2id: fleet.Arn,
                 f2type: 'appstream.fleet',
                 f2data: fleet,
@@ -498,7 +498,7 @@ async function updateDatatableEndUserComputingAppStream() {
                 FleetName: fleet.Name
             }, true).then((data) => {
                 data.Names.forEach(stackName => {
-                    $('#section-endusercomputing-appstream-stackfleetassociations-datatable').bootstrapTable('append', [{
+                    $('#section-endusercomputing-appstream-stackfleetassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: fleet.Name + stackName,
                         f2type: 'appstream.stackfleetassociation',
                         f2data: {
@@ -523,7 +523,7 @@ async function updateDatatableEndUserComputingAppStream() {
         $('#section-endusercomputing-appstream-users-datatable').bootstrapTable('removeAll');
 
         data.Users.forEach(user => {
-            $('#section-endusercomputing-appstream-users-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-appstream-users-datatable').deferredBootstrapTable('append', [{
                 f2id: user.Arn,
                 f2type: 'appstream.user',
                 f2data: user,
@@ -545,7 +545,7 @@ async function updateDatatableEndUserComputingAppStream() {
         $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('removeAll');
 
         data.Stacks.forEach(async (stack) => {
-            $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-appstream-stacks-datatable').deferredBootstrapTable('append', [{
                 f2id: stack.Arn,
                 f2type: 'appstream.stack',
                 f2data: stack,
@@ -560,7 +560,7 @@ async function updateDatatableEndUserComputingAppStream() {
                 StackName: stack.Name
             }, true).then((data) => {
                 data.UserStackAssociations.forEach(userStackAssociation => {
-                    $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('append', [{
+                    $('#section-endusercomputing-appstream-stackuserassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: userStackAssociation.StackName + userStackAssociation.UserName,
                         f2type: 'appstream.stackuserassociation',
                         f2data: userStackAssociation,
@@ -582,7 +582,7 @@ async function updateDatatableEndUserComputingAppStream() {
         $('#section-endusercomputing-appstream-imagebuilders-datatable').bootstrapTable('removeAll');
 
         data.ImageBuilders.forEach(imageBuilder => {
-            $('#section-endusercomputing-appstream-imagebuilders-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-appstream-imagebuilders-datatable').deferredBootstrapTable('append', [{
                 f2id: imageBuilder.Arn,
                 f2type: 'appstream.imagebuilder',
                 f2data: imageBuilder,
@@ -604,7 +604,7 @@ async function updateDatatableEndUserComputingAppStream() {
         $('#section-endusercomputing-appstream-directoryconfigs-datatable').bootstrapTable('removeAll');
 
         data.DirectoryConfigs.forEach(directoryConfig => {
-            $('#section-endusercomputing-appstream-directoryconfigs-datatable').bootstrapTable('append', [{
+            $('#section-endusercomputing-appstream-directoryconfigs-datatable').deferredBootstrapTable('append', [{
                 f2id: directoryConfig.DirectoryName,
                 f2type: 'appstream.directoryconfig',
                 f2data: directoryConfig,
@@ -631,7 +631,7 @@ async function updateDatatableEndUserComputingAppStream() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -654,7 +654,7 @@ async function updateDatatableEndUserComputingAppStream() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,

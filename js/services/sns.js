@@ -128,7 +128,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                     TopicArn: topic.TopicArn
                 }, true).then((data) => {
                     data['TopicArn'] = topic.TopicArn;
-                    $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
                         f2id: topic.TopicArn,
                         f2type: 'sns.topic',
                         f2data: data,
@@ -137,7 +137,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                         displayname: topic.DisplayName
                     }]);
 
-                    $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-sns-topicpolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: topic.TopicArn,
                         f2type: 'sns.topicpolicy',
                         f2data: {
@@ -158,7 +158,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                             SubscriptionArn: subscription.SubscriptionArn
                         }, true).then((data) => {
                             subscription['Attributes'] = data.Attributes;
-                            $('#section-applicationintegration-sns-subscriptions-datatable').bootstrapTable('append', [{
+                            $('#section-applicationintegration-sns-subscriptions-datatable').deferredBootstrapTable('append', [{
                                 f2id: subscription.SubscriptionArn,
                                 f2type: 'sns.subscription',
                                 f2data: subscription,

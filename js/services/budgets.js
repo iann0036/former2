@@ -92,7 +92,7 @@ async function updateDatatableAWSCostManagementBudgets() {
                     }, true).then(async (data) => {
                         // TODO: map data
 
-                        $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('append', [{
+                        $('#section-awscostmanagement-budgets-budgets-datatable').deferredBootstrapTable('append', [{
                             f2id: budget.BudgetName,
                             f2type: 'budgets.budget',
                             f2data: budget,

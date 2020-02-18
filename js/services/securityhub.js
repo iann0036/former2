@@ -53,7 +53,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
             }
         }).catch(() => { });
 
-        $('#section-securityidentityandcompliance-securityhub-hub-datatable').bootstrapTable('append', [{
+        $('#section-securityidentityandcompliance-securityhub-hub-datatable').deferredBootstrapTable('append', [{
             f2id: data.HubArn,
             f2type: 'securityhub.hub',
             f2data: {

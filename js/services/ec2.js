@@ -1640,7 +1640,7 @@ async function updateDatatableComputeEC2() {
                     });
                 }
 
-                $('#section-compute-ec2-instances-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-instances-datatable').deferredBootstrapTable('append', [{
                     f2id: instance.InstanceId,
                     f2type: 'ec2.instance',
                     f2data: instance,
@@ -1664,7 +1664,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-hosts-datatable').bootstrapTable('removeAll');
 
         data.Hosts.forEach(host => {
-            $('#section-compute-ec2-hosts-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-hosts-datatable').deferredBootstrapTable('append', [{
                 f2id: host.HostId,
                 f2type: 'ec2.host',
                 f2data: host,
@@ -1684,7 +1684,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-capacityreservations-datatable').bootstrapTable('removeAll');
 
         data.CapacityReservations.forEach(capacityreservation => {
-            $('#section-compute-ec2-capacityreservations-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-capacityreservations-datatable').deferredBootstrapTable('append', [{
                 f2id: capacityreservation.CapacityReservationId,
                 f2type: 'ec2.capacityreservation',
                 f2data: capacityreservation,
@@ -1706,7 +1706,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-fleets-datatable').bootstrapTable('removeAll');
 
         data.Fleets.forEach(fleet => {
-            $('#section-compute-ec2-fleets-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-fleets-datatable').deferredBootstrapTable('append', [{
                 f2id: fleet.FleetId,
                 f2type: 'ec2.fleet',
                 f2data: fleet,
@@ -1725,7 +1725,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('removeAll');
 
         data.LoadBalancerDescriptions.forEach(loadBalancer => {
-            $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('append', [{
                 f2id: loadBalancer.LoadBalancerName,
                 f2type: 'elb.loadbalancer',
                 f2data: loadBalancer,
@@ -1753,7 +1753,7 @@ async function updateDatatableComputeEC2() {
                 LoadBalancerArn: loadBalancer.LoadBalancerArn
             }, true).then((data) => {
                 loadBalancer['Attributes'] = data.Attributes;
-                $('#section-compute-ec2-v2loadbalancers-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-v2loadbalancers-datatable').deferredBootstrapTable('append', [{
                     f2id: loadBalancer.LoadBalancerArn,
                     f2type: 'elbv2.loadbalancer',
                     f2data: loadBalancer,
@@ -1769,7 +1769,7 @@ async function updateDatatableComputeEC2() {
                 LoadBalancerArn: loadBalancer.LoadBalancerArn
             }, true).then(async (data) => {
                 await Promise.all(data.Listeners.map(listener => {
-                    $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ec2-v2loadbalancerlisteners-datatable').deferredBootstrapTable('append', [{
                         f2id: listener.ListenerArn,
                         f2type: 'elbv2.loadbalancerlistener',
                         f2data: listener,
@@ -1786,7 +1786,7 @@ async function updateDatatableComputeEC2() {
                         }, true).then((data) => {
                             data.Certificates.forEach(certificate => {
                                 certificate['ListenerArn'] = listener.ListenerArn;
-                                $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('append', [{
+                                $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').deferredBootstrapTable('append', [{
                                     f2id: certificate.CertificateArn,
                                     f2type: 'elbv2.loadbalancerlistenercertificate',
                                     f2data: certificate,
@@ -1801,7 +1801,7 @@ async function updateDatatableComputeEC2() {
                         }, true).then((data) => {
                             data.Rules.forEach(rule => {
                                 rule['ListenerArn'] = listener.ListenerArn;
-                                $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('append', [{
+                                $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').deferredBootstrapTable('append', [{
                                     f2id: rule.RuleArn,
                                     f2type: 'elbv2.loadbalancerlistenerrule',
                                     f2data: rule,
@@ -1830,7 +1830,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.AutoScalingGroups.map(autoScalingGroup => {
-            $('#section-compute-ec2-autoscalinggroups-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-autoscalinggroups-datatable').deferredBootstrapTable('append', [{
                 f2id: autoScalingGroup.AutoScalingGroupName,
                 f2type: 'autoscaling.autoscalinggroup',
                 f2data: autoScalingGroup,
@@ -1846,7 +1846,7 @@ async function updateDatatableComputeEC2() {
                 AutoScalingGroupName: autoScalingGroup.AutoScalingGroupName
             }, true).then((data) => {
                 data.LifecycleHooks.forEach(lifecycleHook => {
-                    $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').deferredBootstrapTable('append', [{
                         f2id: lifecycleHook.LifecycleHookName,
                         f2type: 'autoscaling.lifecyclehook',
                         f2data: lifecycleHook,
@@ -1870,7 +1870,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-launchconfigurations-datatable').bootstrapTable('removeAll');
 
         data.LaunchConfigurations.forEach(launchConfiguration => {
-            $('#section-compute-ec2-launchconfigurations-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-launchconfigurations-datatable').deferredBootstrapTable('append', [{
                 f2id: launchConfiguration.LaunchConfigurationName,
                 f2type: 'autoscaling.launchconfiguration',
                 f2data: launchConfiguration,
@@ -1898,7 +1898,7 @@ async function updateDatatableComputeEC2() {
                     Versions: [launchTemplate.LatestVersionNumber.toString()]
                 }, true).then((data) => {
                     launchTemplate = data.LaunchTemplateVersions[0];
-                    $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ec2-launchtemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: launchTemplate.LaunchTemplateName,
                         f2type: 'ec2.launchtemplate',
                         f2data: launchTemplate,
@@ -1932,7 +1932,7 @@ async function updateDatatableComputeEC2() {
             }, true).then((data) => {
                 targetGroup["TargetGroupAttributes"] = data.Attributes;
 
-                $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-v2targetgroups-datatable').deferredBootstrapTable('append', [{
                     f2id: targetGroup.TargetGroupArn,
                     f2type: 'elbv2.targetgroup',
                     f2data: targetGroup,
@@ -1956,7 +1956,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('removeAll');
 
         data.Volumes.forEach(volume => {
-            $('#section-compute-ec2-volumes-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-volumes-datatable').deferredBootstrapTable('append', [{
                 f2id: volume.VolumeId,
                 f2type: 'ec2.volume',
                 f2data: volume,
@@ -1971,7 +1971,7 @@ async function updateDatatableComputeEC2() {
 
             if (volume.Attachments) {
                 volume.Attachments.forEach(attachment => {
-                    $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ec2-volumeattachments-datatable').deferredBootstrapTable('append', [{
                         f2id: attachment.VolumeId + " " + attachment.InstanceId,
                         f2type: 'ec2.volumeattachment',
                         f2data: attachment,
@@ -1996,7 +1996,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('removeAll');
 
         data.NetworkInterfaces.forEach(networkInterface => {
-            $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-networkinterfaces-datatable').deferredBootstrapTable('append', [{
                 f2id: networkInterface.NetworkInterfaceId,
                 f2type: 'ec2.networkinterface',
                 f2data: networkInterface,
@@ -2012,7 +2012,7 @@ async function updateDatatableComputeEC2() {
 
             if (networkInterface.Attachment) {
                 networkInterface.Attachment['NetworkInterfaceId'] = networkInterface.NetworkInterfaceId;
-                $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-networkinterfaceattachments-datatable').deferredBootstrapTable('append', [{
                     f2id: networkInterface.Attachment.AttachmentId,
                     f2type: 'ec2.networkinterfaceattachment',
                     f2data: networkInterface.Attachment,
@@ -2035,7 +2035,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-networkinterfacepermissions-datatable').bootstrapTable('removeAll');
 
         data.NetworkInterfacePermissions.forEach(networkInterfacePermission => {
-            $('#section-compute-ec2-networkinterfacepermissions-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-networkinterfacepermissions-datatable').deferredBootstrapTable('append', [{
                 f2id: networkInterfacePermission.NetworkInterfacePermissionId,
                 f2type: 'ec2.networkinterfacepermission',
                 f2data: networkInterfacePermission,
@@ -2057,7 +2057,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-spotrequests-datatable').bootstrapTable('removeAll');
 
         data.SpotFleetRequestConfigs.forEach(spotFleetRequestConfig => {
-            $('#section-compute-ec2-spotrequests-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-spotrequests-datatable').deferredBootstrapTable('append', [{
                 f2id: spotFleetRequestConfig.SpotFleetRequestId,
                 f2type: 'ec2.spotrequest',
                 f2data: spotFleetRequestConfig,
@@ -2079,7 +2079,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('removeAll');
 
         data.PlacementGroups.forEach(placementGroup => {
-            $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-placementgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: placementGroup.GroupName,
                 f2type: 'ec2.placementgroup',
                 f2data: placementGroup,
@@ -2100,7 +2100,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('removeAll');
 
         data.ScalingPolicies.forEach(scalingPolicy => {
-            $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-autoscalingpolicies-datatable').deferredBootstrapTable('append', [{
                 f2id: scalingPolicy.PolicyARN,
                 f2type: 'autoscaling.policy',
                 f2data: scalingPolicy,
@@ -2122,7 +2122,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('removeAll');
 
         data.ScheduledUpdateGroupActions.forEach(scheduledAction => {
-            $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-autoscalingscheduledactions-datatable').deferredBootstrapTable('append', [{
                 f2id: scheduledAction.ScheduledActionARN,
                 f2type: 'autoscaling.scheduledaction',
                 f2data: scheduledAction,
@@ -2143,7 +2143,7 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('removeAll');
 
         data.SecurityGroups.forEach(securityGroup => {
-            $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('append', [{
+            $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('append', [{
                 f2id: securityGroup.GroupId,
                 f2type: 'ec2.securitygroup',
                 f2data: securityGroup,
@@ -2165,7 +2165,7 @@ async function updateDatatableComputeEC2() {
 
         if (data.FlowLogs) {
             data.FlowLogs.forEach(flowLog => {
-                $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-flowlogs-datatable').deferredBootstrapTable('append', [{
                     f2id: flowLog.FlowLogId,
                     f2type: 'ec2.flowlog',
                     f2data: flowLog,
@@ -2191,7 +2191,7 @@ async function updateDatatableComputeEC2() {
                 return sdkcall("DLM", "getLifecyclePolicy", {
                     PolicyId: policy.PolicyId
                 }, true).then((data) => {
-                    $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: policy.Policy.PolicyId,
                         f2type: 'ec2.snapshotlifecyclepolicy',
                         f2data: policy.Policy,
@@ -2221,7 +2221,7 @@ async function updateDatatableComputeEC2() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -2244,7 +2244,7 @@ async function updateDatatableComputeEC2() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,
@@ -2267,7 +2267,7 @@ async function updateDatatableComputeEC2() {
 
         if (data.KeyPairs) {
             data.KeyPairs.forEach(keypair => {
-                $('#section-compute-ec2-keypairs-datatable').bootstrapTable('append', [{
+                $('#section-compute-ec2-keypairs-datatable').deferredBootstrapTable('append', [{
                     f2id: keypair.KeyName,
                     f2type: 'ec2.keypair',
                     f2data: keypair,

@@ -106,7 +106,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
             return sdkcall("CodeCommit", "getRepository", {
                 repositoryName: repository.repositoryName
             }, true).then((data) => {
-                $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('append', [{
+                $('#section-developertools-codecommit-repositories-datatable').deferredBootstrapTable('append', [{
                     f2id: data.repositoryMetadata.repositoryId,
                     f2type: 'codecommit.repository',
                     f2data: data.repositoryMetadata,
@@ -130,7 +130,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
                 Arn: notificationRule.Arn
             }, false).then(async (data) => {
                 if (data.Resource.split(":")[2] == "codecommit") {
-                    $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-codebuild-notificationrules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'codestarnotifications.notificationrule',
                         f2data: data,

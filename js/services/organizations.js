@@ -247,7 +247,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                 data.Organization['EnabledServicePrincipals'] = serviceaccess.EnabledServicePrincipals;
             });
 
-            $('#section-managementandgovernance-organizations-organization-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-organizations-organization-datatable').deferredBootstrapTable('append', [{
                 f2id: data.Organization.Arn,
                 f2type: 'organizations.organization',
                 f2data: data.Organization,
@@ -280,7 +280,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                         data.OrganizationalUnits.forEach(ou => {
                             ou['ParentId'] = parentid;
 
-                            $('#section-managementandgovernance-organizations-organizationalunits-datatable').bootstrapTable('append', [{
+                            $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('append', [{
                                 f2id: ou.Arn,
                                 f2type: 'organizations.organizationalunit',
                                 f2data: ou,
@@ -303,7 +303,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
         $('#section-managementandgovernance-organizations-accounts-datatable').bootstrapTable('removeAll');
 
         data.Accounts.forEach(account => {
-            $('#section-managementandgovernance-organizations-accounts-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-organizations-accounts-datatable').deferredBootstrapTable('append', [{
                 f2id: account.Arn,
                 f2type: 'organizations.account',
                 f2data: account,
@@ -325,7 +325,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
             await sdkcall("Organizations", "describePolicy", {
                 PolicyId: policy.Id
             }, false).then(async (data) => {
-                $('#section-managementandgovernance-organizations-policies-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Policy.PolicySummary.Arn,
                     f2type: 'organizations.policy',
                     f2data: data.Policy,
@@ -341,7 +341,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                     data.Targets.forEach(target => {
                         target['PolicyId'] = policy.Id;
 
-                        $('#section-managementandgovernance-organizations-policyattachments-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-organizations-policyattachments-datatable').deferredBootstrapTable('append', [{
                             f2id: target.Arn,
                             f2type: 'organizations.policyattachment',
                             f2data: target,

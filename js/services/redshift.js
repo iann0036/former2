@@ -213,7 +213,7 @@ async function updateDatatableDatabaseRedshift() {
         $('#section-database-redshift-clusters-datatable').bootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
-            $('#section-database-redshift-clusters-datatable').bootstrapTable('append', [{
+            $('#section-database-redshift-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: cluster.ClusterIdentifier,
                 f2type: 'redshift.cluster',
                 f2data: cluster,
@@ -236,7 +236,7 @@ async function updateDatatableDatabaseRedshift() {
         $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('removeAll');
 
         data.ClusterSubnetGroups.forEach(subnetGroup => {
-            $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-database-redshift-subnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: subnetGroup.ClusterSubnetGroupName,
                 f2type: 'redshift.subnetgroup',
                 f2data: subnetGroup,
@@ -256,7 +256,7 @@ async function updateDatatableDatabaseRedshift() {
         $('#section-database-redshift-parametergroups-datatable').bootstrapTable('removeAll');
 
         data.ParameterGroups.forEach(parameterGroup => {
-            $('#section-database-redshift-parametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-redshift-parametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: parameterGroup.ParameterGroupName,
                 f2type: 'redshift.parametergroup',
                 f2data: parameterGroup,
@@ -276,7 +276,7 @@ async function updateDatatableDatabaseRedshift() {
         $('#section-database-redshift-securitygroups-datatable').bootstrapTable('removeAll');
 
         data.ClusterSecurityGroups.forEach(securityGroup => {
-            $('#section-database-redshift-securitygroups-datatable').bootstrapTable('append', [{
+            $('#section-database-redshift-securitygroups-datatable').deferredBootstrapTable('append', [{
                 f2id: securityGroup.ClusterSecurityGroupName,
                 f2type: 'redshift.securitygroup',
                 f2data: securityGroup,

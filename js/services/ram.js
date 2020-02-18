@@ -93,7 +93,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
                         resourceShare['resourceArns'].push(resource.arn);
                     });
 
-                    $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').deferredBootstrapTable('append', [{
                         f2id: resourceShare.resourceShareArn,
                         f2type: 'ram.resourceshare',
                         f2data: resourceShare,

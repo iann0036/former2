@@ -409,7 +409,7 @@ async function updateDatatableComputeECS() {
             return sdkcall("ECS", "describeTaskDefinition", {
                 taskDefinition: taskDefinitionArn
             }, true).then((data) => {
-                $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('append', [{
+                $('#section-compute-ecs-taskdefinitions-datatable').deferredBootstrapTable('append', [{
                     f2id: data.taskDefinition.taskDefinitionArn,
                     f2type: 'ecs.taskdefinition',
                     f2data: data.taskDefinition,
@@ -436,7 +436,7 @@ async function updateDatatableComputeECS() {
                 sdkcall("ECS", "describeClusters", {
                     clusters: [clusterArn]
                 }, true).then((data) => {
-                    $('#section-compute-ecs-clusters-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ecs-clusters-datatable').deferredBootstrapTable('append', [{
                         f2id: data.clusters[0].clusterArn,
                         f2type: 'ecs.cluster',
                         f2data: data.clusters[0],
@@ -457,7 +457,7 @@ async function updateDatatableComputeECS() {
                             include: ["TAGS"]
                         }, true).then(async (data) => {
                             if (data.services[0]) {
-                                $('#section-compute-ecs-services-datatable').bootstrapTable('append', [{
+                                $('#section-compute-ecs-services-datatable').deferredBootstrapTable('append', [{
                                     f2id: data.services[0].serviceArn,
                                     f2type: 'ecs.service',
                                     f2data: data.services[0],
@@ -476,7 +476,7 @@ async function updateDatatableComputeECS() {
                                         taskSets: data.services[0].taskSets.map((taskset) => taskset.taskSetArn)
                                     }, true).then((data) => {
                                         data.taskSets.forEach(taskset => {
-                                            $('#section-compute-ecs-tasksets-datatable').bootstrapTable('append', [{
+                                            $('#section-compute-ecs-tasksets-datatable').deferredBootstrapTable('append', [{
                                                 f2id: taskset.taskSetArn,
                                                 f2type: 'ecs.taskset',
                                                 f2data: taskset,
@@ -486,7 +486,7 @@ async function updateDatatableComputeECS() {
                                                 cluster: taskset.clusterArn
                                             }]);
                                             if (taskset.status == "PRIMARY") {
-                                                $('#section-compute-ecs-primarytasksets-datatable').bootstrapTable('append', [{
+                                                $('#section-compute-ecs-primarytasksets-datatable').deferredBootstrapTable('append', [{
                                                     f2id: taskset.taskSetArn,
                                                     f2type: 'ecs.primarytaskset',
                                                     f2data: taskset,
@@ -526,7 +526,7 @@ async function updateDatatableComputeECS() {
                 }, true).then((actions) => {
                     target['ScheduledActions'] = actions.ScheduledActions;
 
-                    $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                    $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                         f2id: target.ResourceId,
                         f2type: 'applicationautoscaling.scalabletarget',
                         f2data: target,
@@ -550,7 +550,7 @@ async function updateDatatableComputeECS() {
 
         if (data.ScalingPolicies) {
             data.ScalingPolicies.forEach(policy => {
-                $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: policy.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: policy,

@@ -81,7 +81,7 @@ async function updateDatatableDeveloperToolsXRay() {
         $('#section-developertools-xray-samplingrules-datatable').bootstrapTable('removeAll');
 
         data.SamplingRuleRecords.forEach(samplingrule => {
-            $('#section-developertools-xray-samplingrules-datatable').bootstrapTable('append', [{
+            $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('append', [{
                 f2id: samplingrule.SamplingRule.RuleARN,
                 f2type: 'xray.samplingrule',
                 f2data: samplingrule.SamplingRule,

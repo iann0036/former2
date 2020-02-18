@@ -2134,7 +2134,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         return Promise.all(data.Vpcs.map(vpc => {
             if (vpc.DhcpOptionsId) {
-                $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('append', [{
                     f2id: vpc.DhcpOptionsId,
                     f2type: 'ec2.dhcpoptionsassociation',
                     f2data: {
@@ -2150,7 +2150,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
                 if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
                     cidrBlock['VpcId'] = vpc.VpcId;
-                    $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('append', [{
                         f2id: cidrBlock.AssociationId,
                         f2type: 'ec2.vpccidrblock',
                         f2data: cidrBlock,
@@ -2173,7 +2173,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
                     vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
 
-                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').deferredBootstrapTable('append', [{
                         f2id: vpc.VpcId,
                         f2type: 'ec2.vpc',
                         f2data: vpc,
@@ -2198,7 +2198,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (subnet.Ipv6CidrBlockAssociationSet) {
                 subnet.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
                     ipv6CidrBlockAssociation['SubnetId'] = subnet.SubnetId;
-                    $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('append', [{
                         f2id: ipv6CidrBlockAssociation.AssociationId,
                         f2type: 'ec2.subnetipv6cidrblock',
                         f2data: ipv6CidrBlockAssociation,
@@ -2210,7 +2210,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 });
             }
 
-            $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('append', [{
                 f2id: subnet.SubnetId,
                 f2type: 'ec2.subnet',
                 f2data: subnet,
@@ -2234,7 +2234,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('removeAll');
 
         data.EgressOnlyInternetGateways.forEach(egressOnlyInternetGateway => {
-            $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').deferredBootstrapTable('append', [{
                 f2id: egressOnlyInternetGateway.EgressOnlyInternetGatewayId,
                 f2type: 'ec2.egressonlyinternetgateway',
                 f2data: egressOnlyInternetGateway,
@@ -2252,7 +2252,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
 
         data.CustomerGateways.forEach(customerGateway => {
-            $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').deferredBootstrapTable('append', [{
                 f2id: customerGateway.CustomerGatewayId,
                 f2type: 'ec2.customergateway',
                 f2data: customerGateway,
@@ -2277,7 +2277,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         data.VpnGateways.forEach(vpnGateway => {
             if (vpnGateway.VpcAttachments) {
                 vpnGateway.VpcAttachments.forEach(attachment => {
-                    $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('append', [{
                         f2id: attachment.VpcId + " " + vpnGateway.VpnGatewayId,
                         f2type: 'ec2.gatewayattachment',
                         f2data: {
@@ -2291,7 +2291,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 });
             }
 
-            $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').deferredBootstrapTable('append', [{
                 f2id: vpnGateway.VpnGatewayId,
                 f2type: 'ec2.vpngateway',
                 f2data: vpnGateway,
@@ -2308,7 +2308,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             data.InternetGateways.forEach(internetGateway => {
                 if (internetGateway.Attachments) {
                     internetGateway.Attachments.forEach(attachment => {
-                        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('append', [{
                             f2id: attachment.VpcId + " " + internetGateway.InternetGatewayId,
                             f2type: 'ec2.gatewayattachment',
                             f2data: {
@@ -2322,7 +2322,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     });
                 }
 
-                $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').deferredBootstrapTable('append', [{
                     f2id: internetGateway.InternetGatewayId,
                     f2type: 'ec2.internetgateway',
                     f2data: internetGateway,
@@ -2345,7 +2345,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').bootstrapTable('removeAll');
 
         data.Addresses.forEach(address => {
-            $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('append', [{
                 f2id: address.AllocationId,
                 f2type: 'ec2.elasticip',
                 f2data: address,
@@ -2359,7 +2359,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
 
             if (address.AssociationId) {
-                $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('append', [{
                     f2id: address.AssociationId,
                     f2type: 'ec2.elasticipassociation',
                     f2data: address,
@@ -2380,7 +2380,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
 
         data.DhcpOptions.forEach(dhcpOptions => {
-            $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
                 f2id: dhcpOptions.DhcpOptionsId,
                 f2type: 'ec2.dhcpoptions',
                 f2data: dhcpOptions,
@@ -2399,7 +2399,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('removeAll');
 
         data.VpnConnections.forEach(vpnConnection => {
-            $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').deferredBootstrapTable('append', [{
                 f2id: vpnConnection.VpnConnectionId,
                 f2type: 'ec2.vpnconnection',
                 f2data: vpnConnection,
@@ -2413,7 +2413,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (vpnConnection.Routes) {
                 vpnConnection.Routes.forEach(route => {
                     route['VpnConnectionId'] = vpnConnection.VpnConnectionId;
-                    $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').deferredBootstrapTable('append', [{
                         f2id: route.VpnConnectionId + " " + route.DestinationCidrBlock,
                         f2type: 'ec2.vpnconnectionroute',
                         f2data: route,
@@ -2435,7 +2435,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
 
         data.VpcPeeringConnections.forEach(peeringConnection => {
-            $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').deferredBootstrapTable('append', [{
                 f2id: peeringConnection.VpcPeeringConnectionId,
                 f2type: 'ec2.peeringconnection',
                 f2data: peeringConnection,
@@ -2457,7 +2457,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         data.NetworkAcls.forEach(networkAcl => {
             if (networkAcl.Associations) {
                 networkAcl.Associations.forEach(association => {
-                    $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: association.NetworkAclAssociationId,
                         f2type: 'ec2.subnetnetworkaclassociation',
                         f2data: association,
@@ -2480,7 +2480,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                                 range = entry.PortRange.From + "-" + entry.PortRange.To;
                             }
                         }
-                        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').deferredBootstrapTable('append', [{
                             f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
                             f2type: 'ec2.networkaclentry',
                             f2data: entry,
@@ -2496,7 +2496,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 });
             }
 
-            $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').deferredBootstrapTable('append', [{
                 f2id: networkAcl.NetworkAclId,
                 f2type: 'ec2.networkacl',
                 f2data: networkAcl,
@@ -2525,7 +2525,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             routeTable.Routes.forEach(route => {
                 if (route.Origin == "CreateRoute") {
                     route['RouteTableId'] = routeTable.RouteTableId;
-                    $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-routes-datatable').deferredBootstrapTable('append', [{
                         f2id: (route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId) + " to " + (route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId),
                         f2type: 'ec2.route',
                         f2data: route,
@@ -2540,7 +2540,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             if (routeTable.Associations) {
                 routeTable.Associations.forEach(association => {
                     if (association.SubnetId) {
-                        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').deferredBootstrapTable('append', [{
                             f2id: association.RouteTableAssociationId,
                             f2type: 'ec2.subnetroutetableassociation',
                             f2data: association,
@@ -2550,7 +2550,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                             subnetid: association.SubnetId
                         }]);
                     } else if (association.GatewayId) {
-                        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').deferredBootstrapTable('append', [{
                             f2id: association.RouteTableAssociationId,
                             f2type: 'ec2.gatewayroutetableassociation',
                             f2data: association,
@@ -2565,7 +2565,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
             if (routeTable.PropagatingVgws) {
                 routeTable.PropagatingVgws.forEach(propagatingVgw => {
-                    $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').deferredBootstrapTable('append', [{
                         f2id: routeTable.RouteTableId + " " + propagatingVgw.GatewayId,
                         f2type: 'ec2.virtualprivategatewayroutepropagation',
                         f2data: {
@@ -2579,7 +2579,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 });
             }
 
-            $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-routetables-datatable').deferredBootstrapTable('append', [{
                 f2id: routeTable.RouteTableId,
                 f2type: 'ec2.routetable',
                 f2data: routeTable,
@@ -2602,7 +2602,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('removeAll');
 
         data.TransitGateways.forEach(transitGateway => {
-            $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').deferredBootstrapTable('append', [{
                 f2id: transitGateway.TransitGatewayId,
                 f2type: 'ec2.transitgateway',
                 f2data: transitGateway,
@@ -2626,7 +2626,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.TransitGatewayRouteTables.map(transitGatewayRouteTable => {
-            $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').deferredBootstrapTable('append', [{
                 f2id: transitGatewayRouteTable.TransitGatewayRouteTableId,
                 f2type: 'ec2.transitgatewayroutetable',
                 f2data: transitGatewayRouteTable,
@@ -2646,7 +2646,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 }, true).then((data) => {
                     data.Routes.forEach(route => {
                         route['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
-                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').deferredBootstrapTable('append', [{
                             f2id: route.DestinationCidrBlock,
                             f2type: 'ec2.transitgatewayroute',
                             f2data: route,
@@ -2662,7 +2662,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 }, true).then((data) => {
                     data.Associations.forEach(association => {
                         association['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
-                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').deferredBootstrapTable('append', [{
                             f2id: association.TransitGatewayAttachmentId,
                             f2type: 'ec2.transitgatewayroutetableassociation',
                             f2data: association,
@@ -2678,7 +2678,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 }, true).then((data) => {
                     data.TransitGatewayRouteTablePropagations.forEach(transitGatewayRouteTablePropagation => {
                         transitGatewayRouteTablePropagation['TransitGatewayRouteTableId'] = transitGatewayRouteTable.TransitGatewayRouteTableId;
-                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').deferredBootstrapTable('append', [{
                             f2id: transitGatewayRouteTablePropagation.TransitGatewayAttachmentId,
                             f2type: 'ec2.transitgatewayroutetablepropogation',
                             f2data: transitGatewayRouteTablePropagation,
@@ -2704,7 +2704,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('removeAll');
 
         data.TransitGatewayVpcAttachments.forEach(transitGatewayVpcAttachment => {
-            $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').deferredBootstrapTable('append', [{
                 f2id: transitGatewayVpcAttachment.TransitGatewayAttachmentId,
                 f2type: 'ec2.transitgatewayattachment',
                 f2data: transitGatewayVpcAttachment,
@@ -2724,7 +2724,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('removeAll');
 
         data.VpcEndpoints.forEach(vpcEndpoint => {
-            $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').deferredBootstrapTable('append', [{
                 f2id: vpcEndpoint.VpcEndpointId,
                 f2type: 'ec2.vpcendpoint',
                 f2data: vpcEndpoint,
@@ -2746,7 +2746,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('removeAll');
 
         data.ConnectionNotificationSet.forEach(connectionNotification => {
-            $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').deferredBootstrapTable('append', [{
                 f2id: connectionNotification.ConnectionNotificationId,
                 f2type: 'ec2.vpcendpointconnectionnotification',
                 f2data: connectionNotification,
@@ -2769,7 +2769,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
             if (serviceDetail.ServiceName.startsWith("vpce-svc-")) {
-                $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').deferredBootstrapTable('append', [{
                     f2id: serviceDetail.ServiceName,
                     f2type: 'ec2.vpcendpointservice',
                     f2data: serviceDetail,
@@ -2783,7 +2783,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 return sdkcall("EC2", "describeVpcEndpointServicePermissions", {
                     ServiceId: serviceDetail.ServiceName
                 }, true).then((data) => {
-                    $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').deferredBootstrapTable('append', [{
                         f2id: serviceDetail.ServiceName,
                         f2type: 'ec2.vpcendpointservicepermission',
                         f2data: {
@@ -2810,7 +2810,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('removeAll');
 
         data.NatGateways.forEach(natGateway => {
-            $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').deferredBootstrapTable('append', [{
                 f2id: natGateway.NatGatewayId,
                 f2type: 'ec2.natgateway',
                 f2data: natGateway,
@@ -2835,7 +2835,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         if (data.ClientVpnEndpoints) {
             await Promise.all(data.ClientVpnEndpoints.map(async (endpoint) => {
-                $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').deferredBootstrapTable('append', [{
                     f2id: endpoint.ClientVpnEndpointId,
                     f2type: 'ec2.clientvpnendpoint',
                     f2data: endpoint,
@@ -2852,7 +2852,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }, true).then((data) => {
                         if (data.Routes) {
                             data.Routes.forEach(route => {
-                                $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').deferredBootstrapTable('append', [{
                                     f2id: route.ClientVpnEndpointId + " Route " + route.DestinationCidr + " " + route.TargetSubnet,
                                     f2type: 'ec2.clientvpnroute',
                                     f2data: route,
@@ -2871,7 +2871,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }, true).then((data) => {
                         if (data.ClientVpnTargetNetworks) {
                             data.ClientVpnTargetNetworks.forEach(network => {
-                                $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').deferredBootstrapTable('append', [{
                                     f2id: network.AssociationId,
                                     f2type: 'ec2.clientvpntargetnetworkassociation',
                                     f2data: network,
@@ -2889,7 +2889,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }, true).then((data) => {
                         if (data.AuthorizationRules) {
                             data.AuthorizationRules.forEach(rule => {
-                                $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').deferredBootstrapTable('append', [{
                                     f2id: rule.ClientVpnEndpointId + " Rule " + rule.DestinationCidr + " " + rule.GroupId,
                                     f2type: 'ec2.clientvpnauthorizationrule',
                                     f2data: rule,
@@ -2919,7 +2919,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('removeAll');
 
         data.TrafficMirrorFilters.forEach(trafficMirrorFilter => {
-            $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').deferredBootstrapTable('append', [{
                 f2id: trafficMirrorFilter.TrafficMirrorFilterId,
                 f2type: 'ec2.trafficmirrorfilter',
                 f2data: trafficMirrorFilter,
@@ -2931,7 +2931,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             trafficMirrorFilter.IngressFilterRules.forEach(filterRule => {
                 filterRule['TrafficDirection'] = "ingress";
 
-                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').deferredBootstrapTable('append', [{
                     f2id: filterRule.TrafficMirrorFilterRuleId,
                     f2type: 'ec2.trafficmirrorfilterrule',
                     f2data: filterRule,
@@ -2947,7 +2947,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             trafficMirrorFilter.EgressFilterRules.forEach(filterRule => {
                 filterRule['TrafficDirection'] = "egress";
 
-                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').deferredBootstrapTable('append', [{
                     f2id: filterRule.TrafficMirrorFilterRuleId,
                     f2type: 'ec2.trafficmirrorfilterrule',
                     f2data: filterRule,
@@ -2971,7 +2971,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('removeAll');
 
         data.TrafficMirrorSessions.forEach(trafficMirrorSession => {
-            $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').deferredBootstrapTable('append', [{
                 f2id: trafficMirrorSession.TrafficMirrorSessionId,
                 f2type: 'ec2.trafficmirrorsession',
                 f2data: trafficMirrorSession,
@@ -2992,7 +2992,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('removeAll');
 
         data.TrafficMirrorTargets.forEach(trafficMirrorTarget => {
-            $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').deferredBootstrapTable('append', [{
                 f2id: trafficMirrorTarget.TrafficMirrorSessionId,
                 f2type: 'ec2.trafficmirrortarget',
                 f2data: trafficMirrorTarget,
@@ -3017,7 +3017,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 Filters: []
             }, false).then((data) => {
                 data.Routes.forEach(route => {
-                    $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').deferredBootstrapTable('append', [{
                         f2id: route.DestinationCidrBlock + " " + route.LocalGatewayVirtualInterfaceGroupId + " " + route.LocalGatewayRouteTableId,
                         f2type: 'ec2.localgatewayroute',
                         f2data: route,
@@ -3039,7 +3039,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('removeAll');
 
         data.LocalGatewayRouteTableVpcAssociations.forEach(association => {
-            $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').deferredBootstrapTable('append', [{
                 f2id: association.LocalGatewayRouteTableVpcAssociationId,
                 f2type: 'ec2.localgatewayroutetablevpcassociation',
                 f2data: association,

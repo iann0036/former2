@@ -75,7 +75,7 @@ async function updateDatatableAnalyticsElasticsearch() {
             return sdkcall("ES", "describeElasticsearchDomains", {
                 DomainNames: [domainName.DomainName]
             }, true).then((data) => {
-                $('#section-analytics-elasticsearch-domains-datatable').bootstrapTable('append', [{
+                $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DomainStatusList[0].ARN,
                     f2type: 'elasticsearch.domain',
                     f2data: data.DomainStatusList[0],

@@ -68,7 +68,7 @@ async function updateDatatableAnalyticsMSK() {
             return sdkcall("Kafka", "describeCluster", {
                 ClusterArn: cluster.ClusterArn
             }, true).then(async (data) => {
-                $('#section-analytics-msk-clusters-datatable').bootstrapTable('append', [{
+                $('#section-analytics-msk-clusters-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ClusterInfo.ClusterArn,
                     f2type: 'msk.cluster',
                     f2data: data.ClusterInfo,

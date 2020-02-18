@@ -491,7 +491,7 @@ async function updateDatatableAnalyticsKinesis() {
             return sdkcall("Kinesis", "describeStream", {
                 StreamName: streamName
             }, true).then(async (data) => {
-                $('#section-analytics-kinesis-streams-datatable').bootstrapTable('append', [{
+                $('#section-analytics-kinesis-streams-datatable').deferredBootstrapTable('append', [{
                     f2id: data.StreamDescription.StreamARN,
                     f2type: 'kinesis.stream',
                     f2data: data.StreamDescription,
@@ -511,7 +511,7 @@ async function updateDatatableAnalyticsKinesis() {
                             ConsumerARN: consumer.ConsumerARN,
                             ConsumerName: consumer.ConsumerName
                         }, true).then((data) => {
-                            $('#section-analytics-kinesis-streamconsumers-datatable').bootstrapTable('append', [{
+                            $('#section-analytics-kinesis-streamconsumers-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.ConsumerDescription.ConsumerARN,
                                 f2type: 'kinesis.streamconsumer',
                                 f2data: data.ConsumerDescription,
@@ -538,7 +538,7 @@ async function updateDatatableAnalyticsKinesis() {
             return sdkcall("Firehose", "describeDeliveryStream", {
                 DeliveryStreamName: deliveryStreamName
             }, true).then((data) => {
-                $('#section-analytics-kinesis-firehosedeliverystreams-datatable').bootstrapTable('append', [{
+                $('#section-analytics-kinesis-firehosedeliverystreams-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DeliveryStreamDescription.DeliveryStreamARN,
                     f2type: 'kinesis.firehosedeliverystream',
                     f2data: data.DeliveryStreamDescription,
@@ -564,7 +564,7 @@ async function updateDatatableAnalyticsKinesis() {
             return sdkcall("KinesisAnalytics", "describeApplication", {
                 ApplicationName: applicationSummary.ApplicationName
             }, true).then((data) => {
-                $('#section-analytics-kinesis-analyticsapplications-datatable').bootstrapTable('append', [{
+                $('#section-analytics-kinesis-analyticsapplications-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ApplicationDetail.ApplicationARN,
                     f2type: 'kinesis.analyticsapplication',
                     f2data: data.ApplicationDetail,
@@ -577,7 +577,7 @@ async function updateDatatableAnalyticsKinesis() {
                 if (data.ApplicationDetail.OutputDescriptions) {
                     data.ApplicationDetail.OutputDescriptions.forEach(output => {
                         output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
-                        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').deferredBootstrapTable('append', [{
                             f2id: output.OutputId,
                             f2type: 'kinesis.analyticsapplicationoutput',
                             f2data: output,
@@ -592,7 +592,7 @@ async function updateDatatableAnalyticsKinesis() {
                 if (data.ApplicationDetail.ReferenceDataSourceDescriptions) {
                     data.ApplicationDetail.ReferenceDataSourceDescriptions.forEach(referenceDataSource => {
                         output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
-                        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').deferredBootstrapTable('append', [{
                             f2id: referenceDataSource.ReferenceId,
                             f2type: 'kinesis.analyticsapplicationreferencedatasource',
                             f2data: referenceDataSource,
@@ -623,7 +623,7 @@ async function updateDatatableAnalyticsKinesis() {
             return sdkcall("KinesisAnalyticsV2", "describeApplication", {
                 ApplicationName: applicationSummary.ApplicationName
             }, true).then((data) => {
-                $('#section-analytics-kinesis-analyticsv2applications-datatable').bootstrapTable('append', [{
+                $('#section-analytics-kinesis-analyticsv2applications-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ApplicationDetail.ApplicationARN,
                     f2type: 'kinesis.analyticsv2application',
                     f2data: data.ApplicationDetail,
@@ -638,7 +638,7 @@ async function updateDatatableAnalyticsKinesis() {
                     if (data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.OutputDescriptions) {
                         data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.OutputDescriptions.forEach(output => {
                             output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
-                            $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').bootstrapTable('append', [{
+                            $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').deferredBootstrapTable('append', [{
                                 f2id: output.OutputId,
                                 f2type: 'kinesis.analyticsv2applicationoutput',
                                 f2data: output,
@@ -653,7 +653,7 @@ async function updateDatatableAnalyticsKinesis() {
                     if (data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.ReferenceDataSourceDescriptions) {
                         data.ApplicationDetail.ApplicationConfigurationDescription.SqlApplicationConfigurationDescription.ReferenceDataSourceDescriptions.forEach(referenceDataSource => {
                             output['ApplicationName'] = data.ApplicationDetail.ApplicationName;
-                            $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').bootstrapTable('append', [{
+                            $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').deferredBootstrapTable('append', [{
                                 f2id: referenceDataSource.ReferenceId,
                                 f2type: 'kinesis.analyticsv2applicationreferencedatasource',
                                 f2data: referenceDataSource,
@@ -669,7 +669,7 @@ async function updateDatatableAnalyticsKinesis() {
                 if (data.ApplicationDetail.CloudWatchLoggingOptionDescriptions) {
                     data.ApplicationDetail.CloudWatchLoggingOptionDescriptions.forEach(cloudWatchLoggingOption => {
                         cloudWatchLoggingOption['ApplicationName'] = data.ApplicationDetail.ApplicationName;
-                        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').bootstrapTable('append', [{
+                        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').deferredBootstrapTable('append', [{
                             f2id: cloudWatchLoggingOption.CloudWatchLoggingOptionId,
                             f2type: 'kinesis.analyticsv2applicationcloudwatchloggingoption',
                             f2data: cloudWatchLoggingOption,

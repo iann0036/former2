@@ -60,7 +60,7 @@ async function updateDatatableApplicationIntegrationSWF() {
             return sdkcall("SWF", "describeDomain", {
                 name: domain.name
             }, true).then(async (data) => {
-                $('#section-applicationintegration-swf-domains-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-swf-domains-datatable').deferredBootstrapTable('append', [{
                     f2id: data.domainInfo.name,
                     f2type: 'swf.domain',
                     f2data: data,

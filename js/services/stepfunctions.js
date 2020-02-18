@@ -108,7 +108,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
             return sdkcall("StepFunctions", "describeStateMachine", {
                 stateMachineArn: stateMachine.stateMachineArn
             }, true).then((data) => {
-                $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('append', [{
+                $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.stateMachineArn,
                     f2type: 'stepfunctions.statemachine',
                     f2data: data,
@@ -132,7 +132,7 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
                 return sdkcall("StepFunctions", "describeActivity", {
                     activityArn: activity.activityArn
                 }, true).then((data) => {
-                    $('#section-applicationintegration-stepfunctions-statemachines-datatable').bootstrapTable('append', [{
+                    $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('append', [{
                         f2id: data.activityArn,
                         f2type: 'stepfunctions.activity',
                         f2data: data,

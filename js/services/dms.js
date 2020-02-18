@@ -373,7 +373,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('removeAll');
 
         data.Endpoints.forEach(endpoint => {
-            $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').deferredBootstrapTable('append', [{
                 f2id: endpoint.EndpointIdentifier,
                 f2type: 'dms.endpoint',
                 f2data: endpoint,
@@ -395,7 +395,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('removeAll');
 
         data.ReplicationInstances.forEach(replicationInstance => {
-            $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').deferredBootstrapTable('append', [{
                 f2id: replicationInstance.ReplicationInstanceIdentifier,
                 f2type: 'dms.replicationinstance',
                 f2data: replicationInstance,
@@ -417,7 +417,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('removeAll');
 
         data.ReplicationTasks.forEach(replicationTask => {
-            $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').deferredBootstrapTable('append', [{
                 f2id: replicationTask.ReplicationTaskIdentifier,
                 f2type: 'dms.replicationtask',
                 f2data: replicationTask,
@@ -439,7 +439,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('removeAll');
 
         data.ReplicationSubnetGroups.forEach(replicationSubnetGroup => {
-            $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: replicationSubnetGroup.ReplicationSubnetGroupIdentifier,
                 f2type: 'dms.replicationsubnetgroup',
                 f2data: replicationSubnetGroup,
@@ -459,7 +459,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('removeAll');
 
         data.Certificates.forEach(certificate => {
-            $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').deferredBootstrapTable('append', [{
                 f2id: certificate.CertificateIdentifier,
                 f2type: 'dms.certificate',
                 f2data: certificate,
@@ -481,7 +481,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
         $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('removeAll');
 
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
-            $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('append', [{
+            $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
                 f2id: eventSubscriptions.CustSubscriptionId,
                 f2type: 'dms.eventsubscription',
                 f2data: eventSubscriptions,

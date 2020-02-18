@@ -457,7 +457,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeCodeRepository", {
                 CodeRepositoryName: coderepository.CodeRepositoryName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-coderepositories-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-coderepositories-datatable').deferredBootstrapTable('append', [{
                     f2id: data.CodeRepositoryName,
                     f2type: 'sagemaker.coderepository',
                     f2data: data,
@@ -480,7 +480,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeModel", {
                 ModelName: model.ModelName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-models-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-models-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ModelName,
                     f2type: 'sagemaker.model',
                     f2data: data,
@@ -503,7 +503,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeEndpoint", {
                 EndpointName: endpoint.EndpointName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-endpoints-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-endpoints-datatable').deferredBootstrapTable('append', [{
                     f2id: data.EndpointArn,
                     f2type: 'sagemaker.endpoint',
                     f2data: data,
@@ -527,7 +527,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeEndpointConfig", {
                 EndpointConfigName: endpointConfig.EndpointConfigName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-endpointconfigs-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-endpointconfigs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.EndpointConfigArn,
                     f2type: 'sagemaker.endpointconfig',
                     f2data: data,
@@ -551,7 +551,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeNotebookInstance", {
                 NotebookInstanceName: notebookInstance.NotebookInstanceName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-notebookinstances-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-notebookinstances-datatable').deferredBootstrapTable('append', [{
                     f2id: data.NotebookInstanceArn,
                     f2type: 'sagemaker.notebookinstance',
                     f2data: data,
@@ -577,7 +577,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeNotebookInstanceLifecycleConfig", {
                 NotebookInstanceLifecycleConfigName: notebookInstanceLifecycleConfig.NotebookInstanceLifecycleConfigName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.NotebookInstanceLifecycleConfigArn,
                     f2type: 'sagemaker.notebookinstancelifecycleconfig',
                     f2data: data,
@@ -604,7 +604,7 @@ async function updateDatatableMachineLearningSageMaker() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -627,7 +627,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,
@@ -652,7 +652,7 @@ async function updateDatatableMachineLearningSageMaker() {
             return sdkcall("SageMaker", "describeWorkteam", {
                 WorkteamName: workteam.WorkteamName
             }, true).then((data) => {
-                $('#section-machinelearning-sagemaker-workteams-datatable').bootstrapTable('append', [{
+                $('#section-machinelearning-sagemaker-workteams-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Workteam.WorkteamArn,
                     f2type: 'sagemaker.workteam',
                     f2data: data,

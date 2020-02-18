@@ -67,7 +67,7 @@ async function updateDatatableAnalyticsDataPipeline() {
             return sdkcall("DataPipeline", "describePipelines", {
                 pipelineIds: [pipeline.id]
             }, true).then((data) => {
-                $('#section-analytics-datapipeline-pipelines-datatable').bootstrapTable('append', [{
+                $('#section-analytics-datapipeline-pipelines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.pipelineDescriptionList[0].pipelineId,
                     f2type: 'datapipeline.pipeline',
                     f2data: data.pipelineDescriptionList[0],

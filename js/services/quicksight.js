@@ -63,7 +63,7 @@ async function updateDatatableAnalyticsQuickSight() {
             $('#section-analytics-quicksight-groups-datatable').bootstrapTable('removeAll');
 
             data.GroupList.forEach(group => {
-                $('#section-analytics-quicksight-groups-datatable').bootstrapTable('append', [{
+                $('#section-analytics-quicksight-groups-datatable').deferredBootstrapTable('append', [{
                     f2id: group.Arn,
                     f2type: 'quicksight.group',
                     f2data: {

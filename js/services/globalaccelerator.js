@@ -125,7 +125,7 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
                     data.Accelerator['Attributes'] = attributedata.AcceleratorAttributes;
                 });
 
-                $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Accelerator.AcceleratorArn,
                     f2type: 'globalaccelerator.accelerator',
                     f2data: data.Accelerator,
@@ -141,7 +141,7 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
                     data.Listeners.forEach(listener => {
                         listener['AcceleratorArn'] = accelerator.AcceleratorArn;
 
-                        $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').deferredBootstrapTable('append', [{
                             f2id: listener.ListenerArn,
                             f2type: 'globalaccelerator.listener',
                             f2data: listener,

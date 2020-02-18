@@ -85,7 +85,7 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
         $('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable').bootstrapTable('removeAll');
 
         data.memberAccounts.forEach(memberAccount => {
-            $('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable').bootstrapTable('append', [{
+            $('#section-securityidentityandcompliance-macie-memberaccountassociations-datatable').deferredBootstrapTable('append', [{
                 f2id: memberAccount.accountId,
                 f2type: 'macie.memberaccountassociation',
                 f2data: memberAccount,
@@ -101,7 +101,7 @@ async function updateDatatableSecurityIdentityAndComplianceMacie() {
         $('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable').bootstrapTable('removeAll');
 
         data.s3Resources.forEach(s3Resource => {
-            $('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable').bootstrapTable('append', [{
+            $('#section-securityidentityandcompliance-macie-s3bucketassociations-datatable').deferredBootstrapTable('append', [{
                 f2id: s3Resource.bucketName,
                 f2type: 'macie.s3bucketassociation',
                 f2data: s3Resource,

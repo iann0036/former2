@@ -159,7 +159,7 @@ async function updateDatatableComputeBatch() {
         $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('removeAll');
 
         data.computeEnvironments.forEach(computeEnvironment => {
-            $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('append', [{
+            $('#section-compute-batch-computeenvironments-datatable').deferredBootstrapTable('append', [{
                 f2id: computeEnvironment.computeEnvironmentArn,
                 f2type: 'batch.computeenvironment',
                 f2data: computeEnvironment,
@@ -179,7 +179,7 @@ async function updateDatatableComputeBatch() {
         $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('removeAll');
 
         data.jobDefinitions.forEach(jobDefinition => {
-            $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('append', [{
+            $('#section-compute-batch-jobdefinitions-datatable').deferredBootstrapTable('append', [{
                 f2id: jobDefinition.jobDefinitionArn,
                 f2type: 'batch.jobdefinition',
                 f2data: jobDefinition,
@@ -199,7 +199,7 @@ async function updateDatatableComputeBatch() {
         $('#section-compute-batch-jobqueues-datatable').bootstrapTable('removeAll');
 
         data.jobQueues.forEach(jobQueue => {
-            $('#section-compute-batch-jobqueues-datatable').bootstrapTable('append', [{
+            $('#section-compute-batch-jobqueues-datatable').deferredBootstrapTable('append', [{
                 f2id: jobQueue.jobQueueArn,
                 f2type: 'batch.jobqueue',
                 f2data: jobQueue,

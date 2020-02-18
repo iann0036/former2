@@ -83,7 +83,7 @@ async function updateDatatableAnalyticsAthena() {
             return sdkcall("Athena", "getNamedQuery", {
                 NamedQueryId: namedQuery
             }, true).then((data) => {
-                $('#section-analytics-athena-namedqueries-datatable').bootstrapTable('append', [{
+                $('#section-analytics-athena-namedqueries-datatable').deferredBootstrapTable('append', [{
                     f2id: data.NamedQuery.NamedQueryId,
                     f2type: 'athena.namedquery',
                     f2data: data.NamedQuery,

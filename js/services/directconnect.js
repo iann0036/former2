@@ -649,7 +649,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
         $('#section-networkingandcontentdelivery-directconnect-connections-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.connections.map(connection => {
-            $('#section-networkingandcontentdelivery-directconnect-connections-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-directconnect-connections-datatable').deferredBootstrapTable('append', [{
                 f2id: connection.connectionId,
                 f2type: 'directconnect.connection',
                 f2data: connection,
@@ -669,7 +669,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
 
                 data.virtualInterfaces.forEach(virtualinterface => {
                     if (virtualinterface.virtualInterfaceType == "public") {
-                        $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').deferredBootstrapTable('append', [{
                             f2id: virtualinterface.virtualInterfaceId,
                             f2type: 'directconnect.publicvirtualinterface',
                             f2data: virtualinterface,
@@ -681,7 +681,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                             asn: virtualinterface.asn
                         }]);
                     } else {
-                        $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').bootstrapTable('append', [{
+                        $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').deferredBootstrapTable('append', [{
                             f2id: virtualinterface.virtualInterfaceId,
                             f2type: 'directconnect.privatevirtualinterface',
                             f2data: virtualinterface,
@@ -696,7 +696,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                     if (virtualinterface.bgpPeers) {
                         virtualinterface.bgpPeers.forEach(bgppeer => {
                             bgppeer['virtualInterfaceId'] = virtualinterface.virtualInterfaceId;
-                            $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').deferredBootstrapTable('append', [{
                                 f2id: bgppeer.bgpPeerId,
                                 f2type: 'directconnect.bgppeer',
                                 f2data: bgppeer,
@@ -721,7 +721,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
         $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.lags.map(lag => {
-            $('#section-networkingandcontentdelivery-directconnect-lags-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-directconnect-lags-datatable').deferredBootstrapTable('append', [{
                 f2id: lag.lagId,
                 f2type: 'directconnect.lag',
                 f2data: lag,
@@ -733,7 +733,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
             }]);
 
             return Promise.all(lag.connections.map(connection => {
-                $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').deferredBootstrapTable('append', [{
                     f2id: connection.connectionId + " " + lag.lagId + " association",
                     f2type: 'directconnect.connectionassociation',
                     f2data: {
@@ -754,7 +754,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
 
                     data.virtualInterfaces.forEach(virtualinterface => {
                         if (virtualinterface.virtualInterfaceType == "public") {
-                            $('#section-networkingandcontentdelivery-directconnect-hostedpublicvirtualinterfaces-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-directconnect-hostedpublicvirtualinterfaces-datatable').deferredBootstrapTable('append', [{
                                 f2id: virtualinterface.virtualInterfaceId,
                                 f2type: 'directconnect.hostedpublicvirtualinterface',
                                 f2data: virtualinterface,
@@ -766,7 +766,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                                 asn: virtualinterface.asn
                             }]);
                         } else {
-                            $('#section-networkingandcontentdelivery-directconnect-hostedprivatevirtualinterfaces-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-directconnect-hostedprivatevirtualinterfaces-datatable').deferredBootstrapTable('append', [{
                                 f2id: virtualinterface.virtualInterfaceId,
                                 f2type: 'directconnect.hostedprivatevirtualinterface',
                                 f2data: virtualinterface,
@@ -782,7 +782,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                         if (virtualinterface.bgpPeers) {
                             virtualinterface.bgpPeers.forEach(bgppeer => {
                                 bgppeer['virtualInterfaceId'] = virtualinterface.virtualInterfaceId;
-                                $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('append', [{
+                                $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').deferredBootstrapTable('append', [{
                                     f2id: bgppeer.bgpPeerId,
                                     f2type: 'directconnect.bgppeer',
                                     f2data: bgppeer,
@@ -809,7 +809,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
         $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.directConnectGateways.map(gateway => {
-            $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').deferredBootstrapTable('append', [{
                 f2id: gateway.directConnectGatewayId,
                 f2type: 'directconnect.gateway',
                 f2data: gateway,
@@ -823,7 +823,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                 directConnectGatewayId: gateway.directConnectGatewayId
             }, true).then(async (data) => {
                 await Promise.all(data.directConnectGatewayAssociations.map(association => {
-                    $('#section-networkingandcontentdelivery-directconnect-gatewayassociations-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-directconnect-gatewayassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: association.associationId,
                         f2type: 'directconnect.gatewayassociation',
                         f2data: association,
@@ -839,7 +839,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                         associatedGatewayId: association.associatedGateway.id
                     }, true).then(async (data) => {
                         data.directConnectGatewayAssociationProposals.forEach(proposal => {
-                            $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').bootstrapTable('append', [{
+                            $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').deferredBootstrapTable('append', [{
                                 f2id: proposal.proposalId,
                                 f2type: 'directconnect.gatewayassociationproposal',
                                 f2data: proposal,

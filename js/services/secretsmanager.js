@@ -137,7 +137,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                     sdkcall("SecretsManager", "getResourcePolicy", {
                         SecretId: secret.ARN
                     }, true).then((data) => {
-                        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').deferredBootstrapTable('append', [{
                             f2id: data.ARN,
                             f2type: 'secretsmanager.resourcepolicy',
                             f2data: data,
@@ -153,7 +153,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                         }, true).then((secretvalue) => {
                             data['SecretString'] = secretvalue.SecretString;
 
-                            $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.ARN,
                                 f2type: 'secretsmanager.secret',
                                 f2data: data,
@@ -165,7 +165,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                         });
 
                         if (data.RotationEnabled) {
-                            $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.ARN,
                                 f2type: 'secretsmanager.rotationschedule',
                                 f2data: data,

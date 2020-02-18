@@ -81,7 +81,7 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
 
         data.DirectoryDescriptions.forEach(directory => {
             if (directory.Type == "SimpleAD") {
-                $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-directoryservice-directories-datatable').deferredBootstrapTable('append', [{
                     f2id: directory.DirectoryId,
                     f2type: 'directoryservice.simplead',
                     f2data: directory,
@@ -93,7 +93,7 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
                     description: directory.Description
                 }]);
             } else if (directory.Type == "MicrosoftAD") {
-                $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('append', [{
+                $('#section-securityidentityandcompliance-directoryservice-directories-datatable').deferredBootstrapTable('append', [{
                     f2id: directory.DirectoryId,
                     f2type: 'directoryservice.microsoftad',
                     f2data: directory,

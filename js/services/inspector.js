@@ -136,7 +136,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
                 sdkcall("Inspector", "describeAssessmentTargets", {
                     assessmentTargetArns: [assessmentTargetArn]
                 }, true).then(async (data) => {
-                    $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').bootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.assessmentTargets[0].arn,
                         f2type: 'inspector.assessmenttarget',
                         f2data: data.assessmentTargets[0],
@@ -148,7 +148,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
                     await sdkcall("Inspector", "describeResourceGroups", {
                         resourceGroupArns: [data.assessmentTargets[0].resourceGroupArn]
                     }, true).then((data) => {
-                        $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').bootstrapTable('append', [{
+                        $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').deferredBootstrapTable('append', [{
                             f2id: data.resourceGroups[0].arn,
                             f2type: 'inspector.resourcegroup',
                             f2data: data.resourceGroups[0],
@@ -164,7 +164,7 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
                         return sdkcall("Inspector", "describeAssessmentTemplates", {
                             assessmentTemplateArns: [assessmentTemplateArn]
                         }, true).then((data) => {
-                            $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').bootstrapTable('append', [{
+                            $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.assessmentTemplates[0].arn,
                                 f2type: 'inspector.assessmenttemplate',
                                 f2data: data.assessmentTemplates[0],

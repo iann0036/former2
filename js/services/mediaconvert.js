@@ -170,7 +170,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return sdkcall("MediaConvert", "getQueue", {
                     Name: queue.Name
                 }, true).then(async (data) => {
-                    $('#section-mediaservices-mediaconvert-queues-datatable').bootstrapTable('append', [{
+                    $('#section-mediaservices-mediaconvert-queues-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Queue.Arn,
                         f2type: 'mediaconvert.queue',
                         f2data: data.Queue,
@@ -196,7 +196,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return sdkcall("MediaConvert", "getPreset", {
                     Name: preset.Name
                 }, true).then(async (data) => {
-                    $('#section-mediaservices-mediaconvert-presets-datatable').bootstrapTable('append', [{
+                    $('#section-mediaservices-mediaconvert-presets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Preset.Arn,
                         f2type: 'mediaconvert.preset',
                         f2data: data.Preset,
@@ -221,7 +221,7 @@ async function updateDatatableMediaServicesMediaConvert() {
                 return sdkcall("MediaConvert", "getJobTemplate", {
                     Name: jobTemplate.Name
                 }, true).then(async (data) => {
-                    $('#section-mediaservices-mediaconvert-jobtemplates-datatable').bootstrapTable('append', [{
+                    $('#section-mediaservices-mediaconvert-jobtemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.JobTemplate.Arn,
                         f2type: 'mediaconvert.jobtemplate',
                         f2data: data.JobTemplate,

@@ -65,7 +65,7 @@ async function updateDatatableManagementAndGovernanceAutoScaling() {
         $('#section-managementandgovernance-autoscaling-scalingplans-datatable').bootstrapTable('removeAll');
 
         data.ScalingPlans.forEach(scalingPlan => {
-            $('#section-managementandgovernance-autoscaling-scalingplans-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-autoscaling-scalingplans-datatable').deferredBootstrapTable('append', [{
                 f2id: scalingPlan.ScalingPlanName,
                 f2type: 'autoscaling.scalingplan',
                 f2data: scalingPlan,

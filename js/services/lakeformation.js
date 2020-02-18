@@ -133,7 +133,7 @@ async function updateDatatableAnalyticsLakeFormation() {
             return sdkcall("LakeFormation", "describeResource", {
                 ResourceArn: resource.ResourceArn
             }, false).then(async (data) => {
-                $('#section-analytics-lakeformation-resources-datatable').bootstrapTable('append', [{
+                $('#section-analytics-lakeformation-resources-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ResourceInfo.ResourceArn,
                     f2type: 'lakeformation.resource',
                     f2data: data.ResourceInfo,
@@ -152,7 +152,7 @@ async function updateDatatableAnalyticsLakeFormation() {
         $('#section-analytics-lakeformation-permissions-datatable').bootstrapTable('removeAll');
 
         data.PrincipalResourcePermissions.forEach(permission => {
-            $('#section-analytics-lakeformation-permissions-datatable').bootstrapTable('append', [{
+            $('#section-analytics-lakeformation-permissions-datatable').deferredBootstrapTable('append', [{
                 f2id: permission.Principal.DataLakePrincipalIdentifier + " " + JSON.stringify(permission.Resource),
                 f2type: 'lakeformation.permission',
                 f2data: permission,
@@ -177,7 +177,7 @@ async function updateDatatableAnalyticsLakeFormation() {
             });
         }
 
-        $('#section-analytics-lakeformation-datalakesettings-datatable').bootstrapTable('append', [{
+        $('#section-analytics-lakeformation-datalakesettings-datatable').deferredBootstrapTable('append', [{
             f2id: "LakeFormationDataLakeSettings",
             f2type: 'lakeformation.datalakesettings',
             f2data: data.DataLakeSettings,

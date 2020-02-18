@@ -78,7 +78,7 @@ async function updateDatatableComputeECR() {
                 }).catch(() => { });
             }).catch(() => { });
 
-            $('#section-compute-ecr-repositories-datatable').bootstrapTable('append', [{
+            $('#section-compute-ecr-repositories-datatable').deferredBootstrapTable('append', [{
                 f2id: repository.repositoryArn,
                 f2type: 'ecr.repository',
                 f2data: repository,

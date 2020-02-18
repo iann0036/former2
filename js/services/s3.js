@@ -200,7 +200,7 @@ async function updateDatatableStorageS3() {
                     bucket['MetricsConfigurations'] = data;
                 }).catch(() => { })
             ]).then(async () => {
-                $('#section-storage-s3-buckets-datatable').bootstrapTable('append', [{
+                $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('append', [{
                     f2id: bucket.Name,
                     f2type: 's3.bucket',
                     f2data: bucket,
@@ -214,7 +214,7 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     data['Bucket'] = bucket.Name;
-                    $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('append', [{
+                    $('#section-storage-s3-bucketpolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: bucket.Name,
                         f2type: 's3.bucketpolicy',
                         f2data: data,
@@ -253,7 +253,7 @@ async function updateDatatableStorageS3() {
 
                     data['AccountId'] = accountId;
 
-                    $('#section-storage-s3-accesspoints-datatable').bootstrapTable('append', [{
+                    $('#section-storage-s3-accesspoints-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Name,
                         f2type: 's3.accesspoint',
                         f2data: data,

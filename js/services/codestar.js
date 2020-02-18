@@ -67,7 +67,7 @@ async function updateDatatableDeveloperToolsCodeStar() {
                             data.pipeline.stages.forEach(stage => {
                                 stage.actions.forEach(action => {
                                     if (action.actionTypeId.provider == "GitHub") {
-                                        $('#section-developertools-codestar-githubrepositories-datatable').bootstrapTable('append', [{
+                                        $('#section-developertools-codestar-githubrepositories-datatable').deferredBootstrapTable('append', [{
                                             f2id: action.configuration.Repo,
                                             f2type: 'codestar.githubrepository',
                                             f2data: action.configuration,

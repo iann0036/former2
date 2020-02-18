@@ -269,7 +269,7 @@ async function updateDatatableDatabaseNeptune() {
         $('#section-database-neptune-clusters-datatable').bootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
-            $('#section-database-neptune-clusters-datatable').bootstrapTable('append', [{
+            $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: cluster.DBClusterIdentifier,
                 f2type: 'neptune.cluster',
                 f2data: cluster,
@@ -291,7 +291,7 @@ async function updateDatatableDatabaseNeptune() {
         $('#section-database-neptune-instances-datatable').bootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
-            $('#section-database-neptune-instances-datatable').bootstrapTable('append', [{
+            $('#section-database-neptune-instances-datatable').deferredBootstrapTable('append', [{
                 f2id: instance.DBInstanceIdentifier,
                 f2type: 'neptune.instance',
                 f2data: instance,
@@ -312,7 +312,7 @@ async function updateDatatableDatabaseNeptune() {
         $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
 
         data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
-            $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: clusterParameterGroup.DBClusterParameterGroupArn,
                 f2type: 'neptune.clusterparametergroup',
                 f2data: clusterParameterGroup,
@@ -332,7 +332,7 @@ async function updateDatatableDatabaseNeptune() {
         $('#section-database-neptune-parametergroups-datatable').bootstrapTable('removeAll');
 
         data.DBParameterGroups.forEach(parameterGroup => {
-            $('#section-database-neptune-parametergroups-datatable').bootstrapTable('append', [{
+            $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('append', [{
                 f2id: parameterGroup.DBParameterGroupArn,
                 f2type: 'neptune.parametergroup',
                 f2data: parameterGroup,
@@ -352,7 +352,7 @@ async function updateDatatableDatabaseNeptune() {
         $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
-            $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-database-neptune-subnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: subnetGroup.DBSubnetGroupArn,
                 f2type: 'neptune.subnetgroup',
                 f2data: subnetGroup,

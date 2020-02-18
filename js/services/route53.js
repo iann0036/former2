@@ -340,7 +340,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.HostedZones.map(hostedZone => {
-            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
                 f2id: hostedZone.Id.split("/").pop(),
                 f2type: 'route53.hostedzone',
                 f2data: hostedZone,
@@ -356,7 +356,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 data.ResourceRecordSets.forEach(resourceRecordSet => {
                     resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
 
-                    $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-route53-records-datatable').deferredBootstrapTable('append', [{
                         f2id: resourceRecordSet.Name + " " + resourceRecordSet.Type,
                         f2type: 'route53.record',
                         f2data: resourceRecordSet,
@@ -379,7 +379,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
 
         data.HealthChecks.forEach(healthCheck => {
-            $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').deferredBootstrapTable('append', [{
                 f2id: healthCheck.Id,
                 f2type: 'route53.healthcheck',
                 f2data: healthCheck,
@@ -409,7 +409,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     data.ResolverEndpoint['IpAddresses'] = ipaddressdata.IpAddresses;
                 }).catch(() => { });
 
-                $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('append', [{
+                $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ResolverEndpoint.Arn,
                     f2type: 'route53.resolverendpoint',
                     f2data: data.ResolverEndpoint,
@@ -436,7 +436,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 ResolverRuleId: resolverRule.Id
             }, true).then((data) => {
                 if (!data.ResolverRule.Arn.includes("::autodefined-rule/")) {
-                    $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ResolverRule.Arn,
                         f2type: 'route53.resolverrule',
                         f2data: data.ResolverRule,
@@ -463,7 +463,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 ResolverRuleAssociationId: resolverRuleAssociation.Id
             }, true).then((data) => {
                 if (data.ResolverRuleAssociation.ResolverRuleId != "rslvr-autodefined-rr-internet-resolver") {
-                    $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').bootstrapTable('append', [{
+                    $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ResolverRuleAssociation.Id,
                         f2type: 'route53.resolverruleassociation',
                         f2data: data.ResolverRuleAssociation,

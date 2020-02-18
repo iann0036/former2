@@ -406,7 +406,7 @@ $(document).ready(function(){
 
     $('#search-form').on('submit', function () {
         $('#section-search-datatable').bootstrapTable('removeAll');
-
+        
         $('.f2datatable').each(function(index) {
             if (this.id != "section-search-datatable") {
                 var rows = $(this).bootstrapTable('getData');

@@ -336,7 +336,7 @@ async function updateDatatableDatabaseDynamoDB() {
             return sdkcall("DynamoDB", "describeTable", {
                 TableName: tableName
             }, true).then((data) => {
-                $('#section-database-dynamodb-tables-datatable').bootstrapTable('append', [{
+                $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Table.TableArn,
                     f2type: 'dynamodb.table',
                     f2data: data.Table,
@@ -359,7 +359,7 @@ async function updateDatatableDatabaseDynamoDB() {
         $('#section-database-dynamodb-acceleratorclusters-datatable').bootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
-            $('#section-database-dynamodb-acceleratorclusters-datatable').bootstrapTable('append', [{
+            $('#section-database-dynamodb-acceleratorclusters-datatable').deferredBootstrapTable('append', [{
                 f2id: cluster.ClusterArn,
                 f2type: 'dynamodb.acceleratorcluster',
                 f2data: cluster,
@@ -385,7 +385,7 @@ async function updateDatatableDatabaseDynamoDB() {
                 ParameterGroupName: parameterGroup.ParameterGroupName
             }, true).then((data) => {
                 parameterGroup['Parameters'] = data.Parameters;
-                $('#section-database-dynamodb-acceleratorparametergroups-datatable').bootstrapTable('append', [{
+                $('#section-database-dynamodb-acceleratorparametergroups-datatable').deferredBootstrapTable('append', [{
                     f2id: parameterGroup.ParameterGroupName,
                     f2type: 'dynamodb.acceleratorparametergroup',
                     f2data: parameterGroup,
@@ -405,7 +405,7 @@ async function updateDatatableDatabaseDynamoDB() {
         $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').bootstrapTable('removeAll');
 
         data.SubnetGroups.forEach(subnetGroup => {
-            $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').bootstrapTable('append', [{
+            $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').deferredBootstrapTable('append', [{
                 f2id: subnetGroup.SubnetGroupName,
                 f2type: 'dynamodb.acceleratorsubnetgroup',
                 f2data: subnetGroup,
@@ -432,7 +432,7 @@ async function updateDatatableDatabaseDynamoDB() {
             }, true).then((actions) => {
                 target['ScheduledActions'] = actions.ScheduledActions;
 
-                $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').bootstrapTable('append', [{
+                $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                     f2id: target.ResourceId,
                     f2type: 'applicationautoscaling.scalabletarget',
                     f2data: target,
@@ -455,7 +455,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
-                $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('append', [{
+                $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: target.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: target,

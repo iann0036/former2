@@ -218,7 +218,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
             return sdkcall("CodeBuild", "batchGetProjects", {
                 names: [project]
             }, true).then((data) => {
-                $('#section-developertools-codebuild-projects-datatable').bootstrapTable('append', [{
+                $('#section-developertools-codebuild-projects-datatable').deferredBootstrapTable('append', [{
                     f2id: data.projects[0].arn,
                     f2type: 'codebuild.project',
                     f2data: data.projects[0],
@@ -238,7 +238,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
         $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('removeAll');
 
         data.sourceCredentialsInfos.forEach(sourcecredentials => {
-            $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('append', [{
+            $('#section-developertools-codebuild-sourcecredentials-datatable').deferredBootstrapTable('append', [{
                 f2id: sourcecredentials.arn,
                 f2type: 'codebuild.sourcecredentials',
                 f2data: sourcecredentials,
@@ -260,7 +260,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
                 Arn: notificationRule.Arn
             }, false).then(async (data) => {
                 if (data.Resource.split(":")[2] == "codebuild") {
-                    $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-codebuild-notificationrules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'codestarnotifications.notificationrule',
                         f2data: data,
@@ -283,7 +283,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
             return sdkcall("CodeBuild", "batchGetReportGroups", {
                 reportGroupArns: [reportGroup]
             }, true).then((data) => {
-                $('#section-developertools-codebuild-reportgroups-datatable').bootstrapTable('append', [{
+                $('#section-developertools-codebuild-reportgroups-datatable').deferredBootstrapTable('append', [{
                     f2id: data.reportGroups[0].arn,
                     f2type: 'codebuild.reportgroup',
                     f2data: data.reportGroups[0],

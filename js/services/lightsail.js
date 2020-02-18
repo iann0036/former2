@@ -213,7 +213,7 @@ async function updateDatatableComputeLightsail() {
         $('#section-compute-lightsail-instances-datatable').bootstrapTable('removeAll');
 
         data.instances.forEach(instance => {
-            $('#section-compute-lightsail-instances-datatable').bootstrapTable('append', [{
+            $('#section-compute-lightsail-instances-datatable').deferredBootstrapTable('append', [{
                 f2id: instance.arn,
                 f2type: 'lightsail.instance',
                 f2data: instance,
@@ -231,7 +231,7 @@ async function updateDatatableComputeLightsail() {
         $('#section-compute-lightsail-domains-datatable').bootstrapTable('removeAll');
 
         data.domains.forEach(domain => {
-            $('#section-compute-lightsail-domains-datatable').bootstrapTable('append', [{
+            $('#section-compute-lightsail-domains-datatable').deferredBootstrapTable('append', [{
                 f2id: domain.arn,
                 f2type: 'lightsail.domain',
                 f2data: instance,
@@ -247,7 +247,7 @@ async function updateDatatableComputeLightsail() {
         $('#section-compute-lightsail-keypairs-datatable').bootstrapTable('removeAll');
 
         data.keyPairs.forEach(keypair => {
-            $('#section-compute-lightsail-keypairs-datatable').bootstrapTable('append', [{
+            $('#section-compute-lightsail-keypairs-datatable').deferredBootstrapTable('append', [{
                 f2id: keypair.arn,
                 f2type: 'lightsail.keypair',
                 f2data: keypair,
@@ -265,7 +265,7 @@ async function updateDatatableComputeLightsail() {
         $('#section-compute-lightsail-staticipattachments-datatable').bootstrapTable('removeAll');
 
         data.staticIps.forEach(staticip => {
-            $('#section-compute-lightsail-staticips-datatable').bootstrapTable('append', [{
+            $('#section-compute-lightsail-staticips-datatable').deferredBootstrapTable('append', [{
                 f2id: staticip.arn,
                 f2type: 'lightsail.staticip',
                 f2data: staticip,
@@ -274,7 +274,7 @@ async function updateDatatableComputeLightsail() {
                 ipaddress: staticip.ipAddress
             }]);
             if (staticip.isAttached) {
-                $('#section-compute-lightsail-staticipattachments-datatable').bootstrapTable('append', [{
+                $('#section-compute-lightsail-staticipattachments-datatable').deferredBootstrapTable('append', [{
                     f2id: staticip.arn,
                     f2type: 'lightsail.staticipattachment',
                     f2data: staticip,

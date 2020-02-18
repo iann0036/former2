@@ -208,7 +208,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
             return sdkcall("CodePipeline", "getPipeline", {
                 name: pipeline.name
             }, true).then((data) => {
-                $('#section-developertools-codepipeline-pipelines-datatable').bootstrapTable('append', [{
+                $('#section-developertools-codepipeline-pipelines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.pipeline.name,
                     f2type: 'codepipeline.pipeline',
                     f2data: data.pipeline,
@@ -228,7 +228,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('removeAll');
 
         data.webhooks.forEach(webhook => {
-            $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('append', [{
+            $('#section-developertools-codepipeline-webhooks-datatable').deferredBootstrapTable('append', [{
                 f2id: webhook.arn,
                 f2type: 'codepipeline.webhook',
                 f2data: webhook,
@@ -249,7 +249,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('removeAll');
 
         data.actionTypes.forEach(actionType => {
-            $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('append', [{
+            $('#section-developertools-codepipeline-customactiontypes-datatable').deferredBootstrapTable('append', [{
                 f2id: MD5(JSON.stringify(actionType)),
                 f2type: 'codepipeline.customactiontype',
                 f2data: actionType,
@@ -273,7 +273,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
                 Arn: notificationRule.Arn
             }, false).then(async (data) => {
                 if (data.Resource.split(":")[2] == "codepipeline") {
-                    $('#section-developertools-codepipeline-notificationrules-datatable').bootstrapTable('append', [{
+                    $('#section-developertools-codepipeline-notificationrules-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Arn,
                         f2type: 'codestarnotifications.notificationrule',
                         f2data: data,

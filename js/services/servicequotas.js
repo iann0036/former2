@@ -71,7 +71,7 @@ async function updateDatatableOtherServiceQuotas() {
                 value = value + " " + quota.Unit;
             }
 
-            $('#section-other-servicequotas-servicequotas-datatable').bootstrapTable('append', [{
+            $('#section-other-servicequotas-servicequotas-datatable').deferredBootstrapTable('append', [{
                 f2id: quota.Id,
                 f2type: 'servicequotas.servicequota',
                 f2data: quota,

@@ -290,7 +290,7 @@ async function updateDatatableInternetofThingsCore() {
                         thingName: thing.thingName
                     }, true).then((data) => {
                         data.principals.forEach(principal => {
-                            $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('append', [{
+                            $('#section-internetofthings-core-thingprincipalattachments-datatable').deferredBootstrapTable('append', [{
                                 f2id: principal,
                                 f2type: 'iot.thingprincipalattachment',
                                 f2data: {
@@ -306,7 +306,7 @@ async function updateDatatableInternetofThingsCore() {
                     sdkcall("Iot", "describeThing", {
                         thingName: thing.thingName
                     }, true).then((data) => {
-                        $('#section-internetofthings-core-things-datatable').bootstrapTable('append', [{
+                        $('#section-internetofthings-core-things-datatable').deferredBootstrapTable('append', [{
                             f2id: data.thingArn,
                             f2type: 'iot.thing',
                             f2data: data,
@@ -339,7 +339,7 @@ async function updateDatatableInternetofThingsCore() {
                     policyName: policy.policyName
                 }, true).then((data) => {
                     data.principals.forEach(principal => {
-                        $('#section-internetofthings-core-policyprincipalattachments-datatable').bootstrapTable('append', [{
+                        $('#section-internetofthings-core-policyprincipalattachments-datatable').deferredBootstrapTable('append', [{
                             f2id: principal,
                             f2type: 'iot.policyprincipalattachment',
                             f2data: {
@@ -355,7 +355,7 @@ async function updateDatatableInternetofThingsCore() {
                 sdkcall("Iot", "getPolicy", {
                     policyName: policy.policyName
                 }, true).then((data) => {
-                    $('#section-internetofthings-core-policies-datatable').bootstrapTable('append', [{
+                    $('#section-internetofthings-core-policies-datatable').deferredBootstrapTable('append', [{
                         f2id: data.policyArn,
                         f2type: 'iot.policy',
                         f2data: data,
@@ -381,7 +381,7 @@ async function updateDatatableInternetofThingsCore() {
             return sdkcall("Iot", "describeCertificate", {
                 certificateId: certificate.certificateId
             }, true).then((data) => {
-                $('#section-internetofthings-core-certificates-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-core-certificates-datatable').deferredBootstrapTable('append', [{
                     f2id: data.certificateDescription.certificateArn,
                     f2type: 'iot.certificate',
                     f2data: data.certificateDescription,
@@ -405,7 +405,7 @@ async function updateDatatableInternetofThingsCore() {
             return sdkcall("Iot", "getTopicRule", {
                 ruleName: rule.ruleName
             }, true).then((data) => {
-                $('#section-internetofthings-core-topicrules-datatable').bootstrapTable('append', [{
+                $('#section-internetofthings-core-topicrules-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ruleArn,
                     f2type: 'iot.topicrule',
                     f2data: data,

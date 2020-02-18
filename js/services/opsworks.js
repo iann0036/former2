@@ -502,7 +502,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
         $('#section-managementandgovernance-opsworks-volumes-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Stacks.map(stack => {
-            $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-opsworks-stacks-datatable').deferredBootstrapTable('append', [{
                 f2id: stack.Arn,
                 f2type: 'opsworks.stack',
                 f2data: stack,
@@ -518,7 +518,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                     StackId: stack.StackId
                 }, true).then((data) => {
                     data.Layers.forEach(layer => {
-                        $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-opsworks-layers-datatable').deferredBootstrapTable('append', [{
                             f2id: layer.Arn,
                             f2type: 'opsworks.layer',
                             f2data: layer,
@@ -535,7 +535,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                     StackId: stack.StackId
                 }, true).then((data) => {
                     data.Apps.forEach(app => {
-                        $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-opsworks-apps-datatable').deferredBootstrapTable('append', [{
                             f2id: app.AppId,
                             f2type: 'opsworks.app',
                             f2data: app,
@@ -552,7 +552,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                     StackId: stack.StackId
                 }, true).then((data) => {
                     data.ElasticLoadBalancers.forEach(elbAttachment => {
-                        $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-opsworks-elbattachments-datatable').deferredBootstrapTable('append', [{
                             f2id: elbAttachment.ElasticLoadBalancerName,
                             f2type: 'opsworks.elbattachment',
                             f2data: elbAttachment,
@@ -569,7 +569,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                     StackId: stack.StackId
                 }, true).then(async (data) => {
                     await Promise.all(data.Instances.map(instance => {
-                        $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-opsworks-instances-datatable').deferredBootstrapTable('append', [{
                             f2id: instance.Arn,
                             f2type: 'opsworks.instance',
                             f2data: instance,
@@ -587,7 +587,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
                         }, true).then((data) => {
                             data.Volumes.forEach(volume => {
                                 volume['StackId'] = stack.StackId;
-                                $('#section-managementandgovernance-opsworks-volumes-datatable').bootstrapTable('append', [{
+                                $('#section-managementandgovernance-opsworks-volumes-datatable').deferredBootstrapTable('append', [{
                                     f2id: volume.VolumeId,
                                     f2type: 'opsworks.volume',
                                     f2data: volume,
@@ -619,7 +619,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
         $('#section-managementandgovernance-opsworks-userprofiles-datatable').bootstrapTable('removeAll');
 
         data.UserProfiles.forEach(userProfile => {
-            $('#section-managementandgovernance-opsworks-userprofiles-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('append', [{
                 f2id: userProfile.IamUserArn,
                 f2type: 'opsworks.userprofile',
                 f2data: userProfile,
@@ -639,7 +639,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
         $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').bootstrapTable('removeAll');
 
         data.Servers.forEach(server => {
-            $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').deferredBootstrapTable('append', [{
                 f2id: server.ServerArn,
                 f2type: 'opsworks.configurationmanagementserver',
                 f2data: server,

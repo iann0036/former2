@@ -454,7 +454,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                 DocumentFormat: 'JSON'
             }, false).then((documentcontent) => {
                 document['Content'] = documentcontent.Content;
-                $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-systemsmanager-documents-datatable').deferredBootstrapTable('append', [{
                     f2id: document.Name,
                     f2type: 'ssm.document',
                     f2data: document,
@@ -480,7 +480,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             return sdkcall("SSM", "getParameter", {
                 Name: parameter.Name
             }, true).then((data) => {
-                $('#section-managementandgovernance-systemsmanager-parameters-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-systemsmanager-parameters-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Parameter.ARN,
                     f2type: 'ssm.parameter',
                     f2data: data.Parameter,
@@ -507,7 +507,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             return sdkcall("SSM", "getPatchBaseline", {
                 BaselineId: baseline.BaselineId
             }, true).then((data) => {
-                $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.BaselineId,
                     f2type: 'ssm.patchbaseline',
                     f2data: data,
@@ -535,7 +535,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                 AssociationId: association.AssociationId,
                 AssociationVersion: association.AssociationVersion
             }, true).then((data) => {
-                $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('append', [{
+                $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('append', [{
                     f2id: data.AssociationDescription.Name,
                     f2type: 'ssm.association',
                     f2data: data.AssociationDescription,
@@ -569,7 +569,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                             WindowId: window.WindowId,
                             WindowTaskId: task.WindowTaskId
                         }, true).then((data) => {
-                            $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').bootstrapTable('append', [{
+                            $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.WindowTaskId,
                                 f2type: 'ssm.maintenancewindowtask',
                                 f2data: data,
@@ -586,7 +586,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                     WindowId: window.WindowId
                 }, true).then((data) => {
                     data.Targets.forEach(target => {
-                        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').bootstrapTable('append', [{
+                        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').deferredBootstrapTable('append', [{
                             f2id: target.Name,
                             f2type: 'ssm.maintenancewindowtarget',
                             f2data: target,
@@ -601,7 +601,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
                 sdkcall("SSM", "getMaintenanceWindow", {
                     WindowId: window.WindowId
                 }, true).then((data) => {
-                    $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').bootstrapTable('append', [{
+                    $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').deferredBootstrapTable('append', [{
                         f2id: data.WindowId,
                         f2type: 'ssm.maintenancewindow',
                         f2data: data,
@@ -627,7 +627,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('removeAll');
 
         data.ResourceDataSyncItems.forEach(dataSync => {
-            $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('append', [{
+            $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').deferredBootstrapTable('append', [{
                 f2id: dataSync.SyncName,
                 f2type: 'ssm.resourcedatasync',
                 f2data: dataSync,

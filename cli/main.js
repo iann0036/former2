@@ -31,6 +31,11 @@ $obj.prototype.bootstrapTable = function (action, data) {
         cli_resources = [...cli_resources, ...data];
     }
 }
+$obj.prototype.deferredBootstrapTable = function (action, data) {
+    if (action == "append") {
+        cli_resources = [...cli_resources, ...data];
+    }
+}
 $.notify = function () { }
 
 var region = process.env.AWS_DEFAULT_REGION || process.env.AWS_REGION || 'us-east-1';
