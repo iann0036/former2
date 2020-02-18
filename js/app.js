@@ -60,6 +60,7 @@ $(document).ready(function(){
                                 data-show-pagination-switch="true"
                                 data-pagination="true"
                                 data-id-field="id"
+                                data-page-size="All"
                                 data-page-list="[10, 25, 50, 100, ALL]"
                                 data-show-footer="false"
                                 data-response-handler="responseHandler">
