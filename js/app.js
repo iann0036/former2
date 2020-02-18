@@ -5,6 +5,7 @@ var _AWS = AWS;
 var visited_sections = [];
 var ping_extension_interval = null;
 var stack_parameters = [];
+var MAX_DT_SCANS = 10;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -827,8 +828,6 @@ $(document).ready(function(){
         var totaldatatables = datatablefuncs.length;
 
         $('#scan-account').html('Scanning... (0/' + totaldatatables + ')');
-
-        var MAX_DT_SCANS = 10;
 
         function processDatatable(dt) {
             // var starttime = new Date();
