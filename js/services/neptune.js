@@ -399,6 +399,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['kms_key_arn'] = obj.data.KmsKeyId;
         reqParams.cfn['IamAuthEnabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
         reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
 
         /*
         TODO:
