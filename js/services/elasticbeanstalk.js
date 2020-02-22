@@ -246,8 +246,9 @@ async function updateDatatableComputeElasticBeanstalk() {
         // no params
     }, true).then(async (data) => {
         $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
+        $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
 
-        await Promise.all(data.Applications.map(application => {
+        await Promise.all(data.Applications.map(async (application) => {
             $('#section-compute-elasticbeanstalk-applications-datatable').deferredBootstrapTable('append', [{
                 f2id: application.ApplicationName,
                 f2type: 'elasticbeanstalk.application',
@@ -258,24 +259,29 @@ async function updateDatatableComputeElasticBeanstalk() {
                 datecreated: application.DateCreated
             }]);
 
-            return sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
+            return sdkcall("ElasticBeanstalk", "describeEnvironments", {
                 ApplicationName: application.ApplicationName
-            }, false).then((data) => {
-                $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
-
-                data.ConfigurationSettings.forEach(configurationTemplate => {
-                    $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').deferredBootstrapTable('append', [{
-                        f2id: application.ApplicationName + configurationTemplate.TemplateName,
-                        f2type: 'elasticbeanstalk.configurationtemplate',
-                        f2data: configurationTemplate,
-                        f2region: region,
-                        name: configurationTemplate.TemplateName,
-                        description: configurationTemplate.Description,
-                        platformarn: configurationTemplate.PlatformArn,
-                        environmentname: configurationTemplate.EnvironmentName,
-                        datecreated: configurationTemplate.DateCreated
-                    }]);
-                });
+            }, true).then(async (data) => {
+                await Promise.all(data.Environments.map(async (environment) => {
+                    return sdkcall("ElasticBeanstalk", "describeConfigurationSettings", {
+                        ApplicationName: application.ApplicationName,
+                        EnvironmentName: environment.EnvironmentName
+                    }, false).then((data) => {
+                        data.ConfigurationSettings.forEach(configurationTemplate => {
+                            $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').deferredBootstrapTable('append', [{
+                                f2id: application.ApplicationName + configurationTemplate.TemplateName,
+                                f2type: 'elasticbeanstalk.configurationtemplate',
+                                f2data: configurationTemplate,
+                                f2region: region,
+                                name: configurationTemplate.TemplateName,
+                                description: configurationTemplate.Description,
+                                platformarn: configurationTemplate.PlatformArn,
+                                environmentname: configurationTemplate.EnvironmentName,
+                                datecreated: configurationTemplate.DateCreated
+                            }]);
+                        });
+                    }).catch(() => { });
+                }));
             }).catch(() => { });
         }));
 
