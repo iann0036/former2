@@ -1091,7 +1091,7 @@ $(document).ready(function(){
             allowed_values = allowed_values.split(",");
         }
 
-        stack_parameters.push({
+        stack_parameters.unshift({
             'name': $('#add-parameter-name').val(),
             'description': $('#add-parameter-description').val(),
             'constraint_description': $('#add-parameter-constraint-description').val(),

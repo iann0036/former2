@@ -234,8 +234,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['DomainValidationOptions'] = [];
             obj.data.DomainValidationOptions.forEach(domainValidation => {
                 reqParams.cfn['DomainValidationOptions'].push({
-                    'DomainName': obj.data.DomainValidationOptions.DomainName,
-                    'ValidationDomain': obj.data.DomainValidationOptions.ValidationDomain
+                    'DomainName': domainValidation.DomainName,
+                    'ValidationDomain': domainValidation.ValidationDomain
                 });
             });
             reqParams.tf['validation_method'] = "DNS";
