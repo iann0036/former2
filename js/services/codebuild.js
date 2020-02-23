@@ -485,14 +485,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "codebuild.sourcecredentials") {
         reqParams.cfn['AuthType'] = obj.data.authType;
         reqParams.cfn['ServerType'] = obj.data.serverType;
-        reqParams.cfn['Token'] = 'REPLACEME';
-        reqParams.cfn['Username'] = 'REPLACEME';
-
-        /*
-        TODO
-        Token: String
-        Username: String
-        */
+        if (obj.data.serverType == "GITHUB" || obj.data.serverType == "GITHUB_ENTERPRISE") {
+            reqParams.cfn['Token'] = 'REPLACEME';
+        }
+        if (obj.data.serverType == "BITBUCKET") {
+            reqParams.cfn['Username'] = 'REPLACEME';
+        }
 
         tracked_resources.push({
             'obj': obj,

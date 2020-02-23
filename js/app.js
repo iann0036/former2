@@ -548,6 +548,11 @@ $(document).ready(function(){
                 
                 setTimeout(function(){
                     cfn_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
                 }, 1);
             } else if (location.hash == "#section-outputs-tf") {
                 $('#header-button-copy-tf').attr('style', '');
@@ -555,6 +560,11 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     tf_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
                 }, 1);
             } else if (location.hash == "#section-outputs-troposphere") {
                 $('#header-button-copy-troposphere').attr('style', '');
@@ -562,6 +572,11 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     troposphere_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
                 }, 1);
             } else if (location.hash == "#section-outputs-cdkts") {
                 $('#header-button-copy-cdkts').attr('style', '');
@@ -569,6 +584,11 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     cdkts_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
                 }, 1);
             } else if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
@@ -643,28 +663,37 @@ $(document).ready(function(){
             var mapped_outputs = compileOutputs(tracked_resources, null);
 
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
+            tf_editor.getDoc().setValue(mapped_outputs['tf']);
+            troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
+            cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
+            raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
+
+            // Gutters
+            [
+                {key: 'cfn', editor: cfn_editor},
+                {key: 'tf', editor: tf_editor}, 
+                {key: 'troposphere', editor: troposphere_editor},
+                {key: 'cdkts', editor: cdkts_editor}
+            ].forEach(language => {
+                var lines = mapped_outputs[language.key].split("\n");
+                for (var i=0; i<lines.length; i++) {
+                    if (lines[i].includes("REPLACEME")) {
+                        language.editor.setGutterMarker(i, "f2gutter", makeReplacementMarker());
+                    }
+                }
+            });
+
             setTimeout(function(){
                 cfn_editor.refresh();
-            }, 1);
-
-            tf_editor.getDoc().setValue(mapped_outputs['tf']);
-            setTimeout(function(){
                 tf_editor.refresh();
-            }, 1);
-
-            troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
-            setTimeout(function(){
                 troposphere_editor.refresh();
-            }, 1);
-
-            cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
-            setTimeout(function(){
                 cdkts_editor.refresh();
-            }, 1);
-
-            raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
-            setTimeout(function(){
                 raw_editor.refresh();
+                tippy('.f2replacementmarker', {
+                    content: "Value requires replacement",
+                    placement: "right",
+                    theme: "material"
+                });
             }, 1);
 
             resolve();
@@ -764,6 +793,7 @@ $(document).ready(function(){
 
     cfn_editor = CodeMirror.fromTextArea(document.getElementById('cfn'), {
         lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
         mode: "yaml",
         theme: "material",
@@ -776,6 +806,7 @@ $(document).ready(function(){
 
     tf_editor = CodeMirror.fromTextArea(document.getElementById('tf'), {
         lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
         mode: "ruby",
         theme: "material",
@@ -788,6 +819,7 @@ $(document).ready(function(){
 
     troposphere_editor = CodeMirror.fromTextArea(document.getElementById('troposphere'), {
         lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
         mode: "python",
         theme: "material",
@@ -800,6 +832,7 @@ $(document).ready(function(){
 
     cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
         lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
         mode: "javascript",
         theme: "material",
@@ -812,6 +845,7 @@ $(document).ready(function(){
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
         mode: "javascript",
         theme: "material",
@@ -1027,6 +1061,10 @@ $(document).ready(function(){
     // Misc
     /* ========================================================================== */
 
+    tippy('[data-tippy-content]', {
+        theme: 'material'
+    });
+
     $('.select2-no-search-arrow').select2({ // Selectors for settings
         minimumResultsForSearch: "Infinity",
         theme: "arrow"
@@ -1197,6 +1235,13 @@ function unblockUI(selector) {
 }
 
 /* ========================================================================== */
+
+function makeReplacementMarker() {
+    var marker = document.createElement("div");
+    marker.classList.add("f2replacementmarker");
+    marker.innerHTML = "<i style=\"color: #ffd301; font-size: .8em; padding-left: 6px;\" class=\"fa fa-warning\"></i>";
+    return marker;
+}
 
 function generateParameterTable() {
     if (stack_parameters.length > 2) {

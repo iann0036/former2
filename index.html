@@ -31,6 +31,7 @@
         <link rel="stylesheet" href="css/lib/bootstrap-table/bootstrap-table.css">
         <link rel="stylesheet" href="css/lib/font-awesome/font-awesome.min.css">
         <link rel="stylesheet" href="css/lib/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="js/lib/tippy/themes/material.css">
 
         <link rel="stylesheet" href="css/separate/vendor/blockui.min.css">
         <link rel="stylesheet" href="css/separate/pages/widgets.min.css">
@@ -1203,7 +1204,7 @@
                                 </div>
                                 <br />
                                 <div class="form-group">
-                                    <h5>Logical ID Strategy&nbsp;<div class="f2tooltip"><i class="fa fa-warning" style="color: #f29824;"></i><span class="f2tooltiptext">Experimental</span></div></h5>
+                                    <h5>Logical ID Strategy</h5>
                                     <p>Change your preference for the naming of Logical IDs:</p>
                                     <select id="logicalidstrategy" class="select2-arrow manual select2-no-search-arrow">
                                         <option value="serviceprefixhashsuffix">Service prefix + hash suffix</option>
@@ -1226,7 +1227,7 @@
                                 </div>
                                 <br />
                                 <div class="form-group">
-                                    <h5>Add All Resources&nbsp;<div class="f2tooltip"><i class="fa fa-warning" style="color: #f29824;"></i><span class="f2tooltiptext">Experimental</span></div></h5>
+                                    <h5>Add All Resources&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
                                     <p>Use the below button to add all scanned resources to the outputs (not recommended):</p>
                                     <button id="add-all-resources" class="btn btn-sm btn-secondary">
                                         <i class="font-icon font-icon-scanner"></i> Add All Resources
@@ -1347,7 +1348,8 @@
         </div>
 
         <script src="js/lib/jquery/jquery-3.2.1.min.js"></script>
-        <script src="js/lib/popper/popper.min.js"></script>
+        <script src="js/lib/tippy/popper.min.js"></script>
+        <script src="js/lib/tippy/tippy-bundle.iife.min.js"></script>
         <script src="js/lib/tether/tether.min.js"></script>
         <script src="js/lib/bootstrap/bootstrap.min.js"></script>
         <script src="js/ui-plugins.js"></script>

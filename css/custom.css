@@ -74,48 +74,6 @@
     padding-right: 10px;
 }
 
-/* Tooltip container */
-.f2tooltip {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Tooltip text */
-  .f2tooltip .f2tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #555;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    font-size: 14px;
-  
-    /* Position the tooltip text */
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-  
-    /* Fade in tooltip */
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  /* Tooltip arrow */
-  .f2tooltip .f2tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-  }
-  
-  .f2tooltip:hover .f2tooltiptext {
-    visibility: visible;
-    opacity: 1;
-  }
+.f2gutter {
+    width: 1em;
+}
