@@ -164,10 +164,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "autoscaling.scheduledaction") {
         reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
         reqParams.tf['autoscaling_group_name'] = obj.data.AutoScalingGroupName;
-        reqParams.cfn['StartTime'] = obj.data.StartTime.toISOString();
-        reqParams.tf['start_time'] = obj.data.StartTime.toISOString();
-        reqParams.cfn['EndTime'] = obj.data.EndTime.toISOString();
-        reqParams.tf['end_time'] = obj.data.EndTime.toISOString();
+        reqParams.cfn['StartTime'] = obj.data.StartTime;
+        reqParams.tf['start_time'] = obj.data.StartTime;
+        reqParams.cfn['EndTime'] = obj.data.EndTime;
+        reqParams.tf['end_time'] = obj.data.EndTime;
         reqParams.cfn['Recurrence'] = obj.data.Recurrence;
         reqParams.tf['recurrence'] = obj.data.Recurrence;
         reqParams.cfn['MaxSize'] = obj.data.MaxSize;
