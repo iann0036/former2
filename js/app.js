@@ -430,23 +430,6 @@ $(document).ready(function(){
     // Credentials
     /* ========================================================================== */
 
-    $('#credentials-accesskey').on('change', () => {
-        window.localStorage.setItem('credentials-accesskey', $('#credentials-accesskey').val().trim());
-        updateIdentity();
-    });
-    $('#credentials-secretkey').on('change', () => {
-        window.localStorage.setItem('credentials-secretkey', $('#credentials-secretkey').val().trim());
-        updateIdentity();
-    });
-    $('#credentials-sessiontoken').on('change', () => {
-        window.localStorage.setItem('credentials-sessiontoken', $('#credentials-sessiontoken').val().trim());
-        updateIdentity();
-    });
-    $('#credentials-assumerole').on('change', () => {
-        window.localStorage.setItem('credentials-assumerole', $('#credentials-assumerole').val().trim());
-        updateIdentity();
-    });
-
     var accesskey = window.localStorage.getItem('credentials-accesskey');
     if (accesskey) {
         $('#credentials-accesskey').val(accesskey);
@@ -463,6 +446,45 @@ $(document).ready(function(){
     if (assumerole) {
         $('#credentials-assumerole').val(assumerole);
     }
+
+    $('#credentials-accesskey').on('change', () => {
+        var val = $('#credentials-accesskey').val().trim();
+        if (val == "") {
+            window.localStorage.removeItem('credentials-accesskey');
+        } else {
+            window.localStorage.setItem('credentials-accesskey', val);
+        }
+        updateIdentity();
+    });
+    $('#credentials-secretkey').on('change', () => {
+        var val = $('#credentials-secretkey').val().trim();
+        if (val == "") {
+            window.localStorage.removeItem('credentials-secretkey');
+            $('.scan-account').attr('disabled', 'disabled');
+        } else {
+            window.localStorage.setItem('credentials-secretkey', val);
+            $('.scan-account').removeAttr('disabled');
+        }
+        updateIdentity();
+    });
+    $('#credentials-sessiontoken').on('change', () => {
+        var val = $('#credentials-sessiontoken').val().trim();
+        if (val == "") {
+            window.localStorage.removeItem('credentials-sessiontoken');
+        } else {
+            window.localStorage.setItem('credentials-sessiontoken', val);
+        }
+        updateIdentity();
+    });
+    $('#credentials-assumerole').on('change', () => {
+        var val = $('#credentials-assumerole').val().trim();
+        if (val == "") {
+            window.localStorage.removeItem('credentials-assumerole');
+        } else {
+            window.localStorage.setItem('credentials-assumerole', val);
+        }
+        updateIdentity();
+    });
 
     /* ========================================================================== */
     // Navigation
@@ -813,11 +835,11 @@ $(document).ready(function(){
     // Account Scan
     /* ========================================================================== */
 
-    $('#scan-account').on('click', () => {
+    $('.scan-account').on('click', () => {
         var completeddatatablecalls = 0;
         var datatablefuncs = [];
 
-        $('#scan-account').attr('disabled', 'disabled');
+        $('.scan-account').attr('disabled', 'disabled');
         $('#search-no-scan-warning').attr('style', 'display: none;');
 
         Object.getOwnPropertyNames(window).forEach(prop => {
@@ -828,18 +850,18 @@ $(document).ready(function(){
 
         var totaldatatables = datatablefuncs.length;
 
-        $('#scan-account').html('Scanning... (0/' + totaldatatables + ')');
+        $('.scan-account').html('Scanning... (0/' + totaldatatables + ')');
 
         function processDatatable(dt) {
             // var starttime = new Date();
 
             window[dt]().catch(err => {}).finally(() => {
                 completeddatatablecalls += 1;
-                $('#scan-account').html('Scanning... (' + completeddatatablecalls + '/' + totaldatatables + ')');
+                $('.scan-account').html('Scanning... (' + completeddatatablecalls + '/' + totaldatatables + ')');
                 if (completeddatatablecalls == totaldatatables) {
                     visited_sections.push("all");
-                    $('#scan-account').removeAttr('disabled');
-                    $('#scan-account').html('Scan Again');
+                    $('.scan-account').removeAttr('disabled');
+                    $('.scan-account').html('Scan Again');
                 }
 
                 // console.log("Finished " + dt + " - " + Math.ceil((new Date() - starttime)/1000)); // for performance testing
@@ -1099,6 +1121,10 @@ $(document).ready(function(){
     $('#relatedresourcessetting').change(function() {
         window.localStorage.setItem('relatedresourcessetting', $(this).is(':checked').toString());
     });
+
+    if (window.localStorage.getItem('credentials-secretkey')) {
+        $('.scan-account').removeAttr('disabled');
+    }
 
 }); // <-- End of documentReady
 
