@@ -371,9 +371,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['Tier'] = obj.data.Tier;
         reqParams.tf['tier'] = obj.data.Tier;
+
         try {
-            reqParams.cfn['CNAMEPrefix'] = new URL("https://" + obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
-            reqParams.tf['cname_prefix'] = new URL("https://" + obj.data.CNAME).hostname.split(".")[0].split("-").splice(-1, 1).join("-");
+            // obj.data.CNAME is in the following format: my-awsome-app.ap-northeast-1.elasticbeanstalk.com
+            reqParams.cfn['CNAMEPrefix'] = obj.data.CNAME.split(".")[0];
+            reqParams.tf['cname_prefix'] = obj.data.CNAME.split(".")[0];
         } catch (err) {
             f2log("Could not determine CNAME prefix for Elastic Beanstalk");
         }
