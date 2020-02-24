@@ -325,6 +325,10 @@ $(document).ready(function(){
             $('#relatedresources').html(html);
             $('#relatedmodal').modal('show');
         }
+
+        $("#add-related-selectall").off('click').on('click', function(){
+            $(".related-check").prop("checked",$("#add-related-selectall").is(":checked"));
+        });
         
         $('#related-add-selected-button').off('click').on('click', function(){
             $('.related-check').each(function(i){
