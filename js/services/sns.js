@@ -138,7 +138,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                     }]);
 
                     $('#section-applicationintegration-sns-topicpolicies-datatable').deferredBootstrapTable('append', [{
-                        f2id: topic.TopicArn,
+                        f2id: topic.TopicArn + " Policy",
                         f2type: 'sns.topicpolicy',
                         f2data: {
                             'Policy': data.Attributes.Policy,
