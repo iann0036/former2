@@ -414,7 +414,7 @@ $(document).ready(function(){
                 rows.forEach(row => {
                     var searchterm = $('#search-input').val();
                     if (JSON.stringify(row).includes(searchterm)) {
-                        $('#section-search-datatable').bootstrapTable('append', [row]);
+                        $('#section-search-datatable').deferredBootstrapTable('append', [row]);
                     }
                 });
             }
