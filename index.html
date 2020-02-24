@@ -139,7 +139,9 @@
                                 <button class="btn btn-nav btn-inline btn-primary" id="generate-outputs" disabled>
                                     Generate
                                 </button>
-
+                                <button class="btn btn-nav btn-inline btn-primary" id="list-resources">
+                                    List Resources
+                                </button>
                                 <div class="dropdown" style="float: right;">
                                     <button class="btn btn-rounded btn-inline btn-secondary dropdown-toggle" id="selected-region" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp;&nbsp;</button>
                                     <div class="dropdown-menu" aria-labelledby="selected-region">
@@ -226,6 +228,7 @@
                         <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
                         <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
+                        <li><a href="#section-outputs-list"><span class="lbl">List resources</span></a></li>
                     </ul>
                 </li>
             </ul>
@@ -1233,6 +1236,17 @@
                                         <i class="font-icon font-icon-scanner"></i> Add All Resources
                                     </button>
                                 </div>
+                                <br />
+                                <div class="form-group">
+                                    <h5>Add Resources by Tag</h5>
+                                    <p>Use the below button to add all scanned resources that contain a tag and value to the outputs:</p>
+                                    <formgroup><label>Tag:</label><input id="ByTagName" type=text></formgroup>
+                                    <formgroup><label>value:</label><input id="ByTagValue" type=text></formgroup>
+                                    <br/><br/>
+                                    <button id="add-resources-by-tag" class="btn btn-sm btn-secondary">
+                                        <i class="font-icon font-icon-scanner"></i> Add Resources  by Tag
+                                    </button><p></p>
+                                </div>
                             </div>
                             <div class="col-md-1"></div>
                         </div>
@@ -1344,6 +1358,12 @@
                     </div>
                 </section>
 
+                <section id="section-outputs-list" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="List Resources" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='list_container'>
+                        <div id='list'></div>
+                    </div>
+                </section>
+                
             </div>
         </div>
 

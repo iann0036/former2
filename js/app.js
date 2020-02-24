@@ -1,6 +1,7 @@
 var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
+var list_objects = [];
 var _AWS = AWS;
 var visited_sections = [];
 var ping_extension_interval = null;
@@ -110,6 +111,54 @@ $(document).ready(function(){
 
         return ids;
     }
+
+    function addRowsWithTagToTemplate(selector, tagName, tagValue) {
+        var ids = $.map($(selector).bootstrapTable('getData'), function (row) {
+            if (row.f2data.Tags)
+            {
+                for (tag in row.f2data.Tags) {
+                    if (tag.toUpperCase === tagName.toUpperCase)
+                    {
+                        value = row.f2data.Tags[tag];
+                        if (value.toUpperCase === tagValue.toUpperCase)
+                        {
+                            output_objects.push({
+                                'id': row.f2id,
+                                'type': row.f2type,
+                                'data': row.f2data,
+                                'region': row.f2region
+                            });
+                            return row.f2id;
+                        }
+                    }
+                }
+            }
+            return null;
+        });
+
+        $('#generate-outputs').text("Generate (" + output_objects.length + ")");
+        $('#generate-outputs').removeAttr('disabled');
+
+        return ids;
+    }
+
+    function listAllTableRows(selector) { 
+        htmlResources = "";
+        var ids = $.map($(selector).bootstrapTable('getData'), function (row) {
+            list_objects.push({
+                'id': row.f2id,
+                'type': row.f2type,
+                'region': row.f2region
+            });
+            htmlResources += row.f2id+","+row.f2type+","+row.f2region+"\n";
+
+            return row.f2id;
+        });
+        $('#list-resources').text("List Resources");
+
+        $('#list-resources').removeAttr('disabled');
+        return htmlResources;
+    }    
 
     function checkRelatedResources(rows) {
         var check_objects = [];
@@ -508,6 +557,7 @@ $(document).ready(function(){
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdkts').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
+        $('#header-button-copy-list').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
             if (location.hash == "#section-dashboard" || location.hash == "#section-search") {
@@ -597,6 +647,10 @@ $(document).ready(function(){
                 setTimeout(function(){
                     raw_editor.refresh();
                 }, 1);
+            } else if (location.hash == "#section-outputs-list") {
+                $('#header-button-copy-list').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
             } else if (location.hash.startsWith("#section-")) {
                 refreshDatatableFirstVisit(location.hash.substring(9));
             }
@@ -917,6 +971,29 @@ $(document).ready(function(){
         $('.f2datatable').each(function() {
             addAllTableRowsToTemplate("#" + this.id);
         });
+    });
+
+    $('#add-resources-by-tag').on('click', () => {
+        output_objects = [];
+        $('.f2datatable').each(function() {
+            addRowsWithTagToTemplate("#" + this.id,$("#ByTagName").val(),$("#ByTagValue").val());
+        });
+    });  
+
+    $('#list-resources').on('click', () => { // WC
+        list_objects = [];
+        htmlResources = "";
+        $('.f2datatable').each(function() {
+            htmlResources += listAllTableRows("#" + this.id)
+        });
+        txt = "<table cellpadding='5px'><tr><th>Id</th><th>Type</th><th>Region</th></tr>";
+        list_objects.forEach(function(item,index) {
+            txt += "<tr><td style='padding-right:20px'>"+item.id+"</td><td style='padding-right:20px'>"+item.type+"</td><td>"+item.region+"</td></tr>";
+        });
+        txt+="</table>";
+        document.getElementById('list').innerHTML = txt;
+            
+        window.location.href = "#section-outputs-list";
     });
 
     /* ========================================================================== */
