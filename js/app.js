@@ -162,15 +162,18 @@ $(document).ready(function(){
                                             }
                                             mapped_check_objects.forEach(child_obj => {
                                                 if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
-                                                    for (var i=0; i<output_objects.length; i++) { // check if already added
-                                                        if (output_objects[i].id == child_obj.obj.id) {
-                                                            return;
+                                                    var is_duplicate = false;
+                                                    for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
+                                                        if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
+                                                            is_duplicate = true;
                                                         }
                                                     };
                                                     if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                         related_resources[readable_relationship_type] = [];
                                                     }
-                                                    related_resources[readable_relationship_type].push(child_obj);
+                                                    if (!is_duplicate) {
+                                                        related_resources[readable_relationship_type].push(child_obj);
+                                                    }
                                                 }
                                             });
                                         });
@@ -178,15 +181,18 @@ $(document).ready(function(){
                                         var propertyvalue = obj.options.cfn[propertyname];
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
-                                                for (var i=0; i<output_objects.length; i++) { // check if already added
-                                                    if (output_objects[i].id == child_obj.obj.id) {
-                                                        return;
+                                                var is_duplicate = false;
+                                                for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
+                                                    if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
+                                                        is_duplicate = true;
                                                     }
                                                 };
                                                 if (!Array.isArray(related_resources[readable_relationship_type])) {
                                                     related_resources[readable_relationship_type] = [];
                                                 }
-                                                related_resources[readable_relationship_type].push(child_obj);
+                                                if (!is_duplicate) {
+                                                    related_resources[readable_relationship_type].push(child_obj);
+                                                }
                                             }
                                         });
                                     }
