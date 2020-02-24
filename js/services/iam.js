@@ -798,6 +798,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_iam_group',
             'options': reqParams,
             'returnValues': {
+                'Ref': obj.data.GroupName,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                },
                 'Import': {
                     'GroupName': obj.data.GroupName
                 }
