@@ -297,6 +297,33 @@ $(document).ready(function(){
             }
         });
 
+        // check for related row overlaps
+        rows.forEach(row => {
+            Object.keys(related_resources).forEach(restype => {
+                for (var i=0; i<related_resources[restype].length; i++) {
+                    if (related_resources[restype][i].obj.id == row.f2id) {
+                        related_resources[restype].splice(i, 1);
+                        i--;
+                    }
+                };
+                if (related_resources[restype].length < 1) {
+                    delete related_resources[restype];
+                }
+            });
+            Object.keys(related_resources_post).forEach(restype => {
+                for (var i=0; i<related_resources_post[restype].length; i++) {
+                    if (related_resources_post[restype][i].obj.id == row.f2id) {
+                        related_resources_post[restype].splice(i, 1);
+                        i--;
+                    }
+                };
+                if (related_resources_post[restype].length < 1) {
+                    delete related_resources_post[restype];
+                }
+            });
+        });
+
+        // create modal if related resources exist
         if (Object.keys(related_resources).length || Object.keys(related_resources_post).length) {
             var html = '';
             var i = 1;
