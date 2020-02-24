@@ -399,16 +399,17 @@ async function updateDatatableComputeLambda() {
                     FunctionName: lambdaFunction.FunctionArn
                 }, false).then((data) => {
                     var policy = JSON.parse(data.Policy);
-
+                    var i = 1;
                     policy.Statement.forEach(statement => {
                         statement['FunctionName'] = lambdaFunction.FunctionArn;
                         $('#section-compute-lambda-permissions-datatable').deferredBootstrapTable('append', [{
-                            f2id: statement.FunctionName,
+                            f2id: statement.FunctionName + " Permission " + i,
                             f2type: 'lambda.permission',
                             f2data: statement,
                             f2region: region,
                             functionname: statement.FunctionName
                         }]);
+                        i+=1;
                     });
                 }).catch(() => { }),
                 sdkcall("Lambda", "listAliases", {
