@@ -87,7 +87,7 @@ async function updateDatatableApplicationIntegrationSQS() {
                     }]);
 
                     $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('append', [{
-                        f2id: queueUrl,
+                        f2id: queueUrl + " Policy",
                         f2type: 'sqs.queuepolicy',
                         f2data: {
                             'Policy': data.Attributes.Policy,

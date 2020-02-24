@@ -114,6 +114,7 @@ $(document).ready(function(){
     function checkRelatedResources(rows) {
         var check_objects = [];
         var related_resources = {};
+        var related_resources_post = {};
         $('.f2datatable').each(function() {
             var datatableid = this.id;
             var ids = $.map($("#" + this.id).bootstrapTable('getData'), function (checkobjectrow) {
@@ -131,6 +132,7 @@ $(document).ready(function(){
         mapped_check_objects = performF2Mappings(check_objects);
         mapped_check_objects.forEach(obj => {
             rows.forEach(row => {
+                // looks for relationships from the row to the check objects
                 if (obj.obj.id == row.f2id && obj.type && RELATIONSHIP_TYPE_MAP[obj.type] && RELATIONSHIP_TYPE_MAP[obj.type]['Relationships']) {
                     var relationships = RELATIONSHIP_TYPE_MAP[obj.type]['Relationships'];
                     Object.keys(relationships).forEach(relationshiptype => {
@@ -144,6 +146,9 @@ $(document).ready(function(){
                             readable_relationship_type = "Is Associated With";
                         } else if (relationshiptype == "References") {
                             readable_relationship_type = "References";
+                        } else {
+                            f2log("Unknown relationship type");
+                            readable_relationship_type = "Related To";
                         }
 
                         Object.keys(relationships[relationshiptype]).forEach(relatedresourcetype => {
@@ -163,14 +168,14 @@ $(document).ready(function(){
                                             mapped_check_objects.forEach(child_obj => {
                                                 if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                     var is_duplicate = false;
+                                                    if (!Array.isArray(related_resources[readable_relationship_type])) {
+                                                        related_resources[readable_relationship_type] = [];
+                                                    }
                                                     for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
                                                         if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
                                                             is_duplicate = true;
                                                         }
                                                     };
-                                                    if (!Array.isArray(related_resources[readable_relationship_type])) {
-                                                        related_resources[readable_relationship_type] = [];
-                                                    }
                                                     if (!is_duplicate) {
                                                         related_resources[readable_relationship_type].push(child_obj);
                                                     }
@@ -182,14 +187,14 @@ $(document).ready(function(){
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                 var is_duplicate = false;
+                                                if (!Array.isArray(related_resources[readable_relationship_type])) {
+                                                    related_resources[readable_relationship_type] = [];
+                                                }
                                                 for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
                                                     if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
                                                         is_duplicate = true;
                                                     }
                                                 };
-                                                if (!Array.isArray(related_resources[readable_relationship_type])) {
-                                                    related_resources[readable_relationship_type] = [];
-                                                }
                                                 if (!is_duplicate) {
                                                     related_resources[readable_relationship_type].push(child_obj);
                                                 }
@@ -202,9 +207,124 @@ $(document).ready(function(){
                     });
                 }
             });
+
+            // looks for relationships from the check objects to the row
+            if (obj.type && RELATIONSHIP_TYPE_MAP[obj.type] && RELATIONSHIP_TYPE_MAP[obj.type]['Relationships']) {
+                var relationships = RELATIONSHIP_TYPE_MAP[obj.type]['Relationships'];
+                Object.keys(relationships).forEach(relationshiptype => {
+                    var readable_relationship_type = relationshiptype;
+
+                    // inverted
+                    if (relationshiptype == "IsContainedInside") {
+                        readable_relationship_type = "Contains";
+                    } else if (relationshiptype == "Uses") {
+                        readable_relationship_type = "Is Used By";
+                    } else if (relationshiptype == "IsAssociatedWith") {
+                        readable_relationship_type = "Is Associated With";
+                    } else if (relationshiptype == "References") {
+                        readable_relationship_type = "Is Referenced By";
+                    } else {
+                        f2log("Unknown relationship type");
+                        readable_relationship_type = "Related To";
+                    }
+
+                    Object.keys(relationships[relationshiptype]).forEach(relatedresourcetype => {
+                        if (!Array.isArray(relationships[relationshiptype][relatedresourcetype])) {
+                            relationships[relationshiptype][relatedresourcetype] = [
+                                relationships[relationshiptype][relatedresourcetype]
+                            ]; // always in array
+                        }
+                        relationships[relationshiptype][relatedresourcetype].forEach(relation => {
+                            var propertyname = relation['PropertyName'];
+                            if (propertyname && obj.options.cfn[propertyname]) {
+                                if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
+                                    obj.options.cfn[propertyname].forEach(propertyvalue => {
+                                        if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                                            propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                                        }
+                                        rows.forEach(row => {
+                                            var row_check_object = null;
+                                            mapped_check_objects.forEach(child_obj => {
+                                                if (child_obj.obj.id == row.f2id) {
+                                                    row_check_object = child_obj;
+                                                }
+                                            });
+                                            if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
+                                                var is_duplicate = false;
+                                                if (!Array.isArray(related_resources_post[readable_relationship_type])) {
+                                                    related_resources_post[readable_relationship_type] = [];
+                                                }
+                                                for (var related_resource in related_resources_post[readable_relationship_type]) { // check if already added
+                                                    if (related_resources_post[readable_relationship_type][related_resource].obj.id == obj.obj.id) {
+                                                        is_duplicate = true;
+                                                    }
+                                                };
+                                                if (!is_duplicate) {
+                                                    related_resources_post[readable_relationship_type].push(obj);
+                                                }
+                                            }
+                                        });
+                                    });
+                                } else {
+                                    var propertyvalue = obj.options.cfn[propertyname];
+                                    rows.forEach(row => {
+                                        var row_check_object = null;
+                                        mapped_check_objects.forEach(child_obj => {
+                                            if (child_obj.obj.id == row.f2id) {
+                                                row_check_object = child_obj;
+                                            }
+                                        });
+                                        if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
+                                            var is_duplicate = false;
+                                            if (!Array.isArray(related_resources_post[readable_relationship_type])) {
+                                                related_resources_post[readable_relationship_type] = [];
+                                            }
+                                            for (var related_resource in related_resources_post[readable_relationship_type]) { // check if already added
+                                                if (related_resources_post[readable_relationship_type][related_resource].obj.id == obj.obj.id) {
+                                                    is_duplicate = true;
+                                                }
+                                            };
+                                            if (!is_duplicate) {
+                                                related_resources_post[readable_relationship_type].push(obj);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    });
+                });
+            }
         });
 
-        if (Object.keys(related_resources).length) {
+        // check for related row overlaps
+        rows.forEach(row => {
+            Object.keys(related_resources).forEach(restype => {
+                for (var i=0; i<related_resources[restype].length; i++) {
+                    if (related_resources[restype][i].obj.id == row.f2id) {
+                        related_resources[restype].splice(i, 1);
+                        i--;
+                    }
+                };
+                if (related_resources[restype].length < 1) {
+                    delete related_resources[restype];
+                }
+            });
+            Object.keys(related_resources_post).forEach(restype => {
+                for (var i=0; i<related_resources_post[restype].length; i++) {
+                    if (related_resources_post[restype][i].obj.id == row.f2id) {
+                        related_resources_post[restype].splice(i, 1);
+                        i--;
+                    }
+                };
+                if (related_resources_post[restype].length < 1) {
+                    delete related_resources_post[restype];
+                }
+            });
+        });
+
+        // create modal if related resources exist
+        if (Object.keys(related_resources).length || Object.keys(related_resources_post).length) {
             var html = '';
             var i = 1;
             Object.keys(related_resources).forEach(restype => {
@@ -212,13 +332,25 @@ $(document).ready(function(){
                 <p>
                 ${related_resources[restype].map(res => `
                     <div class="checkbox">
-                        <input type="checkbox" id="related-check-${i}" class="related-check" data-f2id="${res.obj.id}" data-dt="${res.obj.datatableid}" data-splicelocation="${res.splicelocation}" checked="">
+                        <input type="checkbox" id="related-check-${i}" class="related-check" data-f2id="${res.obj.id}" data-dt="${res.obj.datatableid}" data-splicelocation="${res.splicelocation}" data-post="false" checked="">
+                        <label for="related-check-${i++}">${res.obj.id} (${res.type})</label>
+                    </div>
+                `).join('')}
+                </p>`;
+            });
+            Object.keys(related_resources_post).forEach(restype => {
+                html += `<h5>${restype}</h5>
+                <p>
+                ${related_resources_post[restype].map(res => `
+                    <div class="checkbox">
+                        <input type="checkbox" id="related-check-${i}" class="related-check" data-f2id="${res.obj.id}" data-dt="${res.obj.datatableid}" data-splicelocation="${res.splicelocation}" data-post="true" checked="">
                         <label for="related-check-${i++}">${res.obj.id} (${res.type})</label>
                     </div>
                 `).join('')}
                 </p>`;
             });
             $('#relatedresources').html(html);
+            $('#add-related-selectall').prop('checked', true);
             $('#relatedmodal').modal('show');
         }
 
@@ -239,13 +371,22 @@ $(document).ready(function(){
                                 }
                             });
                             if (exists) return null;
-        
-                            output_objects.splice(-1 * rows.length, 0, {
-                                'id': row.f2id,
-                                'type': row.f2type,
-                                'data': row.f2data,
-                                'region': row.f2region
-                            });
+
+                            if (check_element.attr('data-post') == "true") {
+                                output_objects.push({
+                                    'id': row.f2id,
+                                    'type': row.f2type,
+                                    'data': row.f2data,
+                                    'region': row.f2region
+                                });
+                            } else {
+                                output_objects.unshift({
+                                    'id': row.f2id,
+                                    'type': row.f2type,
+                                    'data': row.f2data,
+                                    'region': row.f2region
+                                });
+                            }
                         }
                     });
                 }
