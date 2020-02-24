@@ -323,6 +323,7 @@ $(document).ready(function(){
                 </p>`;
             });
             $('#relatedresources').html(html);
+            $('#add-related-selectall').prop('checked', true);
             $('#relatedmodal').modal('show');
         }
 
