@@ -229,9 +229,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         }
         for (var sp_index in stack_parameters) {
             var stack_parameter = stack_parameters[sp_index];
-            if (stack_parameter.default_value && stack_parameter.default_value != "") {
+            if (stack_parameter.default_value && stack_parameter.default_value != "" && stack_parameter.default_value.match(/^[0-9]+$/g)) {
                 if (parseInt(stack_parameter.default_value) == param) {
-                    return "!Ref " + stack_parameter.default_value;
+                    return "!Ref " + stack_parameter.name;
                 }
             }
         }

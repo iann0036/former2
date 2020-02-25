@@ -298,6 +298,7 @@ $(document).ready(function(){
         });
 
         // check for related row overlaps
+        // TODO: include added resources here to rows?
         rows.forEach(row => {
             Object.keys(related_resources).forEach(restype => {
                 for (var i=0; i<related_resources[restype].length; i++) {
