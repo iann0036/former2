@@ -38,6 +38,17 @@ The following outputs are currently supported:
 * Troposphere
 * TypeScript CDK (Cfn Primitives)
 
+### Parameters
+
+Parameters can be used to make the resultant template configurable. When setting parameters with default values Former2 will replace all locations in the template with a !Ref or !Sub to replace these values parameters when the template is executed.
+
+For example if you create a parameter:
+Client = SF_
+and you have a Lambda Function called SF_Get_Details, Former2 will replace the SF_ in the function name 
+FunctionName: !Sub "${Client}Get_Details"
+
+When the template is executed, the user will be able to enter their own value for Client and the stack will name the lambda with the new value. e.g. NY_Get_Details
+
 ### Former2 CLI
 
 A command-line version of Former2 with limited functionality is available for installation. For more information, see the [CLI instructions](cli/README.md).
