@@ -561,6 +561,7 @@
                           </div>
                       </div>
                   </div>
+                </div>
               </div>
 
                 <header class="section-header">
@@ -1045,7 +1046,9 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-10">
-                                <h4>Parameters</h4>
+                                    <h4>Parameters</h4>
+                                
+
                                 <p>You can optionally include your own <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html" target="_blank">CloudFormation stack parameters</a> by adding them below. If the default value is set, <code>!Ref</code> or <code>!Sub</code> may be used to reference these parameters in the output if the values match.</p>
                                 <br />
                                 <table id="parameter-table" style="display: none;">
@@ -1160,7 +1163,32 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <fieldset class="form-group">
+                                                <button type="button" class="btn" id="save-parameter-button"><span class="glyphicon glyphicon-save"></span> Save</button>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <fieldset class="form-group">
+                                                <label class="btn" for="load-parameter-file" class="custom-file-upload">
+                                                    <span class="glyphicon glyphicon-open"></span> Load
+                                                </label>
+                                                <input id="load-parameter-file" type="file"/>
+                                            </fieldset>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <fieldset class="form-group">
+                                                <button type="button" class="btn" id="paste-parameter-file">
+                                                    <span class="glyphicon glyphicon-paste"></span> Paste
+                                                </button>
+                                            </fieldset>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div class="col-md-1"></div>
                             </div>
                         </form>

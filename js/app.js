@@ -1274,7 +1274,48 @@ $(document).ready(function(){
 
         generateParameterTable();
     });
-    
+
+    $("#save-parameter-button").click(function(){
+        var text = JSON.stringify(stack_parameters,null,4);
+        text = text.replace(/\n/g, "\r\n"); // To retain the Line breaks.
+        var blob = new Blob([text], { type: "text/plain"});
+        var anchor = document.createElement("a");
+        anchor.download = "former2.json";
+        anchor.href = window.URL.createObjectURL(blob);
+        anchor.target ="_blank";
+        anchor.style.display = "none"; // just to be safe!
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+    });
+
+    function readFileContent(file) {
+        const reader = new FileReader();
+        return new Promise((resolve, reject) => {
+            reader.onload = event => resolve(event.target.result);
+            reader.onerror = error => reject(error);
+            reader.readAsText(file);
+        })
+    }
+    $("#load-parameter-file").change(function (evt) {
+        var file = evt.target.files[0];
+        readFileContent(file).then(content => { 
+            console.log(content); 
+            stack_parameters = JSON.parse(content);
+            generateParameterTable();
+        })
+    });
+    $("#paste-parameter-file").click(function (evt) {
+        navigator.clipboard.readText()
+        .then(content => {
+            stack_parameters = JSON.parse(content);
+            generateParameterTable();
+        })
+        .catch(err => {
+            console.error('Failed to read clipboard contents: ', err);
+        });
+    });
+
     var spacingamount = window.localStorage.getItem('cfnspacing');
     if (spacingamount && spacingamount == 2) {
         cfnspacing = "  ";
