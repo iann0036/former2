@@ -121,7 +121,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ExportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath,
                 'ImportedFileChunkSize': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize,
                 'ImportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath,
-                'WeeklyMaintenanceStartTime': obj.data.LustreConfiguration.WeeklyMaintenanceStartTime
+                'WeeklyMaintenanceStartTime': obj.data.LustreConfiguration.WeeklyMaintenanceStartTime,
+                'DeploymentType': obj.data.LustreConfiguration.DeploymentType,
+                'PerUnitStorageThroughput': obj.data.LustreConfiguration.PerUnitStorageThroughput
             };
         }
 

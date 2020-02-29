@@ -723,14 +723,81 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['VirtualNodeName'] = obj.data.VirtualNodeName;
         var backends = [];
         obj.data.spec.backends.forEach(backend => {
+            var clientPolicy = null;
+            if (backend.virtualService.clientPolicy) {
+                var tls = null;
+                if (backend.virtualService.clientPolicy.tls) {
+                    var validation = null;
+                    if (backend.virtualService.clientPolicy.tls.validation) {
+                        var trust = null;
+                        if (backend.virtualService.clientPolicy.tls.validation.trust) {
+                            var acm = null;
+                            if (backend.virtualService.clientPolicy.tls.validation.trust.acm) {
+                                acm = {
+                                    'CertificateAuthorityArns': backend.virtualService.clientPolicy.tls.validation.trust.acm.certificateAuthorityArns
+                                };
+                            }
+                            var file = null;
+                            if (backend.virtualService.clientPolicy.tls.validation.trust.file) {
+                                file = {
+                                    'CertificateChain': backend.virtualService.clientPolicy.tls.validation.trust.file.certificateChain
+                                };
+                            }
+                            trust = {
+                                'ACM': acm,
+                                'File': file
+                            };
+                        }
+                        validation = {
+                            'Trust': trust
+                        };
+                    }
+                    tls = {
+                        'Enforce': backend.virtualService.clientPolicy.tls.enforce,
+                        'Ports': backend.virtualService.clientPolicy.tls.ports,
+                        'Validation': validation
+                    };
+                }
+                clientPolicy = {
+                    'TLS': tls
+                };
+            }
             backends.push({
                 'VirtualService': {
+                    'ClientPolicy': clientPolicy,
                     'VirtualServiceName': backend.virtualService.virtualServiceName
                 }
             });
         });
         var listeners = [];
         obj.data.spec.listeners.forEach(listener => {
+            var tls = null;
+            if (listener.tls) {
+                var certificate = null;
+                if (listener.tls.certificate) {
+                    var acm = null;
+                    if (listener.tls.certificate.acm) {
+                        acm = {
+                            'CertificateArn': listener.tls.certificate.acm.certificateArn
+                        };
+                    }
+                    var file = null;
+                    if (listener.tls.certificate.file) {
+                        file = {
+                            'CertificateChain': listener.tls.certificate.file.certificateChain,
+                            'PrivateKey': listener.tls.certificate.file.privateKey
+                        };
+                    }
+                    certificate = {
+                        'ACM': acm,
+                        'File': file
+                    };
+                }
+                tls = {
+                    'Certificate': certificate,
+                    'Mode': listener.tls.mode
+                };
+            }
             listeners.push({
                 'HealthCheck': {
                     'HealthyThreshold': listener.healthCheck.healthyThreshold,
@@ -744,10 +811,57 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'PortMapping': {
                     'Port': listener.portMapping.port,
                     'Protocol': listener.portMapping.protocol
-                }
+                },
+                'TLS': tls
             });
         });
+        var backendDefaults = null;
+        if (obj.data.spec.backendDefaults) {
+            var clientPolicy = null;
+            if (obj.data.spec.backendDefaults.clientPolicy) {
+                var tls = null;
+                if (obj.data.spec.backendDefaults.clientPolicy.tls) {
+                    var validation = null;
+                    if (obj.data.spec.backendDefaults.clientPolicy.tls.validation) {
+                        var trust = null;
+                        if (obj.data.spec.backendDefaults.clientPolicy.tls.validation.trust) {
+                            var acm = null;
+                            if (obj.data.spec.backendDefaults.clientPolicy.tls.validation.trust.acm) {
+                                acm = {
+                                    'CertificateAuthorityArns': obj.data.spec.backendDefaults.clientPolicy.tls.validation.trust.acm.certificateAuthorityArns
+                                };
+                            }
+                            var file = null;
+                            if (obj.data.spec.backendDefaults.clientPolicy.tls.validation.trust.file) {
+                                file = {
+                                    'CertificateChain': obj.data.spec.backendDefaults.clientPolicy.tls.validation.trust.file.certificateChain
+                                };
+                            }
+                            trust = {
+                                'ACM': acm,
+                                'File': file
+                            };
+                        }
+                        validation = {
+                            'Trust': trust
+                        };
+                    }
+                    tls = {
+                        'Enforce': obj.data.spec.backendDefaults.clientPolicy.tls.enforce,
+                        'Ports': obj.data.spec.backendDefaults.clientPolicy.tls.ports,
+                        'Validation': validation
+                    };
+                }
+                clientPolicy = {
+                    'TLS': tls
+                };
+            }
+            backendDefaults = {
+                'ClientPolicy': clientPolicy
+            };
+        }
         reqParams.cfn['Spec'] = {
+            'BackendDefaults': backendDefaults,
             'Backends': backends,
             'Listeners': listeners,
             'Logging': {
