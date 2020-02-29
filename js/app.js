@@ -1224,6 +1224,10 @@ $(document).ready(function(){
 
     $('.tags-field').tagEditor();
 
+    $('#load-settings').click(function(){$('#load-settings-picker').click();});
+    $('#save-settings').click(function(){saveSettings()});
+    $('#load-settings-picker').change(loadSettings);
+
     $('#add-parameter-expand-link').click(function(){
         if ($("#add-parameter-expand-section").is(":hidden")) {
             $('#add-parameter-expand-link').html("[&ndash;] Advanced Settings");
@@ -1387,6 +1391,54 @@ function unblockUI(selector) {
 }
 
 /* ========================================================================== */
+
+function saveSettings() {
+    var jsondoc = {
+        'parameters': stack_parameters.filter(function(p){ return !p.name.startsWith("AWS::"); }),
+        'settings': {
+            'cfnspacing': window.localStorage.getItem('cfnspacing'),
+            'logicalidstrategy': window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix',
+            'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting')
+        }
+    };
+
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:application/json,' + encodeURIComponent(JSON.stringify(jsondoc, null, 2)));
+    element.setAttribute('download', "Former2Settings.json");
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+function loadSettings() {
+    if (this.files && this.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e){
+            loaded_settings = JSON.parse(e.target.result);
+
+            stack_parameters = loaded_settings.parameters.concat(stack_parameters.filter(function(p){ return p.name.startsWith("AWS::"); }));
+            generateParameterTable();
+
+            if ('cfnspacing' in loaded_settings.settings) {
+                $('#cfnspacing').val(loaded_settings.settings.cfnspacing).trigger('change');
+            }
+            if ('logicalidstrategy' in loaded_settings.settings) {
+                $('#logicalidstrategy').val(loaded_settings.settings.logicalidstrategy).trigger('change');
+            }
+            if ('relatedresourcessetting' in loaded_settings.settings) {
+                if (loaded_settings.settings.relatedresourcessetting == "true") {
+                    $('#relatedresourcessetting').prop('checked', true);
+                } else {
+                    $('#relatedresourcessetting').prop('checked', false);
+                }
+            }
+        }
+
+        reader.readAsText(this.files[0]);
+    }
+}
 
 function makeReplacementMarker() {
     var marker = document.createElement("div");

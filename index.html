@@ -168,7 +168,7 @@
                                 </div>
 
                                 <button disabled class="btn btn-sm btn-success scan-account" style="margin-right: 10px; float: right; padding-top: 3px; margin-bottom: 8px;">
-                                    <i class="font-icon font-icon-scanner"></i> Scan Account
+                                    Scan Account
                                 </button>
 
                                 <div class="site-header-search-container">
@@ -1215,7 +1215,7 @@
                                     <h5>Account Scanning</h5>
                                     <p>Use the below button to pre-populate all categories by triggering a scan for the account:</p>
                                     <button disabled class="btn btn-sm btn-success scan-account">
-                                        <i class="font-icon font-icon-scanner"></i> Scan Account
+                                        Scan Account
                                     </button>
                                 </div>
                                 <br />
@@ -1254,9 +1254,22 @@
                                 <div class="form-group">
                                     <h5>Add All Resources&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
                                     <p>Use the below button to add all scanned resources to the outputs (not recommended):</p>
-                                    <button id="add-all-resources" class="btn btn-sm btn-secondary">
-                                        <i class="font-icon font-icon-scanner"></i> Add All Resources
+                                    <button id="add-all-resources" class="btn btn-sm btn-primary">
+                                        Add All Resources
                                     </button>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <h5>Save / Load Settings&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
+                                    <p>Save or load a file containing all configured parameters and settings (except credentials):</p>
+                                    <button id="save-settings" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-floppy-o"></i> Save
+                                    </button>
+                                    &nbsp;
+                                    <button id="load-settings" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-folder-open-o"></i> Load
+                                    </button>
+                                    <input id="load-settings-picker" accept=".json,application/json" type="file" style="display: none;" />
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
