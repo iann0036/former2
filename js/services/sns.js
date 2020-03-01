@@ -236,8 +236,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['endpoint'] = obj.data.Endpoint;
         reqParams.cfn['Protocol'] = obj.data.Protocol;
         reqParams.tf['protocol'] = obj.data.Protocol;
-        reqParams.cfn['RawMessageDelivery'] = obj.data.Attributes.RawMessageDelivery;
-        reqParams.tf['raw_message_delivery'] = obj.data.Attributes.RawMessageDelivery;
+        if (['http', 'https', 'sqs'].includes(obj.data.Protocol)) {
+            reqParams.cfn['RawMessageDelivery'] = obj.data.Attributes.RawMessageDelivery;
+            reqParams.tf['raw_message_delivery'] = obj.data.Attributes.RawMessageDelivery;
+        }
         reqParams.cfn['Region'] = obj.data.TopicArn.split(":")[3];
         reqParams.cfn['RedrivePolicy'] = obj.data.Attributes.RedrivePolicy;
 
