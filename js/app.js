@@ -1237,6 +1237,8 @@ $(document).ready(function(){
         $('#add-parameter-expand-section').slideToggle('fast');
     });
 
+    $('#add-parameter-name').mask("B", {translation: {'B': {pattern: /[a-zA-Z0-9]/, recursive: true}}});
+
     $('#add-parameter-form').submit(function(e){
         e.preventDefault();
 
