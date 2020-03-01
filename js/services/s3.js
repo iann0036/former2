@@ -278,9 +278,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'AccelerationStatus': obj.data.AccelerateConfiguration.Status
             };
         }
-        if (obj.data.Encryption && obj.data.Encryption.ServerSideEncryptionConfiguration) {
+        if (obj.data.Encryption && obj.data.Encryption.ServerSideEncryptionConfiguration && obj.data.Encryption.ServerSideEncryptionConfiguration.Rules) {
+            var rules = [];
+            obj.data.Encryption.ServerSideEncryptionConfiguration.Rules.forEach(rule => {
+                rules.push({
+                    'ServerSideEncryptionByDefault': rule.ApplyServerSideEncryptionByDefault
+                });
+            });
             reqParams.cfn['BucketEncryption'] = {
-                'ServerSideEncryptionConfiguration': obj.data.Encryption.ServerSideEncryptionConfiguration.Rules
+                'ServerSideEncryptionConfiguration': rules
             };
         }
         if (obj.data.Lifecycle && obj.data.Lifecycle.Rules) {
