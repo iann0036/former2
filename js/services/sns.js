@@ -128,14 +128,21 @@ async function updateDatatableApplicationIntegrationSNS() {
                     TopicArn: topic.TopicArn
                 }, true).then((data) => {
                     data['TopicArn'] = topic.TopicArn;
-                    $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
-                        f2id: topic.TopicArn,
-                        f2type: 'sns.topic',
-                        f2data: data,
-                        f2region: region,
-                        topicarn: topic.TopicArn,
-                        displayname: topic.DisplayName
-                    }]);
+                    sdkcall("SNS", "listTagsForResource", {
+                        ResourceArn: topic.TopicArn
+                    }, false).then(tagdata => {
+                        if (tagdata.Tags && tagdata.Tags.length) {
+                            data.tags = tagdata.Tags;
+                        }
+                        $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
+                            f2id: topic.TopicArn,
+                            f2type: 'sns.topic',
+                            f2data: data,
+                            f2region: region,
+                            topicarn: topic.TopicArn,
+                            displayname: topic.DisplayName
+                        }]);
+                    }).catch((error) => { });
 
                     $('#section-applicationintegration-sns-topicpolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: topic.TopicArn + " Policy",
@@ -184,6 +191,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['display_name'] = obj.data.Attributes.DisplayName;
         reqParams.cfn['TopicName'] = obj.data.Attributes.TopicArn.split(':').pop();
         reqParams.tf['name'] = obj.data.Attributes.TopicArn.split(':').pop();
+
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
