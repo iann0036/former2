@@ -339,7 +339,7 @@ async function updateDatatableDatabaseDynamoDB() {
                 sdkcall("DynamoDB", "listTagsOfResource", {
                     ResourceArn: data.Table.TableArn
                 }, false).then(tagdata => {
-                    if (Object.keys(tagdata.Tags).length !== 0) {
+                    if (tagdata.Tags && tagdata.Tags.length) {
                         data.Table.tags = tagdata.Tags;
                         console.log(data.Table.TableArn, tagdata.tags);
                     }
@@ -354,9 +354,7 @@ async function updateDatatableDatabaseDynamoDB() {
                         size: data.Table.TableSizeBytes,
                         itemcount: data.Table.ItemCount
                     }]);
-                }).catch((error) => { 
-                    console.log(error);
-                });
+                }).catch((error) => { });
             });
         }));
 
@@ -503,6 +501,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['TableName'] = obj.data.TableName;
         reqParams.tf['name'] = obj.data.TableName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
         reqParams.cfn['KeySchema'] = obj.data.KeySchema;
         if (obj.data.KeySchema) {
             obj.data.KeySchema.forEach(keyschema => {
