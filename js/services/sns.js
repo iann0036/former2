@@ -128,14 +128,21 @@ async function updateDatatableApplicationIntegrationSNS() {
                     TopicArn: topic.TopicArn
                 }, true).then((data) => {
                     data['TopicArn'] = topic.TopicArn;
-                    $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
-                        f2id: topic.TopicArn,
-                        f2type: 'sns.topic',
-                        f2data: data,
-                        f2region: region,
-                        topicarn: topic.TopicArn,
-                        displayname: topic.DisplayName
-                    }]);
+                    sdkcall("SNS", "listTagsForResource", {
+                        ResourceArn: topic.TopicArn
+                    }, false).then(tagdata => {
+                        if (Object.keys(tagdata.Tags).length !== 0) {
+                            data.tags = tagdata.Tags;
+                        }
+                        $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
+                            f2id: topic.TopicArn,
+                            f2type: 'sns.topic',
+                            f2data: data,
+                            f2region: region,
+                            topicarn: topic.TopicArn,
+                            displayname: topic.DisplayName
+                        }]);
+                    });
 
                     $('#section-applicationintegration-sns-topicpolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: topic.TopicArn + " Policy",

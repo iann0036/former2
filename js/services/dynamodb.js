@@ -336,21 +336,33 @@ async function updateDatatableDatabaseDynamoDB() {
             return sdkcall("DynamoDB", "describeTable", {
                 TableName: tableName
             }, true).then((data) => {
-                $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.Table.TableArn,
-                    f2type: 'dynamodb.table',
-                    f2data: data.Table,
-                    f2region: region,
-                    f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
-                    name: data.Table.TableName,
-                    creationtime: data.Table.CreationDateTime,
-                    size: data.Table.TableSizeBytes,
-                    itemcount: data.Table.ItemCount
-                }]);
+                sdkcall("DynamoDB", "listTagsOfResource", {
+                    ResourceArn: data.Table.TableArn
+                }, false).then(tagdata => {
+                    if (Object.keys(tagdata.Tags).length !== 0) {
+                        data.Table.tags = tagdata.Tags;
+                        console.log(data.Table.TableArn, tagdata.tags);
+                    }
+                    $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Table.TableArn,
+                        f2type: 'dynamodb.table',
+                        f2data: data.Table,
+                        f2region: region,
+                        f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
+                        name: data.Table.TableName,
+                        creationtime: data.Table.CreationDateTime,
+                        size: data.Table.TableSizeBytes,
+                        itemcount: data.Table.ItemCount
+                    }]);
+                }).catch((error) => { 
+                    console.log(error);
+                });
             });
         }));
 
         unblockUI('#section-database-dynamodb-tables-datatable');
+
+
     });
 
     await sdkcall("DAX", "describeClusters", {
@@ -470,6 +482,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
         unblockUI('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable');
     });
+    
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
