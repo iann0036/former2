@@ -340,7 +340,7 @@ async function updateDatatableDatabaseDynamoDB() {
                     ResourceArn: data.Table.TableArn
                 }, false).then(tagdata => {
                     if (tagdata.Tags && tagdata.Tags.length) {
-                        data.Table.tags = tagdata.Tags;
+                        data.Table.Tags = tagdata.Tags;
                     }
                     $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Table.TableArn,
