@@ -595,8 +595,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         TODO:
         PointInTimeRecoverySpecification: 
             PointInTimeRecoverySpecification
-        Tags: 
-            - Resource Tag
         TimeToLiveSpecification: 
             TimeToLiveSpecification
         */
