@@ -126,13 +126,13 @@ async function updateDatatableApplicationIntegrationSNS() {
             return Promise.all([
                 sdkcall("SNS", "getTopicAttributes", {
                     TopicArn: topic.TopicArn
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     data['TopicArn'] = topic.TopicArn;
-                    sdkcall("SNS", "listTagsForResource", {
+                    await sdkcall("SNS", "listTagsForResource", {
                         ResourceArn: topic.TopicArn
                     }, false).then(tagdata => {
                         if (tagdata.Tags && tagdata.Tags.length) {
-                            data.tags = tagdata.Tags;
+                            data.Tags = tagdata.Tags;
                         }
                         $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('append', [{
                             f2id: topic.TopicArn,
