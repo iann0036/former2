@@ -341,7 +341,6 @@ async function updateDatatableDatabaseDynamoDB() {
                 }, false).then(tagdata => {
                     if (tagdata.Tags && tagdata.Tags.length) {
                         data.Table.tags = tagdata.Tags;
-                        console.log(data.Table.TableArn, tagdata.tags);
                     }
                     $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Table.TableArn,
