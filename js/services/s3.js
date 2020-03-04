@@ -147,7 +147,7 @@ async function updateDatatableStorageS3() {
                 sdkcall("S3", "getBucketTagging", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
-                    bucket['Tags'] = data;
+                    bucket['Tags'] = data.TagSet;
                 }).catch(() => { }),
                 sdkcall("S3", "getBucketEncryption", {
                     Bucket: bucket.Name
