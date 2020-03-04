@@ -68,6 +68,44 @@ sections.push({
                 ]
             ]
         },
+        'Composite Alarms': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Dashboards': {
             'columns': [
                 [
@@ -407,6 +445,7 @@ sections.push({
 
 async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-compositealarms-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
@@ -417,7 +456,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
-        // no params
+        AlarmTypes: ["MetricAlarm"]
     }, true).then((data) => {
         $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('removeAll');
 
@@ -437,6 +476,26 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
 
         unblockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    });
+
+    await sdkcall("CloudWatch", "describeAlarms", {
+        AlarmTypes: ["CompositeAlarm"]
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').bootstrapTable('removeAll');
+
+        data.CompositeAlarms.forEach(compositeAlarm => {
+            $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').deferredBootstrapTable('append', [{
+                f2id: compositeAlarm.AlarmArn,
+                f2type: 'cloudwatch.compositealarm',
+                f2data: compositeAlarm,
+                f2region: region,
+                f2link: 'https://console.aws.amazon.com/cloudwatch/home?region=' + region + '#alarm:alarm:alarmFilter=ANY;name=' + compositeAlarm.AlarmName,
+                name: compositeAlarm.AlarmName,
+                description: compositeAlarm.AlarmDescription
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-compositealarms-datatable');
     });
 
     await sdkcall("CloudWatch", "listDashboards", {
@@ -481,10 +540,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
         unblockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     });
-
-    /*
-    TODO: Make a setting to enable this
-
+    
     await sdkcall("CloudWatchLogs", "describeLogGroups", {
         // no params
     }, true).then(async (data) => {
@@ -540,7 +596,6 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
             ]);
         }));
     });
-    */
 
     await sdkcall("CloudWatchLogs", "describeMetricFilters", {
         // no params
@@ -689,6 +744,29 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'AlarmName': obj.data.AlarmName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.compositealarm") {
+        reqParams.cfn['AlarmName'] = obj.data.AlarmName;
+        reqParams.cfn['AlarmDescription'] = obj.data.AlarmDescription;
+        reqParams.cfn['ActionsEnabled'] = obj.data.ActionsEnabled;
+        reqParams.cfn['OKActions'] = obj.data.OKActions;
+        reqParams.cfn['AlarmActions'] = obj.data.AlarmActions;
+        reqParams.cfn['InsufficientDataActions'] = obj.data.InsufficientDataActions;
+        reqParams.cfn['AlarmRule'] = obj.data.AlarmRule;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::CompositeAlarm'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::CompositeAlarm',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AlarmName,
+                'GetAtt': {
+                    'Arn': obj.data.AlarmArn
                 }
             }
         });
