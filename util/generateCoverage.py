@@ -52,7 +52,9 @@ for servicefilename in os.listdir("js/services"):
     with open("js/services/" + servicefilename, "r") as f:
         text = f.read()
         lines = text.splitlines()
-        cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
+        for line in lines:
+            if 'not real resource type' not in line:
+                cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(line)
         tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
 
 for cfntype, _ in cfn_spec.items():

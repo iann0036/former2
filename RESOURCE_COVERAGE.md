@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**503/503 (100%)** Resources Covered
+**507/507 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -97,6 +97,7 @@
 | *AWS::CloudTrail::Trail* | :thumbsup: |
 | *AWS::CloudWatch::Alarm* | :thumbsup: |
 | *AWS::CloudWatch::AnomalyDetector* | :thumbsup: |
+| *AWS::CloudWatch::CompositeAlarm* | :thumbsup: |
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CloudWatch::InsightRule* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
@@ -288,6 +289,9 @@
 | *AWS::Greengrass::ResourceDefinitionVersion* | :thumbsup: |
 | *AWS::Greengrass::SubscriptionDefinition* | :thumbsup: |
 | *AWS::Greengrass::SubscriptionDefinitionVersion* | :thumbsup: |
+| *AWS::GroundStation::Config* | :thumbsup: |
+| *AWS::GroundStation::DataflowEndpointGroup* | :thumbsup: |
+| *AWS::GroundStation::MissionProfile* | :thumbsup: |
 | *AWS::GuardDuty::Detector* | :thumbsup: |
 | *AWS::GuardDuty::Filter* | :thumbsup: |
 | *AWS::GuardDuty::IPSet* | :thumbsup: |
