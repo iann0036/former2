@@ -1631,11 +1631,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "pinpoint.admchannel") {
         reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
         reqParams.cfn['Enabled'] = obj.data.Enabled;
+        reqParams.cfn['ClientSecret'] = 'REPLACEME';
 
         /*
         TODO:
         ClientId
-        ClientSecret
         */
 
         tracked_resources.push({
@@ -1741,12 +1741,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "pinpoint.baiduchannel") {
         reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
         reqParams.cfn['Enabled'] = obj.data.Enabled;
-
-        /*
-        TODO:
-        ApiKey: String
-        SecretKey: String
-        */
+        reqParams.cfn['ApiKey'] = 'REPLACEME';
+        reqParams.cfn['SecretKey'] = 'REPLACEME';
 
         tracked_resources.push({
             'obj': obj,

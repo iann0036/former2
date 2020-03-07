@@ -280,7 +280,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Users'] = [];
             obj.data.Users.forEach(user => {
                 reqParams.cfn['Users'].push({
-                    'Username': user.Username
+                    'Username': user.Username,
+                    'Password': 'REPLACEME'
                 });
             });
         }
@@ -289,7 +290,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         TODO:
         Users: 
             - User
-                Password
                 Groups
                 ConsoleAccess
         */
