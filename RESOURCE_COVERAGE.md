@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**507/507 (100%)** Resources Covered
+**510/510 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -71,6 +71,7 @@
 | *AWS::ApplicationAutoScaling::ScalableTarget* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalingPolicy* | :thumbsup: |
 | *AWS::Athena::NamedQuery* | :thumbsup: |
+| *AWS::Athena::WorkGroup* | :thumbsup: |
 | *AWS::AutoScaling::AutoScalingGroup* | :thumbsup: |
 | *AWS::AutoScaling::LaunchConfiguration* | :thumbsup: |
 | *AWS::AutoScaling::LifecycleHook* | :thumbsup: |
@@ -85,6 +86,7 @@
 | *AWS::Batch::JobQueue* | :thumbsup: |
 | *AWS::Budgets::Budget* | :thumbsup: |
 | *AWS::CertificateManager::Certificate* | :thumbsup: |
+| *AWS::Chatbot::SlackChannelConfiguration* | N/A |
 | *AWS::Cloud9::EnvironmentEC2* | :thumbsup: |
 | *AWS::CloudFormation::CustomResource* | N/A |
 | *AWS::CloudFormation::Macro* | N/A |
@@ -111,6 +113,7 @@
 | *AWS::CodePipeline::Pipeline* | :thumbsup: |
 | *AWS::CodePipeline::Webhook* | :thumbsup: |
 | *AWS::CodeStar::GitHubRepository* | :thumbsup: |
+| *AWS::CodeStarConnections::Connection* | :thumbsup: |
 | *AWS::CodeStarNotifications::NotificationRule* | :thumbsup: |
 | *AWS::Cognito::IdentityPool* | :thumbsup: |
 | *AWS::Cognito::IdentityPoolRoleAttachment* | :thumbsup: |

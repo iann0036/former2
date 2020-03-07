@@ -189,6 +189,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'providertype',
+                        title: 'Provider Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -198,6 +236,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     blockUI('#section-developertools-codepipeline-webhooks-datatable');
     blockUI('#section-developertools-codepipeline-customactiontypes-datatable');
     blockUI('#section-developertools-codepipeline-notificationrules-datatable');
+    blockUI('#section-developertools-codepipeline-connections-datatable');
 
     await sdkcall("CodePipeline", "listPipelines", {
         // no params
@@ -287,7 +326,29 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         }));
     }).catch(() => { });
 
+    await sdkcall("CodeStarconnections", "listConnections", {
+        ProviderTypeFilter: "Bitbucket"
+    }, false).then(async (data) => {
+        $('#section-developertools-codepipeline-connections-datatable').bootstrapTable('removeAll');
+
+        await Promise.all(data.Connections.map(connection => {
+            return sdkcall("CodeStarconnections", "getConnection", {
+                ConnectionArn: connection.ConnectionArn
+            }, false).then(async (data) => {
+                $('#section-developertools-codepipeline-connections-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Connection.ConnectionArn,
+                    f2type: 'codestarconnections.connection',
+                    f2data: data.Connection,
+                    f2region: region,
+                    name: data.Connection.ConnectionName,
+                    providertype: data.Connection.ProviderType
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-developertools-codepipeline-notificationrules-datatable');
+    unblockUI('#section-developertools-codepipeline-connections-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -550,6 +611,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'codepipeline',
             'type': 'AWS::CodePipeline::CustomActionType',
+            'options': reqParams
+        });
+    } else if (obj.type == "codestarconnections.connection") {
+        reqParams.cfn['ConnectionName'] = obj.data.ConnectionName;
+        reqParams.cfn['ProviderType'] = obj.data.ProviderType;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('codestarconnections', obj.id, 'AWS::CodeStarConnections::Connection'),
+            'region': obj.region,
+            'service': 'codestarconnections',
+            'type': 'AWS::CodeStarConnections::Connection',
             'options': reqParams
         });
     } else {
