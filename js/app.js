@@ -6,6 +6,7 @@ var visited_sections = [];
 var ping_extension_interval = null;
 var stack_parameters = [];
 var MAX_DT_SCANS = 10;
+var defaultoutput = 'cloudformation';
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -805,7 +806,7 @@ $(document).ready(function(){
 
     $("#generate-outputs").on('click', () => {
         regenerateOutputs().then(() => {
-            window.location.href = "#section-outputs-cloudformation";
+            window.location.href = "#section-outputs-" + defaultoutput;
         });
     });
 
@@ -1311,6 +1312,13 @@ $(document).ready(function(){
         $('#generate-outputs').attr('disabled', 'disabled');
     });
 
+    defaultoutput = window.localStorage.getItem('defaultoutput') || 'cloudformation';
+    $('#defaultoutput').val(defaultoutput).trigger('change');
+    $('#defaultoutput').change(function() {
+        window.localStorage.setItem('defaultoutput', $(this).val());
+        defaultoutput = $(this).val();
+    });
+
     if (window.localStorage.getItem('relatedresourcessetting') == "true") {
         $('#relatedresourcessetting').prop('checked', true);
     }
@@ -1400,6 +1408,7 @@ function saveSettings() {
         'settings': {
             'cfnspacing': window.localStorage.getItem('cfnspacing'),
             'logicalidstrategy': window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix',
+            'defaultoutput': window.localStorage.getItem('defaultoutput') || 'cloudformation',
             'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting')
         }
     };
@@ -1428,6 +1437,9 @@ function loadSettings() {
             }
             if ('logicalidstrategy' in loaded_settings.settings) {
                 $('#logicalidstrategy').val(loaded_settings.settings.logicalidstrategy).trigger('change');
+            }
+            if ('defaultoutput' in loaded_settings.settings) {
+                $('#defaultoutput').val(loaded_settings.settings.defaultoutput).trigger('change');
             }
             if ('relatedresourcessetting' in loaded_settings.settings) {
                 if (loaded_settings.settings.relatedresourcessetting == "true") {
