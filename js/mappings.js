@@ -188,6 +188,9 @@ function processTfParameter(param, spacing, index, tracked_resources) {
                 if (subvalue[0] == '{') {
                     paramitems.push(key + " " + subvalue);
                 } else {
+                    if (key.match(/^[0-9]+$/g)) {
+                        key = "\"" + key + "\"";
+                    }
                     paramitems.push(key + " = " + subvalue);
                 }
             }
@@ -1753,6 +1756,9 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
     ${option} ${optionvalue}
 `;
                             } else {
+                                if (option.match(/^[0-9]+$/g)) {
+                                    option = "\"" + option + "\"";
+                                }
                                 params += `
     ${option} = ${optionvalue}`;
                             }
@@ -1767,6 +1773,9 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
     ${option} ${optionvalue}
 `;
                         } else {
+                            if (option.match(/^[0-9]+$/g)) {
+                                option = "\"" + option + "\"";
+                            }
                             params += `
     ${option} = ${optionvalue}`;
                         }
