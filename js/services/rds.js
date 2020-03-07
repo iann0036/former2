@@ -786,7 +786,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['port'] = obj.data.Port;
         reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
         reqParams.tf['master_username'] = obj.data.MasterUsername;
-        reqParams.cfn['MasterUserPassword'] = "REPLACEME"; // TODO: Fix
+        reqParams.cfn['MasterUserPassword'] = "REPLACEME";
         reqParams.tf['master_password'] = "REPLACEME";
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
         reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;

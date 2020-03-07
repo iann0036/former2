@@ -1944,6 +1944,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'types': obj.data.endpointConfiguration.types
             };
         }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['Tags'] = {};
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
 
         /*
         TODO:
@@ -2372,6 +2382,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Enabled'] = obj.data.enabled;
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Value'] = obj.data.value;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
 
         /*
         TODO:
@@ -2390,6 +2409,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "apigateway.clientcertificate") {
         reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -2414,6 +2442,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['RegionalCertificateArn'] = obj.data.regionalCertificateArn;
         reqParams.tf['regional_certificate_arn'] = obj.data.regionalCertificateArn;
+        reqParams.cfn['SecurityPolicy'] = obj.data.securityPolicy;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['Tags'] = {};
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -2480,6 +2519,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Offset': obj.data.quota.offset,
                 'Period': obj.data.quota.period
             };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
         }
 
         tracked_resources.push({

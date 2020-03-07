@@ -440,6 +440,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
                 reqParams.cfn['Targets'].push({
                     'Arn': target.Arn,
+                    'BatchParameters': target.BatchParameters,
                     'EcsParameters': ecsParameters,
                     'Id': target.Id,
                     'Input': target.Input,

@@ -255,7 +255,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'PlacementGroup': obj.data.computeResources.placementGroup,
                 'BidPercentage': obj.data.computeResources.bidPercentage,
                 'SpotIamFleetRole': obj.data.computeResources.spotIamFleetRole,
-                'LaunchTemplate': launchTemplate
+                'LaunchTemplate': launchTemplate,
+                'AllocationStrategy': obj.data.computeResources.allocationStrategy
             };
             reqParams.tf['compute_resources'] = {
                 'type': obj.data.computeResources.type,

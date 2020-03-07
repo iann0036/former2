@@ -980,7 +980,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Targets) {
             reqParams.cfn['Targets'] = {
                 'S3Targets': obj.data.Targets.S3Targets,
-                'JdbcTargets': obj.data.Targets.JdbcTargets
+                'JdbcTargets': obj.data.Targets.JdbcTargets,
+                'DynamoDBTargets': obj.data.Targets.DynamoDBTargets,
+                'CatalogTargets': obj.data.Targets.CatalogTargets
             };
         }
         reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;

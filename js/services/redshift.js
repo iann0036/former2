@@ -369,7 +369,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         ClusterType: String
         LoggingProperties: 
             LoggingProperties
-        MasterUserPassword: String
         OwnerAccount: String
         SnapshotClusterIdentifier: String
         SnapshotIdentifier: String

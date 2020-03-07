@@ -1002,6 +1002,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.inferenceAccelerators) {
+            reqParams.cfn['InferenceAccelerators'] = [];
+            obj.data.inferenceAccelerators.forEach(inferenceAccelerator => {
+                reqParams.cfn['InferenceAccelerators'].push({
+                    'DeviceName': inferenceAccelerator.deviceName,
+                    'DeviceType': inferenceAccelerator.deviceType
+                })
+            });
+        }
 
         /*
         TODO:

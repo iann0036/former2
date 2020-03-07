@@ -160,6 +160,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['CognitoOptions'] = obj.data.CognitoOptions;
+        reqParams.cfn['LogPublishingOptions'] = obj.data.LogPublishingOptions;
 
         /*
         TODO:

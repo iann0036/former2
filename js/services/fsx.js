@@ -105,6 +105,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
         reqParams.cfn['Tags'] = obj.data.Tags;
         if (obj.data.WindowsConfiguration) {
+            var adconfig = obj.data.WindowsConfiguration.SelfManagedActiveDirectoryConfiguration;
+            adconfig['Password'] = "REPLACEME";
             reqParams.cfn['WindowsConfiguration'] = {
                 'ActiveDirectoryId': obj.data.WindowsConfiguration.ActiveDirectoryId,
                 'AutomaticBackupRetentionDays': obj.data.WindowsConfiguration.AutomaticBackupRetentionDays,
@@ -113,7 +115,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ThroughputCapacity': obj.data.WindowsConfiguration.ThroughputCapacity,
                 'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime,
                 'DeploymentType': obj.data.WindowsConfiguration.DeploymentType,
-                'PreferredSubnetId': obj.data.WindowsConfiguration.PreferredSubnetId
+                'PreferredSubnetId': obj.data.WindowsConfiguration.PreferredSubnetId,
+                'SelfManagedActiveDirectoryConfiguration': adconfig
             };
         }
         if (obj.data.LustreConfiguration) {

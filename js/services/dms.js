@@ -525,8 +525,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MongoDbSettings'] = obj.data.MongoDbSettings;
 
         /*
-        TODO:
+        SKIPPED:
         Password: String
+        TODO:
         Tags:
             - Resource Tag
         */

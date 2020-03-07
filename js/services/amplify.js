@@ -298,7 +298,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.autoBranchCreationConfig || obj.data.autoBranchCreationPatterns || obj.data.enableAutoBranchCreation) {
+            reqParams.cfn['AutoBranchCreationConfig'] = {
+                'AutoBranchCreationPatterns': obj.data.autoBranchCreationPatterns,
+                'BasicAuthConfig': obj.data.autoBranchCreationConfig.basicAuthCredentials,
+                'BuildSpec': obj.data.autoBranchCreationConfig.buildSpec,
+                'EnableAutoBranchCreation': obj.data.enableAutoBranchCreation,
+                'EnableAutoBuild': obj.data.autoBranchCreationConfig.enableAutoBuild,
+                'EnablePullRequestPreview': obj.data.autoBranchCreationConfig.enablePullRequestPreview,
+                'EnvironmentVariables': obj.data.autoBranchCreationConfig.environmentVariables,
+                'PullRequestEnvironmentName': obj.data.autoBranchCreationConfig.pullRequestEnvironmentName,
+                'Stage': obj.data.autoBranchCreationConfig.stage
+            };
+        }
         reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
+
 
         /*
         TODO:
@@ -347,6 +361,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['AppId'] = obj.data.appId;
         reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
+        reqParams.cfn['EnablePullRequestPreview'] = obj.data.enablePullRequestPreview;
+        reqParams.cfn['PullRequestEnvironmentName'] = obj.data.pullRequestEnvironmentName;
 
         tracked_resources.push({
             'obj': obj,
