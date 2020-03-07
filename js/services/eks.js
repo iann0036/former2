@@ -180,6 +180,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'subnet_ids': obj.data.resourcesVpcConfig.subnetIds
             };
         }
+        if (obj.data.encryptionConfig && obj.data.encryptionConfig.length) {
+            reqParams.cfn['EncryptionConfig'] = [];
+            
+            obj.data.encryptionConfig.forEach(encryptionconfig => {
+                var provider = null;
+                if (encryptionconfig.provider) {
+                    provider = {
+                        'KeyArn': encryptionconfig.provider.keyArn
+                    };
+                }
+                reqParams.cfn['EncryptionConfig'].push({
+                    'Provider': provider,
+                    'Resources': encryptionconfig.resources
+                });
+            });
+        }
 
         tracked_resources.push({
             'obj': obj,

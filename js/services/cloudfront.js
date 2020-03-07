@@ -246,6 +246,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
         reqParams.tf['aliases'] = obj.data.Aliases.Items;
         reqParams.cfn.DistributionConfig['Origins'] = [];
+        reqParams.cfn.DistributionConfig['OriginGroups'] = obj.data.OriginGroups;
         reqParams.tf['origin'] = [];
         obj.data.Origins.Items.forEach(origin => {
             var customOriginConfig = null;

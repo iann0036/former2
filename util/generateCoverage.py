@@ -29,7 +29,8 @@ cfn_exceptions = {
     'AWS::ServiceCatalog::PortfolioShare': 'N/A',
     'AWS::SecretsManager::SecretTargetAttachment': 'N/A',
     'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A',
-    'AWS::ACMPCA::Certificate': 'N/A'
+    'AWS::ACMPCA::Certificate': 'N/A',
+    'AWS::Chatbot::SlackChannelConfiguration': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
