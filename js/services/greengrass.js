@@ -1088,16 +1088,23 @@ async function updateDatatableInternetofThingsGreengrass() {
                 }),
                 sdkcall("Greengrass", "getResourceDefinition", {
                     ResourceDefinitionId: definition.Id
-                }, true).then((data) => {
-                    $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
-                        f2type: 'greengrass.resourcedefinition',
-                        f2data: definition,
-                        f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
-                    }]);
+                }, true).then(async (data) => {
+                    await sdkcall("Greengrass", "getResourceDefinitionVersion", {
+                        ResourceDefinitionId: definition.Id,
+                        ResourceDefinitionVersionId: definition.LatestVersion
+                    }, true).then(async (versiondata) => {
+                        data['Definition'] = versiondata['Definition'];
+
+                        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.resourcedefinition',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id,
+                            name: data.Name,
+                            latestversion: data.LatestVersion
+                        }]);
+                    });
                 })
             ]);
         }));
@@ -1335,10 +1342,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "greengrass.resourcedefinition") {
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['InitialVersion'] = obj.data.Definition;
 
         /*
         TODO:
-        InitialVersion
+        Tags
         */
 
         tracked_resources.push({
