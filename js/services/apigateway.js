@@ -1450,7 +1450,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     // V2
     await sdkcall("APIGatewayV2", "getVpcLinks", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         data.Items.forEach(vpcLink => {
             $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').deferredBootstrapTable('append', [{
                 f2id: vpcLink.VpcLinkId,
@@ -1462,7 +1462,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 description: ''
             }]);
         });
-    });
+    }).catch(() => { });
 
     await sdkcall("APIGateway", "getUsagePlans", {
         // no params
