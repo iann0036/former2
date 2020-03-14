@@ -435,6 +435,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "appmesh.virtualrouter") {
         reqParams.cfn['MeshName'] = obj.data.meshName;
+        if (obj.data.metadata) {
+            reqParams.cfn['MeshOwner'] = obj.data.metadata.meshOwner;
+        }
         reqParams.cfn['VirtualRouterName'] = obj.data.virtualRouterName;
         var listeners = [];
         obj.data.spec.listeners.forEach(listener => {
@@ -465,6 +468,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "appmesh.route") {
         reqParams.cfn['MeshName'] = obj.data.meshName;
+        if (obj.data.metadata) {
+            reqParams.cfn['MeshOwner'] = obj.data.metadata.meshOwner;
+        }
         reqParams.cfn['RouteName'] = obj.data.routeName;
         reqParams.cfn['VirtualRouterName'] = obj.data.virtualRouterName;
         var httpRoute = null;
@@ -692,6 +698,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "appmesh.virtualservice") {
         reqParams.cfn['MeshName'] = obj.data.meshName;
+        if (obj.data.metadata) {
+            reqParams.cfn['MeshOwner'] = obj.data.metadata.meshOwner;
+        }
         reqParams.cfn['VirtualServiceName'] = obj.data.virtualServiceName;
         reqParams.cfn['Spec'] = {
             'Provider': {
@@ -720,6 +729,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "appmesh.virtualnode") {
         reqParams.cfn['MeshName'] = obj.data.meshName;
+        if (obj.data.metadata) {
+            reqParams.cfn['MeshOwner'] = obj.data.metadata.meshOwner;
+        }
         reqParams.cfn['VirtualNodeName'] = obj.data.VirtualNodeName;
         var backends = [];
         obj.data.spec.backends.forEach(backend => {

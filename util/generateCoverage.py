@@ -30,7 +30,8 @@ cfn_exceptions = {
     'AWS::SecretsManager::SecretTargetAttachment': 'N/A',
     'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A',
     'AWS::ACMPCA::Certificate': 'N/A',
-    'AWS::Chatbot::SlackChannelConfiguration': 'N/A'
+    'AWS::Chatbot::SlackChannelConfiguration': 'N/A',
+    'AWS::ApiGatewayV2::ApiGatewayManagedOverrides': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',

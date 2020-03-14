@@ -115,6 +115,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['OpenMonitoring'] = obj.data.OpenMonitoring;
+        reqParams.cfn['LoggingInfo'] = obj.data.LoggingInfo;
 
         tracked_resources.push({
             'obj': obj,

@@ -1314,6 +1314,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     blockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
 
     $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('removeAll');
@@ -1429,6 +1430,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
     });
 
+    // V1
     await sdkcall("APIGateway", "getVpcLinks", {
         // no params
     }, true).then((data) => {
@@ -1443,8 +1445,23 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 description: vpcLink.description
             }]);
         });
+    });
 
-        unblockUI('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable');
+    // V2
+    await sdkcall("APIGatewayV2", "getVpcLinks", {
+        // no params
+    }, true).then((data) => {
+        data.Items.forEach(vpcLink => {
+            $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').deferredBootstrapTable('append', [{
+                f2id: vpcLink.VpcLinkId,
+                f2type: 'apigatewayv2.vpclink',
+                f2data: vpcLink,
+                f2region: region,
+                name: vpcLink.Name,
+                id: vpcLink.VpcLinkId,
+                description: ''
+            }]);
+        });
     });
 
     await sdkcall("APIGateway", "getUsagePlans", {
@@ -1919,6 +1936,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     unblockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-domainnames-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2753,6 +2771,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
         reqParams.cfn['TimeoutInMillis'] = obj.data.TimeoutInMillis;
         reqParams.cfn['PayloadFormatVersion'] = obj.data.PayloadFormatVersion;
+        reqParams.cfn['TlsConfig'] = obj.data.TlsConfig;
 
         tracked_resources.push({
             'obj': obj,
@@ -2795,6 +2814,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::ApiMapping',
+            'options': reqParams
+        });
+    } else if (obj.type == "apigatewayv2.vpclink") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('apigatewayv2', obj.id, 'AWS::ApiGatewayV2::VpcLink'),
+            'region': obj.region,
+            'service': 'apigatewayv2',
+            'type': 'AWS::ApiGatewayV2::VpcLink',
             'options': reqParams
         });
     } else {
