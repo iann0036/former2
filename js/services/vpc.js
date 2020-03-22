@@ -2074,6 +2074,336 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Network Manager Global Networks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Sites': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Devices': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Links': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Link Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Link ID',
+                        field: 'linkid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deviceid',
+                        title: 'Device ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Customer Gateway Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Customer Gateway ARN',
+                        field: 'customergatewayarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deviceid',
+                        title: 'Device ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'linkid',
+                        title: 'Link ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Transit Gateway Registrations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Global Network ID',
+                        field: 'globalnetworkid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'transitgatewayarn',
+                        title: 'Transit Gateway ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2124,6 +2454,13 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -3051,12 +3388,134 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
     }).catch(() => { });
+            
+    await sdkcall("NetworkManager", "describeGlobalNetworks", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').bootstrapTable('removeAll');
+
+        data.GlobalNetworks.forEach(async (globalnetwork) => {
+            $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').deferredBootstrapTable('append', [{
+                f2id: globalnetwork.GlobalNetworkArn,
+                f2type: 'ec2.networkmanagerglobalnetwork',
+                f2data: globalnetwork,
+                f2region: region,
+                id: globalnetwork.GlobalNetworkId,
+                description: globalnetwork.Description
+            }]);
+            
+            await Promise.all([
+                sdkcall("NetworkManager", "getSites", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Sites.forEach(site => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').deferredBootstrapTable('append', [{
+                            f2id: site.SiteArn,
+                            f2type: 'ec2.networkmanagersite',
+                            f2data: site,
+                            f2region: region,
+                            id: site.SiteId,
+                            globalnetworkid: site.GlobalNetworkId,
+                            description: site.Description
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getDevices", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Devices.forEach(device => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').deferredBootstrapTable('append', [{
+                            f2id: device.DeviceArn,
+                            f2type: 'ec2.networkmanagerdevice',
+                            f2data: device,
+                            f2region: region,
+                            id: device.DeviceId,
+                            globalnetworkid: device.GlobalNetworkId,
+                            description: device.Description,
+                            type: device.Type
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getLinks", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Links.forEach(link => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').deferredBootstrapTable('append', [{
+                            f2id: link.LinkArn,
+                            f2type: 'ec2.networkmanagerlink',
+                            f2data: link,
+                            f2region: region,
+                            id: link.LinkId,
+                            globalnetworkid: link.GlobalNetworkId,
+                            description: link.Description,
+                            type: link.Type
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getLinkAssociations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.LinkAssociations.forEach(linkassociation => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Link Association " + linkassociation.LinkId + " " + linkassociation.DeviceId + " " + linkassociation.GlobalNetworkId,
+                            f2type: 'ec2.networkmanagerlinkassociation',
+                            f2data: linkassociation,
+                            f2region: region,
+                            linkid: linkassociation.LinkId,
+                            globalnetworkid: linkassociation.GlobalNetworkId,
+                            deviceid: linkassociation.DeviceId
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getCustomerGatewayAssociations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.CustomerGatewayAssociations.forEach(customergatewayassociation => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Customer Gateway Association " + customergatewayassociation.CustomerGatewayArn + " " + customergatewayassociation.LinkId + " " + customergatewayassociation.DeviceId + " " + customergatewayassociation.GlobalNetworkId,
+                            f2type: 'ec2.networkmanagercustomergatewayassociation',
+                            f2data: customergatewayassociation,
+                            f2region: region,
+                            customergatewayarn: customergatewayassociation.CustomerGatewayArn,
+                            linkid: customergatewayassociation.LinkId,
+                            globalnetworkid: customergatewayassociation.GlobalNetworkId,
+                            deviceid: customergatewayassociation.DeviceId
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getTransitGatewayRegistrations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.TransitGatewayRegistrations.forEach(transitgatewayregistration => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Transit Gateway Registration " + transitgatewayregistration.GlobalNetworkId + " " + transitgatewayregistration.TransitGatewayArn,
+                            f2type: 'ec2.networkmanagertransitgatewayregistration',
+                            f2data: transitgatewayregistration,
+                            f2region: region,
+                            transitgatewayarn: transitgatewayregistration.TransitGatewayArn,
+                            globalnetworkid: transitgatewayregistration.GlobalNetworkId
+                        }]);
+                    });
+                }).catch(() => { })
+            ]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -4269,6 +4728,135 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRouteTableVPCAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.networkmanagerglobalnetwork") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::GlobalNetwork'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::GlobalNetwork',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId,
+                'GetAtt': {
+                    'Id': obj.data.GlobalNetworkId,
+                    'Arn': obj.data.GlobalNetworkArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagersite") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Site'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Site',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SiteId,
+                'GetAtt': {
+                    'SiteId': obj.data.SiteId,
+                    'SiteArn': obj.data.SiteArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerdevice") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Model'] = obj.data.Model;
+        reqParams.cfn['Vendor'] = obj.data.Vendor;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['SerialNumber'] = obj.data.SerialNumber;
+        reqParams.cfn['SiteId'] = obj.data.SiteId;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Device'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Device',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DeviceArn,
+                'GetAtt': {
+                    'DeviceId': obj.data.DeviceId,
+                    'DeviceArn': obj.data.DeviceArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerlink") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['SiteId'] = obj.data.SiteId;
+        reqParams.cfn['Bandwidth'] = obj.data.Bandwidth;
+        reqParams.cfn['Provider'] = obj.data.Provider;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Link'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Link',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.LinkArn,
+                'GetAtt': {
+                    'LinkId': obj.data.LinkId,
+                    'LinkArn': obj.data.LinkArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerlinkassociation") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['DeviceId'] = obj.data.DeviceId;
+        reqParams.cfn['LinkId'] = obj.data.LinkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::LinkAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::LinkAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.networkmanagercustomergatewayassociation") {
+        reqParams.cfn['CustomerGatewayArn'] = obj.data.CustomerGatewayArn;
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['DeviceId'] = obj.data.DeviceId;
+        reqParams.cfn['LinkId'] = obj.data.LinkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::CustomerGatewayAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::CustomerGatewayAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.networkmanagertransitgatewayregistration") {
+        reqParams.cfn['TransitGatewayArn'] = obj.data.TransitGatewayArn;
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::TransitGatewayRegistration'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::TransitGatewayRegistration',
             'options': reqParams
         });
     } else {
