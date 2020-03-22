@@ -4101,6 +4101,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }];
         }
         reqParams.cfn['VpnPort'] = obj.data.VpnPort;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
 
         tracked_resources.push({
             'obj': obj,
