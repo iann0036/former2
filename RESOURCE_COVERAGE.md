@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**510/510 (100%)** Resources Covered
+**523/522 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -44,6 +44,7 @@
 | *AWS::ApiGatewayV2::Route* | :thumbsup: |
 | *AWS::ApiGatewayV2::RouteResponse* | :thumbsup: |
 | *AWS::ApiGatewayV2::Stage* | :thumbsup: |
+| *AWS::ApiGatewayV2::VpcLink* | :thumbsup: |
 | *AWS::AppConfig::Application* | :thumbsup: |
 | *AWS::AppConfig::ConfigurationProfile* | :thumbsup: |
 | *AWS::AppConfig::Deployment* | :thumbsup: |
@@ -85,6 +86,8 @@
 | *AWS::Batch::JobDefinition* | :thumbsup: |
 | *AWS::Batch::JobQueue* | :thumbsup: |
 | *AWS::Budgets::Budget* | :thumbsup: |
+| *AWS::Cassandra::Keyspace* | N/A |
+| *AWS::Cassandra::Table* | N/A |
 | *AWS::CertificateManager::Certificate* | :thumbsup: |
 | *AWS::Chatbot::SlackChannelConfiguration* | N/A |
 | *AWS::Cloud9::EnvironmentEC2* | :thumbsup: |
@@ -109,6 +112,7 @@
 | *AWS::CodeDeploy::Application* | :thumbsup: |
 | *AWS::CodeDeploy::DeploymentConfig* | :thumbsup: |
 | *AWS::CodeDeploy::DeploymentGroup* | :thumbsup: |
+| *AWS::CodeGuruProfiler::ProfilingGroup* | :thumbsup: |
 | *AWS::CodePipeline::CustomActionType* | :thumbsup: |
 | *AWS::CodePipeline::Pipeline* | :thumbsup: |
 | *AWS::CodePipeline::Webhook* | :thumbsup: |
@@ -372,6 +376,13 @@
 | *AWS::Neptune::DBInstance* | :thumbsup: |
 | *AWS::Neptune::DBParameterGroup* | :thumbsup: |
 | *AWS::Neptune::DBSubnetGroup* | :thumbsup: |
+| *AWS::NetworkManager::CustomerGatewayAssociation* | :thumbsup: |
+| *AWS::NetworkManager::Device* | :thumbsup: |
+| *AWS::NetworkManager::GlobalNetwork* | :thumbsup: |
+| *AWS::NetworkManager::Link* | :thumbsup: |
+| *AWS::NetworkManager::LinkAssociation* | :thumbsup: |
+| *AWS::NetworkManager::Site* | :thumbsup: |
+| *AWS::NetworkManager::TransitGatewayRegistration* | :thumbsup: |
 | *AWS::OpsWorks::App* | :thumbsup: |
 | *AWS::OpsWorks::ElasticLoadBalancerAttachment* | :thumbsup: |
 | *AWS::OpsWorks::Instance* | :thumbsup: |
@@ -418,6 +429,7 @@
 | *AWS::Redshift::ClusterSecurityGroup* | :thumbsup: |
 | *AWS::Redshift::ClusterSecurityGroupIngress* | N/A |
 | *AWS::Redshift::ClusterSubnetGroup* | :thumbsup: |
+| *AWS::ResourceGroups::Group* | :thumbsup: |
 | *AWS::RoboMaker::Fleet* | :thumbsup: |
 | *AWS::RoboMaker::Robot* | :thumbsup: |
 | *AWS::RoboMaker::RobotApplication* | :thumbsup: |

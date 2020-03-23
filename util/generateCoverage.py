@@ -31,7 +31,9 @@ cfn_exceptions = {
     'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A',
     'AWS::ACMPCA::Certificate': 'N/A',
     'AWS::Chatbot::SlackChannelConfiguration': 'N/A',
-    'AWS::ApiGatewayV2::ApiGatewayManagedOverrides': 'N/A'
+    'AWS::ApiGatewayV2::ApiGatewayManagedOverrides': 'N/A',
+    'AWS::Cassandra::Keyspace': 'N/A',
+    'AWS::Cassandra::Table': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
