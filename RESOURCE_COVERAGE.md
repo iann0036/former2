@@ -529,7 +529,7 @@
 
 ## Terraform Coverage
 
-**298/535 (55%)** Resources Covered
+**298/546 (54%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -564,6 +564,7 @@
 | *aws_api_gateway_usage_plan* |  |
 | *aws_api_gateway_usage_plan_key* | :thumbsup: |
 | *aws_api_gateway_vpc_link* | :thumbsup: |
+| *aws_apigatewayv2_api* |  |
 | *aws_app_cookie_stickiness_policy* |  |
 | *aws_appautoscaling_policy* |  |
 | *aws_appautoscaling_scheduled_action* |  |
@@ -626,6 +627,7 @@
 | *aws_codedeploy_deployment_group* |  |
 | *aws_codepipeline* | :thumbsup: |
 | *aws_codepipeline_webhook* | :thumbsup: |
+| *aws_codestarnotifications_notification_rule* |  |
 | *aws_cognito_identity_pool* | :thumbsup: |
 | *aws_cognito_identity_pool_roles_attachment* | :thumbsup: |
 | *aws_cognito_identity_provider* |  |
@@ -708,10 +710,15 @@
 | *aws_ebs_snapshot* |  |
 | *aws_ebs_snapshot_copy* |  |
 | *aws_ebs_volume* | :thumbsup: |
+| *aws_ec2_availability_zone_group* |  |
 | *aws_ec2_capacity_reservation* |  |
 | *aws_ec2_client_vpn_endpoint* |  |
 | *aws_ec2_client_vpn_network_association* |  |
 | *aws_ec2_fleet* |  |
+| *aws_ec2_traffic_mirror_filter* |  |
+| *aws_ec2_traffic_mirror_filter_rule* |  |
+| *aws_ec2_traffic_mirror_session* |  |
+| *aws_ec2_traffic_mirror_target* |  |
 | *aws_ec2_transit_gateway* | :thumbsup: |
 | *aws_ec2_transit_gateway_route* | :thumbsup: |
 | *aws_ec2_transit_gateway_route_table* | :thumbsup: |
@@ -819,6 +826,7 @@
 | *aws_kinesis_analytics_application* |  |
 | *aws_kinesis_firehose_delivery_stream* |  |
 | *aws_kinesis_stream* | :thumbsup: |
+| *aws_kinesis_video_stream* |  |
 | *aws_kms_alias* | :thumbsup: |
 | *aws_kms_ciphertext* |  |
 | *aws_kms_external_key* |  |
@@ -942,8 +950,10 @@
 | *aws_route53_zone_association* |  |
 | *aws_route_table* | :thumbsup: |
 | *aws_route_table_association* | :thumbsup: |
+| *aws_s3_access_point* |  |
 | *aws_s3_account_public_access_block* |  |
 | *aws_s3_bucket* | :thumbsup: |
+| *aws_s3_bucket_analytics_configuration* |  |
 | *aws_s3_bucket_inventory* |  |
 | *aws_s3_bucket_metric* |  |
 | *aws_s3_bucket_notification* |  |
@@ -960,6 +970,7 @@
 | *aws_security_group* | :thumbsup: |
 | *aws_security_group_rule* |  |
 | *aws_securityhub_account* | :thumbsup: |
+| *aws_securityhub_member* |  |
 | *aws_securityhub_product_subscription* |  |
 | *aws_securityhub_standards_subscription* |  |
 | *aws_service_discovery_http_namespace* | :thumbsup: |

@@ -523,6 +523,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['MongoDbSettings'] = obj.data.MongoDbSettings;
+        if (obj.data.KinesisSettings) {
+            reqParams.cfn['KinesisSettings'] = {
+                'StreamArn': obj.data.KinesisSettings.StreamArn,
+                'MessageFormat': obj.data.KinesisSettings.MessageFormat,
+                'ServiceAccessRoleArn': obj.data.KinesisSettings.ServiceAccessRoleArn
+            }
+        }
+        reqParams.cfn['KafkaSettings'] = obj.data.KafkaSettings;
 
         /*
         SKIPPED:
