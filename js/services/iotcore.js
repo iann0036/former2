@@ -566,7 +566,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 if (action.republish) {
                     actionitem['Republish'] = {
                         'RoleArn': action.republish.roleArn,
-                        'Topic': action.republish.topic
+                        'Topic': action.republish.topic,
+                        'Qos': action.republish.qos
                     };
                 }
                 if (action.s3) {
@@ -621,6 +622,35 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'ExecutionNamePrefix': action.stepFunctions.executionNamePrefix,
                         'RoleArn': action.stepFunctions.roleArn,
                         'StateMachineName': action.stepFunctions.stateMachineName
+                    };
+                }
+                if (action.http) {
+                    var headers = null;
+                    if (action.http.headers) {
+                        headers = [];
+                        action.http.headers.forEach(header => {
+                            headers.push({
+                                'Key': header.key,
+                                'Value': header.value
+                            });
+                        });
+                    }
+                    var auth = null;
+                    if (action.http.auth) {
+                        auth = {};
+                        if (action.http.auth.sigv4) {
+                            auth['Sigv4'] = {
+                                'RoleArn': action.http.auth.sigv4.roleArn,
+                                'ServiceName': action.http.auth.sigv4.serviceName,
+                                'SigningRegion': action.http.auth.sigv4.signingRegion
+                            };
+                        }
+                    }
+                    actionitem['Http'] = {
+                        'Auth': auth,
+                        'ConfirmationUrl': action.http.confirmationUrl,
+                        'Headers': headers,
+                        'Url': action.http.url
                     };
                 }
 

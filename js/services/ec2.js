@@ -2538,6 +2538,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
+        reqParams.cfn['MultiAttachEnabled'] = obj.data.MultiAttachEnabled;
 
         /*
         TODO:
