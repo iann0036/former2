@@ -915,11 +915,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.ConstraintDetail.Description;
         reqParams.cfn['PortfolioId'] = obj.data.PortfolioId;
         reqParams.cfn['ProductId'] = obj.data.ProductId;
+        reqParams.cfn['LocalRoleName'] = "REPLACEME";
 
         /*
         TODO:
         AcceptLanguage: String
         RoleArn: String
+        LocalRoleName: String
         */
 
         tracked_resources.push({

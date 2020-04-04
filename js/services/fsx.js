@@ -129,6 +129,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'PerUnitStorageThroughput': obj.data.LustreConfiguration.PerUnitStorageThroughput
             };
         }
+        reqParams.cfn['StorageType'] = obj.data.StorageType;
 
         /*
         TODO:
