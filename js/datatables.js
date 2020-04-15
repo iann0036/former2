@@ -259,14 +259,32 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     } else if (alert_on_errors) {
                         f2log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
                         f2trace(err);
-
-                        $.notify({
-                            icon: 'font-icon font-icon-warning',
-                            title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
-                            message: err.message || JSON.stringify(err)
-                        }, {
-                            type: 'danger'
-                        });
+                        
+                        if (err.message) {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: err.message
+                            }, {
+                                type: 'danger'
+                            });
+                        } else if (err.retryDelay) {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: 'Credentials may not be correctly configured'
+                            }, {
+                                type: 'danger'
+                            });
+                        } else {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: JSON.stringify(err)
+                            }, {
+                                type: 'danger'
+                            });
+                        }
                     }
 
                     reject(data);
