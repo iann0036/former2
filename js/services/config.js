@@ -790,6 +790,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['TargetId'] = obj.data.TargetId;
         reqParams.cfn['TargetType'] = obj.data.TargetType;
         reqParams.cfn['TargetVersion'] = obj.data.TargetVersion;
+        reqParams.cfn['ExecutionControls'] = obj.data.ExecutionControls;
 
         tracked_resources.push({
             'obj': obj,
@@ -831,7 +832,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConformancePack',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConformancePackName,
+                'Import': {
+                    'ConformancePackName': obj.data.ConformancePackName
+                }
+            }
         });
     } else if (obj.type == "config.organizationnconformancepack") {
         reqParams.cfn['OrganizationConformancePackName'] = obj.data.OrganizationConformancePackName;
@@ -852,7 +859,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::OrganizationConformancePack',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.OrganizationConformancePackName,
+                'Import': {
+                    'OrganizationConformancePackName': obj.data.OrganizationConformancePackName
+                }
+            }
         });
     } else {
         return false;

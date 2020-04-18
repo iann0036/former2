@@ -106,7 +106,6 @@ async function updateDatatableSecurityIdentityAndComplianceDetective() {
     await sdkcall("Detective", "listInvitations", {
         // no params
     }, false).then(async (data) => {
-        console.log(data);
         $('#section-securityidentityandcompliance-detective-memberinvitations-datatable').bootstrapTable('removeAll');
 
         data.Invitations.forEach(invitation => {

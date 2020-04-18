@@ -1725,6 +1725,8 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
             return sdkcall("FMS", "getPolicy", {
                 PolicyId: policy.PolicyId
             }, true).then((data) => {
+                data.Policy['PolicyArn'] = data.PolicyArn;
+
                 $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Policy.PolicyId,
                     f2type: 'fms.policy',
@@ -2329,7 +2331,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::IPSet',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues':  {
+                'Ref': obj.data.Name + "|" + obj.data.Id + "|" + obj.data.Scope,
+                'GetAtt': {
+                    'Id': obj.data.Id,
+                    'Arn': obj.data.ARN
+                },
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id,
+                    'Scope': obj.data.Scope
+                }
+            }
         });
     } else if (obj.type == "waf.v2regexpatternset") {
         reqParams.cfn['Name'] = obj.data.Name;
@@ -2349,7 +2363,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::RegexPatternSet',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Arn': obj.data.ARN,
+                    'Id': obj.data.Id
+                },
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id,
+                    'Scope': obj.data.Scope
+                }
+            }
         });
     } else if (obj.type == "waf.v2webacl") {
         reqParams.cfn['Name'] = obj.data.Name;
@@ -2415,7 +2440,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::WebACL',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Arn': obj.data.ARN,
+                    'Capacity': obj.data.Capacity,
+                    'Id': obj.data.Id
+                },
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id,
+                    'Scope': obj.data.Scope
+                }
+            }
         });
     } else if (obj.type == "waf.v2rulegroup") {
         reqParams.cfn['Name'] = obj.data.Name;
@@ -2473,7 +2510,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::RuleGroup',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Arn': obj.data.ARN,
+                    'Id': obj.data.Id
+                },
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id,
+                    'Scope': obj.data.Scope
+                }
+            }
         });
     } else if (obj.type == "waf.v2webaclassociation") {
         reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
@@ -2485,7 +2533,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'waf',
             'type': 'AWS::WAFv2::WebACLAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'ResourceArn': obj.data.ResourceArn,
+                    'WebACLArn': obj.data.WebACLArn
+                }
+            }
         });
     } else if (obj.type == "fms.policy") {
         reqParams.cfn['PolicyName'] = obj.data.PolicyName;
@@ -2512,7 +2566,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'fms',
             'type': 'AWS::FMS::Policy',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PolicyId,
+                'GetAtt': {
+                    'Id': obj.data.PolicyId,
+                    'Arn': obj.data.PolicyArn
+                },
+                'Import': {
+                    'Id': obj.data.PolicyId
+                }
+            }
         });
     } else if (obj.type == "fms.notificationchannel") {
         reqParams.cfn['SnsRoleName'] = obj.data.SnsRoleName;
@@ -2524,7 +2588,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'fms',
             'type': 'AWS::FMS::NotificationChannel',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SnsTopicArn,
+                'Import': {
+                    'SnsTopicArn': obj.data.SnsTopicArn
+                }
+            }
         });
     } else {
         return false;

@@ -2386,9 +2386,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['HibernationOptions'] = obj.data.HibernationOptions;
+        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
+        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
 
         /*
         TODO:
+        BlockDeviceMappings:
+            Ebs:
+                KmsKeyId
         CreditSpecification: CreditSpecification
         DisableApiTermination: Boolean
         ElasticInferenceAccelerators: 
@@ -3585,6 +3590,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['SuspendedState'] = obj.data.SuspendedState;
 
         tracked_resources.push({
             'obj': obj,

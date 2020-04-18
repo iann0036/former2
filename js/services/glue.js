@@ -1047,6 +1047,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Connections'] = obj.data.Connections;
         reqParams.cfn['MaxRetries'] = obj.data.MaxRetries;
         reqParams.cfn['AllocatedCapacity'] = obj.data.AllocatedCapacity;
+        reqParams.cfn['Timeout'] = obj.data.Timeout;
+        reqParams.cfn['NotificationProperty'] = obj.data.NotificationProperty;
 
         tracked_resources.push({
             'obj': obj,
@@ -1061,6 +1063,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Type'] = obj.data.Type;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['Schedule'] = obj.data.Schedule;
+        reqParams.cfn['WorkflowName'] = obj.data.WorkflowName;
         if (obj.data.actions) {
             reqParams.cfn['Actions'] = [];
             obj.data.actions.forEach(action => {
@@ -1090,6 +1093,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Conditions': conditions
             };
         }
+
+        /*
+        SKIPPED:
+        StartOnCreation
+        */
 
         tracked_resources.push({
             'obj': obj,
@@ -1128,6 +1136,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ExtraJarsS3Path'] = obj.data.ExtraJarsS3Path;
         reqParams.cfn['PublicKey'] = obj.data.PublicKey;
         reqParams.cfn['PublicKeys'] = obj.data.PublicKeys;
+        reqParams.cfn['WorkerType'] = obj.data.WorkerType;
+        reqParams.cfn['NumberOfWorkers'] = obj.data.NumberOfWorkers;
+        reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
+        reqParams.cfn['Arguments'] = obj.data.Arguments;
 
         tracked_resources.push({
             'obj': obj,

@@ -584,7 +584,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.SSEDescription) {
             reqParams.cfn['SSESpecification'] = {
-                'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E")
+                'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E"),
+                'SSEType': obj.data.SSEDescription.SSEType,
+                'KMSMasterKeyId': obj.data.SSEDescription.KMSMasterKeyArn
             };
             reqParams.tf['server_side_encryption'] = {
                 'enabled': (obj.data.SSEDescription.Status[0] == "E")

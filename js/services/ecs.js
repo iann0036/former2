@@ -874,9 +874,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
                 var logConfiguration = null;
                 if (containerDefinition.logConfiguration) {
+                    var secretOptions = null;
+                    if (containerDefinition.logConfiguration.secretOptions) {
+                        secretOptions = [];
+                        containerDefinition.logConfiguration.secretOptions.forEach(secretOption => {
+                            secretOptions.push({
+                                'Name': secretOption.name,
+                                'ValueFrom': secretOption.valueFrom
+                            });
+                        });
+                    }
                     logConfiguration = {
                         'LogDriver': containerDefinition.logConfiguration.logDriver,
-                        'Options': containerDefinition.logConfiguration.options
+                        'Options': containerDefinition.logConfiguration.options,
+                        'SecretOptions': secretOptions
                     };
                 }
                 var healthCheck = null;
@@ -896,6 +907,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'Options': obj.data.firelensConfiguration.options
                     };
                 }
+                var systemControls = null;
+                if (containerDefinition.systemControls) {
+                    systemControls = [];
+                    containerDefinition.systemControls.forEach(systemControl => {
+                        systemControls.push({
+                            'Namespace': systemControl.namespace,
+                            'Value': systemControl.value
+                        });
+                    });
+                }
                 reqParams.cfn['ContainerDefinitions'].push({
                     'Command': containerDefinition.command,
                     'Cpu': (containerDefinition.cpu == 0) ? null : containerDefinition.cpu,
@@ -911,6 +932,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'FirelensConfiguration': firelensConfiguration,
                     'HealthCheck': healthCheck,
                     'Hostname': containerDefinition.hostname,
+                    'Interactive': containerDefinition.interactive,
                     'Image': containerDefinition.image,
                     'Links': containerDefinition.links,
                     'LinuxParameters': linuxParameters,
@@ -921,9 +943,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Name': containerDefinition.name,
                     'PortMappings': portMappings,
                     'Privileged': containerDefinition.privileged,
+                    'PseudoTerminal': containerDefinition.pseudoTerminal,
                     'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
                     'RepositoryCredentials': repositoryCredentials,
                     'Secrets': secrets,
+                    'SystemControls': systemControls,
                     'Ulimits': ulimits,
                     'User': containerDefinition.user,
                     'VolumesFrom': volumesFrom,
@@ -1011,10 +1035,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 })
             });
         }
+        reqParams.cfn['PidMode'] = obj.data.pidMode;
+        reqParams.cfn['IpcMode'] = obj.data.ipcMode;
+        if (obj.data.proxyConfiguration) {
+            var proxyConfigurationProperties = null;
+            if (obj.data.proxyConfiguration.properties) {
+                proxyConfigurationProperties = [];
+                obj.data.proxyConfiguration.properties.forEach(prop => {
+                    proxyConfigurationProperties.push({
+                        'Name': prop.name,
+                        'Value': prop.value
+                    });
+                });
+            }
+            reqParams.cfn['ProxyConfiguration'] = {
+                'ContainerName': obj.data.proxyConfiguration.containerName,
+                'Type': obj.data.proxyConfiguration.type,
+                'ProxyConfigurationProperties': proxyConfigurationProperties
+            };
+        }
 
         /*
         TODO:
-        ProxyConfiguration
         ContainerDefinition:
             DependsOn
             StartTimeout
@@ -1055,7 +1097,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::PrimaryTaskSet',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn
+                }
+            }
         });
     } else if (obj.type == "ecs.taskset") {
         reqParams.cfn['Cluster'] = obj.data.clusterArn;
@@ -1112,6 +1160,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.id,
                 'GetAtt': {
+                    'Id': obj.data.id
+                },
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn,
                     'Id': obj.data.id
                 }
             }

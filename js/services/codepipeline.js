@@ -623,7 +623,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'codestarconnections',
             'type': 'AWS::CodeStarConnections::Connection',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConnectionArn,
+                'GetAtt': {
+                    'ConnectionArn': obj.data.ConnectionArn,
+                    'OwnerAccountId': obj.data.OwnerAccountId,
+                    'ConnectionStatus': obj.data.ConnectionStatus
+                },
+                'Import': {
+                    'ConnectionArn': obj.data.ConnectionArn
+                }
+            }
         });
     } else {
         return false;

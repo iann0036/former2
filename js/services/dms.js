@@ -591,7 +591,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MigrationType'] = obj.data.MigrationType;
         reqParams.cfn['TableMappings'] = obj.data.TableMappings;
         reqParams.cfn['ReplicationTaskSettings'] = obj.data.ReplicationTaskSettings;
-        reqParams.cfn['CdcStartTime'] = obj.data.CdcStartPosition;
+        reqParams.cfn['CdcStartTime'] = obj.data.ReplicationTaskStartDate;
+        reqParams.cfn['CdcStartPosition'] = obj.data.CdcStartPosition;
+        reqParams.cfn['CdcStopPosition'] = obj.data.CdcStopPosition;
 
         /*
         TODO:

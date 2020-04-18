@@ -728,7 +728,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.logConfig) {
             reqParams.cfn['LogConfig'] = {
                 'FieldLogLevel': obj.data.logConfig.fieldLogLevel,
-                'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn
+                'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn,
+                'ExcludeVerboseContent': obj.data.logConfig.excludeVerboseContent
             };
             reqParams.tf['log_config'] = {
                 'field_log_level': obj.data.logConfig.fieldLogLevel,

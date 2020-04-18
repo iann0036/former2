@@ -4562,6 +4562,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['VpnPort'] = obj.data.VpnPort;
         reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
         reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.cfn['SplitTunnel'] = obj.data.SplitTunnel;
 
         tracked_resources.push({
             'obj': obj,
@@ -4702,7 +4703,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ec2',
             'type': 'AWS::EC2::GatewayRouteTableAssociation',
             'terraformType': 'aws_route_table_association',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'GatewayId': obj.data.GatewayId
+                }
+            }
         });
     } else if (obj.type == "ec2.localgatewayroute") {
         reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
@@ -4715,7 +4721,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRoute',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'State': obj.data.State,
+                    'Type': obj.data.Type
+                },
+                'Import': {
+                    'DestinationCidrBlock': obj.data.DestinationCidrBlock,
+                    'LocalGatewayRouteTableId': obj.data.LocalGatewayRouteTableId
+                }
+            }
         });
     } else if (obj.type == "ec2.localgatewayroutetablevpcassociation") {
         reqParams.cfn['LocalGatewayRouteTableId'] = obj.data.LocalGatewayRouteTableId;
@@ -4728,7 +4744,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRouteTableVPCAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'LocalGatewayRouteTableVpcAssociationId': obj.data.LocalGatewayRouteTableVpcAssociationId
+                }
+            }
         });
     } else if (obj.type == "ec2.networkmanagerglobalnetwork") {
         reqParams.cfn['Description'] = obj.data.Description;
@@ -4746,6 +4767,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Id': obj.data.GlobalNetworkId,
                     'Arn': obj.data.GlobalNetworkArn
+                },
+                'Import': {
+                    'Id': obj.data.GlobalNetworkId
                 }
             }
         });
@@ -4767,6 +4791,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'SiteId': obj.data.SiteId,
                     'SiteArn': obj.data.SiteArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'SiteId': obj.data.SiteId
                 }
             }
         });
@@ -4793,6 +4821,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'DeviceId': obj.data.DeviceId,
                     'DeviceArn': obj.data.DeviceArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'DeviceId': obj.data.DeviceId
                 }
             }
         });
@@ -4817,6 +4849,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'LinkId': obj.data.LinkId,
                     'LinkArn': obj.data.LinkArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'LinkId': obj.data.LinkId
                 }
             }
         });
@@ -4831,7 +4867,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::NetworkManager::LinkAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId + "|" + obj.data.DeviceId + "|" + obj.data.LinkId,
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'DeviceId': obj.data.DeviceId,
+                    'LinkId': obj.data.LinkId
+                }
+            }
         });
     } else if (obj.type == "ec2.networkmanagercustomergatewayassociation") {
         reqParams.cfn['CustomerGatewayArn'] = obj.data.CustomerGatewayArn;
@@ -4845,7 +4889,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::NetworkManager::CustomerGatewayAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'CustomerGatewayArn': obj.data.CustomerGatewayArn
+                }
+            }
         });
     } else if (obj.type == "ec2.networkmanagertransitgatewayregistration") {
         reqParams.cfn['TransitGatewayArn'] = obj.data.TransitGatewayArn;
@@ -4857,7 +4907,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::NetworkManager::TransitGatewayRegistration',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId + "|" + obj.data.TransitGatewayArn,
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'TransitGatewayArn': obj.data.TransitGatewayArn
+                }
+            }
         });
     } else {
         return false;

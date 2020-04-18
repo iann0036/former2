@@ -122,7 +122,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'CostFilters': obj.data.CostFilters,
             'BudgetName': obj.data.BudgetName,
             'CostTypes': obj.data.CostTypes,
-            'BudgetType': obj.data.BudgetType
+            'BudgetType': obj.data.BudgetType,
+            'PlannedBudgetLimits': obj.data.PlannedBudgetLimits
         };
         if (obj.data.BudgetLimit) {
             reqParams.tf['limit_amount'] = obj.data.BudgetLimit.Amount;

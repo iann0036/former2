@@ -1004,6 +1004,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AccountRecoverySetting'] = obj.data.AccountRecoverySetting;
         reqParams.cfn['UsernameConfiguration'] = obj.data.UsernameConfiguration;
 
+        /*
+        TODO:
+        EnabledMfas
+        */
+
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('cognito', obj.id, 'AWS::Cognito::UserPool'),

@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**523/522 (100%)** Resources Covered
+**525/524 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -151,6 +151,8 @@
 | *AWS::DMS::ReplicationSubnetGroup* | :thumbsup: |
 | *AWS::DMS::ReplicationTask* | :thumbsup: |
 | *AWS::DataPipeline::Pipeline* | :thumbsup: |
+| *AWS::Detective::Graph* | :thumbsup: |
+| *AWS::Detective::MemberInvitation* | :thumbsup: |
 | *AWS::DirectoryService::MicrosoftAD* | :thumbsup: |
 | *AWS::DirectoryService::SimpleAD* | :thumbsup: |
 | *AWS::DocDB::DBCluster* | :thumbsup: |

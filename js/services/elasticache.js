@@ -524,6 +524,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['transit_encryption_enabled'] = obj.data.TransitEncryptionEnabled;
         reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.AtRestEncryptionEnabled;
         reqParams.tf['at_rest_encryption_enabled'] = obj.data.AtRestEncryptionEnabled;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
 
         /*
         TODO:

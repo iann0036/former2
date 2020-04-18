@@ -842,6 +842,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['EnableHttpEndpoint'] = obj.data.HttpEndpointEnabled;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'FeatureName': associatedRole.FeatureName,
+                    'RoleArn': associatedRole.RoleArn
+                });
+            });
+        }
+        
 
         /*
         TODO:
@@ -978,6 +988,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['CACertificateIdentifier'] = obj.data.CACertificateIdentifier;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'FeatureName': associatedRole.FeatureName,
+                    'RoleArn': associatedRole.RoleArn
+                });
+            });
+        }
 
         /*
         TODO:

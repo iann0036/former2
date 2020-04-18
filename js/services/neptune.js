@@ -401,6 +401,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
         reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
         reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
 
         /*
         TODO:

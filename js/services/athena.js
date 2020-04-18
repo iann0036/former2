@@ -181,7 +181,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'athena',
             'type': 'AWS::Athena::NamedQuery',
             'terraformType': 'aws_athena_named_query',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'Import': {
+                    'NamedQueryId': obj.data.NamedQueryId
+                }
+            }
         });
     } else if (obj.type == "athena.workgroup") {
         reqParams.cfn['Name'] = obj.data.Name;
@@ -214,7 +220,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::Athena::WorkGroup',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.Name
+                'Ref': obj.data.Name,
+                'Import': {
+                    'Name': obj.data.Name
+                }
             }
         });
     } else {

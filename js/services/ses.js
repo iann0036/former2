@@ -454,7 +454,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ses',
             'type': 'AWS::SES::ConfigurationSet',
             'terraformType': 'aws_ses_configuration_set',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConfigurationSet.Name,
+                'Import': {
+                    'Name': obj.data.ConfigurationSet.Name
+                }
+            }
         });
     } else if (obj.type == "ses.receiptfilter") {
         reqParams.cfn['Filter'] = obj.data;

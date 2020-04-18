@@ -281,7 +281,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthority',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                    //'CertificateSigningRequest': 
+                },
+                'Import': {
+                    'Arn': obj.data.Arn
+                }
+            }
         });
     } else if (obj.type == "acm.pcacertificateauthorityactivation") {
         reqParams.cfn['Certificate'] = obj.data.Certificate;
@@ -295,7 +305,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthorityActivation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'CertificateAuthorityArn': obj.data.CertificateAuthorityArn
+                }
+            }
         });
     } else {
         return false;

@@ -826,6 +826,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['ManagedPolicyArns'].push(attachedpolicy.PolicyArn);
             });
         }
+        reqParams.cfn['Description'] = obj.data.Description;
 
         /*
         SKIPPED:
@@ -1037,7 +1038,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'accessanalyzer',
             'type': 'AWS::AccessAnalyzer::Analyzer',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn,
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else {
         return false;

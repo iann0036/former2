@@ -728,6 +728,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['ThresholdMetricId'] = obj.data.ThresholdMetricId;
 
         tracked_resources.push({
             'obj': obj,
@@ -767,6 +768,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.AlarmName,
                 'GetAtt': {
                     'Arn': obj.data.AlarmArn
+                },
+                'Import': {
+                    'AlarmName': obj.data.AlarmName
                 }
             }
         });

@@ -81,7 +81,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'codeguru',
             'type': 'AWS::CodeGuruProfiler::ProfilingGroup',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.name,
+                'GetAtt': {
+                    'Arn': obj.data.arn
+                },
+                'Import': {
+                    'ProfilingGroupName': obj.data.name
+                }
+            }
         });
     } else {
         return false;

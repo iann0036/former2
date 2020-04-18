@@ -433,9 +433,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.Targets.forEach(target => {
                 var ecsParameters = null;
                 if (target.EcsParameters) {
+                    var networkConfiguration = null;
+                    if (target.EcsParameters.NetworkConfiguration) {
+                        networkConfiguration = {
+                            'AwsVpcConfiguration': target.EcsParameters.NetworkConfiguration.awsvpcConfiguration
+                        };
+                    }
                     ecsParameters = {
                         'TaskDefinitionArn': target.EcsParameters.TaskDefinitionArn,
-                        'TaskCount': target.EcsParameters.TaskCount
+                        'TaskCount': target.EcsParameters.TaskCount,
+                        'LaunchType': target.EcsParameters.LaunchType,
+                        'Group': target.EcsParameters.Group,
+                        'PlatformVersion': target.EcsParameters.PlatformVersion,
+                        'NetworkConfiguration': networkConfiguration
                     };
                 }
                 reqParams.cfn['Targets'].push({
@@ -453,6 +463,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['EventBusName'] = obj.data.EventBusName;
 
         tracked_resources.push({
             'obj': obj,

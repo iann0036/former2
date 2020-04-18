@@ -347,6 +347,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
 
         /*
         TODO:

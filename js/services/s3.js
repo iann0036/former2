@@ -630,7 +630,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::AccessPoint',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'Import': {
+                    'Name': obj.data.Name
+                }
+            }
         });
     } else {
         return false;
