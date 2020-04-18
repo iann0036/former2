@@ -1127,6 +1127,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ExtraPythonLibsS3Path'] = obj.data.ExtraPythonLibsS3Path;
         reqParams.cfn['ExtraJarsS3Path'] = obj.data.ExtraJarsS3Path;
         reqParams.cfn['PublicKey'] = obj.data.PublicKey;
+        reqParams.cfn['PublicKeys'] = obj.data.PublicKeys;
 
         tracked_resources.push({
             'obj': obj,
@@ -1194,6 +1195,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['TransformParameters'] = obj.data.Parameters;
         reqParams.cfn['WorkerType'] = obj.data.WorkerType;
         reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
+
+        /*
+        TODO:
+        Tags
+        */
 
         tracked_resources.push({
             'obj': obj,
