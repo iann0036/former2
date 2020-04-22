@@ -862,6 +862,7 @@ $(document).ready(function(){
         "us-east-2": "US East (Ohio)",
         "us-west-1": "US West (N. California)",
         "us-west-2": "US West (Oregon)",
+        "af-south-1": "Africa (Cape Town)",
         "ap-east-1": "Asia Pacific (Hong Kong)",
         "ap-south-1": "Asia Pacific (Mumbai)",
         "ap-northeast-3": "Asia Pacific (Osaka-Local)",
