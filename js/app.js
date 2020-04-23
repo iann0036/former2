@@ -1,3 +1,4 @@
+var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
 var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
@@ -1340,7 +1341,6 @@ $(document).ready(function(){
 // Extension Request/Response
 /* ========================================================================== */
 
-var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
 var active_firefoxaddon_requests = {};
 
 document.addEventListener('f2response', msg => {
