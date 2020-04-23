@@ -799,7 +799,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                 });
             }));
         }));
-    });
+    }).catch(() => { });
 
     await sdkcall("DirectConnect", "describeDirectConnectGateways", {
         // no params

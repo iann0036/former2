@@ -7,6 +7,7 @@ var ping_extension_interval = null;
 var stack_parameters = [];
 var MAX_DT_SCANS = 10;
 var defaultoutput = 'cloudformation';
+var check_objects = [];
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -113,7 +114,7 @@ $(document).ready(function(){
     }
 
     function checkRelatedResources(rows) {
-        var check_objects = [];
+        check_objects = [];
         var related_resources = {};
         var related_resources_post = {};
         $('.f2datatable').each(function() {
@@ -131,6 +132,8 @@ $(document).ready(function(){
             });
         });
         mapped_check_objects = performF2Mappings(check_objects);
+        check_objects = [];
+        
         mapped_check_objects.forEach(obj => {
             rows.forEach(row => {
                 // looks for relationships from the row to the check objects
