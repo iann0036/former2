@@ -167,10 +167,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::EC2::TransitGateway": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::SQS::Queue": {
     "EntityType": "Element",
     "Relationships": {
@@ -180,6 +176,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::EC2::TransitGateway": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::EC2::CapacityReservation": {
     "EntityType": "Element",
@@ -247,7 +247,15 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::NetworkManager::Link": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::StepFunctions::Activity": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::CodeStarConnections::Connection": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -267,10 +275,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::EC2::TransitGatewayRouteTableAssociation": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::EC2::Volume": {
     "EntityType": "Element",
     "Relationships": {
@@ -286,6 +290,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::EC2::TransitGatewayRouteTableAssociation": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::IAM::ServiceLinkedRole": {
     "EntityType": "Element",
@@ -380,6 +388,16 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::Cognito::UserPoolGroup": {
+    "EntityType": "Element",
+    "Relationships": {
+      "IsAssociatedWith": {
+        "AWS::Cognito::UserPool": {
+          "PropertyName": "UserPoolId"
+        }
+      }
+    }
+  },
   "AWS::ApiGateway::Deployment": {
     "EntityType": "Element",
     "Relationships": {
@@ -391,16 +409,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       "IsAssociatedWith": {
         "AWS::ApiGateway::Stage": {
           "PropertyName": "StageName"
-        }
-      }
-    }
-  },
-  "AWS::Cognito::UserPoolGroup": {
-    "EntityType": "Element",
-    "Relationships": {
-      "IsAssociatedWith": {
-        "AWS::Cognito::UserPool": {
-          "PropertyName": "UserPoolId"
         }
       }
     }
@@ -459,10 +467,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::AppMesh::Route": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::EKS::Nodegroup": {
     "EntityType": "Element",
     "Relationships": {}
@@ -485,6 +489,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::AppMesh::Route": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::AppConfig::Deployment": {
     "EntityType": "Element",
     "Relationships": {}
@@ -503,6 +511,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::EC2::LocalGatewayRoute": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::EC2::EIP": {
     "EntityType": "Element",
@@ -523,10 +535,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     }
   },
   "AWS::IoT1Click::Project": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
-  "AWS::EC2::LocalGatewayRoute": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -556,10 +564,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::EC2::VPCEndpointConnectionNotification": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::GameLift::Fleet": {
     "EntityType": "Element",
     "Relationships": {
@@ -569,6 +573,14 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::EC2::VPCEndpointConnectionNotification": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::NetworkManager::CustomerGatewayAssociation": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::Lambda::LayerVersion": {
     "EntityType": "Element",
@@ -667,11 +679,15 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::Glue::Workflow": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::Config::RemediationConfiguration": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Glue::Workflow": {
+  "AWS::SecretsManager::RotationSchedule": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -700,10 +716,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
-  },
-  "AWS::SecretsManager::RotationSchedule": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::Greengrass::ResourceDefinition": {
     "EntityType": "Element",
@@ -926,6 +938,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::Neptune::DBClusterParameterGroup": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::EMR::InstanceGroupConfig": {
     "EntityType": "Element",
     "Relationships": {
@@ -935,10 +951,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
-  },
-  "AWS::Neptune::DBClusterParameterGroup": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::ElasticLoadBalancingV2::ListenerRule": {
     "EntityType": "Element",
@@ -1155,11 +1167,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::Events::EventBusPolicy": {
+  "AWS::EKS::Cluster": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::EKS::Cluster": {
+  "AWS::Events::EventBusPolicy": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1167,15 +1179,19 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::WAF::ByteMatchSet": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::Config::AggregationAuthorization": {
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::WAF::ByteMatchSet": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::DocDB::DBCluster": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::CloudWatch::CompositeAlarm": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1195,11 +1211,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ServiceDiscovery::Service": {
+  "AWS::ServiceCatalog::AcceptedPortfolioShare": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ServiceCatalog::AcceptedPortfolioShare": {
+  "AWS::ServiceDiscovery::Service": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1221,16 +1237,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::Config::ConfigurationRecorder": {
-    "EntityType": "Element",
-    "Relationships": {
-      "Uses": {
-        "AWS::IAM::Role": {
-          "PropertyName": "RoleARN"
-        }
-      }
-    }
-  },
   "AWS::EMR::Step": {
     "EntityType": "Element",
     "Relationships": {
@@ -1246,6 +1252,16 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::Config::ConfigurationRecorder": {
+    "EntityType": "Element",
+    "Relationships": {
+      "Uses": {
+        "AWS::IAM::Role": {
+          "PropertyName": "RoleARN"
+        }
+      }
+    }
+  },
   "AWS::Backup::BackupVault": {
     "EntityType": "Element",
     "Relationships": {}
@@ -1254,11 +1270,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::IoT1Click::Placement": {
+  "AWS::SSM::MaintenanceWindowTarget": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::SSM::MaintenanceWindowTarget": {
+  "AWS::IoT1Click::Placement": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1311,10 +1327,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::Cognito::UserPoolResourceServer": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::OpsWorks::Instance": {
     "EntityType": "Element",
     "Relationships": {
@@ -1342,6 +1354,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::Cognito::UserPoolResourceServer": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::SES::ConfigurationSet": {
     "EntityType": "Element",
     "Relationships": {}
@@ -1351,6 +1367,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "Relationships": {}
   },
   "AWS::ManagedBlockchain::Node": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::Detective::MemberInvitation": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1428,6 +1448,23 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::EC2::NetworkInterfaceAttachment": {
+    "EntityType": "Link",
+    "Relationships": {
+      "References": {
+        "AWS::EC2::NetworkInterface": {
+          "PropertyName": "NetworkInterfaceId"
+        },
+        "AWS::EC2::Instance": {
+          "PropertyName": "InstanceId"
+        }
+      }
+    }
+  },
+  "AWS::WAFRegional::IPSet": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::RDS::DBInstance": {
     "EntityType": "Element",
     "Relationships": {
@@ -1488,23 +1525,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         ]
       }
     }
-  },
-  "AWS::EC2::NetworkInterfaceAttachment": {
-    "EntityType": "Link",
-    "Relationships": {
-      "References": {
-        "AWS::EC2::NetworkInterface": {
-          "PropertyName": "NetworkInterfaceId"
-        },
-        "AWS::EC2::Instance": {
-          "PropertyName": "InstanceId"
-        }
-      }
-    }
-  },
-  "AWS::WAFRegional::IPSet": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::RoboMaker::RobotApplication": {
     "EntityType": "Element",
@@ -1833,11 +1853,15 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::RDS::DBClusterParameterGroup": {
+  "AWS::NetworkManager::Device": {
     "EntityType": "Element",
     "Relationships": {}
   },
   "AWS::Neptune::DBInstance": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::RDS::DBClusterParameterGroup": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1897,10 +1921,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Transfer::Server": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::ApiGateway::UsagePlanKey": {
     "EntityType": "Element",
     "Relationships": {
@@ -1913,6 +1933,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::Transfer::Server": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::EMR::SecurityConfiguration": {
     "EntityType": "Element",
@@ -1935,11 +1959,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Glue::Classifier": {
+  "AWS::RoboMaker::Fleet": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::RoboMaker::Fleet": {
+  "AWS::Glue::Classifier": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -1970,6 +1994,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::Greengrass::Group": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::Cognito::IdentityPoolRoleAttachment": {
     "EntityType": "Element",
     "Relationships": {
@@ -1979,10 +2007,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
-  },
-  "AWS::Greengrass::Group": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::PinpointEmail::Identity": {
     "EntityType": "Element",
@@ -2070,19 +2094,19 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Logs::LogGroup": {
-    "EntityType": "Container",
-    "Relationships": {}
-  },
   "AWS::CodePipeline::Webhook": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::AutoScalingPlans::ScalingPlan": {
-    "EntityType": "Element",
+  "AWS::Logs::LogGroup": {
+    "EntityType": "Container",
     "Relationships": {}
   },
   "AWS::AppStream::ImageBuilder": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::AutoScalingPlans::ScalingPlan": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2138,10 +2162,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Pinpoint::SmsTemplate": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::OpsWorks::Volume": {
     "EntityType": "Element",
     "Relationships": {
@@ -2156,6 +2176,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::Pinpoint::SmsTemplate": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::ServiceCatalog::TagOptionAssociation": {
     "EntityType": "Element",
@@ -2208,10 +2232,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::DirectoryService::MicrosoftAD": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::WAF::Rule": {
     "EntityType": "Element",
     "Relationships": {
@@ -2244,6 +2264,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::DirectoryService::MicrosoftAD": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::ApiGatewayV2::DomainName": {
     "EntityType": "Element",
     "Relationships": {}
@@ -2255,6 +2279,16 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
   "AWS::SSM::Document": {
     "EntityType": "Element",
     "Relationships": {}
+  },
+  "AWS::EC2::NetworkInterfacePermission": {
+    "EntityType": "Element",
+    "Relationships": {
+      "IsAssociatedWith": {
+        "AWS::EC2::NetworkInterface": {
+          "PropertyName": "NetworkInterfaceId"
+        }
+      }
+    }
   },
   "AWS::SageMaker::Model": {
     "EntityType": "Element",
@@ -2273,21 +2307,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::EC2::NetworkInterfacePermission": {
-    "EntityType": "Element",
-    "Relationships": {
-      "IsAssociatedWith": {
-        "AWS::EC2::NetworkInterface": {
-          "PropertyName": "NetworkInterfaceId"
-        }
-      }
-    }
-  },
-  "AWS::EC2::TrafficMirrorFilter": {
+  "AWS::GameLift::Build": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::GameLift::Build": {
+  "AWS::EC2::TrafficMirrorFilter": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2303,7 +2327,7 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::CloudWatch::Alarm": {
+  "AWS::Backup::BackupSelection": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2311,7 +2335,7 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Backup::BackupSelection": {
+  "AWS::CloudWatch::Alarm": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2392,6 +2416,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "Alexa::ASK::Skill": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::RDS::DBCluster": {
     "EntityType": "Element",
     "Relationships": {
@@ -2425,10 +2453,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "Alexa::ASK::Skill": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::EC2::ClientVpnEndpoint": {
     "EntityType": "Element",
     "Relationships": {}
@@ -2459,10 +2483,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::Pinpoint::ApplicationSettings": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::IAM::UserToGroupAddition": {
     "EntityType": "Element",
     "Relationships": {
@@ -2476,6 +2496,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::Pinpoint::ApplicationSettings": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::OpsWorksCM::Server": {
     "EntityType": "Element",
@@ -2544,6 +2568,16 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::IoT::Policy": {
+    "EntityType": "Element",
+    "Relationships": {
+      "IsAssociatedWith": {
+        "AWS::IoT::Certificate": {
+          "Via": "AWS::IoT::PolicyPrincipalAttachment"
+        }
+      }
+    }
+  },
   "AWS::IAM::InstanceProfile": {
     "EntityType": "Element",
     "Relationships": {
@@ -2565,15 +2599,9 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::IoT::Policy": {
+  "AWS::Batch::ComputeEnvironment": {
     "EntityType": "Element",
-    "Relationships": {
-      "IsAssociatedWith": {
-        "AWS::IoT::Certificate": {
-          "Via": "AWS::IoT::PolicyPrincipalAttachment"
-        }
-      }
-    }
+    "Relationships": {}
   },
   "AWS::CodeDeploy::DeploymentGroup": {
     "EntityType": "Element",
@@ -2596,10 +2624,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
-  },
-  "AWS::Batch::ComputeEnvironment": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::EC2::Route": {
     "EntityType": "Element",
@@ -2710,6 +2734,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::Detective::Graph": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::EC2::NetworkInterface": {
     "EntityType": "Element",
     "Relationships": {
@@ -2781,6 +2809,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
+  "AWS::NetworkManager::LinkAssociation": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::EC2::ClientVpnAuthorizationRule": {
     "EntityType": "Element",
     "Relationships": {}
@@ -2824,11 +2856,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
+  "AWS::ServiceCatalog::LaunchRoleConstraint": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ServiceCatalog::LaunchRoleConstraint": {
+  "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2880,25 +2912,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::EC2::NatGateway": {
-    "EntityType": "Element",
-    "Relationships": {
-      "IsContainedInside": {
-        "AWS::EC2::Subnet": {
-          "PropertyName": "SubnetId"
-        }
-      },
-      "Uses": {
-        "AWS::EC2::EIP": {
-          "PropertyName": "AllocationId"
-        }
-      }
-    }
-  },
-  "AWS::RDS::OptionGroup": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::ElastiCache::SecurityGroupIngress": {
     "EntityType": "Link",
     "Relationships": {
@@ -2910,6 +2923,25 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         "AWS::EC2::SecurityGroup": {
           "PropertyName": "EC2SecurityGroupName",
           "Endpoint": "Target"
+        }
+      }
+    }
+  },
+  "AWS::RDS::OptionGroup": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::EC2::NatGateway": {
+    "EntityType": "Element",
+    "Relationships": {
+      "IsContainedInside": {
+        "AWS::EC2::Subnet": {
+          "PropertyName": "SubnetId"
+        }
+      },
+      "Uses": {
+        "AWS::EC2::EIP": {
+          "PropertyName": "AllocationId"
         }
       }
     }
@@ -2946,11 +2978,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::AppSync::FunctionConfiguration": {
+  "AWS::ApiGatewayV2::Model": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ApiGatewayV2::Model": {
+  "AWS::AppSync::FunctionConfiguration": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -2998,11 +3030,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::EC2::TrafficMirrorFilterRule": {
+  "AWS::AppConfig::DeploymentStrategy": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::AppConfig::DeploymentStrategy": {
+  "AWS::EC2::TrafficMirrorFilterRule": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3028,6 +3060,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::CodeGuruProfiler::ProfilingGroup": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::KinesisAnalyticsV2::ApplicationOutput": {
     "EntityType": "Element",
     "Relationships": {}
@@ -3037,6 +3073,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "Relationships": {}
   },
   "AWS::ElastiCache::ParameterGroup": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::NetworkManager::GlobalNetwork": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3050,6 +3090,14 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::NetworkManager::TransitGatewayRegistration": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::WAF::SqlInjectionMatchSet": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::EFS::FileSystem": {
     "EntityType": "Element",
@@ -3070,10 +3118,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
-  },
-  "AWS::WAF::SqlInjectionMatchSet": {
-    "EntityType": "Element",
-    "Relationships": {}
   },
   "AWS::CodeCommit::Repository": {
     "EntityType": "Element",
@@ -3121,6 +3165,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::Athena::WorkGroup": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::RoboMaker::RobotApplicationVersion": {
     "EntityType": "Element",
     "Relationships": {}
@@ -3150,6 +3198,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::ResourceGroups::Group": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::IoTAnalytics::Pipeline": {
     "EntityType": "Element",
@@ -3308,10 +3360,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::Greengrass::DeviceDefinitionVersion": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::IoT::PolicyPrincipalAttachment": {
     "EntityType": "Link",
     "Relationships": {
@@ -3324,6 +3372,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         }
       }
     }
+  },
+  "AWS::Greengrass::DeviceDefinitionVersion": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::ApplicationAutoScaling::ScalableTarget": {
     "EntityType": "Element",
@@ -3351,11 +3403,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::ApiGateway::VpcLink": {
+  "AWS::IoTEvents::DetectorModel": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::IoTEvents::DetectorModel": {
+  "AWS::ApiGateway::VpcLink": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3398,15 +3450,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::ServiceCatalog::LaunchNotificationConstraint": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::SES::ReceiptRuleSet": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Pinpoint::APNSVoipChannel": {
+  "AWS::ServiceCatalog::LaunchNotificationConstraint": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3414,11 +3462,7 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Greengrass::ResourceDefinitionVersion": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
-  "AWS::DirectoryService::SimpleAD": {
+  "AWS::Pinpoint::APNSVoipChannel": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3435,7 +3479,15 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::Greengrass::ResourceDefinitionVersion": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::SecretsManager::SecretTargetAttachment": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::DirectoryService::SimpleAD": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3472,18 +3524,9 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::IoT::ThingPrincipalAttachment": {
-    "EntityType": "Link",
-    "Relationships": {
-      "References": {
-        "AWS::IoT::Certificate": {
-          "PropertyName": "Principal"
-        },
-        "AWS::IoT::Thing": {
-          "PropertyName": "ThingName"
-        }
-      }
-    }
+  "AWS::NetworkManager::Site": {
+    "EntityType": "Element",
+    "Relationships": {}
   },
   "AWS::ElastiCache::CacheCluster": {
     "EntityType": "Element",
@@ -3516,6 +3559,19 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
         },
         "AWS::ElastiCache::ParameterGroup": {
           "PropertyName": "CacheParameterGroupName"
+        }
+      }
+    }
+  },
+  "AWS::IoT::ThingPrincipalAttachment": {
+    "EntityType": "Link",
+    "Relationships": {
+      "References": {
+        "AWS::IoT::Certificate": {
+          "PropertyName": "Principal"
+        },
+        "AWS::IoT::Thing": {
+          "PropertyName": "ThingName"
         }
       }
     }
@@ -3607,11 +3663,11 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::AppMesh::Mesh": {
+  "AWS::Inspector::AssessmentTemplate": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::Inspector::AssessmentTemplate": {
+  "AWS::AppMesh::Mesh": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3641,11 +3697,15 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::EC2::EC2Fleet": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::Pinpoint::App": {
     "EntityType": "Element",
     "Relationships": {}
   },
-  "AWS::EC2::EC2Fleet": {
+  "AWS::Cassandra::Table": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3663,6 +3723,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
+  "AWS::GuardDuty::IPSet": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
   "AWS::IoT::Certificate": {
     "EntityType": "Element",
     "Relationships": {
@@ -3676,10 +3740,6 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   },
-  "AWS::GuardDuty::IPSet": {
-    "EntityType": "Element",
-    "Relationships": {}
-  },
   "AWS::SSM::Association": {
     "EntityType": "Element",
     "Relationships": {}
@@ -3689,6 +3749,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     "Relationships": {}
   },
   "AWS::Athena::NamedQuery": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::Chatbot::SlackChannelConfiguration": {
     "EntityType": "Element",
     "Relationships": {}
   },
@@ -3752,6 +3816,10 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
     }
   },
   "AWS::Route53Resolver::ResolverEndpoint": {
+    "EntityType": "Element",
+    "Relationships": {}
+  },
+  "AWS::Cassandra::Keyspace": {
     "EntityType": "Element",
     "Relationships": {}
   },
