@@ -406,7 +406,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2imagebuilder',
             'type': 'AWS::ImageBuilder::ImagePipeline',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else if (obj.type == "ec2imagebuilder.imagerecipe") {
         reqParams.cfn['Name'] = obj.data.name;
@@ -452,7 +457,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2imagebuilder',
             'type': 'AWS::ImageBuilder::ImageRecipe',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else if (obj.type == "ec2imagebuilder.component") {
         reqParams.cfn['Name'] = obj.data.name;
@@ -474,7 +484,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2imagebuilder',
             'type': 'AWS::ImageBuilder::Component',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else if (obj.type == "ec2imagebuilder.distributionconfiguration") {
         reqParams.cfn['Name'] = obj.data.name;
@@ -497,7 +512,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2imagebuilder',
             'type': 'AWS::ImageBuilder::DistributionConfiguration',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else if (obj.type == "ec2imagebuilder.infrastructureconfiguration") {
         reqParams.cfn['Name'] = obj.data.name;
@@ -529,7 +549,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2imagebuilder',
             'type': 'AWS::ImageBuilder::InfrastructureConfiguration',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else {
         return false;

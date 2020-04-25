@@ -137,7 +137,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::Detective::Graph',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.Arn
+                'Ref': obj.data.Arn,
+                'Import': {
+                    'Arn': obj.data.Arn
+                }
             }
         });
     } else if (obj.type == "detective.memberinvitation") {
@@ -156,7 +159,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'detective',
             'type': 'AWS::Detective::MemberInvitation',
-            'options': reqParams
+            'options': reqParams,
+            'Import': {
+                'GraphArn': obj.data.GraphArn,
+                'MemberId': obj.data.MemberId
+            }
         });
     } else {
         return false;

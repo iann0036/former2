@@ -88,7 +88,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::CE::CostCategory',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.CostCategoryArn
+                'Ref': obj.data.CostCategoryArn,
+                'Import': {
+                    'Arn': obj.data.CostCategoryArn
+                }
             }
         });
     } else {

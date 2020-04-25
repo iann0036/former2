@@ -3,14 +3,27 @@ import pprint
 import json
 import re
 
-cfnclient = boto3.client('cloudformation')
+cfnclient = boto3.client('cloudformation', region_name = "us-east-1")
 
-cfn_types = []
+cfn_types = [
+    'AWS::ApiGatewayV2::VpcLink',
+    'AWS::ImageBuilder::ImagePipeline',
+    'AWS::ImageBuilder::ImageRecipe',
+    'AWS::ImageBuilder::Component',
+    'AWS::ImageBuilder::DistributionConfiguration',
+    'AWS::ImageBuilder::InfrastructureConfiguration',
+    'AWS::GroundStation::MissionProfile',
+    'AWS::GroundStation::Config',
+    'AWS::GroundStation::DataflowEndpointGroup'
+]
 with open("util/cfnspec.json", "r") as f:
     cfn_spec = json.loads(f.read())['ResourceTypes']
 
 for cfntype, _ in cfn_spec.items():
     cfn_types.append(cfntype)
+
+cfn_types = list(set(cfn_types)) # dedup
+cfn_types.sort()
 
 for cfntype in cfn_types:
     try:
@@ -37,8 +50,7 @@ for cfntype in cfn_types:
         p = re.compile('Expected \[([a-zA-Z0-9]+)(?:, )?([a-zA-Z0-9]+)?(?:, )?([a-zA-Z0-9]+)?(?:, )?([a-zA-Z0-9]+)?\]')
         results = p.findall(str(e))
         if len(results) > 0:
-            print(cfntype)
-            print(results[0])
+            print(cfntype, results[0])
         else:
             #print(cfntype)
             #print("Not importable")

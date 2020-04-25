@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**525/524 (100%)** Resources Covered
+**532/531 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -86,6 +86,7 @@
 | *AWS::Batch::JobDefinition* | :thumbsup: |
 | *AWS::Batch::JobQueue* | :thumbsup: |
 | *AWS::Budgets::Budget* | :thumbsup: |
+| *AWS::CE::CostCategory* | :thumbsup: |
 | *AWS::Cassandra::Keyspace* | N/A |
 | *AWS::Cassandra::Table* | N/A |
 | *AWS::CertificateManager::Certificate* | :thumbsup: |
@@ -316,6 +317,11 @@
 | *AWS::IAM::ServiceLinkedRole* | :thumbsup: |
 | *AWS::IAM::User* | :thumbsup: |
 | *AWS::IAM::UserToGroupAddition* | N/A |
+| *AWS::ImageBuilder::Component* | :thumbsup: |
+| *AWS::ImageBuilder::DistributionConfiguration* | :thumbsup: |
+| *AWS::ImageBuilder::ImagePipeline* | :thumbsup: |
+| *AWS::ImageBuilder::ImageRecipe* | :thumbsup: |
+| *AWS::ImageBuilder::InfrastructureConfiguration* | :thumbsup: |
 | *AWS::Inspector::AssessmentTarget* | :thumbsup: |
 | *AWS::Inspector::AssessmentTemplate* | :thumbsup: |
 | *AWS::Inspector::ResourceGroup* | :thumbsup: |
@@ -501,6 +507,7 @@
 | *AWS::ServiceDiscovery::Service* | :thumbsup: |
 | *AWS::StepFunctions::Activity* | :thumbsup: |
 | *AWS::StepFunctions::StateMachine* | :thumbsup: |
+| *AWS::Synthetics::Canary* | :thumbsup: |
 | *AWS::Transfer::Server* | :thumbsup: |
 | *AWS::Transfer::User* | :thumbsup: |
 | *AWS::WAF::ByteMatchSet* | :thumbsup: |

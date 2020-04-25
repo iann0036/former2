@@ -1035,7 +1035,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Synthetics::Canary',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id
+                }
+            }
         });
     } else {
         return false;
