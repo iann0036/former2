@@ -248,6 +248,7 @@
                             <li><a href="#section-compute-lambda"><span class="lbl">Lambda</span></a></li>
                             <li><a href="#section-compute-batch"><span class="lbl">Batch</span></a></li>
                             <li><a href="#section-compute-elasticbeanstalk"><span class="lbl">Elastic Beanstalk</span></a></li>
+                            <li><a href="#section-compute-ec2imagebuilder"><span class="lbl">EC2 Image Builder</span></a></li>
                         </ul>
                     </li>
                     <li class="green with-sub" data-category="storage">
@@ -339,7 +340,7 @@
                             <li><a href="#section-blockchain-managedblockchain"><span class="lbl">Managed Blockchain</span></a></li>
                         </ul>
                     </li>
-                    <li class="blue with-sub" data-category="blockchain">
+                    <li class="blue with-sub" data-category="satellite">
                         <span>
                             <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Satellite_light-bg.png" style="width: 16px; height: 16px;" /></i>
                             <span class="lbl">Satellite</span>
@@ -459,6 +460,7 @@
                             <span class="lbl">AWS Cost Management</span>
                         </span>
                         <ul>
+                            <li><a href="#section-awscostmanagement-costexplorer"><span class="lbl">Cost Explorer</span></a></li>
                             <li><a href="#section-awscostmanagement-budgets"><span class="lbl">Budgets</span></a></li>
                         </ul>
                     </li>
@@ -618,7 +620,8 @@
                                                     <a href="#section-compute-eks" style="font-weight: 600;">EKS</a><br />
                                                     <a href="#section-compute-lambda" style="font-weight: 600;">Lambda</a><br />
                                                     <a href="#section-compute-batch" style="font-weight: 600;">Batch</a><br />
-                                                    <a href="#section-compute-elasticbeanstalk" style="font-weight: 600;">Elastic Beanstalk</a>
+                                                    <a href="#section-compute-elasticbeanstalk" style="font-weight: 600;">Elastic Beanstalk</a><br />
+                                                    <a href="#section-compute-ec2imagebuilder" style="font-weight: 600;">EC2 Image Builder</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -720,6 +723,8 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                    </div>
+                                    <div class="col-md-4">
                                         <table style="border: none; margin-bottom: 16px;">
                                             <tr>
                                                 <td><img src="img/aws/Blockchain_light-bg.png" style="width: 48px; height: 48px;" /></td>
@@ -732,8 +737,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                    <div class="col-md-4">
                                         <table style="border: none; margin-bottom: 16px;">
                                             <tr>
                                                 <td><img src="img/aws/Satellite_light-bg.png" style="width: 48px; height: 48px;" /></td>
@@ -851,6 +854,7 @@
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td style="padding-left: 12px;">
+                                                    <a href="#section-awscostmanagement-costexplorer" style="font-weight: 600;">Cost Explorer</a><br />
                                                     <a href="#section-awscostmanagement-budgets" style="font-weight: 600;">Budgets</a>
                                                 </td>
                                             </tr>
@@ -1427,7 +1431,7 @@
 
         <script src="js/deepmerge.js"></script>
 
-        <script src="aws-sdk-2.632.0.min.js"></script>
+        <script src="aws-sdk-2.663.0.min.js"></script>
         <script src="js/RelationshipTypeMap.js"></script>
 
         <script src="js/deferred-datatable.js"></script>
@@ -1540,6 +1544,8 @@
         <script src="js/services/resourcegroups.js"></script>
         <script src="js/services/codeguru.js"></script>
         <script src="js/services/detective.js"></script>
+        <script src="js/services/costexplorer.js"></script>
+        <script src="js/services/ec2imagebuilder.js"></script>
         
         <script src="js/app.js"></script>
     </body>

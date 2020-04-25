@@ -88,6 +88,8 @@ async function updateDatatableComputeECR() {
                 uri: repository.repositoryUri,
                 createdat: repository.createdAt
             }]);
+
+            return Promise.resolve();
         }));
 
         unblockUI('#section-compute-ecr-repositories-datatable');

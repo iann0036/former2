@@ -439,6 +439,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Canaries': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'runtimeversion',
+                        title: 'Runtime Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -454,6 +500,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -652,11 +699,30 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     });
 
+    await sdkcall("Synthetics", "describeCanaries", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-canaries-datatable').bootstrapTable('removeAll');
+
+        data.Canaries.forEach(canary => {
+            $('#section-managementandgovernance-cloudwatch-canaries-datatable').deferredBootstrapTable('append', [{
+                f2id: canary.Name,
+                f2type: 'cloudwatch.canary',
+                f2data: canary,
+                f2region: region,
+                name: canary.Name,
+                id: canary.Id,
+                runtimeversion: canary.RuntimeVersion
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -936,6 +1002,39 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::InsightRule',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.canary") {
+        if (obj.data.Code) {
+            reqParams.cfn['Code'] = {
+                'Handler': obj.data.Code.Handler,
+                'S3Bucket': 'REPLACEME',
+                'S3Key': 'REPLACEME',
+                'S3ObjectVersion': 'REPLACEME',
+                'Script': 'REPLACEME',
+            };
+        }
+        reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+        reqParams.cfn['Schedule'] = obj.data.Schedule;
+        reqParams.cfn['RunConfig'] = obj.data.RunConfig;
+        reqParams.cfn['SuccessRetentionPeriod'] = obj.data.SuccessRetentionPeriodInDays;
+        reqParams.cfn['FailureRetentionPeriod'] = obj.data.FailureRetentionPeriodInDays;
+        reqParams.cfn['ArtifactS3Location'] = obj.data.ArtifactS3Location;
+        reqParams.cfn['RuntimeVersion'] = obj.data.RuntimeVersion;
+        reqParams.cfn['VPCConfig'] = obj.data.VpcConfig;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        /*
+        SKIPPED:
+        StartCanaryAfterCreation: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Synthetics::Canary'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Synthetics::Canary',
             'options': reqParams
         });
     } else {
