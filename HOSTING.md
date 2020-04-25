@@ -8,7 +8,7 @@ If you are hosting on 127.0.0.1, extension support will be provided by default a
 
 If you are serving from another host, you should perform the following additional steps to achieve extension support:
 
-_Google Chrome_
+_Google Chrome or Microsoft Edge_
 
 * Ensure the official Former2 Helper extension is uninstalled (you can remove it via chrome://extensions)
 * Clone the [Former2 Helper](https://github.com/iann0036/former2-helper) repository locally
@@ -42,10 +42,10 @@ if (["127.0.0.1", "localhost", "former2.com", "www.former2.com", "ec2-12-34-56-7
 
 * Load the extension by visiting chrome://extensions, clicking the "Load unpacked" button and selecting the `chrome/` directory.
 * Note the extension ID of the loaded Former2 Helper extension
-* In the website files, open the `js/app.js` file and change the first line to reflect the noted extension ID, for example:
+* In the website files, open the `js/app.js` file and change the first or second line to reflect the noted extension ID for your extension, for example:
 
 ```
-var HELPER_EXTENSION_ID = "zwnrjxwlcsomeotherexamplehere"; // Chrome
+var CHROME_HELPER_EXTENSION_ID = "zwnrjxwlcsomeotherexamplehere"; // Chrome
 ```
 
 * Finally, reload the page on your web server - remember that your credentials may not be input on the new address
