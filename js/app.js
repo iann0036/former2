@@ -1,4 +1,5 @@
-var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
+var CHROME_HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
+var EDGE_HELPER_EXTENSION_ID = "okkjnfohglnomdbpimkcdkiojbeiedof"; // Edge
 var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
@@ -1370,9 +1371,15 @@ function extensionSendMessage(data, callback) {
                 callback(null);
             }, 200, callback);
         }
+    } else if (navigator.userAgent.search("Edg/") > -1) { // Edge (Chromium)
+        if (window.chrome && window.chrome.runtime) {
+            chrome.runtime.sendMessage(EDGE_HELPER_EXTENSION_ID, data, callback);
+        } else {
+            callback(null);
+        }
     } else { // Chrome
         if (window.chrome && window.chrome.runtime) {
-            chrome.runtime.sendMessage(HELPER_EXTENSION_ID, data, callback);
+            chrome.runtime.sendMessage(CHROME_HELPER_EXTENSION_ID, data, callback);
         } else {
             callback(null);
         }
