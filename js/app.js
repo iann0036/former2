@@ -1224,6 +1224,19 @@ $(document).ready(function(){
         theme: 'material'
     });
 
+    $("#credentials-secretkey").focus(function() {
+        $(this).attr('type', 'text');
+    });
+    $("#credentials-secretkey").blur(function() {
+        $(this).attr('type', 'password');
+    });
+    $("#credentials-sessiontoken").focus(function() {
+        $(this).attr('type', 'text');
+    });
+    $("#credentials-sessiontoken").blur(function() {
+        $(this).attr('type', 'password');
+    });
+
     $('.select2-no-search-arrow').select2({ // Selectors for settings
         minimumResultsForSearch: "Infinity",
         theme: "arrow"
