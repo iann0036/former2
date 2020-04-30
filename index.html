@@ -226,6 +226,7 @@
                         <li><a href="#section-outputs-tf"><span class="lbl">Terraform</span></a></li>
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
                         <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
+                        <li><a href="#section-outputs-pulumits"><span class="lbl">Pulumi (TS)</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
                         <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
                     </ul>
@@ -595,6 +596,7 @@
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-cdkts" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-pulumits" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-raw" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                         </div>
                     </div>
@@ -1264,6 +1266,7 @@
                                         <option value="tf">Terraform</option>
                                         <option value="troposphere">Troposphere</option>
                                         <option value="cdkts">CDK (TS)</option>
+                                        <option value="pulumits">Pulumi (TS)</option>
                                     </select>
                                 </div>
                             </div>
@@ -1393,6 +1396,12 @@
                 <section id="section-outputs-cdkts" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (TypeScript)" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div id='cdkts_container'>
                         <textarea id='cdkts'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-pulumits" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-pulumits" data-section-title="Pulumi (TypeScript)" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='pulumits_container'>
+                        <textarea id='pulumits'></textarea>
                     </div>
                 </section>
 

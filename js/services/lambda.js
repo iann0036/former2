@@ -668,6 +668,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Arn': obj.data.Configuration.FunctionArn
                 },
+                'Terraform': {
+                    'arn': obj.data.Configuration.FunctionArn
+                },
                 'Import': {
                     'FunctionName': obj.data.Configuration.FunctionName
                 }

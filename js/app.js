@@ -665,6 +665,7 @@ $(document).ready(function(){
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdkts').attr('style', 'display: none;');
+        $('#header-button-copy-pulumits').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
@@ -683,6 +684,11 @@ $(document).ready(function(){
             $('#header-title').html(
                 $(location.hash).attr('data-section-title')
             );
+            if ($(location.hash).attr('data-section-label')) {
+                $('#header-title').append(
+                    `&nbsp;<h5 style="display: inline;"><span style="vertical-align: super;" class="label label-info">${$(location.hash).attr('data-section-label')}</span></h5>`
+                );
+            }
             $('#header-breadcrumb1').text(
                 $(location.hash).attr('data-section-breadcrumb1-title')
             );
@@ -742,6 +748,18 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     cdkts_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
+                }, 1);
+            } else if (location.hash == "#section-outputs-pulumits") {
+                $('#header-button-copy-pulumits').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    pulumits_editor.refresh();
                     tippy('.f2replacementmarker', {
                         content: "Value requires replacement",
                         placement: "right",
@@ -824,6 +842,7 @@ $(document).ready(function(){
             tf_editor.getDoc().setValue(mapped_outputs['tf']);
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
             cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
+            pulumits_editor.getDoc().setValue(mapped_outputs['pulumits']);
             raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
 
             // Gutters
@@ -831,7 +850,8 @@ $(document).ready(function(){
                 {key: 'cfn', editor: cfn_editor},
                 {key: 'tf', editor: tf_editor}, 
                 {key: 'troposphere', editor: troposphere_editor},
-                {key: 'cdkts', editor: cdkts_editor}
+                {key: 'cdkts', editor: cdkts_editor},
+                {key: 'pulumits', editor: pulumits_editor}
             ].forEach(language => {
                 var lines = mapped_outputs[language.key].split("\n");
                 for (var i=0; i<lines.length; i++) {
@@ -846,6 +866,7 @@ $(document).ready(function(){
                 tf_editor.refresh();
                 troposphere_editor.refresh();
                 cdkts_editor.refresh();
+                pulumits_editor.refresh();
                 raw_editor.refresh();
                 tippy('.f2replacementmarker', {
                     content: "Value requires replacement",
@@ -1002,6 +1023,19 @@ $(document).ready(function(){
         scrollbarStyle: "null"
     });
     setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
+
+    pulumits_editor = CodeMirror.fromTextArea(document.getElementById('pulumits'), {
+        lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-pulumits', pulumits_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,

@@ -205,6 +205,97 @@ function processTfParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
+function processPulumitsParameter(param, spacing, index, tracked_resources) {
+    var paramitems = [];
+
+    if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
+        return undefined;
+    if (typeof param == "boolean") {
+        if (param)
+            return 'true';
+        return 'false';
+    }
+    if (typeof param == "number") {
+        for (var i = 0; i < index; i++) { // correlate
+            if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
+                for (var attr_name in tracked_resources[i].returnValues.Terraform) {
+                    if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
+                    }
+                }
+            }
+        }
+
+        return param;
+    }
+    if (typeof param == "string") {
+        if (param.startsWith("!Ref ") || param.startsWith("!GetAtt ")) {
+            return undefined;
+        }
+
+        for (var i = 0; i < index; i++) { // correlate
+            if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
+                for (var attr_name in tracked_resources[i].returnValues.Terraform) {
+                    if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
+                    }
+                }
+            }
+        }
+
+        var string_return = param;
+
+        if (string_return.includes("\n")) {
+            string_return = "\`\n" + string_return + "\n\`";
+            return string_return;
+        }
+
+        string_return = param.replace(/\"/g, `\\"`);
+
+        return `"${string_return}"`;
+    }
+    if (Array.isArray(param)) {
+        if (param.length == 0) {
+            return '[]';
+        }
+
+        param.forEach(paramitem => {
+            paramitems.push(processPulumitsParameter(paramitem, spacing + 4, index, tracked_resources));
+        });
+
+        return `[
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `]`;
+    }
+    if (typeof param == "object") {
+        if (Object.keys(param).length === 0 && param.constructor === Object) {
+            return "{}";
+        }
+
+        Object.keys(param).forEach(function (key) {
+            var subvalue = processPulumitsParameter(param[key], spacing + 4, index, tracked_resources);
+            if (typeof subvalue !== "undefined") {
+                if (subvalue[0] == '{') {
+                    paramitems.push(key + ": " + subvalue);
+                } else {
+                    if (key.match(/^[0-9]+$/g)) {
+                        key = "\"" + key + "\"";
+                    }
+                    paramitems.push(key + ": " + subvalue);
+                }
+            }
+        });
+
+        return `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}`;
+    }
+
+    return undefined;
+}
+
 function processCfnParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
@@ -1753,8 +1844,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
                         if (typeof optionvalue !== "undefined") {
                             if (optionvalue[0] == '{') {
                                 params += `
-    ${option} ${optionvalue}
-`;
+    ${option} ${optionvalue}`;
                             } else {
                                 if (option.match(/^[0-9]+$/g)) {
                                     option = "\"" + option + "\"";
@@ -1770,8 +1860,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
                     if (typeof optionvalue !== "undefined") {
                         if (optionvalue[0] == '{') {
                             params += `
-    ${option} ${optionvalue}
-`;
+    ${option} ${optionvalue}`;
                         } else {
                             if (option.match(/^[0-9]+$/g)) {
                                 option = "\"" + option + "\"";
@@ -1789,6 +1878,63 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
 
     output += `
 resource "${type}" "${logicalId}" {${params}}
+`;
+
+    return output;
+}
+
+function outputMapPulumits(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
+    var output = '';
+    var params = '';
+
+    // tf -> pulumi
+    var typesplit = type.split("_");
+    logicalId = logicalId.toLowerCase();
+    type = typesplit.shift() + "." + typesplit.shift() + "." + typesplit.map(x => x[0].toUpperCase() + x.substr(1)).join('');
+
+    if (Object.keys(options).length) {
+        for (option in options) {
+            if (typeof options[option] !== "undefined" && options[option] !== null) {
+                if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
+                    for (var i = 0; i < options[option].length; i++) {
+                        var optionvalue = processPulumitsParameter(options[option][i], 4, index, tracked_resources);
+                        if (typeof optionvalue !== "undefined") {
+                            if (optionvalue[0] == '{') {
+                                params += `
+    ${option}: ${optionvalue},`;
+                            } else {
+                                if (option.match(/^[0-9]+$/g)) {
+                                    option = "\"" + option + "\"";
+                                }
+                                params += `
+    ${option}: ${optionvalue},`;
+                            }
+                        }
+
+                    }
+                } else {
+                    var optionvalue = processPulumitsParameter(options[option], 4, index, tracked_resources);
+                    if (typeof optionvalue !== "undefined") {
+                        if (optionvalue[0] == '{') {
+                            params += `
+    ${option}: ${optionvalue},`;
+                        } else {
+                            if (option.match(/^[0-9]+$/g)) {
+                                option = "\"" + option + "\"";
+                            }
+                            params += `
+    ${option}: ${optionvalue},`;
+                        }
+                    }
+                }
+            }
+        }
+        params = params.substring(0, params.length - 1) + `
+`; // remove last comma
+    }
+
+    output += `
+const ${logicalId} = new ${type}("${logicalId}", {${params}});
 `;
 
     return output;
@@ -1839,20 +1985,6 @@ function outputMapCli(service, method, options, region, was_blocked) {
 }
 
 function compileOutputs(tracked_resources, cfn_deletion_policy) {
-    /*if (!outputs.length) {
-        return {
-            'boto3': '# No resources generated',
-            'go': '// No resources generated',
-            'cfn': '# No resources generated',
-            'tf': '# No resources generated',
-            'cli': '# No resources generated',
-            'js': '// No resources generated',
-            'cdkts': '// No resources generated',
-            'iam': '// No resources generated',
-            'troposphere': '# No resources generated'
-        };
-    }*/
-
     var services = {
         'go': [],
         'cdkts': [],
@@ -1926,6 +2058,9 @@ Description: ""
 provider "aws" {
     region = "${tracked_resources[0].region}"
 }
+`}`,
+        'pulumits': `${!has_tf ? '// No resources generated' : `import * as pulumi from "@pulumi/pulumi";
+import * as aws from "@pulumi/aws";
 `}`,
         'cli': `# pip install awscli --upgrade --user
 
@@ -2024,6 +2159,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
         }
         if (tracked_resources[i].terraformType) {
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            compiled['pulumits'] += outputMapPulumits(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
     }
     for (var i = 0; i < tracked_resources.length; i++) {
@@ -2280,6 +2416,7 @@ function performF2Mappings(objects) {
                 'cfn': {},
                 'cli': {},
                 'tf': {},
+                'pulumits': {},
                 'iam': {}
             };
 
