@@ -1005,6 +1005,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "cloudwatch.canary") {
+        reqParams.cfn['Name'] = obj.data.Name;
         if (obj.data.Code) {
             reqParams.cfn['Code'] = {
                 'Handler': obj.data.Code.Handler,
