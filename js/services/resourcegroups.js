@@ -102,7 +102,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'resourcegroups',
             'type': 'AWS::ResourceGroups::Group',
-            'terraformType': 'aws_servicequotas_service_quota',
+            'terraformType': 'aws_resourcegroups_group',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.Name,

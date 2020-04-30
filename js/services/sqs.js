@@ -170,27 +170,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_sqs_queue_policy',
             'options': reqParams
         });
-    } else if (obj.type == "elasticbeanstalk.application") {
-        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
-        reqParams.tf['name'] = obj.data.ApplicationName;
-        reqParams.cfn['Description'] = obj.data.Description;
-        reqParams.tf['description'] = obj.data.Description;
-
-        /*
-        TODO:
-        ResourceLifecycleConfig:
-            ApplicationResourceLifecycleConfig
-        */
-
-        tracked_resources.push({
-            'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::Application'),
-            'region': obj.region,
-            'service': 'elasticbeanstalk',
-            'type': 'AWS::ElasticBeanstalk::Application',
-            'terraformType': 'aws_elastic_beanstalk_application',
-            'options': reqParams
-        });
     } else {
         return false;
     }
