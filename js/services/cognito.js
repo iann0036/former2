@@ -1003,6 +1003,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['AccountRecoverySetting'] = obj.data.AccountRecoverySetting;
         reqParams.cfn['UsernameConfiguration'] = obj.data.UsernameConfiguration;
+        reqParams.cfn['UserPoolAddOns'] = obj.data.UserPoolAddOns;
+        reqParams.cfn['VerificationMessageTemplate'] = obj.data.VerificationMessageTemplate;
 
         /*
         TODO:
@@ -1098,6 +1100,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['generate_secret'] = true;
         }
         reqParams.cfn['PreventUserExistenceErrors'] = obj.data.PreventUserExistenceErrors;
+        reqParams.cfn['AnalyticsConfiguration'] = obj.data.AnalyticsConfiguration;
 
         tracked_resources.push({
             'obj': obj,

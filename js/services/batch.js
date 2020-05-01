@@ -387,6 +387,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             }
 
+            var linuxParameters = null;
+            if (obj.data.containerProperties.linuxParameters) {
+                var devices = null;
+                if (obj.data.containerProperties.linuxParameters.devices) {
+                    devices = {
+                        'HostPath': obj.data.containerProperties.linuxParameters.devices.hostPath,
+                        'ContainerPath': obj.data.containerProperties.linuxParameters.devices.containerPath,
+                        'Permissions': obj.data.containerProperties.linuxParameters.devices.permissions
+                    };
+                }
+                linuxParameters = {
+                    'Devices': devices
+                };
+            }
+
             reqParams.cfn['ContainerProperties'] = {
                 'MountPoints': mountPoints,
                 'User': obj.data.containerProperties.user,
@@ -399,7 +414,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ReadonlyRootFilesystem': obj.data.containerProperties.readonlyRootFilesystem,
                 'Ulimits': ulimits,
                 'Vcpus': obj.data.containerProperties.vcpus,
-                'Image': obj.data.containerProperties.image
+                'Image': obj.data.containerProperties.image,
+                'LinuxParameters': linuxParameters
             };
             reqParams.tf['container_properties'] = obj.data.containerProperties;
         }

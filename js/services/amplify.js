@@ -363,6 +363,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
         reqParams.cfn['EnablePullRequestPreview'] = obj.data.enablePullRequestPreview;
         reqParams.cfn['PullRequestEnvironmentName'] = obj.data.pullRequestEnvironmentName;
+        reqParams.cfn['EnableAutoBuild'] = obj.data.enableAutoBuild;
 
         tracked_resources.push({
             'obj': obj,

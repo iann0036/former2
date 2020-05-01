@@ -1049,6 +1049,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AllocatedCapacity'] = obj.data.AllocatedCapacity;
         reqParams.cfn['Timeout'] = obj.data.Timeout;
         reqParams.cfn['NotificationProperty'] = obj.data.NotificationProperty;
+        reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
+        reqParams.cfn['MaxCapacity'] = obj.data.MaxCapacity;
+        reqParams.cfn['NumberOfWorkers'] = obj.data.NumberOfWorkers;
+        reqParams.cfn['WorkerType'] = obj.data.WorkerType;
 
         tracked_resources.push({
             'obj': obj,

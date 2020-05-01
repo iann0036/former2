@@ -272,6 +272,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'NumberOfDays': obj.data.retentionPeriod.numberOfDays
             };
         }
+        if (obj.data.storage) {
+            var customerManagedS3 = null;
+            if (obj.data.storage.customerManagedS3) {
+                customerManagedS3 = {
+                    'Bucket': obj.data.storage.customerManagedS3.bucket,
+                    'KeyPrefix': obj.data.storage.customerManagedS3.keyPrefix,
+                    'RoleArn': obj.data.storage.customerManagedS3.roleArn
+                };
+            }
+            reqParams.cfn['ChannelStorage'] = {
+                'ServiceManagedS3': obj.data.storage.serviceManagedS3,
+                'CustomerManagedS3': customerManagedS3
+            };
+        }
 
         /*
         TODO:
@@ -504,6 +518,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['RetentionPeriod'] = {
                 'Unlimited': obj.data.retentionPeriod.unlimited,
                 'NumberOfDays': obj.data.retentionPeriod.numberOfDays
+            };
+        }
+        if (obj.data.storage) {
+            var customerManagedS3 = null;
+            if (obj.data.storage.customerManagedS3) {
+                customerManagedS3 = {
+                    'Bucket': obj.data.storage.customerManagedS3.bucket,
+                    'KeyPrefix': obj.data.storage.customerManagedS3.keyPrefix,
+                    'RoleArn': obj.data.storage.customerManagedS3.roleArn
+                };
+            }
+            reqParams.cfn['DatastoreStorage'] = {
+                'ServiceManagedS3': obj.data.storage.serviceManagedS3,
+                'CustomerManagedS3': customerManagedS3
             };
         }
 

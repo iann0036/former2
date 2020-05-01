@@ -700,6 +700,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.ComputeCapacityStatus) {
             reqParams.cfn['ComputeCapacity'] = obj.data.ComputeCapacityStatus.Desired;
         }
+        reqParams.cfn['IdleDisconnectTimeoutInSeconds'] = obj.data.IdleDisconnectTimeoutInSeconds;
 
         /*
         TODO:
