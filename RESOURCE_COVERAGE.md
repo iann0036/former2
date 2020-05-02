@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**532/531 (100%)** Resources Covered
+**533/532 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -256,6 +256,7 @@
 | *AWS::Elasticsearch::Domain* | :thumbsup: |
 | *AWS::EventSchemas::Discoverer* | :thumbsup: |
 | *AWS::EventSchemas::Registry* | :thumbsup: |
+| *AWS::EventSchemas::RegistryPolicy* | :thumbsup: |
 | *AWS::EventSchemas::Schema* | :thumbsup: |
 | *AWS::Events::EventBus* | :thumbsup: |
 | *AWS::Events::EventBusPolicy* | :thumbsup: |
@@ -538,7 +539,7 @@
 
 ## Terraform Coverage
 
-**298/546 (54%)** Resources Covered
+**299/561 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -574,6 +575,17 @@
 | *aws_api_gateway_usage_plan_key* | :thumbsup: |
 | *aws_api_gateway_vpc_link* | :thumbsup: |
 | *aws_apigatewayv2_api* |  |
+| *aws_apigatewayv2_api_mapping* |  |
+| *aws_apigatewayv2_authorizer* |  |
+| *aws_apigatewayv2_deployment* |  |
+| *aws_apigatewayv2_domain_name* |  |
+| *aws_apigatewayv2_integration* |  |
+| *aws_apigatewayv2_integration_response* |  |
+| *aws_apigatewayv2_model* |  |
+| *aws_apigatewayv2_route* |  |
+| *aws_apigatewayv2_route_response* |  |
+| *aws_apigatewayv2_stage* |  |
+| *aws_apigatewayv2_vpc_link* |  |
 | *aws_app_cookie_stickiness_policy* |  |
 | *aws_appautoscaling_policy* |  |
 | *aws_appautoscaling_scheduled_action* |  |
@@ -687,6 +699,7 @@
 | *aws_dlm_lifecycle_policy* | :thumbsup: |
 | *aws_dms_certificate* |  |
 | *aws_dms_endpoint* |  |
+| *aws_dms_event_subscription* |  |
 | *aws_dms_replication_instance* |  |
 | *aws_dms_replication_subnet_group* |  |
 | *aws_dms_replication_task* |  |
@@ -729,6 +742,7 @@
 | *aws_ec2_traffic_mirror_session* |  |
 | *aws_ec2_traffic_mirror_target* |  |
 | *aws_ec2_transit_gateway* | :thumbsup: |
+| *aws_ec2_transit_gateway_peering_attachment* |  |
 | *aws_ec2_transit_gateway_route* | :thumbsup: |
 | *aws_ec2_transit_gateway_route_table* | :thumbsup: |
 | *aws_ec2_transit_gateway_route_table_association* | :thumbsup: |
@@ -794,6 +808,8 @@
 | *aws_guardduty_invite_accepter* |  |
 | *aws_guardduty_ipset* | :thumbsup: |
 | *aws_guardduty_member* | :thumbsup: |
+| *aws_guardduty_organization_admin_account* |  |
+| *aws_guardduty_organization_configuration* |  |
 | *aws_guardduty_threatintelset* | :thumbsup: |
 | *aws_iam_access_key* | :thumbsup: |
 | *aws_iam_account_alias* |  |
@@ -946,7 +962,7 @@
 | *aws_redshift_snapshot_schedule* |  |
 | *aws_redshift_snapshot_schedule_association* |  |
 | *aws_redshift_subnet_group* | :thumbsup: |
-| *aws_resourcegroups_group* |  |
+| *aws_resourcegroups_group* | :thumbsup: |
 | *aws_route* | :thumbsup: |
 | *aws_route53_delegation_set* |  |
 | *aws_route53_health_check* | :thumbsup: |

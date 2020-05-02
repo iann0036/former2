@@ -254,6 +254,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Registry Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Registry Name',
+                        field: 'registryname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'revisionid',
+                        title: 'Revision ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -265,6 +303,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-schemas-datatable');
     blockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
     blockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
+    blockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -341,6 +380,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     }, false).then(async (data) => {
         $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
         $('#section-applicationintegration-eventbridge-schemaregistries-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-registrypolicies-datatable').bootstrapTable('removeAll');
 
         await Promise.all(data.Registries.map(async (registry) => {
             if (registry.RegistryName.startsWith("aws.")) {
@@ -383,7 +423,21 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                             }]);
                         });
                     }));
-                })
+                }),
+                sdkcall("Schemas", "getResourcePolicy", {
+                    RegistryName: registry.RegistryName
+                }, true).then(async (data) => {
+                    data['RegistryName'] = registry.RegistryName;
+
+                    $('#section-applicationintegration-eventbridge-registrypolicies-datatable').deferredBootstrapTable('append', [{
+                        f2id: registry.RegistryName + " Resource Policy",
+                        f2type: 'eventbridge.registrypolicy',
+                        f2data: data,
+                        f2region: region,
+                        registryname: data.RegistryName,
+                        revisionid: data.RevisionId
+                    }]);
+                }).catch(() => { })
             ]);
         }));
     }).catch(() => { });
@@ -415,6 +469,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-schemas-datatable');
     unblockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
     unblockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -686,6 +741,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::EventSchemas::Schema',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.registrypolicy") {
+        reqParams.cfn['RegistryName'] = obj.data.RegistryName;
+        reqParams.cfn['RevisionId'] = obj.data.RevisionId;
+        reqParams.cfn['Policy'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::EventSchemas::RegistryPolicy'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::EventSchemas::RegistryPolicy',
             'options': reqParams
         });
     } else {

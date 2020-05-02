@@ -273,6 +273,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
+        reqParams.cfn['Certificate'] = obj.data.Certificate;
+        reqParams.cfn['Protocols'] = obj.data.Protocols;
 
         tracked_resources.push({
             'obj': obj,
