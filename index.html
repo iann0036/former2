@@ -225,8 +225,8 @@
                         <li><a href="#section-outputs-cloudformation"><span class="lbl">CloudFormation</span></a></li>
                         <li><a href="#section-outputs-tf"><span class="lbl">Terraform</span></a></li>
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
-                        <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
-                        <li><a href="#section-outputs-pulumits"><span class="lbl">Pulumi (TS)</span></a></li>
+                        <li><a href="#section-outputs-cdk"><span class="lbl">CDK</span></a></li>
+                        <li><a href="#section-outputs-pulumi"><span class="lbl">Pulumi</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
                         <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
                     </ul>
@@ -595,8 +595,8 @@
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
-                            <button id="header-button-copy-cdkts" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
-                            <button id="header-button-copy-pulumits" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-cdk" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-pulumi" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-raw" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                         </div>
                     </div>
@@ -1265,8 +1265,8 @@
                                         <option value="cloudformation">CloudFormation</option>
                                         <option value="tf">Terraform</option>
                                         <option value="troposphere">Troposphere</option>
-                                        <option value="cdkts">CDK (TS)</option>
-                                        <option value="pulumits">Pulumi (TS)</option>
+                                        <option value="cdk">CDK</option>
+                                        <option value="pulumi">Pulumi</option>
                                     </select>
                                 </div>
                             </div>
@@ -1290,7 +1290,7 @@
                                 </div>
                                 <br />
                                 <div class="form-group">
-                                    <h5>Save / Load Settings&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
+                                    <h5>Save / Load Settings</h5>
                                     <p>Save or load a file containing all configured parameters and settings (except credentials):</p>
                                     <button id="save-settings" class="btn btn-sm btn-primary">
                                         <i class="fa fa-floppy-o"></i> Save
@@ -1300,6 +1300,18 @@
                                         <i class="fa fa-folder-open-o"></i> Load
                                     </button>
                                     <input id="load-settings-picker" accept=".json,application/json" type="file" style="display: none;" />
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <h5>Programming Language&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
+                                    <p>Change your preference for the output programming language of CDK or Pulumi outputs:</p>
+                                    <select id="iaclangselect" class="select2-arrow manual select2-no-search-arrow">
+                                        <option value="typescript">TypeScript / JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="java">Java</option>
+                                        <option value="dotnet">C# / .NET</option>
+                                        <option value="go">Go</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -1393,15 +1405,15 @@
                     </div>
                 </section>
 
-                <section id="section-outputs-cdkts" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (TypeScript)" class="former2-section box-typical steps-numeric-block" style="display: none;">
-                    <div id='cdkts_container'>
-                        <textarea id='cdkts'></textarea>
+                <section id="section-outputs-cdk" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cdk_container'>
+                        <textarea id='cdk'></textarea>
                     </div>
                 </section>
 
-                <section id="section-outputs-pulumits" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-pulumits" data-section-title="Pulumi (TypeScript)" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
-                    <div id='pulumits_container'>
-                        <textarea id='pulumits'></textarea>
+                <section id="section-outputs-pulumi" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Pulumi" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='pulumi_container'>
+                        <textarea id='pulumi'></textarea>
                     </div>
                 </section>
 

@@ -9,6 +9,7 @@ var ping_extension_interval = null;
 var stack_parameters = [];
 var MAX_DT_SCANS = 10;
 var defaultoutput = 'cloudformation';
+var iaclangselect = 'typescript';
 var check_objects = [];
 
 $(document).ready(function(){
@@ -47,7 +48,7 @@ $(document).ready(function(){
                             <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable" disabled>
                                 <i class="font-icon font-icon-plus"></i> Add Selected
                             </button>
-                            ${section.resourcetypes[resourcetype].terraformonly ? `<span style="margin-left: 16px; display: inline-block; vertical-align: middle; line-height: 16px; color: #6c7a86; font-weight: 600;"><i class="fa fa-info-circle"></i> Terraform only</span>` : ""}
+                            ${section.resourcetypes[resourcetype].terraformonly ? `<span style="margin-left: 16px; display: inline-block; vertical-align: middle; line-height: 16px; color: #6c7a86; font-weight: 600;"><i class="fa fa-info-circle"></i> Terraform / Pulumi only</span>` : ""}
                         </div>
                         <div class="table-responsive">
                             <table id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable"
@@ -664,8 +665,8 @@ $(document).ready(function(){
         $('#header-button-import-cfn').attr('style', 'margin-left: 16px; display: none;');
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
-        $('#header-button-copy-cdkts').attr('style', 'display: none;');
-        $('#header-button-copy-pulumits').attr('style', 'display: none;');
+        $('#header-button-copy-cdk').attr('style', 'display: none;');
+        $('#header-button-copy-pulumi').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
@@ -742,24 +743,24 @@ $(document).ready(function(){
                         theme: "material"
                     });
                 }, 1);
-            } else if (location.hash == "#section-outputs-cdkts") {
-                $('#header-button-copy-cdkts').attr('style', '');
+            } else if (location.hash == "#section-outputs-cdk") {
+                $('#header-button-copy-cdk').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
-                    cdkts_editor.refresh();
+                    cdk_editor.refresh();
                     tippy('.f2replacementmarker', {
                         content: "Value requires replacement",
                         placement: "right",
                         theme: "material"
                     });
                 }, 1);
-            } else if (location.hash == "#section-outputs-pulumits") {
-                $('#header-button-copy-pulumits').attr('style', '');
+            } else if (location.hash == "#section-outputs-pulumi") {
+                $('#header-button-copy-pulumi').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
-                    pulumits_editor.refresh();
+                    pulumi_editor.refresh();
                     tippy('.f2replacementmarker', {
                         content: "Value requires replacement",
                         placement: "right",
@@ -841,8 +842,8 @@ $(document).ready(function(){
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
             tf_editor.getDoc().setValue(mapped_outputs['tf']);
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
-            cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
-            pulumits_editor.getDoc().setValue(mapped_outputs['pulumits']);
+            cdk_editor.getDoc().setValue(mapped_outputs['cdk']);
+            pulumi_editor.getDoc().setValue(mapped_outputs['pulumi']);
             raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
 
             // Gutters
@@ -850,8 +851,8 @@ $(document).ready(function(){
                 {key: 'cfn', editor: cfn_editor},
                 {key: 'tf', editor: tf_editor}, 
                 {key: 'troposphere', editor: troposphere_editor},
-                {key: 'cdkts', editor: cdkts_editor},
-                {key: 'pulumits', editor: pulumits_editor}
+                {key: 'cdk', editor: cdk_editor},
+                {key: 'pulumi', editor: pulumi_editor}
             ].forEach(language => {
                 var lines = mapped_outputs[language.key].split("\n");
                 for (var i=0; i<lines.length; i++) {
@@ -865,8 +866,8 @@ $(document).ready(function(){
                 cfn_editor.refresh();
                 tf_editor.refresh();
                 troposphere_editor.refresh();
-                cdkts_editor.refresh();
-                pulumits_editor.refresh();
+                cdk_editor.refresh();
+                pulumi_editor.refresh();
                 raw_editor.refresh();
                 tippy('.f2replacementmarker', {
                     content: "Value requires replacement",
@@ -1011,7 +1012,7 @@ $(document).ready(function(){
     });
     setCopyEvent('#header-button-copy-troposphere', troposphere_editor);
 
-    cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
+    cdk_editor = CodeMirror.fromTextArea(document.getElementById('cdk'), {
         lineNumbers: true,
         gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
@@ -1022,9 +1023,9 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
+    setCopyEvent('#header-button-copy-cdk', cdk_editor);
 
-    pulumits_editor = CodeMirror.fromTextArea(document.getElementById('pulumits'), {
+    pulumi_editor = CodeMirror.fromTextArea(document.getElementById('pulumi'), {
         lineNumbers: true,
         gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
@@ -1035,7 +1036,7 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    setCopyEvent('#header-button-copy-pulumits', pulumits_editor);
+    setCopyEvent('#header-button-copy-pulumi', pulumi_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,
@@ -1367,11 +1368,31 @@ $(document).ready(function(){
     });
 
     defaultoutput = window.localStorage.getItem('defaultoutput') || 'cloudformation';
+    if (defaultoutput == "cdkts") { defaultoutput = "cdk"; } // breaking change
+    if (defaultoutput == "pulumits") { defaultoutput = "pulumi"; } // breaking change
+
     $('#defaultoutput').val(defaultoutput).trigger('change');
     $('#defaultoutput').change(function() {
         window.localStorage.setItem('defaultoutput', $(this).val());
         defaultoutput = $(this).val();
     });
+
+    iaclangselect = window.localStorage.getItem('iaclangselect') || 'typescript';
+    $('#iaclangselect').change(function() {
+        window.localStorage.setItem('iaclangselect', $(this).val());
+        iaclangselect = $(this).val();
+
+        if ($(this).val() == "typescript") {
+            cdk_editor.setOption("mode", "javascript");
+        } else if ($(this).val() == "java") {
+            cdk_editor.setOption("mode", "text/x-java");
+        } else if ($(this).val() == "dotnet") {
+            cdk_editor.setOption("mode", "text/x-csrc");
+        } else {
+            cdk_editor.setOption("mode", $(this).val());
+        }
+    });
+    $('#iaclangselect').val(iaclangselect).trigger('change');
 
     if (window.localStorage.getItem('relatedresourcessetting') == "true") {
         $('#relatedresourcessetting').prop('checked', true);
@@ -1468,6 +1489,7 @@ function saveSettings() {
             'cfnspacing': window.localStorage.getItem('cfnspacing'),
             'logicalidstrategy': window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix',
             'defaultoutput': window.localStorage.getItem('defaultoutput') || 'cloudformation',
+            'iaclangselect': window.localStorage.getItem('iaclangselect') || 'typescript',
             'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting')
         }
     };
@@ -1499,6 +1521,9 @@ function loadSettings() {
             }
             if ('defaultoutput' in loaded_settings.settings) {
                 $('#defaultoutput').val(loaded_settings.settings.defaultoutput).trigger('change');
+            }
+            if ('iaclangselect' in loaded_settings.settings) {
+                $('#iaclangselect').val(loaded_settings.settings.iaclangselect).trigger('change');
             }
             if ('relatedresourcessetting' in loaded_settings.settings) {
                 if (loaded_settings.settings.relatedresourcessetting == "true") {

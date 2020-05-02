@@ -205,7 +205,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
-function processPulumitsParameter(param, spacing, index, tracked_resources) {
+function processPulumiParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -260,7 +260,7 @@ function processPulumitsParameter(param, spacing, index, tracked_resources) {
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processPulumitsParameter(paramitem, spacing + 4, index, tracked_resources));
+            paramitems.push(processPulumiParameter(paramitem, spacing + 4, index, tracked_resources));
         });
 
         return `[
@@ -274,7 +274,7 @@ function processPulumitsParameter(param, spacing, index, tracked_resources) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processPulumitsParameter(param[key], spacing + 4, index, tracked_resources);
+            var subvalue = processPulumiParameter(param[key], spacing + 4, index, tracked_resources);
             if (typeof subvalue !== "undefined") {
                 if (subvalue[0] == '{') {
                     paramitems.push(tfToPulumiProp(key) + ": " + subvalue);
@@ -457,12 +457,17 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
-function processCdktsParameter(param, spacing, index, tracked_resources) {
+function processCdkParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
         return undefined;
     if (typeof param == "boolean") {
+        if (iaclangselect == "python") {
+            if (param)
+                return "True";
+            return "False";
+        }
         if (param)
             return "true";
         return "false";
@@ -477,12 +482,18 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
         for (var i = 0; i < index; i++) { // correlate
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    if (iaclangselect == "python") {
+                        return tracked_resources[i].logicalId.toLowerCase() + ".ref";
+                    }
                     return tracked_resources[i].logicalId + ".ref";
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
-                            return tracked_resources[i].logicalId + ".getAtt('" + attr_name + "')"
+                            if (iaclangselect == "python") {
+                                return tracked_resources[i].logicalId.toLowerCase() + ".attr_" + pythonAttr(attr_name);
+                            }
+                            return tracked_resources[i].logicalId + ".attr" + attr_name;
                         }
                     }
                 }
@@ -492,7 +503,7 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
         var string_return = param;
 
         if (string_return.includes("\n")) {
-            string_return = "`" + string_return + "`";
+            string_return = "'''\n" + string_return + "\n'''";
             return string_return;
         }
 
@@ -506,7 +517,7 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
         }
 
         param.forEach(paramitem => {
-            var item = processCdktsParameter(paramitem, spacing + 4, index, tracked_resources);
+            var item = processCdkParameter(paramitem, spacing + 4, index, tracked_resources);
             if (typeof item !== "undefined") {
                 paramitems.push(item);
             }
@@ -519,9 +530,13 @@ function processCdktsParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
-            var item = processCdktsParameter(param[key], spacing + 4, index, tracked_resources);
+            var item = processCdkParameter(param[key], spacing + 4, index, tracked_resources);
             if (typeof item !== "undefined") {
-                paramitems.push(lcfirststr(key) + ": " + item);
+                if (iaclangselect == "python") {
+                    paramitems.push("\"" + pythonAttr(key) + "\": " + item);
+                } else {
+                    paramitems.push(lcfirststr(key) + ": " + item);
+                }
             }
         });
 
@@ -1615,6 +1630,28 @@ function tfToPulumiProp(str) {
     return ret;
 }
 
+function pythonAttr(str) {
+    if (str.length < 2) {
+        return str;
+    }
+
+    var ret = str.charAt(0).toLowerCase();
+    str = str.substr(1);
+
+    while (str.length > 0) {
+        var char = str.charAt(0);
+
+        if (char.match(/[A-Z]/g)) {
+            ret += "_";
+        }
+        ret += char.toLowerCase();
+
+        str = str.substr(1);
+    }
+
+    return ret;
+}
+
 function outputMapTroposphere(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
@@ -1662,30 +1699,49 @@ function outputMapTroposphere(index, service, type, options, region, was_blocked
     return output;
 }
 
-function outputMapCdkts(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
+function outputMapCdk(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
 
     if (Object.keys(options).length) {
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
-                var optionvalue = processCdktsParameter(options[option], 12, index, tracked_resources);
+                var optionvalue = processCdkParameter(options[option], 12, index, tracked_resources);
                 if (typeof optionvalue !== "undefined") {
-                    params += `
+                    if (iaclangselect == "python") {
+                        params += `
+            ${pythonAttr(option)}=${optionvalue},`;
+                    } else {
+                        params += `
             ${lcfirststr(option)}: ${optionvalue},`;
+                    }
                 }
             }
         }
-        params = "{" + params.substring(0, params.length - 1) + `
-        }`; // remove last comma
     }
 
     cdkservice = type.split("::")[1].toLowerCase();
+    if (cdkservice == "lambda" && iaclangselect == "python") {
+        cdkservice = "_lambda";
+    }
     cdktype = type.split("::")[2];
 
-    output += `        const ${logicalId} = new ${cdkservice}.Cfn${cdktype}(this, '${logicalId}', ${params});${was_blocked ? ' // blocked' : ''}
+    if (iaclangselect == "typescript") {
+        params = "{" + params.substring(0, params.length - 1) + `
+        }`; // remove last comma
+
+        output += `        const ${logicalId} = new ${cdkservice}.Cfn${cdktype}(this, '${logicalId}', ${params});
 
 `;
+    } else if (iaclangselect == "python") {
+        params = params.substring(0, params.length - 1); // remove last comma
+        output += `        ${logicalId.toLowerCase()} = ${cdkservice}.Cfn${cdktype}(
+            self,
+            "${logicalId}",${params}
+        )
+
+`;
+    }
 
     return output;
 }
@@ -1891,7 +1947,7 @@ resource "${type}" "${logicalId}" {${params}}
     return output;
 }
 
-function outputMapPulumits(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
+function outputMapPulumi(index, service, type, options, region, was_blocked, logicalId, tracked_resources) {
     var output = '';
     var params = '';
 
@@ -1949,7 +2005,7 @@ function outputMapPulumits(index, service, type, options, region, was_blocked, l
             if (typeof options[option] !== "undefined" && options[option] !== null) {
                 if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
                     for (var i = 0; i < options[option].length; i++) {
-                        var optionvalue = processPulumitsParameter(options[option][i], 4, index, tracked_resources);
+                        var optionvalue = processPulumiParameter(options[option][i], 4, index, tracked_resources);
                         if (typeof optionvalue !== "undefined") {
                             if (optionvalue[0] == '{') {
                                 params += `
@@ -1965,7 +2021,7 @@ function outputMapPulumits(index, service, type, options, region, was_blocked, l
 
                     }
                 } else {
-                    var optionvalue = processPulumitsParameter(options[option], 4, index, tracked_resources);
+                    var optionvalue = processPulumiParameter(options[option], 4, index, tracked_resources);
                     if (typeof optionvalue !== "undefined") {
                         if (optionvalue[0] == '{') {
                             params += `
@@ -2039,7 +2095,7 @@ function outputMapCli(service, method, options, region, was_blocked) {
 function compileOutputs(tracked_resources, cfn_deletion_policy) {
     var services = {
         'go': [],
-        'cdkts': [],
+        'cdk': [],
         'troposphere': []
     };
     for (var i = 0; i < outputs.length; i++) {
@@ -2048,7 +2104,7 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
         }
     }
     for (var i = 0; i < tracked_resources.length; i++) {
-        if (tracked_resources[i].type && !services['cdkts'].includes(tracked_resources[i].type.split("::")[1].toLowerCase())) {
+        if (tracked_resources[i].type && !services['cdk'].includes(tracked_resources[i].type.split("::")[1].toLowerCase())) {
             var troposervice = tracked_resources[i].type.split("::")[1].toLowerCase();
 
             if (troposervice == "kinesisanalytics") {
@@ -2059,7 +2115,7 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
                 troposervice = "firehose";
             }
 
-            services['cdkts'].push(tracked_resources[i].type.split("::")[1].toLowerCase());
+            services['cdk'].push(tracked_resources[i].type.split("::")[1].toLowerCase());
             services['troposphere'].push(troposervice);
         }
     }
@@ -2083,55 +2139,54 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
     }
 
     compiled = {
-        'boto3': `# pip install boto3
+        'boto3': null,
+        'go': null,
 
-import boto3
-`,
-        'go': `// go get -u github.com/aws/aws-sdk-go/...
-
-package main
-
-import (
-    "github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
-${services.go.map(service => `    "github.com/aws/aws-sdk-go/service/${mapServiceJs(service).toLowerCase().replace(/\-/g, '')}"`).join(`
-`)}
-)
-
-func main() {
-`,
         'cfn': `${!has_cfn ? '# No resources generated' : `AWSTemplateFormatVersion: "2010-09-09"
 Metadata:
 ${cfnspacing}Generator: "former2"
 Description: ""
 `}`,
+
         'tf': `${!has_tf ? '# No resources generated' : `# https://www.terraform.io/downloads.html
 
 provider "aws" {
     region = "${tracked_resources[0].region}"
 }
 `}`,
-        'pulumits': `${!has_tf ? '// No resources generated' : `import * as pulumi from "@pulumi/pulumi";
+        'pulumi': `${(iaclangselect == "typescript") ? `${!has_tf ? '// No resources generated' : `import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
-`}`,
-        'cli': `# pip install awscli --upgrade --user
+`}` : '// Selected programming language not supported for this output'}`,
 
-`,
-        'js': `// npm install aws-sdk
+        'cli': null,
+        'js': null,
 
-var AWS = require('aws-sdk');`,
-        'cdkts': `${!has_cfn ? '// No resources generated' : `// npm i -g aws-cdk
+        'cdk': `${(iaclangselect == "typescript") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language typescript
 
-${services.cdkts.map(service => `import ${service} = require('@aws-cdk/aws-${service}');`).join(`
+import * as cdk from '@aws-cdk/core';
+${services.cdk.map(service => `import * as ${service} from '@aws-cdk/aws-${service}';`).join(`
 `)}
-import cdk = require('@aws-cdk/cdk');
 
-class MyStack extends cdk.Stack {
-    constructor(parent: cdk.App, name: string, props?: cdk.StackProps) {
-        super(parent, name, props);
+export class MyStack extends cdk.Stack {
+    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
 
-`}`,
+`}` : `${(iaclangselect == "python") ? `${!has_cfn ? '# No resources generated' : `# cdk init app --language python
+  
+from aws_cdk import (
+${services.cdk.map(service => `    aws_${service} as ${(service == "lambda") ? "_lambda" : service},`).join(`
+`)}
+    core as cdk
+)
+
+class MyStack(cdk.Stack):
+    def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+`}` : '// Selected programming language not supported for this output'}`}`,
+
         'iam': null,
+
         'troposphere': `${!has_cfn ? '# No resources generated' : `# pip install troposphere
 
 from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
@@ -2206,36 +2261,43 @@ ${cfnspacing}${cfnspacing}  - "`)}"
     for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
-            compiled['cdkts'] += outputMapCdkts(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            if (['typescript', 'python'].includes(iaclangselect)) {
+                compiled['cdk'] += outputMapCdk(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            }
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
         if (tracked_resources[i].terraformType) {
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
-            compiled['pulumits'] += outputMapPulumits(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            if (['typescript'].includes(iaclangselect)) {
+                compiled['pulumi'] += outputMapPulumi(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
+            }
         }
     }
-    for (var i = 0; i < tracked_resources.length; i++) {
-        if (tracked_resources[i].type) {
-            compiled['cdkts'] = compiled['cdkts'].substring(0, compiled['cdkts'].length - 1); // trim a newline
-            compiled['cdkts'] += `
-        new cdk.Output(this, '${tracked_resources[i].logicalId}Ref', { value: ${tracked_resources[i].logicalId}.ref, disableExport: true });`;
-        }
+    if (tracked_resources.length && compiled['cdk'].split('\n').length > 1) {
+        compiled['cdk'] = compiled['cdk'].substring(0, compiled['cdk'].length - 1); // trim a newline
     }
 
     if (tracked_resources.length) {
-        if (compiled['cdkts'] != "// No resources generated") {
-            compiled['cdkts'] += `
+        if (compiled['cdk'].split('\n').length > 1) {
+            if (iaclangselect == "typescript") {
+                compiled['cdk'] += `
     }
 }
 
 const app = new cdk.App();
-
 new MyStack(app, 'my-stack-name', { env: { region: '${tracked_resources[0].region}' } });
-
-app.run();
+app.synth();
 `;
+            } else if (iaclangselect == "python") {
+                compiled['cdk'] += `
+
+app = cdk.App()
+MyStack(app, "my-stack-name", env={'region': '${tracked_resources[0].region}'})
+app.synth()
+`;
+            }
         }
-        if (compiled['troposphere'] != "# No resources generated") {
+        if (compiled['troposphere'].split('\n').length > 1) {
             compiled['troposphere'] += `print(template.to_yaml())
 `;
         }
@@ -2468,7 +2530,7 @@ function performF2Mappings(objects) {
                 'cfn': {},
                 'cli': {},
                 'tf': {},
-                'pulumits': {},
+                'pulumi': {},
                 'iam': {}
             };
 
