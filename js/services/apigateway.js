@@ -2592,14 +2592,36 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "apigatewayv2.api") {
         reqParams.cfn['Name'] = obj.data.name;
+        reqParams.tf['name'] = obj.data.name;
         reqParams.cfn['ApiKeySelectionExpression'] = obj.data.ApiKeySelectionExpression;
+        reqParams.tf['api_key_selection_expression'] = obj.data.ApiKeySelectionExpression;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['DisableSchemaValidation'] = obj.data.DisableSchemaValidation;
         reqParams.cfn['ProtocolType'] = obj.data.ProtocolType;
+        reqParams.tf['protocol_type'] = obj.data.ProtocolType;
         reqParams.cfn['RouteSelectionExpression'] = obj.data.RouteSelectionExpression;
+        reqParams.tf['route_selection_expression'] = obj.data.RouteSelectionExpression;
         reqParams.cfn['Version'] = obj.data.Version;
-        reqParams.cfn['CorsConfiguration'] = obj.data.CorsConfiguration;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.tf['version'] = obj.data.Version;
+        if (obj.data.CorsConfiguration) {
+            reqParams.cfn['CorsConfiguration'] = obj.data.CorsConfiguration;
+            reqParams.tf['cors_configuration'] = {
+                'allow_credentials': obj.data.CorsConfiguration.AllowCredentials,
+                'allow_headers': obj.data.CorsConfiguration.AllowHeaders,
+                'allow_methods': obj.data.CorsConfiguration.AllowMethods,
+                'allow_origins': obj.data.CorsConfiguration.AllowOrigins,
+                'expose_headers': obj.data.CorsConfiguration.ExposeHeaders,
+                'max_age': obj.data.CorsConfiguration.MaxAge
+            };
+        }
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = obj.data.Tags;
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
         
         /*
         SKIPPED:
@@ -2613,6 +2635,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         CredentialsArn: String
         RouteKey: String
         Target: String
+
+        credentials_arn
+        route_key
+        target
         */
 
         tracked_resources.push({
@@ -2621,23 +2647,69 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Api',
+            'terraformType': 'aws_apigatewayv2_api',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.ApiId
+                'Ref': obj.data.ApiId,
+                'Terraform': {
+                    'id': obj.data.ApiId,
+                    'api_endpoint': obj.data.ApiEndpoint
+                }
             }
         });
     } else if (obj.type == "apigatewayv2.stage") {
         reqParams.cfn['StageName'] = obj.data.StageName;
+        reqParams.tf['name'] = obj.data.StageName;
         reqParams.cfn['StageVariables'] = obj.data.StageVariables;
+        reqParams.tf['stage_variables'] = obj.data.StageVariables;
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['ClientCertificateId'] = obj.data.ClientCertificateId;
+        reqParams.tf['client_certificate_id'] = obj.data.ClientCertificateId;
         reqParams.cfn['DeploymentId'] = obj.data.DeploymentId;
+        reqParams.tf['deployment_id'] = obj.data.DeploymentId;
         reqParams.cfn['Description'] = obj.data.Description;
-        reqParams.cfn['RouteSettings'] = obj.data.RouteSettings;
-        reqParams.cfn['DefaultRouteSettings'] = obj.data.DefaultRouteSettings;
-        reqParams.cfn['AccessLogSettings'] = obj.data.AccessLogSettings;
+        reqParams.tf['description'] = obj.data.Description;
+        if (obj.data.RouteSettings) {
+            reqParams.cfn['RouteSettings'] = obj.data.RouteSettings;
+            reqParams.tf['route_settings'] = [];
+            Object.keys(obj.data.RouteSettings).forEach(routekey => {
+                reqParams.tf['route_settings'].push({
+                    'route_key': routekey,
+                    'data_trace_enabled': obj.data.RouteSettings[routekey].DataTraceEnabled,
+                    'detailed_metrics_enabled': obj.data.RouteSettings[routekey].DetailedMetricsEnabled,
+                    'logging_level': obj.data.RouteSettings[routekey].LoggingLevel,
+                    'throttling_burst_limit': obj.data.RouteSettings[routekey].ThrottlingBurstLimit,
+                    'throttling_rate_limit': obj.data.RouteSettings[routekey].ThrottlingRateLimit
+                });
+            });
+        }
+        if (obj.data.DefaultRouteSettings) {
+            reqParams.cfn['DefaultRouteSettings'] = obj.data.DefaultRouteSettings;
+            reqParams.tf['default_route_settings'] = {
+                'data_trace_enabled': obj.data.DefaultRouteSettings.DataTraceEnabled,
+                'detailed_metrics_enabled': obj.data.DefaultRouteSettings.DetailedMetricsEnabled,
+                'logging_level': obj.data.DefaultRouteSettings.LoggingLevel,
+                'throttling_burst_limit': obj.data.DefaultRouteSettings.ThrottlingBurstLimit,
+                'throttling_rate_limit': obj.data.DefaultRouteSettings.ThrottlingRateLimit
+            };
+        }
+        if (obj.data.AccessLogSettings) {
+            reqParams.cfn['AccessLogSettings'] = obj.data.AccessLogSettings;
+            reqParams.tf['access_log_settings'] = {
+                'destination_arn': obj.data.AccessLogSettings.DestinationArn,
+                'format': obj.data.AccessLogSettings.Format
+            };
+        }
         reqParams.cfn['AutoDeploy'] = obj.data.AutoDeploy;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.tf['auto_deploy'] = obj.data.AutoDeploy;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = obj.data.Tags;
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -2645,6 +2717,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Stage',
+            'terraformType': 'aws_apigatewayv2_stage',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.StageName
@@ -2652,7 +2725,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "apigatewayv2.deployment") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
 
         /*
         TODO:
@@ -2665,14 +2740,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Deployment',
+            'terraformType': 'aws_apigatewayv2_deployment',
             'options': reqParams
         });
     } else if (obj.type == "apigatewayv2.model") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['ContentType'] = obj.data.ContentType;
+        reqParams.tf['content_type'] = obj.data.ContentType;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['Schema'] = obj.data.Schema;
+        reqParams.tf['schema'] = obj.data.Schema;
 
         tracked_resources.push({
             'obj': obj,
@@ -2680,18 +2761,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Model',
+            'terraformType': 'aws_apigatewayv2_model',
             'options': reqParams
         });
     } else if (obj.type == "apigatewayv2.authorizer") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['AuthorizerCredentialsArn'] = obj.data.AuthorizerCredentialsArn;
+        reqParams.tf['authorizer_credentials_arn'] = obj.data.AuthorizerCredentialsArn;
         reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.AuthorizerResultTtlInSeconds;
         reqParams.cfn['AuthorizerType'] = obj.data.AuthorizerType;
+        reqParams.tf['authorizer_type'] = obj.data.AuthorizerType;
         reqParams.cfn['AuthorizerUri'] = obj.data.AuthorizerUri;
+        reqParams.tf['authorizer_credentials_arn'] = obj.data.AuthorizerUri;
         reqParams.cfn['IdentitySource'] = obj.data.IdentitySource;
+        reqParams.tf['identity_sources'] = obj.data.IdentitySource;
         reqParams.cfn['IdentityValidationExpression'] = obj.data.IdentityValidationExpression;
         reqParams.cfn['Name'] = obj.data.Name;
-        reqParams.cfn['JwtConfiguration'] = obj.data.JwtConfiguration;
+        reqParams.tf['name'] = obj.data.Name;
+        if (obj.data.JwtConfiguration) {
+            reqParams.cfn['JwtConfiguration'] = obj.data.JwtConfiguration;
+            reqParams.tf['JwtConfiguration'] = {
+                'audience': obj.data.JwtConfiguration.Audience,
+                'issuer': obj.data.JwtConfiguration.Issuer
+            };
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -2699,15 +2793,27 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Authorizer',
-            'options': reqParams
+            'terraformType': 'aws_apigatewayv2_authorizer',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AuthorizerId,
+                'Terraform': {
+                    'id': obj.data.AuthorizerId
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.routeresponse") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['ModelSelectionExpression'] = obj.data.ModelSelectionExpression;
+        reqParams.tf['model_selection_expression'] = obj.data.ModelSelectionExpression;
         reqParams.cfn['ResponseModels'] = obj.data.ResponseModels;
+        reqParams.tf['response_models'] = obj.data.ResponseModels;
         reqParams.cfn['ResponseParameters'] = obj.data.ResponseParameters;
         reqParams.cfn['RouteResponseKey'] = obj.data.RouteResponseKey;
+        reqParams.tf['route_response_key'] = obj.data.RouteResponseKey;
         reqParams.cfn['RouteId'] = obj.data.RouteId;
+        reqParams.tf['route_id'] = obj.data.RouteId;
 
         tracked_resources.push({
             'obj': obj,
@@ -2715,21 +2821,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::RouteResponse',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.RouteResponseId,
+                'Terraform': {
+                    'id': obj.data.RouteResponseId
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.route") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['ApiKeyRequired'] = obj.data.ApiKeyRequired;
+        reqParams.tf['api_key_required'] = obj.data.ApiKeyRequired;
         reqParams.cfn['AuthorizationScopes'] = obj.data.AuthorizationScopes;
+        reqParams.tf['authorization_scopes'] = obj.data.AuthorizationScopes;
         reqParams.cfn['AuthorizationType'] = obj.data.AuthorizationType;
+        reqParams.tf['authorization_type'] = obj.data.AuthorizationType;
         reqParams.cfn['AuthorizerId'] = obj.data.AuthorizerId;
+        reqParams.tf['authorizer_id'] = obj.data.AuthorizerId;
         reqParams.cfn['ModelSelectionExpression'] = obj.data.ModelSelectionExpression;
+        reqParams.tf['model_selection_expression'] = obj.data.ModelSelectionExpression;
         reqParams.cfn['OperationName'] = obj.data.OperationName;
+        reqParams.tf['operation_name'] = obj.data.OperationName;
         reqParams.cfn['RequestModels'] = obj.data.RequestModels;
+        reqParams.tf['request_models'] = obj.data.RequestModels;
         reqParams.cfn['RequestParameters'] = obj.data.RequestParameters;
         reqParams.cfn['RouteKey'] = obj.data.RouteKey;
+        reqParams.tf['route_key'] = obj.data.RouteKey;
         reqParams.cfn['RouteResponseSelectionExpression'] = obj.data.RouteResponseSelectionExpression;
+        reqParams.tf['route_response_selection_expression'] = obj.data.RouteResponseSelectionExpression;
         reqParams.cfn['Target'] = obj.data.Target;
+        reqParams.tf['target'] = obj.data.Target;
 
         tracked_resources.push({
             'obj': obj,
@@ -2737,16 +2860,29 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Route',
-            'options': reqParams
+            'terraformType': 'aws_apigatewayv2_route',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.RouteId,
+                'Terraform': {
+                    'id': obj.data.RouteId
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.integrationresponse") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['IntegrationId'] = obj.data.IntegrationId;
+        reqParams.tf['integration_id'] = obj.data.IntegrationId;
         reqParams.cfn['ContentHandlingStrategy'] = obj.data.ContentHandlingStrategy;
+        reqParams.tf['content_handling_strategy'] = obj.data.ContentHandlingStrategy;
         reqParams.cfn['IntegrationResponseKey'] = obj.data.IntegrationResponseKey;
+        reqParams.tf['integration_response_key'] = obj.data.IntegrationResponseKey;
         reqParams.cfn['ResponseParameters'] = obj.data.ResponseParameters;
         reqParams.cfn['ResponseTemplates'] = obj.data.ResponseTemplates;
+        reqParams.tf['response_templates'] = obj.data.ResponseTemplates;
         reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
+        reqParams.tf['template_selection_expression'] = obj.data.TemplateSelectionExpression;
 
         tracked_resources.push({
             'obj': obj,
@@ -2754,23 +2890,42 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::IntegrationResponse',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.IntegrationResponseId,
+                'Terraform': {
+                    'id': obj.data.IntegrationResponseId
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.integration") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['ConnectionType'] = obj.data.ConnectionType;
+        reqParams.tf['connection_type'] = obj.data.ConnectionType;
         reqParams.cfn['ContentHandlingStrategy'] = obj.data.ContentHandlingStrategy;
+        reqParams.tf['content_handling_strategy'] = obj.data.ContentHandlingStrategy;
         reqParams.cfn['CredentialsArn'] = obj.data.CredentialsArn;
+        reqParams.tf['credentials_arn'] = obj.data.CredentialsArn;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['IntegrationMethod'] = obj.data.IntegrationMethod;
+        reqParams.tf['integration_method'] = obj.data.IntegrationMethod;
         reqParams.cfn['IntegrationType'] = obj.data.IntegrationType;
+        reqParams.tf['integration_type'] = obj.data.IntegrationType;
         reqParams.cfn['IntegrationUri'] = obj.data.IntegrationUri;
+        reqParams.tf['integration_uri'] = obj.data.IntegrationUri;
         reqParams.cfn['PassthroughBehavior'] = obj.data.PassthroughBehavior;
+        reqParams.tf['passthrough_behavior'] = obj.data.PassthroughBehavior;
         reqParams.cfn['RequestParameters'] = obj.data.RequestParameters;
         reqParams.cfn['RequestTemplates'] = obj.data.RequestTemplates;
+        reqParams.tf['request_templates'] = obj.data.RequestTemplates;
         reqParams.cfn['TemplateSelectionExpression'] = obj.data.TemplateSelectionExpression;
+        reqParams.tf['template_selection_expression'] = obj.data.TemplateSelectionExpression;
         reqParams.cfn['TimeoutInMillis'] = obj.data.TimeoutInMillis;
+        reqParams.tf['timeout_milliseconds'] = obj.data.TimeoutInMillis;
         reqParams.cfn['PayloadFormatVersion'] = obj.data.PayloadFormatVersion;
+        reqParams.tf['payload_format_version'] = obj.data.PayloadFormatVersion;
         reqParams.cfn['TlsConfig'] = obj.data.TlsConfig;
 
         tracked_resources.push({
@@ -2779,20 +2934,40 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::Integration',
-            'options': reqParams
+            'terraformType': 'aws_apigatewayv2_integration',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.IntegrationId,
+                'Terraform': {
+                    'id': obj.data.IntegrationId,
+                    'integration_response_selection_expression': obj.data.IntegrationResponseSelectionExpression
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.domainname") {
         reqParams.cfn['DomainName'] = obj.data.DomainName;
+        reqParams.tf['domain_name'] = obj.data.DomainName;
         if (obj.data.DomainNameConfigurations) {
             reqParams.cfn['DomainNameConfigurations'] = [];
+            reqParams.tf['domain_name_configuration'] = [];
             obj.data.DomainNameConfigurations.forEach(domainnameconfiguration => {
                 reqParams.cfn['DomainNameConfigurations'].push({
                     'CertificateArn': domainnameconfiguration.CertificateArn,
                     'CertificateName': domainnameconfiguration.CertificateName,
                     'EndpointType': domainnameconfiguration.EndpointType
                 });
+                reqParams.tf['domain_name_configuration'].push({
+                    'certificate_arn': domainnameconfiguration.CertificateArn,
+                    'endpoint_type': domainnameconfiguration.EndpointType,
+                    'security_policy': domainnameconfiguration.SecurityPolicy
+                });
             });
         }
+
+        /*
+        TODO:
+        tags
+        */
 
         tracked_resources.push({
             'obj': obj,
@@ -2800,13 +2975,25 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::DomainName',
-            'options': reqParams
+            'terraformType': 'aws_apigatewayv2_domain_name',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DomainName,
+                'Terraform': {
+                    'id': obj.data.DomainName,
+                    'api_mapping_selection_expression': obj.data.ApiMappingSelectionExpression
+                }
+            }
         });
     } else if (obj.type == "apigatewayv2.apimapping") {
         reqParams.cfn['ApiId'] = obj.data.ApiId;
+        reqParams.tf['api_id'] = obj.data.ApiId;
         reqParams.cfn['DomainName'] = obj.data.DomainName;
+        reqParams.tf['domain_name'] = obj.data.DomainName;
         reqParams.cfn['Stage'] = obj.data.Stage;
+        reqParams.tf['stage'] = obj.data.Stage;
         reqParams.cfn['ApiMappingKey'] = obj.data.ApiMappingKey;
+        reqParams.tf['api_mapping_key'] = obj.data.ApiMappingKey;
 
         tracked_resources.push({
             'obj': obj,
@@ -2814,13 +3001,26 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::ApiMapping',
+            'terraformType': 'aws_apigatewayv2_api_mapping',
             'options': reqParams
         });
     } else if (obj.type == "apigatewayv2.vpclink") {
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.tf['security_group_ids'] = obj.data.SecurityGroupIds;
         reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.tf['subnet_ids'] = obj.data.SubnetIds;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['Tags'] = {};
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -2828,7 +3028,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigatewayv2',
             'type': 'AWS::ApiGatewayV2::VpcLink',
-            'options': reqParams
+            'terraformType': 'aws_apigatewayv2_vpc_link',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VpcLinkId,
+                'Terraform': {
+                    'id': obj.data.VpcLinkId
+                }
+            }
         });
     } else {
         return false;

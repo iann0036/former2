@@ -539,7 +539,7 @@
 
 ## Terraform Coverage
 
-**299/561 (53%)** Resources Covered
+**309/561 (55%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -574,18 +574,18 @@
 | *aws_api_gateway_usage_plan* |  |
 | *aws_api_gateway_usage_plan_key* | :thumbsup: |
 | *aws_api_gateway_vpc_link* | :thumbsup: |
-| *aws_apigatewayv2_api* |  |
-| *aws_apigatewayv2_api_mapping* |  |
-| *aws_apigatewayv2_authorizer* |  |
-| *aws_apigatewayv2_deployment* |  |
-| *aws_apigatewayv2_domain_name* |  |
-| *aws_apigatewayv2_integration* |  |
+| *aws_apigatewayv2_api* | :thumbsup: |
+| *aws_apigatewayv2_api_mapping* | :thumbsup: |
+| *aws_apigatewayv2_authorizer* | :thumbsup: |
+| *aws_apigatewayv2_deployment* | :thumbsup: |
+| *aws_apigatewayv2_domain_name* | :thumbsup: |
+| *aws_apigatewayv2_integration* | :thumbsup: |
 | *aws_apigatewayv2_integration_response* |  |
-| *aws_apigatewayv2_model* |  |
-| *aws_apigatewayv2_route* |  |
+| *aws_apigatewayv2_model* | :thumbsup: |
+| *aws_apigatewayv2_route* | :thumbsup: |
 | *aws_apigatewayv2_route_response* |  |
-| *aws_apigatewayv2_stage* |  |
-| *aws_apigatewayv2_vpc_link* |  |
+| *aws_apigatewayv2_stage* | :thumbsup: |
+| *aws_apigatewayv2_vpc_link* | :thumbsup: |
 | *aws_app_cookie_stickiness_policy* |  |
 | *aws_appautoscaling_policy* |  |
 | *aws_appautoscaling_scheduled_action* |  |
