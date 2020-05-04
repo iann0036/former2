@@ -484,6 +484,8 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (iaclangselect == "python") {
                         return tracked_resources[i].logicalId.toLowerCase() + ".ref";
+                    } else if (iaclangselect == "java") {
+                        return lcfirststr(tracked_resources[i].logicalId) + ".getRef()";
                     }
                     return tracked_resources[i].logicalId + ".ref";
                 }
@@ -492,6 +494,8 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
                             if (iaclangselect == "python") {
                                 return tracked_resources[i].logicalId.toLowerCase() + ".attr_" + pythonAttr(attr_name);
+                            } else if (iaclangselect == "java") {
+                                return lcfirststr(tracked_resources[i].logicalId) + ".getAttr" + attr_name + "()";
                             }
                             return tracked_resources[i].logicalId + ".attr" + attr_name;
                         }
@@ -513,6 +517,9 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
+            if (iaclangselect == "java") {
+                return 'Arrays.asList()';
+            }
             return '[]';
         }
 
@@ -523,6 +530,15 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             }
         });
 
+        if (iaclangselect == "java") {
+            return `
+` + ' '.repeat(spacing) + `Arrays.asList(
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `)
+` + ' '.repeat(spacing - 4);
+        }
+
         return `[
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
 ` + ' '.repeat(spacing + 4)) + `
@@ -531,14 +547,30 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
     if (typeof param == "object") {
         Object.keys(param).forEach(function (key) {
             var item = processCdkParameter(param[key], spacing + 4, index, tracked_resources);
+            if (iaclangselect == "java") {
+                item = processCdkParameter(param[key], spacing + 8, index, tracked_resources);
+            }
             if (typeof item !== "undefined") {
                 if (iaclangselect == "python") {
                     paramitems.push("\"" + pythonAttr(key) + "\": " + item);
+                } else if (iaclangselect == "java") {
+                    paramitems.push("put(\"" + key + "\"," + item + ");");
                 } else {
                     paramitems.push(lcfirststr(key) + ": " + item);
                 }
             }
         });
+
+        if (iaclangselect == "java") {
+            var cdktype = tracked_resources[index].type.split("::")[2];
+
+            return `
+` + ' '.repeat(spacing) + `new HashMap<String, Object>() {{
+` + ' '.repeat(spacing + 4) + paramitems.join(`
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}}
+` + ' '.repeat(spacing - 4);
+        }
 
         return `{
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
@@ -1606,18 +1638,33 @@ function lcfirststr(str) {
         return str.toLowerCase();
     }
 
-    var ret = str.charAt(0).toLowerCase();
+    var ret = ""
 
-    if (str.length > 1 && str[1].toUpperCase() == str[1]) {
-        var i = 1;
-        while (str.length > i && str[i].toUpperCase() == str[i]) {
-            ret += str[i].toLowerCase();
-            i++;
+    var lastWasLower = true;
+    while (str.length > 0) {
+        if (str[0].match(/[A-Z0-9]/g)) {
+            if (lastWasLower) {
+                ret += str[0];
+                lastWasLower = false;
+            } else {
+                if (str.length > 1 && !str[1].match(/[A-Z0-9]/g)) {
+                    ret += str[0];
+                } else {
+                    ret += str[0].toLowerCase();
+                }
+            }
+        } else {
+            ret += str[0];
+            lastWasLower = true;
         }
-        ret = ret.substring(0, ret.length - 1) + ret.charAt(ret.length - 1).toUpperCase() + str.substring(ret.length);
-    } else {
-        ret += str.substring(1);
+        str = str.substr(1);
     }
+
+    if (ret.length < 3) {
+        return ret.toLowerCase();
+    }
+    
+    ret = ret[0].toLowerCase() + ret.substr(1, ret.length - 2) + ret[ret.length - 1].toLowerCase();
 
     return ret;
 }
@@ -1707,10 +1754,16 @@ function outputMapCdk(index, service, type, options, region, was_blocked, logica
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
                 var optionvalue = processCdkParameter(options[option], 12, index, tracked_resources);
+                if (iaclangselect == "java") {
+                    optionvalue = processCdkParameter(options[option], 20, index, tracked_resources);
+                }
                 if (typeof optionvalue !== "undefined") {
                     if (iaclangselect == "python") {
                         params += `
             ${pythonAttr(option)}=${optionvalue},`;
+                    } else if (iaclangselect == "java") {
+                        params += `
+                put("${option}", ${optionvalue});`;
                     } else {
                         params += `
             ${lcfirststr(option)}: ${optionvalue},`;
@@ -1739,6 +1792,15 @@ function outputMapCdk(index, service, type, options, region, was_blocked, logica
             self,
             "${logicalId}",${params}
         )
+
+`;
+    } else if (iaclangselect == "java") {
+        output += `        CfnResource ${lcfirststr(logicalId)} = CfnResource.Builder.create(this, "${logicalId}")
+            .type("${type}")
+            .properties(new HashMap<String, Object>() {{
+                ${params}
+            }})
+            .build();
 
 `;
     }
@@ -2183,7 +2245,27 @@ class MyStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-`}` : '// Selected programming language not supported for this output'}`}`,
+`}` : `${(iaclangselect == "java") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language java
+  
+package com.myorg;
+
+import software.amazon.awscdk.core.Construct;
+import software.amazon.awscdk.core.Stack;
+import software.amazon.awscdk.core.StackProps;
+import software.amazon.awscdk.core.CfnResource;
+
+import java.util.Arrays;
+import java.util.HashMap;
+
+public class MyStack extends Stack {
+    public MyStack(final Construct scope, final String id) {
+        this(scope, id, null);
+    }
+
+    public MyStack(final Construct scope, final String id, final StackProps props) {
+        super(scope, id, props);
+
+`}` : '// Selected programming language not supported for this output'}`}`}`,
 
         'iam': null,
 
@@ -2261,7 +2343,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
     for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
-            if (['typescript', 'python'].includes(iaclangselect)) {
+            if (['typescript', 'python', 'java'].includes(iaclangselect)) {
                 compiled['cdk'] += outputMapCdk(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
             }
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
@@ -2294,6 +2376,10 @@ app.synth();
 app = cdk.App()
 MyStack(app, "my-stack-name", env={'region': '${tracked_resources[0].region}'})
 app.synth()
+`;
+            } else if (iaclangselect == "java") {
+                compiled['cdk'] += `    }
+}        
 `;
             }
         }

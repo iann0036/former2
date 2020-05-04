@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Secrets Manager',
     'resourcetypes': {
         'Secrets': {
