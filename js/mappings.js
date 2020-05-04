@@ -486,6 +486,8 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                         return tracked_resources[i].logicalId.toLowerCase() + ".ref";
                     } else if (iaclangselect == "java") {
                         return lcfirststr(tracked_resources[i].logicalId) + ".getRef()";
+                    } else if (iaclangselect == "dotnet") {
+                        return lcfirststr(tracked_resources[i].logicalId) + ".Ref";
                     }
                     return tracked_resources[i].logicalId + ".ref";
                 }
@@ -495,7 +497,9 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                             if (iaclangselect == "python") {
                                 return tracked_resources[i].logicalId.toLowerCase() + ".attr_" + pythonAttr(attr_name);
                             } else if (iaclangselect == "java") {
-                                return lcfirststr(tracked_resources[i].logicalId) + ".getAttr" + attr_name + "()";
+                                return lcfirststr(tracked_resources[i].logicalId) + ".getAtt(\"" + attr_name + "\")";
+                            } else if (iaclangselect == "dotnet") {
+                                return lcfirststr(tracked_resources[i].logicalId) + ".GetAtt(\"" + attr_name + "\")";
                             }
                             return tracked_resources[i].logicalId + ".attr" + attr_name;
                         }
@@ -519,6 +523,8 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         if (param.length == 0) {
             if (iaclangselect == "java") {
                 return 'Arrays.asList()';
+            } else if (iaclangselect == "dotnet") {
+                return 'new List<Dictionary<string, object>>{}'
             }
             return '[]';
         }
@@ -537,6 +543,12 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + `)
 ` + ' '.repeat(spacing - 4);
+        } else if (iaclangselect == "dotnet") {
+            return `new List<Dictionary<string, object>>
+` + ' '.repeat(spacing) + `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}`;
         }
 
         return `[
@@ -555,6 +567,8 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                     paramitems.push("\"" + pythonAttr(key) + "\": " + item);
                 } else if (iaclangselect == "java") {
                     paramitems.push("put(\"" + key + "\"," + item + ");");
+                } else if (iaclangselect == "dotnet") {
+                    paramitems.push("[\"" + key + "\"] = " + item);
                 } else {
                     paramitems.push(lcfirststr(key) + ": " + item);
                 }
@@ -562,14 +576,18 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         });
 
         if (iaclangselect == "java") {
-            var cdktype = tracked_resources[index].type.split("::")[2];
-
             return `
 ` + ' '.repeat(spacing) + `new HashMap<String, Object>() {{
 ` + ' '.repeat(spacing + 4) + paramitems.join(`
 ` + ' '.repeat(spacing + 4)) + `
 ` + ' '.repeat(spacing) + `}}
 ` + ' '.repeat(spacing - 4);
+        } else if (iaclangselect == "dotnet") {
+            return `new Dictionary<string, object>
+` + ' '.repeat(spacing) + `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`,
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}`;
         }
 
         return `{
@@ -1753,10 +1771,12 @@ function outputMapCdk(index, service, type, options, region, was_blocked, logica
     if (Object.keys(options).length) {
         for (option in options) {
             if (typeof options[option] !== "undefined" && options[option] !== null) {
-                var optionvalue = processCdkParameter(options[option], 12, index, tracked_resources);
-                if (iaclangselect == "java") {
-                    optionvalue = processCdkParameter(options[option], 20, index, tracked_resources);
+                var initialSpacing = 12;
+                if (iaclangselect == "java" || iaclangselect == "dotnet") {
+                    initialSpacing = 20;
                 }
+                var optionvalue = processCdkParameter(options[option], initialSpacing, index, tracked_resources);
+                
                 if (typeof optionvalue !== "undefined") {
                     if (iaclangselect == "python") {
                         params += `
@@ -1764,6 +1784,9 @@ function outputMapCdk(index, service, type, options, region, was_blocked, logica
                     } else if (iaclangselect == "java") {
                         params += `
                 put("${option}", ${optionvalue});`;
+                    } else if (iaclangselect == "dotnet") {
+                        params += `
+                ["${option}"] = ${optionvalue},`;
                     } else {
                         params += `
             ${lcfirststr(option)}: ${optionvalue},`;
@@ -1801,6 +1824,17 @@ function outputMapCdk(index, service, type, options, region, was_blocked, logica
                 ${params}
             }})
             .build();
+
+`;
+    } else if (iaclangselect == "dotnet") {
+        params = params.substring(0, params.length - 1); // remove last comma
+        output += `            var ${logicalId.toLowerCase()} = new CfnResource(this, "${logicalId}", new CfnResourceProps
+            {
+                Type = "${type}",
+                Properties = new Dictionary<string, object>
+                {${params}
+                }
+            });
 
 `;
     }
@@ -2264,8 +2298,18 @@ public class MyStack extends Stack {
 
     public MyStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
+        
+`}` : `${(iaclangselect == "dotnet") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language csharp
+  
+using Amazon.CDK;
 
-`}` : '// Selected programming language not supported for this output'}`}`}`,
+namespace My
+{
+    public class MyStack : Stack
+    {
+        public MyStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
+        {
+`}` : '// Selected programming language not supported for this output'}`}`}`}`,
 
         'iam': null,
 
@@ -2343,7 +2387,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
     for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
-            if (['typescript', 'python', 'java'].includes(iaclangselect)) {
+            if (['typescript', 'python', 'java', 'dotnet'].includes(iaclangselect)) {
                 compiled['cdk'] += outputMapCdk(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
             }
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
@@ -2380,6 +2424,12 @@ app.synth()
             } else if (iaclangselect == "java") {
                 compiled['cdk'] += `    }
 }        
+`;
+            } else if (iaclangselect == "dotnet") {
+                compiled['cdk'] += `
+        }
+    }
+}
 `;
             }
         }
