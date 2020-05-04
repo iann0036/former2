@@ -36,7 +36,7 @@ The following outputs are currently supported:
 * CloudFormation
 * Terraform
 * Troposphere
-* CDK (Cfn Primitives) - TypeScript, Python, Java
+* CDK (Cfn Primitives) - TypeScript, Python, Java, C#
 * Pulumi - TypeScript
 
 ### Former2 CLI
