@@ -544,21 +544,7 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
 ` + ' '.repeat(spacing) + `)
 ` + ' '.repeat(spacing - 4);
         } else if (iaclangselect == "dotnet") {
-            if (paramitems[0] && paramitems[0].substr(0, 1) == "\"") {
-                return `new List<string>
-` + ' '.repeat(spacing) + `{
-` + ' '.repeat(spacing + 4) + paramitems.join(`,
-` + ' '.repeat(spacing + 4)) + `
-` + ' '.repeat(spacing) + `}`;
-            } else if (paramitems[0] && paramitems[0].substr(0, 1).match(/[0-9\-]/g)) {
-                return `new List<decimal>
-` + ' '.repeat(spacing) + `{
-` + ' '.repeat(spacing + 4) + paramitems.join(`,
-` + ' '.repeat(spacing + 4)) + `
-` + ' '.repeat(spacing) + `}`;
-            }
-
-            return `new List<Dictionary<string, object>>
+            return `new List<object>
 ` + ' '.repeat(spacing) + `{
 ` + ' '.repeat(spacing + 4) + paramitems.join(`,
 ` + ' '.repeat(spacing + 4)) + `
