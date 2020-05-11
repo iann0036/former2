@@ -228,6 +228,7 @@
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
                         <li><a href="#section-outputs-cdk"><span class="lbl">CDK</span></a></li>
                         <li><a href="#section-outputs-pulumi"><span class="lbl">Pulumi</span></a></li>
+                        <li><a href="#section-outputs-diagram"><span class="lbl">Diagram</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
                         <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
                     </ul>
@@ -593,6 +594,7 @@
                             </div>
                             <button id="header-button-clear-outputs" type="button" class="f2-header-button btn btn-danger-outline" style="margin-left: 16px; display: none;"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Clear All</button>
                             <button id="header-button-import-cfn" type="button" class="f2-header-button btn btn-info-outline" style="margin-left: 16px; display: none;"><i class="fa fa-cloud-upload"></i>&nbsp;&nbsp;Import</button>
+                            <button id="header-button-downloadpng-diagram" type="button" class="f2-header-button btn btn-info-outline" style="margin-left: 16px; display: none;"><i class="fa fa-download"></i>&nbsp;&nbsp;Download PNG</button>
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
@@ -1268,6 +1270,7 @@
                                         <option value="troposphere">Troposphere</option>
                                         <option value="cdk">CDK</option>
                                         <option value="pulumi">Pulumi</option>
+                                        <option value="diagram">Diagram</option>
                                     </select>
                                 </div>
                             </div>
@@ -1415,6 +1418,12 @@
                 <section id="section-outputs-pulumi" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Pulumi" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div id='pulumi_container'>
                         <textarea id='pulumi'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-diagram" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Diagram" data-section-label="Beta" class="former2-section box-typical steps-numeric-block f2mb0" style="display: none;">
+                    <div id='diagram_container'>
+                        <iframe id="diagramframe" style="width: 100%; height: 100%; border: 0;"></iframe>
                     </div>
                 </section>
 

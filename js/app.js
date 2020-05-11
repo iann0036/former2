@@ -663,6 +663,7 @@ $(document).ready(function(){
     function doNavigation() {
         $('#header-button-copy-cfn').attr('style', 'display: none;');
         $('#header-button-import-cfn').attr('style', 'margin-left: 16px; display: none;');
+        $('#header-button-downloadpng-diagram').attr('style', 'display: none;');
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdk').attr('style', 'display: none;');
@@ -767,6 +768,9 @@ $(document).ready(function(){
                         theme: "material"
                     });
                 }, 1);
+            } else if (location.hash == "#section-outputs-diagram") {
+                $('#header-button-downloadpng-diagram').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             } else if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
@@ -1251,6 +1255,31 @@ $(document).ready(function(){
     $('#import-download-template').off('click').on('click', function() {
         downloadImportTemplate($('#import-stackname').val(), $('#import-deletionpolicy').val());
     });
+
+    /* ========================================================================== */
+    // Diagram
+    /* ========================================================================== */
+    var sectionHeader = $('.section-header');
+    var sectionHeaderHeight = 0;
+    if (sectionHeader.length) {
+        sectionHeaderHeight = parseInt(sectionHeader.height()) + parseInt(sectionHeader.css('padding-bottom'));
+    }
+    $('#diagram_container').attr('style', 'min-height: ' +
+        ($(window).height() -
+        parseInt($('.page-content').css('padding-top')) -
+        parseInt($('.page-content').css('padding-bottom')) -
+        sectionHeaderHeight -
+        48) + 'px;'
+    );
+    $('#diagramframe').attr('style', 'width: 100%; border: 0; min-height: ' +
+        ($(window).height() -
+        parseInt($('.page-content').css('padding-top')) -
+        parseInt($('.page-content').css('padding-bottom')) -
+        sectionHeaderHeight -
+        48) + 'px;'
+    );
+
+    $('#diagramframe').attr('src', '/lib/drawio/src/main/webapp/?embed=1&libraries=1&proto=json&local=1&sync=none&browser=0&gapi=0&db=0&od=0&tr=0&gh=0&gl=0&stealth=1&math=0&picker=0&libs=aws4'); // &configure=1&spin=1
 
     /* ========================================================================== */
     // Misc
