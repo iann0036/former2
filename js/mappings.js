@@ -2239,12 +2239,18 @@ async function generateDiagram() {
         'athena.namedquery': {
             'friendlyname': 'Athena Named Query',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.athena;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'athena.workgroup': {
             'friendlyname': 'Athena Workgroup',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.athena;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'elasticsearch.domain': {
             'friendlyname': 'Elasticsearch Domain',
@@ -2628,7 +2634,10 @@ async function generateDiagram() {
         'cloudwatch.loggroup': {
             'friendlyname': 'Log Group',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'logGroupName'
+            ]
         },
         'cloudwatch.anomalydetector': {
             'friendlyname': 'Anomaly Detector',
@@ -2798,7 +2807,10 @@ async function generateDiagram() {
         'route53.hostedzone': {
             'friendlyname': 'Route53 Hosted Zone',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Name'
+            ]
         },
         'route53.healthcheck': {
             'friendlyname': 'Route53 Health Check',
@@ -2948,7 +2960,10 @@ async function generateDiagram() {
         'kms.key': {
             'friendlyname': 'KMS Key',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'KeyId'
+            ]
         },
         'ram.resourceshare': {
             'friendlyname': 'Resource Share',
@@ -2958,7 +2973,10 @@ async function generateDiagram() {
         'secretsmanager.secret': {
             'friendlyname': 'Secret',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'securityhub.hub': {
             'friendlyname': 'Security Hub',
@@ -3057,6 +3075,9 @@ async function generateDiagram() {
     }
 
     var networking_info = await getNetworkingInfo();
+    var caller_id = await sdkcall("STS", "getCallerIdentity", {
+        // no params
+    }, true);
 
     var xml = '';
     var minX = 160;
@@ -3168,8 +3189,8 @@ async function generateDiagram() {
         if (!group_properties['name']) {
             group_properties['name'] = DRAWIO_MAPPINGS[tracked_resources[i].obj.type].friendlyname;
         } else {
-            if (group_properties['name'].length > 20) {
-                group_properties['name'] = group_properties['name'].substr(0, 17) + "...";
+            if (group_properties['name'].length > 19) {
+                group_properties['name'] = group_properties['name'].substr(0, 16) + "...";
             }
             group_properties['name'] = DRAWIO_MAPPINGS[tracked_resources[i].obj.type].friendlyname + "&lt;br&gt;(" + group_properties['name'] + ")";
             multilinename = true;
@@ -3239,7 +3260,7 @@ async function generateDiagram() {
         <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="former2base-1" value="AWS Cloud" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" parent="1" vertex="1">
+        <mxCell id="former2base-1" value="Account ${caller_id.Account}" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" parent="1" vertex="1">
             <mxGeometry x="${(minX-40)}" y="${(minY-120)}" width="${(maxX-minX+120)}" height="${(maxY-minY+240)}" as="geometry" />
         </mxCell>
         <mxCell id="former2base-2" value="${tracked_resources[0].region}" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#147EBA;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=0;" parent="1" vertex="1">
