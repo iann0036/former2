@@ -12,6 +12,7 @@ var global_used_refs = [];
 var cfnspacing = "    ";
 var logicalidstrategy = "longtypeprefixoptionalindexsuffix";
 var service_mapping_functions = [];
+var tracked_relationships = {};
 
 function MD5(e) {
     function h(a, b) {
@@ -125,10 +126,19 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'tf')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        tracked_relationships['tf'].push({
+                            'sourceIndex': index,
+                            'destinationIndex': i,
+                            'parameter': param
+                        });
                         return "\"${" + tracked_resources[i].terraformType + "." + tracked_resources[i].logicalId + "." + attr_name + "}\""
                     }
                 }
@@ -142,10 +152,19 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'tf')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        tracked_relationships['tf'].push({
+                            'sourceIndex': index,
+                            'destinationIndex': i,
+                            'parameter': param
+                        });
                         return "\"${" + tracked_resources[i].terraformType + "." + tracked_resources[i].logicalId + "." + attr_name + "}\""
                     }
                 }
@@ -216,7 +235,11 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'pulumi')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -233,7 +256,11 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'pulumi')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -296,6 +323,39 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
+function circularReferenceFind(checkindex, references, outputtype) {
+    references.push(checkindex);
+
+    tracked_relationships[outputtype].forEach(tracked_relationship => {
+        if (
+            tracked_relationship.sourceIndex == checkindex &&
+            tracked_relationship.destinationIndex != checkindex && // shouldn't happen? just checking..
+            !references.includes(tracked_relationship.destinationIndex)
+        ) {
+            references = circularReferenceFind(tracked_relationship.destinationIndex, references, outputtype);
+        }
+    });
+
+    return references;
+}
+
+function circularReferenceFound(checkindex, baseindex, outputtype) {
+    if (checkindex == baseindex) {
+        return true;
+    }
+
+    var mapped_output_type = 'cfn';
+    if (['tf', 'pulumi'].includes(outputtype)) {
+        mapped_output_type = 'tf';
+    }
+
+    if (circularReferenceFind(checkindex, [], mapped_output_type).includes(baseindex)) {
+        return true;
+    }
+
+    return false;
+}
+
 function processCfnParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
@@ -307,14 +367,28 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cfn')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues) {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    tracked_relationships['cfn'].push({
+                        'sourceIndex': index,
+                        'destinationIndex': i,
+                        'parameter': param
+                    });
                     return "!Ref " + tracked_resources[i].logicalId;
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                            tracked_relationships['cfn'].push({
+                                'sourceIndex': index,
+                                'destinationIndex': i,
+                                'parameter': param
+                            });
                             return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
                         }
                     }
@@ -338,13 +412,22 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         }
 
         var pre_return_str = "";
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cfn')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (
                     tracked_resources[i].returnValues.Ref == param &&
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
+                    tracked_relationships['cfn'].push({
+                        'sourceIndex': index,
+                        'destinationIndex': i,
+                        'parameter': param
+                    });
                     return "!Ref " + tracked_resources[i].logicalId;
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
@@ -354,6 +437,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
+                            tracked_relationships['cfn'].push({
+                                'sourceIndex': index,
+                                'destinationIndex': i,
+                                'parameter': param
+                            });
                             return "!GetAtt " + tracked_resources[i].logicalId + "." + attr_name;
                         }
                     }
@@ -363,6 +451,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
+                    tracked_relationships['cfn'].push({
+                        'sourceIndex': index,
+                        'destinationIndex': i,
+                        'parameter': param
+                    });
                     for (var j = 0; j < 10; j++) { // replace many
                         pre_return_str = "!Sub ";
                         param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
@@ -375,6 +468,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
+                            tracked_relationships['cfn'].push({
+                                'sourceIndex': index,
+                                'destinationIndex': i,
+                                'parameter': param
+                            });
                             for (var j = 0; j < 10; j++) { // replace many
                                 pre_return_str = "!Sub ";
                                 param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
@@ -479,7 +577,11 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             return undefined; // TODO: Fix this
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cdk')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (iaclangselect == "python") {
@@ -610,7 +712,11 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         return `False`;
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'troposphere')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -635,7 +741,11 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'troposphere')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -2194,6 +2304,11 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
         'cdk': [],
         'troposphere': []
     };
+    tracked_relationships = {
+        'tf': [],
+        'cfn': []
+    };
+
     for (var i = 0; i < outputs.length; i++) {
         if (!services['go'].includes(outputs[i].service)) {
             services['go'].push(outputs[i].service);
@@ -2364,14 +2479,6 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 
     var compiled_iam_outputs = [];
     for (var i = 0; i < outputs.length; i++) {
-        if (outputs[i].options.boto3) {
-            compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-            compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-            compiled['js'] += outputMapJs(outputs[i].service, lowerFirstChar(outputs[i].method.api), outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-        }
-        if (outputs[i].options.cli) {
-            compiled['cli'] += outputMapCli(outputs[i].service, outputs[i].method.cli, outputs[i].options.cli, outputs[i].region, outputs[i].was_blocked);
-        }
         if (outputs[i].method.api) {
             compiled_iam_outputs = compileMapIam(compiled_iam_outputs, outputs[i].service, outputs[i].method.api, outputs[i].options.iam, outputs[i].region, outputs[i].was_blocked);
         }
