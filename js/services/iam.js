@@ -545,6 +545,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                             UserName: user.UserName
                         }, true).then((groups) => {
                             user['Groups'] = groups.Groups.map(group => group.GroupName);
+                        }),
+                        sdkcall("IAM", "listUserTags", {
+                            UserName: user.UserName
+                        }, true).then((tags) => {
+                            user['Tags'] = tags.Tags;
                         })
                     ]);
 
@@ -607,8 +612,16 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         }, true).then(async (data) => {
             $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
             $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
-
+            
             await Promise.all(data.Roles.map(async (role) => {
+                await Promise.all([
+                    sdkcall("IAM", "listRoleTags", {
+                        RoleName: role.RoleName
+                    }, true).then((tags) => {
+                        role['Tags'] = tags.Tags;
+                    }),
+                ]);
+
                 if (role.Path.startsWith("/aws-service-role/")) {
                     $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
                         f2id: role.Arn,
@@ -736,6 +749,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['UserName'] = obj.data.UserName;
         reqParams.tf['name'] = obj.data.UserName;
         reqParams.cfn['Groups'] = obj.data.Groups;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
         if (obj.data.PermissionsBoundary) {
             reqParams.cfn['PermissionsBoundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
             reqParams.tf['permissions_boundary'] = obj.data.PermissionsBoundary.PermissionsBoundaryArn;
@@ -827,6 +847,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = {};
+            obj.data.Tags.forEach(tag => {
+                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            });
+        }
 
         /*
         SKIPPED:
