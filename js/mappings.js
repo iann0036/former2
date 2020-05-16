@@ -344,6 +344,10 @@ function circularReferenceFound(checkindex, baseindex, outputtype) {
         return true;
     }
 
+    if (tracked_resources.length > 500) { // circuit breaker
+        return false;
+    }
+
     var mapped_output_type = 'cfn';
     if (['tf', 'pulumi'].includes(outputtype)) {
         mapped_output_type = 'tf';
