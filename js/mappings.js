@@ -2338,7 +2338,10 @@ async function generateDiagram() {
         'elasticsearch.domain': {
             'friendlyname': 'Elasticsearch Domain',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticsearch_service;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'DomainName'
+            ]
         },
         'emr.cluster': {
             'friendlyname': 'EMR Cluster',
@@ -2348,7 +2351,10 @@ async function generateDiagram() {
         'kinesis.stream': {
             'friendlyname': 'Kinesis Stream',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.kinesis_data_streams;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'StreamName'
+            ]
         },
         'kinesis.analyticsapplication': {
             'friendlyname': 'Analytics Application',
@@ -2373,7 +2379,10 @@ async function generateDiagram() {
         'redshift.cluster': {
             'friendlyname': 'Redshift Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.redshift;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ClusterIdentifier'
+            ]
         },
         'datapipeline.pipeline': {
             'friendlyname': 'Data Pipeline',
@@ -2388,12 +2397,18 @@ async function generateDiagram() {
         'glue.database': {
             'friendlyname': 'Glue Database',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'glue.table': {
             'friendlyname': 'Glue Table',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'glue.job': {
             'friendlyname': 'Glue Job',
@@ -2413,22 +2428,36 @@ async function generateDiagram() {
         'sns.topic': {
             'friendlyname': 'SNS Topic',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sns;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Attributes',
+                'TopicArn'
+            ]
         },
         'sqs.queue': {
             'friendlyname': 'SQS Queue',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sqs;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Attributes',
+                'QueueArn'
+            ]
         },
         'appsync.graphqlapi': {
             'friendlyname': 'AppSync GraphQL API',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.appsync;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'eventbridge.rule': {
             'friendlyname': 'Event Rule',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'eventbridge.eventbus': {
             'friendlyname': 'Event Bus',
@@ -2443,7 +2472,10 @@ async function generateDiagram() {
         'stepfunctions.statemachine': {
             'friendlyname': 'State Machine',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'budgets.budget': {
             'friendlyname': 'Budget',
@@ -2463,12 +2495,18 @@ async function generateDiagram() {
         'ec2.instance': {
             'friendlyname': 'EC2 Instance',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'InstanceId'
+            ]
         },
         'ec2.host': {
             'friendlyname': 'EC2 Host',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ec2;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'HostId'
+            ]
         },
         'ec2.fleet': {
             'friendlyname': 'EC2 Fleet',
@@ -2478,27 +2516,42 @@ async function generateDiagram() {
         'autoscaling.autoscalinggroup': {
             'friendlyname': 'Auto Scaling Group',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.auto_scaling2;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'AutoScalingGroupName'
+            ]
         },
         'ecr.repository': {
             'friendlyname': 'ECR Repository',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecr;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'repositoryName'
+            ]
         },
         'ecs.cluster': {
             'friendlyname': 'ECS Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecs;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'clusterName'
+            ]
         },
         'ecs.service': {
             'friendlyname': 'ECS Service',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecs;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'serviceName'
+            ]
         },
         'eks.cluster': {
             'friendlyname': 'EKS Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eks;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'lightsail.instance': {
             'friendlyname': 'Lightsail Instance',
@@ -2513,7 +2566,10 @@ async function generateDiagram() {
         'elasticbeanstalk.application': {
             'friendlyname': 'Elastic Beanstalk App',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_beanstalk;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ApplicationName'
+            ]
         },
         'ec2imagebuilder.imagepipeline': {
             'friendlyname': 'Image Builder Pipeline',
@@ -2547,12 +2603,18 @@ async function generateDiagram() {
         'elb.loadbalancer': {
             'friendlyname': 'Load Balancer',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'LoadBalancerName'
+            ]
         },
         'elbv2.loadbalancer': {
             'friendlyname': 'V2 Load Balancer',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'LoadBalancerName'
+            ]
         },
         'pinpoint.app': {
             'friendlyname': 'Pinpoint App',
@@ -2567,12 +2629,18 @@ async function generateDiagram() {
         'rds.cluster': {
             'friendlyname': 'RDS Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.aurora;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'DBClusterIdentifier'
+            ]
         },
         'rds.instance': {
             'friendlyname': 'RDS Instance',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.database;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'DBInstanceIdentifier'
+            ]
         },
         'documentdb.cluster': {
             'friendlyname': 'DocDB Cluster',
@@ -2587,12 +2655,18 @@ async function generateDiagram() {
         'dynamodb.table': {
             'friendlyname': 'DynamoDB Table',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'TableName'
+            ]
         },
         'elasticache.cluster': {
             'friendlyname': 'ElastiCache Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elasticache;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'CacheClusterId'
+            ]
         },
         'neptune.cluster': {
             'friendlyname': 'Neptune Cluster',
@@ -2617,27 +2691,42 @@ async function generateDiagram() {
         'cloud9.environment': {
             'friendlyname': 'Cloud9 Environment',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloud9;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'codebuild.project': {
             'friendlyname': 'CodeBuild Project',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codebuild;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'codecommit.repository': {
             'friendlyname': 'CodeCommit Repo',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codecommit;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'repositoryName'
+            ]
         },
         'codedeploy.application': {
             'friendlyname': 'CodeDeploy App',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codedeploy;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'applicationName'
+            ]
         },
         'codepipeline.pipeline': {
             'friendlyname': 'CodePipeline Pipeline',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4D72F3;gradientDirection=north;fillColor=#3334B9;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.codepipeline;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'codestar.githubrepository': {
             'friendlyname': 'CodeStar GitHub Repo',
@@ -2672,7 +2761,10 @@ async function generateDiagram() {
         'iot.thing': {
             'friendlyname': 'IoT Thing',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#60A337;gradientDirection=north;fillColor=#277116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.iot_core;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'thingName'
+            ]
         },
         'iotevents.detectormodel': {
             'friendlyname': 'Detector Model',
@@ -2702,7 +2794,10 @@ async function generateDiagram() {
         'cloudwatch.alarm': {
             'friendlyname': 'Alarm',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'AlarmName'
+            ]
         },
         'cloudwatch.compositealarm': {
             'friendlyname': 'Alarm',
@@ -2735,7 +2830,10 @@ async function generateDiagram() {
         'cloudtrail.trail': {
             'friendlyname': 'CloudTrail Trail',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'codeguru.profilinggroup': {
             'friendlyname': 'CodeGuru Profiling Group',
@@ -2752,140 +2850,226 @@ async function generateDiagram() {
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;',
             'isregional': true
         },
+        //////
         'config.conformancepack': {
             'friendlyname': 'Config Conformance Pack',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ConformancePackName'
+            ]
         },
         'config.organizationconformancepack': {
             'friendlyname': 'Config Conformance Pack',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'OrganizationConformancePackName'
+            ]
         },
         'licensemanager.licenseconfiguration': {
             'friendlyname': 'License Configuration',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.license_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'opsworks.stack': {
             'friendlyname': 'OpsWorks Stack',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.opsworks;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'opsworks.app': {
             'friendlyname': 'OpsWorks App',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.opsworks;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'organizations.organization': {
             'friendlyname': 'Organization',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.organizations;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Id'
+            ]
         },
         'organizations.organizationalunit': {
             'friendlyname': 'Organizational Unit',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.organizations;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Name'
+            ]
         },
         'servicecatalog.portfolio': {
             'friendlyname': 'Service Catalog Portfolio',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.service_catalog;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'PortfolioDetail',
+                'DisplayName'
+            ]
         },
         'servicecatalog.cloudformationproduct': {
             'friendlyname': 'Service Catalog Product',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.service_catalog;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ProductViewDetail',
+                'ProductViewSummary',
+                'Name'
+            ]
         },
         'ssm.document': {
             'friendlyname': 'Document',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'ssm.parameter': {
             'friendlyname': 'Parameter',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'ssm.patchbaseline': {
             'friendlyname': 'Patch Baseline',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F34482;gradientDirection=north;fillColor=#BC1356;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.systems_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'elastictranscoder.pipeline': {
             'friendlyname': 'Elastic Transcoder Pipeline',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_transcoder;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'mediaconvert.queue': {
             'friendlyname': 'MediaConvert Queue',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elemental_mediaconvert;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'medialive.channel': {
             'friendlyname': 'MediaLive Channel',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elemental_medialive;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'mediapackage.channel': {
             'friendlyname': 'MediaPackage Channel',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elemental_mediapackage;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Id'
+            ]
         },
         'mediastore.container': {
             'friendlyname': 'MediaStore Container',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F78E04;gradientDirection=north;fillColor=#D05C17;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elemental_mediastore;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Container',
+                'Name'
+            ]
         },
         'datasync.agent': {
             'friendlyname': 'DataSync Agent',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4AB29A;gradientDirection=north;fillColor=#116D5B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.datasync;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'datasync.task': {
             'friendlyname': 'DataSync Task',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4AB29A;gradientDirection=north;fillColor=#116D5B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.datasync;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'transfer.server': {
             'friendlyname': 'Transfer Server',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#4AB29A;gradientDirection=north;fillColor=#116D5B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transfer_for_sftp;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ServerId'
+            ]
         },
         'apigateway.restapi': {
             'friendlyname': 'API Gateway',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'apigatewayv2.api': {
             'friendlyname': 'API Gateway',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'amplify.app': {
             'friendlyname': 'Amplify App',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.amplify;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'appsync.graphqlschema': {
             'friendlyname': 'AppSync GraphQL Schema',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.appsync;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'apiId'
+            ]
         },
         'devicefarm.project': {
             'friendlyname': 'Device Farm Project',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.device_farm;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'cloudfront.distribution': {
             'friendlyname': 'CloudFront Distribution',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'DomainName'
+            ]
         },
         'cloudfront.streamingdistribution': {
             'friendlyname': 'CloudFront RTMP Distribution',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'DomainName'
+            ]
         },
         'route53.hostedzone': {
             'friendlyname': 'Route53 Hosted Zone',
@@ -2898,82 +3082,130 @@ async function generateDiagram() {
         'route53.healthcheck': {
             'friendlyname': 'Route53 Health Check',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Id'
+            ]
         },
         'route53.resolverendpoint': {
             'friendlyname': 'Route53 Resolver Endpoint',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Name'
+            ]
         },
         'ec2.vpcendpoint': {
             'friendlyname': 'VPC Endpoint',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.vpc_privatelink;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'VpcEndpointId'
+            ]
         },
         'ec2.vpcendpointservice': {
-            'friendlyname': 'PrivateLink Service',
+            'friendlyname': 'VPC Endpoint Service',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.vpc_privatelink;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ServiceName'
+            ]
         },
         'appmesh.mesh': {
             'friendlyname': 'AppMesh Mesh',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.app_mesh;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'meshName'
+            ]
         },
         'ec2.clientvpnendpoint': {
             'friendlyname': 'Client VPN Endpoint',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.client_vpn;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ClientVpnEndpointId'
+            ]
         },
         'ec2.vpnconnection': {
             'friendlyname': 'Site-to-Site VPN Connection',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.site_to_site_vpn;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'VpnConnectionId'
+            ]
         },
         'servicediscovery.service': {
             'friendlyname': 'Cloud Map Service',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloud_map;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'directconnect.connection': {
             'friendlyname': 'Direct Connect Connection',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'connectionName'
+            ]
         },
         'globalaccelerator.accelerator': {
             'friendlyname': 'Global Accelerator',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.global_accelerator;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Name'
+            ]
         },
         'ec2.transitgateway': {
             'friendlyname': 'Transit Gateway',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'TransitGatewayId'
+            ]
         },
         'robomaker.fleet': {
             'friendlyname': 'RoboMaker Fleet',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#FE5151;gradientDirection=north;fillColor=#BE0917;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.robomaker;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'groundstation.missionprofile': {
             'friendlyname': 'Mission Profile',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#517DFD;gradientDirection=north;fillColor=#2F29AF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ground_station;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'cognito.identitypool': {
             'friendlyname': 'Identity Pool',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cognito;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'IdentityPoolName'
+            ]
         },
         'cognito.userpool': {
             'friendlyname': 'User Pool',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cognito;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'cognito.userpoolclient': {
             'friendlyname': 'User Pool Client',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cognito;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ClientName'
+            ]
         },
         'detective.graph': {
             'friendlyname': 'Detective Graph',
@@ -3003,7 +3235,10 @@ async function generateDiagram() {
         'acm.certificate': {
             'friendlyname': 'Certificate',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.certificate_manager_3;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'DomainName'
+            ]
         },
         'acm.pcacertificateauthority': {
             'friendlyname': 'Private Certificate Authority',
@@ -3013,27 +3248,42 @@ async function generateDiagram() {
         'cloudhsm.cluster': {
             'friendlyname': 'CloudHSM Cluster',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudhsm;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'ClusterId'
+            ]
         },
         'cloudhsm.hsm': {
             'friendlyname': 'CloudHSM HSM',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudhsm;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'HsmId'
+            ]
         },
         'directoryservice.simplead': {
             'friendlyname': 'Simple AD',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.directory_service;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'directoryservice.microsoftad': {
             'friendlyname': 'Microsoft AD',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.directory_service;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'fms.policy': {
             'friendlyname': 'Firewall Manager Policy',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.firewall_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'PolicyName'
+            ]
         },
         'iam.accessanalyzer': {
             'friendlyname': 'Access Analyzer',
@@ -3051,7 +3301,10 @@ async function generateDiagram() {
         'ram.resourceshare': {
             'friendlyname': 'Resource Share',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.resource_access_manager;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'name'
+            ]
         },
         'secretsmanager.secret': {
             'friendlyname': 'Secret',
@@ -3069,22 +3322,34 @@ async function generateDiagram() {
         'waf.v2webacl': {
             'friendlyname': 'WAF ACL',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'waf.webacl': {
             'friendlyname': 'WAF ACL',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;',
-            'isregional': false
+            'isregional': false,
+            'namekey': [
+                'Name'
+            ]
         },
         'wafregional.webacl': {
             'friendlyname': 'WAF ACL',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#F54749;gradientDirection=north;fillColor=#C7131F;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         },
         'ec2.volume': {
             'friendlyname': 'EBS Volume',
             'style': 'outlineConnect=0;fontColor=#232F3E;gradientColor=#60A337;gradientDirection=north;fillColor=#277116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_block_store;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'VolumeId'
+            ]
         },
         'efs.filesystem': {
             'friendlyname': 'EFS Filesystem',
@@ -3194,6 +3459,10 @@ async function generateDiagram() {
                             }
                         }
                     });
+
+                    if (grouptype == 'name' && ['sqs.queue', 'sns.topic'].includes(tracked_resources[i].obj.type)) {
+                        running_path = running_path.split(":").pop();
+                    }
 
                     if (typeof running_path == "string" && running_path != "") {
                         group_properties[grouptype] = running_path;
@@ -3327,10 +3596,8 @@ async function generateDiagram() {
         </mxCell>`;
             } else {
                 xml += `
-        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" edge="1">
-            <mxGeometry relative="1" as="geometry">
-                <mxPoint x="${destinationPlacement.x + 39}" y="${destinationPlacement.y + (destinationPlacement.multilinename ? 110 : 100)}" as="targetPoint" />
-            </mxGeometry>
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;targetPerimeterSpacing=${(destinationPlacement.multilinename ? 32 : 22)};" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
+            <mxGeometry relative="1" as="geometry" />
         </mxCell>`;
             }
         }
@@ -3376,12 +3643,11 @@ function clearDiagram() {
     </diagram>
 </mxfile>`;
 
+    var iframe = document.getElementById('diagramframe');
     var message = JSON.stringify({
         action: 'load',
         xml: xml
     });
-
-    var iframe = document.getElementById('diagramframe');  
     iframe.contentWindow.postMessage(message, '*');    
 }
 
