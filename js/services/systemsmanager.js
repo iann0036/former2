@@ -531,7 +531,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         await Promise.all(data.Associations.map(association => {
             return sdkcall("SSM", "describeAssociation", {
                 Name: association.Name,
-                InstanceId: association.InstanceId,
+                //InstanceId: association.InstanceId,
                 AssociationId: association.AssociationId,
                 AssociationVersion: association.AssociationVersion
             }, true).then((data) => {
