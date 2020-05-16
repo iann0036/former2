@@ -116,6 +116,11 @@ async function updateDatatableMediaServicesMediaStore() {
                             ContainerName: container.Name
                         }, false).then((data) => {
                             containerdata['Policy'] = data.Policy;
+                        }).catch(() => { }),
+                        sdkcall("MediaStore", "getMetricPolicy", {
+                            ContainerName: container.Name
+                        }, false).then((data) => {
+                            containerdata['MetricPolicy'] = data.MetricPolicy;
                         }).catch(() => { })
                     ]);
 
@@ -159,6 +164,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['CorsPolicy'] = obj.data.CorsPolicy;
         reqParams.cfn['LifecyclePolicy'] = obj.data.LifecyclePolicy;
         reqParams.cfn['Policy'] = obj.data.Policy;
+        reqParams.cfn['MetricPolicy'] = obj.data.MetricPolicy;
 
         tracked_resources.push({
             'obj': obj,

@@ -531,6 +531,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         }
         reqParams.cfn['KafkaSettings'] = obj.data.KafkaSettings;
+        reqParams.cfn['NeptuneSettings'] = obj.data.NeptuneSettings;
 
         /*
         SKIPPED:
@@ -594,6 +595,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['CdcStartTime'] = obj.data.ReplicationTaskStartDate;
         reqParams.cfn['CdcStartPosition'] = obj.data.CdcStartPosition;
         reqParams.cfn['CdcStopPosition'] = obj.data.CdcStopPosition;
+        reqParams.cfn['TaskData'] = obj.data.TaskData;
 
         /*
         TODO:
