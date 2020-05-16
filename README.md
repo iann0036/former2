@@ -38,6 +38,7 @@ The following outputs are currently supported:
 * Troposphere
 * CDK (Cfn Primitives) - TypeScript, Python, Java, C#
 * Pulumi - TypeScript
+* Diagram - embedded version of [draw.io](https://github.com/jgraph/drawio)
 
 ### Former2 CLI
 

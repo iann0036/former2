@@ -1277,7 +1277,7 @@ $(document).ready(function(){
         sectionHeaderHeight - 40) + 'px;'
     );
 
-    $('#diagramframe').attr('src', '/lib/drawio/src/main/webapp/index.html?embed=1&libraries=1&proto=json&local=1&sync=none&browser=0&gapi=0&db=0&od=0&tr=0&gh=0&gl=0&stealth=1&math=0&picker=0&libs=aws4&spin=1'); // &configure=1
+    $('#diagramframe').attr('src', '/lib/drawio/src/main/webapp/index.html?embed=1&libraries=1&proto=json&local=1&sync=none&browser=0&gapi=0&db=0&od=0&tr=0&gh=0&gl=0&stealth=1&math=0&picker=0&libs=aws4&spin=1&p=page'); // &configure=1
 
     $('#header-button-download-diagram').click(function(){
         var message = JSON.stringify({
@@ -1301,6 +1301,8 @@ $(document).ready(function(){
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
+        } else if (evt['event'] == "toggleFullscreen") {
+            $('#diagramframe').toggleClass('fullscreen');
         }
     });
 
