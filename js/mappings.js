@@ -3434,6 +3434,19 @@ async function generateDiagram() {
     var maxY = 160;
     var placedItems = {};
 
+    var cleaned_relationships = tracked_relationships['cfn'];
+    for (var i=0; i<cleaned_relationships.length; i++) {
+        for (var j=i+1; j<cleaned_relationships.length; j++) {
+            if (
+                cleaned_relationships[i].sourceIndex == cleaned_relationships[j].sourceIndex &&
+                cleaned_relationships[i].destinationIndex == cleaned_relationships[j].destinationIndex
+            ) {
+                cleaned_relationships.splice(j, 1);
+                j -= 1;
+            }
+        }
+    }
+
     for (var i=0; i<tracked_resources.length; i++) {
         var subnetid = null;
         var securitygroupid = null;
@@ -3489,7 +3502,7 @@ async function generateDiagram() {
         var x = maxX + 40;
         var y = 120;
 
-        tracked_relationships['cfn'].forEach(tracked_relationship => {
+        cleaned_relationships.forEach(tracked_relationship => {
             if (tracked_relationship.sourceIndex == i && placedItems[tracked_relationship.destinationIndex]) {
                 y = 120;
                 x = placedItems[tracked_relationship.destinationIndex].x;
@@ -3572,21 +3585,21 @@ async function generateDiagram() {
     // TODO: de-duplicate tracked_relationships
     // TODO: inherited links via non-displayed nodes
 
-    for (var i=0; i<tracked_relationships['cfn'].length; i++) {
+    for (var i=0; i<cleaned_relationships.length; i++) {
         var sourcePlacement = false;
         var destinationPlacement = false;
         Object.values(placedItems).forEach(placedItem => {
-            if (placedItem.itemIndex == tracked_relationships['cfn'][i].sourceIndex) {
+            if (placedItem.itemIndex == cleaned_relationships[i].sourceIndex) {
                 sourcePlacement = placedItem;
             }
-            if (placedItem.itemIndex == tracked_relationships['cfn'][i].destinationIndex) {
+            if (placedItem.itemIndex == cleaned_relationships[i].destinationIndex) {
                 destinationPlacement = placedItem;
             }
         });
         if (sourcePlacement && destinationPlacement) {
-            if (sourcePlacement.y - destinationPlacement.y > 160) {
+            if (sourcePlacement.y - destinationPlacement.y > 160 && sourcePlacement.x == destinationPlacement.x) { // destination significantly above
                 xml += `
-        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
             <mxGeometry relative="1" as="geometry">
                 <Array as="points">
                     <mxPoint x="${sourcePlacement.x - 20}" y="${sourcePlacement.y + 20}" />
@@ -3594,10 +3607,25 @@ async function generateDiagram() {
                 </Array>
             </mxGeometry>
         </mxCell>`;
-            } else {
+            } else if (sourcePlacement.y - destinationPlacement.y == 160 && sourcePlacement.x == destinationPlacement.x) { // destination directly above
                 xml += `
-        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;targetPerimeterSpacing=${(destinationPlacement.multilinename ? 32 : 22)};" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;targetPerimeterSpacing=${(destinationPlacement.multilinename ? 32 : 22)};" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
             <mxGeometry relative="1" as="geometry" />
+        </mxCell>`;
+            } else if (destinationPlacement.y - sourcePlacement.y == 160 && sourcePlacement.x == destinationPlacement.x) { // destination directly below
+                xml += `
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;sourcePerimeterSpacing=${(sourcePlacement.multilinename ? 32 : 22)};" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
+            <mxGeometry relative="1" as="geometry" />
+        </mxCell>`;
+            } else { // somewhere else
+                xml += `
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;jumpStyle=arc;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
+            <mxGeometry relative="1" as="geometry">
+                <Array as="points">
+                    <mxPoint x="${sourcePlacement.x + 100}" y="${sourcePlacement.y + 20}" />
+                    <mxPoint x="${sourcePlacement.x + 100}" y="${destinationPlacement.y - 20}" />
+                </Array>
+            </mxGeometry>
         </mxCell>`;
             }
         }
