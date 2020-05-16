@@ -614,13 +614,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
             
             await Promise.all(data.Roles.map(async (role) => {
-                await Promise.all([
-                    sdkcall("IAM", "listRoleTags", {
-                        RoleName: role.RoleName
-                    }, true).then((tags) => {
-                        role['Tags'] = tags.Tags;
-                    }),
-                ]);
+                await sdkcall("IAM", "listRoleTags", {
+                    RoleName: role.RoleName
+                }, true).then((tags) => {
+                    role['Tags'] = tags.Tags;
+                })
 
                 if (role.Path.startsWith("/aws-service-role/")) {
                     $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
