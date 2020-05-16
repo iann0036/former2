@@ -476,9 +476,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.policyprincipalattachment") {
         reqParams.cfn['PolicyName'] = obj.data.policy.policyName;
-        reqParams.cfn['policy'] = obj.data.policy.policyName;
+        reqParams.tf['policy'] = obj.data.policy.policyName;
         reqParams.cfn['Principal'] = obj.data.principal;
-        reqParams.cfn['target'] = obj.data.principal;
+        reqParams.tf['target'] = obj.data.principal;
 
         tracked_resources.push({
             'obj': obj,
@@ -492,11 +492,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iot.certificate") {
         reqParams.cfn['Status'] = obj.data.status;
         reqParams.tf['active'] = (obj.data.status.toLowerCase() == "active");
-
-        /*
-        TODO:
-        CertificateSigningRequest
-        */
+        reqParams.cfn['CertificateSigningRequest'] = "REPLACEME";
+        reqParams.tf['csr'] = "REPLACEME";
 
         tracked_resources.push({
             'obj': obj,

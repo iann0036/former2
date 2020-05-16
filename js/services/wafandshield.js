@@ -1904,12 +1904,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "waf.sizeconstraintset") {
         reqParams.cfn['Name'] = obj.data.Name;
-        reqParams.cfn['name'] = obj.data.Name;
-        reqParams.cfn['size_constraints'] = obj.data.SizeConstraints;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['SizeConstraints'] = obj.data.SizeConstraints;
         if (obj.data.SizeConstraints) {
-            reqParams.cfn['size_constraints'] = [];
+            reqParams.tf['size_constraints'] = [];
             obj.data.SizeConstraints.forEach(sizeconstraints => {
-                reqParams.cfn['size_constraints'].push({
+                reqParams.tf['size_constraints'].push({
                     'text_transformation': sizeconstraints.TextTransformation,
                     'comparison_operator': sizeconstraints.ComparisonOperator,
                     'size': sizeconstraints.Size,
@@ -2146,12 +2146,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "wafregional.sizeconstraintset") {
         reqParams.cfn['Name'] = obj.data.Name;
-        reqParams.cfn['name'] = obj.data.Name;
-        reqParams.cfn['size_constraints'] = obj.data.SizeConstraints;
+        reqParams.tf['name'] = obj.data.Name;
+        reqParams.cfn['SizeConstraints'] = obj.data.SizeConstraints;
         if (obj.data.SizeConstraints) {
-            reqParams.cfn['size_constraints'] = [];
+            reqParams.tf['size_constraints'] = [];
             obj.data.SizeConstraints.forEach(sizeconstraints => {
-                reqParams.cfn['size_constraints'].push({
+                reqParams.tf['size_constraints'].push({
                     'text_transformation': sizeconstraints.TextTransformation,
                     'comparison_operator': sizeconstraints.ComparisonOperator,
                     'size': sizeconstraints.Size,

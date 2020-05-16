@@ -2010,7 +2010,7 @@ async function updateDatatableComputeEC2() {
                 vpcid: networkInterface.VpcId
             }]);
 
-            if (networkInterface.Attachment) {
+            if (networkInterface.Attachment && networkInterface.Attachment.InstanceId) {
                 networkInterface.Attachment['NetworkInterfaceId'] = networkInterface.NetworkInterfaceId;
                 $('#section-compute-ec2-networkinterfaceattachments-datatable').deferredBootstrapTable('append', [{
                     f2id: networkInterface.Attachment.AttachmentId,

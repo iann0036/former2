@@ -845,13 +845,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     CoreDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-coredefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.coredefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -894,13 +894,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     DeviceDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-devicedefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.devicedefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -943,13 +943,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     FunctionDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-functiondefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.functiondefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -992,13 +992,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     GroupId: group.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-groups-datatable').deferredBootstrapTable('append', [{
-                        f2id: group.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.group',
-                        f2data: group,
+                        f2data: data,
                         f2region: region,
-                        id: group.Id,
-                        name: group.Name,
-                        latestversion: group.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -1041,13 +1041,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     LoggerDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-loggerdefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.loggerdefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -1146,13 +1146,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     SubscriptionDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.subscriptiondefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);

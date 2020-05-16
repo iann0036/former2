@@ -1503,20 +1503,10 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     await sdkcall("APIGateway", "getRestApis", {
         // no params
     }, true).then(async (data) => {
-        await Promise.all(data.items.map(api => {
-            $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').deferredBootstrapTable('append', [{
-                f2id: api.id,
-                f2type: 'apigateway.restapi',
-                f2data: api,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/apis/' + api.id,
-                name: api.name,
-                id: api.id,
-                description: api.description,
-                version: api.version
-            }]);
+        await Promise.all(data.items.map(async (api) => {
+            var rootResourceId = null;
 
-            return Promise.all([
+            await Promise.all([
                 sdkcall("APIGateway", "getRequestValidators", {
                     restApiId: api.id
                 }, true).then((data) => {
@@ -1662,16 +1652,21 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                         }
 
                         resource['restApiId'] = api.id;
-                        $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('append', [{
-                            f2id: resource.id,
-                            f2type: 'apigateway.resource',
-                            f2data: resource,
-                            f2region: region,
-                            apiid: api.id,
-                            id: resource.id,
-                            parentid: resource.parentId,
-                            path: resource.path
-                        }]);
+
+                        if (resource.path != "/") {
+                            $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('append', [{
+                                f2id: resource.id,
+                                f2type: 'apigateway.resource',
+                                f2data: resource,
+                                f2region: region,
+                                apiid: api.id,
+                                id: resource.id,
+                                parentid: resource.parentId,
+                                path: resource.path
+                            }]);
+                        } else {
+                            rootResourceId = resource.id;
+                        }
                     });
 
                     unblockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
@@ -1713,6 +1708,22 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     });
                 })
             ]);
+
+            api['rootResourceId'] = rootResourceId;
+
+            $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').deferredBootstrapTable('append', [{
+                f2id: api.id,
+                f2type: 'apigateway.restapi',
+                f2data: api,
+                f2region: region,
+                f2link: 'https://console.aws.amazon.com/apigateway/home?region=' + region + '#/apis/' + api.id,
+                name: api.name,
+                id: api.id,
+                description: api.description,
+                version: api.version
+            }]);
+
+            return Promise.resolve();
         }));
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
@@ -1994,6 +2005,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.id,
+                'GetAtt': {
+                    'RootResourceId': obj.data.rootResourceId
+                },
                 'Import': {
                     'RestApiId': obj.data.id
                 }
@@ -2120,8 +2134,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['rest_api_id'] = obj.data.restApiId;
         reqParams.cfn['PathPart'] = obj.data.pathPart;
         reqParams.tf['path_part'] = obj.data.pathPart;
-        reqParams.cfn['ParentId'] = obj.data.parentId;
-        reqParams.tf['parent_id'] = obj.data.parentId;
+        if (obj.data.parentId) {
+            reqParams.cfn['ParentId'] = obj.data.parentId;
+            reqParams.tf['parent_id'] = obj.data.parentId;
+        } else {
+            reqParams.cfn['ParentId'] = obj.data.rootResourceId;
+            reqParams.tf['parent_id'] = obj.data.rootResourceId;
+        }
 
         tracked_resources.push({
             'obj': obj,
