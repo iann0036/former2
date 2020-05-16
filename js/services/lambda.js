@@ -750,12 +750,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['license_info'] = obj.data.LicenseInfo;
         reqParams.cfn['LayerName'] = obj.data.LayerName;
         reqParams.tf['layer_name'] = obj.data.LayerName;
+        
+        var url = new URL(obj.data.Content.Location);
 
-        /*
-        TODO:
-        Content: 
-            Content
-        */
+        reqParams.cfn['Content'] = {
+            'S3Bucket': url.host.split(".")[0],
+            'S3Key': url.pathname
+        };
+        reqParams.tf['s3_bucket'] = url.host.split(".")[0];
+        reqParams.tf['s3_key'] = url.pathname;
 
         tracked_resources.push({
             'obj': obj,

@@ -78,22 +78,28 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
 
     await sdkcall("CloudTrail", "describeTrails", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('removeAll');
 
-        data.trailList.forEach(trail => {
-            $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('append', [{
-                f2id: trail.TrailARN,
-                f2type: 'cloudtrail.trail',
-                f2data: trail,
-                f2region: region,
-                name: trail.Name,
-                multiregion: trail.IsMultiRegionTrail,
-                organization: trail.IsOrganizationTrail,
-                homeregion: trail.HomeRegion,
-                bucketname: trail.S3BucketName
-            }]);
-        });
+        await Promise.all(data.trailList.map(trail => {
+            return sdkcall("CloudTrail", "getTrailStatus", {
+                Name: trail.TrailARN
+            }, true).then((trailstatus) => {
+                trail['IsLogging'] = trailstatus.IsLogging;
+
+                $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('append', [{
+                    f2id: trail.TrailARN,
+                    f2type: 'cloudtrail.trail',
+                    f2data: trail,
+                    f2region: region,
+                    name: trail.Name,
+                    multiregion: trail.IsMultiRegionTrail,
+                    organization: trail.IsOrganizationTrail,
+                    homeregion: trail.HomeRegion,
+                    bucketname: trail.S3BucketName
+                }]);
+            });
+        }));
 
         unblockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
     });
@@ -123,12 +129,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['cloud_watch_logs_role_arn'] = obj.data.CloudWatchLogsRoleArn;
         reqParams.cfn['KMSKeyId'] = obj.data.KmsKeyId;
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
-
+        reqParams.cfn['IsLogging'] = obj.data.IsLogging;
+        reqParams.tf['enable_logging'] = obj.data.IsLogging;
+        
         /*
         TODO:
         EventSelectors:
             - EventSelector
-        IsLogging: Boolean
         Tags:
             - Resource Tag
         */

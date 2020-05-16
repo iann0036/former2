@@ -12,7 +12,7 @@ var global_used_refs = [];
 var cfnspacing = "    ";
 var logicalidstrategy = "longtypeprefixoptionalindexsuffix";
 var service_mapping_functions = [];
-var tracked_relationships = [];
+var tracked_relationships = {};
 
 function MD5(e) {
     function h(a, b) {
@@ -126,10 +126,19 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'tf')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        tracked_relationships['tf'].push({
+                            'sourceIndex': index,
+                            'destinationIndex': i,
+                            'parameter': param
+                        });
                         return "\"${" + tracked_resources[i].terraformType + "." + tracked_resources[i].logicalId + "." + attr_name + "}\""
                     }
                 }
@@ -143,10 +152,19 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'tf')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        tracked_relationships['tf'].push({
+                            'sourceIndex': index,
+                            'destinationIndex': i,
+                            'parameter': param
+                        });
                         return "\"${" + tracked_resources[i].terraformType + "." + tracked_resources[i].logicalId + "." + attr_name + "}\""
                     }
                 }
@@ -217,7 +235,11 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'pulumi')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -234,7 +256,11 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'pulumi')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -297,6 +323,39 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
     return undefined;
 }
 
+function circularReferenceFind(checkindex, references, outputtype) {
+    references.push(checkindex);
+
+    tracked_relationships[outputtype].forEach(tracked_relationship => {
+        if (
+            tracked_relationship.sourceIndex == checkindex &&
+            tracked_relationship.destinationIndex != checkindex && // shouldn't happen? just checking..
+            !references.includes(tracked_relationship.destinationIndex)
+        ) {
+            references = circularReferenceFind(tracked_relationship.destinationIndex, references, outputtype);
+        }
+    });
+
+    return references;
+}
+
+function circularReferenceFound(checkindex, baseindex, outputtype) {
+    if (checkindex == baseindex) {
+        return true;
+    }
+
+    var mapped_output_type = 'cfn';
+    if (['tf', 'pulumi'].includes(outputtype)) {
+        mapped_output_type = 'tf';
+    }
+
+    if (circularReferenceFind(checkindex, [], mapped_output_type).includes(baseindex)) {
+        return true;
+    }
+
+    return false;
+}
+
 function processCfnParameter(param, spacing, index, tracked_resources) {
     var paramitems = [];
 
@@ -308,10 +367,14 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         return 'false';
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cfn')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues) {
                 if (tracked_resources[i].returnValues.Ref == param) {
-                    tracked_relationships.push({
+                    tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
                         'parameter': param
@@ -321,7 +384,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
-                            tracked_relationships.push({
+                            tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
                                 'parameter': param
@@ -349,14 +412,18 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
         }
 
         var pre_return_str = "";
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cfn')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (
                     tracked_resources[i].returnValues.Ref == param &&
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
-                    tracked_relationships.push({
+                    tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
                         'parameter': param
@@ -370,7 +437,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
-                            tracked_relationships.push({
+                            tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
                                 'parameter': param
@@ -384,7 +451,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
-                    tracked_relationships.push({
+                    tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
                         'parameter': param
@@ -401,7 +468,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
-                            tracked_relationships.push({
+                            tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
                                 'parameter': param
@@ -510,7 +577,11 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             return undefined; // TODO: Fix this
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'cdk')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (iaclangselect == "python") {
@@ -641,7 +712,11 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         return `False`;
     }
     if (typeof param == "number") {
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'troposphere')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -666,7 +741,11 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             return undefined;
         }
 
-        for (var i = 0; i < index; i++) { // correlate
+        for (var i = 0; i < tracked_resources.length; i++) { // correlate
+            if (circularReferenceFound(i, index, 'troposphere')) {
+                continue;
+            }
+
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     return "Ref(" + tracked_resources[i].logicalId + ")";
@@ -3137,7 +3216,7 @@ async function generateDiagram() {
         var x = maxX + 40;
         var y = 120;
 
-        tracked_relationships.forEach(tracked_relationship => {
+        tracked_relationships['cfn'].forEach(tracked_relationship => {
             if (tracked_relationship.sourceIndex == i && placedItems[tracked_relationship.destinationIndex]) {
                 y = 120;
                 x = placedItems[tracked_relationship.destinationIndex].x;
@@ -3220,21 +3299,21 @@ async function generateDiagram() {
     // TODO: de-duplicate tracked_relationships
     // TODO: inherited links via non-displayed nodes
 
-    for (var i=0; i<tracked_relationships.length; i++) {
+    for (var i=0; i<tracked_relationships['cfn'].length; i++) {
         var sourcePlacement = false;
         var destinationPlacement = false;
         Object.values(placedItems).forEach(placedItem => {
-            if (placedItem.itemIndex == tracked_relationships[i].sourceIndex) {
+            if (placedItem.itemIndex == tracked_relationships['cfn'][i].sourceIndex) {
                 sourcePlacement = placedItem;
             }
-            if (placedItem.itemIndex == tracked_relationships[i].destinationIndex) {
+            if (placedItem.itemIndex == tracked_relationships['cfn'][i].destinationIndex) {
                 destinationPlacement = placedItem;
             }
         });
         if (sourcePlacement && destinationPlacement) {
             if (sourcePlacement.y - destinationPlacement.y > 160) {
                 xml += `
-        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships[i].sourceIndex}" target="former2-${tracked_relationships[i].destinationIndex}" edge="1">
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" target="former2-${tracked_relationships['cfn'][i].destinationIndex}" edge="1">
             <mxGeometry relative="1" as="geometry">
                 <Array as="points">
                     <mxPoint x="${sourcePlacement.x - 20}" y="${sourcePlacement.y + 20}" />
@@ -3244,7 +3323,7 @@ async function generateDiagram() {
         </mxCell>`;
             } else {
                 xml += `
-        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships[i].sourceIndex}" edge="1">
+        <mxCell id="former2rel-${i}" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="former2-${tracked_relationships['cfn'][i].sourceIndex}" edge="1">
             <mxGeometry relative="1" as="geometry">
                 <mxPoint x="${destinationPlacement.x + 39}" y="${destinationPlacement.y + (destinationPlacement.multilinename ? 110 : 100)}" as="targetPoint" />
             </mxGeometry>
@@ -3308,7 +3387,10 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
         'cdk': [],
         'troposphere': []
     };
-    tracked_relationships = [];
+    tracked_relationships = {
+        'cfn': [],
+        'tf': []
+    };
     for (var i = 0; i < outputs.length; i++) {
         if (!services['go'].includes(outputs[i].service)) {
             services['go'].push(outputs[i].service);
@@ -3479,14 +3561,6 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 
     var compiled_iam_outputs = [];
     for (var i = 0; i < outputs.length; i++) {
-        if (outputs[i].options.boto3) {
-            compiled['boto3'] += outputMapBoto3(outputs[i].service, outputs[i].method.boto3, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-            compiled['go'] += outputMapGo(outputs[i].service, outputs[i].method.api, outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-            compiled['js'] += outputMapJs(outputs[i].service, lowerFirstChar(outputs[i].method.api), outputs[i].options.boto3, outputs[i].region, outputs[i].was_blocked);
-        }
-        if (outputs[i].options.cli) {
-            compiled['cli'] += outputMapCli(outputs[i].service, outputs[i].method.cli, outputs[i].options.cli, outputs[i].region, outputs[i].was_blocked);
-        }
         if (outputs[i].method.api) {
             compiled_iam_outputs = compileMapIam(compiled_iam_outputs, outputs[i].service, outputs[i].method.api, outputs[i].options.iam, outputs[i].region, outputs[i].was_blocked);
         }

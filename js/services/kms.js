@@ -128,7 +128,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
                         KeyId: key.KeyId,
                         PolicyName: "default"
                     }, true).then(async (data) => {
-                        keydata['Policy'] = data.Policy;
+                        keydata.KeyMetadata['Policy'] = data.Policy;
 
                         await sdkcall("KMS", "getKeyRotationStatus", {
                             KeyId: key.KeyId
