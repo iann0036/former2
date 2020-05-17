@@ -3455,6 +3455,18 @@ async function generateDiagram() {
             'name': null
         };
 
+        if (["cloudwatch.loggroup"].includes(tracked_resources[i].obj.type)) { // resources that are almost meaningless by themselves
+            var found_relationship = false;
+            cleaned_relationships.forEach(tracked_relationship => {
+                if (tracked_relationship.sourceIndex == i || tracked_relationship.destinationIndex == i) {
+                    found_relationship = true;
+                }
+            });
+            if (!found_relationship) {
+                continue;
+            }
+        }
+
         var style = DRAWIO_MAPPINGS['default']['style'];
         if (DRAWIO_MAPPINGS[tracked_resources[i].obj.type]) {
             style = DRAWIO_MAPPINGS[tracked_resources[i].obj.type]['style'];
@@ -3519,9 +3531,8 @@ async function generateDiagram() {
                 }
             }
         });
-
-        /*
-        if (group_properties['subnet']) {
+        
+        /*if (group_properties['subnet']) {
             xml = `
         <mxCell id="former2subnet-${i}" value="${group_properties['subnet']}" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;grStroke=0;strokeColor=#147EBA;fillColor=#E6F2F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=0;" parent="1" vertex="1">
             <mxGeometry x="${x+80}" y="${y+80}" width="160" height="160" as="geometry" />
@@ -3547,8 +3558,7 @@ async function generateDiagram() {
                     maxY = Math.max(maxY, y + 320);
                 }
             });
-        }
-        */
+        }*/
 
         var multilinename = false;
         if (!group_properties['name']) {

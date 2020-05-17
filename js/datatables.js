@@ -233,12 +233,14 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
             if (err) {
                 if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
                     if (backoff) {
-                        f2log("Too many requests, sleeping for " + backoff + "ms");
+                        f2log("Too many requests for " + svc + "." + method + ", sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
                         backoff *= 2;
-                        backoff = Math.min(backoff, 120000);
+                        if (backoff > 120000) {
+                            reject(data);
+                        }
                     } else {
-                        f2log("Too many requests, sleeping for 500ms");
+                        f2log("Too many requests for " + svc + "." + method + ", sleeping for 500ms");
                         await new Promise(resolve => setTimeout(resolve, 500));
                         backoff = 500 + Math.floor(Math.random() * 500);
                     }

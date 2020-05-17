@@ -383,19 +383,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.artifactStores) {
             reqParams.cfn['ArtifactStores'] = [];
-            array.forEach(element => {
+            obj.data.artifactStores.forEach(artifactStore => {
                 var encryptionKey = null;
-                if (element.encryptionKey) {
+                if (artifactStore.encryptionKey) {
                     encryptionKey = {
-                        'Id': element.encryptionKey.id,
-                        'Type': element.encryptionKey.type
+                        'Id': artifactStore.encryptionKey.id,
+                        'Type': artifactStore.encryptionKey.type
                     };
                 }
                 reqParams.cfn['ArtifactStores'].push({
                     'ArtifactStore': {
                         'EncryptionKey': encryptionKey,
-                        'Location': element.location,
-                        'Type': element.type
+                        'Location': artifactStore.location,
+                        'Type': artifactStore.type
                     },
                     'Region': region // May not be accurate
                 });

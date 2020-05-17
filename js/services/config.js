@@ -502,7 +502,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
 
     await sdkcall("ConfigService", "describeOrganizationConfigRules", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('removeAll');
 
         data.OrganizationConfigRules.forEach(organizationConfigRule => {
@@ -518,7 +518,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-organizationconfigrules-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ConfigService", "describeConfigurationRecorders", {
         // no params

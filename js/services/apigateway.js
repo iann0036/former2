@@ -2203,8 +2203,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['authorizer_credentials'] = obj.data.authorizerCredentials;
         reqParams.cfn['IdentitySource'] = obj.data.identitySource;
         reqParams.tf['identity_source'] = obj.data.identitySource;
-        reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);;
-        reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);;
+        if (obj.data.identityValidationExpression) {
+            reqParams.cfn['IdentityValidationExpression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);
+            reqParams.tf['identity_validation_expression'] = obj.data.identityValidationExpression.replace(/\\/g, `\\\\`);
+        }
         reqParams.cfn['AuthorizerResultTtlInSeconds'] = obj.data.authorizerResultTtlInSeconds;
         reqParams.tf['authorizer_result_ttl_in_seconds'] = obj.data.authorizerResultTtlInSeconds;
 

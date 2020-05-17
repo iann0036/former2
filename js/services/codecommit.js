@@ -116,8 +116,6 @@ async function updateDatatableDeveloperToolsCodeCommit() {
                 }]);
             });
         }));
-
-        unblockUI('#section-developertools-codecommit-repositories-datatable');
     });
 
     await sdkcall("CodeStarNotifications", "listNotificationRules", {
@@ -144,6 +142,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
         }));
     }).catch(() => { });
 
+    unblockUI('#section-developertools-codecommit-repositories-datatable');
     unblockUI('#section-developertools-codecommit-notificationrules-datatable');
 }
 
