@@ -54,7 +54,7 @@ async function updateDatatableMachineLearningCodeGuru() {
     await sdkcall("CodeGuruProfiler", "listProfilingGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-codeguru-profilinggroups-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-codeguru-profilinggroups-datatable').deferredBootstrapTable('removeAll');
 
         data.profilingGroups.forEach(group => {
             $('#section-machinelearning-codeguru-profilinggroups-datatable').deferredBootstrapTable('append', [{

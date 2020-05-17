@@ -11,6 +11,7 @@ var MAX_DT_SCANS = 10;
 var defaultoutput = 'cloudformation';
 var iaclangselect = 'typescript';
 var check_objects = [];
+var CLI = false;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -99,7 +100,7 @@ $(document).ready(function(){
     };
 
     function addAllTableRowsToTemplate(selector) {
-        var ids = $.map($(selector).bootstrapTable('getData'), function (row) {
+        var ids = $.map($(selector).deferredBootstrapTable('getData'), function (row) {
             output_objects.push({
                 'id': row.f2id,
                 'type': row.f2type,
@@ -122,7 +123,7 @@ $(document).ready(function(){
         var related_resources_post = {};
         $('.f2datatable').each(function() {
             var datatableid = this.id;
-            var ids = $.map($("#" + this.id).bootstrapTable('getData'), function (checkobjectrow) {
+            var ids = $.map($("#" + this.id).deferredBootstrapTable('getData'), function (checkobjectrow) {
                 check_objects.push({
                     'id': checkobjectrow.f2id,
                     'type': checkobjectrow.f2type,
@@ -251,11 +252,12 @@ $(document).ready(function(){
                                         }
                                         rows.forEach(row => {
                                             var row_check_object = null;
-                                            mapped_check_objects.forEach(child_obj => {
+                                            for (var child_obj of mapped_check_objects) {
                                                 if (child_obj.obj.id == row.f2id) {
                                                     row_check_object = child_obj;
+                                                    break;
                                                 }
-                                            });
+                                            };
                                             if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
                                                 var is_duplicate = false;
                                                 if (!Array.isArray(related_resources_post[readable_relationship_type])) {
@@ -276,11 +278,12 @@ $(document).ready(function(){
                                     var propertyvalue = obj.options.cfn[propertyname];
                                     rows.forEach(row => {
                                         var row_check_object = null;
-                                        mapped_check_objects.forEach(child_obj => {
+                                        for (var child_obj of mapped_check_objects) {
                                             if (child_obj.obj.id == row.f2id) {
                                                 row_check_object = child_obj;
+                                                break;
                                             }
-                                        });
+                                        };
                                         if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
                                             var is_duplicate = false;
                                             if (!Array.isArray(related_resources_post[readable_relationship_type])) {
@@ -370,7 +373,7 @@ $(document).ready(function(){
             $('.related-check').each(function(i){
                 var check_element = $(this);
                 if (check_element.is(':checked')) {
-                    $.map($("#" + check_element.attr('data-dt')).bootstrapTable('getData'), function (row) {
+                    $.map($("#" + check_element.attr('data-dt')).deferredBootstrapTable('getData'), function (row) {
                         if (row.f2id == check_element.attr('data-f2id')) {
                             var exists = false;
                             output_objects.forEach(output_object => { // check if already added
@@ -569,11 +572,11 @@ $(document).ready(function(){
 
         $('.f2datatable').each(function(index) {
             if (this.id != "section-search-datatable") {
-                var rows = $(this).bootstrapTable('getData');
+                var rows = $(this).deferredBootstrapTable('getData');
                 rows.forEach(row => {
                     var searchterm = $('#search-input').val();
                     if (JSON.stringify(row).includes(searchterm)) {
-                        $('#section-search-datatable').deferredBootstrapTable('append', [row]);
+                        $('#section-search-datatable').bootstrapTable('append', [row]);
                     }
                 });
             }
@@ -652,9 +655,16 @@ $(document).ready(function(){
     function refreshDatatableFirstVisit(urlpart) {
         sections.forEach(section => {
             if (urlpart == navlower(section.category) + "-" + navlower(section.service)) {
-                if (!visited_sections.includes("all") && !visited_sections.includes(urlpart)) {
+                if (!visited_sections.includes(urlpart)) {
                     visited_sections.push(urlpart);
-                    window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                    $('.f2datatable').each(function() {
+                        if (this.id.startsWith("section-" + urlpart + "-")) {
+                            $('#' + this.id).deferredBootstrapTable('setActive', true);
+                        }
+                    });
+                    if (!visited_sections.includes("all")) {
+                        window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                    }
                 }
             }
         });
@@ -779,6 +789,7 @@ $(document).ready(function(){
                     raw_editor.refresh();
                 }, 1);
             } else if (location.hash.startsWith("#section-")) {
+                // TODO: unset isactive in deferred
                 refreshDatatableFirstVisit(location.hash.substring(9));
             }
         } else if (location.hash != "" && location.hash != "#") {
@@ -1514,18 +1525,20 @@ function extensionSendMessage(data, callback) {
 /* ========================================================================== */
 
 function blockUI(selector) {
-    $(selector).block({
-        message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
-        overlayCSS:  {
-            background: 'rgba(142, 159, 167, 0.8)',
-            opacity: 1,
-            cursor: 'wait'
-        },
-        css: {
-            width: '50%'
-        },
-        blockMsgClass: 'block-msg-default'
-    });
+    if (selector.startsWith(window.location.hash)) {
+        $(selector).block({
+            message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
+            overlayCSS:  {
+                background: 'rgba(142, 159, 167, 0.8)',
+                opacity: 1,
+                cursor: 'wait'
+            },
+            css: {
+                width: '50%'
+            },
+            blockMsgClass: 'block-msg-default'
+        });
+    }
 }
 
 function unblockUI(selector) {

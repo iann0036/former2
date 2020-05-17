@@ -766,8 +766,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listConnectorDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-connectordefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -815,8 +815,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listCoreDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-coredefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -864,8 +864,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listDeviceDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-devicedefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -913,8 +913,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listFunctionDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-functiondefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -962,8 +962,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-groups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-groupversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Groups.map(group => {
             return Promise.all([
@@ -1011,8 +1011,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listLoggerDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-loggerdefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -1060,8 +1060,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listResourceDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -1116,8 +1116,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listSubscriptionDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([

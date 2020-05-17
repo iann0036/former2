@@ -266,7 +266,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
             $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('append', [{
@@ -288,7 +288,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
             $('#section-database-neptune-instances-datatable').deferredBootstrapTable('append', [{
@@ -309,7 +309,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBClusterParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
             return sdkcall("Neptune", "describeDBClusterParameters", {
@@ -338,7 +338,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-neptune-parametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DBParameterGroups.map(parameterGroup => {
             return sdkcall("Neptune", "describeDBParameters", {
@@ -367,7 +367,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-neptune-subnetgroups-datatable').deferredBootstrapTable('append', [{

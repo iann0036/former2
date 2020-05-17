@@ -134,8 +134,8 @@ async function updateDatatableStorageS3() {
     await sdkcall("S3", "listBuckets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
-        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-bucketpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Buckets.map(bucket => {
             return Promise.all([

@@ -100,7 +100,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
     await sdkcall("CodeCommit", "listRepositories", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codecommit-repositories-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codecommit-repositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.repositories.map(repository => {
             return sdkcall("CodeCommit", "getRepository", {
@@ -121,7 +121,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
     await sdkcall("CodeStarNotifications", "listNotificationRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codebuild-notificationrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotificationRules.map(notificationRule => {
             return sdkcall("CodeStarNotifications", "describeNotificationRule", {

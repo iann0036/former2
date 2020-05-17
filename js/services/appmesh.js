@@ -289,11 +289,11 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
     await sdkcall("AppMesh", "listMeshes", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-appmesh-meshes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-appmesh-routes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-appmesh-virtualnodes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-appmesh-virtualrouters-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-appmesh-meshes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-appmesh-routes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-appmesh-virtualnodes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-appmesh-virtualrouters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.meshes.map(mesh => {
             return Promise.all([

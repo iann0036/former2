@@ -77,7 +77,7 @@ async function updateDatatableStorageFSx() {
     await sdkcall("FSx", "describeFileSystems", {
         // no params
     }, true).then((data) => {
-        $('#section-storage-fsx-filesystems-datatable').bootstrapTable('removeAll');
+        $('#section-storage-fsx-filesystems-datatable').deferredBootstrapTable('removeAll');
 
         data.FileSystems.forEach(fileSystem => {
             $('#section-storage-fsx-filesystems-datatable').deferredBootstrapTable('append', [{

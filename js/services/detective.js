@@ -88,7 +88,7 @@ async function updateDatatableSecurityIdentityAndComplianceDetective() {
     await sdkcall("Detective", "listGraphs", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-detective-graph-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-detective-graph-datatable').deferredBootstrapTable('removeAll');
 
         if (data.GraphList && data.GraphList.length) {
             $('#section-securityidentityandcompliance-detective-graph-datatable').deferredBootstrapTable('append', [{
@@ -106,7 +106,7 @@ async function updateDatatableSecurityIdentityAndComplianceDetective() {
     await sdkcall("Detective", "listInvitations", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-detective-memberinvitations-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-detective-memberinvitations-datatable').deferredBootstrapTable('removeAll');
 
         data.Invitations.forEach(invitation => {
             if (invitation.EmailAddress) { // master is null

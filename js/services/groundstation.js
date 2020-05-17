@@ -127,7 +127,7 @@ async function updateDatatableSatelliteGroundStation() {
     await sdkcall("GroundStation", "listMissionProfiles", {
         // no params
     }, true).then(async (data) => {
-        $('#section-satellite-groundstation-missionprofiles-datatable').bootstrapTable('removeAll');
+        $('#section-satellite-groundstation-missionprofiles-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.missionProfileList.map(missionProfile => {
             return sdkcall("GroundStation", "getMissionProfile", {
@@ -149,7 +149,7 @@ async function updateDatatableSatelliteGroundStation() {
     await sdkcall("GroundStation", "listConfigs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-satellite-groundstation-configs-datatable').bootstrapTable('removeAll');
+        $('#section-satellite-groundstation-configs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.configList.map(config => {
             return sdkcall("GroundStation", "getConfig", {
@@ -171,7 +171,7 @@ async function updateDatatableSatelliteGroundStation() {
     await sdkcall("GroundStation", "listDataflowEndpointGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-satellite-groundstation-dataflowendpointgroups-datatable').bootstrapTable('removeAll');
+        $('#section-satellite-groundstation-dataflowendpointgroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.dataflowEndpointGroupList.map(dataflowEndpointGroup => {
             return sdkcall("GroundStation", "getDataflowEndpointGroup", {

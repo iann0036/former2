@@ -210,7 +210,7 @@ async function updateDatatableComputeLightsail() {
     await sdkcall("Lightsail", "getInstances", {
         // no params
     }, false).then(async (data) => {
-        $('#section-compute-lightsail-instances-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lightsail-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.instances.forEach(instance => {
             $('#section-compute-lightsail-instances-datatable').deferredBootstrapTable('append', [{
@@ -228,7 +228,7 @@ async function updateDatatableComputeLightsail() {
     await sdkcall("Lightsail", "getDomains", {
         // no params
     }, false).then(async (data) => {
-        $('#section-compute-lightsail-domains-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lightsail-domains-datatable').deferredBootstrapTable('removeAll');
 
         data.domains.forEach(domain => {
             $('#section-compute-lightsail-domains-datatable').deferredBootstrapTable('append', [{
@@ -244,7 +244,7 @@ async function updateDatatableComputeLightsail() {
     await sdkcall("Lightsail", "getKeyPairs", {
         // no params
     }, false).then(async (data) => {
-        $('#section-compute-lightsail-keypairs-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lightsail-keypairs-datatable').deferredBootstrapTable('removeAll');
 
         data.keyPairs.forEach(keypair => {
             $('#section-compute-lightsail-keypairs-datatable').deferredBootstrapTable('append', [{
@@ -261,8 +261,8 @@ async function updateDatatableComputeLightsail() {
     await sdkcall("Lightsail", "getStaticIps", {
         // no params
     }, false).then(async (data) => {
-        $('#section-compute-lightsail-staticips-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lightsail-staticipattachments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lightsail-staticips-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lightsail-staticipattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.staticIps.forEach(staticip => {
             $('#section-compute-lightsail-staticips-datatable').deferredBootstrapTable('append', [{

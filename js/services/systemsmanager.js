@@ -446,7 +446,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             value: "Self"
         }]
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-documents-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DocumentIdentifiers.map(document => {
             return sdkcall("SSM", "getDocument", {
@@ -474,7 +474,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "describeParameters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-parameters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-parameters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Parameters.map(parameter => {
             return sdkcall("SSM", "getParameter", {
@@ -501,7 +501,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             Values: ["Self"]
         }]
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.BaselineIdentities.map(baseline => {
             return sdkcall("SSM", "getPatchBaseline", {
@@ -526,7 +526,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "listAssociations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Associations.map(association => {
             return sdkcall("SSM", "describeAssociation", {
@@ -555,9 +555,9 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "describeMaintenanceWindows", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WindowIdentities.map(window => {
             return Promise.all([
@@ -624,7 +624,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "listResourceDataSync", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').deferredBootstrapTable('removeAll');
 
         data.ResourceDataSyncItems.forEach(dataSync => {
             $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').deferredBootstrapTable('append', [{

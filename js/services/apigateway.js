@@ -1313,32 +1313,32 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     blockUI('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
 
-    $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-stages-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-resources-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-models-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-routes-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').bootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-account-datatable').bootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-stages-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-models-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-routes-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-apimappings-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-apikeys-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-vpclinks-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-usageplans-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-gatewayresponses-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-documentationparts-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-documentationversions-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-requestvalidators-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-account-datatable').deferredBootstrapTable('removeAll');
 
     // V1
     await sdkcall("APIGateway", "getAccount", {
@@ -1628,46 +1628,48 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                     restApiId: api.id,
                     limit: 500
                 }, true).then((data) => {
-                    data.items.forEach(async (resource) => {
-                        if (resource.resourceMethods) {
-                            await Promise.all(Object.keys(resource.resourceMethods).map(resourceMethod => {
-                                return sdkcall("APIGateway", "getMethod", {
-                                    httpMethod: resourceMethod,
-                                    resourceId: resource.id,
-                                    restApiId: api.id
-                                }, true).then((data) => {
-                                    data['restApiId'] = api.id;
-                                    data['resourceId'] = resource.id;
-                                    $('#section-networkingandcontentdelivery-apigateway-methods-datatable').deferredBootstrapTable('append', [{
-                                        f2id: resource.id + "-" + data.httpMethod,
-                                        f2type: 'apigateway.method',
-                                        f2data: data,
-                                        f2region: region,
-                                        apiid: api.id,
-                                        resourceid: resource.id,
-                                        httpmethod: data.httpMethod
-                                    }]);
-                                });
-                            }));
-                        }
+                    if (data.items) {
+                        data.items.forEach(async (resource) => {
+                            if (resource.resourceMethods) {
+                                await Promise.all(Object.keys(resource.resourceMethods).map(resourceMethod => {
+                                    return sdkcall("APIGateway", "getMethod", {
+                                        httpMethod: resourceMethod,
+                                        resourceId: resource.id,
+                                        restApiId: api.id
+                                    }, true).then((data) => {
+                                        data['restApiId'] = api.id;
+                                        data['resourceId'] = resource.id;
+                                        $('#section-networkingandcontentdelivery-apigateway-methods-datatable').deferredBootstrapTable('append', [{
+                                            f2id: resource.id + "-" + data.httpMethod,
+                                            f2type: 'apigateway.method',
+                                            f2data: data,
+                                            f2region: region,
+                                            apiid: api.id,
+                                            resourceid: resource.id,
+                                            httpmethod: data.httpMethod
+                                        }]);
+                                    });
+                                }));
+                            }
 
-                        resource['restApiId'] = api.id;
+                            resource['restApiId'] = api.id;
 
-                        if (resource.path != "/") {
-                            $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('append', [{
-                                f2id: resource.id,
-                                f2type: 'apigateway.resource',
-                                f2data: resource,
-                                f2region: region,
-                                apiid: api.id,
-                                id: resource.id,
-                                parentid: resource.parentId,
-                                path: resource.path
-                            }]);
-                        } else {
-                            rootResourceId = resource.id;
-                        }
-                    });
+                            if (resource.path != "/") {
+                                $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('append', [{
+                                    f2id: resource.id,
+                                    f2type: 'apigateway.resource',
+                                    f2data: resource,
+                                    f2region: region,
+                                    apiid: api.id,
+                                    id: resource.id,
+                                    parentid: resource.parentId,
+                                    path: resource.path
+                                }]);
+                            } else {
+                                rootResourceId = resource.id;
+                            }
+                        });
+                    }
 
                     unblockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
                     unblockUI('#section-networkingandcontentdelivery-apigateway-resources-datatable');

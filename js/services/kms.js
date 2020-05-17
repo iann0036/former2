@@ -117,7 +117,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
     await sdkcall("KMS", "listKeys", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-kms-keys-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-kms-keys-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Keys.map(key => {
             return sdkcall("KMS", "describeKey", {
@@ -159,7 +159,7 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
     await sdkcall("KMS", "listAliases", {
         // no params
     }, true).then((data) => {
-        $('#section-securityidentityandcompliance-kms-aliases-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-kms-aliases-datatable').deferredBootstrapTable('removeAll');
 
         data.Aliases.forEach(alias => {
             if (!alias.AliasName.startsWith("alias/aws/")) {

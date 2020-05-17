@@ -127,9 +127,9 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
     await sdkcall("Inspector", "listAssessmentTargets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-inspector-assessmenttargets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-inspector-assessmenttemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.assessmentTargetArns.map(assessmentTargetArn => {
             return Promise.all([

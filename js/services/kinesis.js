@@ -484,8 +484,8 @@ async function updateDatatableAnalyticsKinesis() {
     await sdkcall("Kinesis", "listStreams", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-kinesis-streams-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-streamconsumers-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-streams-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-streamconsumers-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.StreamNames.map(streamName => {
             return sdkcall("Kinesis", "describeStream", {
@@ -532,7 +532,7 @@ async function updateDatatableAnalyticsKinesis() {
     await sdkcall("Firehose", "listDeliveryStreams", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-kinesis-firehosedeliverystreams-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-firehosedeliverystreams-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DeliveryStreamNames.map(deliveryStreamName => {
             return sdkcall("Firehose", "describeDeliveryStream", {
@@ -556,9 +556,9 @@ async function updateDatatableAnalyticsKinesis() {
     await sdkcall("KinesisAnalytics", "listApplications", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-kinesis-analyticsapplications-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsapplications-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsapplicationoutputs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsapplicationreferencedatasources-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ApplicationSummaries.map(applicationSummary => {
             return sdkcall("KinesisAnalytics", "describeApplication", {
@@ -614,10 +614,10 @@ async function updateDatatableAnalyticsKinesis() {
     await sdkcall("KinesisAnalyticsV2", "listApplications", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-kinesis-analyticsv2applications-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applications-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ApplicationSummaries.map(applicationSummary => {
             return sdkcall("KinesisAnalyticsV2", "describeApplication", {

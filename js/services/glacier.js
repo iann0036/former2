@@ -104,8 +104,8 @@ async function updateDatatableStorageGlacier() {
     await sdkcall("Glacier", "listVaults", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-glacier-vaults-datatable').bootstrapTable('removeAll');
-        $('#section-storage-glacier-vaultlocks-datatable').bootstrapTable('removeAll');
+        $('#section-storage-glacier-vaults-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-glacier-vaultlocks-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.VaultList.map(vault => {
             return Promise.all([

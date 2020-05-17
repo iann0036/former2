@@ -11,18 +11,21 @@ const cliprogress = require('cli-progress');
 const logplease = require('logplease');
 const _colors = require('colors');
 const pjson = require('./package.json');
+const CLI = true;
 
 logplease.setLogLevel('NONE');
 const awslog = logplease.create('AWS');
 AWS.config.logger = awslog;
 
 var cli_resources = [];
+var check_objects = [];
 
 function blockUI() { }
 function unblockUI() { }
 function nav(str) {
     return str.replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "And");
 }
+const iaclangselect = "typescript";
 
 function $(selector) { return new $obj(selector) }
 $obj = function (selector) { };
@@ -34,6 +37,8 @@ $obj.prototype.bootstrapTable = function (action, data) {
 $obj.prototype.deferredBootstrapTable = function (action, data) {
     if (action == "append") {
         cli_resources = [...cli_resources, ...data];
+    } else if (action == "removeAll") {
+        cli_resources = [];
     }
 }
 $.notify = function () { }
@@ -54,6 +59,11 @@ f2trace = function(err){};
 async function main(opts) {
     if (!opts.outputDebug && !opts.outputCloudformation && !opts.outputTerraform) {
         throw new Error('You must specify an output type');
+    }
+
+    if (opts.debug) {
+        f2log = function(msg){ console.log(msg); };
+        f2trace = function(err){ console.trace(err); };
     }
 
     if (opts.profile) {
@@ -152,6 +162,7 @@ cliargs
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
+    .option('--debug', 'log debugging messages')
     .action(async (opts) => {
         // The followings are here to silence Node runtime complaining about event emitter listeners
         // due to the number of TLS requests that suddenly go out to AWS APIs. This is harmless here

@@ -171,8 +171,8 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     await sdkcall("MQ", "listBrokers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-amazonmq-configurationassociations-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-configurationassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.BrokerSummaries.map(brokerSummary => {
             return sdkcall("MQ", "describeBroker", {
@@ -213,7 +213,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     await sdkcall("MQ", "listConfigurations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-configurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Configurations.map(configuration => {
             return sdkcall("MQ", "describeConfiguration", {

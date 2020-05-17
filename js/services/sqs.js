@@ -68,8 +68,8 @@ async function updateDatatableApplicationIntegrationSQS() {
     await sdkcall("SQS", "listQueues", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queues-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.QueueUrls) {
             await Promise.all(data.QueueUrls.map(queueUrl => {

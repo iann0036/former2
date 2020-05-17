@@ -391,7 +391,7 @@ async function updateDatatableComputeECS() {
     await sdkcall("ECS", "listTaskDefinitions", {
         sort: "DESC"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-taskdefinitions-datatable').deferredBootstrapTable('removeAll');
 
         var baseTaskDefinitions = [];
         var taskDefinitionArns = [];
@@ -428,8 +428,8 @@ async function updateDatatableComputeECS() {
     await sdkcall("ECS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ecs-services-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
             return Promise.all([
@@ -515,7 +515,7 @@ async function updateDatatableComputeECS() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             await Promise.all(data.ScalableTargets.map(target => {
@@ -546,7 +546,7 @@ async function updateDatatableComputeECS() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalingPolicies) {
             data.ScalingPolicies.forEach(policy => {

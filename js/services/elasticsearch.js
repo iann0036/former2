@@ -69,7 +69,7 @@ async function updateDatatableAnalyticsElasticsearch() {
     await sdkcall("ES", "listDomainNames", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-elasticsearch-domains-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DomainNames.map(domainName => {
             return sdkcall("ES", "describeElasticsearchDomains", {

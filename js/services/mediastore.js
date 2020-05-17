@@ -93,8 +93,8 @@ async function updateDatatableMediaServicesMediaStore() {
     await sdkcall("MediaStore", "listContainers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-mediaservices-mediastore-containers-datatable').bootstrapTable('removeAll');
-        $('#section-mediaservices-mediastore-containerpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-mediastore-containers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mediaservices-mediastore-containerpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Containers.map(container => {
             return Promise.all([

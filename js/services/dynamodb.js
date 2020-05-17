@@ -330,7 +330,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("DynamoDB", "listTables", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-dynamodb-tables-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TableNames.map(tableName => {
             return sdkcall("DynamoDB", "describeTable", {
@@ -365,7 +365,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("DAX", "describeClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-dynamodb-acceleratorclusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-acceleratorclusters-datatable').deferredBootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
             $('#section-database-dynamodb-acceleratorclusters-datatable').deferredBootstrapTable('append', [{
@@ -387,7 +387,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("DAX", "describeParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-dynamodb-acceleratorparametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-acceleratorparametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ParameterGroups.map(parameterGroup => {
             return sdkcall("DAX", "describeParameters", {
@@ -411,7 +411,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("DAX", "describeSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.SubnetGroups.forEach(subnetGroup => {
             $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -431,7 +431,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "dynamodb"
     }, true).then(async (data) => {
-        $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -460,7 +460,7 @@ async function updateDatatableDatabaseDynamoDB() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "dynamodb"
     }, true).then(async (data) => {
-        $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-database-dynamodb-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {

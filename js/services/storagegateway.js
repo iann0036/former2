@@ -62,7 +62,7 @@ async function updateDatatableStorageStorageGateway() {
     await sdkcall("StorageGateway", "listGateways", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-storagegateway-gateways-datatable').bootstrapTable('removeAll');
+        $('#section-storage-storagegateway-gateways-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Gateways.map(gateways => {
             return sdkcall("StorageGateway", "describeGatewayInformation", {

@@ -173,7 +173,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listChannels", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-channels-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-channels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.channelSummaries.map(channel => {
             return sdkcall("IoTAnalytics", "describeChannel", {
@@ -196,7 +196,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.pipelineSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describePipeline", {
@@ -219,7 +219,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listDatastores", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-datastores-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-datastores-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.datastoreSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describeDatastore", {
@@ -242,7 +242,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listDatasets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-datasets-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-datasets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.datasetSummaries.map(dataset => {
             return sdkcall("IoTAnalytics", "describeDataset", {

@@ -53,7 +53,7 @@ async function updateDatatableAWSCostManagementCostExplorer() {
     await sdkcall("CostExplorer", "listCostCategoryDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-awscostmanagement-costexplorer-costcategories-datatable').bootstrapTable('removeAll');
+        $('#section-awscostmanagement-costexplorer-costcategories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CostCategoryReferences.map(ccr => {
             return sdkcall("CostExplorer", "describeCostCategoryDefinition", {

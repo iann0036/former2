@@ -62,7 +62,7 @@ async function updateDatatableDatabaseQLDB() {
     await sdkcall("QLDB", "listLedgers", {
         // no params
     }, false).then(async (data) => {
-        $('#section-database-qldb-ledgers-datatable').bootstrapTable('removeAll');
+        $('#section-database-qldb-ledgers-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Ledgers.map(async (ledger) => {
             return sdkcall("QLDB", "describeLedger", {

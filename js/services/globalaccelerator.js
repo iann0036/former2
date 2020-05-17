@@ -149,9 +149,9 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
     await sdkcall("GlobalAccelerator", "listAccelerators", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-globalaccelerator-endpointgroups-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-globalaccelerator-endpointgroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Accelerators.map(accelerator => {
             return sdkcall("GlobalAccelerator", "describeAccelerator", {

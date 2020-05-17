@@ -70,7 +70,7 @@ async function updateDatatableMediaServicesElasticTranscoder() {
     await sdkcall("ElasticTranscoder", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-mediaservices-elastictranscoder-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-elastictranscoder-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Pipelines.map(pipeline => {
             return sdkcall("ElasticTranscoder", "readPipeline", {

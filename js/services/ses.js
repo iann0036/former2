@@ -282,8 +282,8 @@ async function updateDatatableCustomerEngagementSES() {
         await sdkcall("SES", "listConfigurationSets", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-configurationsets-datatable').bootstrapTable('removeAll');
-            $('#section-customerengagement-ses-eventdestinations-datatable').bootstrapTable('removeAll');
+            $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('removeAll');
+            $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.ConfigurationSets.map(configurationSet => {
                 return sdkcall("SES", "describeConfigurationSet", {
@@ -319,7 +319,7 @@ async function updateDatatableCustomerEngagementSES() {
         await sdkcall("SES", "listReceiptFilters", {
             // no params
         }, true).then((data) => {
-            $('#section-customerengagement-ses-receiptfilters-datatable').bootstrapTable('removeAll');
+            $('#section-customerengagement-ses-receiptfilters-datatable').deferredBootstrapTable('removeAll');
 
             data.Filters.forEach(filter => {
                 $('#section-customerengagement-ses-receiptfilters-datatable').deferredBootstrapTable('append', [{
@@ -339,7 +339,7 @@ async function updateDatatableCustomerEngagementSES() {
         await sdkcall("SES", "listReceiptRuleSets", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-receiptrulesets-datatable').bootstrapTable('removeAll');
+            $('#section-customerengagement-ses-receiptrulesets-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.RuleSets.map(ruleSet => {
                 $('#section-customerengagement-ses-receiptrulesets-datatable').deferredBootstrapTable('append', [{
@@ -381,7 +381,7 @@ async function updateDatatableCustomerEngagementSES() {
         await sdkcall("SES", "listTemplates", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-templates-datatable').bootstrapTable('removeAll');
+            $('#section-customerengagement-ses-templates-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.TemplatesMetadata.map(template => {
                 return sdkcall("SES", "getTemplate", {

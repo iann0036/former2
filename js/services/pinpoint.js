@@ -1088,21 +1088,21 @@ async function updateDatatableCustomerEngagementPinpoint() {
     await sdkcall("Pinpoint", "getApps", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-apps-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-applicationsettings-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-campaigns-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-segments-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-eventstreams-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-admchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnschannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-baiduchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-emailchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-gcmchannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-smschannels-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-voicechannels-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apps-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-applicationsettings-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-campaigns-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-segments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-eventstreams-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-admchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnschannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-baiduchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-gcmchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-smschannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-voicechannels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ApplicationsResponse.Item.map(app => {
             $('#section-customerengagement-pinpoint-apps-datatable').deferredBootstrapTable('append', [{
@@ -1340,8 +1340,8 @@ async function updateDatatableCustomerEngagementPinpoint() {
     await sdkcall("PinpointEmail", "listConfigurationSets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ConfigurationSets.map(configurationset => {
             return sdkcall("PinpointEmail", "getConfigurationSet", {
@@ -1382,7 +1382,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
     await sdkcall("PinpointEmail", "listDedicatedIpPools", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('removeAll');
 
         data.DedicatedIpPools.forEach(dedicatedippool => {
             $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('append', [{
@@ -1402,7 +1402,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
     await sdkcall("PinpointEmail", "listEmailIdentities", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailidentities-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailidentities-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EmailIdentities.map(emailidentity => {
             return sdkcall("PinpointEmail", "getEmailIdentity", {
@@ -1427,9 +1427,9 @@ async function updateDatatableCustomerEngagementPinpoint() {
     await sdkcall("Pinpoint", "listTemplates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailtemplates-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-smstemplates-datatable').bootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-pushtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-emailtemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-smstemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-customerengagement-pinpoint-pushtemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TemplatesResponse.Item.map(template => {
             if (template.TemplateType == "EMAIL") {

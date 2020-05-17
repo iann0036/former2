@@ -179,7 +179,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').deferredBootstrapTable('removeAll');
 
         data.CloudFrontOriginAccessIdentityList.Items.forEach(oai => {
             $('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable').deferredBootstrapTable('append', [{
@@ -199,7 +199,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     await sdkcall("CloudFront", "listDistributions", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('removeAll');
 
         data.DistributionList.Items.forEach(distribution => {
             $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
@@ -221,7 +221,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     await sdkcall("CloudFront", "listStreamingDistributions", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').deferredBootstrapTable('removeAll');
 
         data.StreamingDistributionList.Items.forEach(distribution => {
             $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').deferredBootstrapTable('append', [{

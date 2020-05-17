@@ -442,12 +442,12 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     blockUI('#section-securityidentityandcompliance-iam-accessanalyzer-datatable');
 
-    $('#section-securityidentityandcompliance-iam-policies-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-iam-policies-datatable').deferredBootstrapTable('removeAll');
 
     await sdkcall("IAM", "listPolicies", {
         Scope: 'Local'
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-managedpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Policies.map(managedPolicy => {
             if (!managedPolicy.Arn.startsWith("arn:aws:iam::aws")) {
@@ -481,7 +481,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         sdkcall("IAM", "listGroups", {
             // no params
         }, true).then(async (data) => {
-            $('#section-securityidentityandcompliance-iam-groups-datatable').bootstrapTable('removeAll');
+            $('#section-securityidentityandcompliance-iam-groups-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.Groups.map(async (group) => {
                 await sdkcall("IAM", "listAttachedGroupPolicies", {
@@ -531,8 +531,8 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             await sdkcall("IAM", "listUsers", {
                 // no params
             }, true).then(async (data) => {
-                $('#section-securityidentityandcompliance-iam-users-datatable').bootstrapTable('removeAll');
-                $('#section-securityidentityandcompliance-iam-accesskeys-datatable').bootstrapTable('removeAll');
+                $('#section-securityidentityandcompliance-iam-users-datatable').deferredBootstrapTable('removeAll');
+                $('#section-securityidentityandcompliance-iam-accesskeys-datatable').deferredBootstrapTable('removeAll');
 
                 await Promise.all(data.Users.map(async (user) => {
                     await Promise.all([
@@ -610,8 +610,8 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         sdkcall("IAM", "listRoles", {
             // no params
         }, true).then(async (data) => {
-            $('#section-securityidentityandcompliance-iam-roles-datatable').bootstrapTable('removeAll');
-            $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').bootstrapTable('removeAll');
+            $('#section-securityidentityandcompliance-iam-roles-datatable').deferredBootstrapTable('removeAll');
+            $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('removeAll');
             
             await Promise.all(data.Roles.map(async (role) => {
                 await sdkcall("IAM", "listRoleTags", {
@@ -683,7 +683,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     await sdkcall("IAM", "listInstanceProfiles", {
         // no params
     }, true).then((data) => {
-        $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').deferredBootstrapTable('removeAll');
 
         data.InstanceProfiles.forEach(instanceProfile => {
             $('#section-securityidentityandcompliance-iam-instanceprofiles-datatable').deferredBootstrapTable('append', [{
@@ -701,7 +701,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     await sdkcall("AccessAnalyzer", "listAnalyzers", {
         type: 'ACCOUNT'
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-iam-accessanalyzer-datatable').deferredBootstrapTable('removeAll');
 
         data.analyzers.forEach(async (analyzer) => {
             await sdkcall("AccessAnalyzer", "getAnalyzer", {

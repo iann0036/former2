@@ -296,9 +296,9 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
     await sdkcall("ServiceDiscovery", "listNamespaces", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-httpnamespaces-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-publicdnsnamespaces-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-privatednsnamespaces-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Namespaces.map(namespace => {
             return sdkcall("ServiceDiscovery", "getNamespace", {
@@ -350,8 +350,8 @@ async function updateDatatableNetworkingAndContentDeliveryCloudMap() {
     await sdkcall("ServiceDiscovery", "listServices", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-cloudmap-services-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-services-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-cloudmap-instances-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Services.map(service => {
             return Promise.all([

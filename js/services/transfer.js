@@ -172,9 +172,9 @@ async function updateDatatableMigrationAndTransferTransfer() {
     await sdkcall("Transfer", "listServers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-migrationandtransfer-transfer-servers-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-transfer-users-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-transfer-sshkeys-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-servers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-users-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-sshkeys-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Servers.map(async (server) => {
             await sdkcall("Transfer", "listUsers", {

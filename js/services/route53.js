@@ -336,8 +336,8 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     await sdkcall("Route53", "listHostedZones", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-route53-records-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-records-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.HostedZones.map(hostedZone => {
             $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
@@ -376,7 +376,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     await sdkcall("Route53", "listHealthChecks", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').deferredBootstrapTable('removeAll');
 
         data.HealthChecks.forEach(healthCheck => {
             $('#section-networkingandcontentdelivery-route53-healthchecks-datatable').deferredBootstrapTable('append', [{
@@ -397,7 +397,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     await sdkcall("Route53Resolver", "listResolverEndpoints", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResolverEndpoints.map(resolverEndpoint => {
             return sdkcall("Route53Resolver", "getResolverEndpoint", {
@@ -429,7 +429,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     await sdkcall("Route53Resolver", "listResolverRules", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResolverRules.map(resolverRule => {
             return sdkcall("Route53Resolver", "getResolverRule", {
@@ -456,7 +456,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     await sdkcall("Route53Resolver", "listResolverRuleAssociations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResolverRuleAssociations.map(resolverRuleAssociation => {
             return sdkcall("Route53Resolver", "getResolverRuleAssociation", {

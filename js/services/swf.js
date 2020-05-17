@@ -54,7 +54,7 @@ async function updateDatatableApplicationIntegrationSWF() {
     await sdkcall("SWF", "listDomains", {
         registrationStatus: 'REGISTERED'
     }, true).then(async (data) => {
-        $('#section-applicationintegration-swf-domains-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-swf-domains-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.domainInfos.map(domain => {
             return sdkcall("SWF", "describeDomain", {

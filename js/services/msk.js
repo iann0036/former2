@@ -62,7 +62,7 @@ async function updateDatatableAnalyticsMSK() {
     await sdkcall("Kafka", "listClusters", {
         // no params
     }, false).then(async (data) => {
-        $('#section-analytics-msk-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-msk-clusters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ClusterInfoList.map(cluster => {
             return sdkcall("Kafka", "describeCluster", {

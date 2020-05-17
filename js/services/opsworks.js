@@ -494,12 +494,12 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
     await sdkcall("OpsWorks", "describeStacks", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-opsworks-stacks-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-opsworks-layers-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-opsworks-apps-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-opsworks-elbattachments-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-opsworks-instances-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-opsworks-volumes-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-stacks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-layers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-apps-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-elbattachments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-instances-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-volumes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Stacks.map(stack => {
             $('#section-managementandgovernance-opsworks-stacks-datatable').deferredBootstrapTable('append', [{
@@ -616,7 +616,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
     await sdkcall("OpsWorks", "describeUserProfiles", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-userprofiles-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('removeAll');
 
         data.UserProfiles.forEach(userProfile => {
             $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('append', [{
@@ -636,7 +636,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
     await sdkcall("OpsWorksCM", "describeServers", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').deferredBootstrapTable('removeAll');
 
         data.Servers.forEach(server => {
             $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').deferredBootstrapTable('append', [{

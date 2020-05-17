@@ -116,7 +116,7 @@ async function updateDatatableAnalyticsAthena() {
     await sdkcall("Athena", "listNamedQueries", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-athena-namedqueries-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-athena-namedqueries-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NamedQueryIds.map(namedQuery => {
             return sdkcall("Athena", "getNamedQuery", {
@@ -142,7 +142,7 @@ async function updateDatatableAnalyticsAthena() {
     await sdkcall("Athena", "listWorkGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-athena-workgroups-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WorkGroups.map(workgroup => {
             return sdkcall("Athena", "getWorkGroup", {

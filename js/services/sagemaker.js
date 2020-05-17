@@ -451,7 +451,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-coderepositories-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-coderepositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CodeRepositorySummaryList.map(coderepository => {
             return sdkcall("SageMaker", "describeCodeRepository", {
@@ -474,7 +474,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listModels", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-models-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-models-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Models.map(model => {
             return sdkcall("SageMaker", "describeModel", {
@@ -497,7 +497,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listEndpoints", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-endpoints-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-endpoints-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Endpoints.map(endpoint => {
             return sdkcall("SageMaker", "describeEndpoint", {
@@ -521,7 +521,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listEndpointConfigs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-endpointconfigs-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-endpointconfigs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EndpointConfigs.map(endpointConfig => {
             return sdkcall("SageMaker", "describeEndpointConfig", {
@@ -545,7 +545,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listNotebookInstances", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-notebookinstances-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-notebookinstances-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotebookInstances.map(notebookInstance => {
             return sdkcall("SageMaker", "describeNotebookInstance", {
@@ -571,7 +571,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listNotebookInstanceLifecycleConfigs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-notebookinstancelifecycleconfigs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotebookInstanceLifecycleConfigs.map(notebookInstanceLifecycleConfig => {
             return sdkcall("SageMaker", "describeNotebookInstanceLifecycleConfig", {
@@ -594,7 +594,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -623,7 +623,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
@@ -646,7 +646,7 @@ async function updateDatatableMachineLearningSageMaker() {
     await sdkcall("SageMaker", "listWorkteams", {
         // no params
     }, false).then(async (data) => {
-        $('#section-machinelearning-sagemaker-workteams-datatable').bootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-workteams-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Workteams.map(workteam => {
             return sdkcall("SageMaker", "describeWorkteam", {

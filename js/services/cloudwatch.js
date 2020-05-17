@@ -505,7 +505,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-alarms-datatable').deferredBootstrapTable('removeAll');
 
         data.MetricAlarms.forEach(metricAlarm => {
             $('#section-managementandgovernance-cloudwatch-alarms-datatable').deferredBootstrapTable('append', [{
@@ -528,7 +528,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["CompositeAlarm"]
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').deferredBootstrapTable('removeAll');
 
         data.CompositeAlarms.forEach(compositeAlarm => {
             $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').deferredBootstrapTable('append', [{
@@ -548,7 +548,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "listDashboards", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-dashboards-datatable').deferredBootstrapTable('removeAll');
 
         if (data.DashboardEntries) {
             await Promise.all(data.DashboardEntries.map(dashboard => {
@@ -572,7 +572,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatchLogs", "describeDestinations", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-destinations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-destinations-datatable').deferredBootstrapTable('removeAll');
 
         data.destinations.forEach(destination => {
             $('#section-managementandgovernance-cloudwatch-destinations-datatable').deferredBootstrapTable('append', [{
@@ -591,9 +591,9 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatchLogs", "describeLogGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudwatch-loggroups-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-cloudwatch-logstreams-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-loggroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-logstreams-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.logGroups.map(logGroup => {
             $('#section-managementandgovernance-cloudwatch-loggroups-datatable').deferredBootstrapTable('append', [{
@@ -647,7 +647,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatchLogs", "describeMetricFilters", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').deferredBootstrapTable('removeAll');
 
         data.metricFilters.forEach(metricFilter => {
             $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').deferredBootstrapTable('append', [{
@@ -667,7 +667,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeAnomalyDetectors", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').deferredBootstrapTable('removeAll');
 
         data.AnomalyDetectors.forEach(anomalyDetector => {
             $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').deferredBootstrapTable('append', [{
@@ -685,7 +685,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeInsightRules", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-insightrules-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-insightrules-datatable').deferredBootstrapTable('removeAll');
 
         data.InsightRules.forEach(insightRule => {
             $('#section-managementandgovernance-cloudwatch-insightrules-datatable').deferredBootstrapTable('append', [{
@@ -702,7 +702,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("Synthetics", "describeCanaries", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-canaries-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-canaries-datatable').deferredBootstrapTable('removeAll');
 
         data.Canaries.forEach(canary => {
             $('#section-managementandgovernance-cloudwatch-canaries-datatable').deferredBootstrapTable('append', [{

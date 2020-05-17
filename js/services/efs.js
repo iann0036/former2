@@ -126,7 +126,7 @@ async function updateDatatableStorageEFS() {
     await sdkcall("EFS", "describeFileSystems", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-efs-filesystems-datatable').bootstrapTable('removeAll');
+        $('#section-storage-efs-filesystems-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.FileSystems.map(fileSystem => {
             $('#section-storage-efs-filesystems-datatable').deferredBootstrapTable('append', [{
@@ -143,7 +143,7 @@ async function updateDatatableStorageEFS() {
             return sdkcall("EFS", "describeMountTargets", {
                 FileSystemId: fileSystem.FileSystemId
             }, true).then(async (data) => {
-                $('#section-storage-efs-mounttargets-datatable').bootstrapTable('removeAll');
+                $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('removeAll');
 
                 await Promise.all(data.MountTargets.map(mountTarget => {
                     return sdkcall("EC2", "describeNetworkInterfaces", {

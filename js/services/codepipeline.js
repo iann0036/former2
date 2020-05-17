@@ -241,7 +241,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodePipeline", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codepipeline-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.pipelines.map(pipeline => {
             return sdkcall("CodePipeline", "getPipeline", {
@@ -264,7 +264,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodePipeline", "listWebhooks", {
         // no params
     }, true).then((data) => {
-        $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-webhooks-datatable').deferredBootstrapTable('removeAll');
 
         data.webhooks.forEach(webhook => {
             $('#section-developertools-codepipeline-webhooks-datatable').deferredBootstrapTable('append', [{
@@ -285,7 +285,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodePipeline", "listActionTypes", {
         actionOwnerFilter: "Custom"
     }, true).then((data) => {
-        $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-customactiontypes-datatable').deferredBootstrapTable('removeAll');
 
         data.actionTypes.forEach(actionType => {
             $('#section-developertools-codepipeline-customactiontypes-datatable').deferredBootstrapTable('append', [{
@@ -305,7 +305,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodeStarNotifications", "listNotificationRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codepipeline-notificationrules-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-notificationrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotificationRules.map(notificationRule => {
             return sdkcall("CodeStarNotifications", "describeNotificationRule", {
@@ -329,7 +329,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodeStarconnections", "listConnections", {
         ProviderTypeFilter: "Bitbucket"
     }, false).then(async (data) => {
-        $('#section-developertools-codepipeline-connections-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-connections-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Connections.map(connection => {
             return sdkcall("CodeStarconnections", "getConnection", {

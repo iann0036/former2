@@ -156,7 +156,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeComputeEnvironments", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-computeenvironments-datatable').deferredBootstrapTable('removeAll');
 
         data.computeEnvironments.forEach(computeEnvironment => {
             $('#section-compute-batch-computeenvironments-datatable').deferredBootstrapTable('append', [{
@@ -176,7 +176,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeJobDefinitions", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-jobdefinitions-datatable').deferredBootstrapTable('removeAll');
 
         data.jobDefinitions.forEach(jobDefinition => {
             $('#section-compute-batch-jobdefinitions-datatable').deferredBootstrapTable('append', [{
@@ -196,7 +196,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeJobQueues", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-jobqueues-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-jobqueues-datatable').deferredBootstrapTable('removeAll');
 
         data.jobQueues.forEach(jobQueue => {
             $('#section-compute-batch-jobqueues-datatable').deferredBootstrapTable('append', [{

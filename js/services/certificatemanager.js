@@ -156,7 +156,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     await sdkcall("ACM", "listCertificates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CertificateSummaryList.map(certificate => {
             return sdkcall("ACM", "describeCertificate", {
@@ -181,7 +181,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     await sdkcall("ACMPCA", "listCertificateAuthorities", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CertificateAuthorities.map(certificateAuthority => {
             return sdkcall("ACMPCA", "describeCertificateAuthority", {

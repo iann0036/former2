@@ -61,7 +61,7 @@ async function updateDatatableAnalyticsDataPipeline() {
     await sdkcall("DataPipeline", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-datapipeline-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-datapipeline-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.pipelineIdList.map(pipeline => {
             return sdkcall("DataPipeline", "describePipelines", {

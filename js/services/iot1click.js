@@ -148,8 +148,8 @@ async function updateDatatableInternetofThings1Click() {
     await sdkcall("IoT1ClickProjects", "listProjects", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-1click-projects-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-1click-placements-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-1click-projects-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-1click-placements-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.projects.map(project => {
             return Promise.all([
@@ -195,7 +195,7 @@ async function updateDatatableInternetofThings1Click() {
     await sdkcall("IoT1ClickDevicesService", "listDevices", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-1click-devices-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-1click-devices-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Devices.map(device => {
             return sdkcall("IoT1ClickProjects", "describeDevice", {

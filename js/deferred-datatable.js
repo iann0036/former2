@@ -3,6 +3,24 @@
         init : function(options) {
             ;
         },
+        getData : function() {
+            var data = this.data('f2dtrows');
+            if (!data) {
+                return [];
+            }
+            return data;
+        },
+        removeAll : function() {
+            var existing_timer = this.data('f2dttimer');
+            if (existing_timer) {
+                clearTimeout(existing_timer);
+            }
+
+            this.data('f2dtrows', null);
+            this.data('f2dtdrawn', null);
+
+            this.bootstrapTable('removeAll');
+        },
         append : function(data) {
             var existing_timer = this.data('f2dttimer');
             if (existing_timer) {
@@ -16,12 +34,32 @@
                 this.data('f2dtrows', existing_data.concat(data));
             }
 
-            this.data('f2dttimer', setTimeout(function(el) {
-                var existing_data = el.data('f2dtrows');
+            var drawn_data = this.data('f2dtdrawn');
+            if (!drawn_data) {
+                this.data('f2dtdrawn', data);
+            } else {
+                this.data('f2dtdrawn', drawn_data.concat(data));
+            }
 
-                if (existing_data) {
-                    el.data('f2dtrows', null);
-                    el.bootstrapTable('append', existing_data);
+            if (this.data('f2dtactive')) {
+                this.data('f2dttimer', setTimeout(function(el) {
+                    var drawn_data = el.data('f2dtdrawn');
+    
+                    if (drawn_data) {
+                        el.data('f2dtdrawn', null);
+                        el.bootstrapTable('append', drawn_data);
+                    }
+                }, 200, this));
+            }
+        },
+        setActive : function(isactive) {
+            this.data('f2dtactive', isactive);
+            this.data('f2dttimer', setTimeout(function(el) {
+                var drawn_data = el.data('f2dtdrawn');
+
+                if (drawn_data) {
+                    el.data('f2dtdrawn', null);
+                    el.bootstrapTable('append', drawn_data);
                 }
             }, 200, this));
         }

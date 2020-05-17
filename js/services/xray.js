@@ -78,7 +78,7 @@ async function updateDatatableDeveloperToolsXRay() {
     await sdkcall("XRay", "getSamplingRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-xray-samplingrules-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('removeAll');
 
         data.SamplingRuleRecords.forEach(samplingrule => {
             $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('append', [{

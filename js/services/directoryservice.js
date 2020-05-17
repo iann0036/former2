@@ -77,7 +77,7 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
     await sdkcall("DirectoryService", "describeDirectories", {
         // no params
     }, true).then((data) => {
-        $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-directoryservice-directories-datatable').deferredBootstrapTable('removeAll');
 
         data.DirectoryDescriptions.forEach(directory => {
             if (directory.Type == "SimpleAD") {

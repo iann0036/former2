@@ -82,7 +82,7 @@ async function updateDatatableAWSCostManagementBudgets() {
         await sdkcall("Budgets", "describeBudgets", {
             AccountId: accountId
         }, true).then(async (data) => {
-            $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
+            $('#section-awscostmanagement-budgets-budgets-datatable').deferredBootstrapTable('removeAll');
 
             if (data.Budgets) {
                 await Promise.all(data.Budgets.map(budget => {

@@ -53,7 +53,7 @@ async function updateDatatableOtherResourceGroups() {
     await sdkcall("ResourceGroups", "listGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-other-resourcegroups-groups-datatable').bootstrapTable('removeAll');
+        $('#section-other-resourcegroups-groups-datatable').deferredBootstrapTable('removeAll');
 
         data.Groups.forEach(async (group) => {
             await sdkcall("ResourceGroups", "getGroupQuery", {

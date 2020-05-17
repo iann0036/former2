@@ -229,7 +229,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
             $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('append', [{
@@ -251,7 +251,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
             $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('append', [{
@@ -273,7 +273,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBClusterParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
             return sdkcall("DocDB", "describeDBClusterParameters", {
@@ -302,7 +302,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('append', [{

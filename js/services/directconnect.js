@@ -646,7 +646,7 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
     await sdkcall("DirectConnect", "describeConnections", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-directconnect-connections-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-connections-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.connections.map(connection => {
             $('#section-networkingandcontentdelivery-directconnect-connections-datatable').deferredBootstrapTable('append', [{
@@ -663,9 +663,9 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
             return sdkcall("DirectConnect", "describeVirtualInterfaces", {
                 connectionId: connection.connectionId
             }, true).then(async (data) => {
-                $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('removeAll');
-                $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').bootstrapTable('removeAll');
-                $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('removeAll');
+                $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').deferredBootstrapTable('removeAll');
+                $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').deferredBootstrapTable('removeAll');
+                $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').deferredBootstrapTable('removeAll');
 
                 data.virtualInterfaces.forEach(virtualinterface => {
                     if (virtualinterface.virtualInterfaceType == "public") {
@@ -717,8 +717,8 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
     await sdkcall("DirectConnect", "describeLags", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-directconnect-lags-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-lags-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-connectionassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.lags.map(lag => {
             $('#section-networkingandcontentdelivery-directconnect-lags-datatable').deferredBootstrapTable('append', [{
@@ -748,9 +748,9 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
                 return sdkcall("DirectConnect", "describeVirtualInterfaces", {
                     connectionId: connection.connectionId
                 }, true).then(async (data) => {
-                    $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').bootstrapTable('removeAll');
-                    $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').bootstrapTable('removeAll');
-                    $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').bootstrapTable('removeAll');
+                    $('#section-networkingandcontentdelivery-directconnect-publicvirtualinterfaces-datatable').deferredBootstrapTable('removeAll');
+                    $('#section-networkingandcontentdelivery-directconnect-privatevirtualinterfaces-datatable').deferredBootstrapTable('removeAll');
+                    $('#section-networkingandcontentdelivery-directconnect-bgppeers-datatable').deferredBootstrapTable('removeAll');
 
                     data.virtualInterfaces.forEach(virtualinterface => {
                         if (virtualinterface.virtualInterfaceType == "public") {
@@ -804,9 +804,9 @@ async function updateDatatableNetworkingAndContentDeliveryDirectConnect() {
     await sdkcall("DirectConnect", "describeDirectConnectGateways", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-directconnect-gatewayassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-gatewayassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-directconnect-gatewayassociationproposals-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.directConnectGateways.map(gateway => {
             $('#section-networkingandcontentdelivery-directconnect-gateways-datatable').deferredBootstrapTable('append', [{

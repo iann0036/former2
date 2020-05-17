@@ -41,7 +41,7 @@ async function updateDatatableSecurityIdentityAndComplianceSecurityHub() {
     await sdkcall("SecurityHub", "describeHub", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-securityhub-hub-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-securityhub-hub-datatable').deferredBootstrapTable('removeAll');
 
         var tags = null;
 

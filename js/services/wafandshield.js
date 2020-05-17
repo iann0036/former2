@@ -1049,13 +1049,13 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagernotificationchannel-datatable');
 
-    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('removeAll');
-    $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-v2webaclassociations-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').deferredBootstrapTable('removeAll');
 
     if (region == "us-east-1") {
         await sdkcall("WAFV2", "listWebACLs", {
@@ -1298,7 +1298,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listWebACLs", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-webacls-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WebACLs.map(webAcl => {
             return sdkcall("WAF", "getWebACL", {
@@ -1322,7 +1322,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-rules-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-rules-datatable').deferredBootstrapTable('removeAll');
 
         if (data.Rules) {
             await Promise.all(data.Rules.map(rule => {
@@ -1348,7 +1348,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listXssMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-xssmatchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
             return sdkcall("WAF", "getXssMatchSet", {
@@ -1371,7 +1371,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listIPSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-ipsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.IPSets.map(ipSet => {
             return sdkcall("WAF", "getIPSet", {
@@ -1394,7 +1394,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listSizeConstraintSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-sizeconstraintsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
             return sdkcall("WAF", "getSizeConstraintSet", {
@@ -1417,7 +1417,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listSqlInjectionMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-sqlinjectionmatchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
             return sdkcall("WAF", "getSqlInjectionMatchSet", {
@@ -1440,7 +1440,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAF", "listByteMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-bytematchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
             return sdkcall("WAF", "getByteMatchSet", {
@@ -1465,8 +1465,8 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listWebACLs", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalwebacls-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalwebaclassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WebACLs.map(webAcl => {
             return Promise.all([
@@ -1510,7 +1510,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("WAFRegional", "getRule", {
@@ -1534,7 +1534,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listXssMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalxssmatchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.XssMatchSets.map(xssMatchSet => {
             return sdkcall("WAFRegional", "getXssMatchSet", {
@@ -1557,7 +1557,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listIPSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalipsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.IPSets.map(ipSet => {
             return sdkcall("WAFRegional", "getIPSet", {
@@ -1580,7 +1580,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listSizeConstraintSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalsizeconstraintsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.SizeConstraintSets.map(sizeConstraintSet => {
             return sdkcall("WAFRegional", "getSizeConstraintSet", {
@@ -1603,7 +1603,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listSqlInjectionMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalsqlinjectionmatchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.SqlInjectionMatchSets.map(sqlInjectionMatchSet => {
             return sdkcall("WAFRegional", "getSqlInjectionMatchSet", {
@@ -1625,7 +1625,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listByteMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalbytematchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ByteMatchSets.map(byteMatchSet => {
             return sdkcall("WAFRegional", "getByteMatchSet", {
@@ -1648,7 +1648,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listGeoMatchSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalgeomatchsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.GeoMatchSets.map(geoMatchSet => {
             return sdkcall("WAFRegional", "getGeoMatchSet", {
@@ -1671,7 +1671,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listRegexPatternSets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.RegexPatternSets.map(regexPatternSet => {
             return sdkcall("WAFRegional", "getRegexPatternSet", {
@@ -1694,7 +1694,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("WAFRegional", "listRateBasedRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-regionalratebasedrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("WAFRegional", "getRateBasedRule", {
@@ -1719,7 +1719,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("FMS", "listPolicies", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.PolicyList.map(policy => {
             return sdkcall("FMS", "getPolicy", {
@@ -1745,7 +1745,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     await sdkcall("FMS", "getNotificationChannel", {
         // no params
     }, false).then(async (data) => {
-        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').deferredBootstrapTable('removeAll');
         
         $('#section-securityidentityandcompliance-wafandshield-firewallmanagernotifcationchannel-datatable').deferredBootstrapTable('append', [{
             f2id: 'FMSNotificationChannel',

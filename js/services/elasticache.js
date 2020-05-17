@@ -257,7 +257,7 @@ async function updateDatatableDatabaseElastiCache() {
     await sdkcall("ElastiCache", "describeCacheClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-elasticache-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-elasticache-clusters-datatable').deferredBootstrapTable('removeAll');
 
         if (data.Clusters) {
             data.Clusters.forEach(cluster => {
@@ -281,7 +281,7 @@ async function updateDatatableDatabaseElastiCache() {
     await sdkcall("ElastiCache", "describeReplicationGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-elasticache-replicationgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-elasticache-replicationgroups-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ReplicationGroups) {
             data.ReplicationGroups.forEach(replicationGroup => {
@@ -303,7 +303,7 @@ async function updateDatatableDatabaseElastiCache() {
     await sdkcall("ElastiCache", "describeCacheSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-elasticache-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-elasticache-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.CacheSubnetGroups.forEach(subnetGroup => {
             $('#section-database-elasticache-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -323,7 +323,7 @@ async function updateDatatableDatabaseElastiCache() {
     await sdkcall("ElastiCache", "describeCacheParameterGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-elasticache-parametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-elasticache-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
         data.CacheParameterGroups.forEach(parameterGroup => {
             $('#section-database-elasticache-parametergroups-datatable').deferredBootstrapTable('append', [{
@@ -343,7 +343,7 @@ async function updateDatatableDatabaseElastiCache() {
     await sdkcall("ElastiCache", "describeCacheSecurityGroups", {
         // no params
     }, false).then((data) => {
-        $('#section-database-elasticache-securitygroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-elasticache-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.CacheSecurityGroups.forEach(securityGroup => {
             $('#section-database-elasticache-securitygroups-datatable').deferredBootstrapTable('append', [{

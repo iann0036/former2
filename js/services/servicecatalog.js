@@ -578,8 +578,8 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     await sdkcall("ServiceCatalog", "listPortfolios", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-servicecatalog-portfolios-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-portfolios-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.PortfolioDetails.map(portfolio => {
             return Promise.all([
@@ -624,7 +624,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     await sdkcall("ServiceCatalog", "searchProductsAsAdmin", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ProductViewDetails.map(productView => {
             return sdkcall("ServiceCatalog", "describeProductAsAdmin", {
@@ -652,7 +652,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     await sdkcall("ServiceCatalog", "listAcceptedPortfolioShares", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable').deferredBootstrapTable('removeAll');
 
         data.PortfolioDetails.forEach(portfolio => {
             $('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable').deferredBootstrapTable('append', [{
@@ -673,12 +673,12 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     await sdkcall("ServiceCatalog", "searchProvisionedProducts", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-cloudformationprovisionedproducts-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchnotificationconstraints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ProvisionedProducts.map(provisionedProduct => {
             return Promise.all([
@@ -783,8 +783,8 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     await sdkcall("ServiceCatalog", "listTagOptions", {
         // no params
     }, false).then(async (data) => {
-        $('#section-managementandgovernance-servicecatalog-tagoptions-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-tagoptions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TagOptionDetails.map(tagOption => {
             return Promise.all([

@@ -3409,14 +3409,14 @@ async function generateDiagram() {
     // TODO: VPC, IAM* 
 
     async function getNetworkingInfo() {
-        if ($('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('getData', {
+        if ($('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('getData', {
             'useCurrentPage': true
         }).length == 0) {
             await updateDatatableNetworkingAndContentDeliveryVPC();
         }
 
         return {
-            'subnets': $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('getData', {
+            'subnets': $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('getData', {
                 'unfiltered': true
             })
         };

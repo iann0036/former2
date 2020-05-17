@@ -61,7 +61,7 @@ async function updateDatatableDeveloperToolsCloud9() {
     await sdkcall("Cloud9", "listEnvironments", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-cloud9-environments-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-cloud9-environments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.environmentIds.map(environmentId => {
             return sdkcall("Cloud9", "describeEnvironments", {

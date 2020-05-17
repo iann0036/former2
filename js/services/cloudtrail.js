@@ -79,7 +79,7 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
     await sdkcall("CloudTrail", "describeTrails", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudtrail-trails-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.trailList.map(trail => {
             return sdkcall("CloudTrail", "getTrailStatus", {

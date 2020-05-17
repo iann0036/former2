@@ -238,7 +238,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
     await sdkcall("Organizations", "describeOrganization", {
         // no params
     }, false).then(async (data) => {
-        $('#section-managementandgovernance-organizations-organization-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-organizations-organization-datatable').deferredBootstrapTable('removeAll');
 
         if (data.Organization) {
             await sdkcall("Organizations", "listAWSServiceAccessForOrganization", {
@@ -267,7 +267,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
             ChildId: accountId
         }, false).then(async (data) => {
             if (data.Parents.length == 1) {
-                $('#section-managementandgovernance-organizations-organizationalunits-datatable').bootstrapTable('removeAll');
+                $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('removeAll');
 
                 var parents = [data.Parents[0].Id];
 
@@ -300,7 +300,7 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
     await sdkcall("Organizations", "listAccounts", {
         // no params
     }, false).then(async (data) => {
-        $('#section-managementandgovernance-organizations-accounts-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-organizations-accounts-datatable').deferredBootstrapTable('removeAll');
 
         data.Accounts.forEach(account => {
             $('#section-managementandgovernance-organizations-accounts-datatable').deferredBootstrapTable('append', [{
@@ -318,8 +318,8 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
     await sdkcall("Organizations", "listPolicies", {
         Filter: "SERVICE_CONTROL_POLICY"
     }, false).then(async (data) => {
-        $('#section-managementandgovernance-organizations-policies-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-organizations-policyattachments-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-organizations-policyattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Policies.map(async (policy) => {
             await sdkcall("Organizations", "describePolicy", {

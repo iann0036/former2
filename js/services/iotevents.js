@@ -100,7 +100,7 @@ async function updateDatatableInternetofThingsEvents() {
     await sdkcall("IoTEvents", "listDetectorModels", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-events-detectormodels-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-events-detectormodels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.detectorModelSummaries.map(async (detectorModel) => {
             return sdkcall("IoTEvents", "describeDetectorModel", {
@@ -122,7 +122,7 @@ async function updateDatatableInternetofThingsEvents() {
     await sdkcall("IoTEvents", "listInputs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-events-inputs-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-events-inputs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.inputSummaries.map(input => {
             return sdkcall("IoTEvents", "describeInput", {

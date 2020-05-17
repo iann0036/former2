@@ -304,7 +304,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listImagePipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-imagepipelines-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-imagepipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.imagePipelineList.map(async (imagePipeline) => {
             return sdkcall("Imagebuilder", "getImagePipeline", {
@@ -326,7 +326,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listImageRecipes", {
         owner: 'Self'
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-imagerecipes-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-imagerecipes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.imageRecipeSummaryList.map(async (imageRecipe) => {
             return sdkcall("Imagebuilder", "getImageRecipe", {
@@ -349,7 +349,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listImages", {
         owner: 'Self'
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-images-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-images-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.imageVersionList.map(async (imageVersion) => {
             return sdkcall("Imagebuilder", "listImageBuildVersions", {
@@ -377,7 +377,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listComponents", {
         owner: 'Self'
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-components-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-components-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.componentVersionList.map(async (componentVersion) => {
             return sdkcall("Imagebuilder", "listComponentBuildVersions", {
@@ -407,7 +407,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listDistributionConfigurations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-distributionconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-distributionconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.distributionConfigurationSummaryList.map(async (distributionConfiguration) => {
             return sdkcall("Imagebuilder", "getDistributionConfiguration", {
@@ -428,7 +428,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     await sdkcall("Imagebuilder", "listInfrastructureConfigurations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2imagebuilder-infrastructureconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2imagebuilder-infrastructureconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.infrastructureConfigurationSummaryList.map(async (infrastructureConfiguration) => {
             return sdkcall("Imagebuilder", "getInfrastructureConfiguration", {

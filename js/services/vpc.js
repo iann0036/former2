@@ -2465,9 +2465,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcs", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('removeAll');
 
         return Promise.all(data.Vpcs.map(vpc => {
             if (vpc.DhcpOptionsId) {
@@ -2528,8 +2528,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeSubnets", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('removeAll');
 
         data.Subnets.forEach(subnet => {
             if (subnet.Ipv6CidrBlockAssociationSet) {
@@ -2568,7 +2568,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeEgressOnlyInternetGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.EgressOnlyInternetGateways.forEach(egressOnlyInternetGateway => {
             $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').deferredBootstrapTable('append', [{
@@ -2586,7 +2586,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeCustomerGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').deferredBootstrapTable('removeAll');
 
         data.CustomerGateways.forEach(customerGateway => {
             $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').deferredBootstrapTable('append', [{
@@ -2607,9 +2607,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpnGateways", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.VpnGateways.forEach(vpnGateway => {
             if (vpnGateway.VpcAttachments) {
@@ -2678,8 +2678,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeAddresses", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.Addresses.forEach(address => {
             $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('append', [{
@@ -2714,7 +2714,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeDhcpOptions", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('removeAll');
 
         data.DhcpOptions.forEach(dhcpOptions => {
             $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
@@ -2732,8 +2732,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpnConnections", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').deferredBootstrapTable('removeAll');
 
         data.VpnConnections.forEach(vpnConnection => {
             $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').deferredBootstrapTable('append', [{
@@ -2769,7 +2769,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcPeeringConnections", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').deferredBootstrapTable('removeAll');
 
         data.VpcPeeringConnections.forEach(peeringConnection => {
             $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').deferredBootstrapTable('append', [{
@@ -2787,9 +2787,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeNetworkAcls", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
             if (networkAcl.Associations) {
@@ -2852,11 +2852,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeRouteTables", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-routes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
             routeTable.Routes.forEach(route => {
@@ -2936,7 +2936,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGateways", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.TransitGateways.forEach(transitGateway => {
             $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').deferredBootstrapTable('append', [{
@@ -2957,10 +2957,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGatewayRouteTables", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TransitGatewayRouteTables.map(transitGatewayRouteTable => {
             $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').deferredBootstrapTable('append', [{
@@ -3038,7 +3038,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGatewayVpcAttachments", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.TransitGatewayVpcAttachments.forEach(transitGatewayVpcAttachment => {
             $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').deferredBootstrapTable('append', [{
@@ -3058,7 +3058,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpoints", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').deferredBootstrapTable('removeAll');
 
         data.VpcEndpoints.forEach(vpcEndpoint => {
             $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').deferredBootstrapTable('append', [{
@@ -3080,7 +3080,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpointConnectionNotifications", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').deferredBootstrapTable('removeAll');
 
         data.ConnectionNotificationSet.forEach(connectionNotification => {
             $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').deferredBootstrapTable('append', [{
@@ -3101,8 +3101,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpointServices", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
             if (serviceDetail.ServiceName.startsWith("vpce-svc-")) {
@@ -3144,7 +3144,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeNatGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.NatGateways.forEach(natGateway => {
             $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').deferredBootstrapTable('append', [{
@@ -3165,10 +3165,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeClientVpnEndpoints", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ClientVpnEndpoints) {
             await Promise.all(data.ClientVpnEndpoints.map(async (endpoint) => {
@@ -3252,8 +3252,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorFilters", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorFilters.forEach(trafficMirrorFilter => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').deferredBootstrapTable('append', [{
@@ -3305,7 +3305,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorSessions", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorSessions.forEach(trafficMirrorSession => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').deferredBootstrapTable('append', [{
@@ -3326,7 +3326,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorTargets.forEach(trafficMirrorTarget => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').deferredBootstrapTable('append', [{
@@ -3346,7 +3346,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeLocalGatewayRouteTables", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.LocalGatewayRouteTables.map(async (localgatewayroutetable) => {
             await sdkcall("EC2", "searchLocalGatewayRoutes", {
@@ -3373,7 +3373,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeLocalGatewayRouteTableVpcAssociations", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.LocalGatewayRouteTableVpcAssociations.forEach(association => {
             $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').deferredBootstrapTable('append', [{
@@ -3392,10 +3392,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("NetworkManager", "describeGlobalNetworks", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').deferredBootstrapTable('removeAll');
 
         data.GlobalNetworks.forEach(async (globalnetwork) => {
             $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').deferredBootstrapTable('append', [{

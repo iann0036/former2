@@ -180,7 +180,7 @@ async function updateDatatableMobileAmplify() {
     await sdkcall("Amplify", "listApps", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mobile-amplify-apps-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-amplify-apps-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.apps.map(app => {
             return Promise.all([

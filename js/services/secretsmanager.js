@@ -127,9 +127,9 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
     await sdkcall("SecretsManager", "listSecrets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').deferredBootstrapTable('removeAll');
 
         if (data.SecretList) {
             await Promise.all(data.SecretList.map(secret => {

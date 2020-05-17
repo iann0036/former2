@@ -280,8 +280,8 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listThings", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-things-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-things-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-core-thingprincipalattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.things.map(thing => {
             if (thing.thingName) {
@@ -330,8 +330,8 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listPolicies", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-policies-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-core-policyprincipalattachments-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-policies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-core-policyprincipalattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.policies.map(policy => {
             return Promise.all([
@@ -375,7 +375,7 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listCertificates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-certificates-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-certificates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.certificates.map(certificate => {
             return sdkcall("Iot", "describeCertificate", {
@@ -399,7 +399,7 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listTopicRules", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-topicrules-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-topicrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.rules.map(rule => {
             return sdkcall("Iot", "getTopicRule", {

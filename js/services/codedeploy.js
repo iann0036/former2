@@ -189,14 +189,14 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
     await sdkcall("CodeDeploy", "listApplications", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codedeploy-applications-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codedeploy-applications-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.applications.map(application => {
             return Promise.all([
                 sdkcall("CodeDeploy", "listDeploymentGroups", {
                     applicationName: application
                 }, true).then((data) => {
-                    $('#section-developertools-codedeploy-deploymentgroups-datatable').bootstrapTable('removeAll');
+                    $('#section-developertools-codedeploy-deploymentgroups-datatable').deferredBootstrapTable('removeAll');
 
                     data.deploymentGroups.forEach(deploymentGroup => {
                         sdkcall("CodeDeploy", "getDeploymentGroup", {
@@ -241,7 +241,7 @@ async function updateDatatableDeveloperToolsCodeDeploy() {
     await sdkcall("CodeDeploy", "listDeploymentConfigs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codedeploy-deploymentconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codedeploy-deploymentconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.deploymentConfigsList.map(deploymentConfiguration => {
             return sdkcall("CodeDeploy", "getDeploymentConfig", {

@@ -119,8 +119,8 @@ async function updateDatatableApplicationIntegrationSNS() {
     await sdkcall("SNS", "listTopics", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-sns-topics-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-sns-topicpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sns-topics-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-sns-topicpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Topics.map(topic => {
             return Promise.all([

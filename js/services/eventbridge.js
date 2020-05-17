@@ -308,7 +308,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     await sdkcall("EventBridge", "listRules", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-eventbridge-rules-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-rules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Rules.map(rule => {
             return sdkcall("EventBridge", "describeRule", {
@@ -338,8 +338,8 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     await sdkcall("EventBridge", "listEventBuses", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-eventbridge-eventbuses-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-eventbuses-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EventBuses.map(async (eventBus) => {
             return sdkcall("EventBridge", "describeEventBus", {
@@ -378,9 +378,9 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     await sdkcall("Schemas", "listRegistries", {
         // no params
     }, false).then(async (data) => {
-        $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-eventbridge-schemaregistries-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-eventbridge-registrypolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-schemas-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-schemaregistries-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-registrypolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Registries.map(async (registry) => {
             if (registry.RegistryName.startsWith("aws.")) {
@@ -403,7 +403,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                 sdkcall("Schemas", "listSchemas", {
                     RegistryName: registry.RegistryName
                 }, true).then(async (data) => {
-                    $('#section-applicationintegration-eventbridge-schemas-datatable').bootstrapTable('removeAll');
+                    $('#section-applicationintegration-eventbridge-schemas-datatable').deferredBootstrapTable('removeAll');
 
                     await Promise.all(data.Schemas.map(async (schema) => {
                         return sdkcall("Schemas", "describeSchema", {
@@ -445,7 +445,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     await sdkcall("Schemas", "listDiscoverers", {
         // no params
     }, false).then(async (data) => {
-        $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-eventbridge-schemadiscoverers-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Discoverers.map(async (discoverer) => {
             return sdkcall("Schemas", "describeDiscoverer", {

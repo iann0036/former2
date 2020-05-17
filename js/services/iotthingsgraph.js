@@ -54,7 +54,7 @@ async function updateDatatableInternetofThingsThingsGraph() {
     await sdkcall("IoTThingsGraph", "searchFlowTemplates", {
         // no params
     }, false).then(async (data) => {
-        $('#section-internetofthings-thingsgraph-flowtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-thingsgraph-flowtemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.summaries.map(flowtemplate => {
             return sdkcall("IoTThingsGraph", "getFlowTemplate", {

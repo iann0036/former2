@@ -281,9 +281,9 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
     await sdkcall("AppConfig", "listApplications", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-appconfig-applications-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-appconfig-environments-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-appconfig-applications-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-appconfig-configurationprofiles-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-appconfig-environments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Items.map(async (item) => {
             await sdkcall("AppConfig", "getApplication", {
@@ -374,7 +374,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
     await sdkcall("AppConfig", "listDeploymentStrategies", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').deferredBootstrapTable('removeAll');
         
         return Promise.all(data.Items.map(deploymentstrategyitem => {
             return sdkcall("AppConfig", "getDeploymentStrategy", {

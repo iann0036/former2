@@ -116,7 +116,7 @@ async function updateDatatableComputeEKS() {
     await sdkcall("EKS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-eks-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([

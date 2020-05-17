@@ -60,7 +60,7 @@ async function updateDatatableAnalyticsQuickSight() {
             Namespace: 'default',
             AwsAccountId: accountId
         }, false).then(async (data) => {
-            $('#section-analytics-quicksight-groups-datatable').bootstrapTable('removeAll');
+            $('#section-analytics-quicksight-groups-datatable').deferredBootstrapTable('removeAll');
 
             data.GroupList.forEach(group => {
                 $('#section-analytics-quicksight-groups-datatable').deferredBootstrapTable('append', [{

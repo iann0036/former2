@@ -127,8 +127,8 @@ async function updateDatatableSecurityIdentityAndComplianceCloudHSM() {
     await sdkcall("CloudHSMV2", "describeClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cloudhsm-hsms-datatable').deferredBootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
             $('#section-securityidentityandcompliance-cloudhsm-clusters-datatable').deferredBootstrapTable('append', [{

@@ -549,7 +549,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(dbCluster => {
             $('#section-database-rds-clusters-datatable').deferredBootstrapTable('append', [{
@@ -571,7 +571,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(dbInstance => {
             $('#section-database-rds-instances-datatable').deferredBootstrapTable('append', [{
@@ -594,7 +594,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-rds-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -614,7 +614,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DBParameterGroups.map(parameterGroup => {
             return sdkcall("RDS", "describeDBParameters", {
@@ -643,7 +643,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBClusterParameterGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
             return sdkcall("RDS", "describeDBClusterParameters", {
@@ -672,7 +672,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeOptionGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-optiongroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('removeAll');
 
         data.OptionGroupsList.forEach(optionGroup => {
             if (optionGroup.Options && optionGroup.Options.length) {
@@ -695,7 +695,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBSecurityGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-securitygroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSecurityGroups.forEach(securityGroup => {
             if ((securityGroup.EC2SecurityGroups && securityGroup.EC2SecurityGroups.length) || (securityGroup.IPRanges && securityGroup.IPRanges.length)) {
@@ -717,7 +717,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeEventSubscriptions", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-eventsubscriptions-datatable').deferredBootstrapTable('removeAll');
 
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
             $('#section-database-rds-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
@@ -738,7 +738,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
-        $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -767,7 +767,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
-        $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {

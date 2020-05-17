@@ -77,7 +77,7 @@ async function updateDatatableEndUserComputingWorkSpaces() {
     await sdkcall("WorkSpaces", "describeWorkspaces", {
         // no params
     }, true).then((data) => {
-        $('#section-endusercomputing-workspaces-workspaces-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-workspaces-workspaces-datatable').deferredBootstrapTable('removeAll');
 
         data.Workspaces.forEach(workspace => {
             $('#section-endusercomputing-workspaces-workspaces-datatable').deferredBootstrapTable('append', [{

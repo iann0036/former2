@@ -546,8 +546,8 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     await sdkcall("CognitoIdentity", "listIdentityPools", {
         MaxResults: 60 // WTF, required!
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-cognito-identitypools-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-identitypools-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-identitypoolroleattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.IdentityPools.map(identityPool => {
             return Promise.all([
@@ -591,16 +591,16 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
     await sdkcall("CognitoIdentityServiceProvider", "listUserPools", {
         MaxResults: 60 // WTF? required!
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-cognito-userpools-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpools-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolresourceservers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolidentityproviders-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolriskconfigurationattachments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpooluicustomizationattachments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolclients-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.UserPools.map(userPool => {
             return Promise.all([
