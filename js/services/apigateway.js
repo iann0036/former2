@@ -2639,10 +2639,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = obj.data.Tags;
-            reqParams.tf['tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['Tags'] = {};
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
         
@@ -2727,10 +2730,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AutoDeploy'] = obj.data.AutoDeploy;
         reqParams.tf['auto_deploy'] = obj.data.AutoDeploy;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = obj.data.Tags;
-            reqParams.tf['tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['Tags'] = {};
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 

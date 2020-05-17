@@ -37,8 +37,6 @@ $obj.prototype.bootstrapTable = function (action, data) {
 $obj.prototype.deferredBootstrapTable = function (action, data) {
     if (action == "append") {
         cli_resources = [...cli_resources, ...data];
-    } else if (action == "removeAll") {
-        cli_resources = [];
     }
 }
 $.notify = function () { }
@@ -119,13 +117,28 @@ async function main(opts) {
 
         for (var i=0; i<cli_resources.length; i++) {
             if (opts.searchFilter) {
-                if (JSON.stringify(cli_resources[i]).includes(opts.searchFilter)) {
-                    output_objects.push({
-                        'id': cli_resources[i].f2id,
-                        'type': cli_resources[i].f2type,
-                        'data': cli_resources[i].f2data,
-                        'region': cli_resources[i].f2region
-                    });
+                var jsonres = JSON.stringify(cli_resources[i]);
+                if (opts.searchFilter.includes(",")) {
+                    for (var searchterm of opts.searchFilter.split(",")) {
+                        if (jsonres.includes(searchterm)) {
+                            output_objects.push({
+                                'id': cli_resources[i].f2id,
+                                'type': cli_resources[i].f2type,
+                                'data': cli_resources[i].f2data,
+                                'region': cli_resources[i].f2region
+                            });
+                            break;
+                        }
+                    }
+                } else {
+                    if (jsonres.includes(opts.searchFilter)) {
+                        output_objects.push({
+                            'id': cli_resources[i].f2id,
+                            'type': cli_resources[i].f2type,
+                            'data': cli_resources[i].f2data,
+                            'region': cli_resources[i].f2region
+                        });
+                    }
                 }
             } else {
                 output_objects.push({
@@ -158,7 +171,7 @@ cliargs
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
-    .option('--search-filter <value>', 'search filter for discovered resources')
+    .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')

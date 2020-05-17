@@ -575,8 +575,18 @@ $(document).ready(function(){
                 var rows = $(this).deferredBootstrapTable('getData');
                 rows.forEach(row => {
                     var searchterm = $('#search-input').val();
-                    if (JSON.stringify(row).includes(searchterm)) {
-                        $('#section-search-datatable').bootstrapTable('append', [row]);
+                    var jsonrow = JSON.stringify(row);
+
+                    if (searchterm.includes(",")) {
+                        searchterm.split(",").forEach(searchterminst => {
+                            if (jsonrow.includes(searchterminst)) {
+                                $('#section-search-datatable').bootstrapTable('append', [row]);
+                            }
+                        });
+                    } else {
+                        if (jsonrow.includes(searchterm)) {
+                            $('#section-search-datatable').bootstrapTable('append', [row]);
+                        }
                     }
                 });
             }
