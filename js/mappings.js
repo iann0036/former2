@@ -3937,7 +3937,9 @@ app.synth()
         }
     }
 
-    generateDiagram();
+    if (!CLI) {
+        generateDiagram();
+    }
 
     return compiled;
 }
