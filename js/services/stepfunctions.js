@@ -182,9 +182,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
+        SKIPPED:
+        DefinitionS3Location: 
+            S3Location
+        DefinitionSubstitutions: 
+            DefinitionSubstitutions
         TODO:
         Tags: 
-            - Resource Tag
+            - TagsEntry
         */
 
         tracked_resources.push({

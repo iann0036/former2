@@ -480,6 +480,11 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             return sdkcall("SSM", "getParameter", {
                 Name: parameter.Name
             }, true).then((data) => {
+                data.Parameter['Description'] = parameter.Description;
+                data.Parameter['AllowedPattern'] = parameter.AllowedPattern;
+                data.Parameter['Tier'] = parameter.Tier;
+                data.Parameter['Policies'] = parameter.Policies;
+
                 $('#section-managementandgovernance-systemsmanager-parameters-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Parameter.ARN,
                     f2type: 'ssm.parameter',
@@ -672,11 +677,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['type'] = obj.data.Type;
         reqParams.cfn['Value'] = obj.data.Value;
         reqParams.tf['value'] = obj.data.Value;
+        reqParams.cfn['DataType'] = obj.data.DataType;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['AllowedPattern'] = obj.data.AllowedPattern;
+        reqParams.cfn['Tier'] = obj.data.Tier;
+        if (obj.data.Policies) {
+            reqParams.cfn['Policies'] = [];
+            obj.data.Policies.forEach(policy => {
+                reqParams.cfn['Policies'].push(policy.PolicyText);
+            });
+        }
 
         /*
-        SKIPPED:
-        AllowedPattern
-        Description
+        TODO:
+        Tags
         */
 
         tracked_resources.push({
