@@ -1,4 +1,4 @@
-var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
+var RELATIONSHIP_TYPE_MAP = {
   "AWS::EC2::RouteTable": {
     "EntityType": "Container",
     "Relationships": {
@@ -3886,4 +3886,24 @@ var RELATIONSHIP_TYPE_MAP = JSON.parse(`{
       }
     }
   }
-}`);
+};
+
+/* Overrides */
+RELATIONSHIP_TYPE_MAP_OVERRIDES = {
+  "AWS::Lambda::Function": {
+    "Relationships": {
+      "IsContainedInside": {
+        "AWS::EC2::Subnet": [
+          {
+            "PropertyName": "VpcConfig",
+            "Arity": "Many",
+            "EmbeddedPropertyName": "SubnetIds"
+          }
+        ]
+      },
+    }
+  }
+}
+
+// Merge
+RELATIONSHIP_TYPE_MAP = deepmerge.all([RELATIONSHIP_TYPE_MAP, RELATIONSHIP_TYPE_MAP_OVERRIDES]);

@@ -3435,7 +3435,7 @@ async function generateDiagram() {
     var placedItems = {};
 
     var cleaned_relationships = tracked_relationships['cfn'];
-    for (var i=0; i<cleaned_relationships.length; i++) {
+    for (var i=0; i<cleaned_relationships.length; i++) { // deduplicate
         for (var j=i+1; j<cleaned_relationships.length; j++) {
             if (
                 cleaned_relationships[i].sourceIndex == cleaned_relationships[j].sourceIndex &&
@@ -3592,8 +3592,7 @@ async function generateDiagram() {
         return;
     }
 
-    // TODO: de-duplicate tracked_relationships
-    // TODO: inherited links via non-displayed nodes
+    // TODO: inherited links via non-displayed nodes [ ]
 
     for (var i=0; i<cleaned_relationships.length; i++) {
         var sourcePlacement = false;

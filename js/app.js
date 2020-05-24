@@ -117,7 +117,52 @@ $(document).ready(function(){
         return ids;
     }
 
-    function checkRelatedResources(rows) {
+    function getRelationshipPropertyValues(relation, obj, propertyname) {
+        var propertyvalues = [];
+
+        if (relation['Arity'] == "Many") {
+            if (Array.isArray(obj.options.cfn[propertyname])) {
+                obj.options.cfn[propertyname].forEach(propertyvalue => {
+                    if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                        propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                    }
+    
+                    if (Array.isArray(propertyvalue)) {
+                        propertyvalue.forEach(propertyvalueitem => {
+                            propertyvalues.push(propertyvalueitem);
+                        });
+                    } else {
+                        propertyvalues.push(propertyvalue);
+                    }
+                });
+            } else {
+                var propertyvalue = obj.options.cfn[propertyname];
+
+                if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                    propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                }
+
+                if (Array.isArray(propertyvalue)) {
+                    propertyvalue.forEach(propertyvalueitem => {
+                        propertyvalues.push(propertyvalueitem);
+                    });
+                } else {
+                    propertyvalues.push(propertyvalue);
+                }
+            }
+        } else {
+            var propertyvalue = obj.options.cfn[propertyname];
+
+            if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+            }
+            propertyvalues.push(propertyvalue);
+        }
+
+        return propertyvalues;
+    }
+
+    function checkRelatedResources(rows) { // TODO: make this function more generic (too much duplication)
         check_objects = [];
         var related_resources = {};
         var related_resources_post = {};
@@ -168,30 +213,9 @@ $(document).ready(function(){
                             relationships[relationshiptype][relatedresourcetype].forEach(relation => {
                                 var propertyname = relation['PropertyName'];
                                 if (propertyname && obj.options.cfn[propertyname]) {
-                                    if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
-                                        obj.options.cfn[propertyname].forEach(propertyvalue => {
-                                            if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
-                                                propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
-                                            }
-                                            mapped_check_objects.forEach(child_obj => {
-                                                if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
-                                                    var is_duplicate = false;
-                                                    if (!Array.isArray(related_resources[readable_relationship_type])) {
-                                                        related_resources[readable_relationship_type] = [];
-                                                    }
-                                                    for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
-                                                        if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
-                                                            is_duplicate = true;
-                                                        }
-                                                    };
-                                                    if (!is_duplicate) {
-                                                        related_resources[readable_relationship_type].push(child_obj);
-                                                    }
-                                                }
-                                            });
-                                        });
-                                    } else {
-                                        var propertyvalue = obj.options.cfn[propertyname];
+                                    var propertyvalues = getRelationshipPropertyValues(relation, obj, propertyname);
+
+                                    propertyvalues.forEach(propertyvalue => {
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                 var is_duplicate = false;
@@ -208,7 +232,7 @@ $(document).ready(function(){
                                                 }
                                             }
                                         });
-                                    }
+                                    });
                                 }
                             });
                         });
@@ -245,37 +269,9 @@ $(document).ready(function(){
                         relationships[relationshiptype][relatedresourcetype].forEach(relation => {
                             var propertyname = relation['PropertyName'];
                             if (propertyname && obj.options.cfn[propertyname]) {
-                                if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
-                                    obj.options.cfn[propertyname].forEach(propertyvalue => {
-                                        if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
-                                            propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
-                                        }
-                                        rows.forEach(row => {
-                                            var row_check_object = null;
-                                            for (var child_obj of mapped_check_objects) {
-                                                if (child_obj.obj.id == row.f2id) {
-                                                    row_check_object = child_obj;
-                                                    break;
-                                                }
-                                            };
-                                            if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
-                                                var is_duplicate = false;
-                                                if (!Array.isArray(related_resources_post[readable_relationship_type])) {
-                                                    related_resources_post[readable_relationship_type] = [];
-                                                }
-                                                for (var related_resource in related_resources_post[readable_relationship_type]) { // check if already added
-                                                    if (related_resources_post[readable_relationship_type][related_resource].obj.id == obj.obj.id) {
-                                                        is_duplicate = true;
-                                                    }
-                                                };
-                                                if (!is_duplicate) {
-                                                    related_resources_post[readable_relationship_type].push(obj);
-                                                }
-                                            }
-                                        });
-                                    });
-                                } else {
-                                    var propertyvalue = obj.options.cfn[propertyname];
+                                var propertyvalues = getRelationshipPropertyValues(relation, obj, propertyname);
+
+                                propertyvalues.forEach(propertyvalue => {
                                     rows.forEach(row => {
                                         var row_check_object = null;
                                         for (var child_obj of mapped_check_objects) {
@@ -299,7 +295,7 @@ $(document).ready(function(){
                                             }
                                         }
                                     });
-                                }
+                                });
                             }
                         });
                     });
