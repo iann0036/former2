@@ -25,6 +25,8 @@ for cfntype, _ in cfn_spec.items():
 cfn_types = list(set(cfn_types)) # dedup
 cfn_types.sort()
 
+jsonobj = {}
+
 for cfntype in cfn_types:
     try:
         cfnclient.create_change_set(
@@ -51,7 +53,17 @@ for cfntype in cfn_types:
         results = p.findall(str(e))
         if len(results) > 0:
             print(cfntype, results[0])
+            importprops = list(results[0])
+            while importprops[-1] == "":
+                importprops.pop()
+
+            jsonobj[cfntype] = {
+                'importProperties': importprops
+            }
         else:
             #print(cfntype)
             #print("Not importable")
             pass
+
+print("")
+print(json.dumps(jsonobj, indent=4, sort_keys=True))
