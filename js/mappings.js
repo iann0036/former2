@@ -3641,7 +3641,7 @@ async function generateDiagram() {
     };
 
     xml = `<?xml version="1.0" encoding="UTF-8"?>
-<mxfile modified="${new Date().toISOString()}" agent="Former2/1.0" etag="rS7_16A_GMVNg1aOA2n0" version="13.0.9">
+<mxfile modified="${new Date().toISOString()}" agent="Former2/1.0" etag="rS7_16A_GMVNg1aOA2n0" version="13.1.9">
     <diagram id="diagram1" name="AWS Infrastructure">
     <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="${(maxX + 300)}" pageHeight="${(maxY + 300)}" math="0" shadow="0">
         <root>
@@ -3669,7 +3669,7 @@ async function generateDiagram() {
 
 function clearDiagram() {
     var xml = `<?xml version="1.0" encoding="UTF-8"?>
-<mxfile modified="${new Date().toISOString()}" agent="Former2/1.0" etag="rS7_16A_GMVNg1aOA2n0" version="13.0.9">
+<mxfile modified="${new Date().toISOString()}" agent="Former2/1.0" etag="rS7_16A_GMVNg1aOA2n0" version="13.1.9">
     <diagram id="diagram1" name="AWS Infrastructure">
     <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
         <root>
