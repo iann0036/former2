@@ -576,6 +576,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Proxy Target Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'proxyname',
+                        title: 'Proxy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -592,6 +630,7 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-database-rds-proxies-datatable');
+    blockUI('#section-database-rds-proxytargetgroups-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
         // no params
@@ -838,9 +877,10 @@ async function updateDatatableDatabaseRDS() {
         // no params
     }, true).then(async (data) => {
         $('#section-database-rds-proxies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-database-rds-proxytargetgroups-datatable').deferredBootstrapTable('removeAll');
 
         if (data.DBProxies) {
-            data.DBProxies.forEach(proxy => {
+            await Promise.all(data.DBProxies.map(async (proxy) => {
                 $('#section-database-rds-proxies-datatable').deferredBootstrapTable('append', [{
                     f2id: proxy.DBProxyArn,
                     f2type: 'rds.proxy',
@@ -850,10 +890,33 @@ async function updateDatatableDatabaseRDS() {
                     enginefamily: proxy.EngineFamily,
                     endpoint: proxy.Endpoint
                 }]);
-            });
+
+                return sdkcall("RDS", "describeDBProxyTargetGroups", {
+                    DBProxyName: proxy.DBProxyName
+                }, true).then(async (targetgroups) => {
+                    targetgroups.TargetGroups.forEach(async (tg) => {
+                        await sdkcall("RDS", "describeDBProxyTargets", {
+                            DBProxyName: proxy.DBProxyName,
+                            TargetGroupName: tg.TargetGroupName
+                        }, true).then((targetsdata) => {
+                            tg['Targets'] = targetsdata['Targets'];
+                        });
+
+                        $('#section-database-rds-proxytargetgroups-datatable').deferredBootstrapTable('append', [{
+                            f2id: tg.TargetGroupArn,
+                            f2type: 'rds.proxytargetgroup',
+                            f2data: tg,
+                            f2region: region,
+                            name: tg.TargetGroupName,
+                            proxyname: tg.DBProxyName
+                        }]);
+                    });
+                });
+            }));
         }
 
         unblockUI('#section-database-rds-proxies-datatable');
+        unblockUI('#section-database-rds-proxytargetgroups-datatable');
     }).catch(err => { });
 }
 
@@ -1371,6 +1434,42 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Endpoint': obj.data.Endpoint,
                     'DBProxyArn': obj.data.DBProxyArn
+                }
+            }
+        });
+    } else if (obj.type == "rds.proxytargetgroup") {
+        reqParams.cfn['DBProxyName'] = obj.data.DBProxyName;
+        reqParams.cfn['TargetGroupName'] = obj.data.TargetGroupName;
+        reqParams.cfn['ConnectionPoolConfigurationInfo'] = obj.data.ConnectionPoolConfig;
+        reqParams.cfn['DBClusterIdentifiers'] = [];
+        reqParams.cfn['DBInstanceIdentifiers'] = [];
+
+        obj.data.Targets.forEach(target => {
+            if (target.TrackedClusterId && target.TrackedClusterId != "") {
+                reqParams.cfn['DBClusterIdentifiers'].push(target.TrackedClusterId);
+            } else if (target.RdsResourceId && target.RdsResourceId != "") {
+                reqParams.cfn['DBInstanceIdentifiers'].push(target.RdsResourceId);
+            }
+        });
+
+        if (reqParams.cfn['DBClusterIdentifiers'].length == 0) {
+            reqParams.cfn['DBClusterIdentifiers'] = null;
+        }
+        if (reqParams.cfn['DBInstanceIdentifiers'].length == 0) {
+            reqParams.cfn['DBInstanceIdentifiers'] = null;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxy'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBProxy',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'TargetGroupArn': obj.data.TargetGroupArn,
+                    'TargetGroupName': obj.data.TargetGroupName
                 }
             }
         });
