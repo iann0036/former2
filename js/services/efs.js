@@ -115,6 +115,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Access Points': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Access Point ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'filesystemid',
+                        title: 'File System ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -122,6 +168,7 @@ sections.push({
 async function updateDatatableStorageEFS() {
     blockUI('#section-storage-efs-filesystems-datatable');
     blockUI('#section-storage-efs-mounttargets-datatable');
+    blockUI('#section-storage-efs-accesspoints-datatable');
 
     await sdkcall("EFS", "describeFileSystems", {
         // no params
@@ -140,37 +187,55 @@ async function updateDatatableStorageEFS() {
                 size: fileSystem.SizeInBytes.Value
             }]);
 
-            return sdkcall("EFS", "describeMountTargets", {
-                FileSystemId: fileSystem.FileSystemId
-            }, true).then(async (data) => {
-                $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('removeAll');
+            return Promise.all([
+                sdkcall("EFS", "describeMountTargets", {
+                    FileSystemId: fileSystem.FileSystemId
+                }, true).then(async (data) => {
+                    $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('removeAll');
 
-                await Promise.all(data.MountTargets.map(mountTarget => {
-                    return sdkcall("EC2", "describeNetworkInterfaces", {
-                        NetworkInterfaceIds: [mountTarget.NetworkInterfaceId]
-                    }, true).then((nicdata) => {
-                        mountTarget['SecurityGroups'] = [];
-                        nicdata.NetworkInterfaces[0].Groups.forEach(group => {
-                            mountTarget['SecurityGroups'].push(group.GroupId);
+                    await Promise.all(data.MountTargets.map(mountTarget => {
+                        return sdkcall("EC2", "describeNetworkInterfaces", {
+                            NetworkInterfaceIds: [mountTarget.NetworkInterfaceId]
+                        }, true).then((nicdata) => {
+                            mountTarget['SecurityGroups'] = [];
+                            nicdata.NetworkInterfaces[0].Groups.forEach(group => {
+                                mountTarget['SecurityGroups'].push(group.GroupId);
+                            });
+
+                            $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('append', [{
+                                f2id: mountTarget.MountTargetId,
+                                f2type: 'efs.mounttarget',
+                                f2data: mountTarget,
+                                f2region: region,
+                                id: mountTarget.MountTargetId,
+                                filesystemid: mountTarget.FileSystemId,
+                                subnetid: mountTarget.SubnetId,
+                                ipaddress: mountTarget.IpAddress
+                            }]);
                         });
-
-                        $('#section-storage-efs-mounttargets-datatable').deferredBootstrapTable('append', [{
-                            f2id: mountTarget.MountTargetId,
-                            f2type: 'efs.mounttarget',
-                            f2data: mountTarget,
+                    }));
+                }),
+                sdkcall("EC2", "describeAccessPoints", {
+                    FileSystemId: fileSystem.FileSystemId
+                }, true).then((apdata) => {
+                    apdata.AccessPoints.forEach(ap => {
+                        $('#section-storage-efs-accesspoints-datatable').deferredBootstrapTable('append', [{
+                            f2id: ap.AccessPointArn,
+                            f2type: 'efs.accesspoint',
+                            f2data: ap,
                             f2region: region,
-                            id: mountTarget.MountTargetId,
-                            filesystemid: mountTarget.FileSystemId,
-                            subnetid: mountTarget.SubnetId,
-                            ipaddress: mountTarget.IpAddress
+                            id: ap.AccessPointId,
+                            filesystemid: ap.FileSystemId,
+                            name: ap.Name
                         }]);
                     });
-                }));
-            });
+                })
+            ]);
         }));
 
         unblockUI('#section-storage-efs-filesystems-datatable');
         unblockUI('#section-storage-efs-mounttargets-datatable');
+        unblockUI('#section-storage-efs-accesspoints-datatable');
     });
 }
 
@@ -229,6 +294,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'IpAddress': obj.data.IpAddress
                 }
+            }
+        });
+    } else if (obj.type == "efs.accesspoint") {
+        reqParams.cfn['FileSystemId'] = obj.data.FileSystemId;
+        reqParams.cfn['ClientToken'] = obj.data.ClientToken;
+        reqParams.cfn['AccessPointTags'] = obj.data.Tags;
+        reqParams.cfn['PosixUser'] = obj.data.PosixUser;
+        reqParams.cfn['RootDirectory'] = obj.data.RootDirectory;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('efs', obj.id, 'AWS::EFS::AccessPoint'),
+            'region': obj.region,
+            'service': 'efs',
+            'type': 'AWS::EFS::AccessPoint',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AccessPoint
             }
         });
     } else {

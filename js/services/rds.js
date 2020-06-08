@@ -530,6 +530,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Proxies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'enginename',
+                        title: 'Engine Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -545,6 +591,7 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-eventsubscriptions-datatable');
     blockUI('#section-database-rds-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-database-rds-proxies-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
         // no params
@@ -786,6 +833,28 @@ async function updateDatatableDatabaseRDS() {
 
         unblockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     });
+
+    await sdkcall("RDS", "describeDBProxies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-database-rds-proxies-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.DBProxies) {
+            data.DBProxies.forEach(proxy => {
+                $('#section-database-rds-proxies-datatable').deferredBootstrapTable('append', [{
+                    f2id: proxy.DBProxyArn,
+                    f2type: 'rds.proxy',
+                    f2data: proxy,
+                    f2region: region,
+                    name: proxy.DBProxyName,
+                    enginefamily: proxy.EngineFamily,
+                    endpoint: proxy.Endpoint
+                }]);
+            });
+        }
+
+        unblockUI('#section-database-rds-proxies-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1273,6 +1342,37 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::RDS::DBSecurityGroup',
             'terraformType': 'aws_db_security_group',
             'options': reqParams
+        });
+    } else if (obj.type == "rds.proxy") {
+        reqParams.cfn['DBProxyName'] = obj.data.DBProxyName;
+        reqParams.cfn['EngineFamily'] = obj.data.EngineFamily;
+        reqParams.cfn['VpcSecurityGroupIds'] = obj.data.VpcSecurityGroupIds;
+        reqParams.cfn['VpcSubnetIds'] = obj.data.VpcSubnetIds;
+        reqParams.cfn['Auth'] = obj.data.Auth;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['RequireTLS'] = obj.data.RequireTLS;
+        reqParams.cfn['IdleClientTimeout'] = obj.data.IdleClientTimeout;
+        reqParams.cfn['DebugLogging'] = obj.data.DebugLogging;
+
+        /*
+        TODO
+        Tags: 
+            - TagFormat
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxy'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBProxy',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Endpoint': obj.data.Endpoint,
+                    'DBProxyArn': obj.data.DBProxyArn
+                }
+            }
         });
     } else {
         return false;

@@ -1045,7 +1045,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'RoleARN': destination.ElasticsearchDestinationDescription.RoleARN,
                     'S3BackupMode': destination.ElasticsearchDestinationDescription.S3BackupMode,
                     'S3Configuration': s3Configuration,
-                    'TypeName': destination.ElasticsearchDestinationDescription.TypeName
+                    'TypeName': destination.ElasticsearchDestinationDescription.TypeName,
+                    'VpcConfiguration': destination.ElasticsearchDestinationDescription.VpcConfigurationDescription
                 };
             }
             if (destination.ElasticsearchDestinationDescription) {

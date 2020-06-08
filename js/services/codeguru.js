@@ -74,6 +74,11 @@ async function updateDatatableMachineLearningCodeGuru() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "codeguru.profilinggroup") {
         reqParams.cfn['ProfilingGroupName'] = obj.data.name;
+        
+        /*
+        TODO:
+        AgentPermissions
+        */
 
         tracked_resources.push({
             'obj': obj,

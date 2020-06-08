@@ -265,6 +265,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Provisioning Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -276,6 +314,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-policyprincipalattachments-datatable');
     blockUI('#section-internetofthings-core-certificates-datatable');
     blockUI('#section-internetofthings-core-topicrules-datatable');
+    blockUI('#section-internetofthings-core-provisioningtemplates-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -418,6 +457,29 @@ async function updateDatatableInternetofThingsCore() {
 
         unblockUI('#section-internetofthings-core-topicrules-datatable');
     });
+
+    await sdkcall("Iot", "listProvisioningTemplates", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-internetofthings-core-provisioningtemplates-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.templates.map(template => {
+            return sdkcall("Iot", "describeProvisioningTemplate", {
+                templateName: template.templateName
+            }, true).then((data) => {
+                $('#section-internetofthings-core-provisioningtemplates-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.templateArn,
+                    f2type: 'iot.provisioningtemplate',
+                    f2data: data,
+                    f2region: region,
+                    name: data.templateName,
+                    description: data.description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-internetofthings-core-provisioningtemplates-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -782,6 +844,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::TopicRule',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.provisioningtemplate") {
+        reqParams.cfn['TemplateName'] = obj.data.templateName;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['TemplateBody'] = obj.data.templateBody;
+        reqParams.cfn['Enabled'] = obj.data.enabled;
+        reqParams.cfn['ProvisioningRoleArn'] = obj.data.provisioningRoleArn;
+        if (obj.data.preProvisioningHook) {
+            reqParams.cfn['PreProvisioningHook'] = {
+                'PayloadVersion': obj.data.preProvisioningHook.payloadVersion,
+                'TargetArn': obj.data.preProvisioningHook.targetArn
+            };
+        }
+
+        /*
+        TODO
+        Tags: 
+         - Json
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::ProvisioningTemplate'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::ProvisioningTemplate',
             'options': reqParams
         });
     } else {

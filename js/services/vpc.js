@@ -4545,9 +4545,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'ClientRootCertificateChainArn': authenticationoptions.MutualAuthentication.ClientRootCertificateChain
                     }
                 }
+                var federatedauthentication = null;
+                if (authenticationoptions.FederatedAuthentication) {
+                    federatedauthentication = {
+                        'SAMLProviderArn': authenticationoptions.FederatedAuthentication.SamlProviderArn
+                    }
+                }
                 reqParams.cfn['AuthenticationOptions'].push({
                     'Type': authenticationoptions.Type,
                     'ActiveDirectory': authenticationoptions.ActiveDirectory,
+                    'FederatedAuthentication': federatedauthentication,
                     'MutualAuthentication': mutualauthentication,
                 });
             });
