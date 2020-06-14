@@ -288,6 +288,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             }
             reqParams.cfn.DistributionConfig['Origins'].push({
+                'ConnectionAttempts': origin.ConnectionAttempts,
+                'ConnectionTimeout': origin.ConnectionTimeout,
                 'CustomOriginConfig': customOriginConfig,
                 'DomainName': origin.DomainName,
                 'Id': origin.Id,

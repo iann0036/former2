@@ -240,6 +240,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
             reqParams.tf['validation_method'] = "DNS";
         }
+        reqParams.cfn['CertificateAuthorityArn'] = obj.data.CertificateAuthorityArn;
+        if (obj.data.Options) {
+            reqParams.cfn['CertificateTransparencyLoggingPreference'] = obj.data.Options.CertificateTransparencyLoggingPreference;
+        }
 
         /*
         TODO:

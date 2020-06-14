@@ -2544,6 +2544,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['MultiAttachEnabled'] = obj.data.MultiAttachEnabled;
+        reqParams.cfn['OutpostArn'] = obj.data.OutpostArn;
 
         /*
         TODO:
@@ -3105,7 +3106,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         if (loadBalancerAddress.AllocationId) {
                             reqParams.cfn['SubnetMappings'].push({
                                 'SubnetId': availabilityZone.SubnetId,
-                                'AllocationId': loadBalancerAddress.AllocationId
+                                'AllocationId': loadBalancerAddress.AllocationId,
+                                'PrivateIPv4Address': loadBalancerAddress.PrivateIPv4Address
                             });
                             reqParams.tf['subnet_mapping'].push({
                                 'subnet_id': availabilityZone.SubnetId,

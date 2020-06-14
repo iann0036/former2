@@ -525,6 +525,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AtRestEncryptionEnabled'] = obj.data.AtRestEncryptionEnabled;
         reqParams.tf['at_rest_encryption_enabled'] = obj.data.AtRestEncryptionEnabled;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['MultiAZ'] = (obj.data.MultiAZ == "enabled");
 
         /*
         TODO:
