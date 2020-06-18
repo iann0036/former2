@@ -175,7 +175,13 @@ async function updateDatatableStorageEFS() {
     }, true).then(async (data) => {
         $('#section-storage-efs-filesystems-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.FileSystems.map(fileSystem => {
+        await Promise.all(data.FileSystems.map(async (fileSystem) => {
+            await sdkcall("EFS", "describeFileSystemPolicy", {
+                FileSystemId: fileSystem.FileSystemId
+            }, true).then(async (policydata) => {
+                fileSystem['FileSystemPolicy'] = policydata.Policy;
+            }).catch(err => { });
+
             $('#section-storage-efs-filesystems-datatable').deferredBootstrapTable('append', [{
                 f2id: fileSystem.FileSystemId,
                 f2type: 'efs.filesystem',
@@ -258,6 +264,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
+        reqParams.cfn['FileSystemPolicy'] = obj.data.FileSystemPolicy;
 
         tracked_resources.push({
             'obj': obj,
@@ -311,7 +318,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::EFS::AccessPoint',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.AccessPoint
+                'Ref': obj.data.AccessPoint,
+                'GetAtt': {
+                    'AccessPointId': obj.data.AccessPointId,
+                    'Arn': obj.data.AccessPointArn
+                }
             }
         });
     } else {

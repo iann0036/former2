@@ -1461,10 +1461,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxy'),
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxyTargetGroup'),
             'region': obj.region,
             'service': 'rds',
-            'type': 'AWS::RDS::DBProxy',
+            'type': 'AWS::RDS::DBProxyTargetGroup',
             'options': reqParams,
             'returnValues': {
                 'GetAtt': {

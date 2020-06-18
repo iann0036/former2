@@ -648,6 +648,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['layers'].push(layer.Arn);
             });
         }
+        
+        reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
 
         /*
         TODO:

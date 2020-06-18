@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**533/532 (100%)** Resources Covered
+**544/544 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -187,6 +187,7 @@
 | *AWS::EC2::NetworkInterfaceAttachment* | :thumbsup: |
 | *AWS::EC2::NetworkInterfacePermission* | :thumbsup: |
 | *AWS::EC2::PlacementGroup* | :thumbsup: |
+| *AWS::EC2::PrefixList* |  |
 | *AWS::EC2::Route* | :thumbsup: |
 | *AWS::EC2::RouteTable* | :thumbsup: |
 | *AWS::EC2::SecurityGroup* | :thumbsup: |
@@ -228,6 +229,7 @@
 | *AWS::ECS::Service* | :thumbsup: |
 | *AWS::ECS::TaskDefinition* | :thumbsup: |
 | *AWS::ECS::TaskSet* | :thumbsup: |
+| *AWS::EFS::AccessPoint* | :thumbsup: |
 | *AWS::EFS::FileSystem* | :thumbsup: |
 | *AWS::EFS::MountTarget* | :thumbsup: |
 | *AWS::EKS::Cluster* | :thumbsup: |
@@ -271,6 +273,9 @@
 | *AWS::GameLift::MatchmakingConfiguration* | :thumbsup: |
 | *AWS::GameLift::MatchmakingRuleSet* | :thumbsup: |
 | *AWS::GameLift::Script* | :thumbsup: |
+| *AWS::GlobalAccelerator::Accelerator* | :thumbsup: |
+| *AWS::GlobalAccelerator::EndpointGroup* | :thumbsup: |
+| *AWS::GlobalAccelerator::Listener* | :thumbsup: |
 | *AWS::Glue::Classifier* | :thumbsup: |
 | *AWS::Glue::Connection* | :thumbsup: |
 | *AWS::Glue::Crawler* | :thumbsup: |
@@ -320,6 +325,7 @@
 | *AWS::IAM::UserToGroupAddition* | N/A |
 | *AWS::ImageBuilder::Component* | :thumbsup: |
 | *AWS::ImageBuilder::DistributionConfiguration* | :thumbsup: |
+| *AWS::ImageBuilder::Image* | :thumbsup: |
 | *AWS::ImageBuilder::ImagePipeline* | :thumbsup: |
 | *AWS::ImageBuilder::ImageRecipe* | :thumbsup: |
 | *AWS::ImageBuilder::InfrastructureConfiguration* | :thumbsup: |
@@ -332,6 +338,7 @@
 | *AWS::IoT::Certificate* | :thumbsup: |
 | *AWS::IoT::Policy* | :thumbsup: |
 | *AWS::IoT::PolicyPrincipalAttachment* | :thumbsup: |
+| *AWS::IoT::ProvisioningTemplate* | :thumbsup: |
 | *AWS::IoT::Thing* | :thumbsup: |
 | *AWS::IoT::ThingPrincipalAttachment* | :thumbsup: |
 | *AWS::IoT::TopicRule* | :thumbsup: |
@@ -371,6 +378,9 @@
 | *AWS::Logs::MetricFilter* | :thumbsup: |
 | *AWS::Logs::SubscriptionFilter* | :thumbsup: |
 | *AWS::MSK::Cluster* | :thumbsup: |
+| *AWS::Macie::CustomDataIdentifier* | :thumbsup: |
+| *AWS::Macie::FindingsFilter* | :thumbsup: |
+| *AWS::Macie::Session* | :thumbsup: |
 | *AWS::ManagedBlockchain::Member* | :thumbsup: |
 | *AWS::ManagedBlockchain::Node* | :thumbsup: |
 | *AWS::MediaConvert::JobTemplate* | :thumbsup: |
@@ -428,6 +438,8 @@
 | *AWS::RDS::DBClusterParameterGroup* | :thumbsup: |
 | *AWS::RDS::DBInstance* | :thumbsup: |
 | *AWS::RDS::DBParameterGroup* | :thumbsup: |
+| *AWS::RDS::DBProxy* | :thumbsup: |
+| *AWS::RDS::DBProxyTargetGroup* | :thumbsup: |
 | *AWS::RDS::DBSecurityGroup* | :thumbsup: |
 | *AWS::RDS::DBSecurityGroupIngress* | N/A |
 | *AWS::RDS::DBSubnetGroup* | :thumbsup: |
@@ -539,7 +551,7 @@
 
 ## Terraform Coverage
 
-**309/561 (55%)** Resources Covered
+**309/562 (54%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -743,6 +755,7 @@
 | *aws_ec2_traffic_mirror_target* |  |
 | *aws_ec2_transit_gateway* | :thumbsup: |
 | *aws_ec2_transit_gateway_peering_attachment* |  |
+| *aws_ec2_transit_gateway_peering_attachment_accepter* |  |
 | *aws_ec2_transit_gateway_route* | :thumbsup: |
 | *aws_ec2_transit_gateway_route_table* | :thumbsup: |
 | *aws_ec2_transit_gateway_route_table_association* | :thumbsup: |
