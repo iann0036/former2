@@ -375,6 +375,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Capacity Providers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'status',
+                        title: 'Status',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -387,6 +425,7 @@ async function updateDatatableComputeECS() {
     blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-compute-ecs-primarytasksets-datatable');
     blockUI('#section-compute-ecs-tasksets-datatable');
+    blockUI('#section-compute-ecs-capacityproviders-datatable');
 
     await sdkcall("ECS", "listTaskDefinitions", {
         sort: "DESC"
@@ -565,6 +604,27 @@ async function updateDatatableComputeECS() {
 
         unblockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
     });
+
+    await sdkcall("ECS", "describeCapacityProviders", {
+        include: ["TAGS"]
+    }, true).then(async (data) => {
+        $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.capacityProviders) {
+            data.capacityProviders.forEach(capacityProvider => {
+                $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
+                    f2id: capacityProvider.capacityProviderArn,
+                    f2type: 'ecs.capacityprovider',
+                    f2data: capacityProvider,
+                    f2region: region,
+                    name: capacityProvider.name,
+                    status: capacityProvider.status
+                }]);
+            });
+        }
+
+        unblockUI('#section-compute-ecs-capacityproviders-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -586,6 +646,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['ClusterSettings'].push({
                     'Name': setting.name,
                     'Value': setting.value
+                });
+            });
+        }
+        reqParams.cfn['CapacityProviders'] = obj.data.capacityProviders;
+        if (obj.data.defaultCapacityProviderStrategy && obj.data.defaultCapacityProviderStrategy.length) {
+            reqParams.cfn['CapacityProviders'] = [];
+            obj.data.defaultCapacityProviderStrategy.forEach(dcps => {
+                reqParams.cfn['CapacityProviders'].push({
+                    'CapacityProvider': dcps.capacityProvider,
+                    'Weight': dcps.weight,
+                    'Base': dcps.base
                 });
             });
         }
@@ -716,6 +787,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.deploymentController) {
             reqParams.cfn['DeploymentController'] = {
                 'Type': obj.data.deploymentController.type
+            };
+        }
+        if (obj.data.capacityProviderStrategy) {
+            reqParams.cfn['CapacityProviderStrategy'] = {
+                'CapacityProvider': obj.data.capacityProviderStrategy.capacityProvider,
+                'Weight': obj.data.capacityProviderStrategy.weight,
+                'Base': obj.data.capacityProviderStrategy.base
             };
         }
 
@@ -1168,6 +1246,46 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Id': obj.data.id
                 }
             }
+        });
+    } else if (obj.type == "ecs.capacityprovider") {
+        reqParams.cfn['Name'] = obj.data.name;
+        var managedscaling = null;
+        if (obj.data.autoScalingGroupProvider.managedScaling) {
+            managedscaling = {
+                'MaximumScalingStepSize': obj.data.autoScalingGroupProvider.managedScaling.maximumScalingStepSize,
+                'MinimumScalingStepSize': obj.data.autoScalingGroupProvider.managedScaling.minimumScalingStepSize,
+                'Status': obj.data.autoScalingGroupProvider.managedScaling.status,
+                'TargetCapacity': obj.data.autoScalingGroupProvider.managedScaling.targetCapacity
+            };
+        }
+        reqParams.cfn['AutoScalingGroupProvider'] = {
+            'AutoScalingGroupArn': obj.data.autoScalingGroupProvider.autoScalingGroupArn,
+            'ManagedTerminationProtection': obj.data.autoScalingGroupProvider.managedTerminationProtection,
+            'ManagedScaling': managedscaling
+        };
+        if (obj.data.tags && obj.data.tags.length) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag.key,
+                    'Value': tag.value
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::CapacityProvider'),
+            'region': obj.region,
+            'service': 'ecs',
+            'type': 'AWS::ECS::CapacityProvider',
+            'options': reqParams/*,
+            'returnValues': {
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn
+                }
+            }*/
         });
     } else {
         return false;
