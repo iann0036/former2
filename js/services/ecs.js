@@ -612,14 +612,16 @@ async function updateDatatableComputeECS() {
 
         if (data.capacityProviders) {
             data.capacityProviders.forEach(capacityProvider => {
-                $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
-                    f2id: capacityProvider.capacityProviderArn,
-                    f2type: 'ecs.capacityprovider',
-                    f2data: capacityProvider,
-                    f2region: region,
-                    name: capacityProvider.name,
-                    status: capacityProvider.status
-                }]);
+                if (!['FARGATE', 'FARGATE_SPOT'].includes(capacityProvider.name)) {
+                    $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
+                        f2id: capacityProvider.capacityProviderArn,
+                        f2type: 'ecs.capacityprovider',
+                        f2data: capacityProvider,
+                        f2region: region,
+                        name: capacityProvider.name,
+                        status: capacityProvider.status
+                    }]);
+                }
             });
         }
 
