@@ -317,12 +317,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Resource': obj.data.source.auth.resource
             };
         }
+        var buildStatusConfig = null;
+        if (obj.data.source.buildStatusConfig) {
+            buildStatusConfig = {
+                'Context': obj.data.source.buildStatusConfig.context,
+                'TargetUrl': obj.data.source.buildStatusConfig.targetUrl
+            };
+        }
 
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Description'] = obj.data.description;
         reqParams.cfn['Source'] = {
             'Auth': auth,
             'BuildSpec': obj.data.source.buildspec,
+            'BuildStatusConfig': buildStatusConfig,
             'GitCloneDepth': obj.data.source.gitCloneDepth,
             'GitSubmodulesConfig': gitSubmodulesConfig,
             'InsecureSsl': obj.data.source.insecureSsl,

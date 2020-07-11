@@ -312,7 +312,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
-
+        reqParams.cfn['EnableBranchAutoDeletion'] = obj.data.enableBranchAutoDeletion;
 
         /*
         TODO:
@@ -383,6 +383,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'BranchName': subdomain.subDomainSetting.branchName,
             });
         });
+        reqParams.cfn['EnableAutoSubDomain'] = obj.data.enableAutoSubDomain;
+        reqParams.cfn['AutoSubDomainCreationPatterns'] = obj.data.autoSubDomainCreationPatterns;
+        reqParams.cfn['AutoSubDomainIAMRole'] = obj.data.autoSubDomainIAMRole;
 
         tracked_resources.push({
             'obj': obj,

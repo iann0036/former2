@@ -3156,6 +3156,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             });
         }
+        reqParams.cfn['AlpnPolicy'] = obj.data.AlpnPolicy;
 
         /*
         TODO:

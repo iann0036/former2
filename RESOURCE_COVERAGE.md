@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**545/545 (100%)** Resources Covered
+**548/548 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -72,6 +72,7 @@
 | *AWS::AppSync::Resolver* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalableTarget* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalingPolicy* | :thumbsup: |
+| *AWS::Athena::DataCatalog* | :thumbsup: |
 | *AWS::Athena::NamedQuery* | :thumbsup: |
 | *AWS::Athena::WorkGroup* | :thumbsup: |
 | *AWS::AutoScaling::AutoScalingGroup* | :thumbsup: |
@@ -188,6 +189,7 @@
 | *AWS::EC2::NetworkInterfaceAttachment* | :thumbsup: |
 | *AWS::EC2::NetworkInterfacePermission* | :thumbsup: |
 | *AWS::EC2::PlacementGroup* | :thumbsup: |
+| *AWS::EC2::PrefixList* | :thumbsup: |
 | *AWS::EC2::Route* | :thumbsup: |
 | *AWS::EC2::RouteTable* | :thumbsup: |
 | *AWS::EC2::SecurityGroup* | :thumbsup: |
@@ -434,6 +436,7 @@
 | *AWS::PinpointEmail::DedicatedIpPool* | :thumbsup: |
 | *AWS::PinpointEmail::Identity* | :thumbsup: |
 | *AWS::QLDB::Ledger* | :thumbsup: |
+| *AWS::QLDB::Stream* | :thumbsup: |
 | *AWS::RAM::ResourceShare* | :thumbsup: |
 | *AWS::RDS::DBCluster* | :thumbsup: |
 | *AWS::RDS::DBClusterParameterGroup* | :thumbsup: |

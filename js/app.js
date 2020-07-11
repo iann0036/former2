@@ -1791,519 +1791,615 @@ async function getResourceStackAssociation() {
 // Import
 
 eligibleImportResources = {
-	"AWS::AccessAnalyzer::Analyzer": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ACMPCA::Certificate": {
-		"importProperties": [
-			"Arn",
-			"CertificateAuthorityArn"
-		]
-	},
-	"AWS::ACMPCA::CertificateAuthority": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ACMPCA::CertificateAuthorityActivation": {
-		"importProperties": [
-			"CertificateAuthorityArn"
-		]
-	},
-	"AWS::ApiGateway::Authorizer": {
-		"importProperties": [
-			"AuthorizerId",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::Deployment": {
-		"importProperties": [
-			"DeploymentId",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::Method": {
-		"importProperties": [
-			"HttpMethod",
-			"ResourceId",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::Model": {
-		"importProperties": [
-			"Name",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::RequestValidator": {
-		"importProperties": [
-			"RequestValidatorId",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::Resource": {
-		"importProperties": [
-			"ResourceId",
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::RestApi": {
-		"importProperties": [
-			"RestApiId"
-		]
-	},
-	"AWS::ApiGateway::Stage": {
-		"importProperties": [
-			"RestApiId",
-			"StageName"
-		]
-	},
-	"AWS::Athena::NamedQuery": {
-		"importProperties": [
-			"NamedQueryId"
-		]
-	},
-	"AWS::Athena::WorkGroup": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::AutoScaling::AutoScalingGroup": {
-		"importProperties": [
-			"AutoScalingGroupName"
-		]
-	},
-	"AWS::AutoScaling::LaunchConfiguration": {
-		"importProperties": [
-			"LaunchConfigurationName"
-		]
-	},
-	"AWS::AutoScaling::LifecycleHook": {
-		"importProperties": [
-			"AutoScalingGroupName",
-			"LifecycleHookName"
-		]
-	},
-	"AWS::AutoScaling::ScalingPolicy": {
-		"importProperties": [
-			"PolicyName"
-		]
-	},
-	"AWS::AutoScaling::ScheduledAction": {
-		"importProperties": [
-			"ScheduledActionName"
-		]
-	},
-	"AWS::Cassandra::Keyspace": {
-		"importProperties": [
-			"KeyspaceName"
-		]
-	},
-	"AWS::Cassandra::Table": {
-		"importProperties": [
-			"KeyspaceName",
-			"TableName"
-		]
-	},
-	"AWS::CE::CostCategory": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::Chatbot::SlackChannelConfiguration": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::CloudFormation::Stack": {
-		"importProperties": [
-			"StackId"
-		]
-	},
-	"AWS::CloudTrail::Trail": {
-		"importProperties": [
-			"TrailName"
-		]
-	},
-	"AWS::CloudWatch::Alarm": {
-		"importProperties": [
-			"AlarmName"
-		]
-	},
-	"AWS::CloudWatch::CompositeAlarm": {
-		"importProperties": [
-			"AlarmName"
-		]
-	},
-	"AWS::CodeGuruProfiler::ProfilingGroup": {
-		"importProperties": [
-			"ProfilingGroupName"
-		]
-	},
-	"AWS::CodeStarConnections::Connection": {
-		"importProperties": [
-			"ConnectionArn"
-		]
-	},
-	"AWS::Config::ConformancePack": {
-		"importProperties": [
-			"ConformancePackName"
-		]
-	},
-	"AWS::Config::OrganizationConformancePack": {
-		"importProperties": [
-			"OrganizationConformancePackName"
-		]
-	},
-	"AWS::Detective::Graph": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::Detective::MemberInvitation": {
-		"importProperties": [
-			"GraphArn",
-			"MemberId"
-		]
-	},
-	"AWS::DynamoDB::Table": {
-		"importProperties": [
-			"TableName"
-		]
-	},
-	"AWS::EC2::EIP": {
-		"importProperties": [
-			"PublicIp"
-		]
-	},
-	"AWS::EC2::GatewayRouteTableAssociation": {
-		"importProperties": [
-			"GatewayId"
-		]
-	},
-	"AWS::EC2::Instance": {
-		"importProperties": [
-			"InstanceId"
-		]
-	},
-	"AWS::EC2::InternetGateway": {
-		"importProperties": [
-			"InternetGatewayId"
-		]
-	},
-	"AWS::EC2::LocalGatewayRoute": {
-		"importProperties": [
-			"DestinationCidrBlock",
-			"LocalGatewayRouteTableId"
-		]
-	},
-	"AWS::EC2::LocalGatewayRouteTableVPCAssociation": {
-		"importProperties": [
-			"LocalGatewayRouteTableVpcAssociationId"
-		]
-	},
-	"AWS::EC2::NatGateway": {
-		"importProperties": [
-			"NatGatewayId"
-		]
-	},
-	"AWS::EC2::NetworkAcl": {
-		"importProperties": [
-			"NetworkAclId"
-		]
-	},
-	"AWS::EC2::NetworkInterface": {
-		"importProperties": [
-			"NetworkInterfaceId"
-		]
-	},
-	"AWS::EC2::RouteTable": {
-		"importProperties": [
-			"RouteTableId"
-		]
-	},
-	"AWS::EC2::SecurityGroup": {
-		"importProperties": [
-			"GroupId"
-		]
-	},
-	"AWS::EC2::Subnet": {
-		"importProperties": [
-			"SubnetId"
-		]
-	},
-	"AWS::EC2::Volume": {
-		"importProperties": [
-			"VolumeId"
-		]
-	},
-	"AWS::EC2::VPC": {
-		"importProperties": [
-			"VpcId"
-		]
-	},
-	"AWS::ECS::Cluster": {
-		"importProperties": [
-			"ClusterName"
-		]
-	},
-	"AWS::ECS::PrimaryTaskSet": {
-		"importProperties": [
-			"Cluster",
-			"Service"
-		]
-	},
-	"AWS::ECS::Service": {
-		"importProperties": [
-			"Cluster",
-			"ServiceArn"
-		]
-	},
-	"AWS::ECS::TaskDefinition": {
-		"importProperties": [
-			"TaskDefinitionArn"
-		]
-	},
-	"AWS::ECS::TaskSet": {
-		"importProperties": [
-			"Cluster",
-			"Id",
-			"Service"
-		]
-	},
-	"AWS::ElasticLoadBalancing::LoadBalancer": {
-		"importProperties": [
-			"LoadBalancerName"
-		]
-	},
-	"AWS::ElasticLoadBalancingV2::Listener": {
-		"importProperties": [
-			"ListenerArn"
-		]
-	},
-	"AWS::ElasticLoadBalancingV2::ListenerRule": {
-		"importProperties": [
-			"RuleArn"
-		]
-	},
-	"AWS::ElasticLoadBalancingV2::LoadBalancer": {
-		"importProperties": [
-			"LoadBalancerArn"
-		]
-	},
-	"AWS::Events::Rule": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::EventSchemas::RegistryPolicy": {
-		"importProperties": [
-			"Id"
-		]
-	},
-	"AWS::FMS::NotificationChannel": {
-		"importProperties": [
-			"SnsTopicArn"
-		]
-	},
-	"AWS::FMS::Policy": {
-		"importProperties": [
-			"Id"
-		]
-	},
-	"AWS::ImageBuilder::Component": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ImageBuilder::DistributionConfiguration": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ImageBuilder::ImagePipeline": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ImageBuilder::ImageRecipe": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::ImageBuilder::InfrastructureConfiguration": {
-		"importProperties": [
-			"Arn"
-		]
-	},
-	"AWS::IoT::Thing": {
-		"importProperties": [
-			"ThingName"
-		]
-	},
-	"AWS::Lambda::Alias": {
-		"importProperties": [
-			"AliasArn"
-		]
-	},
-	"AWS::Lambda::Function": {
-		"importProperties": [
-			"FunctionName"
-		]
-	},
-	"AWS::Lambda::Version": {
-		"importProperties": [
-			"FunctionArn"
-		]
-	},
-	"AWS::Logs::LogGroup": {
-		"importProperties": [
-			"LogGroupName"
-		]
-	},
-	"AWS::Logs::MetricFilter": {
-		"importProperties": [
-			"FilterName"
-		]
-	},
-	"AWS::Logs::SubscriptionFilter": {
-		"importProperties": [
-			"FilterName",
-			"LogGroupName"
-		]
-	},
-	"AWS::NetworkManager::CustomerGatewayAssociation": {
-		"importProperties": [
-			"CustomerGatewayArn",
-			"GlobalNetworkId"
-		]
-	},
-	"AWS::NetworkManager::Device": {
-		"importProperties": [
-			"DeviceId",
-			"GlobalNetworkId"
-		]
-	},
-	"AWS::NetworkManager::GlobalNetwork": {
-		"importProperties": [
-			"Id"
-		]
-	},
-	"AWS::NetworkManager::Link": {
-		"importProperties": [
-			"GlobalNetworkId",
-			"LinkId"
-		]
-	},
-	"AWS::NetworkManager::LinkAssociation": {
-		"importProperties": [
-			"DeviceId",
-			"GlobalNetworkId",
-			"LinkId"
-		]
-	},
-	"AWS::NetworkManager::Site": {
-		"importProperties": [
-			"GlobalNetworkId",
-			"SiteId"
-		]
-	},
-	"AWS::NetworkManager::TransitGatewayRegistration": {
-		"importProperties": [
-			"GlobalNetworkId",
-			"TransitGatewayArn"
-		]
-	},
-	"AWS::RDS::DBCluster": {
-		"importProperties": [
-			"DBClusterIdentifier"
-		]
-	},
-	"AWS::RDS::DBInstance": {
-		"importProperties": [
-			"DBInstanceIdentifier"
-		]
-	},
-	"AWS::ResourceGroups::Group": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::Route53::HostedZone": {
-		"importProperties": [
-			"HostedZoneId"
-		]
-	},
-	"AWS::S3::AccessPoint": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::S3::Bucket": {
-		"importProperties": [
-			"BucketName"
-		]
-	},
-	"AWS::SES::ConfigurationSet": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::SNS::Topic": {
-		"importProperties": [
-			"TopicArn"
-		]
-	},
-	"AWS::SQS::Queue": {
-		"importProperties": [
-			"QueueUrl"
-		]
-	},
-	"AWS::SSM::Association": {
-		"importProperties": [
-			"AssociationId"
-		]
-	},
-	"AWS::Synthetics::Canary": {
-		"importProperties": [
-			"Name"
-		]
-	},
-	"AWS::WAFv2::IPSet": {
-		"importProperties": [
-			"Id",
-			"Name",
-			"Scope"
-		]
-	},
-	"AWS::WAFv2::RegexPatternSet": {
-		"importProperties": [
-			"Id",
-			"Name",
-			"Scope"
-		]
-	},
-	"AWS::WAFv2::RuleGroup": {
-		"importProperties": [
-			"Id",
-			"Name",
-			"Scope"
-		]
-	},
-	"AWS::WAFv2::WebACL": {
-		"importProperties": [
-			"Id",
-			"Name",
-			"Scope"
-		]
-	},
-	"AWS::WAFv2::WebACLAssociation": {
-		"importProperties": [
-			"ResourceArn",
-			"WebACLArn"
-		]
+    "AWS::ACMPCA::Certificate": {
+        "importProperties": [
+            "Arn", 
+            "CertificateAuthorityArn"
+        ]
+    }, 
+    "AWS::ACMPCA::CertificateAuthority": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ACMPCA::CertificateAuthorityActivation": {
+        "importProperties": [
+            "CertificateAuthorityArn"
+        ]
+    }, 
+    "AWS::AccessAnalyzer::Analyzer": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ApiGateway::Authorizer": {
+        "importProperties": [
+            "RestApiId", 
+            "AuthorizerId"
+        ]
+    }, 
+    "AWS::ApiGateway::Deployment": {
+        "importProperties": [
+            "RestApiId", 
+            "DeploymentId"
+        ]
+    }, 
+    "AWS::ApiGateway::Method": {
+        "importProperties": [
+            "RestApiId", 
+            "ResourceId", 
+            "HttpMethod"
+        ]
+    }, 
+    "AWS::ApiGateway::Model": {
+        "importProperties": [
+            "RestApiId", 
+            "Name"
+        ]
+    }, 
+    "AWS::ApiGateway::RequestValidator": {
+        "importProperties": [
+            "RestApiId", 
+            "RequestValidatorId"
+        ]
+    }, 
+    "AWS::ApiGateway::Resource": {
+        "importProperties": [
+            "RestApiId", 
+            "ResourceId"
+        ]
+    }, 
+    "AWS::ApiGateway::RestApi": {
+        "importProperties": [
+            "RestApiId"
+        ]
+    }, 
+    "AWS::ApiGateway::Stage": {
+        "importProperties": [
+            "RestApiId", 
+            "StageName"
+        ]
+    }, 
+    "AWS::Athena::DataCatalog": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::Athena::NamedQuery": {
+        "importProperties": [
+            "NamedQueryId"
+        ]
+    }, 
+    "AWS::Athena::WorkGroup": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::AutoScaling::AutoScalingGroup": {
+        "importProperties": [
+            "AutoScalingGroupName"
+        ]
+    }, 
+    "AWS::AutoScaling::LaunchConfiguration": {
+        "importProperties": [
+            "LaunchConfigurationName"
+        ]
+    }, 
+    "AWS::AutoScaling::LifecycleHook": {
+        "importProperties": [
+            "AutoScalingGroupName", 
+            "LifecycleHookName"
+        ]
+    }, 
+    "AWS::AutoScaling::ScalingPolicy": {
+        "importProperties": [
+            "PolicyName"
+        ]
+    }, 
+    "AWS::AutoScaling::ScheduledAction": {
+        "importProperties": [
+            "ScheduledActionName"
+        ]
+    }, 
+    "AWS::CE::CostCategory": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::Cassandra::Keyspace": {
+        "importProperties": [
+            "KeyspaceName"
+        ]
+    }, 
+    "AWS::Cassandra::Table": {
+        "importProperties": [
+            "KeyspaceName", 
+            "TableName"
+        ]
+    }, 
+    "AWS::Chatbot::SlackChannelConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::CloudFormation::Stack": {
+        "importProperties": [
+            "StackId"
+        ]
+    }, 
+    "AWS::CloudTrail::Trail": {
+        "importProperties": [
+            "TrailName"
+        ]
+    }, 
+    "AWS::CloudWatch::Alarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    }, 
+    "AWS::CloudWatch::CompositeAlarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    }, 
+    "AWS::CodeGuruProfiler::ProfilingGroup": {
+        "importProperties": [
+            "ProfilingGroupName"
+        ]
+    }, 
+    "AWS::CodeStarConnections::Connection": {
+        "importProperties": [
+            "ConnectionArn"
+        ]
+    }, 
+    "AWS::Config::ConformancePack": {
+        "importProperties": [
+            "ConformancePackName"
+        ]
+    }, 
+    "AWS::Config::OrganizationConformancePack": {
+        "importProperties": [
+            "OrganizationConformancePackName"
+        ]
+    }, 
+    "AWS::Detective::Graph": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::Detective::MemberInvitation": {
+        "importProperties": [
+            "GraphArn", 
+            "MemberId"
+        ]
+    }, 
+    "AWS::DynamoDB::Table": {
+        "importProperties": [
+            "TableName"
+        ]
+    }, 
+    "AWS::EC2::EIP": {
+        "importProperties": [
+            "PublicIp"
+        ]
+    }, 
+    "AWS::EC2::FlowLog": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::EC2::GatewayRouteTableAssociation": {
+        "importProperties": [
+            "GatewayId"
+        ]
+    }, 
+    "AWS::EC2::Instance": {
+        "importProperties": [
+            "InstanceId"
+        ]
+    }, 
+    "AWS::EC2::InternetGateway": {
+        "importProperties": [
+            "InternetGatewayId"
+        ]
+    }, 
+    "AWS::EC2::LocalGatewayRoute": {
+        "importProperties": [
+            "DestinationCidrBlock", 
+            "LocalGatewayRouteTableId"
+        ]
+    }, 
+    "AWS::EC2::LocalGatewayRouteTableVPCAssociation": {
+        "importProperties": [
+            "LocalGatewayRouteTableVpcAssociationId"
+        ]
+    }, 
+    "AWS::EC2::NatGateway": {
+        "importProperties": [
+            "NatGatewayId"
+        ]
+    }, 
+    "AWS::EC2::NetworkAcl": {
+        "importProperties": [
+            "NetworkAclId"
+        ]
+    }, 
+    "AWS::EC2::NetworkInterface": {
+        "importProperties": [
+            "NetworkInterfaceId"
+        ]
+    }, 
+    "AWS::EC2::PrefixList": {
+        "importProperties": [
+            "PrefixListId"
+        ]
+    }, 
+    "AWS::EC2::RouteTable": {
+        "importProperties": [
+            "RouteTableId"
+        ]
+    }, 
+    "AWS::EC2::SecurityGroup": {
+        "importProperties": [
+            "GroupId"
+        ]
+    }, 
+    "AWS::EC2::Subnet": {
+        "importProperties": [
+            "SubnetId"
+        ]
+    }, 
+    "AWS::EC2::VPC": {
+        "importProperties": [
+            "VpcId"
+        ]
+    }, 
+    "AWS::EC2::Volume": {
+        "importProperties": [
+            "VolumeId"
+        ]
+    }, 
+    "AWS::ECS::CapacityProvider": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::ECS::Cluster": {
+        "importProperties": [
+            "ClusterName"
+        ]
+    }, 
+    "AWS::ECS::PrimaryTaskSet": {
+        "importProperties": [
+            "Cluster", 
+            "Service"
+        ]
+    }, 
+    "AWS::ECS::Service": {
+        "importProperties": [
+            "ServiceArn", 
+            "Cluster"
+        ]
+    }, 
+    "AWS::ECS::TaskDefinition": {
+        "importProperties": [
+            "TaskDefinitionArn"
+        ]
+    }, 
+    "AWS::ECS::TaskSet": {
+        "importProperties": [
+            "Cluster", 
+            "Service", 
+            "Id"
+        ]
+    }, 
+    "AWS::EFS::AccessPoint": {
+        "importProperties": [
+            "AccessPointId"
+        ]
+    }, 
+    "AWS::EFS::FileSystem": {
+        "importProperties": [
+            "FileSystemId"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancing::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerName"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::Listener": {
+        "importProperties": [
+            "ListenerArn"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::ListenerRule": {
+        "importProperties": [
+            "RuleArn"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerArn"
+        ]
+    }, 
+    "AWS::EventSchemas::RegistryPolicy": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Events::Rule": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::FMS::NotificationChannel": {
+        "importProperties": [
+            "SnsTopicArn"
+        ]
+    }, 
+    "AWS::FMS::Policy": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::Accelerator": {
+        "importProperties": [
+            "AcceleratorArn"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::EndpointGroup": {
+        "importProperties": [
+            "EndpointGroupArn"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::Listener": {
+        "importProperties": [
+            "ListenerArn"
+        ]
+    }, 
+    "AWS::ImageBuilder::Component": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::DistributionConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::Image": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::ImagePipeline": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::ImageRecipe": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::InfrastructureConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::IoT::ProvisioningTemplate": {
+        "importProperties": [
+            "TemplateName"
+        ]
+    }, 
+    "AWS::IoT::Thing": {
+        "importProperties": [
+            "ThingName"
+        ]
+    }, 
+    "AWS::KinesisFirehose::DeliveryStream": {
+        "importProperties": [
+            "DeliveryStreamName"
+        ]
+    }, 
+    "AWS::Lambda::Alias": {
+        "importProperties": [
+            "AliasArn"
+        ]
+    }, 
+    "AWS::Lambda::Function": {
+        "importProperties": [
+            "FunctionName"
+        ]
+    }, 
+    "AWS::Lambda::Version": {
+        "importProperties": [
+            "FunctionArn"
+        ]
+    }, 
+    "AWS::Logs::LogGroup": {
+        "importProperties": [
+            "LogGroupName"
+        ]
+    }, 
+    "AWS::Logs::MetricFilter": {
+        "importProperties": [
+            "FilterName"
+        ]
+    }, 
+    "AWS::Logs::SubscriptionFilter": {
+        "importProperties": [
+            "LogGroupName", 
+            "FilterName"
+        ]
+    }, 
+    "AWS::Macie::CustomDataIdentifier": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Macie::FindingsFilter": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Macie::Session": {
+        "importProperties": [
+            "AwsAccountId"
+        ]
+    }, 
+    "AWS::NetworkManager::CustomerGatewayAssociation": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "CustomerGatewayArn"
+        ]
+    }, 
+    "AWS::NetworkManager::Device": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "DeviceId"
+        ]
+    }, 
+    "AWS::NetworkManager::GlobalNetwork": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::NetworkManager::Link": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "LinkId"
+        ]
+    }, 
+    "AWS::NetworkManager::LinkAssociation": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "DeviceId", 
+            "LinkId"
+        ]
+    }, 
+    "AWS::NetworkManager::Site": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "SiteId"
+        ]
+    }, 
+    "AWS::NetworkManager::TransitGatewayRegistration": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "TransitGatewayArn"
+        ]
+    }, 
+    "AWS::QLDB::Stream": {
+        "importProperties": [
+            "LedgerName", 
+            "Id"
+        ]
+    }, 
+    "AWS::RDS::DBCluster": {
+        "importProperties": [
+            "DBClusterIdentifier"
+        ]
+    }, 
+    "AWS::RDS::DBInstance": {
+        "importProperties": [
+            "DBInstanceIdentifier"
+        ]
+    }, 
+    "AWS::RDS::DBProxy": {
+        "importProperties": [
+            "DBProxyName"
+        ]
+    }, 
+    "AWS::RDS::DBProxyTargetGroup": {
+        "importProperties": [
+            "TargetGroupArn"
+        ]
+    }, 
+    "AWS::ResourceGroups::Group": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::Route53::HostedZone": {
+        "importProperties": [
+            "HostedZoneId"
+        ]
+    }, 
+    "AWS::S3::AccessPoint": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::S3::Bucket": {
+        "importProperties": [
+            "BucketName"
+        ]
+    }, 
+    "AWS::SES::ConfigurationSet": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::SNS::Topic": {
+        "importProperties": [
+            "TopicArn"
+        ]
+    }, 
+    "AWS::SQS::Queue": {
+        "importProperties": [
+            "QueueUrl"
+        ]
+    }, 
+    "AWS::SSM::Association": {
+        "importProperties": [
+            "AssociationId"
+        ]
+    }, 
+    "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
+        "importProperties": [
+            "ProvisionedProductId"
+        ]
+    }, 
+    "AWS::Synthetics::Canary": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::WAFv2::IPSet": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::RegexPatternSet": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::RuleGroup": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::WebACL": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::WebACLAssociation": {
+        "importProperties": [
+            "ResourceArn", 
+            "WebACLArn"
+        ]
     },
     /*****/
     "AWS::CloudFormation::Stack": {

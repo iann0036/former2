@@ -2404,6 +2404,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Prefix Lists': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'addressfamily',
+                        title: 'Address Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2461,6 +2507,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -3503,6 +3550,32 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             ]);
         });
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeManagedPrefixLists", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.PrefixLists.map(prefixlist => {
+            return sdkcall("EC2", "getManagedPrefixListEntries", {
+                PrefixListId: prefixlist.PrefixListId
+            }, false).then((prefixentries) => {
+                prefixlist['Entries'] = prefixentries['Entries'];
+
+                $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('append', [{
+                    f2id: prefixlist.PrefixListArn,
+                    f2type: 'ec2.prefixlist',
+                    f2data: prefixlist,
+                    f2region: region,
+                    id: prefixlist.PrefixListId,
+                    name: prefixlist.PrefixListName,
+                    addressfamily: prefixlist.AddressFamily
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -3516,6 +3589,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -4920,6 +4994,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'GlobalNetworkId': obj.data.GlobalNetworkId,
                     'TransitGatewayArn': obj.data.TransitGatewayArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.prefixlist") {
+        reqParams.cfn['AddressFamily'] = obj.data.AddressFamily;
+        reqParams.cfn['PrefixListName'] = obj.data.PrefixListName;
+        reqParams.cfn['MaxEntries'] = obj.data.MaxEntries;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Entries'] = obj.data.Entries;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::PrefixList'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::PrefixList',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PrefixListId,
+                'GetAtt': {
+                    'Arn': obj.data.PrefixListArn,
+                    'OwnerId': obj.data.OwnerId,
+                    'PrefixListId': obj.data.PrefixListId,
+                    'Version': obj.data.Version
+                },
+                'Import': {
+                    'PrefixListId': obj.data.PrefixListId
                 }
             }
         });

@@ -74,6 +74,7 @@ async function updateDatatableMachineLearningCodeGuru() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "codeguru.profilinggroup") {
         reqParams.cfn['ProfilingGroupName'] = obj.data.name;
+        reqParams.cfn['ComputePlatform'] = obj.data.computePlatform;
         
         /*
         TODO:
