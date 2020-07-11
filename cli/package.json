@@ -16,7 +16,7 @@
   "author": "Ian Mckay",
   "license": "MIT",
   "dependencies": {
-    "aws-sdk": "^2.678.0",
+    "aws-sdk": "^2.701.0",
     "cli-progress": "^3.5.0",
     "colors": "^1.4.0",
     "commander": "^4.1.0",

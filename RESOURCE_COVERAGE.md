@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**544/544 (100%)** Resources Covered
+**545/545 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -50,6 +50,7 @@
 | *AWS::AppConfig::Deployment* | :thumbsup: |
 | *AWS::AppConfig::DeploymentStrategy* | :thumbsup: |
 | *AWS::AppConfig::Environment* | :thumbsup: |
+| *AWS::AppConfig::HostedConfigurationVersion* |  |
 | *AWS::AppMesh::Mesh* | :thumbsup: |
 | *AWS::AppMesh::Route* | :thumbsup: |
 | *AWS::AppMesh::VirtualNode* | :thumbsup: |
@@ -187,7 +188,6 @@
 | *AWS::EC2::NetworkInterfaceAttachment* | :thumbsup: |
 | *AWS::EC2::NetworkInterfacePermission* | :thumbsup: |
 | *AWS::EC2::PlacementGroup* | :thumbsup: |
-| *AWS::EC2::PrefixList* |  |
 | *AWS::EC2::Route* | :thumbsup: |
 | *AWS::EC2::RouteTable* | :thumbsup: |
 | *AWS::EC2::SecurityGroup* | :thumbsup: |
@@ -224,6 +224,7 @@
 | *AWS::EC2::Volume* | :thumbsup: |
 | *AWS::EC2::VolumeAttachment* | :thumbsup: |
 | *AWS::ECR::Repository* | :thumbsup: |
+| *AWS::ECS::CapacityProvider* | :thumbsup: |
 | *AWS::ECS::Cluster* | :thumbsup: |
 | *AWS::ECS::PrimaryTaskSet* | :thumbsup: |
 | *AWS::ECS::Service* | :thumbsup: |
@@ -551,7 +552,7 @@
 
 ## Terraform Coverage
 
-**309/562 (54%)** Resources Covered
+**309/576 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -746,9 +747,13 @@
 | *aws_ebs_volume* | :thumbsup: |
 | *aws_ec2_availability_zone_group* |  |
 | *aws_ec2_capacity_reservation* |  |
+| *aws_ec2_client_vpn_authorization_rule* |  |
 | *aws_ec2_client_vpn_endpoint* |  |
 | *aws_ec2_client_vpn_network_association* |  |
 | *aws_ec2_fleet* |  |
+| *aws_ec2_local_gateway_route* |  |
+| *aws_ec2_local_gateway_route_table_vpc_association* |  |
+| *aws_ec2_tag* |  |
 | *aws_ec2_traffic_mirror_filter* |  |
 | *aws_ec2_traffic_mirror_filter_rule* |  |
 | *aws_ec2_traffic_mirror_session* |  |
@@ -769,7 +774,9 @@
 | *aws_ecs_cluster* | :thumbsup: |
 | *aws_ecs_service* | :thumbsup: |
 | *aws_ecs_task_definition* | :thumbsup: |
+| *aws_efs_access_point* |  |
 | *aws_efs_file_system* | :thumbsup: |
+| *aws_efs_file_system_policy* |  |
 | *aws_efs_mount_target* | :thumbsup: |
 | *aws_egress_only_internet_gateway* | :thumbsup: |
 | *aws_eip* | :thumbsup: |
@@ -1004,6 +1011,7 @@
 | *aws_sagemaker_notebook_instance* |  |
 | *aws_sagemaker_notebook_instance_lifecycle_configuration* |  |
 | *aws_secretsmanager_secret* | :thumbsup: |
+| *aws_secretsmanager_secret_rotation* |  |
 | *aws_secretsmanager_secret_version* | :thumbsup: |
 | *aws_security_group* | :thumbsup: |
 | *aws_security_group_rule* |  |
@@ -1112,8 +1120,15 @@
 | *aws_wafregional_web_acl* | :thumbsup: |
 | *aws_wafregional_web_acl_association* | :thumbsup: |
 | *aws_wafregional_xss_match_set* | :thumbsup: |
+| *aws_wafv2_ip_set* |  |
+| *aws_wafv2_regex_pattern_set* |  |
+| *aws_wafv2_rule_group* |  |
+| *aws_wafv2_web_acl* |  |
+| *aws_wafv2_web_acl_association* |  |
+| *aws_wafv2_web_acl_logging_configuration* |  |
 | *aws_worklink_fleet* | :thumbsup: |
 | *aws_worklink_website_certificate_authority_association* | :thumbsup: |
 | *aws_workspaces_directory* |  |
 | *aws_workspaces_ip_group* |  |
+| *aws_workspaces_workspace* |  |
 | *aws_xray_sampling_rule* | :thumbsup: |

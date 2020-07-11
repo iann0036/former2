@@ -2,6 +2,7 @@ import boto3
 import pprint
 import json
 import re
+import sys
 
 cfnclient = boto3.client('cloudformation', region_name = "us-east-1")
 
@@ -26,6 +27,11 @@ cfn_types = list(set(cfn_types)) # dedup
 cfn_types.sort()
 
 jsonobj = {}
+
+if len(sys.argv) == 2:
+    cfn_types = [
+        sys.argv[1]
+    ]
 
 for cfntype in cfn_types:
     try:

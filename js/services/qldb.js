@@ -52,12 +52,60 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'streamname',
+                        title: 'Stream Name',
+                        sortable: true,
+                        editable: true,
+                        formatter: timeAgoFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'ledgername',
+                        title: 'Ledger Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableDatabaseQLDB() {
     blockUI('#section-database-qldb-ledgers-datatable');
+    blockUI('#section-database-qldb-streams-datatable');
 
     await sdkcall("QLDB", "listLedgers", {
         // no params
@@ -65,7 +113,7 @@ async function updateDatatableDatabaseQLDB() {
         $('#section-database-qldb-ledgers-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Ledgers.map(async (ledger) => {
-            return sdkcall("QLDB", "describeLedger", {
+            await sdkcall("QLDB", "describeLedger", {
                 Name: ledger.Name
             }, false).then(async (data) => {
                 $('#section-database-qldb-ledgers-datatable').deferredBootstrapTable('append', [{
@@ -77,11 +125,35 @@ async function updateDatatableDatabaseQLDB() {
                     creationdate: data.CreationDateTime
                 }]);
             });
-        }));
 
+            return sdkcall("QLDB", "listJournalKinesisStreamsForLedger", {
+                LedgerName: ledger.Name
+            }, false).then(async (data) => {
+                $('#section-database-qldb-streams-datatable').deferredBootstrapTable('removeAll');
+        
+                await Promise.all(data.Streams.map(async (stream) => {
+                    return sdkcall("QLDB", "describeLedger", {
+                        LedgerName: ledger.Name,
+                        StreamId: stream.StreamId
+                    }, false).then(async (data) => {
+                        $('#section-database-qldb-streams-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Stream.Arn,
+                            f2type: 'qldb.stream',
+                            f2data: data.Stream,
+                            f2region: region,
+                            id: data.Stream.StreamId,
+                            streamname: data.Stream.StreamName,
+                            ledgername: data.Stream.LedgerName
+                        }]);
+                    });
+                }));
+        
+            }).catch(() => { });
+        }));
     }).catch(() => { });
 
     unblockUI('#section-database-qldb-ledgers-datatable');
+    unblockUI('#section-database-qldb-streams-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -106,6 +178,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'qldb',
             'type': 'AWS::QLDB::Ledger',
             'options': reqParams
+        });
+    } else if (obj.type == "qldb.stream") {
+        reqParams.cfn['LedgerName'] = obj.data.LedgerName;
+        reqParams.cfn['InclusiveStartTime'] = obj.data.InclusiveStartTime;
+        reqParams.cfn['ExclusiveEndTime'] = obj.data.ExclusiveEndTime;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['StreamName'] = obj.data.StreamName;
+        reqParams.cfn['KinesisConfiguration'] = obj.data.KinesisConfiguration;
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('qldb', obj.id, 'AWS::QLDB::Stream'),
+            'region': obj.region,
+            'service': 'qldb',
+            'type': 'AWS::QLDB::Stream',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.StreamId,
+                    'Arn': obj.data.Arn
+                },
+                'Import': {
+                    'LedgerName': obj.data.LedgerName,
+                    'Id': obj.data.StreamId
+                }
+            }
         });
     } else {
         return false;

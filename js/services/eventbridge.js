@@ -507,6 +507,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Arn': target.Arn,
                     'BatchParameters': target.BatchParameters,
                     'EcsParameters': ecsParameters,
+                    'HttpParameters': target.HttpParameters,
                     'Id': target.Id,
                     'Input': target.Input,
                     'InputPath': target.InputPath,

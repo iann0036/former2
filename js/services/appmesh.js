@@ -382,7 +382,7 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
                     meshName: mesh.meshName
                 }, true).then(async (data) => {
                     await Promise.all(data.virtualNodes.map(virtualnode => {
-                        return sdkcall("AppMesh", "describeVirtualService", {
+                        return sdkcall("AppMesh", "describeVirtualNode", {
                             meshName: mesh.meshName,
                             virtualNode: virtualnode.virtualNodeName
                         }, true).then((data) => {
