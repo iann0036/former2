@@ -217,7 +217,7 @@ async function updateDatatableAnalyticsAthena() {
         await Promise.all(data.DataCatalogsSummary.map(datacatalog => {
             return sdkcall("Athena", "getDataCatalog", {
                 Name: datacatalog.CatalogName
-            }, true).then((data) => {
+            }, false).then((data) => {
                 $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DataCatalog.Name + " Data Catalog",
                     f2type: 'athena.datacatalog',
@@ -227,7 +227,7 @@ async function updateDatatableAnalyticsAthena() {
                     description: data.DataCatalog.Description,
                     type: data.DataCatalog.Type
                 }]);
-            });
+            }).catch(() => { });
         }));
 
         unblockUI('#section-analytics-athena-datacatalogs-datatable');
