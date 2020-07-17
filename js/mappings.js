@@ -3871,6 +3871,10 @@ function compileOutputs(tracked_resources, cfn_deletion_policy) {
             services['cdktf'].push(typesplit.map(x => x[0].toUpperCase() + x.substr(1)).join(''));
         }
     }
+    services['go'] = [...new Set(services['go'])]; // dedup
+    services['cdk'] = [...new Set(services['cdk'])]; // dedup
+    services['cdktf'] = [...new Set(services['cdktf'])]; // dedup
+    services['troposphere'] = [...new Set(services['troposphere'])]; // dedup
 
     var has_cfn = false;
     var has_tf = false;
