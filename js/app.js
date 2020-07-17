@@ -683,6 +683,7 @@ $(document).ready(function(){
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdk').attr('style', 'display: none;');
+        $('#header-button-copy-cdktf').attr('style', 'display: none;');
         $('#header-button-copy-pulumi').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
@@ -766,6 +767,18 @@ $(document).ready(function(){
 
                 setTimeout(function(){
                     cdk_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
+                }, 1);
+            } else if (location.hash == "#section-outputs-cdktf") {
+                $('#header-button-copy-cdktf').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    cdktf_editor.refresh();
                     tippy('.f2replacementmarker', {
                         content: "Value requires replacement",
                         placement: "right",
@@ -864,6 +877,7 @@ $(document).ready(function(){
             tf_editor.getDoc().setValue(mapped_outputs['tf']);
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
             cdk_editor.getDoc().setValue(mapped_outputs['cdk']);
+            cdktf_editor.getDoc().setValue(mapped_outputs['cdktf']);
             pulumi_editor.getDoc().setValue(mapped_outputs['pulumi']);
             raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
 
@@ -873,6 +887,7 @@ $(document).ready(function(){
                 {key: 'tf', editor: tf_editor}, 
                 {key: 'troposphere', editor: troposphere_editor},
                 {key: 'cdk', editor: cdk_editor},
+                {key: 'cdktf', editor: cdktf_editor},
                 {key: 'pulumi', editor: pulumi_editor}
             ].forEach(language => {
                 var lines = mapped_outputs[language.key].split("\n");
@@ -888,6 +903,7 @@ $(document).ready(function(){
                 tf_editor.refresh();
                 troposphere_editor.refresh();
                 cdk_editor.refresh();
+                cdktf_editor.refresh();
                 pulumi_editor.refresh();
                 raw_editor.refresh();
                 tippy('.f2replacementmarker', {
@@ -1045,6 +1061,19 @@ $(document).ready(function(){
         scrollbarStyle: "null"
     });
     setCopyEvent('#header-button-copy-cdk', cdk_editor);
+
+    cdktf_editor = CodeMirror.fromTextArea(document.getElementById('cdktf'), {
+        lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-cdktf', cdktf_editor);
 
     pulumi_editor = CodeMirror.fromTextArea(document.getElementById('pulumi'), {
         lineNumbers: true,
@@ -1455,12 +1484,16 @@ $(document).ready(function(){
 
         if ($(this).val() == "typescript") {
             cdk_editor.setOption("mode", "javascript");
+            cdktf_editor.setOption("mode", "javascript");
         } else if ($(this).val() == "java") {
             cdk_editor.setOption("mode", "text/x-java");
+            cdktf_editor.setOption("mode", "text/x-java");
         } else if ($(this).val() == "dotnet") {
             cdk_editor.setOption("mode", "text/x-csrc");
+            cdktf_editor.setOption("mode", "text/x-csrc");
         } else {
             cdk_editor.setOption("mode", $(this).val());
+            cdktf_editor.setOption("mode", $(this).val());
         }
     });
     $('#iaclangselect').val(iaclangselect).trigger('change');

@@ -227,6 +227,7 @@
                         <li><a href="#section-outputs-tf"><span class="lbl">Terraform</span></a></li>
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
                         <li><a href="#section-outputs-cdk"><span class="lbl">CDK</span></a></li>
+                        <li><a href="#section-outputs-cdktf"><span class="lbl">CDK (Terraform)</span></a></li>
                         <li><a href="#section-outputs-pulumi"><span class="lbl">Pulumi</span></a></li>
                         <li><a href="#section-outputs-diagram"><span class="lbl">Diagram</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
@@ -599,6 +600,7 @@
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-cdk" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-cdktf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-pulumi" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-raw" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                         </div>
@@ -1269,6 +1271,7 @@
                                         <option value="tf">Terraform</option>
                                         <option value="troposphere">Troposphere</option>
                                         <option value="cdk">CDK</option>
+                                        <option value="cdktf">CDK (Terraform)</option>
                                         <option value="pulumi">Pulumi</option>
                                         <option value="diagram">Diagram</option>
                                     </select>
@@ -1412,6 +1415,12 @@
                 <section id="section-outputs-cdk" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK" class="former2-section box-typical steps-numeric-block" style="display: none;">
                     <div id='cdk_container'>
                         <textarea id='cdk'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-cdktf" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (Terraform)" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cdktf_container'>
+                        <textarea id='cdktf'></textarea>
                     </div>
                 </section>
 
