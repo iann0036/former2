@@ -29,7 +29,11 @@ cfn_exceptions = {
     'AWS::ServiceCatalog::PortfolioShare': 'N/A',
     'AWS::SecretsManager::SecretTargetAttachment': 'N/A',
     'AWS::ServiceCatalog::ResourceUpdateConstraint': 'N/A',
-    'AWS::ACMPCA::Certificate': 'N/A'
+    'AWS::ACMPCA::Certificate': 'N/A',
+    'AWS::Chatbot::SlackChannelConfiguration': 'N/A',
+    'AWS::ApiGatewayV2::ApiGatewayManagedOverrides': 'N/A',
+    'AWS::Cassandra::Keyspace': 'N/A',
+    'AWS::Cassandra::Table': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
@@ -52,7 +56,9 @@ for servicefilename in os.listdir("js/services"):
     with open("js/services/" + servicefilename, "r") as f:
         text = f.read()
         lines = text.splitlines()
-        cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(text)
+        for line in lines:
+            if 'not real resource type' not in line:
+                cfn_occurances += re.compile(r'(AWS\:\:[a-zA-Z0-9]+\:\:[a-zA-Z0-9]+)').findall(line)
         tf_occurances += re.compile(r'terraformType\'\:\ \'(aws(?:\_[a-zA-Z0-9]+)+)\'').findall(text)
 
 for cfntype, _ in cfn_spec.items():

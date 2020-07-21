@@ -2074,6 +2074,382 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Network Manager Global Networks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Sites': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Devices': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Links': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Link Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Link ID',
+                        field: 'linkid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deviceid',
+                        title: 'Device ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Customer Gateway Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Customer Gateway ARN',
+                        field: 'customergatewayarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'globalnetworkid',
+                        title: 'Global Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'deviceid',
+                        title: 'Device ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'linkid',
+                        title: 'Link ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Transit Gateway Registrations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Global Network ID',
+                        field: 'globalnetworkid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'transitgatewayarn',
+                        title: 'Transit Gateway ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Prefix Lists': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'addressfamily',
+                        title: 'Address Family',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2124,13 +2500,21 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('removeAll');
 
         return Promise.all(data.Vpcs.map(vpc => {
             if (vpc.DhcpOptionsId) {
@@ -2191,8 +2575,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeSubnets", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('removeAll');
 
         data.Subnets.forEach(subnet => {
             if (subnet.Ipv6CidrBlockAssociationSet) {
@@ -2231,7 +2615,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeEgressOnlyInternetGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.EgressOnlyInternetGateways.forEach(egressOnlyInternetGateway => {
             $('#section-networkingandcontentdelivery-vpc-egressonlyinternetgateways-datatable').deferredBootstrapTable('append', [{
@@ -2249,7 +2633,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeCustomerGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').deferredBootstrapTable('removeAll');
 
         data.CustomerGateways.forEach(customerGateway => {
             $('#section-networkingandcontentdelivery-vpc-customergateways-datatable').deferredBootstrapTable('append', [{
@@ -2270,9 +2654,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpnGateways", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategateways-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.VpnGateways.forEach(vpnGateway => {
             if (vpnGateway.VpcAttachments) {
@@ -2341,8 +2725,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeAddresses", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-elasticipassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.Addresses.forEach(address => {
             $('#section-networkingandcontentdelivery-vpc-elasticips-datatable').deferredBootstrapTable('append', [{
@@ -2377,7 +2761,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeDhcpOptions", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('removeAll');
 
         data.DhcpOptions.forEach(dhcpOptions => {
             $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
@@ -2395,8 +2779,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpnConnections", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpnconnectionroutes-datatable').deferredBootstrapTable('removeAll');
 
         data.VpnConnections.forEach(vpnConnection => {
             $('#section-networkingandcontentdelivery-vpc-vpnconnections-datatable').deferredBootstrapTable('append', [{
@@ -2432,7 +2816,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcPeeringConnections", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').deferredBootstrapTable('removeAll');
 
         data.VpcPeeringConnections.forEach(peeringConnection => {
             $('#section-networkingandcontentdelivery-vpc-peeringconnections-datatable').deferredBootstrapTable('append', [{
@@ -2450,9 +2834,9 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeNetworkAcls", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
             if (networkAcl.Associations) {
@@ -2515,11 +2899,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeRouteTables", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-routes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-routetables-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-routes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-virtualprivategatewayroutepropagations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-subnetroutetableassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
             routeTable.Routes.forEach(route => {
@@ -2599,7 +2983,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGateways", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.TransitGateways.forEach(transitGateway => {
             $('#section-networkingandcontentdelivery-vpc-transitgateways-datatable').deferredBootstrapTable('append', [{
@@ -2620,10 +3004,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGatewayRouteTables", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetableassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetablepropogations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TransitGatewayRouteTables.map(transitGatewayRouteTable => {
             $('#section-networkingandcontentdelivery-vpc-transitgatewayroutetables-datatable').deferredBootstrapTable('append', [{
@@ -2701,7 +3085,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTransitGatewayVpcAttachments", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.TransitGatewayVpcAttachments.forEach(transitGatewayVpcAttachment => {
             $('#section-networkingandcontentdelivery-vpc-transitgatewayattachments-datatable').deferredBootstrapTable('append', [{
@@ -2721,7 +3105,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpoints", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').deferredBootstrapTable('removeAll');
 
         data.VpcEndpoints.forEach(vpcEndpoint => {
             $('#section-networkingandcontentdelivery-vpc-vpcendpoints-datatable').deferredBootstrapTable('append', [{
@@ -2743,7 +3127,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpointConnectionNotifications", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').deferredBootstrapTable('removeAll');
 
         data.ConnectionNotificationSet.forEach(connectionNotification => {
             $('#section-networkingandcontentdelivery-vpc-vpcendpointconnectionnotifications-datatable').deferredBootstrapTable('append', [{
@@ -2764,8 +3148,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeVpcEndpointServices", {
         // no params
     }, true).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservices-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-vpcendpointservicepermissions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ServiceDetails.map(serviceDetail => {
             if (serviceDetail.ServiceName.startsWith("vpce-svc-")) {
@@ -2807,7 +3191,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeNatGateways", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').deferredBootstrapTable('removeAll');
 
         data.NatGateways.forEach(natGateway => {
             $('#section-networkingandcontentdelivery-vpc-natgateways-datatable').deferredBootstrapTable('append', [{
@@ -2828,10 +3212,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeClientVpnEndpoints", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnendpoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnroutes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpntargetnetworkassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-clientvpnauthorizationrules-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ClientVpnEndpoints) {
             await Promise.all(data.ClientVpnEndpoints.map(async (endpoint) => {
@@ -2915,8 +3299,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorFilters", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').bootstrapTable('removeAll');
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilterrules-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorFilters.forEach(trafficMirrorFilter => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrorfilters-datatable').deferredBootstrapTable('append', [{
@@ -2968,7 +3352,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorSessions", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorSessions.forEach(trafficMirrorSession => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrorsessions-datatable').deferredBootstrapTable('append', [{
@@ -2989,7 +3373,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeTrafficMirrorTargets", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').deferredBootstrapTable('removeAll');
 
         data.TrafficMirrorTargets.forEach(trafficMirrorTarget => {
             $('#section-networkingandcontentdelivery-vpc-trafficmirrortargets-datatable').deferredBootstrapTable('append', [{
@@ -3009,7 +3393,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeLocalGatewayRouteTables", {
         // no params
     }, false).then(async (data) => {
-        $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.LocalGatewayRouteTables.map(async (localgatewayroutetable) => {
             await sdkcall("EC2", "searchLocalGatewayRoutes", {
@@ -3036,7 +3420,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     await sdkcall("EC2", "describeLocalGatewayRouteTableVpcAssociations", {
         // no params
     }, false).then((data) => {
-        $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').bootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.LocalGatewayRouteTableVpcAssociations.forEach(association => {
             $('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable').deferredBootstrapTable('append', [{
@@ -3051,12 +3435,161 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
     }).catch(() => { });
+            
+    await sdkcall("NetworkManager", "describeGlobalNetworks", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').deferredBootstrapTable('removeAll');
+
+        data.GlobalNetworks.forEach(async (globalnetwork) => {
+            $('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable').deferredBootstrapTable('append', [{
+                f2id: globalnetwork.GlobalNetworkArn,
+                f2type: 'ec2.networkmanagerglobalnetwork',
+                f2data: globalnetwork,
+                f2region: region,
+                id: globalnetwork.GlobalNetworkId,
+                description: globalnetwork.Description
+            }]);
+            
+            await Promise.all([
+                sdkcall("NetworkManager", "getSites", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Sites.forEach(site => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable').deferredBootstrapTable('append', [{
+                            f2id: site.SiteArn,
+                            f2type: 'ec2.networkmanagersite',
+                            f2data: site,
+                            f2region: region,
+                            id: site.SiteId,
+                            globalnetworkid: site.GlobalNetworkId,
+                            description: site.Description
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getDevices", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Devices.forEach(device => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable').deferredBootstrapTable('append', [{
+                            f2id: device.DeviceArn,
+                            f2type: 'ec2.networkmanagerdevice',
+                            f2data: device,
+                            f2region: region,
+                            id: device.DeviceId,
+                            globalnetworkid: device.GlobalNetworkId,
+                            description: device.Description,
+                            type: device.Type
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getLinks", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.Links.forEach(link => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable').deferredBootstrapTable('append', [{
+                            f2id: link.LinkArn,
+                            f2type: 'ec2.networkmanagerlink',
+                            f2data: link,
+                            f2region: region,
+                            id: link.LinkId,
+                            globalnetworkid: link.GlobalNetworkId,
+                            description: link.Description,
+                            type: link.Type
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getLinkAssociations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.LinkAssociations.forEach(linkassociation => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Link Association " + linkassociation.LinkId + " " + linkassociation.DeviceId + " " + linkassociation.GlobalNetworkId,
+                            f2type: 'ec2.networkmanagerlinkassociation',
+                            f2data: linkassociation,
+                            f2region: region,
+                            linkid: linkassociation.LinkId,
+                            globalnetworkid: linkassociation.GlobalNetworkId,
+                            deviceid: linkassociation.DeviceId
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getCustomerGatewayAssociations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.CustomerGatewayAssociations.forEach(customergatewayassociation => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Customer Gateway Association " + customergatewayassociation.CustomerGatewayArn + " " + customergatewayassociation.LinkId + " " + customergatewayassociation.DeviceId + " " + customergatewayassociation.GlobalNetworkId,
+                            f2type: 'ec2.networkmanagercustomergatewayassociation',
+                            f2data: customergatewayassociation,
+                            f2region: region,
+                            customergatewayarn: customergatewayassociation.CustomerGatewayArn,
+                            linkid: customergatewayassociation.LinkId,
+                            globalnetworkid: customergatewayassociation.GlobalNetworkId,
+                            deviceid: customergatewayassociation.DeviceId
+                        }]);
+                    });
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "getTransitGatewayRegistrations", {
+                    GlobalNetworkId: globalnetwork.GlobalNetworkId
+                }, false).then((data) => {
+                    data.TransitGatewayRegistrations.forEach(transitgatewayregistration => {
+                        $('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable').deferredBootstrapTable('append', [{
+                            f2id: "Network Manager Transit Gateway Registration " + transitgatewayregistration.GlobalNetworkId + " " + transitgatewayregistration.TransitGatewayArn,
+                            f2type: 'ec2.networkmanagertransitgatewayregistration',
+                            f2data: transitgatewayregistration,
+                            f2region: region,
+                            transitgatewayarn: transitgatewayregistration.TransitGatewayArn,
+                            globalnetworkid: transitgatewayregistration.GlobalNetworkId
+                        }]);
+                    });
+                }).catch(() => { })
+            ]);
+        });
+    }).catch(() => { });
+            
+    await sdkcall("EC2", "describeManagedPrefixLists", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.PrefixLists.map(prefixlist => {
+            return sdkcall("EC2", "getManagedPrefixListEntries", {
+                PrefixListId: prefixlist.PrefixListId
+            }, false).then((prefixentries) => {
+                prefixlist['Entries'] = prefixentries['Entries'];
+
+                $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('append', [{
+                    f2id: prefixlist.PrefixListArn,
+                    f2type: 'ec2.prefixlist',
+                    f2data: prefixlist,
+                    f2region: region,
+                    id: prefixlist.PrefixListId,
+                    name: prefixlist.PrefixListName,
+                    addressfamily: prefixlist.AddressFamily
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutes-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-localgatewayroutetablevpcassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerglobalnetworks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagersites-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerdevices-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -4086,9 +4619,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'ClientRootCertificateChainArn': authenticationoptions.MutualAuthentication.ClientRootCertificateChain
                     }
                 }
+                var federatedauthentication = null;
+                if (authenticationoptions.FederatedAuthentication) {
+                    federatedauthentication = {
+                        'SAMLProviderArn': authenticationoptions.FederatedAuthentication.SamlProviderArn
+                    }
+                }
                 reqParams.cfn['AuthenticationOptions'].push({
                     'Type': authenticationoptions.Type,
                     'ActiveDirectory': authenticationoptions.ActiveDirectory,
+                    'FederatedAuthentication': federatedauthentication,
                     'MutualAuthentication': mutualauthentication,
                 });
             });
@@ -4101,6 +4641,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }];
         }
         reqParams.cfn['VpnPort'] = obj.data.VpnPort;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.cfn['SplitTunnel'] = obj.data.SplitTunnel;
 
         tracked_resources.push({
             'obj': obj,
@@ -4241,7 +4784,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ec2',
             'type': 'AWS::EC2::GatewayRouteTableAssociation',
             'terraformType': 'aws_route_table_association',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'GatewayId': obj.data.GatewayId
+                }
+            }
         });
     } else if (obj.type == "ec2.localgatewayroute") {
         reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
@@ -4254,7 +4802,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRoute',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'State': obj.data.State,
+                    'Type': obj.data.Type
+                },
+                'Import': {
+                    'DestinationCidrBlock': obj.data.DestinationCidrBlock,
+                    'LocalGatewayRouteTableId': obj.data.LocalGatewayRouteTableId
+                }
+            }
         });
     } else if (obj.type == "ec2.localgatewayroutetablevpcassociation") {
         reqParams.cfn['LocalGatewayRouteTableId'] = obj.data.LocalGatewayRouteTableId;
@@ -4267,7 +4825,204 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::LocalGatewayRouteTableVPCAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'LocalGatewayRouteTableVpcAssociationId': obj.data.LocalGatewayRouteTableVpcAssociationId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerglobalnetwork") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::GlobalNetwork'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::GlobalNetwork',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId,
+                'GetAtt': {
+                    'Id': obj.data.GlobalNetworkId,
+                    'Arn': obj.data.GlobalNetworkArn
+                },
+                'Import': {
+                    'Id': obj.data.GlobalNetworkId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagersite") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Site'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Site',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SiteId,
+                'GetAtt': {
+                    'SiteId': obj.data.SiteId,
+                    'SiteArn': obj.data.SiteArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'SiteId': obj.data.SiteId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerdevice") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Model'] = obj.data.Model;
+        reqParams.cfn['Vendor'] = obj.data.Vendor;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['SerialNumber'] = obj.data.SerialNumber;
+        reqParams.cfn['SiteId'] = obj.data.SiteId;
+        reqParams.cfn['Location'] = obj.data.Location;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Device'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Device',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DeviceArn,
+                'GetAtt': {
+                    'DeviceId': obj.data.DeviceId,
+                    'DeviceArn': obj.data.DeviceArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'DeviceId': obj.data.DeviceId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerlink") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['SiteId'] = obj.data.SiteId;
+        reqParams.cfn['Bandwidth'] = obj.data.Bandwidth;
+        reqParams.cfn['Provider'] = obj.data.Provider;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::Link'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::Link',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.LinkArn,
+                'GetAtt': {
+                    'LinkId': obj.data.LinkId,
+                    'LinkArn': obj.data.LinkArn
+                },
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'LinkId': obj.data.LinkId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerlinkassociation") {
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['DeviceId'] = obj.data.DeviceId;
+        reqParams.cfn['LinkId'] = obj.data.LinkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::LinkAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::LinkAssociation',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId + "|" + obj.data.DeviceId + "|" + obj.data.LinkId,
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'DeviceId': obj.data.DeviceId,
+                    'LinkId': obj.data.LinkId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagercustomergatewayassociation") {
+        reqParams.cfn['CustomerGatewayArn'] = obj.data.CustomerGatewayArn;
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['DeviceId'] = obj.data.DeviceId;
+        reqParams.cfn['LinkId'] = obj.data.LinkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::CustomerGatewayAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::CustomerGatewayAssociation',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'CustomerGatewayArn': obj.data.CustomerGatewayArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagertransitgatewayregistration") {
+        reqParams.cfn['TransitGatewayArn'] = obj.data.TransitGatewayArn;
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::TransitGatewayRegistration'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::TransitGatewayRegistration',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.GlobalNetworkId + "|" + obj.data.TransitGatewayArn,
+                'Import': {
+                    'GlobalNetworkId': obj.data.GlobalNetworkId,
+                    'TransitGatewayArn': obj.data.TransitGatewayArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.prefixlist") {
+        reqParams.cfn['AddressFamily'] = obj.data.AddressFamily;
+        reqParams.cfn['PrefixListName'] = obj.data.PrefixListName;
+        reqParams.cfn['MaxEntries'] = obj.data.MaxEntries;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Entries'] = obj.data.Entries;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::PrefixList'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::PrefixList',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PrefixListId,
+                'GetAtt': {
+                    'Arn': obj.data.PrefixListArn,
+                    'OwnerId': obj.data.OwnerId,
+                    'PrefixListId': obj.data.PrefixListId,
+                    'Version': obj.data.Version
+                },
+                'Import': {
+                    'PrefixListId': obj.data.PrefixListId
+                }
+            }
         });
     } else {
         return false;

@@ -68,6 +68,44 @@ sections.push({
                 ]
             ]
         },
+        'Composite Alarms': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Dashboards': {
             'columns': [
                 [
@@ -401,12 +439,59 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Canaries': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'runtimeversion',
+                        title: 'Runtime Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-compositealarms-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-dashboards-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
@@ -415,11 +500,12 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
-        // no params
+        AlarmTypes: ["MetricAlarm"]
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-alarms-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-alarms-datatable').deferredBootstrapTable('removeAll');
 
         data.MetricAlarms.forEach(metricAlarm => {
             $('#section-managementandgovernance-cloudwatch-alarms-datatable').deferredBootstrapTable('append', [{
@@ -439,10 +525,30 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         unblockUI('#section-managementandgovernance-cloudwatch-alarms-datatable');
     });
 
+    await sdkcall("CloudWatch", "describeAlarms", {
+        AlarmTypes: ["CompositeAlarm"]
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').deferredBootstrapTable('removeAll');
+
+        data.CompositeAlarms.forEach(compositeAlarm => {
+            $('#section-managementandgovernance-cloudwatch-compositealarms-datatable').deferredBootstrapTable('append', [{
+                f2id: compositeAlarm.AlarmArn,
+                f2type: 'cloudwatch.compositealarm',
+                f2data: compositeAlarm,
+                f2region: region,
+                f2link: 'https://console.aws.amazon.com/cloudwatch/home?region=' + region + '#alarm:alarm:alarmFilter=ANY;name=' + compositeAlarm.AlarmName,
+                name: compositeAlarm.AlarmName,
+                description: compositeAlarm.AlarmDescription
+            }]);
+        });
+
+        unblockUI('#section-managementandgovernance-cloudwatch-compositealarms-datatable');
+    });
+
     await sdkcall("CloudWatch", "listDashboards", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudwatch-dashboards-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-dashboards-datatable').deferredBootstrapTable('removeAll');
 
         if (data.DashboardEntries) {
             await Promise.all(data.DashboardEntries.map(dashboard => {
@@ -466,7 +572,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatchLogs", "describeDestinations", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-destinations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-destinations-datatable').deferredBootstrapTable('removeAll');
 
         data.destinations.forEach(destination => {
             $('#section-managementandgovernance-cloudwatch-destinations-datatable').deferredBootstrapTable('append', [{
@@ -481,16 +587,13 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
 
         unblockUI('#section-managementandgovernance-cloudwatch-destinations-datatable');
     });
-
-    /*
-    TODO: Make a setting to enable this
-
+    
     await sdkcall("CloudWatchLogs", "describeLogGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-cloudwatch-loggroups-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-cloudwatch-logstreams-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-loggroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-logstreams-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.logGroups.map(logGroup => {
             $('#section-managementandgovernance-cloudwatch-loggroups-datatable').deferredBootstrapTable('append', [{
@@ -540,12 +643,11 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
             ]);
         }));
     });
-    */
 
     await sdkcall("CloudWatchLogs", "describeMetricFilters", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').deferredBootstrapTable('removeAll');
 
         data.metricFilters.forEach(metricFilter => {
             $('#section-managementandgovernance-cloudwatch-metricfilters-datatable').deferredBootstrapTable('append', [{
@@ -565,7 +667,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeAnomalyDetectors", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').deferredBootstrapTable('removeAll');
 
         data.AnomalyDetectors.forEach(anomalyDetector => {
             $('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable').deferredBootstrapTable('append', [{
@@ -583,7 +685,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     await sdkcall("CloudWatch", "describeInsightRules", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-cloudwatch-insightrules-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-insightrules-datatable').deferredBootstrapTable('removeAll');
 
         data.InsightRules.forEach(insightRule => {
             $('#section-managementandgovernance-cloudwatch-insightrules-datatable').deferredBootstrapTable('append', [{
@@ -597,11 +699,30 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     });
 
+    await sdkcall("Synthetics", "describeCanaries", {
+        // no params
+    }, true).then((data) => {
+        $('#section-managementandgovernance-cloudwatch-canaries-datatable').deferredBootstrapTable('removeAll');
+
+        data.Canaries.forEach(canary => {
+            $('#section-managementandgovernance-cloudwatch-canaries-datatable').deferredBootstrapTable('append', [{
+                f2id: canary.Name,
+                f2type: 'cloudwatch.canary',
+                f2data: canary,
+                f2region: region,
+                name: canary.Name,
+                id: canary.Id,
+                runtimeversion: canary.RuntimeVersion
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -673,6 +794,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['ThresholdMetricId'] = obj.data.ThresholdMetricId;
 
         tracked_resources.push({
             'obj': obj,
@@ -681,6 +803,32 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::Alarm',
             'terraformType': 'aws_cloudwatch_metric_alarm',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AlarmName,
+                'GetAtt': {
+                    'Arn': obj.data.AlarmArn
+                },
+                'Import': {
+                    'AlarmName': obj.data.AlarmName
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.compositealarm") {
+        reqParams.cfn['AlarmName'] = obj.data.AlarmName;
+        reqParams.cfn['AlarmDescription'] = obj.data.AlarmDescription;
+        reqParams.cfn['ActionsEnabled'] = obj.data.ActionsEnabled;
+        reqParams.cfn['OKActions'] = obj.data.OKActions;
+        reqParams.cfn['AlarmActions'] = obj.data.AlarmActions;
+        reqParams.cfn['InsufficientDataActions'] = obj.data.InsufficientDataActions;
+        reqParams.cfn['AlarmRule'] = obj.data.AlarmRule;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::CompositeAlarm'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::CompositeAlarm',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.AlarmName,
@@ -855,6 +1003,46 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'cloudwatch',
             'type': 'AWS::CloudWatch::InsightRule',
             'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.canary") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.Code) {
+            reqParams.cfn['Code'] = {
+                'Handler': obj.data.Code.Handler,
+                'S3Bucket': 'REPLACEME',
+                'S3Key': 'REPLACEME',
+                'S3ObjectVersion': 'REPLACEME',
+                'Script': 'REPLACEME',
+            };
+        }
+        reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+        reqParams.cfn['Schedule'] = obj.data.Schedule;
+        reqParams.cfn['RunConfig'] = obj.data.RunConfig;
+        reqParams.cfn['SuccessRetentionPeriod'] = obj.data.SuccessRetentionPeriodInDays;
+        reqParams.cfn['FailureRetentionPeriod'] = obj.data.FailureRetentionPeriodInDays;
+        reqParams.cfn['ArtifactS3Location'] = obj.data.ArtifactS3Location;
+        reqParams.cfn['RuntimeVersion'] = obj.data.RuntimeVersion;
+        reqParams.cfn['VPCConfig'] = obj.data.VpcConfig;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        /*
+        SKIPPED:
+        StartCanaryAfterCreation: Boolean
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Synthetics::Canary'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Synthetics::Canary',
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Name': obj.data.Name,
+                    'Id': obj.data.Id
+                }
+            }
         });
     } else {
         return false;

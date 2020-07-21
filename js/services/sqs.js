@@ -68,8 +68,8 @@ async function updateDatatableApplicationIntegrationSQS() {
     await sdkcall("SQS", "listQueues", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-sqs-queues-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-sqs-queuepolicies-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queues-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.QueueUrls) {
             await Promise.all(data.QueueUrls.map(queueUrl => {
@@ -168,27 +168,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'sqs',
             'type': 'AWS::SQS::QueuePolicy',
             'terraformType': 'aws_sqs_queue_policy',
-            'options': reqParams
-        });
-    } else if (obj.type == "elasticbeanstalk.application") {
-        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
-        reqParams.tf['name'] = obj.data.ApplicationName;
-        reqParams.cfn['Description'] = obj.data.Description;
-        reqParams.tf['description'] = obj.data.Description;
-
-        /*
-        TODO:
-        ResourceLifecycleConfig:
-            ApplicationResourceLifecycleConfig
-        */
-
-        tracked_resources.push({
-            'obj': obj,
-            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::Application'),
-            'region': obj.region,
-            'service': 'elasticbeanstalk',
-            'type': 'AWS::ElasticBeanstalk::Application',
-            'terraformType': 'aws_elastic_beanstalk_application',
             'options': reqParams
         });
     } else {

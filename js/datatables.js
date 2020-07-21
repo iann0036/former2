@@ -225,18 +225,22 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
         var service = new AWS[svc]({ region: region, customUserAgent: 'former2/latest' });
         if (svc == "GlobalAccelerator") {
             service = new AWS[svc]({ region: 'us-west-2', customUserAgent: 'former2/latest' });
+        } else if (svc == "CostExplorer") {
+            service = new AWS[svc]({ region: 'us-east-1', customUserAgent: 'former2/latest' });
         }
 
         service[method].call(service, params, async function (err, data) {
             if (err) {
                 if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
                     if (backoff) {
-                        f2log("Too many requests, sleeping for " + backoff + "ms");
+                        f2log("Too many requests for " + svc + "." + method + ", sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
                         backoff *= 2;
-                        backoff = Math.min(backoff, 120000);
+                        if (backoff > 120000) {
+                            reject(data);
+                        }
                     } else {
-                        f2log("Too many requests, sleeping for 500ms");
+                        f2log("Too many requests for " + svc + "." + method + ", sleeping for 500ms");
                         await new Promise(resolve => setTimeout(resolve, 500));
                         backoff = 500 + Math.floor(Math.random() * 500);
                     }
@@ -259,14 +263,32 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     } else if (alert_on_errors) {
                         f2log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
                         f2trace(err);
-
-                        $.notify({
-                            icon: 'font-icon font-icon-warning',
-                            title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
-                            message: err.message || JSON.stringify(err)
-                        }, {
-                            type: 'danger'
-                        });
+                        
+                        if (err.message) {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: err.message
+                            }, {
+                                type: 'danger'
+                            });
+                        } else if (err.retryDelay) {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: 'Credentials may not be correctly configured'
+                            }, {
+                                type: 'danger'
+                            });
+                        } else {
+                            $.notify({
+                                icon: 'font-icon font-icon-warning',
+                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                message: JSON.stringify(err)
+                            }, {
+                                type: 'danger'
+                            });
+                        }
                     }
 
                     reject(data);

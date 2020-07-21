@@ -229,7 +229,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
             $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('append', [{
@@ -251,7 +251,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
             $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('append', [{
@@ -272,20 +272,29 @@ async function updateDatatableDatabaseDocumentDB() {
 
     await sdkcall("DocDB", "describeDBClusterParameterGroups", {
         // no params
-    }, true).then((data) => {
-        $('#section-database-documentdb-clusterparametergroups-datatable').bootstrapTable('removeAll');
+    }, true).then(async (data) => {
+        $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
-            $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: clusterParameterGroup.DBClusterParameterGroupArn,
-                f2type: 'documentdb.clusterparametergroup',
-                f2data: clusterParameterGroup,
-                f2region: region,
-                name: clusterParameterGroup.DBClusterParameterGroupName,
-                family: clusterParameterGroup.DBParameterGroupFamily,
-                description: clusterParameterGroup.Description
-            }]);
-        });
+        await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
+            return sdkcall("DocDB", "describeDBClusterParameters", {
+                DBClusterParameterGroupName: parameterGroup.DBClusterParameterGroupName,
+                Source: 'user'
+            }, true).then((paramdata) => {
+                parameterGroup['Parameters'] = paramdata.Parameters;
+
+                if (paramdata.Parameters.length) {
+                    $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.DBClusterParameterGroupArn,
+                        f2type: 'documentdb.clusterparametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.DBClusterParameterGroupName,
+                        family: parameterGroup.DBParameterGroupFamily,
+                        description: parameterGroup.Description
+                    }]);
+                }
+            });
+        }));
 
         unblockUI('#section-database-documentdb-clusterparametergroups-datatable');
     });
@@ -293,7 +302,7 @@ async function updateDatatableDatabaseDocumentDB() {
     await sdkcall("DocDB", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-documentdb-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -329,6 +338,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['port'] = obj.data.Port;
         reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
         reqParams.tf['master_username'] = obj.data.MasterUsername;
+        reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+        reqParams.tf['master_password'] = 'REPLACEME';
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
         reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
         reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
@@ -345,10 +356,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
 
         /*
         TODO:
-        MasterUserPassword: String
         SnapshotIdentifier: String
         Tags: 
             - Tag
@@ -399,10 +410,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Parameters'] = {};
+        reqParams.tf['parameters'] = [];
+        obj.data.Parameters.forEach(parameter => {
+            reqParams.cfn['Parameters'][parameter.ParameterName] = parameter.ParameterValue;
+            reqParams.tf['parameters'].push({
+                'name': parameter.ParameterName,
+                'value': parameter.ParameterValue
+            });
+        });
 
         /*
         TODO:
-        Parameters: Json
         Tags: 
             - Tag
         */

@@ -62,7 +62,7 @@ async function updateDatatableAnalyticsMSK() {
     await sdkcall("Kafka", "listClusters", {
         // no params
     }, false).then(async (data) => {
-        $('#section-analytics-msk-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-msk-clusters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ClusterInfoList.map(cluster => {
             return sdkcall("Kafka", "describeCluster", {
@@ -115,6 +115,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['OpenMonitoring'] = obj.data.OpenMonitoring;
+        reqParams.cfn['LoggingInfo'] = obj.data.LoggingInfo;
 
         tracked_resources.push({
             'obj': obj,

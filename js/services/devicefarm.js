@@ -55,7 +55,7 @@ async function updateDatatableMobileDeviceFarm() {
     await sdkcall("DeviceFarm", "listProjects", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mobile-devicefarm-projects-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-devicefarm-projects-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.projects.map(project => {
             return sdkcall("DeviceFarm", "getProject", {

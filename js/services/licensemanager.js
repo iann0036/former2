@@ -122,8 +122,8 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
     await sdkcall("LicenseManager", "listLicenseConfigurations", {
         // no params
     }, false).then(async (data) => {
-        $('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-licensemanager-associations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-licensemanager-associations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.LicenseConfigurations.map(licenseconfiguration => {
             return sdkcall("LicenseManager", "getLicenseConfiguration", {

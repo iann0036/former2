@@ -156,7 +156,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeComputeEnvironments", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-computeenvironments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-computeenvironments-datatable').deferredBootstrapTable('removeAll');
 
         data.computeEnvironments.forEach(computeEnvironment => {
             $('#section-compute-batch-computeenvironments-datatable').deferredBootstrapTable('append', [{
@@ -176,7 +176,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeJobDefinitions", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-jobdefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-jobdefinitions-datatable').deferredBootstrapTable('removeAll');
 
         data.jobDefinitions.forEach(jobDefinition => {
             $('#section-compute-batch-jobdefinitions-datatable').deferredBootstrapTable('append', [{
@@ -196,7 +196,7 @@ async function updateDatatableComputeBatch() {
     await sdkcall("Batch", "describeJobQueues", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-batch-jobqueues-datatable').bootstrapTable('removeAll');
+        $('#section-compute-batch-jobqueues-datatable').deferredBootstrapTable('removeAll');
 
         data.jobQueues.forEach(jobQueue => {
             $('#section-compute-batch-jobqueues-datatable').deferredBootstrapTable('append', [{
@@ -255,7 +255,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'PlacementGroup': obj.data.computeResources.placementGroup,
                 'BidPercentage': obj.data.computeResources.bidPercentage,
                 'SpotIamFleetRole': obj.data.computeResources.spotIamFleetRole,
-                'LaunchTemplate': launchTemplate
+                'LaunchTemplate': launchTemplate,
+                'AllocationStrategy': obj.data.computeResources.allocationStrategy
             };
             reqParams.tf['compute_resources'] = {
                 'type': obj.data.computeResources.type,
@@ -386,6 +387,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             }
 
+            var linuxParameters = null;
+            if (obj.data.containerProperties.linuxParameters) {
+                var devices = null;
+                if (obj.data.containerProperties.linuxParameters.devices) {
+                    devices = {
+                        'HostPath': obj.data.containerProperties.linuxParameters.devices.hostPath,
+                        'ContainerPath': obj.data.containerProperties.linuxParameters.devices.containerPath,
+                        'Permissions': obj.data.containerProperties.linuxParameters.devices.permissions
+                    };
+                }
+                linuxParameters = {
+                    'Devices': devices
+                };
+            }
+
             reqParams.cfn['ContainerProperties'] = {
                 'MountPoints': mountPoints,
                 'User': obj.data.containerProperties.user,
@@ -398,7 +414,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ReadonlyRootFilesystem': obj.data.containerProperties.readonlyRootFilesystem,
                 'Ulimits': ulimits,
                 'Vcpus': obj.data.containerProperties.vcpus,
-                'Image': obj.data.containerProperties.image
+                'Image': obj.data.containerProperties.image,
+                'LinuxParameters': linuxParameters
             };
             reqParams.tf['container_properties'] = obj.data.containerProperties;
         }

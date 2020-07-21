@@ -82,7 +82,7 @@ async function updateDatatableAWSCostManagementBudgets() {
         await sdkcall("Budgets", "describeBudgets", {
             AccountId: accountId
         }, true).then(async (data) => {
-            $('#section-awscostmanagement-budgets-budgets-datatable').bootstrapTable('removeAll');
+            $('#section-awscostmanagement-budgets-budgets-datatable').deferredBootstrapTable('removeAll');
 
             if (data.Budgets) {
                 await Promise.all(data.Budgets.map(budget => {
@@ -122,7 +122,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'CostFilters': obj.data.CostFilters,
             'BudgetName': obj.data.BudgetName,
             'CostTypes': obj.data.CostTypes,
-            'BudgetType': obj.data.BudgetType
+            'BudgetType': obj.data.BudgetType,
+            'PlannedBudgetLimits': obj.data.PlannedBudgetLimits
         };
         if (obj.data.BudgetLimit) {
             reqParams.tf['limit_amount'] = obj.data.BudgetLimit.Amount;

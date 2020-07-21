@@ -171,8 +171,8 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     await sdkcall("MQ", "listBrokers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-amazonmq-brokers-datatable').bootstrapTable('removeAll');
-        $('#section-applicationintegration-amazonmq-configurationassociations-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-configurationassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.BrokerSummaries.map(brokerSummary => {
             return sdkcall("MQ", "describeBroker", {
@@ -213,7 +213,7 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
     await sdkcall("MQ", "listConfigurations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-amazonmq-configurations-datatable').bootstrapTable('removeAll');
+        $('#section-applicationintegration-amazonmq-configurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Configurations.map(configuration => {
             return sdkcall("MQ", "describeConfiguration", {
@@ -280,16 +280,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Users'] = [];
             obj.data.Users.forEach(user => {
                 reqParams.cfn['Users'].push({
-                    'Username': user.Username
+                    'Username': user.Username,
+                    'Password': 'REPLACEME'
                 });
             });
         }
+        reqParams.cfn['EncryptionOptions'] = obj.data.EncryptionOptions;
 
         /*
         TODO:
         Users: 
             - User
-                Password
                 Groups
                 ConsoleAccess
         */

@@ -132,8 +132,8 @@ async function updateDatatableBlockchainManagedBlockchain() {
     await sdkcall("ManagedBlockchain", "listNetworks", {
         // no params
     }, false).then(async (data) => {
-        $('#section-blockchain-managedblockchain-members-datatable').bootstrapTable('removeAll');
-        $('#section-blockchain-managedblockchain-nodes-datatable').bootstrapTable('removeAll');
+        $('#section-blockchain-managedblockchain-members-datatable').deferredBootstrapTable('removeAll');
+        $('#section-blockchain-managedblockchain-nodes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Networks.map(async (network) => {
             return sdkcall("ManagedBlockchain", "getNetwork", {

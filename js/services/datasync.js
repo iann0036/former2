@@ -233,7 +233,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     await sdkcall("DataSync", "listAgents", {
         // no params
     }, true).then(async (data) => {
-        $('#section-migrationandtransfer-datasync-agents-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-agents-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Agents.map(agent => {
             return sdkcall("DataSync", "describeAgent", {
@@ -255,7 +255,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     await sdkcall("DataSync", "listTasks", {
         // no params
     }, true).then(async (data) => {
-        $('#section-migrationandtransfer-datasync-tasks-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-tasks-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Tasks.map(task => {
             return sdkcall("DataSync", "describeTask", {
@@ -277,9 +277,9 @@ async function updateDatatableMigrationAndTransferDataSync() {
     await sdkcall("DataSync", "listLocations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-migrationandtransfer-datasync-efslocations-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-datasync-nfslocations-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-datasync-s3locations-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-efslocations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-nfslocations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-s3locations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Locations.map(location => {
             if (location.LocationUri.split(":")[0] == "EFS") {

@@ -766,8 +766,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listConnectorDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-connectordefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-connectordefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-connectordefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -815,8 +815,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listCoreDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-coredefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-coredefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-coredefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -845,13 +845,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     CoreDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-coredefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.coredefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -864,8 +864,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listDeviceDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-devicedefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-devicedefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-devicedefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -894,13 +894,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     DeviceDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-devicedefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.devicedefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -913,8 +913,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listFunctionDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-functiondefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-functiondefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-functiondefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -943,13 +943,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     FunctionDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-functiondefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.functiondefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -962,8 +962,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-groups-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-groupversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-groups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-groupversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Groups.map(group => {
             return Promise.all([
@@ -992,13 +992,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     GroupId: group.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-groups-datatable').deferredBootstrapTable('append', [{
-                        f2id: group.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.group',
-                        f2data: group,
+                        f2data: data,
                         f2region: region,
-                        id: group.Id,
-                        name: group.Name,
-                        latestversion: group.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -1011,8 +1011,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listLoggerDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-loggerdefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-loggerdefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-loggerdefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -1041,13 +1041,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     LoggerDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-loggerdefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.loggerdefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -1060,8 +1060,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listResourceDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-resourcedefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -1088,16 +1088,23 @@ async function updateDatatableInternetofThingsGreengrass() {
                 }),
                 sdkcall("Greengrass", "getResourceDefinition", {
                     ResourceDefinitionId: definition.Id
-                }, true).then((data) => {
-                    $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
-                        f2type: 'greengrass.resourcedefinition',
-                        f2data: definition,
-                        f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
-                    }]);
+                }, true).then(async (data) => {
+                    await sdkcall("Greengrass", "getResourceDefinitionVersion", {
+                        ResourceDefinitionId: definition.Id,
+                        ResourceDefinitionVersionId: definition.LatestVersion
+                    }, true).then(async (versiondata) => {
+                        data['Definition'] = versiondata['Definition'];
+
+                        $('#section-internetofthings-greengrass-resourcedefinitions-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'greengrass.resourcedefinition',
+                            f2data: data,
+                            f2region: region,
+                            id: data.Id,
+                            name: data.Name,
+                            latestversion: data.LatestVersion
+                        }]);
+                    });
                 })
             ]);
         }));
@@ -1109,8 +1116,8 @@ async function updateDatatableInternetofThingsGreengrass() {
     await sdkcall("Greengrass", "listSubscriptionDefinitions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Definitions.map(definition => {
             return Promise.all([
@@ -1139,13 +1146,13 @@ async function updateDatatableInternetofThingsGreengrass() {
                     SubscriptionDefinitionId: definition.Id
                 }, true).then((data) => {
                     $('#section-internetofthings-greengrass-subscriptiondefinitions-datatable').deferredBootstrapTable('append', [{
-                        f2id: definition.Arn,
+                        f2id: data.Arn,
                         f2type: 'greengrass.subscriptiondefinition',
-                        f2data: definition,
+                        f2data: data,
                         f2region: region,
-                        id: definition.Id,
-                        name: definition.Name,
-                        latestversion: definition.LatestVersion
+                        id: data.Id,
+                        name: data.Name,
+                        latestversion: data.LatestVersion
                     }]);
                 })
             ]);
@@ -1335,10 +1342,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "greengrass.resourcedefinition") {
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['InitialVersion'] = obj.data.Definition;
 
         /*
         TODO:
-        InitialVersion
+        Tags
         */
 
         tracked_resources.push({

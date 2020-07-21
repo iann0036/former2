@@ -155,7 +155,7 @@ async function updateDatatableMediaServicesMediaLive() {
     await sdkcall("MediaLive", "listChannels", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-medialive-channels-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-medialive-channels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Channels.map(channel => {
             return sdkcall("MediaLive", "describeCluster", {
@@ -177,7 +177,7 @@ async function updateDatatableMediaServicesMediaLive() {
     await sdkcall("MediaLive", "listInputs", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-medialive-inputs-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-medialive-inputs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Inputs.map(input => {
             return sdkcall("MediaLive", "describeInput", {
@@ -200,7 +200,7 @@ async function updateDatatableMediaServicesMediaLive() {
     await sdkcall("MediaLive", "listInputSecurityGroups", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-medialive-inputsecuritygroups-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-medialive-inputsecuritygroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.InputSecurityGroups.map(inputsecuritygroup => {
             return sdkcall("MediaLive", "describeInputSecurityGroup", {

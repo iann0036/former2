@@ -212,7 +212,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     await sdkcall("CodeBuild", "listProjects", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codebuild-projects-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codebuild-projects-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.projects.map(project => {
             return sdkcall("CodeBuild", "batchGetProjects", {
@@ -235,7 +235,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     await sdkcall("CodeBuild", "listSourceCredentials", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codebuild-sourcecredentials-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codebuild-sourcecredentials-datatable').deferredBootstrapTable('removeAll');
 
         data.sourceCredentialsInfos.forEach(sourcecredentials => {
             $('#section-developertools-codebuild-sourcecredentials-datatable').deferredBootstrapTable('append', [{
@@ -253,7 +253,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     await sdkcall("CodeStarNotifications", "listNotificationRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codebuild-notificationrules-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codebuild-notificationrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotificationRules.map(notificationRule => {
             return sdkcall("CodeStarNotifications", "describeNotificationRule", {
@@ -277,7 +277,7 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     await sdkcall("CodeBuild", "listReportGroups", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codebuild-reportgroups-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codebuild-reportgroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.reportGroups.map(reportGroup => {
             return sdkcall("CodeBuild", "batchGetReportGroups", {
@@ -317,12 +317,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Resource': obj.data.source.auth.resource
             };
         }
+        var buildStatusConfig = null;
+        if (obj.data.source.buildStatusConfig) {
+            buildStatusConfig = {
+                'Context': obj.data.source.buildStatusConfig.context,
+                'TargetUrl': obj.data.source.buildStatusConfig.targetUrl
+            };
+        }
 
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Description'] = obj.data.description;
         reqParams.cfn['Source'] = {
             'Auth': auth,
             'BuildSpec': obj.data.source.buildspec,
+            'BuildStatusConfig': buildStatusConfig,
             'GitCloneDepth': obj.data.source.gitCloneDepth,
             'GitSubmodulesConfig': gitSubmodulesConfig,
             'InsecureSsl': obj.data.source.insecureSsl,

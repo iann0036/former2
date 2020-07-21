@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Resource Access Manager',
     'resourcetypes': {
         'Resource Shares': {
@@ -71,7 +71,7 @@ async function updateDatatableSecurityIdentityAndComplianceResourceAccessManager
     await sdkcall("RAM", "getResourceShares", {
         resourceOwner: 'SELF'
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-resourceaccessmanager-resourceshares-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.resourceShares.map(resourceShare => {
             resourceShare['principals'] = [];

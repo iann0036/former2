@@ -479,7 +479,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("AppStream", "describeFleets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-endusercomputing-appstream-fleets-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-fleets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Fleets.map(fleet => {
             $('#section-endusercomputing-appstream-fleets-datatable').deferredBootstrapTable('append', [{
@@ -520,7 +520,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("AppStream", "describeUsers", {
         AuthenticationType: 'USERPOOL'
     }, true).then((data) => {
-        $('#section-endusercomputing-appstream-users-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-users-datatable').deferredBootstrapTable('removeAll');
 
         data.Users.forEach(user => {
             $('#section-endusercomputing-appstream-users-datatable').deferredBootstrapTable('append', [{
@@ -541,8 +541,8 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("AppStream", "describeStacks", {
         // no params
     }, true).then((data) => {
-        $('#section-endusercomputing-appstream-stacks-datatable').bootstrapTable('removeAll');
-        $('#section-endusercomputing-appstream-stackuserassociations-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-stacks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-stackuserassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.Stacks.forEach(async (stack) => {
             $('#section-endusercomputing-appstream-stacks-datatable').deferredBootstrapTable('append', [{
@@ -579,7 +579,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("AppStream", "describeImageBuilders", {
         // no params
     }, true).then((data) => {
-        $('#section-endusercomputing-appstream-imagebuilders-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-imagebuilders-datatable').deferredBootstrapTable('removeAll');
 
         data.ImageBuilders.forEach(imageBuilder => {
             $('#section-endusercomputing-appstream-imagebuilders-datatable').deferredBootstrapTable('append', [{
@@ -601,7 +601,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("AppStream", "describeDirectoryConfigs", {
         // no params
     }, true).then((data) => {
-        $('#section-endusercomputing-appstream-directoryconfigs-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-directoryconfigs-datatable').deferredBootstrapTable('removeAll');
 
         data.DirectoryConfigs.forEach(directoryConfig => {
             $('#section-endusercomputing-appstream-directoryconfigs-datatable').deferredBootstrapTable('append', [{
@@ -621,7 +621,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "appstream"
     }, true).then(async (data) => {
-        $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -650,7 +650,7 @@ async function updateDatatableEndUserComputingAppStream() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "appstream"
     }, true).then(async (data) => {
-        $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
@@ -700,6 +700,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.ComputeCapacityStatus) {
             reqParams.cfn['ComputeCapacity'] = obj.data.ComputeCapacityStatus.Desired;
         }
+        reqParams.cfn['IdleDisconnectTimeoutInSeconds'] = obj.data.IdleDisconnectTimeoutInSeconds;
 
         /*
         TODO:

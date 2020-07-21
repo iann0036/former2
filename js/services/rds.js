@@ -530,6 +530,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Proxies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'enginename',
+                        title: 'Engine Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'endpoint',
+                        title: 'Endpoint',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Proxy Target Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'proxyname',
+                        title: 'Proxy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -545,11 +629,13 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-eventsubscriptions-datatable');
     blockUI('#section-database-rds-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-database-rds-proxies-datatable');
+    blockUI('#section-database-rds-proxytargetgroups-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(dbCluster => {
             $('#section-database-rds-clusters-datatable').deferredBootstrapTable('append', [{
@@ -571,7 +657,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(dbInstance => {
             $('#section-database-rds-instances-datatable').deferredBootstrapTable('append', [{
@@ -594,7 +680,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-rds-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -613,40 +699,58 @@ async function updateDatatableDatabaseRDS() {
 
     await sdkcall("RDS", "describeDBParameterGroups", {
         // no params
-    }, true).then((data) => {
-        $('#section-database-rds-parametergroups-datatable').bootstrapTable('removeAll');
+    }, true).then(async (data) => {
+        $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBParameterGroups.forEach(parameterGroup => {
-            $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: parameterGroup.DBParameterGroupArn,
-                f2type: 'rds.parametergroup',
-                f2data: parameterGroup,
-                f2region: region,
-                name: parameterGroup.DBParameterGroupName,
-                family: parameterGroup.DBParameterGroupFamily,
-                description: parameterGroup.Description
-            }]);
-        });
+        await Promise.all(data.DBParameterGroups.map(parameterGroup => {
+            return sdkcall("RDS", "describeDBParameters", {
+                DBParameterGroupName: parameterGroup.DBParameterGroupName,
+                Source: 'user'
+            }, true).then((paramdata) => {
+                parameterGroup['Parameters'] = paramdata.Parameters;
+
+                if (paramdata.Parameters.length) {
+                    $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.DBParameterGroupArn,
+                        f2type: 'rds.parametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.DBParameterGroupName,
+                        family: parameterGroup.DBParameterGroupFamily,
+                        description: parameterGroup.Description
+                    }]);
+                }
+            });
+        }));
 
         unblockUI('#section-database-rds-parametergroups-datatable');
     });
 
     await sdkcall("RDS", "describeDBClusterParameterGroups", {
         // no params
-    }, true).then((data) => {
-        $('#section-database-rds-clusterparametergroups-datatable').bootstrapTable('removeAll');
+    }, true).then(async (data) => {
+        $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBClusterParameterGroups.forEach(parameterGroup => {
-            $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: parameterGroup.DBClusterParameterGroupName,
-                f2type: 'rds.clusterparametergroup',
-                f2data: parameterGroup,
-                f2region: region,
-                name: parameterGroup.DBClusterParameterGroupName,
-                family: parameterGroup.DBParameterGroupFamily,
-                description: parameterGroup.Description
-            }]);
-        });
+        await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
+            return sdkcall("RDS", "describeDBClusterParameters", {
+                DBClusterParameterGroupName: parameterGroup.DBClusterParameterGroupName,
+                Source: 'user'
+            }, true).then((paramdata) => {
+                parameterGroup['Parameters'] = paramdata.Parameters;
+
+                if (paramdata.Parameters.length) {
+                    $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.DBClusterParameterGroupName,
+                        f2type: 'rds.clusterparametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.DBClusterParameterGroupName,
+                        family: parameterGroup.DBParameterGroupFamily,
+                        description: parameterGroup.Description
+                    }]);
+                }
+            });
+        }));
 
         unblockUI('#section-database-rds-clusterparametergroups-datatable');
     });
@@ -654,19 +758,21 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeOptionGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-optiongroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('removeAll');
 
         data.OptionGroupsList.forEach(optionGroup => {
-            $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('append', [{
-                f2id: optionGroup.OptionGroupName,
-                f2type: 'rds.optiongroup',
-                f2data: optionGroup,
-                f2region: region,
-                name: optionGroup.OptionGroupName,
-                description: optionGroup.OptionGroupDescription,
-                enginename: optionGroup.EngineName,
-                majorengineversion: optionGroup.MajorEngineVersion
-            }]);
+            if (optionGroup.Options && optionGroup.Options.length) {
+                $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: optionGroup.OptionGroupName,
+                    f2type: 'rds.optiongroup',
+                    f2data: optionGroup,
+                    f2region: region,
+                    name: optionGroup.OptionGroupName,
+                    description: optionGroup.OptionGroupDescription,
+                    enginename: optionGroup.EngineName,
+                    majorengineversion: optionGroup.MajorEngineVersion
+                }]);
+            }
         });
 
         unblockUI('#section-database-rds-optiongroups-datatable');
@@ -675,18 +781,20 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBSecurityGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-securitygroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSecurityGroups.forEach(securityGroup => {
-            $('#section-database-rds-securitygroups-datatable').deferredBootstrapTable('append', [{
-                f2id: securityGroup.DBSecurityGroupName,
-                f2type: 'rds.securitygroup',
-                f2data: securityGroup,
-                f2region: region,
-                name: securityGroup.DBSecurityGroupName,
-                description: securityGroup.DBSecurityGroupDescription,
-                vpcid: securityGroup.VpcId
-            }]);
+            if ((securityGroup.EC2SecurityGroups && securityGroup.EC2SecurityGroups.length) || (securityGroup.IPRanges && securityGroup.IPRanges.length)) {
+                $('#section-database-rds-securitygroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: securityGroup.DBSecurityGroupName,
+                    f2type: 'rds.securitygroup',
+                    f2data: securityGroup,
+                    f2region: region,
+                    name: securityGroup.DBSecurityGroupName,
+                    description: securityGroup.DBSecurityGroupDescription,
+                    vpcid: securityGroup.VpcId
+                }]);
+            }
         });
 
         unblockUI('#section-database-rds-securitygroups-datatable');
@@ -695,7 +803,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeEventSubscriptions", {
         // no params
     }, true).then((data) => {
-        $('#section-database-rds-eventsubscriptions-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-eventsubscriptions-datatable').deferredBootstrapTable('removeAll');
 
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
             $('#section-database-rds-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
@@ -716,7 +824,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
-        $('#section-database-rds-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -745,7 +853,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "rds"
     }, true).then(async (data) => {
-        $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-database-rds-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
@@ -764,6 +872,52 @@ async function updateDatatableDatabaseRDS() {
 
         unblockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     });
+
+    await sdkcall("RDS", "describeDBProxies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-database-rds-proxies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-database-rds-proxytargetgroups-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.DBProxies) {
+            await Promise.all(data.DBProxies.map(async (proxy) => {
+                $('#section-database-rds-proxies-datatable').deferredBootstrapTable('append', [{
+                    f2id: proxy.DBProxyArn,
+                    f2type: 'rds.proxy',
+                    f2data: proxy,
+                    f2region: region,
+                    name: proxy.DBProxyName,
+                    enginefamily: proxy.EngineFamily,
+                    endpoint: proxy.Endpoint
+                }]);
+
+                return sdkcall("RDS", "describeDBProxyTargetGroups", {
+                    DBProxyName: proxy.DBProxyName
+                }, true).then(async (targetgroups) => {
+                    targetgroups.TargetGroups.forEach(async (tg) => {
+                        await sdkcall("RDS", "describeDBProxyTargets", {
+                            DBProxyName: proxy.DBProxyName,
+                            TargetGroupName: tg.TargetGroupName
+                        }, true).then((targetsdata) => {
+                            tg['Targets'] = targetsdata['Targets'];
+                        });
+
+                        $('#section-database-rds-proxytargetgroups-datatable').deferredBootstrapTable('append', [{
+                            f2id: tg.TargetGroupArn,
+                            f2type: 'rds.proxytargetgroup',
+                            f2data: tg,
+                            f2region: region,
+                            name: tg.TargetGroupName,
+                            proxyname: tg.DBProxyName
+                        }]);
+                    });
+                });
+            }));
+        }
+
+        unblockUI('#section-database-rds-proxies-datatable');
+        unblockUI('#section-database-rds-proxytargetgroups-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -786,7 +940,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['port'] = obj.data.Port;
         reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
         reqParams.tf['master_username'] = obj.data.MasterUsername;
-        reqParams.cfn['MasterUserPassword'] = "REPLACEME"; // TODO: Fix
+        reqParams.cfn['MasterUserPassword'] = "REPLACEME";
         reqParams.tf['master_password'] = "REPLACEME";
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
         reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
@@ -842,6 +996,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['EnableHttpEndpoint'] = obj.data.HttpEndpointEnabled;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'FeatureName': associatedRole.FeatureName,
+                    'RoleArn': associatedRole.RoleArn
+                });
+            });
+        }
+        
 
         /*
         TODO:
@@ -978,6 +1142,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['CACertificateIdentifier'] = obj.data.CACertificateIdentifier;
+        if (obj.data.AssociatedRoles) {
+            reqParams.cfn['AssociatedRoles'] = [];
+            obj.data.AssociatedRoles.forEach(associatedRole => {
+                reqParams.cfn['AssociatedRoles'].push({
+                    'FeatureName': associatedRole.FeatureName,
+                    'RoleArn': associatedRole.RoleArn
+                });
+            });
+        }
 
         /*
         TODO:
@@ -1064,11 +1237,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
         reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
+        reqParams.cfn['Parameters'] = {};
+        reqParams.tf['parameters'] = [];
+        obj.data.Parameters.forEach(parameter => {
+            reqParams.cfn['Parameters'][parameter.ParameterName] = parameter.ParameterValue;
+            reqParams.tf['parameters'].push({
+                'name': parameter.ParameterName,
+                'value': parameter.ParameterValue
+            });
+        });
 
         /*
         TODO:
-        Parameters:
-        - Parameter
         Tags:
         - Tag
         */
@@ -1087,11 +1267,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
         reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
+        reqParams.cfn['Parameters'] = {};
+        reqParams.tf['parameters'] = [];
+        obj.data.Parameters.forEach(parameter => {
+            reqParams.cfn['Parameters'][parameter.ParameterName] = parameter.ParameterValue;
+            reqParams.tf['parameters'].push({
+                'name': parameter.ParameterName,
+                'value': parameter.ParameterValue
+            });
+        });
 
         /*
         TODO:
-        Parameters:
-        - Parameter
         Tags:
         - Tag
         */
@@ -1112,58 +1299,56 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['major_engine_version'] = obj.data.MajorEngineVersion;
         reqParams.cfn['OptionGroupDescription'] = obj.data.OptionGroupDescription;
         reqParams.tf['option_group_description'] = obj.data.OptionGroupDescription;
-        if (obj.data.Options) {
-            reqParams.cfn['OptionConfigurations'] = [];
-            reqParams.tf['option'] = [];
-            obj.data.Options.forEach(option => {
-                var optionSettings = null;
-                var tfOptionSettings = null;
-                if (option.OptionSettings) {
-                    optionSettings = [];
-                    tfOptionSettings = {};
-                    option.OptionSettings.forEach(optionSetting => {
-                        optionSettings.push({
-                            'Name': optionSetting.Name,
-                            'Value': optionSetting.Value
-                        });
-                        tfOptionSettings.push({
-                            'name': optionSetting.Name,
-                            'value': optionSetting.Value
-                        });
+        reqParams.cfn['OptionConfigurations'] = [];
+        reqParams.tf['option'] = [];
+        obj.data.Options.forEach(option => {
+            var optionSettings = null;
+            var tfOptionSettings = null;
+            if (option.OptionSettings) {
+                optionSettings = [];
+                tfOptionSettings = [];
+                option.OptionSettings.forEach(optionSetting => {
+                    optionSettings.push({
+                        'Name': optionSetting.Name,
+                        'Value': optionSetting.Value
                     });
-                }
-                var dbSecurityGroupMemberships = null;
-                if (option.DBSecurityGroupMemberships) {
-                    dbSecurityGroupMemberships = [];
-                    option.DBSecurityGroupMemberships.forEach(dbSecurityGroupMembership => {
-                        dbSecurityGroupMemberships.push(dbSecurityGroupMembership.DBSecurityGroupName);
+                    tfOptionSettings.push({
+                        'name': optionSetting.Name,
+                        'value': optionSetting.Value
                     });
-                }
-                var vpcSecurityGroupMemberships = null;
-                if (option.VpcSecurityGroupMemberships) {
-                    vpcSecurityGroupMemberships = [];
-                    option.VpcSecurityGroupMemberships.forEach(vpcSecurityGroupMembership => {
-                        vpcSecurityGroupMemberships.push(vpcSecurityGroupMembership.VpcSecurityGroupId);
-                    });
-                }
-                reqParams.cfn['OptionConfigurations'].push({
-                    'DBSecurityGroupMemberships': dbSecurityGroupMemberships,
-                    'OptionName': option.OptionName,
-                    'OptionSettings': optionSettings,
-                    'OptionVersion': option.OptionVersion,
-                    'Port': option.Port,
-                    'VpcSecurityGroupMemberships': vpcSecurityGroupMemberships
                 });
-                reqParams.tf['option'].push({
-                    'db_security_group_memberships': dbSecurityGroupMemberships,
-                    'option_name': option.OptionName,
-                    'option_settings': optionSettings,
-                    'version': option.OptionVersion,
-                    'port': option.Port,
-                    'vpc_security_group_memberships': vpcSecurityGroupMemberships
+            }
+            var dbSecurityGroupMemberships = null;
+            if (option.DBSecurityGroupMemberships) {
+                dbSecurityGroupMemberships = [];
+                option.DBSecurityGroupMemberships.forEach(dbSecurityGroupMembership => {
+                    dbSecurityGroupMemberships.push(dbSecurityGroupMembership.DBSecurityGroupName);
                 });
+            }
+            var vpcSecurityGroupMemberships = null;
+            if (option.VpcSecurityGroupMemberships) {
+                vpcSecurityGroupMemberships = [];
+                option.VpcSecurityGroupMemberships.forEach(vpcSecurityGroupMembership => {
+                    vpcSecurityGroupMemberships.push(vpcSecurityGroupMembership.VpcSecurityGroupId);
+                });
+            }
+            reqParams.cfn['OptionConfigurations'].push({
+                'DBSecurityGroupMemberships': dbSecurityGroupMemberships,
+                'OptionName': option.OptionName,
+                'OptionSettings': optionSettings,
+                'OptionVersion': option.OptionVersion,
+                'Port': option.Port,
+                'VpcSecurityGroupMemberships': vpcSecurityGroupMemberships
             });
-        }
+            reqParams.tf['option'].push({
+                'db_security_group_memberships': dbSecurityGroupMemberships,
+                'option_name': option.OptionName,
+                'option_settings': optionSettings,
+                'version': option.OptionVersion,
+                'port': option.Port,
+                'vpc_security_group_memberships': vpcSecurityGroupMemberships
+            });
+        });
 
         /*
         TODO:
@@ -1184,11 +1369,30 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['GroupDescription'] = obj.data.DBSecurityGroupDescription;
         reqParams.tf['description'] = obj.data.DBSecurityGroupDescription;
         reqParams.cfn['EC2VpcId'] = obj.data.VpcId;
+        reqParams.cfn['DBSecurityGroupIngress'] = [];
+        if (obj.data.EC2SecurityGroups) {
+            obj.data.EC2SecurityGroups.forEach(group => {
+                if (group.Status == "authorized") {
+                    reqParams.cfn['DBSecurityGroupIngress'].push({
+                        'EC2SecurityGroupName': group.EC2SecurityGroupName,
+                        'EC2SecurityGroupId': group.EC2SecurityGroupId,
+                        'EC2SecurityGroupOwnerId': group.EC2SecurityGroupOwnerId
+                    });
+                }
+            });
+        }
+        if (obj.data.IPRanges) {
+            obj.data.IPRanges.forEach(range => {
+                if (range.Status == "authorized") {
+                    reqParams.cfn['DBSecurityGroupIngress'].push({
+                        'CIDRIP': range.CIDRIP
+                    });
+                }
+            });
+        }
 
         /*
         TODO:
-        DBSecurityGroupIngress:
-            - RDS Security Group Rule
         Tags:
             - Resource Tag 
         */
@@ -1201,6 +1405,73 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::RDS::DBSecurityGroup',
             'terraformType': 'aws_db_security_group',
             'options': reqParams
+        });
+    } else if (obj.type == "rds.proxy") {
+        reqParams.cfn['DBProxyName'] = obj.data.DBProxyName;
+        reqParams.cfn['EngineFamily'] = obj.data.EngineFamily;
+        reqParams.cfn['VpcSecurityGroupIds'] = obj.data.VpcSecurityGroupIds;
+        reqParams.cfn['VpcSubnetIds'] = obj.data.VpcSubnetIds;
+        reqParams.cfn['Auth'] = obj.data.Auth;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['RequireTLS'] = obj.data.RequireTLS;
+        reqParams.cfn['IdleClientTimeout'] = obj.data.IdleClientTimeout;
+        reqParams.cfn['DebugLogging'] = obj.data.DebugLogging;
+
+        /*
+        TODO
+        Tags: 
+            - TagFormat
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxy'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBProxy',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Endpoint': obj.data.Endpoint,
+                    'DBProxyArn': obj.data.DBProxyArn
+                }
+            }
+        });
+    } else if (obj.type == "rds.proxytargetgroup") {
+        reqParams.cfn['DBProxyName'] = obj.data.DBProxyName;
+        reqParams.cfn['TargetGroupName'] = obj.data.TargetGroupName;
+        reqParams.cfn['ConnectionPoolConfigurationInfo'] = obj.data.ConnectionPoolConfig;
+        reqParams.cfn['DBClusterIdentifiers'] = [];
+        reqParams.cfn['DBInstanceIdentifiers'] = [];
+
+        obj.data.Targets.forEach(target => {
+            if (target.TrackedClusterId && target.TrackedClusterId != "") {
+                reqParams.cfn['DBClusterIdentifiers'].push(target.TrackedClusterId);
+            } else if (target.RdsResourceId && target.RdsResourceId != "") {
+                reqParams.cfn['DBInstanceIdentifiers'].push(target.RdsResourceId);
+            }
+        });
+
+        if (reqParams.cfn['DBClusterIdentifiers'].length == 0) {
+            reqParams.cfn['DBClusterIdentifiers'] = null;
+        }
+        if (reqParams.cfn['DBInstanceIdentifiers'].length == 0) {
+            reqParams.cfn['DBInstanceIdentifiers'] = null;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxyTargetGroup'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBProxyTargetGroup',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'TargetGroupArn': obj.data.TargetGroupArn,
+                    'TargetGroupName': obj.data.TargetGroupName
+                }
+            }
         });
     } else {
         return false;

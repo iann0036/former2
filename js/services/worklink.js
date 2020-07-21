@@ -127,7 +127,7 @@ async function updateDatatableEndUserComputingWorkLink() {
     await sdkcall("WorkLink", "listFleets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-endusercomputing-worklink-fleets-datatable').bootstrapTable('removeAll');
+        $('#section-endusercomputing-worklink-fleets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.FleetSummaryList.map(fleet => {
             return sdkcall("WorkLink", "describeFleetMetadata", {
@@ -146,7 +146,7 @@ async function updateDatatableEndUserComputingWorkLink() {
                 await sdkcall("WorkLink", "listWebsiteCertificateAuthorities", {
                     FleetArn: fleet.FleetArn
                 }, true).then(async (data) => {
-                    $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').bootstrapTable('removeAll');
+                    $('#section-endusercomputing-worklink-websitecertificateauthorityassociations-datatable').deferredBootstrapTable('removeAll');
 
                     await Promise.all(data.WebsiteCertificateAuthorities.map(websiteca => {
                         return sdkcall("WorkLink", "describeWebsiteCertificateAuthority", {

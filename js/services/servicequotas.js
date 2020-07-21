@@ -62,7 +62,7 @@ async function updateDatatableOtherServiceQuotas() {
     await sdkcall("ServiceQuotas", "listRequestedServiceQuotaChangeHistory", {
         // no params
     }, true).then(async (data) => {
-        $('#section-other-servicequotas-servicequotas-datatable').bootstrapTable('removeAll');
+        $('#section-other-servicequotas-servicequotas-datatable').deferredBootstrapTable('removeAll');
 
         data.RequestedQuotas.forEach(quota => {
             var value = quota.DesiredValue;

@@ -1,0 +1,170 @@
+AWS::EC2::Volume
+('VolumeId', '', '', '')
+AWS::WAFv2::IPSet
+('Name', 'Id', 'Scope', '')
+AWS::AutoScaling::ScalingPolicy
+('PolicyName', '', '', '')
+AWS::Events::Rule
+('Name', '', '', '')
+AWS::Chatbot::SlackChannelConfiguration
+('Arn', '', '', '')
+AWS::ACMPCA::CertificateAuthority
+('Arn', '', '', '')
+AWS::NetworkManager::Site
+('GlobalNetworkId', 'SiteId', '', '')
+AWS::AutoScaling::AutoScalingGroup
+('AutoScalingGroupName', '', '', '')
+AWS::Config::ConformancePack
+('ConformancePackName', '', '', '')
+AWS::WAFv2::WebACLAssociation
+('ResourceArn', 'WebACLArn', '', '')
+AWS::ApiGateway::Authorizer
+('RestApiId', 'AuthorizerId', '', '')
+AWS::ApiGateway::RequestValidator
+('RestApiId', 'RequestValidatorId', '', '')
+AWS::EC2::NetworkInterface
+('NetworkInterfaceId', '', '', '')
+AWS::AutoScaling::LaunchConfiguration
+('LaunchConfigurationName', '', '', '')
+AWS::EC2::NatGateway
+('NatGatewayId', '', '', '')
+AWS::CloudWatch::CompositeAlarm
+('AlarmName', '', '', '')
+AWS::NetworkManager::LinkAssociation
+('GlobalNetworkId', 'DeviceId', 'LinkId', '')
+AWS::ECS::TaskSet
+('Cluster', 'Service', 'Id', '')
+AWS::FMS::NotificationChannel
+('SnsTopicArn', '', '', '')
+AWS::EC2::LocalGatewayRouteTableVPCAssociation
+('LocalGatewayRouteTableVpcAssociationId', '', '', '')
+AWS::CodeGuruProfiler::ProfilingGroup
+('ProfilingGroupName', '', '', '')
+AWS::ApiGateway::Stage
+('RestApiId', 'StageName', '', '')
+AWS::SQS::Queue
+('QueueUrl', '', '', '')
+AWS::NetworkManager::CustomerGatewayAssociation
+('GlobalNetworkId', 'CustomerGatewayArn', '', '')
+AWS::ApiGateway::Deployment
+('RestApiId', 'DeploymentId', '', '')
+AWS::EC2::VPC
+('VpcId', '', '', '')
+AWS::S3::Bucket
+('BucketName', '', '', '')
+AWS::NetworkManager::TransitGatewayRegistration
+('GlobalNetworkId', 'TransitGatewayArn', '', '')
+AWS::RDS::DBCluster
+('DBClusterIdentifier', '', '', '')
+AWS::NetworkManager::GlobalNetwork
+('Id', '', '', '')
+AWS::EC2::SecurityGroup
+('GroupId', '', '', '')
+AWS::ACMPCA::Certificate
+('Arn', 'CertificateAuthorityArn', '', '')
+AWS::ElasticLoadBalancingV2::ListenerRule
+('RuleArn', '', '', '')
+AWS::EC2::EIP
+('PublicIp', '', '', '')
+AWS::ECS::PrimaryTaskSet
+('Cluster', 'Service', '', '')
+AWS::SES::ConfigurationSet
+('Name', '', '', '')
+AWS::ApiGateway::RestApi
+('RestApiId', '', '', '')
+AWS::Config::OrganizationConformancePack
+('OrganizationConformancePackName', '', '', '')
+AWS::CloudFormation::Stack
+('StackId', '', '', '')
+AWS::CodeStarConnections::Connection
+('ConnectionArn', '', '', '')
+AWS::NetworkManager::Link
+('GlobalNetworkId', 'LinkId', '', '')
+AWS::S3::AccessPoint
+('Name', '', '', '')
+AWS::AutoScaling::ScheduledAction
+('ScheduledActionName', '', '', '')
+AWS::EC2::InternetGateway
+('InternetGatewayId', '', '', '')
+AWS::Logs::LogGroup
+('LogGroupName', '', '', '')
+AWS::CloudTrail::Trail
+('TrailName', '', '', '')
+AWS::WAFv2::RegexPatternSet
+('Name', 'Id', 'Scope', '')
+AWS::CloudWatch::Alarm
+('AlarmName', '', '', '')
+AWS::WAFv2::WebACL
+('Name', 'Id', 'Scope', '')
+AWS::AutoScaling::LifecycleHook
+('AutoScalingGroupName', 'LifecycleHookName', '', '')
+AWS::EC2::RouteTable
+('RouteTableId', '', '', '')
+AWS::ApiGateway::Method
+('RestApiId', 'ResourceId', 'HttpMethod', '')
+AWS::EC2::Subnet
+('SubnetId', '', '', '')
+AWS::Logs::SubscriptionFilter
+('LogGroupName', 'FilterName', '', '')
+AWS::IoT::Thing
+('ThingName', '', '', '')
+AWS::Lambda::Version
+('FunctionArn', '', '', '')
+AWS::ElasticLoadBalancing::LoadBalancer
+('LoadBalancerName', '', '', '')
+AWS::ECS::Cluster
+('ClusterName', '', '', '')
+AWS::Logs::MetricFilter
+('FilterName', '', '', '')
+AWS::EC2::Instance
+('InstanceId', '', '', '')
+AWS::EC2::GatewayRouteTableAssociation
+('GatewayId', '', '', '')
+AWS::Cassandra::Table
+('KeyspaceName', 'TableName', '', '')
+AWS::FMS::Policy
+('Id', '', '', '')
+AWS::Lambda::Function
+('FunctionName', '', '', '')
+AWS::Lambda::Alias
+('AliasArn', '', '', '')
+AWS::ECS::TaskDefinition
+('TaskDefinitionArn', '', '', '')
+AWS::ElasticLoadBalancingV2::Listener
+('ListenerArn', '', '', '')
+AWS::AccessAnalyzer::Analyzer
+('Arn', '', '', '')
+AWS::EC2::NetworkAcl
+('NetworkAclId', '', '', '')
+AWS::EC2::LocalGatewayRoute
+('DestinationCidrBlock', 'LocalGatewayRouteTableId', '', '')
+AWS::WAFv2::RuleGroup
+('Name', 'Id', 'Scope', '')
+AWS::Athena::NamedQuery
+('NamedQueryId', '', '', '')
+AWS::Athena::WorkGroup
+('Name', '', '', '')
+AWS::NetworkManager::Device
+('GlobalNetworkId', 'DeviceId', '', '')
+AWS::ApiGateway::Resource
+('RestApiId', 'ResourceId', '', '')
+AWS::Route53::HostedZone
+('HostedZoneId', '', '', '')
+AWS::RDS::DBInstance
+('DBInstanceIdentifier', '', '', '')
+AWS::ApiGateway::Model
+('RestApiId', 'Name', '', '')
+AWS::Cassandra::Keyspace
+('KeyspaceName', '', '', '')
+AWS::ECS::Service
+('ServiceArn', 'Cluster', '', '')
+AWS::SNS::Topic
+('TopicArn', '', '', '')
+AWS::DynamoDB::Table
+('TableName', '', '', '')
+AWS::ACMPCA::CertificateAuthorityActivation
+('CertificateAuthorityArn', '', '', '')
+AWS::ResourceGroups::Group
+('Name', '', '', '')
+AWS::ElasticLoadBalancingV2::LoadBalancer
+('LoadBalancerArn', '', '', '')

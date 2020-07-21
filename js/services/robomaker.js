@@ -204,7 +204,7 @@ async function updateDatatableRoboticsRoboMaker() {
     await sdkcall("RoboMaker", "listFleets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-robotics-robomaker-fleets-datatable').bootstrapTable('removeAll');
+        $('#section-robotics-robomaker-fleets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.fleetDetails.map(fleet => {
             return sdkcall("RoboMaker", "describeFleet", {
@@ -227,7 +227,7 @@ async function updateDatatableRoboticsRoboMaker() {
     await sdkcall("RoboMaker", "listRobots", {
         // no params
     }, true).then(async (data) => {
-        $('#section-robotics-robomaker-robots-datatable').bootstrapTable('removeAll');
+        $('#section-robotics-robomaker-robots-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.robots.map(robot => {
             return sdkcall("RoboMaker", "describeRobot", {
@@ -252,7 +252,7 @@ async function updateDatatableRoboticsRoboMaker() {
     await sdkcall("RoboMaker", "listRobotApplications", {
         versionQualifier: "ALL"
     }, true).then(async (data) => {
-        $('#section-robotics-robomaker-robotapplications-datatable').bootstrapTable('removeAll');
+        $('#section-robotics-robomaker-robotapplications-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.robotApplicationSummaries.map(robotApplication => {
             return sdkcall("RoboMaker", "describeRobotApplication", {
@@ -277,7 +277,7 @@ async function updateDatatableRoboticsRoboMaker() {
     await sdkcall("RoboMaker", "listSimulationApplications", {
         versionQualifier: "ALL"
     }, true).then(async (data) => {
-        $('#section-robotics-robomaker-simulationapplications-datatable').bootstrapTable('removeAll');
+        $('#section-robotics-robomaker-simulationapplications-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.simulationApplicationSummaries.map(simulationApplication => {
             return sdkcall("RoboMaker", "describeSimulationApplication", {

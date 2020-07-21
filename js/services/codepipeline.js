@@ -189,6 +189,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'providertype',
+                        title: 'Provider Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -198,11 +236,12 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     blockUI('#section-developertools-codepipeline-webhooks-datatable');
     blockUI('#section-developertools-codepipeline-customactiontypes-datatable');
     blockUI('#section-developertools-codepipeline-notificationrules-datatable');
+    blockUI('#section-developertools-codepipeline-connections-datatable');
 
     await sdkcall("CodePipeline", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-developertools-codepipeline-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.pipelines.map(pipeline => {
             return sdkcall("CodePipeline", "getPipeline", {
@@ -225,7 +264,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodePipeline", "listWebhooks", {
         // no params
     }, true).then((data) => {
-        $('#section-developertools-codepipeline-webhooks-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-webhooks-datatable').deferredBootstrapTable('removeAll');
 
         data.webhooks.forEach(webhook => {
             $('#section-developertools-codepipeline-webhooks-datatable').deferredBootstrapTable('append', [{
@@ -246,7 +285,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodePipeline", "listActionTypes", {
         actionOwnerFilter: "Custom"
     }, true).then((data) => {
-        $('#section-developertools-codepipeline-customactiontypes-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-customactiontypes-datatable').deferredBootstrapTable('removeAll');
 
         data.actionTypes.forEach(actionType => {
             $('#section-developertools-codepipeline-customactiontypes-datatable').deferredBootstrapTable('append', [{
@@ -266,7 +305,7 @@ async function updateDatatableDeveloperToolsCodePipeline() {
     await sdkcall("CodeStarNotifications", "listNotificationRules", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codepipeline-notificationrules-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codepipeline-notificationrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.NotificationRules.map(notificationRule => {
             return sdkcall("CodeStarNotifications", "describeNotificationRule", {
@@ -287,7 +326,29 @@ async function updateDatatableDeveloperToolsCodePipeline() {
         }));
     }).catch(() => { });
 
+    await sdkcall("CodeStarconnections", "listConnections", {
+        ProviderTypeFilter: "Bitbucket"
+    }, false).then(async (data) => {
+        $('#section-developertools-codepipeline-connections-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Connections.map(connection => {
+            return sdkcall("CodeStarconnections", "getConnection", {
+                ConnectionArn: connection.ConnectionArn
+            }, false).then(async (data) => {
+                $('#section-developertools-codepipeline-connections-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Connection.ConnectionArn,
+                    f2type: 'codestarconnections.connection',
+                    f2data: data.Connection,
+                    f2region: region,
+                    name: data.Connection.ConnectionName,
+                    providertype: data.Connection.ProviderType
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-developertools-codepipeline-notificationrules-datatable');
+    unblockUI('#section-developertools-codepipeline-connections-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -322,19 +383,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.artifactStores) {
             reqParams.cfn['ArtifactStores'] = [];
-            array.forEach(element => {
+            obj.data.artifactStores.forEach(artifactStore => {
                 var encryptionKey = null;
-                if (element.encryptionKey) {
+                if (artifactStore.encryptionKey) {
                     encryptionKey = {
-                        'Id': element.encryptionKey.id,
-                        'Type': element.encryptionKey.type
+                        'Id': artifactStore.encryptionKey.id,
+                        'Type': artifactStore.encryptionKey.type
                     };
                 }
                 reqParams.cfn['ArtifactStores'].push({
                     'ArtifactStore': {
                         'EncryptionKey': encryptionKey,
-                        'Location': element.location,
-                        'Type': element.type
+                        'Location': artifactStore.location,
+                        'Type': artifactStore.type
                     },
                     'Region': region // May not be accurate
                 });
@@ -551,6 +612,29 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'codepipeline',
             'type': 'AWS::CodePipeline::CustomActionType',
             'options': reqParams
+        });
+    } else if (obj.type == "codestarconnections.connection") {
+        reqParams.cfn['ConnectionName'] = obj.data.ConnectionName;
+        reqParams.cfn['ProviderType'] = obj.data.ProviderType;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('codestarconnections', obj.id, 'AWS::CodeStarConnections::Connection'),
+            'region': obj.region,
+            'service': 'codestarconnections',
+            'type': 'AWS::CodeStarConnections::Connection',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConnectionArn,
+                'GetAtt': {
+                    'ConnectionArn': obj.data.ConnectionArn,
+                    'OwnerAccountId': obj.data.OwnerAccountId,
+                    'ConnectionStatus': obj.data.ConnectionStatus
+                },
+                'Import': {
+                    'ConnectionArn': obj.data.ConnectionArn
+                }
+            }
         });
     } else {
         return false;

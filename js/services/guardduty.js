@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'GuardDuty',
     'resourcetypes': {
         'Master': {
@@ -328,12 +328,12 @@ async function updateDatatableSecurityIdentityAndComplianceGuardDuty() {
     await sdkcall("GuardDuty", "listDetectors", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-guardduty-detectors-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-guardduty-members-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-guardduty-filters-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-guardduty-master-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-detectors-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-members-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-filters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-ipsets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-threatintelsets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-guardduty-master-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DetectorIds.map(detectorId => {
             return Promise.all([

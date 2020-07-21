@@ -1590,7 +1590,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-instances-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.Reservations.forEach(reservation => {
             reservation.Instances.forEach(async (instance) => {
@@ -1661,7 +1661,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeHosts", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-hosts-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-hosts-datatable').deferredBootstrapTable('removeAll');
 
         data.Hosts.forEach(host => {
             $('#section-compute-ec2-hosts-datatable').deferredBootstrapTable('append', [{
@@ -1681,7 +1681,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeCapacityReservations", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-capacityreservations-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-capacityreservations-datatable').deferredBootstrapTable('removeAll');
 
         data.CapacityReservations.forEach(capacityreservation => {
             $('#section-compute-ec2-capacityreservations-datatable').deferredBootstrapTable('append', [{
@@ -1703,7 +1703,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeFleets", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-fleets-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-fleets-datatable').deferredBootstrapTable('removeAll');
 
         data.Fleets.forEach(fleet => {
             $('#section-compute-ec2-fleets-datatable').deferredBootstrapTable('append', [{
@@ -1722,7 +1722,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("ELB", "describeLoadBalancers", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-loadbalancers-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('removeAll');
 
         data.LoadBalancerDescriptions.forEach(loadBalancer => {
             $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('append', [{
@@ -1743,10 +1743,10 @@ async function updateDatatableComputeEC2() {
     await sdkcall("ELBv2", "describeLoadBalancers", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-v2loadbalancers-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-v2loadbalancerlisteners-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlisteners-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').deferredBootstrapTable('removeAll');
 
         data.LoadBalancers.forEach(async (loadBalancer) => {
             await sdkcall("ELBv2", "describeLoadBalancerAttributes", {
@@ -1826,8 +1826,8 @@ async function updateDatatableComputeEC2() {
     await sdkcall("AutoScaling", "describeAutoScalingGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2-autoscalinggroups-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-autoscalinggroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.AutoScalingGroups.map(autoScalingGroup => {
             $('#section-compute-ec2-autoscalinggroups-datatable').deferredBootstrapTable('append', [{
@@ -1867,7 +1867,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("AutoScaling", "describeLaunchConfigurations", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-launchconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-launchconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         data.LaunchConfigurations.forEach(launchConfiguration => {
             $('#section-compute-ec2-launchconfigurations-datatable').deferredBootstrapTable('append', [{
@@ -1889,7 +1889,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeLaunchTemplates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2-launchtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-launchtemplates-datatable').deferredBootstrapTable('removeAll');
 
         if (data.LaunchTemplates) {
             await Promise.all(data.LaunchTemplates.map(launchTemplate => {
@@ -1918,7 +1918,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("ELBv2", "describeTargetGroups", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2-v2targetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-v2targetgroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TargetGroups.map(async (targetGroup) => {
             await sdkcall("ELBv2", "describeTargetHealth", {
@@ -1952,8 +1952,8 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeVolumes", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-volumes-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-volumeattachments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-volumes-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-volumeattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.Volumes.forEach(volume => {
             $('#section-compute-ec2-volumes-datatable').deferredBootstrapTable('append', [{
@@ -1992,8 +1992,8 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeNetworkInterfaces", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-networkinterfaces-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ec2-networkinterfaceattachments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-networkinterfaces-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-networkinterfaceattachments-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkInterfaces.forEach(networkInterface => {
             $('#section-compute-ec2-networkinterfaces-datatable').deferredBootstrapTable('append', [{
@@ -2010,7 +2010,7 @@ async function updateDatatableComputeEC2() {
                 vpcid: networkInterface.VpcId
             }]);
 
-            if (networkInterface.Attachment) {
+            if (networkInterface.Attachment && networkInterface.Attachment.InstanceId) {
                 networkInterface.Attachment['NetworkInterfaceId'] = networkInterface.NetworkInterfaceId;
                 $('#section-compute-ec2-networkinterfaceattachments-datatable').deferredBootstrapTable('append', [{
                     f2id: networkInterface.Attachment.AttachmentId,
@@ -2032,7 +2032,7 @@ async function updateDatatableComputeEC2() {
     sdkcall("EC2", "describeNetworkInterfacePermissions", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-networkinterfacepermissions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-networkinterfacepermissions-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkInterfacePermissions.forEach(networkInterfacePermission => {
             $('#section-compute-ec2-networkinterfacepermissions-datatable').deferredBootstrapTable('append', [{
@@ -2054,7 +2054,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeSpotFleetRequests", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-spotrequests-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-spotrequests-datatable').deferredBootstrapTable('removeAll');
 
         data.SpotFleetRequestConfigs.forEach(spotFleetRequestConfig => {
             $('#section-compute-ec2-spotrequests-datatable').deferredBootstrapTable('append', [{
@@ -2076,7 +2076,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describePlacementGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-placementgroups-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-placementgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.PlacementGroups.forEach(placementGroup => {
             $('#section-compute-ec2-placementgroups-datatable').deferredBootstrapTable('append', [{
@@ -2097,7 +2097,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("AutoScaling", "describePolicies", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-autoscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-autoscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         data.ScalingPolicies.forEach(scalingPolicy => {
             $('#section-compute-ec2-autoscalingpolicies-datatable').deferredBootstrapTable('append', [{
@@ -2119,7 +2119,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("AutoScaling", "describeScheduledActions", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-autoscalingscheduledactions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-autoscalingscheduledactions-datatable').deferredBootstrapTable('removeAll');
 
         data.ScheduledUpdateGroupActions.forEach(scheduledAction => {
             $('#section-compute-ec2-autoscalingscheduledactions-datatable').deferredBootstrapTable('append', [{
@@ -2140,7 +2140,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeSecurityGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-securitygroups-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.SecurityGroups.forEach(securityGroup => {
             $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('append', [{
@@ -2161,7 +2161,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeFlowLogs", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-ec2-flowlogs-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-flowlogs-datatable').deferredBootstrapTable('removeAll');
 
         if (data.FlowLogs) {
             data.FlowLogs.forEach(flowLog => {
@@ -2184,7 +2184,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("DLM", "getLifecyclePolicies", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.Policies) {
             await Promise.all(data.Policies.map(policy => {
@@ -2211,7 +2211,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ec2"
     }, true).then(async (data) => {
-        $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -2240,7 +2240,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ec2"
     }, true).then(async (data) => {
-        $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {
@@ -2263,7 +2263,7 @@ async function updateDatatableComputeEC2() {
     await sdkcall("EC2", "describeKeyPairs", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ec2-keypairs-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ec2-keypairs-datatable').deferredBootstrapTable('removeAll');
 
         if (data.KeyPairs) {
             data.KeyPairs.forEach(keypair => {
@@ -2386,9 +2386,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['HibernationOptions'] = obj.data.HibernationOptions;
+        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
+        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
 
         /*
         TODO:
+        BlockDeviceMappings:
+            Ebs:
+                KmsKeyId
         CreditSpecification: CreditSpecification
         DisableApiTermination: Boolean
         ElasticInferenceAccelerators: 
@@ -2538,6 +2543,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
+        reqParams.cfn['MultiAttachEnabled'] = obj.data.MultiAttachEnabled;
+        reqParams.cfn['OutpostArn'] = obj.data.OutpostArn;
 
         /*
         TODO:
@@ -3099,7 +3106,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         if (loadBalancerAddress.AllocationId) {
                             reqParams.cfn['SubnetMappings'].push({
                                 'SubnetId': availabilityZone.SubnetId,
-                                'AllocationId': loadBalancerAddress.AllocationId
+                                'AllocationId': loadBalancerAddress.AllocationId,
+                                'PrivateIPv4Address': loadBalancerAddress.PrivateIPv4Address
                             });
                             reqParams.tf['subnet_mapping'].push({
                                 'subnet_id': availabilityZone.SubnetId,
@@ -3148,6 +3156,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             });
         }
+        reqParams.cfn['AlpnPolicy'] = obj.data.AlpnPolicy;
 
         /*
         TODO:
@@ -3584,6 +3593,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['SuspendedState'] = obj.data.SuspendedState;
 
         tracked_resources.push({
             'obj': obj,

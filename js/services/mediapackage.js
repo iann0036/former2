@@ -54,7 +54,7 @@ async function updateDatatableMediaServicesMediaPackage() {
     await sdkcall("MediaPackage", "listChannels", {
         // no params
     }, true).then(async (data) => {
-        $('#section-mediaservices-mediapackage-channels-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-mediapackage-channels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Channels.map(channel => {
             return sdkcall("MediaPackage", "describeChannel", {

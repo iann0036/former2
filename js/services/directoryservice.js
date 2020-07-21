@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Directory Service',
     'resourcetypes': {
         'Directories': {
@@ -77,7 +77,7 @@ async function updateDatatableSecurityIdentityAndComplianceDirectoryService() {
     await sdkcall("DirectoryService", "describeDirectories", {
         // no params
     }, true).then((data) => {
-        $('#section-securityidentityandcompliance-directoryservice-directories-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-directoryservice-directories-datatable').deferredBootstrapTable('removeAll');
 
         data.DirectoryDescriptions.forEach(directory => {
             if (directory.Type == "SimpleAD") {
@@ -117,6 +117,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['ShortName'] = obj.data.ShortName;
         reqParams.tf['short_name'] = obj.data.ShortName;
+        reqParams.cfn['Password'] = 'REPLACEME';
+        reqParams.tf['password'] = 'REPLACEME';
         reqParams.cfn['Size'] = obj.data.Size;
         reqParams.tf['size'] = obj.data.Size;
         if (obj.data.Alias && obj.data.Alias != obj.data.DirectoryId) {
@@ -138,11 +140,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
 
-        /*
-        TODO:
-        Password: String
-        */
-
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('directoryservice', obj.id, 'AWS::DirectoryService::SimpleAD'),
@@ -159,6 +156,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['short_name'] = obj.data.ShortName;
         reqParams.cfn['Edition'] = obj.data.Edition;
         reqParams.tf['edition'] = obj.data.Edition;
+        reqParams.cfn['Password'] = 'REPLACEME';
+        reqParams.tf['password'] = 'REPLACEME';
         if (obj.data.Alias && obj.data.Alias != obj.data.DirectoryId) {
             reqParams.cfn['CreateAlias'] = true;
             reqParams.tf['alias'] = obj.data.Alias;
@@ -175,11 +174,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'subnet_ids': obj.data.VpcSettings.SubnetIds
             };
         }
-
-        /*
-        TODO:
-        Password: String
-        */
 
         tracked_resources.push({
             'obj': obj,

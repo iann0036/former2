@@ -62,7 +62,7 @@ async function updateDatatableManagementAndGovernanceAutoScaling() {
     await sdkcall("AutoScalingPlans", "describeScalingPlans", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-autoscaling-scalingplans-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-autoscaling-scalingplans-datatable').deferredBootstrapTable('removeAll');
 
         data.ScalingPlans.forEach(scalingPlan => {
             $('#section-managementandgovernance-autoscaling-scalingplans-datatable').deferredBootstrapTable('append', [{
@@ -290,6 +290,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['MaxInstanceLifetime'] = obj.data.MaxInstanceLifetime;
 
         /*
         TODO:

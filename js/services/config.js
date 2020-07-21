@@ -442,7 +442,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     await sdkcall("ConfigService", "describeConfigRules", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-config-configrules-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-configrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ConfigRules.map(configRule => {
             $('#section-managementandgovernance-config-configrules-datatable').deferredBootstrapTable('append', [{
@@ -459,7 +459,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
             return sdkcall("ConfigService", "describeRemediationConfigurations", {
                 ConfigRuleNames: [configRule.ConfigRuleName]
             }, true).then((data) => {
-                $('#section-managementandgovernance-config-remediationconfiguraions-datatable').bootstrapTable('removeAll');
+                $('#section-managementandgovernance-config-remediationconfiguraions-datatable').deferredBootstrapTable('removeAll');
 
                 data.RemediationConfigurations.forEach(remediationConfiguration => {
                     $('#section-managementandgovernance-config-remediationconfiguraions-datatable').deferredBootstrapTable('append', [{
@@ -484,7 +484,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     await sdkcall("ConfigService", "describeConfigurationAggregators", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-config-configurationaggregators-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-configurationaggregators-datatable').deferredBootstrapTable('removeAll');
 
         data.ConfigurationAggregators.forEach(configurationAggregator => {
             $('#section-managementandgovernance-config-configurationaggregators-datatable').deferredBootstrapTable('append', [{
@@ -502,8 +502,8 @@ async function updateDatatableManagementAndGovernanceConfig() {
 
     await sdkcall("ConfigService", "describeOrganizationConfigRules", {
         // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-config-organizationconfigrules-datatable').bootstrapTable('removeAll');
+    }, false).then((data) => {
+        $('#section-managementandgovernance-config-organizationconfigrules-datatable').deferredBootstrapTable('removeAll');
 
         data.OrganizationConfigRules.forEach(organizationConfigRule => {
             $('#section-managementandgovernance-config-organizationconfigrules-datatable').deferredBootstrapTable('append', [{
@@ -518,12 +518,12 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-organizationconfigrules-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ConfigService", "describeConfigurationRecorders", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-config-configurationrecorder-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-configurationrecorder-datatable').deferredBootstrapTable('removeAll');
 
         data.ConfigurationRecorders.forEach(configurationRecorder => {
             $('#section-managementandgovernance-config-configurationrecorder-datatable').deferredBootstrapTable('append', [{
@@ -541,7 +541,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     await sdkcall("ConfigService", "describeAggregationAuthorizations", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-config-aggregationauthorizations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-aggregationauthorizations-datatable').deferredBootstrapTable('removeAll');
 
         data.AggregationAuthorizations.forEach(aggregationAuthorization => {
             $('#section-managementandgovernance-config-aggregationauthorizations-datatable').deferredBootstrapTable('append', [{
@@ -561,7 +561,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     await sdkcall("ConfigService", "describeDeliveryChannels", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-config-deliverychannels-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-deliverychannels-datatable').deferredBootstrapTable('removeAll');
 
         data.DeliveryChannels.forEach(deliveryChannel => {
             $('#section-managementandgovernance-config-deliverychannels-datatable').deferredBootstrapTable('append', [{
@@ -582,7 +582,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     await sdkcall("ConfigService", "describeConformancePacks", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-config-conformancepacks-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-conformancepacks-datatable').deferredBootstrapTable('removeAll');
 
         data.ConformancePackDetails.forEach(conformancepack => {
             $('#section-managementandgovernance-config-conformancepacks-datatable').deferredBootstrapTable('append', [{
@@ -601,8 +601,8 @@ async function updateDatatableManagementAndGovernanceConfig() {
 
     await sdkcall("ConfigService", "describeOrganizationConformancePacks", {
         // no params
-    }, true).then((data) => {
-        $('#section-managementandgovernance-config-organizationconformancepacks-datatable').bootstrapTable('removeAll');
+    }, false).then((data) => {
+        $('#section-managementandgovernance-config-organizationconformancepacks-datatable').deferredBootstrapTable('removeAll');
 
         data.OrganizationConformancePackDetails.forEach(conformancepack => {
             $('#section-managementandgovernance-config-organizationconformancepacks-datatable').deferredBootstrapTable('append', [{
@@ -617,7 +617,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-organizationconformancepacks-datatable');
-    });
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -790,6 +790,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['TargetId'] = obj.data.TargetId;
         reqParams.cfn['TargetType'] = obj.data.TargetType;
         reqParams.cfn['TargetVersion'] = obj.data.TargetVersion;
+        reqParams.cfn['ExecutionControls'] = obj.data.ExecutionControls;
 
         tracked_resources.push({
             'obj': obj,
@@ -831,7 +832,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::ConformancePack',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ConformancePackName,
+                'Import': {
+                    'ConformancePackName': obj.data.ConformancePackName
+                }
+            }
         });
     } else if (obj.type == "config.organizationnconformancepack") {
         reqParams.cfn['OrganizationConformancePackName'] = obj.data.OrganizationConformancePackName;
@@ -852,7 +859,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'config',
             'type': 'AWS::Config::OrganizationConformancePack',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.OrganizationConformancePackName,
+                'Import': {
+                    'OrganizationConformancePackName': obj.data.OrganizationConformancePackName
+                }
+            }
         });
     } else {
         return false;

@@ -245,8 +245,8 @@ async function updateDatatableComputeElasticBeanstalk() {
     await sdkcall("ElasticBeanstalk", "describeApplications", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-elasticbeanstalk-applications-datatable').bootstrapTable('removeAll');
-        $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-compute-elasticbeanstalk-applications-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-elasticbeanstalk-configurationtemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Applications.map(async (application) => {
             $('#section-compute-elasticbeanstalk-applications-datatable').deferredBootstrapTable('append', [{
@@ -292,7 +292,7 @@ async function updateDatatableComputeElasticBeanstalk() {
     await sdkcall("ElasticBeanstalk", "describeApplicationVersions", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-elasticbeanstalk-applicationversions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-elasticbeanstalk-applicationversions-datatable').deferredBootstrapTable('removeAll');
 
         data.ApplicationVersions.forEach(applicationVersion => {
             $('#section-compute-elasticbeanstalk-applicationversions-datatable').deferredBootstrapTable('append', [{
@@ -313,7 +313,7 @@ async function updateDatatableComputeElasticBeanstalk() {
     await sdkcall("ElasticBeanstalk", "describeEnvironments", {
         // no params
     }, true).then((data) => {
-        $('#section-compute-elasticbeanstalk-environments-datatable').bootstrapTable('removeAll');
+        $('#section-compute-elasticbeanstalk-environments-datatable').deferredBootstrapTable('removeAll');
 
         data.Environments.forEach(environment => {
             $('#section-compute-elasticbeanstalk-environments-datatable').deferredBootstrapTable('append', [{
@@ -334,7 +334,28 @@ async function updateDatatableComputeElasticBeanstalk() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    if (obj.type == "elasticbeanstalk.applicationversion") {
+    if (obj.type == "elasticbeanstalk.application") {
+        reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
+        reqParams.tf['name'] = obj.data.ApplicationName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
+
+        /*
+        TODO:
+        ResourceLifecycleConfig:
+            ApplicationResourceLifecycleConfig
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticbeanstalk', obj.id, 'AWS::ElasticBeanstalk::Application'),
+            'region': obj.region,
+            'service': 'elasticbeanstalk',
+            'type': 'AWS::ElasticBeanstalk::Application',
+            'terraformType': 'aws_elastic_beanstalk_application',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticbeanstalk.applicationversion") {
         reqParams.cfn['ApplicationName'] = obj.data.ApplicationName;
         reqParams.tf['name'] = obj.data.ApplicationName;
         reqParams.cfn['Description'] = obj.data.Description;

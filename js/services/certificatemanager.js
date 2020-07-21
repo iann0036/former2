@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Certificate Manager',
     'resourcetypes': {
         'Certificates': {
@@ -156,7 +156,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     await sdkcall("ACM", "listCertificates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CertificateSummaryList.map(certificate => {
             return sdkcall("ACM", "describeCertificate", {
@@ -181,7 +181,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     await sdkcall("ACMPCA", "listCertificateAuthorities", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.CertificateAuthorities.map(certificateAuthority => {
             return sdkcall("ACMPCA", "describeCertificateAuthority", {
@@ -240,6 +240,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
             reqParams.tf['validation_method'] = "DNS";
         }
+        reqParams.cfn['CertificateAuthorityArn'] = obj.data.CertificateAuthorityArn;
+        if (obj.data.Options) {
+            reqParams.cfn['CertificateTransparencyLoggingPreference'] = obj.data.Options.CertificateTransparencyLoggingPreference;
+        }
 
         /*
         TODO:
@@ -281,7 +285,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthority',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                    //'CertificateSigningRequest': 
+                },
+                'Import': {
+                    'Arn': obj.data.Arn
+                }
+            }
         });
     } else if (obj.type == "acm.pcacertificateauthorityactivation") {
         reqParams.cfn['Certificate'] = obj.data.Certificate;
@@ -295,7 +309,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::ACMPCA::CertificateAuthorityActivation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'CertificateAuthorityArn': obj.data.CertificateAuthorityArn
+                }
+            }
         });
     } else {
         return false;

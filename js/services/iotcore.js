@@ -265,6 +265,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Provisioning Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -276,12 +314,13 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-policyprincipalattachments-datatable');
     blockUI('#section-internetofthings-core-certificates-datatable');
     blockUI('#section-internetofthings-core-topicrules-datatable');
+    blockUI('#section-internetofthings-core-provisioningtemplates-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-things-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-core-thingprincipalattachments-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-things-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-core-thingprincipalattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.things.map(thing => {
             if (thing.thingName) {
@@ -330,8 +369,8 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listPolicies", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-policies-datatable').bootstrapTable('removeAll');
-        $('#section-internetofthings-core-policyprincipalattachments-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-policies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-core-policyprincipalattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.policies.map(policy => {
             return Promise.all([
@@ -375,7 +414,7 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listCertificates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-certificates-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-certificates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.certificates.map(certificate => {
             return sdkcall("Iot", "describeCertificate", {
@@ -399,7 +438,7 @@ async function updateDatatableInternetofThingsCore() {
     await sdkcall("Iot", "listTopicRules", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-core-topicrules-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-core-topicrules-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.rules.map(rule => {
             return sdkcall("Iot", "getTopicRule", {
@@ -418,6 +457,29 @@ async function updateDatatableInternetofThingsCore() {
 
         unblockUI('#section-internetofthings-core-topicrules-datatable');
     });
+
+    await sdkcall("Iot", "listProvisioningTemplates", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-internetofthings-core-provisioningtemplates-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.templates.map(template => {
+            return sdkcall("Iot", "describeProvisioningTemplate", {
+                templateName: template.templateName
+            }, true).then((data) => {
+                $('#section-internetofthings-core-provisioningtemplates-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.templateArn,
+                    f2type: 'iot.provisioningtemplate',
+                    f2data: data,
+                    f2region: region,
+                    name: data.templateName,
+                    description: data.description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-internetofthings-core-provisioningtemplates-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -476,9 +538,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.policyprincipalattachment") {
         reqParams.cfn['PolicyName'] = obj.data.policy.policyName;
-        reqParams.cfn['policy'] = obj.data.policy.policyName;
+        reqParams.tf['policy'] = obj.data.policy.policyName;
         reqParams.cfn['Principal'] = obj.data.principal;
-        reqParams.cfn['target'] = obj.data.principal;
+        reqParams.tf['target'] = obj.data.principal;
 
         tracked_resources.push({
             'obj': obj,
@@ -492,11 +554,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iot.certificate") {
         reqParams.cfn['Status'] = obj.data.status;
         reqParams.tf['active'] = (obj.data.status.toLowerCase() == "active");
-
-        /*
-        TODO:
-        CertificateSigningRequest
-        */
+        reqParams.cfn['CertificateSigningRequest'] = "REPLACEME";
+        reqParams.tf['csr'] = "REPLACEME";
 
         tracked_resources.push({
             'obj': obj,
@@ -566,7 +625,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 if (action.republish) {
                     actionitem['Republish'] = {
                         'RoleArn': action.republish.roleArn,
-                        'Topic': action.republish.topic
+                        'Topic': action.republish.topic,
+                        'Qos': action.republish.qos
                     };
                 }
                 if (action.s3) {
@@ -621,6 +681,35 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'ExecutionNamePrefix': action.stepFunctions.executionNamePrefix,
                         'RoleArn': action.stepFunctions.roleArn,
                         'StateMachineName': action.stepFunctions.stateMachineName
+                    };
+                }
+                if (action.http) {
+                    var headers = null;
+                    if (action.http.headers) {
+                        headers = [];
+                        action.http.headers.forEach(header => {
+                            headers.push({
+                                'Key': header.key,
+                                'Value': header.value
+                            });
+                        });
+                    }
+                    var auth = null;
+                    if (action.http.auth) {
+                        auth = {};
+                        if (action.http.auth.sigv4) {
+                            auth['Sigv4'] = {
+                                'RoleArn': action.http.auth.sigv4.roleArn,
+                                'ServiceName': action.http.auth.sigv4.serviceName,
+                                'SigningRegion': action.http.auth.sigv4.signingRegion
+                            };
+                        }
+                    }
+                    actionitem['Http'] = {
+                        'Auth': auth,
+                        'ConfirmationUrl': action.http.confirmationUrl,
+                        'Headers': headers,
+                        'Url': action.http.url
                     };
                 }
 
@@ -755,6 +844,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::TopicRule',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.provisioningtemplate") {
+        reqParams.cfn['TemplateName'] = obj.data.templateName;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['TemplateBody'] = obj.data.templateBody;
+        reqParams.cfn['Enabled'] = obj.data.enabled;
+        reqParams.cfn['ProvisioningRoleArn'] = obj.data.provisioningRoleArn;
+        if (obj.data.preProvisioningHook) {
+            reqParams.cfn['PreProvisioningHook'] = {
+                'PayloadVersion': obj.data.preProvisioningHook.payloadVersion,
+                'TargetArn': obj.data.preProvisioningHook.targetArn
+            };
+        }
+
+        /*
+        TODO
+        Tags: 
+         - Json
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::ProvisioningTemplate'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::ProvisioningTemplate',
             'options': reqParams
         });
     } else {

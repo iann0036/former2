@@ -53,7 +53,7 @@ async function updateDatatableDeveloperToolsCodeStar() {
     await sdkcall("CodeStar", "listProjects", {
         // no params
     }, false).then(async (data) => {
-        $('#section-developertools-codestar-githubrepositories-datatable').bootstrapTable('removeAll');
+        $('#section-developertools-codestar-githubrepositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.projects.map(async (project) => {
             return sdkcall("CodeStar", "listResources", {

@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Security, Identity &amp; Compliance',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Secrets Manager',
     'resourcetypes': {
         'Secrets': {
@@ -127,9 +127,9 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
     await sdkcall("SecretsManager", "listSecrets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').bootstrapTable('removeAll');
-        $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').bootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').deferredBootstrapTable('removeAll');
 
         if (data.SecretList) {
             await Promise.all(data.SecretList.map(secret => {
@@ -137,13 +137,15 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                     sdkcall("SecretsManager", "getResourcePolicy", {
                         SecretId: secret.ARN
                     }, true).then((data) => {
-                        $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').deferredBootstrapTable('append', [{
-                            f2id: data.ARN,
-                            f2type: 'secretsmanager.resourcepolicy',
-                            f2data: data,
-                            f2region: region,
-                            name: data.Name
-                        }]);
+                        if (data.ResourcePolicy) {
+                            $('#section-securityidentityandcompliance-secretsmanager-resourcepolicies-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ARN,
+                                f2type: 'secretsmanager.resourcepolicy',
+                                f2data: data,
+                                f2region: region,
+                                name: data.Name
+                            }]);
+                        }
                     }),
                     sdkcall("SecretsManager", "describeSecret", {
                         SecretId: secret.ARN

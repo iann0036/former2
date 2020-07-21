@@ -4,3 +4,4 @@ cli/deepmerge.js
 cli/mappings.js
 cli/datatables.js
 cli/services
+lib/drawio/src/main/webapp/WEB-INF/lib/appengine-api-1.0-sdk-1.9.63.jar

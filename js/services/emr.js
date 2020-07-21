@@ -376,10 +376,10 @@ async function updateDatatableAnalyticsEMR() {
     await sdkcall("EMR", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-emr-clusters-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-emr-instancefleetconfigs-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-emr-instancegroupconfigs-datatable').bootstrapTable('removeAll');
-        $('#section-analytics-emr-steps-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-emr-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-emr-instancefleetconfigs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-emr-instancegroupconfigs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-emr-steps-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Clusters.map(cluster => {
             return Promise.all([
@@ -459,7 +459,7 @@ async function updateDatatableAnalyticsEMR() {
     await sdkcall("EMR", "listSecurityConfigurations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-emr-securityconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-emr-securityconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.SecurityConfigurations.map(securityConfiguration => {
             return sdkcall("EMR", "describeSecurityConfiguration", {
@@ -482,7 +482,7 @@ async function updateDatatableAnalyticsEMR() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "elasticmapreduce"
     }, true).then(async (data) => {
-        $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-emr-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ScalableTargets.map(target => {
             return sdkcall("ApplicationAutoScaling", "describeScheduledActions", {
@@ -511,7 +511,7 @@ async function updateDatatableAnalyticsEMR() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "elasticmapreduce"
     }, true).then(async (data) => {
-        $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             data.ScalableTargets.forEach(target => {

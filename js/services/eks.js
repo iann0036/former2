@@ -116,7 +116,7 @@ async function updateDatatableComputeEKS() {
     await sdkcall("EKS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-eks-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([
@@ -179,6 +179,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'security_group_ids': obj.data.resourcesVpcConfig.securityGroupIds,
                 'subnet_ids': obj.data.resourcesVpcConfig.subnetIds
             };
+        }
+        if (obj.data.encryptionConfig && obj.data.encryptionConfig.length) {
+            reqParams.cfn['EncryptionConfig'] = [];
+            
+            obj.data.encryptionConfig.forEach(encryptionconfig => {
+                var provider = null;
+                if (encryptionconfig.provider) {
+                    provider = {
+                        'KeyArn': encryptionconfig.provider.keyArn
+                    };
+                }
+                reqParams.cfn['EncryptionConfig'].push({
+                    'Provider': provider,
+                    'Resources': encryptionconfig.resources
+                });
+            });
         }
 
         tracked_resources.push({

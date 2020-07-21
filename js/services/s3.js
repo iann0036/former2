@@ -134,8 +134,8 @@ async function updateDatatableStorageS3() {
     await sdkcall("S3", "listBuckets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-s3-buckets-datatable').bootstrapTable('removeAll');
-        $('#section-storage-s3-bucketpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-bucketpolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Buckets.map(bucket => {
             return Promise.all([
@@ -143,6 +143,11 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['AccelerateConfiguration'] = data;
+                }).catch(() => { }),
+                sdkcall("S3", "getBucketTagging", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['Tags'] = data.TagSet;
                 }).catch(() => { }),
                 sdkcall("S3", "getBucketEncryption", {
                     Bucket: bucket.Name
@@ -273,6 +278,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "s3.bucket") {
         reqParams.cfn['BucketName'] = obj.data.Name;
         reqParams.tf['bucket'] = obj.data.Name;
+        reqParams.cfn['Tags'] = obj.data.Tags;
         if (obj.data.AccelerateConfiguration && obj.data.AccelerateConfiguration.Status) {
             reqParams.cfn['AccelerateConfiguration'] = {
                 'AccelerationStatus': obj.data.AccelerateConfiguration.Status
@@ -624,7 +630,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::AccessPoint',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'Import': {
+                    'Name': obj.data.Name
+                }
+            }
         });
     } else {
         return false;

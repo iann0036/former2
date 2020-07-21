@@ -131,7 +131,7 @@ async function updateDatatableStorageBackup() {
     await sdkcall("Backup", "listBackupVaults", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-backup-backupvaults-datatable').bootstrapTable('removeAll');
+        $('#section-storage-backup-backupvaults-datatable').deferredBootstrapTable('removeAll');
 
         data.BackupVaultList.forEach(async (backupvault) => {
             await Promise.all([
@@ -167,8 +167,8 @@ async function updateDatatableStorageBackup() {
     await sdkcall("Backup", "listBackupPlans", {
         // no params
     }, true).then(async (data) => {
-        $('#section-storage-backup-backupplans-datatable').bootstrapTable('removeAll');
-        $('#section-storage-backup-backupselections-datatable').bootstrapTable('removeAll');
+        $('#section-storage-backup-backupplans-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-backup-backupselections-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.BackupPlansList.map(async (backupplan) => {
             await sdkcall("Backup", "listBackupSelections", {

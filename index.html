@@ -107,6 +107,7 @@
         <script src="lib/codemirror/mode/javascript/javascript.js"></script>
         <script src="lib/codemirror/mode/yaml/yaml.js"></script>
         <script src="lib/codemirror/mode/ruby/ruby.js"></script>
+        <script src="lib/codemirror/mode/clike/clike.js"></script>
     </head>
     <body class="with-side-menu">
 
@@ -147,6 +148,7 @@
                                         <a class="dropdown-item region-item" data-region="us-east-2">US East (Ohio)</a>
                                         <a class="dropdown-item region-item" data-region="us-west-1">US West (N. California)</a>
                                         <a class="dropdown-item region-item" data-region="us-west-2">US West (Oregon)</a>
+                                        <a class="dropdown-item region-item" data-region="af-south-1">Africa (Cape Town)</a>
                                         <a class="dropdown-item region-item" data-region="ap-east-1">Asia Pacific (Hong Kong)</a>
                                         <a class="dropdown-item region-item" data-region="ap-south-1">Asia Pacific (Mumbai)</a>
                                         <a class="dropdown-item region-item" data-region="ap-northeast-3">Asia Pacific (Osaka-Local)</a>
@@ -158,6 +160,7 @@
                                         <a class="dropdown-item region-item" data-region="eu-central-1">EU (Frankfurt)</a>
                                         <a class="dropdown-item region-item" data-region="eu-west-1">EU (Ireland)</a>
                                         <a class="dropdown-item region-item" data-region="eu-west-2">EU (London)</a>
+                                        <a class="dropdown-item region-item" data-region="eu-south-1">EU (Milan)</a>
                                         <a class="dropdown-item region-item" data-region="eu-west-3">EU (Paris)</a>
                                         <a class="dropdown-item region-item" data-region="eu-north-1">EU (Stockholm)</a>
                                         <a class="dropdown-item region-item" data-region="me-south-1">Middle East (Bahrain)</a>
@@ -223,7 +226,10 @@
                         <li><a href="#section-outputs-cloudformation"><span class="lbl">CloudFormation</span></a></li>
                         <li><a href="#section-outputs-tf"><span class="lbl">Terraform</span></a></li>
                         <li><a href="#section-outputs-troposphere"><span class="lbl">Troposphere</span></a></li>
-                        <li><a href="#section-outputs-cdkts"><span class="lbl">CDK (TS)</span></a></li>
+                        <li><a href="#section-outputs-cdk"><span class="lbl">CDK</span></a></li>
+                        <li><a href="#section-outputs-cdktf"><span class="lbl">CDK (Terraform)</span></a></li>
+                        <li><a href="#section-outputs-pulumi"><span class="lbl">Pulumi</span></a></li>
+                        <li><a href="#section-outputs-diagram"><span class="lbl">Diagram</span></a></li>
                         <!--<li><a href="#section-outputs-iam"><span class="lbl">IAM</span></a></li>-->
                         <li><a href="#section-outputs-raw"><span class="lbl">Raw Output (Debug)</span></a></li>
                     </ul>
@@ -247,6 +253,7 @@
                             <li><a href="#section-compute-lambda"><span class="lbl">Lambda</span></a></li>
                             <li><a href="#section-compute-batch"><span class="lbl">Batch</span></a></li>
                             <li><a href="#section-compute-elasticbeanstalk"><span class="lbl">Elastic Beanstalk</span></a></li>
+                            <li><a href="#section-compute-ec2imagebuilder"><span class="lbl">EC2 Image Builder</span></a></li>
                         </ul>
                     </li>
                     <li class="green with-sub" data-category="storage">
@@ -338,7 +345,7 @@
                             <li><a href="#section-blockchain-managedblockchain"><span class="lbl">Managed Blockchain</span></a></li>
                         </ul>
                     </li>
-                    <li class="blue with-sub" data-category="blockchain">
+                    <li class="blue with-sub" data-category="satellite">
                         <span>
                             <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Satellite_light-bg.png" style="width: 16px; height: 16px;" /></i>
                             <span class="lbl">Satellite</span>
@@ -385,6 +392,7 @@
                         </span>
                         <ul>
                             <li><a href="#section-machinelearning-sagemaker"><span class="lbl">SageMaker</span></a></li>
+                            <li><a href="#section-machinelearning-codeguru"><span class="lbl">CodeGuru</span></a></li>
                         </ul>
                     </li>
                     <li class="purple with-sub" data-category="analytics">
@@ -407,7 +415,7 @@
                     <li class="red with-sub" data-category="securityidentityandcompliance">
                         <span>
                             <i class="font-icon" style="left: 19px; top: 10px;"><img src="img/aws/Security-Identity-and-Compliance_light-bg.png" style="width: 16px; height: 16px;" /></i>
-                            <span class="lbl">Security, Identity &amp; Compliance</span>
+                            <span class="lbl">Security, Identity, &amp; Compliance</span>
                         </span>
                         <ul>
                             <li><a href="#section-securityidentityandcompliance-iam"><span class="lbl">IAM</span></a></li>
@@ -423,6 +431,7 @@
                             <li><a href="#section-securityidentityandcompliance-directoryservice"><span class="lbl">Directory Service</span></a></li>
                             <li><a href="#section-securityidentityandcompliance-wafandshield"><span class="lbl">WAF &amp; Shield</span></a></li>
                             <li><a href="#section-securityidentityandcompliance-securityhub"><span class="lbl">Security Hub</span></a></li>
+                            <li><a href="#section-securityidentityandcompliance-detective"><span class="lbl">Detective</span></a></li>
                         </ul>
                     </li>
                     <li class="red with-sub" data-category="mobile">
@@ -456,6 +465,7 @@
                             <span class="lbl">AWS Cost Management</span>
                         </span>
                         <ul>
+                            <li><a href="#section-awscostmanagement-costexplorer"><span class="lbl">Cost Explorer</span></a></li>
                             <li><a href="#section-awscostmanagement-budgets"><span class="lbl">Budgets</span></a></li>
                         </ul>
                     </li>
@@ -509,6 +519,7 @@
                             <span class="lbl">Other</span>
                         </span>
                         <ul>
+                            <li><a href="#section-other-resourcegroups"><span class="lbl">Resource Groups</span></a></li>
                             <li><a href="#section-other-servicequotas"><span class="lbl">Service Quotas</span></a></li>
                         </ul>
                     </li>
@@ -584,10 +595,13 @@
                             </div>
                             <button id="header-button-clear-outputs" type="button" class="f2-header-button btn btn-danger-outline" style="margin-left: 16px; display: none;"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Clear All</button>
                             <button id="header-button-import-cfn" type="button" class="f2-header-button btn btn-info-outline" style="margin-left: 16px; display: none;"><i class="fa fa-cloud-upload"></i>&nbsp;&nbsp;Import</button>
+                            <button id="header-button-download-diagram" type="button" class="f2-header-button btn btn-info-outline" style="margin-left: 16px; display: none;"><i class="fa fa-download"></i>&nbsp;&nbsp;Download PNG</button>
                             <button id="header-button-copy-cfn" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-tf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-troposphere" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
-                            <button id="header-button-copy-cdkts" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-cdk" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-cdktf" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
+                            <button id="header-button-copy-pulumi" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                             <button id="header-button-copy-raw" type="button" class="f2-header-button btn btn-default-outline" style="display: none;"><i class="fa fa-files-o"></i>&nbsp;&nbsp;Copy</button>
                         </div>
                     </div>
@@ -614,7 +628,8 @@
                                                     <a href="#section-compute-eks" style="font-weight: 600;">EKS</a><br />
                                                     <a href="#section-compute-lambda" style="font-weight: 600;">Lambda</a><br />
                                                     <a href="#section-compute-batch" style="font-weight: 600;">Batch</a><br />
-                                                    <a href="#section-compute-elasticbeanstalk" style="font-weight: 600;">Elastic Beanstalk</a>
+                                                    <a href="#section-compute-elasticbeanstalk" style="font-weight: 600;">Elastic Beanstalk</a><br />
+                                                    <a href="#section-compute-ec2imagebuilder" style="font-weight: 600;">EC2 Image Builder</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -716,6 +731,8 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                    </div>
+                                    <div class="col-md-4">
                                         <table style="border: none; margin-bottom: 16px;">
                                             <tr>
                                                 <td><img src="img/aws/Blockchain_light-bg.png" style="width: 48px; height: 48px;" /></td>
@@ -728,8 +745,6 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                    <div class="col-md-4">
                                         <table style="border: none; margin-bottom: 16px;">
                                             <tr>
                                                 <td><img src="img/aws/Satellite_light-bg.png" style="width: 48px; height: 48px;" /></td>
@@ -788,6 +803,7 @@
                                                 <td>&nbsp;</td>
                                                 <td style="padding-left: 12px;">
                                                     <a href="#section-machinelearning-sagemaker" style="font-weight: 600;">SageMaker</a><br />
+                                                    <a href="#section-machinelearning-codeguru" style="font-weight: 600;">CodeGuru</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -814,7 +830,7 @@
                                         <table style="border: none; margin-bottom: 16px;">
                                             <tr>
                                                 <td><img src="img/aws/Security-Identity-and-Compliance_light-bg.png" style="width: 48px; height: 48px;" /></td>
-                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Security, Identity &amp; Compliance</h4></td>
+                                                <td style="padding-left: 12px;"><h4 style="vertical-align: middle; margin-top: 6px; margin-bottom: 6px;">Security, Identity, &amp; Compliance</h4></td>
                                             </tr>
                                             <tr>
                                                 <td>&nbsp;</td>
@@ -831,7 +847,8 @@
                                                     <a href="#section-securityidentityandcompliance-cloudhsm" style="font-weight: 600;">CloudHSM</a><br />
                                                     <a href="#section-securityidentityandcompliance-directoryservice" style="font-weight: 600;">Directory Service</a><br />
                                                     <a href="#section-securityidentityandcompliance-wafandshield" style="font-weight: 600;">WAF &amp; Shield</a><br />
-                                                    <a href="#section-securityidentityandcompliance-securityhub" style="font-weight: 600;">Security Hub</a>
+                                                    <a href="#section-securityidentityandcompliance-securityhub" style="font-weight: 600;">Security Hub</a><br />
+                                                    <a href="#section-securityidentityandcompliance-detective" style="font-weight: 600;">Detective</a>
                                                 </td>
                                             </tr>
                                         </table>
@@ -845,6 +862,7 @@
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td style="padding-left: 12px;">
+                                                    <a href="#section-awscostmanagement-costexplorer" style="font-weight: 600;">Cost Explorer</a><br />
                                                     <a href="#section-awscostmanagement-budgets" style="font-weight: 600;">Budgets</a>
                                                 </td>
                                             </tr>
@@ -944,6 +962,7 @@
                                             <tr>
                                                 <td>&nbsp;</td>
                                                 <td style="padding-left: 12px;">
+                                                    <a href="#section-other-resourcegroups" style="font-weight: 600;">Resource Groups</a><br />
                                                     <a href="#section-other-servicequotas" style="font-weight: 600;">Service Quotas</a>
                                                 </td>
                                             </tr>
@@ -977,15 +996,19 @@
                                 <p>
                                     <table style="border: none;">
                                         <tr>
-                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank"><img src="img/ChromeWebStore_Badge_v2_206x58.png" /></a></td>
-                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank" style="font-weight: 600;">Install Former2 Helper for Google Chrome</a></td>
+                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank"><img src="img/browser-chrome.svg" /></a></td>
+                                            <td><a href="https://chrome.google.com/webstore/detail/former2-helper/fhejmeojlbhfhjndnkkleooeejklmigi" target="_blank" style="font-weight: 600;">&nbsp;Install Former2 Helper for Google Chrome</a></td>
                                         </tr>
                                         <tr>
-                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank"><img src="img/AMO-button_1.png" /></a></td>
-                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank" style="font-weight: 600;">Install Former2 Helper for Mozilla Firefox</a></td>
+                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank"><img src="img/browser-firefox.svg" /></a></td>
+                                            <td><a href="https://addons.mozilla.org/en-US/firefox/addon/former2-helper/" target="_blank" style="font-weight: 600;">&nbsp;Install Former2 Helper for Mozilla Firefox</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="https://microsoftedge.microsoft.com/addons/detail/okkjnfohglnomdbpimkcdkiojbeiedof" target="_blank"><img src="img/browser-edge.svg" /></a></td>
+                                            <td><a href="https://microsoftedge.microsoft.com/addons/detail/okkjnfohglnomdbpimkcdkiojbeiedof" target="_blank" style="font-weight: 600;">&nbsp;Install Former2 Helper for Microsoft Edge</a></td>
                                         </tr>
                                     </table>
-                                </p><br />
+                                </p>
                                 <p>If you have any questions, bugs or feature requests please <a href="https://github.com/iann0036/former2/issues" target="_blank">raise an issue</a> via GitHub.</p>
                             </div>
                             <div class="col-md-1"></div>
@@ -1015,15 +1038,15 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-6">
-                                <header class="steps-numeric-title">Enter your IAM credentials:</header>
+                                <h5>Enter your IAM credentials:</h5>
                                 <div class="form-group">
-                                    <input id="credentials-accesskey" type="text" class="form-control credentials-field" placeholder="Access Key"/>
+                                    <input id="credentials-accesskey" type="text" class="form-control credentials-field" placeholder="Access Key ID"/>
                                 </div>
                                 <div class="form-group">
-                                    <input id="credentials-secretkey" type="text" class="form-control credentials-field" placeholder="Secret Key"/>
+                                    <input id="credentials-secretkey" type="password" class="form-control credentials-field" placeholder="Secret Access Key"/>
                                 </div>
                                 <div class="form-group">
-                                    <input id="credentials-sessiontoken" type="text" class="form-control credentials-field" placeholder="Session Token (optional)"/>
+                                    <input id="credentials-sessiontoken" type="password" class="form-control credentials-field" placeholder="Session Token (optional)"/>
                                 </div>
                                 <div class="form-group">
                                     <input id="credentials-assumerole" type="text" class="form-control credentials-field" placeholder="Assumed Role ARN (optional)"/>
@@ -1066,7 +1089,7 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-10">
-                                <h4>Parameters</h4>
+                                <h5>Parameters</h5>
                                 <p>You can optionally include your own <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html" target="_blank">CloudFormation stack parameters</a> by adding them below. If the default value is set, <code>!Ref</code> or <code>!Sub</code> may be used to reference these parameters in the output if the values match.</p>
                                 <br />
                                 <table id="parameter-table" style="display: none;">
@@ -1239,6 +1262,20 @@
                                         <option value="longtypeprefixoptionalindexsuffix" selected>Long type prefix + optional index suffix</option>
                                     </select>
                                 </div>
+                                <br />
+                                <div class="form-group">
+                                    <h5>Default Output</h5>
+                                    <p>Change your preference for the default output language:</p>
+                                    <select id="defaultoutput" class="select2-arrow manual select2-no-search-arrow">
+                                        <option value="cloudformation">CloudFormation</option>
+                                        <option value="tf">Terraform</option>
+                                        <option value="troposphere">Troposphere</option>
+                                        <option value="cdk">CDK</option>
+                                        <option value="cdktf">CDK (Terraform)</option>
+                                        <option value="pulumi">Pulumi</option>
+                                        <option value="diagram">Diagram</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-1"></div>
                             <div class="col-md-5">
@@ -1260,7 +1297,7 @@
                                 </div>
                                 <br />
                                 <div class="form-group">
-                                    <h5>Save / Load Settings&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
+                                    <h5>Save / Load Settings</h5>
                                     <p>Save or load a file containing all configured parameters and settings (except credentials):</p>
                                     <button id="save-settings" class="btn btn-sm btn-primary">
                                         <i class="fa fa-floppy-o"></i> Save
@@ -1270,6 +1307,18 @@
                                         <i class="fa fa-folder-open-o"></i> Load
                                     </button>
                                     <input id="load-settings-picker" accept=".json,application/json" type="file" style="display: none;" />
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <h5>Programming Language&nbsp;<span data-tippy-content="Experimental"><i class="fa fa-warning" style="color: #f29824;"></i></span></h5>
+                                    <p>Change your preference for the output programming language of CDK or Pulumi outputs:</p>
+                                    <select id="iaclangselect" class="select2-arrow manual select2-no-search-arrow">
+                                        <option value="typescript">TypeScript / JavaScript</option>
+                                        <option value="python">Python</option>
+                                        <option value="java">Java</option>
+                                        <option value="dotnet">C# / .NET</option>
+                                        <option value="go">Go</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-1"></div>
@@ -1363,9 +1412,27 @@
                     </div>
                 </section>
 
-                <section id="section-outputs-cdkts" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (TypeScript)" class="former2-section box-typical steps-numeric-block" style="display: none;">
-                    <div id='cdkts_container'>
-                        <textarea id='cdkts'></textarea>
+                <section id="section-outputs-cdk" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cdk_container'>
+                        <textarea id='cdk'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-cdktf" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="CDK (Terraform)" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='cdktf_container'>
+                        <textarea id='cdktf'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-pulumi" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Pulumi" data-section-label="Beta" class="former2-section box-typical steps-numeric-block" style="display: none;">
+                    <div id='pulumi_container'>
+                        <textarea id='pulumi'></textarea>
+                    </div>
+                </section>
+
+                <section id="section-outputs-diagram" data-section-breadcrumb1-title="Outputs" data-section-breadcrumb1-link="#section-outputs-cloudformation" data-section-title="Diagram" data-section-label="Beta" class="former2-section box-typical steps-numeric-block f2mb0" style="display: none;">
+                    <div id='diagram_container'>
+                        <iframe id="diagramframe" style="width: 100%; height: 100%; border: 0;"></iframe>
                     </div>
                 </section>
 
@@ -1409,7 +1476,7 @@
 
         <script src="js/deepmerge.js"></script>
 
-        <script src="aws-sdk-2.606.0.min.js"></script>
+        <script src="aws-sdk-2.699.0.min.js"></script>
         <script src="js/RelationshipTypeMap.js"></script>
 
         <script src="js/deferred-datatable.js"></script>
@@ -1519,6 +1586,11 @@
         <script src="js/services/mediaconvert.js"></script>
         <script src="js/services/appconfig.js"></script>
         <script src="js/services/groundstation.js"></script>
+        <script src="js/services/resourcegroups.js"></script>
+        <script src="js/services/codeguru.js"></script>
+        <script src="js/services/detective.js"></script>
+        <script src="js/services/costexplorer.js"></script>
+        <script src="js/services/ec2imagebuilder.js"></script>
         
         <script src="js/app.js"></script>
     </body>

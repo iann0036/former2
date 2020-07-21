@@ -266,7 +266,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.DBClusters.forEach(cluster => {
             $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('append', [{
@@ -288,7 +288,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-instances-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-instances-datatable').deferredBootstrapTable('removeAll');
 
         data.DBInstances.forEach(instance => {
             $('#section-database-neptune-instances-datatable').deferredBootstrapTable('append', [{
@@ -308,40 +308,58 @@ async function updateDatatableDatabaseNeptune() {
 
     await sdkcall("Neptune", "describeDBClusterParameterGroups", {
         // no params
-    }, true).then((data) => {
-        $('#section-database-neptune-clusterparametergroups-datatable').bootstrapTable('removeAll');
+    }, true).then(async (data) => {
+        $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBClusterParameterGroups.forEach(clusterParameterGroup => {
-            $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: clusterParameterGroup.DBClusterParameterGroupArn,
-                f2type: 'neptune.clusterparametergroup',
-                f2data: clusterParameterGroup,
-                f2region: region,
-                name: clusterParameterGroup.DBClusterParameterGroupName,
-                family: clusterParameterGroup.DBParameterGroupFamily,
-                description: clusterParameterGroup.Description
-            }]);
-        });
+        await Promise.all(data.DBClusterParameterGroups.map(parameterGroup => {
+            return sdkcall("Neptune", "describeDBClusterParameters", {
+                DBClusterParameterGroupName: parameterGroup.DBClusterParameterGroupName,
+                Source: 'user'
+            }, true).then((paramdata) => {
+                parameterGroup['Parameters'] = paramdata.Parameters;
+
+                if (paramdata.Parameters.length) {
+                    $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.DBClusterParameterGroupArn,
+                        f2type: 'neptune.clusterparametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.DBClusterParameterGroupName,
+                        family: parameterGroup.DBParameterGroupFamily,
+                        description: parameterGroup.Description
+                    }]);
+                }
+            });
+        }));
 
         unblockUI('#section-database-neptune-clusterparametergroups-datatable');
     });
 
     await sdkcall("Neptune", "describeDBParameterGroups", {
         // no params
-    }, true).then((data) => {
-        $('#section-database-neptune-parametergroups-datatable').bootstrapTable('removeAll');
+    }, true).then(async (data) => {
+        $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBParameterGroups.forEach(parameterGroup => {
-            $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: parameterGroup.DBParameterGroupArn,
-                f2type: 'neptune.parametergroup',
-                f2data: parameterGroup,
-                f2region: region,
-                name: parameterGroup.DBParameterGroupName,
-                family: parameterGroup.DBParameterGroupFamily,
-                description: parameterGroup.Description
-            }]);
-        });
+        await Promise.all(data.DBParameterGroups.map(parameterGroup => {
+            return sdkcall("Neptune", "describeDBParameters", {
+                DBParameterGroupName: parameterGroup.DBParameterGroupName,
+                Source: 'user'
+            }, true).then((paramdata) => {
+                parameterGroup['Parameters'] = paramdata.Parameters;
+
+                if (paramdata.Parameters.length) {
+                    $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.DBParameterGroupArn,
+                        f2type: 'neptune.parametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.DBParameterGroupName,
+                        family: parameterGroup.DBParameterGroupFamily,
+                        description: parameterGroup.Description
+                    }]);
+                }
+            });
+        }));
 
         unblockUI('#section-database-neptune-parametergroups-datatable');
     });
@@ -349,7 +367,7 @@ async function updateDatatableDatabaseNeptune() {
     await sdkcall("Neptune", "describeDBSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-neptune-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-neptune-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.DBSubnetGroups.forEach(subnetGroup => {
             $('#section-database-neptune-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -401,6 +419,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
         reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
         reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.cfn['EnableCloudwatchLogsExports'] = obj.data.EnabledCloudwatchLogsExports;
 
         /*
         TODO:
@@ -461,10 +480,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Parameters'] = {};
+        reqParams.tf['parameters'] = [];
+        obj.data.Parameters.forEach(parameter => {
+            reqParams.cfn['Parameters'][parameter.ParameterName] = parameter.ParameterValue;
+            reqParams.tf['parameters'].push({
+                'name': parameter.ParameterName,
+                'value': parameter.ParameterValue
+            });
+        });
 
         /*
         TODO:
-        Parameters: DBParameters
         Tags:
             Resource Tag
         */
@@ -485,10 +512,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['family'] = obj.data.DBParameterGroupFamily;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
+        reqParams.cfn['Parameters'] = {};
+        reqParams.tf['parameters'] = [];
+        obj.data.Parameters.forEach(parameter => {
+            reqParams.cfn['Parameters'][parameter.ParameterName] = parameter.ParameterValue;
+            reqParams.tf['parameters'].push({
+                'name': parameter.ParameterName,
+                'value': parameter.ParameterValue
+            });
+        });
 
         /*
         TODO:
-        Parameters: DBParameters
         Tags:
             Resource Tag
         */

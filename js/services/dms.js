@@ -370,7 +370,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeEndpoints", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').deferredBootstrapTable('removeAll');
 
         data.Endpoints.forEach(endpoint => {
             $('#section-migrationandtransfer-databasemigrationservice-endpoints-datatable').deferredBootstrapTable('append', [{
@@ -392,7 +392,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeReplicationInstances", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').deferredBootstrapTable('removeAll');
 
         data.ReplicationInstances.forEach(replicationInstance => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationinstances-datatable').deferredBootstrapTable('append', [{
@@ -414,7 +414,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeReplicationTasks", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').deferredBootstrapTable('removeAll');
 
         data.ReplicationTasks.forEach(replicationTask => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationtasks-datatable').deferredBootstrapTable('append', [{
@@ -436,7 +436,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeReplicationSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.ReplicationSubnetGroups.forEach(replicationSubnetGroup => {
             $('#section-migrationandtransfer-databasemigrationservice-replicationsubnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -456,7 +456,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeCertificates", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').deferredBootstrapTable('removeAll');
 
         data.Certificates.forEach(certificate => {
             $('#section-migrationandtransfer-databasemigrationservice-certificates-datatable').deferredBootstrapTable('append', [{
@@ -478,7 +478,7 @@ async function updateDatatableMigrationAndTransferDatabaseMigrationService() {
     await sdkcall("DMS", "describeEventSubscriptions", {
         // no params
     }, true).then((data) => {
-        $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').deferredBootstrapTable('removeAll');
 
         data.EventSubscriptionsList.forEach(eventSubscriptions => {
             $('#section-migrationandtransfer-databasemigrationservice-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
@@ -523,10 +523,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['MongoDbSettings'] = obj.data.MongoDbSettings;
+        if (obj.data.KinesisSettings) {
+            reqParams.cfn['KinesisSettings'] = {
+                'StreamArn': obj.data.KinesisSettings.StreamArn,
+                'MessageFormat': obj.data.KinesisSettings.MessageFormat,
+                'ServiceAccessRoleArn': obj.data.KinesisSettings.ServiceAccessRoleArn
+            }
+        }
+        reqParams.cfn['KafkaSettings'] = obj.data.KafkaSettings;
+        reqParams.cfn['NeptuneSettings'] = obj.data.NeptuneSettings;
 
         /*
-        TODO:
+        SKIPPED:
         Password: String
+        TODO:
         Tags:
             - Resource Tag
         */
@@ -582,7 +592,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MigrationType'] = obj.data.MigrationType;
         reqParams.cfn['TableMappings'] = obj.data.TableMappings;
         reqParams.cfn['ReplicationTaskSettings'] = obj.data.ReplicationTaskSettings;
-        reqParams.cfn['CdcStartTime'] = obj.data.CdcStartPosition;
+        reqParams.cfn['CdcStartTime'] = obj.data.ReplicationTaskStartDate;
+        reqParams.cfn['CdcStartPosition'] = obj.data.CdcStartPosition;
+        reqParams.cfn['CdcStopPosition'] = obj.data.CdcStopPosition;
+        reqParams.cfn['TaskData'] = obj.data.TaskData;
 
         /*
         TODO:

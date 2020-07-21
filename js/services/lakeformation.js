@@ -127,7 +127,7 @@ async function updateDatatableAnalyticsLakeFormation() {
     await sdkcall("LakeFormation", "listResources", {
         // no params
     }, false).then(async (data) => {
-        $('#section-analytics-lakeformation-resources-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-lakeformation-resources-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResourceInfoList.map(async (resource) => {
             return sdkcall("LakeFormation", "describeResource", {
@@ -149,7 +149,7 @@ async function updateDatatableAnalyticsLakeFormation() {
     await sdkcall("LakeFormation", "listPermissions", {
         // no params
     }, false).then(async (data) => {
-        $('#section-analytics-lakeformation-permissions-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-lakeformation-permissions-datatable').deferredBootstrapTable('removeAll');
 
         data.PrincipalResourcePermissions.forEach(permission => {
             $('#section-analytics-lakeformation-permissions-datatable').deferredBootstrapTable('append', [{
@@ -168,7 +168,7 @@ async function updateDatatableAnalyticsLakeFormation() {
     await sdkcall("LakeFormation", "getDataLakeSettings", {
         // no params
     }, false).then(async (data) => {
-        $('#section-analytics-lakeformation-datalakesettings-datatable').bootstrapTable('removeAll');
+        $('#section-analytics-lakeformation-datalakesettings-datatable').deferredBootstrapTable('removeAll');
 
         var datalakeadmins = [];
         if (data.DataLakeSettings.DataLakeAdmins) {

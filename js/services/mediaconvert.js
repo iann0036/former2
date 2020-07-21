@@ -163,7 +163,7 @@ async function updateDatatableMediaServicesMediaConvert() {
     await sdkcall("MediaConvert", "listQueues", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-mediaconvert-queues-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-mediaconvert-queues-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Queues.map(queue => {
             if (queue.Type == "CUSTOM") {
@@ -189,7 +189,7 @@ async function updateDatatableMediaServicesMediaConvert() {
     await sdkcall("MediaConvert", "listPresets", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-mediaconvert-presets-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-mediaconvert-presets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Presets.map(preset => {
             if (preset.Type == "CUSTOM") {
@@ -214,7 +214,7 @@ async function updateDatatableMediaServicesMediaConvert() {
     await sdkcall("MediaConvert", "listJobTemplates", {
         // no params
     }, false).then(async (data) => {
-        $('#section-mediaservices-mediaconvert-jobtemplates-datatable').bootstrapTable('removeAll');
+        $('#section-mediaservices-mediaconvert-jobtemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.JobTemplates.map(jobTemplate => {
             if (jobTemplate.Type == "CUSTOM") {

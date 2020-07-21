@@ -60,7 +60,7 @@ async function updateDatatableAnalyticsQuickSight() {
             Namespace: 'default',
             AwsAccountId: accountId
         }, false).then(async (data) => {
-            $('#section-analytics-quicksight-groups-datatable').bootstrapTable('removeAll');
+            $('#section-analytics-quicksight-groups-datatable').deferredBootstrapTable('removeAll');
 
             data.GroupList.forEach(group => {
                 $('#section-analytics-quicksight-groups-datatable').deferredBootstrapTable('append', [{
@@ -92,7 +92,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('quicksight', obj.id, 'AWS::QuickSight::Group'),
+            'logicalId': getResourceName('quicksight', obj.id, 'AWS::QuickSight::Group'), // not real resource type
             'region': obj.region,
             'service': 'quicksight',
             'terraformType': 'aws_quicksight_group',

@@ -446,7 +446,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             value: "Self"
         }]
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-documents-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-documents-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DocumentIdentifiers.map(document => {
             return sdkcall("SSM", "getDocument", {
@@ -474,12 +474,17 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "describeParameters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-parameters-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-parameters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Parameters.map(parameter => {
             return sdkcall("SSM", "getParameter", {
                 Name: parameter.Name
             }, true).then((data) => {
+                data.Parameter['Description'] = parameter.Description;
+                data.Parameter['AllowedPattern'] = parameter.AllowedPattern;
+                data.Parameter['Tier'] = parameter.Tier;
+                data.Parameter['Policies'] = parameter.Policies;
+
                 $('#section-managementandgovernance-systemsmanager-parameters-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Parameter.ARN,
                     f2type: 'ssm.parameter',
@@ -501,7 +506,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
             Values: ["Self"]
         }]
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-patchbaselines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.BaselineIdentities.map(baseline => {
             return sdkcall("SSM", "getPatchBaseline", {
@@ -526,12 +531,12 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "listAssociations", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-associations-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Associations.map(association => {
             return sdkcall("SSM", "describeAssociation", {
                 Name: association.Name,
-                InstanceId: association.InstanceId,
+                //InstanceId: association.InstanceId,
                 AssociationId: association.AssociationId,
                 AssociationVersion: association.AssociationVersion
             }, true).then((data) => {
@@ -555,9 +560,9 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "describeMaintenanceWindows", {
         // no params
     }, true).then(async (data) => {
-        $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').bootstrapTable('removeAll');
-        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindows-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindowtasks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-maintenancewindowtargets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WindowIdentities.map(window => {
             return Promise.all([
@@ -624,7 +629,7 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
     await sdkcall("SSM", "listResourceDataSync", {
         // no params
     }, true).then((data) => {
-        $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').bootstrapTable('removeAll');
+        $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').deferredBootstrapTable('removeAll');
 
         data.ResourceDataSyncItems.forEach(dataSync => {
             $('#section-managementandgovernance-systemsmanager-resourcedatasyncs-datatable').deferredBootstrapTable('append', [{
@@ -672,11 +677,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['type'] = obj.data.Type;
         reqParams.cfn['Value'] = obj.data.Value;
         reqParams.tf['value'] = obj.data.Value;
+        reqParams.cfn['DataType'] = obj.data.DataType;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['AllowedPattern'] = obj.data.AllowedPattern;
+        reqParams.cfn['Tier'] = obj.data.Tier;
+        if (obj.data.Policies) {
+            reqParams.cfn['Policies'] = [];
+            obj.data.Policies.forEach(policy => {
+                reqParams.cfn['Policies'].push(policy.PolicyText);
+            });
+        }
 
         /*
-        SKIPPED:
-        AllowedPattern
-        Description
+        TODO:
+        Tags
         */
 
         tracked_resources.push({
@@ -690,7 +704,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.Name,
                 'GetAtt': {
-                    'Type': obj.data.Type,
+                    //'Type': obj.data.Type,
                     'Value': obj.data.Value
                 }
             }

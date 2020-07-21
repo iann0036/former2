@@ -372,10 +372,10 @@ async function updateDatatableComputeLambda() {
     await sdkcall("Lambda", "listFunctions", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-lambda-functions-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lambda-aliases-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lambda-versions-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lambda-permissions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-functions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-aliases-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-versions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-permissions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Functions.map(async (lambdaFunction) => {
             return Promise.all([
@@ -465,7 +465,7 @@ async function updateDatatableComputeLambda() {
                 sdkcall("Lambda", "listFunctionEventInvokeConfigs", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, false).then(async (data) => {
-                    $('#section-compute-lambda-eventinvokeconfigs-datatable').bootstrapTable('removeAll');
+                    $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('removeAll');
 
                     var eventConfigIterator = 1;
                     data.FunctionEventInvokeConfigs.forEach(config => {
@@ -495,8 +495,8 @@ async function updateDatatableComputeLambda() {
     await sdkcall("Lambda", "listLayers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-lambda-layerversions-datatable').bootstrapTable('removeAll');
-        $('#section-compute-lambda-layerversionpermissions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-layerversions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-layerversionpermissions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Layers.map(layer => {
             return sdkcall("Lambda", "listLayerVersions", {
@@ -548,7 +548,7 @@ async function updateDatatableComputeLambda() {
     await sdkcall("Lambda", "listEventSourceMappings", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-lambda-eventsourcemappings-datatable').bootstrapTable('removeAll');
+        $('#section-compute-lambda-eventsourcemappings-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EventSourceMappings.map(eventSourceMapping => {
             return sdkcall("Lambda", "getEventSourceMapping", {
@@ -648,6 +648,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['layers'].push(layer.Arn);
             });
         }
+        
+        reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
 
         /*
         TODO:
@@ -667,6 +669,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.Configuration.FunctionName,
                 'GetAtt': {
                     'Arn': obj.data.Configuration.FunctionArn
+                },
+                'Terraform': {
+                    'arn': obj.data.Configuration.FunctionArn
                 },
                 'Import': {
                     'FunctionName': obj.data.Configuration.FunctionName
@@ -747,12 +752,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['license_info'] = obj.data.LicenseInfo;
         reqParams.cfn['LayerName'] = obj.data.LayerName;
         reqParams.tf['layer_name'] = obj.data.LayerName;
+        
+        var url = new URL(obj.data.Content.Location);
 
-        /*
-        TODO:
-        Content: 
-            Content
-        */
+        reqParams.cfn['Content'] = {
+            'S3Bucket': url.host.split(".")[0],
+            'S3Key': url.pathname
+        };
+        reqParams.tf['s3_bucket'] = url.host.split(".")[0];
+        reqParams.tf['s3_key'] = url.pathname;
 
         tracked_resources.push({
             'obj': obj,

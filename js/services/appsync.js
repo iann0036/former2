@@ -355,12 +355,12 @@ async function updateDatatableMobileAppSync() {
     await sdkcall("AppSync", "listGraphqlApis", {
         // no params
     }, true).then(async (data) => {
-        $('#section-mobile-appsync-graphqlapis-datatable').bootstrapTable('removeAll');
-        $('#section-mobile-appsync-graphqlschemas-datatable').bootstrapTable('removeAll');
-        $('#section-mobile-appsync-resolvers-datatable').bootstrapTable('removeAll');
-        $('#section-mobile-appsync-apikeys-datatable').bootstrapTable('removeAll');
-        $('#section-mobile-appsync-datasources-datatable').bootstrapTable('removeAll');
-        $('#section-mobile-appsync-functionconfigurations-datatable').bootstrapTable('removeAll');
+        $('#section-mobile-appsync-graphqlapis-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-graphqlschemas-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-resolvers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-apikeys-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-datasources-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-functionconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.graphqlApis.map(graphqlApi => {
             return Promise.all([
@@ -728,7 +728,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.logConfig) {
             reqParams.cfn['LogConfig'] = {
                 'FieldLogLevel': obj.data.logConfig.fieldLogLevel,
-                'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn
+                'CloudWatchLogsRoleArn': obj.data.logConfig.cloudWatchLogsRoleArn,
+                'ExcludeVerboseContent': obj.data.logConfig.excludeVerboseContent
             };
             reqParams.tf['log_config'] = {
                 'field_log_level': obj.data.logConfig.fieldLogLevel,

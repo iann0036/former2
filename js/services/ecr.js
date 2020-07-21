@@ -62,7 +62,7 @@ async function updateDatatableComputeECR() {
     await sdkcall("ECR", "describeRepositories", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecr-repositories-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecr-repositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.repositories.map(async (repository) => {
             await sdkcall("ECR", "getLifecyclePolicy", {
@@ -88,6 +88,8 @@ async function updateDatatableComputeECR() {
                 uri: repository.repositoryUri,
                 createdat: repository.createdAt
             }]);
+
+            return Promise.resolve();
         }));
 
         unblockUI('#section-compute-ecr-repositories-datatable');

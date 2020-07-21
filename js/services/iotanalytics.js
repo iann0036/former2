@@ -173,7 +173,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listChannels", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-channels-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-channels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.channelSummaries.map(channel => {
             return sdkcall("IoTAnalytics", "describeChannel", {
@@ -196,7 +196,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listPipelines", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-pipelines-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-pipelines-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.pipelineSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describePipeline", {
@@ -219,7 +219,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listDatastores", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-datastores-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-datastores-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.datastoreSummaries.map(pipeline => {
             return sdkcall("IoTAnalytics", "describeDatastore", {
@@ -242,7 +242,7 @@ async function updateDatatableInternetofThingsAnalytics() {
     await sdkcall("IoTAnalytics", "listDatasets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-internetofthings-analytics-datasets-datatable').bootstrapTable('removeAll');
+        $('#section-internetofthings-analytics-datasets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.datasetSummaries.map(dataset => {
             return sdkcall("IoTAnalytics", "describeDataset", {
@@ -270,6 +270,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['RetentionPeriod'] = {
                 'Unlimited': obj.data.retentionPeriod.unlimited,
                 'NumberOfDays': obj.data.retentionPeriod.numberOfDays
+            };
+        }
+        if (obj.data.storage) {
+            var customerManagedS3 = null;
+            if (obj.data.storage.customerManagedS3) {
+                customerManagedS3 = {
+                    'Bucket': obj.data.storage.customerManagedS3.bucket,
+                    'KeyPrefix': obj.data.storage.customerManagedS3.keyPrefix,
+                    'RoleArn': obj.data.storage.customerManagedS3.roleArn
+                };
+            }
+            reqParams.cfn['ChannelStorage'] = {
+                'ServiceManagedS3': obj.data.storage.serviceManagedS3,
+                'CustomerManagedS3': customerManagedS3
             };
         }
 
@@ -504,6 +518,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['RetentionPeriod'] = {
                 'Unlimited': obj.data.retentionPeriod.unlimited,
                 'NumberOfDays': obj.data.retentionPeriod.numberOfDays
+            };
+        }
+        if (obj.data.storage) {
+            var customerManagedS3 = null;
+            if (obj.data.storage.customerManagedS3) {
+                customerManagedS3 = {
+                    'Bucket': obj.data.storage.customerManagedS3.bucket,
+                    'KeyPrefix': obj.data.storage.customerManagedS3.keyPrefix,
+                    'RoleArn': obj.data.storage.customerManagedS3.roleArn
+                };
+            }
+            reqParams.cfn['DatastoreStorage'] = {
+                'ServiceManagedS3': obj.data.storage.serviceManagedS3,
+                'CustomerManagedS3': customerManagedS3
             };
         }
 

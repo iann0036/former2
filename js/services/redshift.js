@@ -210,7 +210,7 @@ async function updateDatatableDatabaseRedshift() {
     await sdkcall("Redshift", "describeClusters", {
         // no params
     }, true).then((data) => {
-        $('#section-database-redshift-clusters-datatable').bootstrapTable('removeAll');
+        $('#section-database-redshift-clusters-datatable').deferredBootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
             $('#section-database-redshift-clusters-datatable').deferredBootstrapTable('append', [{
@@ -233,7 +233,7 @@ async function updateDatatableDatabaseRedshift() {
     await sdkcall("Redshift", "describeClusterSubnetGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-redshift-subnetgroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-redshift-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.ClusterSubnetGroups.forEach(subnetGroup => {
             $('#section-database-redshift-subnetgroups-datatable').deferredBootstrapTable('append', [{
@@ -253,7 +253,7 @@ async function updateDatatableDatabaseRedshift() {
     await sdkcall("Redshift", "describeClusterParameterGroups", {
         // no params
     }, true).then((data) => {
-        $('#section-database-redshift-parametergroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-redshift-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
         data.ParameterGroups.forEach(parameterGroup => {
             $('#section-database-redshift-parametergroups-datatable').deferredBootstrapTable('append', [{
@@ -273,7 +273,7 @@ async function updateDatatableDatabaseRedshift() {
     await sdkcall("Redshift", "describeClusterSecurityGroups", {
         // no params
     }, false).then((data) => {
-        $('#section-database-redshift-securitygroups-datatable').bootstrapTable('removeAll');
+        $('#section-database-redshift-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.ClusterSecurityGroups.forEach(securityGroup => {
             $('#section-database-redshift-securitygroups-datatable').deferredBootstrapTable('append', [{
@@ -369,7 +369,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         ClusterType: String
         LoggingProperties: 
             LoggingProperties
-        MasterUserPassword: String
         OwnerAccount: String
         SnapshotClusterIdentifier: String
         SnapshotIdentifier: String

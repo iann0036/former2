@@ -375,6 +375,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Capacity Providers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'status',
+                        title: 'Status',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -387,11 +425,12 @@ async function updateDatatableComputeECS() {
     blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-compute-ecs-primarytasksets-datatable');
     blockUI('#section-compute-ecs-tasksets-datatable');
+    blockUI('#section-compute-ecs-capacityproviders-datatable');
 
     await sdkcall("ECS", "listTaskDefinitions", {
         sort: "DESC"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-taskdefinitions-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-taskdefinitions-datatable').deferredBootstrapTable('removeAll');
 
         var baseTaskDefinitions = [];
         var taskDefinitionArns = [];
@@ -428,8 +467,8 @@ async function updateDatatableComputeECS() {
     await sdkcall("ECS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecs-clusters-datatable').bootstrapTable('removeAll');
-        $('#section-compute-ecs-services-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ecs-services-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
             return Promise.all([
@@ -515,7 +554,7 @@ async function updateDatatableComputeECS() {
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             await Promise.all(data.ScalableTargets.map(target => {
@@ -546,7 +585,7 @@ async function updateDatatableComputeECS() {
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').bootstrapTable('removeAll');
+        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalingPolicies) {
             data.ScalingPolicies.forEach(policy => {
@@ -565,6 +604,29 @@ async function updateDatatableComputeECS() {
 
         unblockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
     });
+
+    await sdkcall("ECS", "describeCapacityProviders", {
+        include: ["TAGS"]
+    }, true).then(async (data) => {
+        $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.capacityProviders) {
+            data.capacityProviders.forEach(capacityProvider => {
+                if (!['FARGATE', 'FARGATE_SPOT'].includes(capacityProvider.name)) {
+                    $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
+                        f2id: capacityProvider.capacityProviderArn,
+                        f2type: 'ecs.capacityprovider',
+                        f2data: capacityProvider,
+                        f2region: region,
+                        name: capacityProvider.name,
+                        status: capacityProvider.status
+                    }]);
+                }
+            });
+        }
+
+        unblockUI('#section-compute-ecs-capacityproviders-datatable');
+    }).catch(err => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -586,6 +648,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['ClusterSettings'].push({
                     'Name': setting.name,
                     'Value': setting.value
+                });
+            });
+        }
+        reqParams.cfn['CapacityProviders'] = obj.data.capacityProviders;
+        if (obj.data.defaultCapacityProviderStrategy && obj.data.defaultCapacityProviderStrategy.length) {
+            reqParams.cfn['CapacityProviders'] = [];
+            obj.data.defaultCapacityProviderStrategy.forEach(dcps => {
+                reqParams.cfn['CapacityProviders'].push({
+                    'CapacityProvider': dcps.capacityProvider,
+                    'Weight': dcps.weight,
+                    'Base': dcps.base
                 });
             });
         }
@@ -716,6 +789,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.deploymentController) {
             reqParams.cfn['DeploymentController'] = {
                 'Type': obj.data.deploymentController.type
+            };
+        }
+        if (obj.data.capacityProviderStrategy) {
+            reqParams.cfn['CapacityProviderStrategy'] = {
+                'CapacityProvider': obj.data.capacityProviderStrategy.capacityProvider,
+                'Weight': obj.data.capacityProviderStrategy.weight,
+                'Base': obj.data.capacityProviderStrategy.base
             };
         }
 
@@ -874,9 +954,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
                 var logConfiguration = null;
                 if (containerDefinition.logConfiguration) {
+                    var secretOptions = null;
+                    if (containerDefinition.logConfiguration.secretOptions) {
+                        secretOptions = [];
+                        containerDefinition.logConfiguration.secretOptions.forEach(secretOption => {
+                            secretOptions.push({
+                                'Name': secretOption.name,
+                                'ValueFrom': secretOption.valueFrom
+                            });
+                        });
+                    }
                     logConfiguration = {
                         'LogDriver': containerDefinition.logConfiguration.logDriver,
-                        'Options': containerDefinition.logConfiguration.options
+                        'Options': containerDefinition.logConfiguration.options,
+                        'SecretOptions': secretOptions
                     };
                 }
                 var healthCheck = null;
@@ -896,6 +987,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'Options': obj.data.firelensConfiguration.options
                     };
                 }
+                var systemControls = null;
+                if (containerDefinition.systemControls) {
+                    systemControls = [];
+                    containerDefinition.systemControls.forEach(systemControl => {
+                        systemControls.push({
+                            'Namespace': systemControl.namespace,
+                            'Value': systemControl.value
+                        });
+                    });
+                }
                 reqParams.cfn['ContainerDefinitions'].push({
                     'Command': containerDefinition.command,
                     'Cpu': (containerDefinition.cpu == 0) ? null : containerDefinition.cpu,
@@ -911,6 +1012,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'FirelensConfiguration': firelensConfiguration,
                     'HealthCheck': healthCheck,
                     'Hostname': containerDefinition.hostname,
+                    'Interactive': containerDefinition.interactive,
                     'Image': containerDefinition.image,
                     'Links': containerDefinition.links,
                     'LinuxParameters': linuxParameters,
@@ -921,9 +1023,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Name': containerDefinition.name,
                     'PortMappings': portMappings,
                     'Privileged': containerDefinition.privileged,
+                    'PseudoTerminal': containerDefinition.pseudoTerminal,
                     'ReadonlyRootFilesystem': containerDefinition.readonlyRootFilesystem,
                     'RepositoryCredentials': repositoryCredentials,
                     'Secrets': secrets,
+                    'SystemControls': systemControls,
                     'Ulimits': ulimits,
                     'User': containerDefinition.user,
                     'VolumesFrom': volumesFrom,
@@ -1002,10 +1106,37 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.inferenceAccelerators) {
+            reqParams.cfn['InferenceAccelerators'] = [];
+            obj.data.inferenceAccelerators.forEach(inferenceAccelerator => {
+                reqParams.cfn['InferenceAccelerators'].push({
+                    'DeviceName': inferenceAccelerator.deviceName,
+                    'DeviceType': inferenceAccelerator.deviceType
+                })
+            });
+        }
+        reqParams.cfn['PidMode'] = obj.data.pidMode;
+        reqParams.cfn['IpcMode'] = obj.data.ipcMode;
+        if (obj.data.proxyConfiguration) {
+            var proxyConfigurationProperties = null;
+            if (obj.data.proxyConfiguration.properties) {
+                proxyConfigurationProperties = [];
+                obj.data.proxyConfiguration.properties.forEach(prop => {
+                    proxyConfigurationProperties.push({
+                        'Name': prop.name,
+                        'Value': prop.value
+                    });
+                });
+            }
+            reqParams.cfn['ProxyConfiguration'] = {
+                'ContainerName': obj.data.proxyConfiguration.containerName,
+                'Type': obj.data.proxyConfiguration.type,
+                'ProxyConfigurationProperties': proxyConfigurationProperties
+            };
+        }
 
         /*
         TODO:
-        ProxyConfiguration
         ContainerDefinition:
             DependsOn
             StartTimeout
@@ -1046,7 +1177,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ecs',
             'type': 'AWS::ECS::PrimaryTaskSet',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn
+                }
+            }
         });
     } else if (obj.type == "ecs.taskset") {
         reqParams.cfn['Cluster'] = obj.data.clusterArn;
@@ -1104,8 +1241,53 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.id,
                 'GetAtt': {
                     'Id': obj.data.id
+                },
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn,
+                    'Id': obj.data.id
                 }
             }
+        });
+    } else if (obj.type == "ecs.capacityprovider") {
+        reqParams.cfn['Name'] = obj.data.name;
+        var managedscaling = null;
+        if (obj.data.autoScalingGroupProvider.managedScaling) {
+            managedscaling = {
+                'MaximumScalingStepSize': obj.data.autoScalingGroupProvider.managedScaling.maximumScalingStepSize,
+                'MinimumScalingStepSize': obj.data.autoScalingGroupProvider.managedScaling.minimumScalingStepSize,
+                'Status': obj.data.autoScalingGroupProvider.managedScaling.status,
+                'TargetCapacity': obj.data.autoScalingGroupProvider.managedScaling.targetCapacity
+            };
+        }
+        reqParams.cfn['AutoScalingGroupProvider'] = {
+            'AutoScalingGroupArn': obj.data.autoScalingGroupProvider.autoScalingGroupArn,
+            'ManagedTerminationProtection': obj.data.autoScalingGroupProvider.managedTerminationProtection,
+            'ManagedScaling': managedscaling
+        };
+        if (obj.data.tags && obj.data.tags.length) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag.key,
+                    'Value': tag.value
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ecs', obj.id, 'AWS::ECS::CapacityProvider'),
+            'region': obj.region,
+            'service': 'ecs',
+            'type': 'AWS::ECS::CapacityProvider',
+            'options': reqParams/*,
+            'returnValues': {
+                'Import': {
+                    'Cluster': obj.data.clusterArn,
+                    'Service': obj.data.serviceArn
+                }
+            }*/
         });
     } else {
         return false;

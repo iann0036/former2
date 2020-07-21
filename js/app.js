@@ -1,3 +1,5 @@
+var CHROME_HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
+var EDGE_HELPER_EXTENSION_ID = "okkjnfohglnomdbpimkcdkiojbeiedof"; // Edge
 var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
@@ -6,6 +8,10 @@ var visited_sections = [];
 var ping_extension_interval = null;
 var stack_parameters = [];
 var MAX_DT_SCANS = 10;
+var defaultoutput = 'cloudformation';
+var iaclangselect = 'typescript';
+var check_objects = [];
+var CLI = false;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -43,7 +49,7 @@ $(document).ready(function(){
                             <button class="additems btn btn-primary" data-datatable="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable" disabled>
                                 <i class="font-icon font-icon-plus"></i> Add Selected
                             </button>
-                            ${section.resourcetypes[resourcetype].terraformonly ? `<span style="margin-left: 16px; display: inline-block; vertical-align: middle; line-height: 16px; color: #6c7a86; font-weight: 600;"><i class="fa fa-info-circle"></i> Terraform only</span>` : ""}
+                            ${section.resourcetypes[resourcetype].terraformonly ? `<span style="margin-left: 16px; display: inline-block; vertical-align: middle; line-height: 16px; color: #6c7a86; font-weight: 600;"><i class="fa fa-info-circle"></i> Terraform / Pulumi only</span>` : ""}
                         </div>
                         <div class="table-responsive">
                             <table id="section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable"
@@ -94,7 +100,7 @@ $(document).ready(function(){
     };
 
     function addAllTableRowsToTemplate(selector) {
-        var ids = $.map($(selector).bootstrapTable('getData'), function (row) {
+        var ids = $.map($(selector).deferredBootstrapTable('getData'), function (row) {
             output_objects.push({
                 'id': row.f2id,
                 'type': row.f2type,
@@ -111,13 +117,58 @@ $(document).ready(function(){
         return ids;
     }
 
-    function checkRelatedResources(rows) {
-        var check_objects = [];
+    function getRelationshipPropertyValues(relation, obj, propertyname) {
+        var propertyvalues = [];
+
+        if (relation['Arity'] == "Many") {
+            if (Array.isArray(obj.options.cfn[propertyname])) {
+                obj.options.cfn[propertyname].forEach(propertyvalue => {
+                    if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                        propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                    }
+    
+                    if (Array.isArray(propertyvalue)) {
+                        propertyvalue.forEach(propertyvalueitem => {
+                            propertyvalues.push(propertyvalueitem);
+                        });
+                    } else {
+                        propertyvalues.push(propertyvalue);
+                    }
+                });
+            } else {
+                var propertyvalue = obj.options.cfn[propertyname];
+
+                if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                    propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+                }
+
+                if (Array.isArray(propertyvalue)) {
+                    propertyvalue.forEach(propertyvalueitem => {
+                        propertyvalues.push(propertyvalueitem);
+                    });
+                } else {
+                    propertyvalues.push(propertyvalue);
+                }
+            }
+        } else {
+            var propertyvalue = obj.options.cfn[propertyname];
+
+            if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
+                propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
+            }
+            propertyvalues.push(propertyvalue);
+        }
+
+        return propertyvalues;
+    }
+
+    function checkRelatedResources(rows) { // TODO: make this function more generic (too much duplication)
+        check_objects = [];
         var related_resources = {};
         var related_resources_post = {};
         $('.f2datatable').each(function() {
             var datatableid = this.id;
-            var ids = $.map($("#" + this.id).bootstrapTable('getData'), function (checkobjectrow) {
+            var ids = $.map($("#" + this.id).deferredBootstrapTable('getData'), function (checkobjectrow) {
                 check_objects.push({
                     'id': checkobjectrow.f2id,
                     'type': checkobjectrow.f2type,
@@ -130,6 +181,8 @@ $(document).ready(function(){
             });
         });
         mapped_check_objects = performF2Mappings(check_objects);
+        check_objects = [];
+        
         mapped_check_objects.forEach(obj => {
             rows.forEach(row => {
                 // looks for relationships from the row to the check objects
@@ -160,30 +213,9 @@ $(document).ready(function(){
                             relationships[relationshiptype][relatedresourcetype].forEach(relation => {
                                 var propertyname = relation['PropertyName'];
                                 if (propertyname && obj.options.cfn[propertyname]) {
-                                    if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
-                                        obj.options.cfn[propertyname].forEach(propertyvalue => {
-                                            if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
-                                                propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
-                                            }
-                                            mapped_check_objects.forEach(child_obj => {
-                                                if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
-                                                    var is_duplicate = false;
-                                                    if (!Array.isArray(related_resources[readable_relationship_type])) {
-                                                        related_resources[readable_relationship_type] = [];
-                                                    }
-                                                    for (var related_resource in related_resources[readable_relationship_type]) { // check if already added
-                                                        if (related_resources[readable_relationship_type][related_resource].obj.id == child_obj.obj.id) {
-                                                            is_duplicate = true;
-                                                        }
-                                                    };
-                                                    if (!is_duplicate) {
-                                                        related_resources[readable_relationship_type].push(child_obj);
-                                                    }
-                                                }
-                                            });
-                                        });
-                                    } else {
-                                        var propertyvalue = obj.options.cfn[propertyname];
+                                    var propertyvalues = getRelationshipPropertyValues(relation, obj, propertyname);
+
+                                    propertyvalues.forEach(propertyvalue => {
                                         mapped_check_objects.forEach(child_obj => {
                                             if (child_obj.obj.id != obj.obj.id && child_obj.type == relatedresourcetype && JSON.stringify(child_obj.obj.data).includes(propertyvalue)) {
                                                 var is_duplicate = false;
@@ -200,7 +232,7 @@ $(document).ready(function(){
                                                 }
                                             }
                                         });
-                                    }
+                                    });
                                 }
                             });
                         });
@@ -237,43 +269,17 @@ $(document).ready(function(){
                         relationships[relationshiptype][relatedresourcetype].forEach(relation => {
                             var propertyname = relation['PropertyName'];
                             if (propertyname && obj.options.cfn[propertyname]) {
-                                if (relation['Arity'] == "Many" && Array.isArray(obj.options.cfn[propertyname])) {
-                                    obj.options.cfn[propertyname].forEach(propertyvalue => {
-                                        if (relation['EmbeddedPropertyName'] && typeof propertyvalue == "object") {
-                                            propertyvalue = propertyvalue[relation['EmbeddedPropertyName']];
-                                        }
-                                        rows.forEach(row => {
-                                            var row_check_object = null;
-                                            mapped_check_objects.forEach(child_obj => {
-                                                if (child_obj.obj.id == row.f2id) {
-                                                    row_check_object = child_obj;
-                                                }
-                                            });
-                                            if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
-                                                var is_duplicate = false;
-                                                if (!Array.isArray(related_resources_post[readable_relationship_type])) {
-                                                    related_resources_post[readable_relationship_type] = [];
-                                                }
-                                                for (var related_resource in related_resources_post[readable_relationship_type]) { // check if already added
-                                                    if (related_resources_post[readable_relationship_type][related_resource].obj.id == obj.obj.id) {
-                                                        is_duplicate = true;
-                                                    }
-                                                };
-                                                if (!is_duplicate) {
-                                                    related_resources_post[readable_relationship_type].push(obj);
-                                                }
-                                            }
-                                        });
-                                    });
-                                } else {
-                                    var propertyvalue = obj.options.cfn[propertyname];
+                                var propertyvalues = getRelationshipPropertyValues(relation, obj, propertyname);
+
+                                propertyvalues.forEach(propertyvalue => {
                                     rows.forEach(row => {
                                         var row_check_object = null;
-                                        mapped_check_objects.forEach(child_obj => {
+                                        for (var child_obj of mapped_check_objects) {
                                             if (child_obj.obj.id == row.f2id) {
                                                 row_check_object = child_obj;
+                                                break;
                                             }
-                                        });
+                                        };
                                         if (row.f2id != obj.obj.id && row_check_object.type == relatedresourcetype && JSON.stringify(row_check_object.obj.data).includes(propertyvalue)) {
                                             var is_duplicate = false;
                                             if (!Array.isArray(related_resources_post[readable_relationship_type])) {
@@ -289,7 +295,7 @@ $(document).ready(function(){
                                             }
                                         }
                                     });
-                                }
+                                });
                             }
                         });
                     });
@@ -363,7 +369,7 @@ $(document).ready(function(){
             $('.related-check').each(function(i){
                 var check_element = $(this);
                 if (check_element.is(':checked')) {
-                    $.map($("#" + check_element.attr('data-dt')).bootstrapTable('getData'), function (row) {
+                    $.map($("#" + check_element.attr('data-dt')).deferredBootstrapTable('getData'), function (row) {
                         if (row.f2id == check_element.attr('data-f2id')) {
                             var exists = false;
                             output_objects.forEach(output_object => { // check if already added
@@ -562,11 +568,21 @@ $(document).ready(function(){
 
         $('.f2datatable').each(function(index) {
             if (this.id != "section-search-datatable") {
-                var rows = $(this).bootstrapTable('getData');
+                var rows = $(this).deferredBootstrapTable('getData');
                 rows.forEach(row => {
                     var searchterm = $('#search-input').val();
-                    if (JSON.stringify(row).includes(searchterm)) {
-                        $('#section-search-datatable').deferredBootstrapTable('append', [row]);
+                    var jsonrow = JSON.stringify(row);
+
+                    if (searchterm.includes(",")) {
+                        searchterm.split(",").forEach(searchterminst => {
+                            if (jsonrow.includes(searchterminst)) {
+                                $('#section-search-datatable').bootstrapTable('append', [row]);
+                            }
+                        });
+                    } else {
+                        if (jsonrow.includes(searchterm)) {
+                            $('#section-search-datatable').bootstrapTable('append', [row]);
+                        }
                     }
                 });
             }
@@ -645,9 +661,16 @@ $(document).ready(function(){
     function refreshDatatableFirstVisit(urlpart) {
         sections.forEach(section => {
             if (urlpart == navlower(section.category) + "-" + navlower(section.service)) {
-                if (!visited_sections.includes("all") && !visited_sections.includes(urlpart)) {
+                if (!visited_sections.includes(urlpart)) {
                     visited_sections.push(urlpart);
-                    window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                    $('.f2datatable').each(function() {
+                        if (this.id.startsWith("section-" + urlpart + "-")) {
+                            $('#' + this.id).deferredBootstrapTable('setActive', true);
+                        }
+                    });
+                    if (!visited_sections.includes("all")) {
+                        window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                    }
                 }
             }
         });
@@ -656,9 +679,12 @@ $(document).ready(function(){
     function doNavigation() {
         $('#header-button-copy-cfn').attr('style', 'display: none;');
         $('#header-button-import-cfn').attr('style', 'margin-left: 16px; display: none;');
+        $('#header-button-download-diagram').attr('style', 'display: none;');
         $('#header-button-copy-tf').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
-        $('#header-button-copy-cdkts').attr('style', 'display: none;');
+        $('#header-button-copy-cdk').attr('style', 'display: none;');
+        $('#header-button-copy-cdktf').attr('style', 'display: none;');
+        $('#header-button-copy-pulumi').attr('style', 'display: none;');
         $('#header-button-copy-raw').attr('style', 'display: none;');
 
         if ($(location.hash).length) {
@@ -677,6 +703,11 @@ $(document).ready(function(){
             $('#header-title').html(
                 $(location.hash).attr('data-section-title')
             );
+            if ($(location.hash).attr('data-section-label')) {
+                $('#header-title').append(
+                    `&nbsp;<h5 style="display: inline;"><span style="vertical-align: super;" class="label label-info">${$(location.hash).attr('data-section-label')}</span></h5>`
+                );
+            }
             $('#header-breadcrumb1').text(
                 $(location.hash).attr('data-section-breadcrumb1-title')
             );
@@ -730,18 +761,45 @@ $(document).ready(function(){
                         theme: "material"
                     });
                 }, 1);
-            } else if (location.hash == "#section-outputs-cdkts") {
-                $('#header-button-copy-cdkts').attr('style', '');
+            } else if (location.hash == "#section-outputs-cdk") {
+                $('#header-button-copy-cdk').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
 
                 setTimeout(function(){
-                    cdkts_editor.refresh();
+                    cdk_editor.refresh();
                     tippy('.f2replacementmarker', {
                         content: "Value requires replacement",
                         placement: "right",
                         theme: "material"
                     });
                 }, 1);
+            } else if (location.hash == "#section-outputs-cdktf") {
+                $('#header-button-copy-cdktf').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    cdktf_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
+                }, 1);
+            } else if (location.hash == "#section-outputs-pulumi") {
+                $('#header-button-copy-pulumi').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    pulumi_editor.refresh();
+                    tippy('.f2replacementmarker', {
+                        content: "Value requires replacement",
+                        placement: "right",
+                        theme: "material"
+                    });
+                }, 1);
+            } else if (location.hash == "#section-outputs-diagram") {
+                $('#header-button-download-diagram').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
             } else if (location.hash == "#section-outputs-raw") {
                 $('#header-button-copy-raw').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
@@ -750,6 +808,7 @@ $(document).ready(function(){
                     raw_editor.refresh();
                 }, 1);
             } else if (location.hash.startsWith("#section-")) {
+                // TODO: unset isactive in deferred
                 refreshDatatableFirstVisit(location.hash.substring(9));
             }
         } else if (location.hash != "" && location.hash != "#") {
@@ -805,7 +864,7 @@ $(document).ready(function(){
 
     $("#generate-outputs").on('click', () => {
         regenerateOutputs().then(() => {
-            window.location.href = "#section-outputs-cloudformation";
+            window.location.href = "#section-outputs-" + defaultoutput;
         });
     });
 
@@ -817,7 +876,9 @@ $(document).ready(function(){
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
             tf_editor.getDoc().setValue(mapped_outputs['tf']);
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
-            cdkts_editor.getDoc().setValue(mapped_outputs['cdkts']);
+            cdk_editor.getDoc().setValue(mapped_outputs['cdk']);
+            cdktf_editor.getDoc().setValue(mapped_outputs['cdktf']);
+            pulumi_editor.getDoc().setValue(mapped_outputs['pulumi']);
             raw_editor.getDoc().setValue(JSON.stringify(output_objects, null, 4));
 
             // Gutters
@@ -825,7 +886,9 @@ $(document).ready(function(){
                 {key: 'cfn', editor: cfn_editor},
                 {key: 'tf', editor: tf_editor}, 
                 {key: 'troposphere', editor: troposphere_editor},
-                {key: 'cdkts', editor: cdkts_editor}
+                {key: 'cdk', editor: cdk_editor},
+                {key: 'cdktf', editor: cdktf_editor},
+                {key: 'pulumi', editor: pulumi_editor}
             ].forEach(language => {
                 var lines = mapped_outputs[language.key].split("\n");
                 for (var i=0; i<lines.length; i++) {
@@ -839,7 +902,9 @@ $(document).ready(function(){
                 cfn_editor.refresh();
                 tf_editor.refresh();
                 troposphere_editor.refresh();
-                cdkts_editor.refresh();
+                cdk_editor.refresh();
+                cdktf_editor.refresh();
+                pulumi_editor.refresh();
                 raw_editor.refresh();
                 tippy('.f2replacementmarker', {
                     content: "Value requires replacement",
@@ -861,6 +926,7 @@ $(document).ready(function(){
         "us-east-2": "US East (Ohio)",
         "us-west-1": "US West (N. California)",
         "us-west-2": "US West (Oregon)",
+        "af-south-1": "Africa (Cape Town)",
         "ap-east-1": "Asia Pacific (Hong Kong)",
         "ap-south-1": "Asia Pacific (Mumbai)",
         "ap-northeast-3": "Asia Pacific (Osaka-Local)",
@@ -874,6 +940,7 @@ $(document).ready(function(){
         "eu-west-2": "EU (London)",
         "eu-west-3": "EU (Paris)",
         "eu-north-1": "EU (Stockholm)",
+        "eu-south-1": "EU (Milan)",
         "me-south-1": "Middle East (Bahrain)",
         "sa-east-1": "South America (S&#227;o Paulo)",
         "us-gov-east-1": "AWS GovCloud (US-Gov-East)",
@@ -982,7 +1049,7 @@ $(document).ready(function(){
     });
     setCopyEvent('#header-button-copy-troposphere', troposphere_editor);
 
-    cdkts_editor = CodeMirror.fromTextArea(document.getElementById('cdkts'), {
+    cdk_editor = CodeMirror.fromTextArea(document.getElementById('cdk'), {
         lineNumbers: true,
         gutters: ["f2gutter", "CodeMirror-linenumbers"],
         lineWrapping: true,
@@ -993,7 +1060,33 @@ $(document).ready(function(){
         viewportMargin: Infinity,
         scrollbarStyle: "null"
     });
-    setCopyEvent('#header-button-copy-cdkts', cdkts_editor);
+    setCopyEvent('#header-button-copy-cdk', cdk_editor);
+
+    cdktf_editor = CodeMirror.fromTextArea(document.getElementById('cdktf'), {
+        lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-cdktf', cdktf_editor);
+
+    pulumi_editor = CodeMirror.fromTextArea(document.getElementById('pulumi'), {
+        lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
+        lineWrapping: true,
+        mode: "javascript",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-pulumi', pulumi_editor);
 
     raw_editor = CodeMirror.fromTextArea(document.getElementById('raw'), {
         lineNumbers: true,
@@ -1210,11 +1303,74 @@ $(document).ready(function(){
     });
 
     /* ========================================================================== */
+    // Diagram
+    /* ========================================================================== */
+    var sectionHeader = $('.section-header');
+    var sectionHeaderHeight = 0;
+    if (sectionHeader.length) {
+        sectionHeaderHeight = parseInt(sectionHeader.height()) + parseInt(sectionHeader.css('padding-bottom'));
+    }
+    $('#diagram_container').attr('style', 'min-height: ' +
+        ($(window).height() -
+        parseInt($('.page-content').css('padding-top')) -
+        parseInt($('.page-content').css('padding-bottom')) -
+        sectionHeaderHeight - 40) + 'px;'
+    );
+    $('#diagramframe').attr('style', 'width: 100%; border: 0; min-height: ' +
+        ($(window).height() -
+        parseInt($('.page-content').css('padding-top')) -
+        parseInt($('.page-content').css('padding-bottom')) -
+        sectionHeaderHeight - 40) + 'px;'
+    );
+
+    $('#diagramframe').attr('src', '/lib/drawio/src/main/webapp/index.html?embed=1&libraries=1&proto=json&local=1&sync=none&browser=0&gapi=0&db=0&od=0&tr=0&gh=0&gl=0&stealth=1&math=0&picker=0&libs=aws4&spin=1&p=page&saveAndExit=0&noSaveBtn=1&noExitBtn=1'); // &configure=1
+
+    $('#header-button-download-diagram').click(function(){
+        var message = JSON.stringify({
+            action: 'export',
+            format: 'png'
+        });
+    
+        var iframe = document.getElementById('diagramframe');  
+        iframe.contentWindow.postMessage(message, '*');    
+    });
+
+    window.addEventListener('message', (message) => {
+        var evt = JSON.parse(message.data);
+        if (evt['event'] == "init") {
+            clearDiagram();
+        } else if (evt['event'] == "export") {
+            var element = document.createElement('a');
+            element.setAttribute('href', evt.data);
+            element.setAttribute('download', "graph.png");
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        } else if (evt['event'] == "toggleFullscreen") {
+            $('#diagramframe').toggleClass('fullscreen');
+        }
+    });
+
+    /* ========================================================================== */
     // Misc
     /* ========================================================================== */
 
     tippy('[data-tippy-content]', {
         theme: 'material'
+    });
+
+    $("#credentials-secretkey").focus(function() {
+        $(this).attr('type', 'text');
+    });
+    $("#credentials-secretkey").blur(function() {
+        $(this).attr('type', 'password');
+    });
+    $("#credentials-sessiontoken").focus(function() {
+        $(this).attr('type', 'text');
+    });
+    $("#credentials-sessiontoken").blur(function() {
+        $(this).attr('type', 'password');
     });
 
     $('.select2-no-search-arrow').select2({ // Selectors for settings
@@ -1311,6 +1467,37 @@ $(document).ready(function(){
         $('#generate-outputs').attr('disabled', 'disabled');
     });
 
+    defaultoutput = window.localStorage.getItem('defaultoutput') || 'cloudformation';
+    if (defaultoutput == "cdkts") { defaultoutput = "cdk"; } // breaking change
+    if (defaultoutput == "pulumits") { defaultoutput = "pulumi"; } // breaking change
+
+    $('#defaultoutput').val(defaultoutput).trigger('change');
+    $('#defaultoutput').change(function() {
+        window.localStorage.setItem('defaultoutput', $(this).val());
+        defaultoutput = $(this).val();
+    });
+
+    iaclangselect = window.localStorage.getItem('iaclangselect') || 'typescript';
+    $('#iaclangselect').change(function() {
+        window.localStorage.setItem('iaclangselect', $(this).val());
+        iaclangselect = $(this).val();
+
+        if ($(this).val() == "typescript") {
+            cdk_editor.setOption("mode", "javascript");
+            cdktf_editor.setOption("mode", "javascript");
+        } else if ($(this).val() == "java") {
+            cdk_editor.setOption("mode", "text/x-java");
+            cdktf_editor.setOption("mode", "text/x-java");
+        } else if ($(this).val() == "dotnet") {
+            cdk_editor.setOption("mode", "text/x-csrc");
+            cdktf_editor.setOption("mode", "text/x-csrc");
+        } else {
+            cdk_editor.setOption("mode", $(this).val());
+            cdktf_editor.setOption("mode", $(this).val());
+        }
+    });
+    $('#iaclangselect').val(iaclangselect).trigger('change');
+
     if (window.localStorage.getItem('relatedresourcessetting') == "true") {
         $('#relatedresourcessetting').prop('checked', true);
     }
@@ -1328,7 +1515,6 @@ $(document).ready(function(){
 // Extension Request/Response
 /* ========================================================================== */
 
-var HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
 var active_firefoxaddon_requests = {};
 
 document.addEventListener('f2response', msg => {
@@ -1358,9 +1544,15 @@ function extensionSendMessage(data, callback) {
                 callback(null);
             }, 200, callback);
         }
+    } else if (navigator.userAgent.search("Edg/") > -1) { // Edge (Chromium)
+        if (window.chrome && window.chrome.runtime) {
+            chrome.runtime.sendMessage(EDGE_HELPER_EXTENSION_ID, data, callback);
+        } else {
+            callback(null);
+        }
     } else { // Chrome
         if (window.chrome && window.chrome.runtime) {
-            chrome.runtime.sendMessage(HELPER_EXTENSION_ID, data, callback);
+            chrome.runtime.sendMessage(CHROME_HELPER_EXTENSION_ID, data, callback);
         } else {
             callback(null);
         }
@@ -1372,18 +1564,20 @@ function extensionSendMessage(data, callback) {
 /* ========================================================================== */
 
 function blockUI(selector) {
-    $(selector).block({
-        message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
-        overlayCSS:  {
-            background: 'rgba(142, 159, 167, 0.8)',
-            opacity: 1,
-            cursor: 'wait'
-        },
-        css: {
-            width: '50%'
-        },
-        blockMsgClass: 'block-msg-default'
-    });
+    if (selector.startsWith(window.location.hash)) {
+        $(selector).block({
+            message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
+            overlayCSS:  {
+                background: 'rgba(142, 159, 167, 0.8)',
+                opacity: 1,
+                cursor: 'wait'
+            },
+            css: {
+                width: '50%'
+            },
+            blockMsgClass: 'block-msg-default'
+        });
+    }
 }
 
 function unblockUI(selector) {
@@ -1400,6 +1594,8 @@ function saveSettings() {
         'settings': {
             'cfnspacing': window.localStorage.getItem('cfnspacing'),
             'logicalidstrategy': window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix',
+            'defaultoutput': window.localStorage.getItem('defaultoutput') || 'cloudformation',
+            'iaclangselect': window.localStorage.getItem('iaclangselect') || 'typescript',
             'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting')
         }
     };
@@ -1428,6 +1624,12 @@ function loadSettings() {
             }
             if ('logicalidstrategy' in loaded_settings.settings) {
                 $('#logicalidstrategy').val(loaded_settings.settings.logicalidstrategy).trigger('change');
+            }
+            if ('defaultoutput' in loaded_settings.settings) {
+                $('#defaultoutput').val(loaded_settings.settings.defaultoutput).trigger('change');
+            }
+            if ('iaclangselect' in loaded_settings.settings) {
+                $('#iaclangselect').val(loaded_settings.settings.iaclangselect).trigger('change');
             }
             if ('relatedresourcessetting' in loaded_settings.settings) {
                 if (loaded_settings.settings.relatedresourcessetting == "true") {
@@ -1622,67 +1824,672 @@ async function getResourceStackAssociation() {
 // Import
 
 eligibleImportResources = {
-    'AWS::ApiGateway::Authorizer': {'importProperties': ['RestApiId', 'AuthorizerId']},
-    'AWS::ApiGateway::Deployment': {'importProperties': ['RestApiId', 'DeploymentId']},
-    'AWS::ApiGateway::Method': {'importProperties': ['RestApiId', 'ResourceId', 'HttpMethod']},
-    'AWS::ApiGateway::Model': {'importProperties': ['RestApiId', 'Name']},
-    'AWS::ApiGateway::RestApi': {'importProperties': ['RestApiId']},
-    'AWS::AutoScaling::LaunchConfiguration': {'importProperties': ['LaunchConfigurationName']},
-    'AWS::EC2::InternetGateway': {'importProperties': ['InternetGatewayId']},
-    'AWS::EC2::Instance': {'importProperties': ['InstanceId']},
-    'AWS::EC2::NatGateway': {'importProperties': ['NatGatewayId']},
-    'AWS::EC2::RouteTable': {'importProperties': ['RouteTableId']},
-    'AWS::ElasticLoadBalancingV2::LoadBalancer': {'importProperties': ['LoadBalancerArn']},
-    'AWS::Events::Rule': {'importProperties': ['Name']},
-    'AWS::ApiGateway::Stage': {'importProperties': ['RestApiId', 'StageName']},
-    'AWS::ApiGateway::Resource': {'importProperties': ['RestApiId', 'ResourceId']},
-    'AWS::ApiGateway::RequestValidator': {'importProperties': ['RestApiId', 'RequestValidatorId']},
-    'AWS::AutoScaling::LifecycleHook': {'importProperties': ['AutoScalingGroupName', 'LifecycleHookName']},
-    'AWS::AutoScaling::ScheduledAction': {'importProperties': ['ScheduledActionName']},
-    'AWS::CloudTrail::Trail': {'importProperties': ['TrailName']},
-    'AWS::EC2::Subnet': {'importProperties': ['SubnetId']},
-    'AWS::EC2::SecurityGroup': {'importProperties': ['GroupId']},
-    'AWS::EC2::VPC': {'importProperties': ['VpcId']},
-    'AWS::ElasticLoadBalancing::LoadBalancer': {'importProperties': ['LoadBalancerName']},
-    'AWS::ElasticLoadBalancingV2::Listener': {'importProperties': ['ListenerArn']},
-    'AWS::ElasticLoadBalancingV2::ListenerRule': {'importProperties': ['RuleArn']},
-    'AWS::Logs::MetricFilter': {'importProperties': ['FilterName']},
-    'AWS::Lambda::Alias': {'importProperties': ['AliasArn']},
-    'AWS::AutoScaling::AutoScalingGroup': {'importProperties': ['AutoScalingGroupName']},
-    'AWS::CloudWatch::Alarm': {'importProperties': ['AlarmName']},
-    'AWS::AutoScaling::ScalingPolicy': {'importProperties': ['PolicyName']},
-    'AWS::CloudFormation::Stack': {'importProperties': ['StackId'], 'capabilities': ['CAPABILITY_NAMED_IAM']}, // interesting...
-    'AWS::DynamoDB::Table': {'importProperties': ['TableName']},
-    'AWS::EC2::EIP': {'importProperties': ['PublicIp']},
-    'AWS::EC2::NetworkAcl': {'importProperties': ['NetworkAclId']},
-    'AWS::ECS::TaskDefinition': {'importProperties': ['TaskDefinitionArn']},
-    'AWS::Lambda::Version': {'importProperties': ['FunctionArn']}, // just FunctionArn?
-    'AWS::RDS::DBCluster': {'importProperties': ['DBClusterIdentifier']},
-    'AWS::Route53::HostedZone': {'importProperties': ['HostedZoneId']},
-    'AWS::ECS::Cluster': {'importProperties': ['ClusterName']},
-    'AWS::ECS::Service': {'importProperties': ['ServiceArn', 'Cluster']}, // ClusterArn ?
-    'AWS::EC2::Volume': {'importProperties': ['VolumeId']},
-    'AWS::IoT::Thing': {'importProperties': ['ThingName']},
-    'AWS::Logs::LogGroup': {'importProperties': ['LogGroupName']},
-    'AWS::RDS::DBInstance': {'importProperties': ['DBInstanceIdentifier']},
-    'AWS::SNS::Topic': {'importProperties': ['TopicArn']},
-    'AWS::EC2::NetworkInterface': {'importProperties': ['NetworkInterfaceId']},
-    'AWS::Lambda::Function': {'importProperties': ['FunctionName']},
-    'AWS::Logs::SubscriptionFilter': {'importProperties': ['LogGroupName', 'FilterName']},
-    'AWS::SQS::Queue': {'importProperties': ['QueueUrl']},
-    'AWS::S3::Bucket': {'importProperties': ['BucketName']},
-    'AWS::IAM::Group': {'importProperties': ['GroupName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
-    'AWS::IAM::InstanceProfile': {'importProperties': ['InstanceProfileName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
-    'AWS::IAM::Role': {'importProperties': ['RoleName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
-    'AWS::IAM::User': {'importProperties': ['UserName'], 'capabilities': ['CAPABILITY_NAMED_IAM']},
-    'AWS::IAM::ManagedPolicy': {'importProperties': ['PolicyArn'], 'capabilities': ['CAPABILITY_NAMED_IAM']}
+    "AWS::ACMPCA::Certificate": {
+        "importProperties": [
+            "Arn", 
+            "CertificateAuthorityArn"
+        ]
+    }, 
+    "AWS::ACMPCA::CertificateAuthority": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ACMPCA::CertificateAuthorityActivation": {
+        "importProperties": [
+            "CertificateAuthorityArn"
+        ]
+    }, 
+    "AWS::AccessAnalyzer::Analyzer": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ApiGateway::Authorizer": {
+        "importProperties": [
+            "RestApiId", 
+            "AuthorizerId"
+        ]
+    }, 
+    "AWS::ApiGateway::Deployment": {
+        "importProperties": [
+            "RestApiId", 
+            "DeploymentId"
+        ]
+    }, 
+    "AWS::ApiGateway::Method": {
+        "importProperties": [
+            "RestApiId", 
+            "ResourceId", 
+            "HttpMethod"
+        ]
+    }, 
+    "AWS::ApiGateway::Model": {
+        "importProperties": [
+            "RestApiId", 
+            "Name"
+        ]
+    }, 
+    "AWS::ApiGateway::RequestValidator": {
+        "importProperties": [
+            "RestApiId", 
+            "RequestValidatorId"
+        ]
+    }, 
+    "AWS::ApiGateway::Resource": {
+        "importProperties": [
+            "RestApiId", 
+            "ResourceId"
+        ]
+    }, 
+    "AWS::ApiGateway::RestApi": {
+        "importProperties": [
+            "RestApiId"
+        ]
+    }, 
+    "AWS::ApiGateway::Stage": {
+        "importProperties": [
+            "RestApiId", 
+            "StageName"
+        ]
+    }, 
+    "AWS::Athena::DataCatalog": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::Athena::NamedQuery": {
+        "importProperties": [
+            "NamedQueryId"
+        ]
+    }, 
+    "AWS::Athena::WorkGroup": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::AutoScaling::AutoScalingGroup": {
+        "importProperties": [
+            "AutoScalingGroupName"
+        ]
+    }, 
+    "AWS::AutoScaling::LaunchConfiguration": {
+        "importProperties": [
+            "LaunchConfigurationName"
+        ]
+    }, 
+    "AWS::AutoScaling::LifecycleHook": {
+        "importProperties": [
+            "AutoScalingGroupName", 
+            "LifecycleHookName"
+        ]
+    }, 
+    "AWS::AutoScaling::ScalingPolicy": {
+        "importProperties": [
+            "PolicyName"
+        ]
+    }, 
+    "AWS::AutoScaling::ScheduledAction": {
+        "importProperties": [
+            "ScheduledActionName"
+        ]
+    }, 
+    "AWS::CE::CostCategory": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::Cassandra::Keyspace": {
+        "importProperties": [
+            "KeyspaceName"
+        ]
+    }, 
+    "AWS::Cassandra::Table": {
+        "importProperties": [
+            "KeyspaceName", 
+            "TableName"
+        ]
+    }, 
+    "AWS::Chatbot::SlackChannelConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::CloudFormation::Stack": {
+        "importProperties": [
+            "StackId"
+        ]
+    }, 
+    "AWS::CloudTrail::Trail": {
+        "importProperties": [
+            "TrailName"
+        ]
+    }, 
+    "AWS::CloudWatch::Alarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    }, 
+    "AWS::CloudWatch::CompositeAlarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    }, 
+    "AWS::CodeGuruProfiler::ProfilingGroup": {
+        "importProperties": [
+            "ProfilingGroupName"
+        ]
+    }, 
+    "AWS::CodeStarConnections::Connection": {
+        "importProperties": [
+            "ConnectionArn"
+        ]
+    }, 
+    "AWS::Config::ConformancePack": {
+        "importProperties": [
+            "ConformancePackName"
+        ]
+    }, 
+    "AWS::Config::OrganizationConformancePack": {
+        "importProperties": [
+            "OrganizationConformancePackName"
+        ]
+    }, 
+    "AWS::Detective::Graph": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::Detective::MemberInvitation": {
+        "importProperties": [
+            "GraphArn", 
+            "MemberId"
+        ]
+    }, 
+    "AWS::DynamoDB::Table": {
+        "importProperties": [
+            "TableName"
+        ]
+    }, 
+    "AWS::EC2::EIP": {
+        "importProperties": [
+            "PublicIp"
+        ]
+    }, 
+    "AWS::EC2::FlowLog": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::EC2::GatewayRouteTableAssociation": {
+        "importProperties": [
+            "GatewayId"
+        ]
+    }, 
+    "AWS::EC2::Instance": {
+        "importProperties": [
+            "InstanceId"
+        ]
+    }, 
+    "AWS::EC2::InternetGateway": {
+        "importProperties": [
+            "InternetGatewayId"
+        ]
+    }, 
+    "AWS::EC2::LocalGatewayRoute": {
+        "importProperties": [
+            "DestinationCidrBlock", 
+            "LocalGatewayRouteTableId"
+        ]
+    }, 
+    "AWS::EC2::LocalGatewayRouteTableVPCAssociation": {
+        "importProperties": [
+            "LocalGatewayRouteTableVpcAssociationId"
+        ]
+    }, 
+    "AWS::EC2::NatGateway": {
+        "importProperties": [
+            "NatGatewayId"
+        ]
+    }, 
+    "AWS::EC2::NetworkAcl": {
+        "importProperties": [
+            "NetworkAclId"
+        ]
+    }, 
+    "AWS::EC2::NetworkInterface": {
+        "importProperties": [
+            "NetworkInterfaceId"
+        ]
+    }, 
+    "AWS::EC2::PrefixList": {
+        "importProperties": [
+            "PrefixListId"
+        ]
+    }, 
+    "AWS::EC2::RouteTable": {
+        "importProperties": [
+            "RouteTableId"
+        ]
+    }, 
+    "AWS::EC2::SecurityGroup": {
+        "importProperties": [
+            "GroupId"
+        ]
+    }, 
+    "AWS::EC2::Subnet": {
+        "importProperties": [
+            "SubnetId"
+        ]
+    }, 
+    "AWS::EC2::VPC": {
+        "importProperties": [
+            "VpcId"
+        ]
+    }, 
+    "AWS::EC2::Volume": {
+        "importProperties": [
+            "VolumeId"
+        ]
+    }, 
+    "AWS::ECS::CapacityProvider": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::ECS::Cluster": {
+        "importProperties": [
+            "ClusterName"
+        ]
+    }, 
+    "AWS::ECS::PrimaryTaskSet": {
+        "importProperties": [
+            "Cluster", 
+            "Service"
+        ]
+    }, 
+    "AWS::ECS::Service": {
+        "importProperties": [
+            "ServiceArn", 
+            "Cluster"
+        ]
+    }, 
+    "AWS::ECS::TaskDefinition": {
+        "importProperties": [
+            "TaskDefinitionArn"
+        ]
+    }, 
+    "AWS::ECS::TaskSet": {
+        "importProperties": [
+            "Cluster", 
+            "Service", 
+            "Id"
+        ]
+    }, 
+    "AWS::EFS::AccessPoint": {
+        "importProperties": [
+            "AccessPointId"
+        ]
+    }, 
+    "AWS::EFS::FileSystem": {
+        "importProperties": [
+            "FileSystemId"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancing::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerName"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::Listener": {
+        "importProperties": [
+            "ListenerArn"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::ListenerRule": {
+        "importProperties": [
+            "RuleArn"
+        ]
+    }, 
+    "AWS::ElasticLoadBalancingV2::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerArn"
+        ]
+    }, 
+    "AWS::EventSchemas::RegistryPolicy": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Events::Rule": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::FMS::NotificationChannel": {
+        "importProperties": [
+            "SnsTopicArn"
+        ]
+    }, 
+    "AWS::FMS::Policy": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::Accelerator": {
+        "importProperties": [
+            "AcceleratorArn"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::EndpointGroup": {
+        "importProperties": [
+            "EndpointGroupArn"
+        ]
+    }, 
+    "AWS::GlobalAccelerator::Listener": {
+        "importProperties": [
+            "ListenerArn"
+        ]
+    }, 
+    "AWS::ImageBuilder::Component": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::DistributionConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::Image": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::ImagePipeline": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::ImageRecipe": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::ImageBuilder::InfrastructureConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    }, 
+    "AWS::IoT::ProvisioningTemplate": {
+        "importProperties": [
+            "TemplateName"
+        ]
+    }, 
+    "AWS::IoT::Thing": {
+        "importProperties": [
+            "ThingName"
+        ]
+    }, 
+    "AWS::KinesisFirehose::DeliveryStream": {
+        "importProperties": [
+            "DeliveryStreamName"
+        ]
+    }, 
+    "AWS::Lambda::Alias": {
+        "importProperties": [
+            "AliasArn"
+        ]
+    }, 
+    "AWS::Lambda::Function": {
+        "importProperties": [
+            "FunctionName"
+        ]
+    }, 
+    "AWS::Lambda::Version": {
+        "importProperties": [
+            "FunctionArn"
+        ]
+    }, 
+    "AWS::Logs::LogGroup": {
+        "importProperties": [
+            "LogGroupName"
+        ]
+    }, 
+    "AWS::Logs::MetricFilter": {
+        "importProperties": [
+            "FilterName"
+        ]
+    }, 
+    "AWS::Logs::SubscriptionFilter": {
+        "importProperties": [
+            "LogGroupName", 
+            "FilterName"
+        ]
+    }, 
+    "AWS::Macie::CustomDataIdentifier": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Macie::FindingsFilter": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::Macie::Session": {
+        "importProperties": [
+            "AwsAccountId"
+        ]
+    }, 
+    "AWS::NetworkManager::CustomerGatewayAssociation": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "CustomerGatewayArn"
+        ]
+    }, 
+    "AWS::NetworkManager::Device": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "DeviceId"
+        ]
+    }, 
+    "AWS::NetworkManager::GlobalNetwork": {
+        "importProperties": [
+            "Id"
+        ]
+    }, 
+    "AWS::NetworkManager::Link": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "LinkId"
+        ]
+    }, 
+    "AWS::NetworkManager::LinkAssociation": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "DeviceId", 
+            "LinkId"
+        ]
+    }, 
+    "AWS::NetworkManager::Site": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "SiteId"
+        ]
+    }, 
+    "AWS::NetworkManager::TransitGatewayRegistration": {
+        "importProperties": [
+            "GlobalNetworkId", 
+            "TransitGatewayArn"
+        ]
+    }, 
+    "AWS::QLDB::Stream": {
+        "importProperties": [
+            "LedgerName", 
+            "Id"
+        ]
+    }, 
+    "AWS::RDS::DBCluster": {
+        "importProperties": [
+            "DBClusterIdentifier"
+        ]
+    }, 
+    "AWS::RDS::DBInstance": {
+        "importProperties": [
+            "DBInstanceIdentifier"
+        ]
+    }, 
+    "AWS::RDS::DBProxy": {
+        "importProperties": [
+            "DBProxyName"
+        ]
+    }, 
+    "AWS::RDS::DBProxyTargetGroup": {
+        "importProperties": [
+            "TargetGroupArn"
+        ]
+    }, 
+    "AWS::ResourceGroups::Group": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::Route53::HostedZone": {
+        "importProperties": [
+            "HostedZoneId"
+        ]
+    }, 
+    "AWS::S3::AccessPoint": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::S3::Bucket": {
+        "importProperties": [
+            "BucketName"
+        ]
+    }, 
+    "AWS::SES::ConfigurationSet": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::SNS::Topic": {
+        "importProperties": [
+            "TopicArn"
+        ]
+    }, 
+    "AWS::SQS::Queue": {
+        "importProperties": [
+            "QueueUrl"
+        ]
+    }, 
+    "AWS::SSM::Association": {
+        "importProperties": [
+            "AssociationId"
+        ]
+    }, 
+    "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
+        "importProperties": [
+            "ProvisionedProductId"
+        ]
+    }, 
+    "AWS::Synthetics::Canary": {
+        "importProperties": [
+            "Name"
+        ]
+    }, 
+    "AWS::WAFv2::IPSet": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::RegexPatternSet": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::RuleGroup": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::WebACL": {
+        "importProperties": [
+            "Name", 
+            "Id", 
+            "Scope"
+        ]
+    }, 
+    "AWS::WAFv2::WebACLAssociation": {
+        "importProperties": [
+            "ResourceArn", 
+            "WebACLArn"
+        ]
+    },
+    /*****/
+    "AWS::CloudFormation::Stack": {
+        "importProperties": [
+            "StackId"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    },
+    "AWS::IAM::Group": {
+        "importProperties": [
+            "GroupName"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    },
+    "AWS::IAM::InstanceProfile": {
+        "importProperties": [
+            "InstanceProfileName"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    },
+    "AWS::IAM::Role": {
+        "importProperties": [
+            "RoleName"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    },
+    "AWS::IAM::User": {
+        "importProperties": [
+            "UserName"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    },
+    "AWS::IAM::ManagedPolicy": {
+        "importProperties": [
+            "PolicyArn"
+        ],
+        "capabilities": [
+            "CAPABILITY_NAMED_IAM"
+        ]
+    }
 };
 
 async function downloadImportTemplate(stack_name, deletion_policy) {
     var importable_resources = [];
     var resources_to_import = [];
     tracked_resources.forEach(res => {
-        if ('type' in res && res['type'] in eligibleImportResources) {
+        if ('type' in res && res['type'] in eligibleImportResources && res.returnValues && res.returnValues.Import) {
             importable_resources.push(res);
             var resource_identifier = {};
             eligibleImportResources[res.type].importProperties.forEach(prop => {
@@ -1716,7 +2523,7 @@ async function importResources(stack_name, deletion_policy) {
     var resources_to_import = [];
     var capabilities = [];
     tracked_resources.forEach(res => {
-        if ('type' in res && res['type'] in eligibleImportResources) {
+        if ('type' in res && res['type'] in eligibleImportResources && res.returnValues && res.returnValues.Import) {
             importable_resources.push(res);
             var resource_identifier = {};
             eligibleImportResources[res.type].importProperties.forEach(prop => {

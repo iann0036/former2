@@ -172,9 +172,9 @@ async function updateDatatableMigrationAndTransferTransfer() {
     await sdkcall("Transfer", "listServers", {
         // no params
     }, true).then(async (data) => {
-        $('#section-migrationandtransfer-transfer-servers-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-transfer-users-datatable').bootstrapTable('removeAll');
-        $('#section-migrationandtransfer-transfer-sshkeys-datatable').bootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-servers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-users-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-sshkeys-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Servers.map(async (server) => {
             await sdkcall("Transfer", "listUsers", {
@@ -273,6 +273,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
+        reqParams.cfn['Certificate'] = obj.data.Certificate;
+        reqParams.cfn['Protocols'] = obj.data.Protocols;
 
         tracked_resources.push({
             'obj': obj,
