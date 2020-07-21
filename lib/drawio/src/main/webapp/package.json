@@ -32,6 +32,6 @@
     "crc": "^3.8.0"
   },
   "devDependencies": {
-    "electron": "^9.0.0"
+    "electron": "^8.2.4"
   }
 }
