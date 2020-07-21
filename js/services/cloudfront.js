@@ -198,22 +198,28 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
 
     await sdkcall("CloudFront", "listDistributions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('removeAll');
 
-        data.DistributionList.Items.forEach(distribution => {
-            $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
-                f2id: distribution.ARN,
-                f2type: 'cloudfront.distribution',
-                f2data: distribution,
-                f2region: region,
-                domainname: distribution.DomainName,
-                id: distribution.Id,
-                httpversion: distribution.HttpVersion,
-                comment: distribution.Comment,
-                priceclass: distribution.PriceClass // TODO: Make readable
-            }]);
-        });
+        await Promise.all(data.DistributionList.Items.map(distribution => {
+            return sdkcall("CloudFront", "getDistribution", {
+                Id: distribution.Id
+            }, true).then((data) => {
+                distribution['DefaultRootObject'] = data.Distribution.DistributionConfig.DefaultRootObject;
+                
+                $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
+                    f2id: distribution.ARN,
+                    f2type: 'cloudfront.distribution',
+                    f2data: distribution,
+                    f2region: region,
+                    domainname: distribution.DomainName,
+                    id: distribution.Id,
+                    httpversion: distribution.HttpVersion,
+                    comment: distribution.Comment,
+                    priceclass: distribution.PriceClass // TODO: Make readable
+                }]);
+            });
+        }));
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
     });
@@ -240,7 +246,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     });
 }
 
-service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
     if (obj.type == "cloudfront.distribution") {
         reqParams.cfn['DistributionConfig'] = {};
         reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
@@ -506,6 +512,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['web_acl_id'] = obj.data.WebACLId;
         }
         reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion.toLowerCase();
+        reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DefaultRootObject;
         reqParams.tf['http_version'] = obj.data.HttpVersion;
         reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
         reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
@@ -513,7 +520,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         /*
         TODO:
         DistributionConfig:
-            DefaultRootObject: String
             Logging:
                 Logging
         Tags
