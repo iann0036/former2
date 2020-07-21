@@ -201,7 +201,17 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     }, true).then((data) => {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('removeAll');
 
-        data.DistributionList.Items.forEach(distribution => {
+        data.DistributionList.Items.forEach(async (distribution) => {
+            await sdkcall("CloudFront", "getDistribution", {
+                Id: distribution.Id
+            }, true)
+            .then((data) => {
+                distribution['DefaultRootObject'] = data.Distribution.DistributionConfig.DefaultRootObject;  
+                /* TODO:
+                    terraform etc
+                    Logging
+                */
+            });
             $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
                 f2id: distribution.ARN,
                 f2type: 'cloudfront.distribution',
@@ -240,7 +250,8 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     });
 }
 
-service_mapping_functions.push(function(reqParams, obj, tracked_resources){
+service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
+    console.log(reqParams, obj, tracked_resources);
     if (obj.type == "cloudfront.distribution") {
         reqParams.cfn['DistributionConfig'] = {};
         reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
@@ -506,18 +517,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['web_acl_id'] = obj.data.WebACLId;
         }
         reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion.toLowerCase();
+        reqParams.cfn.DistributionConfig['DefaultRootObject'] = "index.html";
         reqParams.tf['http_version'] = obj.data.HttpVersion;
         reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
         reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
-
-        /*
-        TODO:
-        DistributionConfig:
-            DefaultRootObject: String
-            Logging:
-                Logging
-        Tags
-        */
 
         tracked_resources.push({
             'obj': obj,
