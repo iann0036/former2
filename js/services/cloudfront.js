@@ -511,9 +511,11 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             reqParams.cfn.DistributionConfig['WebACLId'] = obj.data.WebACLId;
             reqParams.tf['web_acl_id'] = obj.data.WebACLId;
         }
-        reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion.toLowerCase();
+        if (obj.data.HttpVersion) {
+            reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion.toLowerCase();
+            reqParams.tf['http_version'] = obj.data.HttpVersion;
+        }
         reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DefaultRootObject;
-        reqParams.tf['http_version'] = obj.data.HttpVersion;
         reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
         reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
 
