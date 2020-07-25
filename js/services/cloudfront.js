@@ -304,7 +304,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'S3OriginConfig': origin.S3OriginConfig
             });
             reqParams.tf['origin'].push({
-                'custom_origin_config': customOriginConfig,
+                'custom_origin_config': tfCustomOriginConfig,
                 'domain_name': origin.DomainName,
                 'origin_id': origin.Id,
                 'custom_header': customHeaders,
