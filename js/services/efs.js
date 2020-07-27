@@ -178,7 +178,13 @@ async function updateDatatableStorageEFS() {
         await Promise.all(data.FileSystems.map(async (fileSystem) => {
             await sdkcall("EFS", "describeFileSystemPolicy", {
                 FileSystemId: fileSystem.FileSystemId
-            }, true).then(async (policydata) => {
+            }, false).then(async (policydata) => {
+                fileSystem['BackupPolicy'] = policydata.BackupPolicy;
+            }).catch(err => { });
+
+            await sdkcall("EFS", "describeBackupPolicy", {
+                FileSystemId: fileSystem.FileSystemId
+            }, false).then(async (policydata) => {
                 fileSystem['FileSystemPolicy'] = policydata.Policy;
             }).catch(err => { });
 
@@ -265,6 +271,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['FileSystemPolicy'] = obj.data.FileSystemPolicy;
+        reqParams.cfn['BackupPolicy'] = obj.data.BackupPolicy;
 
         tracked_resources.push({
             'obj': obj,

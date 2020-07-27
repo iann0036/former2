@@ -740,6 +740,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['DataCaptureConfig'] = obj.data.DataCaptureConfig;
 
         /*
         TODO:

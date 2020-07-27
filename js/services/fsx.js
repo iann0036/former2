@@ -121,6 +121,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.LustreConfiguration) {
             reqParams.cfn['LustreConfiguration'] = {
+                'AutoImportPolicyType': obj.data.LustreConfiguration.DataRepositoryConfiguration.AutoImportPolicy,
                 'ExportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath,
                 'ImportedFileChunkSize': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize,
                 'ImportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath,

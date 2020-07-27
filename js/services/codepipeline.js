@@ -616,6 +616,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "codestarconnections.connection") {
         reqParams.cfn['ConnectionName'] = obj.data.ConnectionName;
         reqParams.cfn['ProviderType'] = obj.data.ProviderType;
+        reqParams.cfn['HostArn'] = obj.data.HostArn;
 
         tracked_resources.push({
             'obj': obj,

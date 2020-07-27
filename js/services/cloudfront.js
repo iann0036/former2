@@ -339,6 +339,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'CachedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
             'Compress': obj.data.DefaultCacheBehavior.Compress,
             'DefaultTTL': obj.data.DefaultCacheBehavior.DefaultTTL,
+            'CachePolicyId': obj.data.DefaultCacheBehavior.CachePolicyId,
+            'OriginRequestPolicyId': obj.data.DefaultCacheBehavior.OriginRequestPolicyId,
             'FieldLevelEncryptionId': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
             'ForwardedValues': {
                 'Cookies': {
@@ -411,6 +413,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'CachedMethods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
                     'Compress': cacheBehaviour.Compress,
                     'DefaultTTL': cacheBehaviour.DefaultTTL,
+                    'CachePolicyId': cacheBehaviour.CachePolicyId,
+                    'OriginRequestPolicyId': cacheBehaviour.OriginRequestPolicyId,
                     'FieldLevelEncryptionId': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
                     'ForwardedValues': {
                         'Cookies': {
