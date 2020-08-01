@@ -574,3 +574,4 @@ aws_wafv2_web_acl
 aws_wafv2_web_acl_association
 aws_wafv2_web_acl_logging_configuration
 aws_ec2_client_vpn_authorization_rule
+aws_ec2_client_vpn_route

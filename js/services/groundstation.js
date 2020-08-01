@@ -352,8 +352,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.endpointsDetails.forEach(endpointsDetail => {
                 var dataflowendpoint = null;
                 if (endpointsDetail.endpoint) {
-                    dataflowendpoint = {};
-                    dataflowendpoint['Name'] = endpointsDetail.endpoint.name;
+                    dataflowendpoint = {
+                        'Name': endpointsDetail.endpoint.name,
+                        'Mtu': endpointsDetail.endpoint.mtu
+                    };
                     if (endpointsDetail.endpoint.address) {
                         dataflowendpoint['Address'] = {
                             'Name': endpointsDetail.endpoint.address.name,

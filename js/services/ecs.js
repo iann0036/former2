@@ -1074,10 +1074,29 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'labels': volume.dockerVolumeConfiguration.labels
                     };
                 }
+                var efsVolumeConfiguration = null;
+                if (volume.efsVolumeConfiguration) {
+                    var authorizationConfig = null;
+                    if (volume.efsVolumeConfiguration.authorizationConfig) {
+                        authorizationConfig = {
+                            'AccessPointId': volume.efsVolumeConfiguration.authorizationConfig.accessPointId,
+                            'IAM': volume.efsVolumeConfiguration.authorizationConfig.iam
+                        };
+                    }
+                    dockerVolumeConfiguration = {
+                        'AuthorizationConfig': authorizationConfig,
+                        'FilesystemId': volume.efsVolumeConfiguration.fileSystemId,
+                        'RootDirectory': volume.efsVolumeConfiguration.rootDirectory,
+                        'TransitEncryption': volume.efsVolumeConfiguration.transitEncryption,
+                        'TransitEncryptionPort': volume.efsVolumeConfiguration.transitEncryptionPort,
+                    };
+                    
+                }
                 reqParams.cfn['Volumes'].push({
                     'Name': volume.name,
                     'Host': host,
-                    'DockerVolumeConfiguration': dockerVolumeConfiguration
+                    'DockerVolumeConfiguration': dockerVolumeConfiguration,
+                    'EFSVolumeConfiguration': efsVolumeConfiguration
                 });
                 reqParams.tf['volume'].push({
                     'name': volume.name,

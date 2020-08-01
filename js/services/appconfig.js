@@ -267,6 +267,60 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Hosted Configuration Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Version',
+                        field: 'version',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'applicationid',
+                        title: 'Application ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'configuration Profile ID',
+                        title: 'Configuration Profile ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -277,6 +331,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
     blockUI('#section-managementandgovernance-appconfig-environments-datatable');
     blockUI('#section-managementandgovernance-appconfig-deployments-datatable');
     blockUI('#section-managementandgovernance-appconfig-deploymentstrategies-datatable');
+    blockUI('#section-managementandgovernance-appconfig-hostedconfigurationversions-datatable');
 
     await sdkcall("AppConfig", "listApplications", {
         // no params
@@ -350,7 +405,31 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
             return sdkcall("AppConfig", "listConfigurationProfiles", {
                 ApplicationId: item.Id
             }, true).then(async (data) => {
-                await Promise.all(data.Items.map(configprofileitem => {
+                await Promise.all(data.Items.map(async (configprofileitem) => {
+                    await sdkcall("AppConfig", "listHostedConfigurationVersions", {
+                        ApplicationId: item.Id,
+                        ConfigurationProfileId: configprofileitem.Id
+                    }, true).then(async (data) => {
+                        await Promise.all(data.Items.map(hostedconfigversion => {
+                            return sdkcall("AppConfig", "getHostedConfigurationVersion", {
+                                ApplicationId: item.Id,
+                                ConfigurationProfileId: configprofileitem.Id,
+                                VersionNumber: hostedconfigversion.VersionNumber
+                            }, true).then(async (data) => {
+                                $('#section-managementandgovernance-appconfig-hostedconfigurationversions-datatable').deferredBootstrapTable('append', [{
+                                    f2id: data.ApplicationId + " " + data.ConfigurationProfileId + " Version " + data.VersionNumber,
+                                    f2type: 'appconfig.hostedconfigurationversion',
+                                    f2data: data,
+                                    f2region: region,
+                                    applicationid: data.ApplicationId,
+                                    configurationprofileid: data.ConfigurationProfileId,
+                                    version: data.VersionNumber,
+                                    description: data.Description
+                                }]);
+                            });
+                        }));
+                    });
+
                     return sdkcall("AppConfig", "getConfigurationProfile", {
                         ApplicationId: item.Id,
                         ConfigurationProfileId: configprofileitem.Id
@@ -398,6 +477,7 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
     unblockUI('#section-managementandgovernance-appconfig-environments-datatable');
     unblockUI('#section-managementandgovernance-appconfig-deployments-datatable');
     unblockUI('#section-managementandgovernance-appconfig-deploymentstrategies-datatable');
+    unblockUI('#section-managementandgovernance-appconfig-hostedconfigurationversions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -515,6 +595,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.Id
+            }
+        });
+    } else if (obj.type == "appconfig.hostedconfigurationversion") {
+        reqParams.cfn['ApplicationId'] = obj.data.ApplicationId;
+        reqParams.cfn['ConfigurationProfileId'] = obj.data.ConfigurationProfileId;
+        reqParams.cfn['Content'] = obj.data.Content;
+        reqParams.cfn['ContentType'] = obj.data.ContentType;
+        reqParams.cfn['Description'] = obj.data.Description;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appconfig', obj.id, 'AWS::AppConfig::HostedConfigurationVersion'),
+            'region': obj.region,
+            'service': 'appconfig',
+            'type': 'AWS::AppConfig::HostedConfigurationVersion',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.VersionNumber
             }
         });
     } else {

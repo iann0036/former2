@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**548/548 (100%)** Resources Covered
+**551/551 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -34,6 +34,7 @@
 | *AWS::ApiGateway::UsagePlanKey* | :thumbsup: |
 | *AWS::ApiGateway::VpcLink* | :thumbsup: |
 | *AWS::ApiGatewayV2::Api* | :thumbsup: |
+| *AWS::ApiGatewayV2::ApiGatewayManagedOverrides* | N/A |
 | *AWS::ApiGatewayV2::ApiMapping* | :thumbsup: |
 | *AWS::ApiGatewayV2::Authorizer* | :thumbsup: |
 | *AWS::ApiGatewayV2::Deployment* | :thumbsup: |
@@ -50,9 +51,11 @@
 | *AWS::AppConfig::Deployment* | :thumbsup: |
 | *AWS::AppConfig::DeploymentStrategy* | :thumbsup: |
 | *AWS::AppConfig::Environment* | :thumbsup: |
-| *AWS::AppConfig::HostedConfigurationVersion* |  |
+| *AWS::AppConfig::HostedConfigurationVersion* | :thumbsup: |
+| *AWS::AppMesh::GatewayRoute* | :thumbsup: |
 | *AWS::AppMesh::Mesh* | :thumbsup: |
 | *AWS::AppMesh::Route* | :thumbsup: |
+| *AWS::AppMesh::VirtualGateway* | :thumbsup: |
 | *AWS::AppMesh::VirtualNode* | :thumbsup: |
 | *AWS::AppMesh::VirtualRouter* | :thumbsup: |
 | *AWS::AppMesh::VirtualService* | :thumbsup: |
@@ -555,7 +558,7 @@
 
 ## Terraform Coverage
 
-**309/576 (53%)** Resources Covered
+**309/577 (53%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -753,6 +756,7 @@
 | *aws_ec2_client_vpn_authorization_rule* |  |
 | *aws_ec2_client_vpn_endpoint* |  |
 | *aws_ec2_client_vpn_network_association* |  |
+| *aws_ec2_client_vpn_route* |  |
 | *aws_ec2_fleet* |  |
 | *aws_ec2_local_gateway_route* |  |
 | *aws_ec2_local_gateway_route_table_vpc_association* |  |

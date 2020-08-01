@@ -4516,37 +4516,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::EC2::NetworkInterfacePermission',
             'options': reqParams
         });
-    } else if (obj.type == "ec2.flowlog") {
-        reqParams.cfn['DeliverLogsPermissionArn'] = obj.data.DeliverLogsPermissionArn;
-        reqParams.tf['iam_role_arn'] = obj.data.DeliverLogsPermissionArn;
-        reqParams.cfn['LogGroupName'] = obj.data.LogGroupName;
-        reqParams.cfn['ResourceId'] = obj.data.ResourceId;
-        reqParams.cfn['TrafficType'] = obj.data.TrafficType;
-        reqParams.tf['traffic_type'] = obj.data.TrafficType;
-        reqParams.cfn['LogDestinationType'] = obj.data.LogDestinationType;
-        reqParams.tf['log_destination_type'] = obj.data.LogDestinationType;
-        reqParams.cfn['LogDestination'] = obj.data.LogDestination;
-        reqParams.tf['log_destination'] = obj.data.LogDestination;
-        if (obj.data.ResourceId.startsWith("vpc-")) {
-            reqParams.cfn['ResourceType'] = "VPC";
-            reqParams.tf['vpc_id'] = obj.data.ResourceId;
-        } else if (obj.data.ResourceId.startsWith("subnet-")) {
-            reqParams.cfn['ResourceType'] = "Subnet";
-            reqParams.tf['subnet_id'] = obj.data.ResourceId;
-        } else if (obj.data.ResourceId.startsWith("eni-")) {
-            reqParams.cfn['ResourceType'] = "NetworkInterface";
-            reqParams.tf['eni_id'] = obj.data.ResourceId;
-        }
-
-        tracked_resources.push({
-            'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::FlowLog'),
-            'region': obj.region,
-            'service': 'ec2',
-            'type': 'AWS::EC2::FlowLog',
-            'terraformType': 'aws_flow_log',
-            'options': reqParams
-        });
     } else if (obj.type == "ec2.subnetnetworkaclassociation") {
         reqParams.cfn['SubnetId'] = obj.data.SubnetId;
         reqParams.cfn['NetworkAclId'] = obj.data.NetworkAclId;

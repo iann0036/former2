@@ -398,7 +398,7 @@ async function updateDatatableMobileAppSync() {
                             apiId: graphqlApi.apiId,
                             name: dataSource.name
                         }, true).then((data) => {
-                            data['apiId'] = graphqlApi.apiId;
+                            data.dataSource['apiId'] = graphqlApi.apiId;
                             $('#section-mobile-appsync-datasources-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.dataSource.dataSourceArn,
                                 f2type: 'appsync.datasource',
@@ -419,7 +419,7 @@ async function updateDatatableMobileAppSync() {
                             apiId: graphqlApi.apiId,
                             functionId: appSyncFunction.functionId
                         }, true).then((data) => {
-                            data['apiId'] = graphqlApi.apiId;
+                            data.functionConfiguration['apiId'] = graphqlApi.apiId;
                             $('#section-mobile-appsync-functionconfigurations-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.functionConfiguration.functionArn,
                                 f2type: 'appsync.functionconfiguration',

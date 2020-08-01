@@ -56,7 +56,13 @@ async function updateDatatableMachineLearningCodeGuru() {
     }, true).then(async (data) => {
         $('#section-machinelearning-codeguru-profilinggroups-datatable').deferredBootstrapTable('removeAll');
 
-        data.profilingGroups.forEach(group => {
+        await Promise.all(data.profilingGroups.map(async (group) => {
+            await sdkcall("CodeGuruProfiler", "getNotificationConfiguration", {
+                profilingGroupName: group.name
+            }, true).then(async (data) => {
+                group['notificationConfiguration'] = data.notificationConfiguration;
+            }).catch(() => { });
+
             $('#section-machinelearning-codeguru-profilinggroups-datatable').deferredBootstrapTable('append', [{
                 f2id: group.arn,
                 f2type: 'codeguru.profilinggroup',
@@ -65,7 +71,9 @@ async function updateDatatableMachineLearningCodeGuru() {
                 name: group.name,
                 creationtime: group.createdAt
             }]);
-        });
+
+            return Promise.resolve();
+        }));
     }).catch(() => { });
 
     unblockUI('#section-machinelearning-codeguru-profilinggroups-datatable');
@@ -75,6 +83,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "codeguru.profilinggroup") {
         reqParams.cfn['ProfilingGroupName'] = obj.data.name;
         reqParams.cfn['ComputePlatform'] = obj.data.computePlatform;
+        if (obj.data.notificationConfiguration) {
+            var channels = [];
+            obj.data.notificationConfiguration.channels.forEach(channel => {
+                channels.push({
+                    'channelId': channel.id,
+                    'channelUri': channel.uri
+                });
+            });
+            reqParams.cfn['AnomalyDetectionNotificationConfiguration'] = channels;
+        }
         
         /*
         TODO:
