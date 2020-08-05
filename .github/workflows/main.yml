@@ -1,0 +1,31 @@
+name: Publish former2.com
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    name: Publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS creds
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.FORMER2_AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.FORMER2_AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Copy files to origin S3 bucket
+      run: |
+        aws s3 cp --cache-control max-age=300 --recursive . s3://former2.com/ --exclude ".git/*" --exclude "cli/*" --exclude ".*" --exclude "notes.txt" --exclude "*.md" --exclude "DOCKERFILE" --exclude "LICENSE" --exclude "*.yml" --exclude ".gitignore" --exclude "util/*" --exclude "lib/*"
+
+    - name: Publish NPM package
+      run: |
+        cd cli && npm update aws-sdk && npm publish
+      env:
+        NPM_AUTH_TOKEN: ${{ secrets.FORMER2_NPM_AUTH_TOKEN }}
