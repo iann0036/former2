@@ -203,6 +203,11 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['MetricsConfigurations'] = data;
+                }).catch(() => { }),
+                sdkcall("S3", "getObjectLockConfiguration", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['ObjectLockConfiguration'] = data.ObjectLockConfiguration;
                 }).catch(() => { })
             ]).then(async () => {
                 $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('append', [{
@@ -576,6 +581,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
 
         /*
         TODO:
