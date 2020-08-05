@@ -26,4 +26,4 @@ jobs:
 
     - name: Publish NPM package
       run: |
-        cd cli && npm update aws-sdk && npm version patch && echo "//registry.npmjs.org/:_authToken=${{ secrets.FORMER2_NPM_AUTH_TOKEN }}" > ~/.npmrc && npm publish
+        cd cli && npm update aws-sdk && echo "//registry.npmjs.org/:_authToken=${{ secrets.FORMER2_NPM_AUTH_TOKEN }}" > ~/.npmrc && npm publish
