@@ -29,3 +29,4 @@ jobs:
         cd cli && npm update aws-sdk && npm version patch && npm publish
       env:
         NPM_TOKEN: ${{ secrets.FORMER2_NPM_AUTH_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
