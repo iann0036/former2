@@ -564,7 +564,7 @@ $(document).ready(function(){
     });
 
     $('#search-form').on('submit', function () {
-        $('#section-search-datatable').deferredBootstrapTable('setActive');
+        $('#section-search-datatable').deferredBootstrapTable('setActive', true);
 
         $('#section-search-datatable').deferredBootstrapTable('removeAll');
 
