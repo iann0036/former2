@@ -435,8 +435,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['availability_zone'] = obj.data.PreferredAvailabilityZone;
         reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
         reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
-        reqParams.cfn['NotificationTopicArn'] = obj.data.NotificationConfiguration.TopicArn;
-        reqParams.tf['notification_topic_arn'] = obj.data.NotificationConfiguration.TopicArn;
+        if (obj.data.NotificationConfiguration) {
+            reqParams.cfn['NotificationTopicArn'] = obj.data.NotificationConfiguration.TopicArn;
+            reqParams.tf['notification_topic_arn'] = obj.data.NotificationConfiguration.TopicArn;
+        }
         if (obj.data.CacheSecurityGroups) {
             reqParams.cfn['CacheSecurityGroupNames'] = [];
             reqParams.tf['security_group_names'] = [];
@@ -449,8 +451,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['parameter_group_name'] = obj.data.CacheParameterGroup.CacheParameterGroupName;
         reqParams.cfn['CacheSubnetGroupName'] = obj.data.CacheSubnetGroupName;
         reqParams.tf['subnet_group_name'] = obj.data.CacheSubnetGroupName;
-        reqParams.cfn['Port'] = obj.data.CacheNodes[0].Endpoint.Port;
-        reqParams.tf['port'] = obj.data.CacheNodes[0].Endpoint.Port;
+        if (obj.data.CacheNodes && obj.data.CacheNodes[0] && obj.data.CacheNodes[0].Endpoint) {
+            reqParams.cfn['Port'] = obj.data.CacheNodes[0].Endpoint.Port;
+            reqParams.tf['port'] = obj.data.CacheNodes[0].Endpoint.Port;
+        }
         reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
         if (obj.data.SecurityGroups) {
             reqParams.cfn['VpcSecurityGroupIds'] = [];
