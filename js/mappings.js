@@ -3813,6 +3813,10 @@ async function generateDiagram() {
     iframe.contentWindow.postMessage(message, '*');    
 }
 
+function f2debug(arg) {
+    // for overridding only
+}
+
 function clearDiagram() {
     var xml = `<?xml version="1.0" encoding="UTF-8"?>
 <mxfile modified="${new Date().toISOString()}" agent="Former2/1.0" etag="rS7_16A_GMVNg1aOA2n0" version="13.1.9">
@@ -4052,6 +4056,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
 
     for (var i = 0; i < tracked_resources.length; i++) {
         if (tracked_resources[i].type) {
+            f2debug(tracked_resources[i].type);
             compiled['cfn'] += outputMapCfn(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, cfn_deletion_policy, tracked_resources);
             if (['typescript', 'python', 'java', 'dotnet'].includes(iaclangselect)) {
                 compiled['cdk'] += outputMapCdk(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
@@ -4059,6 +4064,7 @@ ${cfnspacing}${cfnspacing}  - "`)}"
             compiled['troposphere'] += outputMapTroposphere(i, tracked_resources[i].service, tracked_resources[i].type, tracked_resources[i].options.cfn, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
         }
         if (tracked_resources[i].terraformType) {
+            f2debug(tracked_resources[i].terraformType);
             compiled['tf'] += outputMapTf(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);
             if (['typescript'].includes(iaclangselect)) {
                 compiled['pulumi'] += outputMapPulumi(i, tracked_resources[i].service, tracked_resources[i].terraformType, tracked_resources[i].options.tf, tracked_resources[i].region, tracked_resources[i].was_blocked, tracked_resources[i].logicalId, tracked_resources);

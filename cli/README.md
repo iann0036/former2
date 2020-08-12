@@ -26,8 +26,123 @@ former2 generate \
   --output-terraform "terraform.hcl" \
   --output-debug "debug.json" \
   --search-filter "myapp" \
+  --exclude-services "CloudWatch,KMS" \
   --sort-outputs
 ```
+
+#### Service Names
+
+Below is a list of services for use with the `--exclude-services` argument:
+
+<details><summary>Expand</summary>
+* Amplify
+* APIGateway
+* AppConfig
+* AppMesh
+* AppStream
+* AppSync
+* Athena
+* AutoScaling
+* Backup
+* Batch
+* Budgets
+* CertificateManager
+* Cloud9
+* CloudFront
+* CloudHSM
+* CloudMap
+* CloudTrail
+* CloudWatch
+* CodeBuild
+* CodeCommit
+* CodeDeploy
+* CodeGuru
+* CodePipeline
+* CodeStar
+* Cognito
+* Config
+* CostExplorer
+* DataPipeline
+* DataSync
+* Detective
+* DeviceFarm
+* DirectConnect
+* DirectoryService
+* DatabaseMigrationService
+* DocumentDB
+* DynamoDB
+* EC2
+* EC2ImageBuilder
+* ECR
+* ECS
+* EFS
+* EKS
+* ElastiCache
+* ElasticBeanstalk
+* Elasticsearch
+* ElasticTranscoder
+* EMR
+* EventBridge
+* FSx
+* GameLift
+* Glacier
+* GlobalAccelerator
+* Glue
+* Greengrass
+* GroundStation
+* GuardDuty
+* IAM
+* Inspector
+* 1Click
+* Analytics
+* Core
+* Events
+* ThingsGraph
+* Kinesis
+* KMS
+* LakeFormation
+* Lambda
+* LicenseManager
+* Lightsail
+* Macie
+* ManagedBlockchain
+* MediaConvert
+* MediaLive
+* MediaPackage
+* MediaStore
+* MSK
+* Neptune
+* OpsWorks
+* Organizations
+* Pinpoint
+* QLDB
+* QuickSight
+* ResourceAccessManager
+* RDS
+* Redshift
+* ResourceGroups
+* RoboMaker
+* Route53
+* S3
+* SageMaker
+* SecretsManager
+* SecurityHub
+* ServiceCatalog
+* ServiceQuotas
+* SES
+* SNS
+* SQS
+* StepFunctions
+* StorageGateway
+* SWF
+* SystemsManager
+* Transfer
+* VPC
+* WAFAndShield
+* WorkLink
+* WorkSpaces
+* XRay
+</details>
 
 ## Security
 

@@ -62,6 +62,7 @@ async function main(opts) {
     if (opts.debug) {
         f2log = function(msg){ console.log(msg); };
         f2trace = function(err){ console.trace(err); };
+        f2debug = function(msg){ console.log(Date.now().toString() + ": " + msg); };
     }
 
     if (opts.profile) {
@@ -72,6 +73,23 @@ async function main(opts) {
         AWS.config.update({region: opts.region});
         region = opts.region;
     }
+
+    if (opts.excludeServices) {
+        var excludeServices = opts.excludeServices.split(",").map(x => x.toLowerCase());
+        for (var i in sections) {
+            if (excludeServices.includes(nav(sections[i].service).toLowerCase())) {
+                delete sections[i];
+            }
+        }
+        sections = sections.filter(val => val); // reindex
+    }
+
+    outputMapCdk = function(){};
+    outputMapTroposphere = function(){};
+    outputMapPulumi = function(){};
+    outputMapCdktf = function(){};
+    if (!opts.outputCloudformation) { outputMapCfn = function(){}; }
+    if (!opts.outputTerraform) { outputMapTf = function(){}; }
 
     const b1 = new cliprogress.SingleBar({
         format: _colors.cyan('{bar}') + '  {percentage}% ({value}/{total} services completed)',
@@ -172,6 +190,7 @@ cliargs
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
+    .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
