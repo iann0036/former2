@@ -35,6 +35,7 @@ former2 generate \
 Below is a list of services for use with the `--exclude-services` argument:
 
 <details><summary>Expand</summary>
+
 * Amplify
 * APIGateway
 * AppConfig
