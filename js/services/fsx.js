@@ -130,6 +130,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'PerUnitStorageThroughput': obj.data.LustreConfiguration.PerUnitStorageThroughput,
                 'DailyAutomaticBackupStartTime': obj.data.LustreConfiguration.DailyAutomaticBackupStartTime,
                 'CopyTagsToBackups': obj.data.LustreConfiguration.CopyTagsToBackups,
+                'DriveCacheType': obj.data.LustreConfiguration.DriveCacheType,
                 'AutomaticBackupRetentionDays': obj.data.LustreConfiguration.AutomaticBackupRetentionDays
             };
         }

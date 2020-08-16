@@ -162,6 +162,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['CognitoOptions'] = obj.data.CognitoOptions;
         reqParams.cfn['LogPublishingOptions'] = obj.data.LogPublishingOptions;
+        reqParams.cfn['DomainEndpointOptions'] = obj.data.DomainEndpointOptions;
+        reqParams.cfn['AdvancedSecurityOptions'] = obj.data.AdvancedSecurityOptions;
 
         /*
         TODO:

@@ -485,6 +485,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Application Insights Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource Group Name',
+                        field: 'resourcegroupname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -501,6 +527,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -717,12 +744,33 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     }).catch(() => { });
 
+    await sdkcall("ApplicationInsights", "listApplications", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ApplicationInfoList.map(async (app) => {
+            return sdkcall("ApplicationInsights", "describeApplication", {
+                ResourceGroupName: app.ResourceGroupName
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ApplicationInfo.Name + " Application Insight",
+                    f2type: 'applicationinsights.application',
+                    f2data: data.ApplicationInfo,
+                    f2region: region,
+                    resourcegroupname: data.ApplicationInfo.ResourceGroupName
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1043,6 +1091,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Id': obj.data.Id
                 }
             }
+        });
+    } else if (obj.type == "applicationinsights.application") {
+        reqParams.cfn['ResourceGroupName'] = obj.data.ResourceGroupName;
+        reqParams.cfn['OpsItemSNSTopicArn'] = obj.data.OpsItemSNSTopicArn;
+        reqParams.cfn['OpsCenterEnabled'] = obj.data.OpsCenterEnabled;
+        reqParams.cfn['CWEMonitorEnabled'] = obj.data.CWEMonitorEnabled;
+
+        /*
+        SKIPPED:
+        AutoConfigurationEnabled: Boolean
+        ComponentMonitoringSettings: 
+            - ComponentMonitoringSetting
+        CustomComponents: 
+            - CustomComponent
+        LogPatternSets: 
+            - LogPatternSet
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('applicationinsights', obj.id, 'AWS::ApplicationInsights::Application'),
+            'region': obj.region,
+            'service': 'applicationinsights',
+            'type': 'AWS::ApplicationInsights::Application',
+            'options': reqParams
         });
     } else {
         return false;

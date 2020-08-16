@@ -2450,6 +2450,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Carrier Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2508,6 +2546,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
 
     await sdkcall("EC2", "describeVpcs", {
         // no params
@@ -3576,6 +3615,23 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeCarrierGateways", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-carriergateways-datatable').deferredBootstrapTable('removeAll');
+
+        data.CarrierGateways.forEach(carrierGateway => {
+            $('#section-networkingandcontentdelivery-vpc-carriergateways-datatable').deferredBootstrapTable('append', [{
+                f2id: carrierGateway.CarrierGatewayId,
+                f2type: 'ec2.carriergateway',
+                f2data: carrierGateway,
+                f2region: region,
+                id: carrierGateway.CarrierGatewayId,
+                vpcid: carrierGateway.VpcId
+            }]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -3590,6 +3646,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -4990,6 +5047,25 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'PrefixListId': obj.data.PrefixListId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.carriergateway") {
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::CarrierGateway'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::CarrierGateway',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.CarrierGatewayId,
+                'GetAtt': {
+                    'OwnerId': obj.data.OwnerId,
+                    'State': obj.data.State
                 }
             }
         });

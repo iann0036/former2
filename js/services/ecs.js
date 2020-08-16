@@ -997,6 +997,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         });
                     });
                 }
+                var environmentFiles = null;
+                if (containerDefinition.environmentFiles) {
+                    systemControls = [];
+                    containerDefinition.environmentFiles.forEach(environmentFile => {
+                        environmentFiles.push({
+                            'Type': environmentFile.type,
+                            'Value': environmentFile.value
+                        });
+                    });
+                }
                 reqParams.cfn['ContainerDefinitions'].push({
                     'Command': containerDefinition.command,
                     'Cpu': (containerDefinition.cpu == 0) ? null : containerDefinition.cpu,
@@ -1007,6 +1017,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'DockerSecurityOptions': containerDefinition.dockerSecurityOptions,
                     'EntryPoint': containerDefinition.entryPoint,
                     'Environment': environment,
+                    'EnvironmentFiles': environmentFiles,
                     'Essential': containerDefinition.essential,
                     'ExtraHosts': extraHosts,
                     'FirelensConfiguration': firelensConfiguration,

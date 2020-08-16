@@ -275,6 +275,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['Certificate'] = obj.data.Certificate;
         reqParams.cfn['Protocols'] = obj.data.Protocols;
+        reqParams.cfn['SecurityPolicy'] = obj.data.SecurityPolicyName;
 
         tracked_resources.push({
             'obj': obj,

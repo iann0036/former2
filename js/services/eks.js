@@ -231,6 +231,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Labels'] = obj.data.labels;
         reqParams.cfn['DiskSize'] = obj.data.diskSize;
         reqParams.cfn['Tags'] = obj.data.tags;
+        if (obj.data.launchTemplate) {
+            reqParams.cfn['LaunchTemplate'] = {
+                'Id': obj.data.launchTemplate.id,
+                'Name': obj.data.launchTemplate.name,
+                'Version': obj.data.launchTemplate.version
+            };
+        }
 
         /*
         TODO:

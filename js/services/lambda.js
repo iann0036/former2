@@ -835,6 +835,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MaximumRecordAgeInSeconds'] = obj.data.MaximumRecordAgeInSeconds;
         reqParams.cfn['BisectBatchOnFunctionError'] = obj.data.BisectBatchOnFunctionError;
         reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
+        reqParams.cfn['Topics'] = obj.data.Topics;
 
         /*
         TODO:

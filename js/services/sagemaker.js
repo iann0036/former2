@@ -433,6 +433,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Monitoring Schedules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'arn',
+                        title: 'ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -447,6 +485,7 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-machinelearning-sagemaker-coderepositories-datatable');
     blockUI('#section-machinelearning-sagemaker-workteams-datatable');
+    blockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
 
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
@@ -666,6 +705,29 @@ async function updateDatatableMachineLearningSageMaker() {
 
         unblockUI('#section-machinelearning-sagemaker-workteams-datatable');
     }).catch(() => { });
+
+    await sdkcall("SageMaker", "listMonitoringSchedules", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-monitoringschedules-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.MonitoringScheduleSummaries.map(async (monitoringSchedule) => {
+            return sdkcall("SageMaker", "describeMonitoringSchedule", {
+                MonitoringScheduleName: monitoringSchedule.MonitoringScheduleName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-monitoringschedules-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.MonitoringScheduleArn,
+                    f2type: 'sagemaker.monitoringschedule',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Workteam.MonitoringScheduleName,
+                    arn: data.MonitoringScheduleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -840,6 +902,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Workteam',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.monitoringschedule") {
+        reqParams.cfn['MonitoringScheduleName'] = obj.data.MonitoringScheduleName;
+        reqParams.cfn['MonitoringScheduleConfig'] = obj.data.MonitoringScheduleConfig;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::MonitoringSchedule'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::MonitoringSchedule',
             'options': reqParams
         });
     } else {
