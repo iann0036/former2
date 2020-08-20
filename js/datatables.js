@@ -231,7 +231,7 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 
         service[method].call(service, params, async function (err, data) {
             if (err) {
-                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError") {
+                if (err.code == "TooManyRequestsException" || err.message == "Too Many Requests" || err.code == "ThrottlingException" || err.message == "Rate exceeded" || err.code == "TimeoutError" || err.code == "RequestLimitExceeded") {
                     if (backoff) {
                         f2log("Too many requests for " + svc + "." + method + ", sleeping for " + backoff + "ms");
                         await new Promise(resolve => setTimeout(resolve, backoff));
