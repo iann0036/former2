@@ -339,16 +339,20 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-route53-records-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.HostedZones.map(hostedZone => {
-            $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
-                f2id: hostedZone.Id.split("/").pop(),
-                f2type: 'route53.hostedzone',
-                f2data: hostedZone,
-                f2region: region,
-                hostedzoneid: hostedZone.Id.split("/").pop(),
-                domainname: hostedZone.Name,
-                recordscount: hostedZone.ResourceRecordSetCount
-            }]);
+        await Promise.all(data.HostedZones.map(async (hostedZone) => {
+            await sdkcall("Route53", "getHostedZone", {
+                Id: hostedZone.Id.split("/").pop()
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.HostedZone.Id.split("/").pop(),
+                    f2type: 'route53.hostedzone',
+                    f2data: data,
+                    f2region: region,
+                    hostedzoneid: data.HostedZone.Id.split("/").pop(),
+                    domainname: data.HostedZone.Name,
+                    recordscount: data.HostedZone.ResourceRecordSetCount
+                }]);
+            });
 
             return sdkcall("Route53", "listResourceRecordSets", {
                 HostedZoneId: hostedZone.Id.split("/").pop()
@@ -558,14 +562,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         });
     } else if (obj.type == "route53.hostedzone") {
-        reqParams.cfn['Name'] = obj.data.Name;
-        reqParams.tf['name'] = obj.data.Name;
-        if (obj.data.Config && obj.data.Config.Comment) {
+        reqParams.cfn['Name'] = obj.data.HostedZone.Name;
+        reqParams.tf['name'] = obj.data.HostedZone.Name;
+        if (obj.data.Config && obj.data.HostedZone.Config.Comment) {
             reqParams.cfn['HostedZoneConfig'] = {
-                'Comment': obj.data.Config.Comment
+                'Comment': obj.data.HostedZone.Config.Comment
             };
-            reqParams.tf['comment'] = obj.data.Config.Comment;
+            reqParams.tf['comment'] = obj.data.HostedZone.Config.Comment;
         }
+        reqParams.cfn['VPCs'] = obj.data.VPCs;
 
         /*
         TODO:
@@ -573,8 +578,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             - HostedZoneTags
         QueryLoggingConfig: 
             QueryLoggingConfig
-        VPCs:
-            - HostedZoneVPCs 
         */
 
         tracked_resources.push({
