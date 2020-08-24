@@ -344,11 +344,11 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 Id: hostedZone.Id.split("/").pop()
             }, true).then((data) => {
                 $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.HostedZone.Id.split("/").pop(),
+                    f2id: hostedZone.Id.split("/").pop(),
                     f2type: 'route53.hostedzone',
                     f2data: data,
                     f2region: region,
-                    hostedzoneid: data.HostedZone.Id.split("/").pop(),
+                    hostedzoneid: hostedZone.Id.split("/").pop(),
                     domainname: data.HostedZone.Name,
                     recordscount: data.HostedZone.ResourceRecordSetCount
                 }]);
@@ -589,9 +589,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_route53_zone',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.Id.split("/").pop(),
+                'Ref': obj.data.HostedZone.Id.split("/").pop(),
                 'Import': {
-                    'HostedZoneId': obj.data.Id.split("/").pop()
+                    'HostedZoneId': obj.data.HostedZone.Id.split("/").pop()
                 }
                 /*
                 TODO:
