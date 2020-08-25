@@ -2703,14 +2703,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     ipPermissionsEgress.UserIdGroupPairs.forEach(userIdGroupPair => {
                         reqParams.cfn['SecurityGroupEgress'].push({
                             'DestinationSecurityGroupId': userIdGroupPair.GroupId,
-                            'Description': ipv6Range.Description,
+                            'Description': userIdGroupPair.Description,
                             'FromPort': ipPermissionsEgress.FromPort,
                             'IpProtocol': ipPermissionsEgress.IpProtocol,
                             'ToPort': ipPermissionsEgress.ToPort
                         });
                         reqParams.tf['egress'].push({
                             'security_groups': [userIdGroupPair.GroupId],
-                            'description': ipv6Range.Description,
+                            'description': userIdGroupPair.Description,
                             'from_port': ipPermissionsEgress.FromPort,
                             'protocol': ipPermissionsEgress.IpProtocol,
                             'to_port': ipPermissionsEgress.ToPort

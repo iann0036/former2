@@ -983,8 +983,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 var firelensConfiguration = null;
                 if (containerDefinition.firelensConfiguration) {
                     firelensConfiguration = {
-                        'Type': obj.data.firelensConfiguration.type,
-                        'Options': obj.data.firelensConfiguration.options
+                        'Type': containerDefinition.firelensConfiguration.type,
+                        'Options': containerDefinition.firelensConfiguration.options
                     };
                 }
                 var systemControls = null;
