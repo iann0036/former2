@@ -534,24 +534,41 @@ async function updateDatatableManagementAndGovernanceSystemsManager() {
         $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Associations.map(association => {
-            return sdkcall("SSM", "describeAssociation", {
-                Name: association.Name,
-                //InstanceId: association.InstanceId,
-                AssociationId: association.AssociationId,
-                AssociationVersion: association.AssociationVersion
-            }, true).then((data) => {
-                $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.AssociationDescription.Name,
-                    f2type: 'ssm.association',
-                    f2data: data.AssociationDescription,
-                    f2region: region,
-                    name: data.AssociationDescription.Name,
-                    instanceid: data.AssociationDescription.InstanceId,
-                    associationversion: data.AssociationDescription.AssociationVersion,
-                    associationname: data.AssociationDescription.AssociationName,
-                    associationid: data.AssociationDescription.AssociationId
-                }]);
-            });
+            if (association.AssociationId) {
+                return sdkcall("SSM", "describeAssociation", {
+                    AssociationId: association.AssociationId,
+                    AssociationVersion: association.AssociationVersion
+                }, true).then((data) => {
+                    $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.AssociationDescription.Name,
+                        f2type: 'ssm.association',
+                        f2data: data.AssociationDescription,
+                        f2region: region,
+                        name: data.AssociationDescription.Name,
+                        instanceid: data.AssociationDescription.InstanceId,
+                        associationversion: data.AssociationDescription.AssociationVersion,
+                        associationname: data.AssociationDescription.AssociationName,
+                        associationid: data.AssociationDescription.AssociationId
+                    }]);
+                });
+            } else {
+                return sdkcall("SSM", "describeAssociation", {
+                    Name: association.Name,
+                    AssociationVersion: association.AssociationVersion
+                }, true).then((data) => {
+                    $('#section-managementandgovernance-systemsmanager-associations-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.AssociationDescription.Name,
+                        f2type: 'ssm.association',
+                        f2data: data.AssociationDescription,
+                        f2region: region,
+                        name: data.AssociationDescription.Name,
+                        instanceid: data.AssociationDescription.InstanceId,
+                        associationversion: data.AssociationDescription.AssociationVersion,
+                        associationname: data.AssociationDescription.AssociationName,
+                        associationid: data.AssociationDescription.AssociationId
+                    }]);
+                });
+            }
         }));
 
         unblockUI('#section-managementandgovernance-systemsmanager-associations-datatable');
@@ -777,8 +794,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ssm.association") {
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.tf['name'] = obj.data.Name;
-        reqParams.cfn['InstanceId'] = obj.data.InstanceId;
-        reqParams.tf['instance_id'] = obj.data.InstanceId;
         reqParams.cfn['DocumentVersion'] = obj.data.DocumentVersion;
         reqParams.tf['document_version'] = obj.data.DocumentVersion;
         reqParams.cfn['Parameters'] = obj.data.Parameters;
