@@ -27,7 +27,7 @@ former2 generate \
   --output-debug "debug.json" \
   --search-filter "myapp" \
   --exclude-services "CloudWatch,KMS" \
-  --sort-outputs
+  --sort-output
 ```
 
 #### Service Names
