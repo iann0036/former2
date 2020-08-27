@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var AWS = require("aws-sdk");
+var proxy = require('proxy-agent');
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
@@ -72,6 +73,10 @@ async function main(opts) {
     if (opts.region) {
         AWS.config.update({region: opts.region});
         region = opts.region;
+    }
+
+    if (opts.proxy) {
+        AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
     }
 
     if (opts.excludeServices) {
@@ -194,6 +199,7 @@ cliargs
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
+    .option('--proxy <protocol://host:port>', 'use proxy')
     .option('--debug', 'log debugging messages')
     .action(async (opts) => {
         // The followings are here to silence Node runtime complaining about event emitter listeners
