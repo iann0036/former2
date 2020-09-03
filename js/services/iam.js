@@ -546,10 +546,11 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                         }, true).then((groups) => {
                             user['Groups'] = groups.Groups.map(group => group.GroupName);
                         }),
-                        sdkcall("IAM", "listUserTags", {
+                        sdkcall("IAM", "getUser", {
                             UserName: user.UserName
-                        }, true).then((tags) => {
-                            user['Tags'] = tags.Tags;
+                        }, true).then((res) => {
+                            user['PermissionsBoundary'] = res.User.PermissionsBoundary;
+                            user['Tags'] = res.User.Tags;
                         })
                     ]);
 
@@ -614,11 +615,12 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('removeAll');
             
             await Promise.all(data.Roles.map(async (role) => {
-                await sdkcall("IAM", "listRoleTags", {
+                await sdkcall("IAM", "getRole", {
                     RoleName: role.RoleName
-                }, true).then((tags) => {
-                    role['Tags'] = tags.Tags;
-                })
+                }, true).then((res) => {
+                    role['PermissionsBoundary'] = res.Role.PermissionsBoundary;
+                    role['Tags'] = res.Role.Tags;
+                });
 
                 if (role.Path.startsWith("/aws-service-role/")) {
                     $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
