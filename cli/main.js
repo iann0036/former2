@@ -79,6 +79,17 @@ async function main(opts) {
         AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
     }
 
+    if (opts.services) {
+        var services = opts.services.split(",").map(x => x.toLowerCase());
+        var newSections = []
+        for (var i in sections) {
+            if (services.includes(nav(sections[i].service).toLowerCase())) {
+                newSections.push(sections[i])
+            }
+        }
+        sections = newSections;
+    }
+
     if (opts.excludeServices) {
         var excludeServices = opts.excludeServices.split(",").map(x => x.toLowerCase());
         for (var i in sections) {
@@ -195,6 +206,7 @@ cliargs
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-debug <filename>', 'filename for debug output (full)')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
+    .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
