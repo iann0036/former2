@@ -32,7 +32,7 @@ former2 generate \
 
 #### Service Names
 
-Below is a list of services for use with the `--exclude-services` argument:
+Below is a list of services for use with the `--services` and `--exclude-services` argument:
 
 <details><summary>Expand</summary>
 
