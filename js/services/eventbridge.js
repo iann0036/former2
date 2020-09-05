@@ -559,8 +559,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['role_arn'] = obj.data.RoleArn;
                 if (target.InputTransformer) {
                     reqParams.tf['input_transformer'] = {
-                        'input_paths': obj.data.InputTransformer.InputPathsMap,
-                        'input_template': obj.data.InputTransformer.InputTemplate
+                        'input_paths': target.InputTransformer.InputPathsMap,
+                        'input_template': target.InputTransformer.InputTemplate
                     };
                 }
                 if (target.EcsParameters) {

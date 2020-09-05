@@ -321,6 +321,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Resolver Query Logging Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resolver Query Logging Config Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resourceid',
+                        title: 'Resource ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'resolverquerylogconfigid',
+                        title: 'Resolver Query Log Config ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -332,6 +416,8 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverrules-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigs-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable');
 
     await sdkcall("Route53", "listHostedZones", {
         // no params
@@ -483,6 +569,53 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
         unblockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
     });
+
+    await sdkcall("Route53Resolver", "listResolverQueryLogConfigs", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigs-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ResolverQueryLogConfigs.map(async (resolverQueryLogConfig) => {
+            return sdkcall("Route53Resolver", "getResolverQueryLogConfig", {
+                ResolverQueryLogConfigId: resolverQueryLogConfig.Id
+            }, true).then(async (data) => {
+                $('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigs-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ResolverQueryLogConfig.Id,
+                    f2type: 'route53.resolverqueryloggingconfig',
+                    f2data: data.ResolverQueryLogConfig,
+                    f2region: region,
+                    id: data.ResolverQueryLogConfig.Id,
+                    name: data.ResolverQueryLogConfig.Name
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigs-datatable');
+    }).catch(() => { });
+
+    await sdkcall("Route53Resolver", "listResolverQueryLogConfigAssociations", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ResolverQueryLogConfigAssociations.map(async (resolverQueryLogConfigAssociation) => {
+            return sdkcall("Route53Resolver", "getResolverQueryLogConfigAssociation", {
+                ResolverQueryLogConfigAssociationId: resolverQueryLogConfigAssociation.Id
+            }, true).then(async (data) => {
+                $('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ResolverQueryLogConfigAssociation.Id,
+                    f2type: 'route53.resolverqueryloggingconfigassociation',
+                    f2data: data.ResolverQueryLogConfigAssociation,
+                    f2region: region,
+                    id: data.ResolverQueryLogConfigAssociation.Id,
+                    resolverquerylogconfigid: data.ResolverQueryLogConfigAssociation.ResolverQueryLogConfigId,
+                    resourceid: data.ResolverQueryLogConfigAssociation.ResourceId
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -736,6 +869,39 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::Route53Resolver::ResolverRuleAssociation',
             'terraformType': 'aws_route53_resolver_rule_association',
             'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverqueryloggingconfig") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DestinationArn'] = obj.data.DestinationArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverQueryLoggingConfig'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverQueryLoggingConfig',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "route53.resolverqueryloggingconfigassociation") {
+        reqParams.cfn['ResolverQueryLogConfigId'] = obj.data.ResolverQueryLogConfigId;
+        reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
         });
     } else {
         return false;
