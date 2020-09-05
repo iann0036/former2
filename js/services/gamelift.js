@@ -337,6 +337,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Game Server Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -349,6 +388,7 @@ async function updateDatatableGameDevelopmentGameLift() {
     blockUI('#section-gamedevelopment-gamelift-queues-datatable');
     blockUI('#section-gamedevelopment-gamelift-matchmakingconfigurations-datatable');
     blockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
+    blockUI('#section-gamedevelopment-gamelift-gameservergroups-datatable');
 
     await sdkcall("GameLift", "listFleets", {
         // no params
@@ -522,6 +562,29 @@ async function updateDatatableGameDevelopmentGameLift() {
 
         unblockUI('#section-gamedevelopment-gamelift-matchmakingrulesets-datatable');
     }).catch(() => { });
+
+    await sdkcall("GameLift", "listGameServerGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-gamedevelopment-gamelift-gameservergroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.GameServerGroups.map(async (gameServerGroup) => {
+            return sdkcall("GameLift", "describeGameServerGroup", {
+                GameServerGroupName: gameServerGroup.GameServerGroupName
+            }, false).then((data) => {
+                $('#section-gamedevelopment-gamelift-gameservergroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.GameServerGroup.GameServerGroupArn,
+                    f2type: 'gamelift.gameservergroup',
+                    f2data: data.GameServerGroup,
+                    f2region: region,
+                    name: data.GameServerGroup.GameServerGroupName,
+                    rolearn: data.GameServerGroup.RoleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-gamedevelopment-gamelift-gameservergroups-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -664,6 +727,36 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'gamelift',
             'type': 'AWS::GameLift::MatchmakingRuleSet',
+            'options': reqParams
+        });
+    } else if (obj.type == "gamelift.gameservergroup") {
+        reqParams.cfn['GameServerGroupName'] = obj.data.GameServerGroupName;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['InstanceDefinitions'] = obj.data.InstanceDefinitions;
+        reqParams.cfn['BalancingStrategy'] = obj.data.BalancingStrategy;
+        reqParams.cfn['GameServerProtectionPolicy'] = obj.data.GameServerProtectionPolicy;
+
+        /*
+        TODO:
+        AutoScalingPolicy: 
+            AutoScalingPolicy
+        DeleteOption: String
+        LaunchTemplate: 
+            LaunchTemplate
+        MaxSize: Double
+        MinSize: Double
+        Tags: 
+            Tags
+        VpcSubnets: 
+            VpcSubnets
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('gamelift', obj.id, 'AWS::GameLift::GameServerGroup'),
+            'region': obj.region,
+            'service': 'gamelift',
+            'type': 'AWS::GameLift::GameServerGroup',
             'options': reqParams
         });
     } else {

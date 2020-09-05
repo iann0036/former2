@@ -132,9 +132,9 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
 
                         await sdkcall("KMS", "getKeyRotationStatus", {
                             KeyId: key.KeyId
-                        }, true).then((data) => {
+                        }, false).then((data) => {
                             keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
-                        });
+                        }).catch(() => { });
 
                         $('#section-securityidentityandcompliance-kms-keys-datatable').deferredBootstrapTable('append', [{
                             f2id: keydata.KeyMetadata.Arn,

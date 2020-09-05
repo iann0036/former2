@@ -218,6 +218,7 @@ sections.push({
             ]
         },
         'Log Streams': {
+            'limitedresults': true,
             'columns': [
                 [
                     {

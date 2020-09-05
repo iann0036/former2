@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**551/551 (100%)** Resources Covered
+**556/562 (98%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -75,6 +75,7 @@
 | *AWS::AppSync::Resolver* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalableTarget* | :thumbsup: |
 | *AWS::ApplicationAutoScaling::ScalingPolicy* | :thumbsup: |
+| *AWS::ApplicationInsights::Application* | :thumbsup: |
 | *AWS::Athena::DataCatalog* | :thumbsup: |
 | *AWS::Athena::NamedQuery* | :thumbsup: |
 | *AWS::Athena::WorkGroup* | :thumbsup: |
@@ -102,8 +103,11 @@
 | *AWS::CloudFormation::Stack* | N/A |
 | *AWS::CloudFormation::WaitCondition* | N/A |
 | *AWS::CloudFormation::WaitConditionHandle* | N/A |
+| *AWS::CloudFront::CachePolicy* |  |
 | *AWS::CloudFront::CloudFrontOriginAccessIdentity* | :thumbsup: |
 | *AWS::CloudFront::Distribution* | :thumbsup: |
+| *AWS::CloudFront::OriginRequestPolicy* |  |
+| *AWS::CloudFront::RealtimeLogConfig* |  |
 | *AWS::CloudFront::StreamingDistribution* | :thumbsup: |
 | *AWS::CloudTrail::Trail* | :thumbsup: |
 | *AWS::CloudWatch::Alarm* | :thumbsup: |
@@ -119,6 +123,7 @@
 | *AWS::CodeDeploy::DeploymentConfig* | :thumbsup: |
 | *AWS::CodeDeploy::DeploymentGroup* | :thumbsup: |
 | *AWS::CodeGuruProfiler::ProfilingGroup* | :thumbsup: |
+| *AWS::CodeGuruReviewer::RepositoryAssociation* |  |
 | *AWS::CodePipeline::CustomActionType* | :thumbsup: |
 | *AWS::CodePipeline::Pipeline* | :thumbsup: |
 | *AWS::CodePipeline::Webhook* | :thumbsup: |
@@ -167,6 +172,7 @@
 | *AWS::DocDB::DBSubnetGroup* | :thumbsup: |
 | *AWS::DynamoDB::Table* | :thumbsup: |
 | *AWS::EC2::CapacityReservation* | :thumbsup: |
+| *AWS::EC2::CarrierGateway* | :thumbsup: |
 | *AWS::EC2::ClientVpnAuthorizationRule* | :thumbsup: |
 | *AWS::EC2::ClientVpnEndpoint* | :thumbsup: |
 | *AWS::EC2::ClientVpnRoute* | :thumbsup: |
@@ -239,6 +245,7 @@
 | *AWS::EFS::FileSystem* | :thumbsup: |
 | *AWS::EFS::MountTarget* | :thumbsup: |
 | *AWS::EKS::Cluster* | :thumbsup: |
+| *AWS::EKS::FargateProfile* |  |
 | *AWS::EKS::Nodegroup* | :thumbsup: |
 | *AWS::EMR::Cluster* | :thumbsup: |
 | *AWS::EMR::InstanceFleetConfig* | :thumbsup: |
@@ -275,6 +282,7 @@
 | *AWS::GameLift::Alias* | :thumbsup: |
 | *AWS::GameLift::Build* | :thumbsup: |
 | *AWS::GameLift::Fleet* | :thumbsup: |
+| *AWS::GameLift::GameServerGroup* |  |
 | *AWS::GameLift::GameSessionQueue* | :thumbsup: |
 | *AWS::GameLift::MatchmakingConfiguration* | :thumbsup: |
 | *AWS::GameLift::MatchmakingRuleSet* | :thumbsup: |
@@ -469,6 +477,8 @@
 | *AWS::Route53::RecordSet* | :thumbsup: |
 | *AWS::Route53::RecordSetGroup* | N/A |
 | *AWS::Route53Resolver::ResolverEndpoint* | :thumbsup: |
+| *AWS::Route53Resolver::ResolverQueryLoggingConfig* | :thumbsup: |
+| *AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRule* | :thumbsup: |
 | *AWS::Route53Resolver::ResolverRuleAssociation* | :thumbsup: |
 | *AWS::S3::AccessPoint* | :thumbsup: |
@@ -498,6 +508,7 @@
 | *AWS::SageMaker::Endpoint* | :thumbsup: |
 | *AWS::SageMaker::EndpointConfig* | :thumbsup: |
 | *AWS::SageMaker::Model* | :thumbsup: |
+| *AWS::SageMaker::MonitoringSchedule* | :thumbsup: |
 | *AWS::SageMaker::NotebookInstance* | :thumbsup: |
 | *AWS::SageMaker::NotebookInstanceLifecycleConfig* | :thumbsup: |
 | *AWS::SageMaker::Workteam* | :thumbsup: |
@@ -558,7 +569,7 @@
 
 ## Terraform Coverage
 
-**309/577 (53%)** Resources Covered
+**309/589 (52%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -658,6 +669,7 @@
 | *aws_cloudwatch_log_subscription_filter* | :thumbsup: |
 | *aws_cloudwatch_metric_alarm* | :thumbsup: |
 | *aws_codebuild_project* |  |
+| *aws_codebuild_report_group* |  |
 | *aws_codebuild_source_credential* |  |
 | *aws_codebuild_webhook* |  |
 | *aws_codecommit_repository* | :thumbsup: |
@@ -702,6 +714,7 @@
 | *aws_db_instance_role_association* |  |
 | *aws_db_option_group* | :thumbsup: |
 | *aws_db_parameter_group* | :thumbsup: |
+| *aws_db_proxy* |  |
 | *aws_db_security_group* | :thumbsup: |
 | *aws_db_snapshot* |  |
 | *aws_db_subnet_group* | :thumbsup: |
@@ -807,7 +820,9 @@
 | *aws_elb* | :thumbsup: |
 | *aws_elb_attachment* |  |
 | *aws_emr_cluster* |  |
+| *aws_emr_instance_fleet* |  |
 | *aws_emr_instance_group* |  |
+| *aws_emr_managed_scaling_policy* |  |
 | *aws_emr_security_configuration* |  |
 | *aws_flow_log* | :thumbsup: |
 | *aws_fms_admin_account* |  |
@@ -830,13 +845,16 @@
 | *aws_glue_job* |  |
 | *aws_glue_security_configuration* |  |
 | *aws_glue_trigger* |  |
+| *aws_glue_user_defined_function* |  |
 | *aws_glue_workflow* |  |
 | *aws_guardduty_detector* | :thumbsup: |
+| *aws_guardduty_filter* |  |
 | *aws_guardduty_invite_accepter* |  |
 | *aws_guardduty_ipset* | :thumbsup: |
 | *aws_guardduty_member* | :thumbsup: |
 | *aws_guardduty_organization_admin_account* |  |
 | *aws_guardduty_organization_configuration* |  |
+| *aws_guardduty_publishing_destination* |  |
 | *aws_guardduty_threatintelset* | :thumbsup: |
 | *aws_iam_access_key* | :thumbsup: |
 | *aws_iam_account_alias* |  |
@@ -901,6 +919,7 @@
 | *aws_lb_ssl_negotiation_policy* |  |
 | *aws_lb_target_group* | :thumbsup: |
 | *aws_lb_target_group_attachment* |  |
+| *aws_lex_slot_type* |  |
 | *aws_licensemanager_association* | :thumbsup: |
 | *aws_licensemanager_license_configuration* | :thumbsup: |
 | *aws_lightsail_domain* | :thumbsup: |
@@ -998,6 +1017,7 @@
 | *aws_route53_resolver_endpoint* | :thumbsup: |
 | *aws_route53_resolver_rule* | :thumbsup: |
 | *aws_route53_resolver_rule_association* | :thumbsup: |
+| *aws_route53_vpc_association_authorization* |  |
 | *aws_route53_zone* | :thumbsup: |
 | *aws_route53_zone_association* |  |
 | *aws_route_table* | :thumbsup: |
@@ -1023,6 +1043,7 @@
 | *aws_security_group* | :thumbsup: |
 | *aws_security_group_rule* |  |
 | *aws_securityhub_account* | :thumbsup: |
+| *aws_securityhub_action_target* |  |
 | *aws_securityhub_member* |  |
 | *aws_securityhub_product_subscription* |  |
 | *aws_securityhub_standards_subscription* |  |
@@ -1138,4 +1159,6 @@
 | *aws_workspaces_directory* |  |
 | *aws_workspaces_ip_group* |  |
 | *aws_workspaces_workspace* |  |
+| *aws_xray_encryption_config* |  |
+| *aws_xray_group* |  |
 | *aws_xray_sampling_rule* | :thumbsup: |

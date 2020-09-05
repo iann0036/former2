@@ -50,7 +50,8 @@ with open("util/cfnspec.json", "r") as f:
 with open("util/tf_resources.txt", "r") as f:
     lines = f.read().splitlines()
     for line in lines:
-        tf_resources.append(line)
+        if line != "":
+            tf_resources.append(line)
 
 for servicefilename in os.listdir("js/services"):
     with open("js/services/" + servicefilename, "r") as f:

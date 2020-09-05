@@ -167,6 +167,152 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Cache Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'minttl',
+                        title: 'Min TTL',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'maxttl',
+                        title: 'Max TTL',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Origin Request Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Realtime Log Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'samplingrate',
+                        title: 'Sampling Rate',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -175,6 +321,9 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
 
     await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
         // no params
@@ -243,6 +392,79 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
+    });
+
+    await sdkcall("CloudFront", "listCachePolicies", {
+        Type: "custom"
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.CachePolicyList.Items.map(cachePolicy => {
+            return sdkcall("CloudFront", "getCachePolicy", {
+                Id: cachePolicy.CachePolicy.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.CachePolicy.Id,
+                    f2type: 'cloudfront.cachepolicy',
+                    f2data: data.CachePolicy,
+                    f2region: region,
+                    name: data.CachePolicy.CachePolicyConfig.Name,
+                    id: data.CachePolicy.Id,
+                    comment: data.CachePolicy.CachePolicyConfig.Comment,
+                    minttl: data.CachePolicy.CachePolicyConfig.MinTTL,
+                    maxttl: data.CachePolicy.CachePolicyConfig.MaxTTL
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable');
+    });
+
+    await sdkcall("CloudFront", "listOriginRequestPolicies", {
+        Type: "custom"
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.OriginRequestPolicyList.Items.map(originRequestPolicy => {
+            return sdkcall("CloudFront", "getOriginRequestPolicy", {
+                Id: originRequestPolicy.OriginRequestPolicy.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.OriginRequestPolicy.Id,
+                    f2type: 'cloudfront.originrequestpolicy',
+                    f2data: data.OriginRequestPolicy,
+                    f2region: region,
+                    name: data.OriginRequestPolicy.OriginRequestPolicyConfig.Name,
+                    id: data.OriginRequestPolicy.Id,
+                    comment: data.OriginRequestPolicy.OriginRequestPolicyConfig.Comment
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable');
+    });
+
+    await sdkcall("CloudFront", "listRealtimeLogConfigs", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.RealtimeLogConfigs.Items.map(realtimeLogConfig => {
+            return sdkcall("CloudFront", "getRealtimeLogConfig", {
+                ARN: realtimeLogConfig.ARN
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.RealtimeLogConfig.ARN,
+                    f2type: 'cloudfront.realtimelogconfig',
+                    f2data: data.RealtimeLogConfig,
+                    f2region: region,
+                    name: data.RealtimeLogConfig.Name,
+                    samplingrate: data.RealtimeLogConfig.SamplingRate
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
     });
 }
 
@@ -354,6 +576,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
             'MaxTTL': obj.data.DefaultCacheBehavior.MaxTTL,
             'MinTTL': obj.data.DefaultCacheBehavior.MinTTL,
+            'RealtimeLogConfigArn': obj.data.DefaultCacheBehavior.RealtimeLogConfigArn,
             'SmoothStreaming': obj.data.DefaultCacheBehavior.SmoothStreaming,
             'TargetOriginId': obj.data.DefaultCacheBehavior.TargetOriginId,
             'TrustedSigners': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
@@ -429,6 +652,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'MaxTTL': cacheBehaviour.MaxTTL,
                     'MinTTL': cacheBehaviour.MinTTL,
                     'PathPattern': cacheBehaviour.PathPattern,
+                    'RealtimeLogConfigArn': cacheBehaviour.RealtimeLogConfigArn,
                     'SmoothStreaming': cacheBehaviour.SmoothStreaming,
                     'TargetOriginId': cacheBehaviour.TargetOriginId,
                     'TrustedSigners': cacheBehaviour.TrustedSigners.Items,
@@ -604,6 +828,145 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::StreamingDistribution',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.cachepolicy") {
+        var parametersInCacheKeyAndForwardedToOrigin = null;
+        if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin) {
+            var headersConfig = null;
+            if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig) {
+                var headers = null;
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers) {
+                    headers = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers.Items;
+                }
+                headersConfig = {
+                    'HeaderBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.HeaderBehavior,
+                    'Headers': headers
+                };
+            }
+            var cookiesConfig = null;
+            if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig) {
+                var cookies = null;
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies) {
+                    cookies = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies.Items;
+                }
+                cookiesConfig = {
+                    'CookieBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior,
+                    'Cookies': cookies
+                };
+            }
+            var queryStringsConfig = null;
+            if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig) {
+                var queryStrings = null;
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings) {
+                    queryStrings = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings.Items;
+                }
+                queryStringsConfig = {
+                    'QueryStringBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior,
+                    'QueryStrings': queryStrings
+                };
+            }
+            parametersInCacheKeyAndForwardedToOrigin = {
+                'EnableAcceptEncodingGzip': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingGzip,
+                'CookiesConfig': cookiesConfig,
+                'HeadersConfig': headersConfig,
+                'QueryStringsConfig': queryStringsConfig
+            };
+        }
+        reqParams.cfn['CachePolicyConfig'] = {
+            'Name': obj.data.CachePolicyConfig.Name,
+            'Comment': obj.data.CachePolicyConfig.Comment,
+            'DefaultTTL': obj.data.CachePolicyConfig.DefaultTTL,
+            'MaxTTL': obj.data.CachePolicyConfig.MaxTTL,
+            'MinTTL': obj.data.CachePolicyConfig.MinTTL,
+            'ParametersInCacheKeyAndForwardedToOrigin': parametersInCacheKeyAndForwardedToOrigin
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::CachePolicy'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::CachePolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.originrequestpolicy") {
+        var headersConfig = null;
+        if (obj.data.OriginRequestPolicyConfig.HeadersConfig) {
+            var headers = null;
+            if (obj.data.OriginRequestPolicyConfig.HeadersConfig.Headers) {
+                headers = obj.data.OriginRequestPolicyConfig.HeadersConfig.Headers.Items;
+            }
+            headersConfig = {
+                'HeaderBehavior': obj.data.OriginRequestPolicyConfig.HeadersConfig.HeaderBehavior,
+                'Headers': headers
+            };
+        }
+        var cookiesConfig = null;
+        if (obj.data.OriginRequestPolicyConfig.CookiesConfig) {
+            var cookies = null;
+            if (obj.data.OriginRequestPolicyConfig.CookiesConfig.Cookies) {
+                cookies = obj.data.OriginRequestPolicyConfig.CookiesConfig.Cookies.Items;
+            }
+            cookiesConfig = {
+                'CookieBehavior': obj.data.OriginRequestPolicyConfig.CookiesConfig.CookiesBehavior,
+                'Cookies': cookies
+            };
+        }
+        var queryStringsConfig = null;
+        if (obj.data.OriginRequestPolicyConfig.QueryStringsConfig) {
+            var queryStrings = null;
+            if (obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStrings) {
+                queryStrings = obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStrings.Items;
+            }
+            queryStringsConfig = {
+                'QueryStringBehavior': obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStringsBehavior,
+                'QueryStrings': queryStrings
+            };
+        }
+        reqParams.cfn['OriginRequestPolicyConfig'] = {
+            'Name': obj.data.OriginRequestPolicyConfig.Name,
+            'Comment': obj.data.OriginRequestPolicyConfig.Comment,
+            'HeadersConfig': headersConfig,
+            'CookiesConfig': cookiesConfig,
+            'QueryStringsConfig': queryStringsConfig
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::OriginRequestPolicy'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::OriginRequestPolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.realtimelogconfig") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['SamplingRate'] = obj.data.SamplingRate;
+        if (obj.data.EndPoints) {
+            reqParams.cfn['EndPoints'] = [];
+            obj.data.EndPoints.forEach(endpoint => {
+                var kinesisStreamConfig = null;
+                if (endpoint.KinesisStreamConfig) {
+                    kinesisStreamConfig = {
+                        'RoleArn': endpoint.KinesisStreamConfig.RoleARN,
+                        'StreamArn': endpoint.KinesisStreamConfig.StreamARN
+                    };
+                }
+                reqParams.cfn['EndPoints'].push({
+                    'StreamType': endpoint.StreamType,
+                    'KinesisStreamConfig': kinesisStreamConfig,
+                });
+            });
+        }
+        reqParams.cfn['Fields'] = obj.data.Fields;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::RealtimeLogConfig'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::RealtimeLogConfig',
             'options': reqParams
         });
     } else {

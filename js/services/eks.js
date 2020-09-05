@@ -105,6 +105,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Fargate Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clustername',
+                        title: 'Cluster Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -112,6 +150,7 @@ sections.push({
 async function updateDatatableComputeEKS() {
     blockUI('#section-compute-eks-clusters-datatable');
     blockUI('#section-compute-eks-nodegroups-datatable');
+    blockUI('#section-compute-eks-fargateprofiles-datatable');
 
     await sdkcall("EKS", "listClusters", {
         // no params
@@ -153,12 +192,32 @@ async function updateDatatableComputeEKS() {
                             }]);
                         });
                     }));
+                }),
+                sdkcall("EKS", "listFargateProfiles", {
+                    clusterName: cluster
+                }, true).then(async (data) => {
+                    await Promise.all(data.fargateProfileNames.map(async (fargateProfileName) => {
+                        return sdkcall("EKS", "describeFargateProfile", {
+                            clusterName: cluster,
+                            fargateProfileName: fargateProfileName
+                        }, true).then((data) => {
+                            $('#section-compute-eks-fargateprofles-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.fargateProfile.nodegroupArn,
+                                f2type: 'eks.fargateprofle',
+                                f2data: data.fargateProfile,
+                                f2region: region,
+                                name: data.fargateProfile.fargateProfileName,
+                                clustername: data.fargateProfile.clusterName
+                            }]);
+                        });
+                    }));
                 })
             ]);
         }));
 
         unblockUI('#section-compute-eks-clusters-datatable');
         unblockUI('#section-compute-eks-nodegroups-datatable');
+        unblockUI('#section-compute-eks-fargateprofiles-datatable');
     });
 }
 
@@ -250,6 +309,47 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'eks',
             'type': 'AWS::EKS::Nodegroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "eks.fargateprofile") {
+        reqParams.cfn['FargateProfileName'] = obj.data.fargateProfileName;
+        reqParams.cfn['ClusterName'] = obj.data.clusterName;
+        reqParams.cfn['PodExecutionRoleArn'] = obj.data.podExecutionRoleArn;
+        reqParams.cfn['Subnets'] = obj.data.subnets;
+        if (obj.data.selectors) {
+            reqParams.cfn['Selectors'] = [];
+            obj.data.selectors.forEach(selector => {
+                var labels = [];
+                if (selector.labels) {
+                    Object.keys(selector.labels).forEach(key => {
+                        labels.push({
+                            'Key': key,
+                            'Value': selector.labels[key]
+                        });
+                    });
+                }
+                reqParams.cfn['Selectors'].push({
+                    'Labels': labels,
+                    'Namespace': selector.namespace
+                });
+            });
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eks', obj.id, 'AWS::EKS::FargateProfile'),
+            'region': obj.region,
+            'service': 'eks',
+            'type': 'AWS::EKS::FargateProfile',
             'options': reqParams
         });
     } else {

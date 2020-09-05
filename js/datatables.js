@@ -295,7 +295,9 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                 }
             } else {
                 // https://github.com/iann0036/aws-pagination-rules
-                if (data.NextToken) {
+                if (svc == "CloudWatchLogs" && method == "describeLogStreams") {
+                    resolve(data);
+                } else if (data.NextToken) {
                     params['NextToken'] = data.NextToken;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
                         var mergeddata = deepmerge.all([data, newdata]);
