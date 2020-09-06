@@ -202,7 +202,7 @@ former2 generate --output-cloudformation "cfn.yaml" --exclude-services "CloudWat
   Filtering by whether the JSON responses of AWS SDK call contains a specified string.
 
 ```
-former2 generate --output-terraform "tf.yaml" --search-filter "myapp"
+former2 generate --output-terraform "tf.hcl" --search-filter "myapp"
 ```
 
 ## Security
