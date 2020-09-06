@@ -81,10 +81,10 @@ async function main(opts) {
 
     if (opts.services) {
         var services = opts.services.split(",").map(x => x.toLowerCase());
-        var newSections = []
+        var newSections = [];
         for (var i in sections) {
             if (services.includes(nav(sections[i].service).toLowerCase())) {
-                newSections.push(sections[i])
+                newSections.push(sections[i]);
             }
         }
         sections = newSections;
@@ -98,6 +98,10 @@ async function main(opts) {
             }
         }
         sections = sections.filter(val => val); // reindex
+    }
+
+    if (opts.cfnDeletionPolicy && opts.cfnDeletionPolicy != "Delete" && opts.cfnDeletionPolicy != "Retain") {
+        throw new Error('You must specify --cfn-deletion-policy value in [Delete, Retain]');
     }
 
     outputMapCdk = function(){};
@@ -185,7 +189,7 @@ async function main(opts) {
         }
 
         var tracked_resources = performF2Mappings(output_objects);
-        var mapped_outputs = compileOutputs(tracked_resources, null);
+        var mapped_outputs = compileOutputs(tracked_resources, opts.cfnDeletionPolicy);
 
         if (opts.outputCloudformation) {
             fs.writeFileSync(opts.outputCloudformation, mapped_outputs['cfn']);
@@ -205,6 +209,7 @@ cliargs
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-raw-data <filename>', 'filename for debug output (full)')
+    .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
