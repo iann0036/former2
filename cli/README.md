@@ -12,7 +12,7 @@ The Former2 CLI allows you to use the [former2.com](https://former2.com) tool di
 npm install -g former2
 ```
 
-Or build Docker image when node.js is not installed in your environment.
+Or build the Docker image if Node.js is not installed in your environment.
 
 ```
 docker build https://github.com/iann0036/former2.git#master:cli -t iann0036/former2:latest
