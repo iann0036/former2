@@ -56,7 +56,7 @@ f2log = function(msg){};
 f2trace = function(err){};
 
 async function main(opts) {
-    if (!opts.outputDebug && !opts.outputCloudformation && !opts.outputTerraform) {
+    if (!opts.outputRawData && !opts.outputCloudformation && !opts.outputTerraform) {
         throw new Error('You must specify an output type');
     }
 
@@ -142,8 +142,8 @@ async function main(opts) {
         cli_resources = cli_resources.sort((a, b) => (a.f2id > b.f2id) ? 1 : -1);
     }
 
-    if (opts.outputDebug) {
-        fs.writeFileSync(opts.outputDebug, JSON.stringify(cli_resources, null, 4));
+    if (opts.outputRawData) {
+        fs.writeFileSync(opts.outputRawData, JSON.stringify(cli_resources, null, 4));
     }
 
     if (opts.outputCloudformation || opts.outputTerraform) {
@@ -204,7 +204,7 @@ cliargs
     .description('generates outputs and writes them to the specified file')
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
-    .option('--output-debug <filename>', 'filename for debug output (full)')
+    .option('--output-raw-data <filename>', 'filename for debug output (full)')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
