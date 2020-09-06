@@ -81,10 +81,10 @@ async function main(opts) {
 
     if (opts.services) {
         var services = opts.services.split(",").map(x => x.toLowerCase());
-        var newSections = []
+        var newSections = [];
         for (var i in sections) {
             if (services.includes(nav(sections[i].service).toLowerCase())) {
-                newSections.push(sections[i])
+                newSections.push(sections[i]);
             }
         }
         sections = newSections;
