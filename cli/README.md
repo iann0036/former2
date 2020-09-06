@@ -12,6 +12,12 @@ The Former2 CLI allows you to use the [former2.com](https://former2.com) tool di
 npm install -g former2
 ```
 
+Or build the Docker image if Node.js is not installed in your environment.
+
+```
+docker build https://github.com/iann0036/former2.git#master:cli -t iann0036/former2:latest
+```
+
 ## Usage
 
 Former2 will load AWS credentials from your local credentials file, environment variables or [other available sources](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) per default precedence. It is recommended that you provide only read access with these credentials and suggest you assign the [ReadOnlyAccess](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/ReadOnlyAccess) policy.
@@ -25,6 +31,18 @@ former2 generate \
   --output-cloudformation "cloudformation.yml" \
   --output-terraform "terraform.hcl" \
   --output-debug "debug.json" \
+  --search-filter "myapp" \
+  --exclude-services "CloudWatch,KMS" \
+  --sort-output
+```
+
+When using Docker image:
+
+```
+docker run --rm -t -v `pwd`:/former2 -v ~/.aws:/root/.aws \
+iann0036/former2:latest generate \
+  --output-cloudformation "cloudformation.yml" \
+  --output-terraform "terraform.hcl" \
   --search-filter "myapp" \
   --exclude-services "CloudWatch,KMS" \
   --sort-output
