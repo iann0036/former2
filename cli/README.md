@@ -186,20 +186,20 @@ Below is a list of services for use with the `--services` and `--exclude-service
 
 #### Filtering examples
 
-- Generate CloudFormation output for Lambda and IAM only.
+Generate CloudFormation output for Lambda and IAM only.
 
 ```
 former2 generate --services "Lambda,IAM" --output-cloudformation "cfn.yaml"
 ```
 
-- Generate CloudFormation output all services excluding CloudWatch and KMS.
+Generate CloudFormation output all services excluding CloudWatch and KMS.
 
 ```
 former2 generate --output-cloudformation "cfn.yaml" --exclude-services "CloudWatch,KMS"
 ```
 
-- Generates Terraform output only for the resources that contain "myapp" in Names or Tags etc.
-  Filtering by whether the JSON responses of AWS SDK call contains a specified string.
+Generates Terraform output only for the resources that contain "myapp" in Names or Tags etc.
+Filtering by whether the JSON responses of the AWS SDK calls contain a specified string.
 
 ```
 former2 generate --output-terraform "tf.hcl" --search-filter "myapp"
