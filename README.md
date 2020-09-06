@@ -43,7 +43,9 @@ The following outputs are currently supported:
 
 ### Former2 CLI
 
-A command-line version of Former2 with limited functionality is available for installation. For more information, see the [CLI instructions](cli/README.md).
+A command-line version of Former2 with limited functionality is available for installation.
+Former2 CLI has the advantage of being able to use your local AWS CLI credentials without using access keys.
+For more information, see the [CLI instructions](cli/README.md).
 
 ## Security
 
