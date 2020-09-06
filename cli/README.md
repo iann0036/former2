@@ -48,6 +48,27 @@ iann0036/former2:latest generate \
   --sort-output
 ```
 
+#### Options
+
+At least one of the options starting with `--output` should be specified.
+
+```
+Options:
+  --output-cloudformation <filename>     filename for CloudFormation output
+  --output-terraform <filename>          filename for Terraform output
+  --output-raw-data <filename>           filename for debug output (full)
+  --cfn-deletion-policy <Delete|Retain>  add DeletionPolicy in CloudFormation output
+  --search-filter <value>                search filter for discovered resources (can be comma separated)
+  --services <value>                     list of services to include (can be comma separated (default: ALL))
+  --exclude-services <value>             list of services to exclude (can be comma separated)
+  --sort-output                          sort resources by their ID before outputting
+  --region <regionname>                  overrides the default AWS region to scan
+  --profile <profilename>                uses the profile specified from the shared credentials file
+  --proxy <protocol://host:port>         use proxy
+  --debug                                log debugging messages
+  -h, --help                             output usage information
+```
+
 #### Service Names
 
 Below is a list of services for use with the `--services` and `--exclude-services` argument:
