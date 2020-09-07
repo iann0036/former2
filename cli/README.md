@@ -184,6 +184,27 @@ Below is a list of services for use with the `--services` and `--exclude-service
 * XRay
 </details>
 
+#### Filtering examples
+
+Generate CloudFormation output for Lambda and IAM only.
+
+```
+former2 generate --services "Lambda,IAM" --output-cloudformation "cfn.yaml"
+```
+
+Generate CloudFormation output all services excluding CloudWatch and KMS.
+
+```
+former2 generate --output-cloudformation "cfn.yaml" --exclude-services "CloudWatch,KMS"
+```
+
+Generates Terraform output only for the resources that contain "myapp" in Names or Tags etc.
+Filtering by whether the JSON responses of the AWS SDK calls contain a specified string.
+
+```
+former2 generate --output-terraform "tf.hcl" --search-filter "myapp"
+```
+
 ## Security
 
 Calls to the AWS service API endpoints are made directly with the JavaScript SDK. Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
