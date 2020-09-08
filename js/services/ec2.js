@@ -1784,6 +1784,7 @@ async function updateDatatableComputeEC2() {
                         listener.Protocol.startsWith("HTTP") ? sdkcall("ELBv2", "describeListenerCertificates", {
                             ListenerArn: listener.ListenerArn
                         }, true).then((data) => {
+                            data.Certificates = data.Certificates || [];
                             data.Certificates.forEach(certificate => {
                                 certificate['ListenerArn'] = listener.ListenerArn;
                                 $('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable').deferredBootstrapTable('append', [{
