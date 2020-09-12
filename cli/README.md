@@ -59,7 +59,7 @@ Options:
   --output-raw-data <filename>           filename for debug output (full)
   --cfn-deletion-policy <Delete|Retain>  add DeletionPolicy in CloudFormation output
   --search-filter <value>                search filter for discovered resources (can be comma separated)
-  --include-services <value>             list of services to include (can be comma separated (default: ALL))
+  --services <value>                     list of services to include (can be comma separated (default: ALL))
   --exclude-services <value>             list of services to exclude (can be comma separated)
   --sort-output                          sort resources by their ID before outputting
   --region <regionname>                  overrides the default AWS region to scan
@@ -71,7 +71,7 @@ Options:
 
 #### Service Names
 
-Below is a list of services for use with the `--include-services` and `--exclude-services` argument:
+Below is a list of services for use with the `--services` and `--exclude-services` argument:
 
 <details><summary>Expand</summary>
 
@@ -189,7 +189,7 @@ Below is a list of services for use with the `--include-services` and `--exclude
 Generate CloudFormation output for Lambda and IAM only.
 
 ```
-former2 generate --include-services "Lambda,IAM" --output-cloudformation "cfn.yaml"
+former2 generate --services "Lambda,IAM" --output-cloudformation "cfn.yaml"
 ```
 
 Generate CloudFormation output all services excluding CloudWatch and KMS.

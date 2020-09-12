@@ -79,16 +79,16 @@ async function main(opts) {
         AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
     }
 
-    if (opts.excludeServices && opts.includeServices) {
-        throw new Error('Please do not use --exclude-services and --include-services simultaneously');
+    if (opts.excludeServices && opts.services) {
+        throw new Error('Please do not use --exclude-services and --services simultaneously');
     }
 
-    var includeExclude = opts.excludeServices || opts.includeServices;
+    var includeExclude = opts.excludeServices || opts.services;
     if (includeExclude) {
         var includeExcludeServices = includeExclude.split(",").map(x => x.toLowerCase());
         for (var i in sections) {
             var includes = includeExcludeServices.includes(nav(sections[i].service).toLowerCase());
-            if ((opts.includeServices && !includes) || (opts.excludeServices && includes)) {
+            if ((opts.services && !includes) || (opts.excludeServices && includes)) {
                 delete sections[i];
             }
         }
@@ -207,7 +207,7 @@ cliargs
     .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
-    .option('--include-services <value>', 'list of services to include (can be comma separated (default: ALL))')
+    .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
