@@ -303,6 +303,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Authorizers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'functionarn',
+                        title: 'Function ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -315,6 +353,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-certificates-datatable');
     blockUI('#section-internetofthings-core-topicrules-datatable');
     blockUI('#section-internetofthings-core-provisioningtemplates-datatable');
+    blockUI('#section-internetofthings-core-authorizers-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -479,6 +518,29 @@ async function updateDatatableInternetofThingsCore() {
         }));
 
         unblockUI('#section-internetofthings-core-provisioningtemplates-datatable');
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listAuthorizers", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-internetofthings-core-authorizers-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.authorizers.map(authorizer => {
+            return sdkcall("Iot", "describeAuthorizer", {
+                authorizerName: authorizer.authorizerName
+            }, true).then((data) => {
+                $('#section-internetofthings-core-authorizers-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.authorizerDescription.authorizerArn,
+                    f2type: 'iot.authorizer',
+                    f2data: data.authorizerDescription,
+                    f2region: region,
+                    name: data.authorizerDescription.authorizerName,
+                    functionarn: data.authorizerDescription.authorizerFunctionArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-internetofthings-core-authorizers-datatable');
     }).catch(err => { });
 }
 
@@ -871,6 +933,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::ProvisioningTemplate',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.authorizer") {
+        reqParams.cfn['AuthorizerName'] = obj.data.authorizerName;
+        reqParams.cfn['AuthorizerFunctionArn'] = obj.data.authorizerFunctionArn;
+        reqParams.cfn['TokenKeyName'] = obj.data.tokenKeyName;
+        reqParams.cfn['TokenSigningPublicKeys'] = obj.data.tokenSigningPublicKeys;
+        reqParams.cfn['Status'] = obj.data.status;
+        reqParams.cfn['SigningDisabled'] = obj.data.signingDisabled;
+
+        /*
+        TODO
+        Tags: 
+            Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Authorizer'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Authorizer',
             'options': reqParams
         });
     } else {
