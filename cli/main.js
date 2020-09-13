@@ -79,21 +79,16 @@ async function main(opts) {
         AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
     }
 
-    if (opts.services) {
-        var services = opts.services.split(",").map(x => x.toLowerCase());
-        var newSections = [];
-        for (var i in sections) {
-            if (services.includes(nav(sections[i].service).toLowerCase())) {
-                newSections.push(sections[i]);
-            }
-        }
-        sections = newSections;
+    if (opts.excludeServices && opts.services) {
+        throw new Error('Please do not use --exclude-services and --services simultaneously');
     }
 
-    if (opts.excludeServices) {
-        var excludeServices = opts.excludeServices.split(",").map(x => x.toLowerCase());
+    var includeExclude = opts.excludeServices || opts.services;
+    if (includeExclude) {
+        var includeExcludeServices = includeExclude.split(",").map(x => x.toLowerCase());
         for (var i in sections) {
-            if (excludeServices.includes(nav(sections[i].service).toLowerCase())) {
+            var includes = includeExcludeServices.includes(nav(sections[i].service).toLowerCase());
+            if ((opts.services && !includes) || (opts.excludeServices && includes)) {
                 delete sections[i];
             }
         }
