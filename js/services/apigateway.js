@@ -2638,6 +2638,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'max_age': obj.data.CorsConfiguration.MaxAge
             };
         }
+        reqParams.cfn['DisableExecuteApiEndpoint'] = obj.data.DisableExecuteApiEndpoint;
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
             reqParams.tf['Tags'] = {};
