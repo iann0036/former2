@@ -634,8 +634,9 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                 retention: logGroup.retentionInDays + " days",
                 amountstored: logGroup.storedBytes
             }]);
-
+            
             return Promise.all([
+                (window && window.localStorage.getItem('skipirrelevantresources') != "true") ? // potentially skip
                 sdkcall("CloudWatchLogs", "describeLogStreams", {
                     logGroupName: logGroup.logGroupName
                 }, true).then((data) => {
@@ -650,7 +651,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
                             amountstored: logGroup.storedBytes
                         }]);
                     });
-                }),
+                }) : Promise.resolve(),
                 sdkcall("CloudWatchLogs", "describeSubscriptionFilters", {
                     logGroupName: logGroup.logGroupName
                 }, true).then((data) => {

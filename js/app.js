@@ -1508,6 +1508,13 @@ $(document).ready(function(){
         window.localStorage.setItem('relatedresourcessetting', $(this).is(':checked').toString());
     });
 
+    if (window.localStorage.getItem('skipirrelevantresources') == "true") {
+        $('#skipirrelevantresources').prop('checked', true);
+    }
+    $('#skipirrelevantresources').change(function() {
+        window.localStorage.setItem('skipirrelevantresources', $(this).is(':checked').toString());
+    });
+
     if (window.localStorage.getItem('credentials-secretkey')) {
         $('.scan-account').removeAttr('disabled');
     }
@@ -1599,7 +1606,8 @@ function saveSettings() {
             'logicalidstrategy': window.localStorage.getItem('logicalidstrategy') || 'longtypeprefixoptionalindexsuffix',
             'defaultoutput': window.localStorage.getItem('defaultoutput') || 'cloudformation',
             'iaclangselect': window.localStorage.getItem('iaclangselect') || 'typescript',
-            'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting')
+            'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting'),
+            'skipirrelevantresources': window.localStorage.getItem('skipirrelevantresources')
         }
     };
 
@@ -1639,6 +1647,13 @@ function loadSettings() {
                     $('#relatedresourcessetting').prop('checked', true);
                 } else {
                     $('#relatedresourcessetting').prop('checked', false);
+                }
+            }
+            if ('skipirrelevantresources' in loaded_settings.settings) {
+                if (loaded_settings.settings.skipirrelevantresources == "true") {
+                    $('#skipirrelevantresources').prop('checked', true);
+                } else {
+                    $('#skipirrelevantresources').prop('checked', false);
                 }
             }
         }
