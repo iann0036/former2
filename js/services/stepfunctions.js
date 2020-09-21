@@ -125,14 +125,14 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
     await sdkcall("StepFunctions", "listActivities", {
         // no params
     }, true).then(async (data) => {
-        $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('removeAll');
+        $('#section-applicationintegration-stepfunctions-activities-datatable').deferredBootstrapTable('removeAll');
 
         if (data.activities) {
             await Promise.all(data.activities.map(activity => {
                 return sdkcall("StepFunctions", "describeActivity", {
                     activityArn: activity.activityArn
                 }, true).then((data) => {
-                    $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('append', [{
+                    $('#section-applicationintegration-stepfunctions-activities-datatable').deferredBootstrapTable('append', [{
                         f2id: data.activityArn,
                         f2type: 'stepfunctions.activity',
                         f2data: data,
