@@ -735,6 +735,11 @@ async function updateDatatableAnalyticsGlue() {
                 version = classifier.GrokClassifier.Version;
                 type = "JSON";
             }
+            if (classifier.CsvClassifier) {
+                name = classifier.CsvClassifier.Name;
+                version = classifier.CsvClassifier.Version;
+                type = "CSV";
+            }
             if (name) {
                 $('#section-analytics-glue-classifiers-datatable').deferredBootstrapTable('append', [{
                     f2id: name,
@@ -1025,6 +1030,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['JsonClassifier'] = {
                 'JsonPath': obj.data.JsonClassifier.JsonPath,
                 'Name': obj.data.JsonClassifier.Name
+            };
+        }
+        if (obj.data.CsvClassifier) {
+            reqParams.cfn['CsvClassifier'] = {
+                'Name': obj.data.CsvClassifier.Name,
+                'AllowSingleColumn': obj.data.CsvClassifier.AllowSingleColumn,
+                'ContainsHeader': obj.data.CsvClassifier.ContainsHeader,
+                'Delimiter': obj.data.CsvClassifier.Delimiter,
+                'DisableValueTrimming': obj.data.CsvClassifier.DisableValueTrimming,
+                'Header': obj.data.CsvClassifier.Header,
+                'QuoteSymbol': obj.data.CsvClassifier.QuoteSymbol
             };
         }
 
