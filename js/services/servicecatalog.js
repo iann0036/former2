@@ -629,7 +629,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         await Promise.all(data.ProductViewDetails.map(productView => {
             return sdkcall("ServiceCatalog", "describeProductAsAdmin", {
                 Id: productView.ProductViewSummary.Id
-            }, true).then((data) => {
+            }, false).then((data) => {
                 if (data.ProductViewDetail.ProductViewSummary.Type == "CLOUD_FORMATION_TEMPLATE") {
                     $('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ProductViewDetail.ProductViewSummary.Id,
@@ -643,7 +643,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                         distributor: data.ProductViewDetail.ProductViewSummary.Distributor
                     }]);
                 }
-            });
+            }).catch(() => { });
         }));
 
         unblockUI('#section-managementandgovernance-servicecatalog-cloudformationproducts-datatable');

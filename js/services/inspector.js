@@ -145,17 +145,19 @@ async function updateDatatableSecurityIdentityAndComplianceInspector() {
                         resourcegrouparn: data.assessmentTargets[0].resourceGroupArn
                     }]);
 
-                    await sdkcall("Inspector", "describeResourceGroups", {
-                        resourceGroupArns: [data.assessmentTargets[0].resourceGroupArn]
-                    }, true).then((data) => {
-                        $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').deferredBootstrapTable('append', [{
-                            f2id: data.resourceGroups[0].arn,
-                            f2type: 'inspector.resourcegroup',
-                            f2data: data.resourceGroups[0],
-                            f2region: region,
-                            arn: data.resourceGroups[0].arn
-                        }]);
-                    });
+                    if (data.assessmentTargets[0].resourceGroupArn) {
+                        await sdkcall("Inspector", "describeResourceGroups", {
+                            resourceGroupArns: [data.assessmentTargets[0].resourceGroupArn]
+                        }, true).then((data) => {
+                            $('#section-securityidentityandcompliance-inspector-resourcegroups-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.resourceGroups[0].arn,
+                                f2type: 'inspector.resourcegroup',
+                                f2data: data.resourceGroups[0],
+                                f2region: region,
+                                arn: data.resourceGroups[0].arn
+                            }]);
+                        });
+                    }
                 }),
                 sdkcall("Inspector", "listAssessmentTemplates", {
                     assessmentTargetArns: [assessmentTargetArn]
