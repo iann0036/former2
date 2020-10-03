@@ -67,12 +67,51 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Connection Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'connectionstring',
+                        title: 'Connection String',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableEndUserComputingWorkSpaces() {
     blockUI('#section-endusercomputing-workspaces-workspaces-datatable');
+    blockUI('#section-endusercomputing-workspaces-connectionaliases-datatable');
 
     await sdkcall("WorkSpaces", "describeWorkspaces", {
         // no params
@@ -92,9 +131,27 @@ async function updateDatatableEndUserComputingWorkSpaces() {
                 subnetid: workspace.SubnetId
             }]);
         });
-
-        unblockUI('#section-endusercomputing-workspaces-workspaces-datatable');
     });
+
+    await sdkcall("WorkSpaces", "describeConnectionAliases", {
+        // no params
+    }, true).then((data) => {
+        $('#section-endusercomputing-workspaces-connectionaliases-datatable').deferredBootstrapTable('removeAll');
+
+        data.ConnectionAliases.forEach(connectionalias => {
+            $('#section-endusercomputing-workspaces-connectionaliases-datatable').deferredBootstrapTable('append', [{
+                f2id: connectionalias.AliasId,
+                f2type: 'workspaces.connectionalias',
+                f2data: connectionalias,
+                f2region: region,
+                id: connectionalias.AliasId,
+                connectionstring: connectionalias.ConnectionString
+            }]);
+        });
+    }).catch(() => { });
+
+    unblockUI('#section-endusercomputing-workspaces-workspaces-datatable');
+    unblockUI('#section-endusercomputing-workspaces-connectionaliases-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -119,6 +176,23 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'workspaces',
             'type': 'AWS::WorkSpaces::Workspace',
+            'options': reqParams
+        });
+    } else if (obj.type == "workspaces.connectionalias") {
+        reqParams.cfn['ConnectionString'] = obj.data.ConnectionString;
+
+        /*
+        TODO:
+        Tags:
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('workspaces', obj.id, 'AWS::WorkSpaces::ConnectionAlias'),
+            'region': obj.region,
+            'service': 'workspaces',
+            'type': 'AWS::WorkSpaces::ConnectionAlias',
             'options': reqParams
         });
     } else {

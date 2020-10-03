@@ -868,6 +868,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             }
             parametersInCacheKeyAndForwardedToOrigin = {
                 'EnableAcceptEncodingGzip': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingGzip,
+                'EnableAcceptEncodingBrotli': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingBrotli,
                 'CookiesConfig': cookiesConfig,
                 'HeadersConfig': headersConfig,
                 'QueryStringsConfig': queryStringsConfig

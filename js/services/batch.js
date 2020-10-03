@@ -397,9 +397,55 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'Permissions': obj.data.containerProperties.linuxParameters.devices.permissions
                     };
                 }
+                var tmpfs = null;
+                if (obj.data.containerProperties.linuxParameters.tmpfs) {
+                    tmpfs = [];
+                    obj.data.containerProperties.linuxParameters.tmpfs.forEach(tmpfse => {
+                        tmpfs.push({
+                            'ContainerPath': tmpfse.containerPath,
+                            'Size': tmpfse.size,
+                            'MountOptions': tmpfse.mountOptions
+                        })
+                    });
+                }
                 linuxParameters = {
-                    'Devices': devices
+                    'Devices': devices,
+                    'InitProcessEnabled': obj.data.containerProperties.linuxParameters.initProcessEnabled,
+                    'MaxSwap': obj.data.containerProperties.linuxParameters.maxSwap,
+                    'SharedMemorySize': obj.data.containerProperties.linuxParameters.sharedMemorySize,
+                    'Swappiness': obj.data.containerProperties.linuxParameters.swappiness,
+                    'Tmpfs': tmpfs
                 };
+            }
+
+            var logConfiguration = null;
+            if (obj.data.containerProperties.logConfiguration) {
+                var secretOptions = null;
+                if (obj.data.containerProperties.logConfiguration.secretOptions) {
+                    secretOptions = [];
+                    obj.data.containerProperties.logConfiguration.secretOptions.forEach(secretOption => {
+                        secretOptions.push({
+                            'Name': secretOption.name,
+                            'ValueFrom': secretOption.valueFrom
+                        });
+                    });
+                }
+                logConfiguration = {
+                    'LogDriver': obj.data.containerProperties.logConfiguration.logDriver,
+                    'Options': obj.data.containerProperties.logConfiguration.options,
+                    'SecretOptions': secretOptions
+                };
+            }
+
+            var secrets = null;
+            if (obj.data.containerProperties.secrets) {
+                secrets = [];
+                obj.data.containerProperties.secrets.forEach(secret => {
+                    secrets.push({
+                        'Name': secret.name,
+                        'ValueFrom': secret.valueFrom
+                    });
+                });
             }
 
             reqParams.cfn['ContainerProperties'] = {
@@ -415,7 +461,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ulimits': ulimits,
                 'Vcpus': obj.data.containerProperties.vcpus,
                 'Image': obj.data.containerProperties.image,
-                'LinuxParameters': linuxParameters
+                'ExecutionRoleArn': obj.data.containerProperties.executionRoleArn,
+                'LinuxParameters': linuxParameters,
+                'LogConfiguration': logConfiguration,
+                'Secrets': secrets
             };
             reqParams.tf['container_properties'] = obj.data.containerProperties;
         }

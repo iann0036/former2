@@ -653,9 +653,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['CapacityProviders'] = obj.data.capacityProviders;
         if (obj.data.defaultCapacityProviderStrategy && obj.data.defaultCapacityProviderStrategy.length) {
-            reqParams.cfn['CapacityProviders'] = [];
+            reqParams.cfn['DefaultCapacityProviderStrategy'] = [];
             obj.data.defaultCapacityProviderStrategy.forEach(dcps => {
-                reqParams.cfn['CapacityProviders'].push({
+                reqParams.cfn['DefaultCapacityProviderStrategy'].push({
                     'CapacityProvider': dcps.capacityProvider,
                     'Weight': dcps.weight,
                     'Base': dcps.base
@@ -791,12 +791,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Type': obj.data.deploymentController.type
             };
         }
-        if (obj.data.capacityProviderStrategy) {
-            reqParams.cfn['CapacityProviderStrategy'] = {
-                'CapacityProvider': obj.data.capacityProviderStrategy.capacityProvider,
-                'Weight': obj.data.capacityProviderStrategy.weight,
-                'Base': obj.data.capacityProviderStrategy.base
-            };
+        if (obj.data.capacityProviderStrategy && obj.data.capacityProviderStrategy.length) {
+            reqParams.cfn['CapacityProviderStrategy'] = [];
+            obj.data.capacityProviderStrategy.forEach(cps => {
+                reqParams.cfn['CapacityProviderStrategy'].push({
+                    'CapacityProvider': cps.capacityProvider,
+                    'Weight': cps.weight,
+                    'Base': cps.base
+                });
+            });
         }
 
         tracked_resources.push({
