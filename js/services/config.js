@@ -604,7 +604,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     }, false).then((data) => {
         $('#section-managementandgovernance-config-organizationconformancepacks-datatable').deferredBootstrapTable('removeAll');
 
-        data.OrganizationConformancePackDetails.forEach(conformancepack => {
+        data.OrganizationConformancePacks.forEach(conformancepack => {
             $('#section-managementandgovernance-config-organizationconformancepacks-datatable').deferredBootstrapTable('append', [{
                 f2id: conformancepack.OrganizationConformancePackArn,
                 f2type: 'config.organizationconformancepack',
