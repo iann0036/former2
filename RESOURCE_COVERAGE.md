@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**572/572 (100%)** Resources Covered
+**578/578 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -118,6 +118,9 @@
 | *AWS::CloudWatch::CompositeAlarm* | :thumbsup: |
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CloudWatch::InsightRule* | :thumbsup: |
+| *AWS::CodeArtifact::Domain* | :thumbsup: |
+| *AWS::CodeArtifact::DomainPermissionsPolicy* | :thumbsup: |
+| *AWS::CodeArtifact::Repository* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
 | *AWS::CodeBuild::ReportGroup* | :thumbsup: |
 | *AWS::CodeBuild::SourceCredential* | :thumbsup: |
@@ -393,6 +396,9 @@
 | *AWS::Lambda::LayerVersionPermission* | :thumbsup: |
 | *AWS::Lambda::Permission* | :thumbsup: |
 | *AWS::Lambda::Version* | :thumbsup: |
+| *AWS::Lex::Bot* | :thumbsup: |
+| *AWS::Lex::Intent* | :thumbsup: |
+| *AWS::Lex::SlotType* | :thumbsup: |
 | *AWS::Logs::Destination* | :thumbsup: |
 | *AWS::Logs::LogGroup* | :thumbsup: |
 | *AWS::Logs::LogStream* | :thumbsup: |
@@ -579,7 +585,7 @@
 
 ## Terraform Coverage
 
-**309/604 (51%)** Resources Covered
+**315/604 (52%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -679,9 +685,9 @@
 | *aws_cloudwatch_log_stream* | :thumbsup: |
 | *aws_cloudwatch_log_subscription_filter* | :thumbsup: |
 | *aws_cloudwatch_metric_alarm* | :thumbsup: |
-| *aws_codeartifact_domain* |  |
+| *aws_codeartifact_domain* | :thumbsup: |
 | *aws_codeartifact_domain_permissions* |  |
-| *aws_codeartifact_repository* |  |
+| *aws_codeartifact_repository* | :thumbsup: |
 | *aws_codebuild_project* |  |
 | *aws_codebuild_report_group* |  |
 | *aws_codebuild_source_credential* |  |
@@ -940,9 +946,9 @@
 | *aws_lb_ssl_negotiation_policy* |  |
 | *aws_lb_target_group* | :thumbsup: |
 | *aws_lb_target_group_attachment* |  |
-| *aws_lex_bot* |  |
-| *aws_lex_intent* |  |
-| *aws_lex_slot_type* |  |
+| *aws_lex_bot* | :thumbsup: |
+| *aws_lex_intent* | :thumbsup: |
+| *aws_lex_slot_type* | :thumbsup: |
 | *aws_licensemanager_association* | :thumbsup: |
 | *aws_licensemanager_license_configuration* | :thumbsup: |
 | *aws_lightsail_domain* | :thumbsup: |
