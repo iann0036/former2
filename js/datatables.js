@@ -294,6 +294,11 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     reject(data);
                 }
             } else {
+                if (!data || Object.keys(data).length === 0) {
+                    reject(data);
+                    return;
+                }
+                
                 // https://github.com/iann0036/aws-pagination-rules
                 if (svc == "CloudWatchLogs" && method == "describeLogStreams") {
                     resolve(data);
