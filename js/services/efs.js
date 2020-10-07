@@ -227,7 +227,7 @@ async function updateDatatableStorageEFS() {
                         });
                     }));
                 }),
-                sdkcall("EC2", "describeAccessPoints", {
+                sdkcall("EFS", "describeAccessPoints", {
                     FileSystemId: fileSystem.FileSystemId
                 }, true).then((apdata) => {
                     apdata.AccessPoints.forEach(ap => {
