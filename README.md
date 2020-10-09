@@ -51,6 +51,10 @@ Calls to the AWS service API endpoints are made either directly with the JavaScr
 
 If you prefer not to use a publicly hosted site to use Former2, you can [host your own version](HOSTING.md) by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1 or localhost, otherwise you can [modify the extension](HOSTING.md) as needed.
 
+## Pricing
+
+Though Former2 is free to access or use locally, some [AWS services](https://aws.amazon.com/secrets-manager/pricing/) have small charges associated with API calls, so usage may attract an extra couple cents to your AWS bill.
+
 ## FAQ
 
 **Does this replace Console Recorder?**
