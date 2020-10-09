@@ -326,15 +326,17 @@ async function updateDatatableDatabaseElastiCache() {
         $('#section-database-elasticache-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
         data.CacheParameterGroups.forEach(parameterGroup => {
-            $('#section-database-elasticache-parametergroups-datatable').deferredBootstrapTable('append', [{
-                f2id: parameterGroup.CacheParameterGroupName,
-                f2type: 'elasticache.parametergroup',
-                f2data: parameterGroup,
-                f2region: region,
-                name: parameterGroup.CacheParameterGroupName,
-                family: parameterGroup.CacheParameterGroupFamily,
-                description: parameterGroup.Description
-            }]);
+            if (!parameterGroup.CacheParameterGroupName.startsWith("default.")) {
+                $('#section-database-elasticache-parametergroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: parameterGroup.CacheParameterGroupName,
+                    f2type: 'elasticache.parametergroup',
+                    f2data: parameterGroup,
+                    f2region: region,
+                    name: parameterGroup.CacheParameterGroupName,
+                    family: parameterGroup.CacheParameterGroupFamily,
+                    description: parameterGroup.Description
+                }]);
+            }
         });
 
         unblockUI('#section-database-elasticache-parametergroups-datatable');

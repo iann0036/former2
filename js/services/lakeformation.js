@@ -177,14 +177,15 @@ async function updateDatatableAnalyticsLakeFormation() {
             });
         }
 
-        $('#section-analytics-lakeformation-datalakesettings-datatable').deferredBootstrapTable('append', [{
-            f2id: "LakeFormationDataLakeSettings",
-            f2type: 'lakeformation.datalakesettings',
-            f2data: data.DataLakeSettings,
-            f2region: region,
-            admins: datalakeadmins.join(",")
-        }]);
-
+        if (data.DataLakeSettings.DataLakeAdmins.length) {
+            $('#section-analytics-lakeformation-datalakesettings-datatable').deferredBootstrapTable('append', [{
+                f2id: "LakeFormationDataLakeSettings",
+                f2type: 'lakeformation.datalakesettings',
+                f2data: data.DataLakeSettings,
+                f2region: region,
+                admins: datalakeadmins.join(",")
+            }]);
+        }
     }).catch(() => { });
 
     unblockUI('#section-analytics-lakeformation-resources-datatable');

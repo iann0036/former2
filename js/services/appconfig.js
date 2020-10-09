@@ -459,15 +459,17 @@ async function updateDatatableManagementAndGovernanceAppConfig() {
             return sdkcall("AppConfig", "getDeploymentStrategy", {
                 DeploymentStrategyId: deploymentstrategyitem.Id
             }, true).then(async (data) => {
-                $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.Id,
-                    f2type: 'appconfig.deploymentstrategy',
-                    f2data: data,
-                    f2region: region,
-                    id: data.Id,
-                    name: data.Name,
-                    description: data.Description
-                }]);
+                if (!data.Name.startsWith("AppConfig.")) {
+                    $('#section-managementandgovernance-appconfig-deploymentstrategies-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Id,
+                        f2type: 'appconfig.deploymentstrategy',
+                        f2data: data,
+                        f2region: region,
+                        id: data.Id,
+                        name: data.Name,
+                        description: data.Description
+                    }]);
+                }
             });
         }));
     }).catch(() => { });

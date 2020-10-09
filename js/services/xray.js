@@ -81,17 +81,30 @@ async function updateDatatableDeveloperToolsXRay() {
         $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('removeAll');
 
         data.SamplingRuleRecords.forEach(samplingrule => {
-            $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('append', [{
-                f2id: samplingrule.SamplingRule.RuleARN,
-                f2type: 'xray.samplingrule',
-                f2data: samplingrule.SamplingRule,
-                f2region: region,
-                name: samplingrule.SamplingRule.RuleName,
-                priority: samplingrule.SamplingRule.Priority,
-                resourcearn: samplingrule.SamplingRule.ResourceARN,
-                servicename: samplingrule.SamplingRule.ServiceName,
-                limit: "Limit to " + samplingrule.SamplingRule.ReservoirSize + " r/sec, then " + samplingrule.SamplingRule.FixedRate + "% fixed rate"
-            }]);
+            if (
+                samplingrule.SamplingRule.RuleName != "Default" ||
+                samplingrule.SamplingRule.ResourceARN != "*" ||
+                samplingrule.SamplingRule.Priority != 10000 ||
+                samplingrule.SamplingRule.FixedRate != 0.05 ||
+                samplingrule.SamplingRule.ReservoirSize != 1 ||
+                samplingrule.SamplingRule.ServiceName != "*" ||
+                samplingrule.SamplingRule.ServiceType != "*" ||
+                samplingrule.SamplingRule.Host != "*" ||
+                samplingrule.SamplingRule.HTTPMethod != "*" ||
+                samplingrule.SamplingRule.URLPath != "*"
+            ) {
+                $('#section-developertools-xray-samplingrules-datatable').deferredBootstrapTable('append', [{
+                    f2id: samplingrule.SamplingRule.RuleARN,
+                    f2type: 'xray.samplingrule',
+                    f2data: samplingrule.SamplingRule,
+                    f2region: region,
+                    name: samplingrule.SamplingRule.RuleName,
+                    priority: samplingrule.SamplingRule.Priority,
+                    resourcearn: samplingrule.SamplingRule.ResourceARN,
+                    servicename: samplingrule.SamplingRule.ServiceName,
+                    limit: "Limit to " + samplingrule.SamplingRule.ReservoirSize + " r/sec, then " + samplingrule.SamplingRule.FixedRate + "% fixed rate"
+                }]);
+            }
         });
     }).catch(() => { });
 

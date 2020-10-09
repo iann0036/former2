@@ -3601,15 +3601,20 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }, false).then((prefixentries) => {
                 prefixlist['Entries'] = prefixentries['Entries'];
 
-                $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('append', [{
-                    f2id: prefixlist.PrefixListArn,
-                    f2type: 'ec2.prefixlist',
-                    f2data: prefixlist,
-                    f2region: region,
-                    id: prefixlist.PrefixListId,
-                    name: prefixlist.PrefixListName,
-                    addressfamily: prefixlist.AddressFamily
-                }]);
+                if (
+                    prefixlist.PrefixListName != "com.amazonaws.us-east-1.s3" &&
+                    prefixlist.PrefixListName != "com.amazonaws.us-east-1.dynamodb"
+                ) {
+                    $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('append', [{
+                        f2id: prefixlist.PrefixListArn,
+                        f2type: 'ec2.prefixlist',
+                        f2data: prefixlist,
+                        f2region: region,
+                        id: prefixlist.PrefixListId,
+                        name: prefixlist.PrefixListName,
+                        addressfamily: prefixlist.AddressFamily
+                    }]);
+                }
             });
         }));
 

@@ -218,15 +218,19 @@ async function updateDatatableAnalyticsAthena() {
             return sdkcall("Athena", "getDataCatalog", {
                 Name: datacatalog.CatalogName
             }, false).then((data) => {
-                $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.DataCatalog.Name + " Data Catalog",
-                    f2type: 'athena.datacatalog',
-                    f2data: data.DataCatalog,
-                    f2region: region,
-                    name: data.DataCatalog.Name,
-                    description: data.DataCatalog.Description,
-                    type: data.DataCatalog.Type
-                }]);
+                if (
+                    data.DataCatalog.Name != "primary"
+                ) {
+                    $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.DataCatalog.Name + " Data Catalog",
+                        f2type: 'athena.datacatalog',
+                        f2data: data.DataCatalog,
+                        f2region: region,
+                        name: data.DataCatalog.Name,
+                        description: data.DataCatalog.Description,
+                        type: data.DataCatalog.Type
+                    }]);
+                }
             }).catch(() => { });
         }));
 

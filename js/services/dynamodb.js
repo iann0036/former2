@@ -394,14 +394,17 @@ async function updateDatatableDatabaseDynamoDB() {
                 ParameterGroupName: parameterGroup.ParameterGroupName
             }, true).then((data) => {
                 parameterGroup['Parameters'] = data.Parameters;
-                $('#section-database-dynamodb-acceleratorparametergroups-datatable').deferredBootstrapTable('append', [{
-                    f2id: parameterGroup.ParameterGroupName,
-                    f2type: 'dynamodb.acceleratorparametergroup',
-                    f2data: parameterGroup,
-                    f2region: region,
-                    name: parameterGroup.ParameterGroupName,
-                    description: parameterGroup.Description
-                }]);
+
+                if (!parameterGroup.ParameterGroupName.startsWith("default.")) {
+                    $('#section-database-dynamodb-acceleratorparametergroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: parameterGroup.ParameterGroupName,
+                        f2type: 'dynamodb.acceleratorparametergroup',
+                        f2data: parameterGroup,
+                        f2region: region,
+                        name: parameterGroup.ParameterGroupName,
+                        description: parameterGroup.Description
+                    }]);
+                }
             });
         }));
 

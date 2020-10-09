@@ -623,16 +623,21 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 });
 
                 if (role.Path.startsWith("/aws-service-role/")) {
-                    $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
-                        f2id: role.Arn,
-                        f2type: 'iam.servicelinkedrole',
-                        f2data: role,
-                        f2region: region,
-                        name: role.RoleName,
-                        path: role.Path,
-                        id: role.RoleId,
-                        description: role.Description
-                    }]);
+                    if (
+                        role.RoleName != "AWSServiceRoleForSupport" &&
+                        role.RoleName != "AWSServiceRoleForTrustedAdvisor"
+                    ) {
+                        $('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable').deferredBootstrapTable('append', [{
+                            f2id: role.Arn,
+                            f2type: 'iam.servicelinkedrole',
+                            f2data: role,
+                            f2region: region,
+                            name: role.RoleName,
+                            path: role.Path,
+                            id: role.RoleId,
+                            description: role.Description
+                        }]);
+                    }
                 } else {
                     await sdkcall("IAM", "listAttachedRolePolicies", {
                         RoleName: role.RoleName

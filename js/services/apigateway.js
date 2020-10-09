@@ -1344,13 +1344,20 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     await sdkcall("APIGateway", "getAccount", {
         // no params
     }, true).then((data) => {
-        $('#section-networkingandcontentdelivery-apigateway-account-datatable').deferredBootstrapTable('append', [{
-            f2id: data.cloudwatchRoleArn || (region + "-account"),
-            f2type: 'apigateway.account',
-            f2data: data,
-            f2region: region,
-            cloudwatchrolearn: data.cloudwatchRoleArn
-        }]);
+        if (
+            data.throttleSettings.burstLimit != 5000 ||
+            data.throttleSettings.rateLimit != 10000 ||
+            data.features.length != 1 ||
+            data.features[0] != "UsagePlans"
+        ) {
+            $('#section-networkingandcontentdelivery-apigateway-account-datatable').deferredBootstrapTable('append', [{
+                f2id: data.cloudwatchRoleArn || (region + "-account"),
+                f2type: 'apigateway.account',
+                f2data: data,
+                f2region: region,
+                cloudwatchrolearn: data.cloudwatchRoleArn
+            }]);
+        }
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
     });

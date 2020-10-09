@@ -890,13 +890,18 @@ async function updateDatatableAnalyticsGlue() {
     }, true).then((data) => {
         $('#section-analytics-glue-datacatalogencryptionsettings-datatable').deferredBootstrapTable('removeAll');
 
-        $('#section-analytics-glue-datacatalogencryptionsettings-datatable').deferredBootstrapTable('append', [{
-            f2id: 'GlueDataCatalogEncryptionSettingsCurrentAccount',
-            f2type: 'glue.datacatalogencryptionsettings',
-            f2data: data,
-            f2region: region,
-            catalogid: "(current account)"
-        }]);
+        if (
+            data.DataCatalogEncryptionSettings.EncryptionAtRest.CatalogEncryptionMode != "DISABLED" ||
+            data.DataCatalogEncryptionSettings.ConnectionPasswordEncryption.ReturnConnectionPasswordEncrypted != false
+        ) {
+            $('#section-analytics-glue-datacatalogencryptionsettings-datatable').deferredBootstrapTable('append', [{
+                f2id: 'GlueDataCatalogEncryptionSettingsCurrentAccount',
+                f2type: 'glue.datacatalogencryptionsettings',
+                f2data: data,
+                f2region: region,
+                catalogid: "(current account)"
+            }]);
+        }
     }).catch(() => { });
 
     unblockUI('#section-analytics-glue-databases-datatable');

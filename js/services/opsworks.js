@@ -619,15 +619,17 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
         $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('removeAll');
 
         data.UserProfiles.forEach(userProfile => {
-            $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('append', [{
-                f2id: userProfile.IamUserArn,
-                f2type: 'opsworks.userprofile',
-                f2data: userProfile,
-                f2region: region,
-                iamuserarn: userProfile.IamUserArn,
-                name: userProfile.Name,
-                sshusername: userProfile.SshUsername
-            }]);
+            if (userProfile.Name != "root" || !userProfile.IamUserArn.endsWith(":root")) {
+                $('#section-managementandgovernance-opsworks-userprofiles-datatable').deferredBootstrapTable('append', [{
+                    f2id: userProfile.IamUserArn,
+                    f2type: 'opsworks.userprofile',
+                    f2data: userProfile,
+                    f2region: region,
+                    iamuserarn: userProfile.IamUserArn,
+                    name: userProfile.Name,
+                    sshusername: userProfile.SshUsername
+                }]);
+            }
         });
 
         unblockUI('#section-managementandgovernance-opsworks-userprofiles-datatable');
