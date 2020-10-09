@@ -195,14 +195,18 @@ async function updateDatatableAnalyticsAthena() {
             return sdkcall("Athena", "getWorkGroup", {
                 WorkGroup: workgroup.Name
             }, true).then((data) => {
-                $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.WorkGroup.Name + " Workgroup",
-                    f2type: 'athena.workgroup',
-                    f2data: data.WorkGroup,
-                    f2region: region,
-                    name: data.WorkGroup.Name,
-                    description: data.WorkGroup.Description
-                }]);
+                if (
+                    data.WorkGroup.Name != "primary"
+                ) {
+                    $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.WorkGroup.Name + " Workgroup",
+                        f2type: 'athena.workgroup',
+                        f2data: data.WorkGroup,
+                        f2region: region,
+                        name: data.WorkGroup.Name,
+                        description: data.WorkGroup.Description
+                    }]);
+                }
             });
         }));
 
@@ -218,19 +222,15 @@ async function updateDatatableAnalyticsAthena() {
             return sdkcall("Athena", "getDataCatalog", {
                 Name: datacatalog.CatalogName
             }, false).then((data) => {
-                if (
-                    data.DataCatalog.Name != "primary"
-                ) {
-                    $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.DataCatalog.Name + " Data Catalog",
-                        f2type: 'athena.datacatalog',
-                        f2data: data.DataCatalog,
-                        f2region: region,
-                        name: data.DataCatalog.Name,
-                        description: data.DataCatalog.Description,
-                        type: data.DataCatalog.Type
-                    }]);
-                }
+                $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.DataCatalog.Name + " Data Catalog",
+                    f2type: 'athena.datacatalog',
+                    f2data: data.DataCatalog,
+                    f2region: region,
+                    name: data.DataCatalog.Name,
+                    description: data.DataCatalog.Description,
+                    type: data.DataCatalog.Type
+                }]);
             }).catch(() => { });
         }));
 
