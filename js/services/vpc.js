@@ -2548,6 +2548,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
 
+    var defaultVPC = "unset";
+
     await sdkcall("EC2", "describeVpcs", {
         // no params
     }, true).then((data) => {
@@ -2556,58 +2558,62 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('removeAll');
 
         return Promise.all(data.Vpcs.map(vpc => {
-            if (vpc.DhcpOptionsId) {
-                $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('append', [{
-                    f2id: vpc.DhcpOptionsId,
-                    f2type: 'ec2.dhcpoptionsassociation',
-                    f2data: {
-                        'VpcId': vpc.VpcId,
-                        'DhcpOptionsId': vpc.DhcpOptionsId
-                    },
-                    f2region: region,
-                    vpcid: vpc.VpcId,
-                    dhcpoptionsid: vpc.DhcpOptionsId
-                }]);
-            }
-
-            vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
-                if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
-                    cidrBlock['VpcId'] = vpc.VpcId;
-                    $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('append', [{
-                        f2id: cidrBlock.AssociationId,
-                        f2type: 'ec2.vpccidrblock',
-                        f2data: cidrBlock,
+            if (vpc.IsDefault) {
+                defaultVPC = vpc.VpcId;
+            } else {
+                if (vpc.DhcpOptionsId) {
+                    $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: vpc.DhcpOptionsId,
+                        f2type: 'ec2.dhcpoptionsassociation',
+                        f2data: {
+                            'VpcId': vpc.VpcId,
+                            'DhcpOptionsId': vpc.DhcpOptionsId
+                        },
                         f2region: region,
                         vpcid: vpc.VpcId,
-                        cidrblock: cidrBlock.CidrBlock,
-                        associationid: cidrBlock.AssociationId
+                        dhcpoptionsid: vpc.DhcpOptionsId
                     }]);
                 }
-            });
 
-            return sdkcall("EC2", "describeVpcAttribute", {
-                Attribute: "enableDnsSupport",
-                VpcId: vpc.VpcId
-            }, true).then(async (dnsSupport) => {
-                await sdkcall("EC2", "describeVpcAttribute", {
-                    Attribute: "enableDnsHostnames",
-                    VpcId: vpc.VpcId
-                }, true).then((dnsHostnames) => {
-                    vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
-                    vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
-
-                    $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').deferredBootstrapTable('append', [{
-                        f2id: vpc.VpcId,
-                        f2type: 'ec2.vpc',
-                        f2data: vpc,
-                        f2region: region,
-                        f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#vpcs:filter=' + vpc.VpcId,
-                        vpcid: vpc.VpcId,
-                        instancetenancy: vpc.InstanceTenancy,
-                        cidrblock: vpc.CidrBlock
-                    }]);
+                vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
+                    if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
+                        cidrBlock['VpcId'] = vpc.VpcId;
+                        $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('append', [{
+                            f2id: cidrBlock.AssociationId,
+                            f2type: 'ec2.vpccidrblock',
+                            f2data: cidrBlock,
+                            f2region: region,
+                            vpcid: vpc.VpcId,
+                            cidrblock: cidrBlock.CidrBlock,
+                            associationid: cidrBlock.AssociationId
+                        }]);
+                    }
                 });
-            });
+
+                return sdkcall("EC2", "describeVpcAttribute", {
+                    Attribute: "enableDnsSupport",
+                    VpcId: vpc.VpcId
+                }, true).then(async (dnsSupport) => {
+                    await sdkcall("EC2", "describeVpcAttribute", {
+                        Attribute: "enableDnsHostnames",
+                        VpcId: vpc.VpcId
+                    }, true).then((dnsHostnames) => {
+                        vpc.EnableDnsSupport = dnsSupport.EnableDnsSupport.Value;
+                        vpc.EnableDnsHostnames = dnsHostnames.EnableDnsHostnames.Value;
+
+                        $('#section-networkingandcontentdelivery-vpc-vpcs-datatable').deferredBootstrapTable('append', [{
+                            f2id: vpc.VpcId,
+                            f2type: 'ec2.vpc',
+                            f2data: vpc,
+                            f2region: region,
+                            f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#vpcs:filter=' + vpc.VpcId,
+                            vpcid: vpc.VpcId,
+                            instancetenancy: vpc.InstanceTenancy,
+                            cidrblock: vpc.CidrBlock
+                        }]);
+                    });
+                });
+            }
         }));
     });
 
@@ -2618,33 +2624,35 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('removeAll');
 
         data.Subnets.forEach(subnet => {
-            if (subnet.Ipv6CidrBlockAssociationSet) {
-                subnet.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
-                    ipv6CidrBlockAssociation['SubnetId'] = subnet.SubnetId;
-                    $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('append', [{
-                        f2id: ipv6CidrBlockAssociation.AssociationId,
-                        f2type: 'ec2.subnetipv6cidrblock',
-                        f2data: ipv6CidrBlockAssociation,
-                        f2region: region,
-                        subnetid: subnet.SubnetId,
-                        ipv6cidrblock: subnet.Ipv6CidrBlock,
-                        associationid: subnet.AssociationId
-                    }]);
-                });
-            }
+            if (subnet.VpcId != defaultVPC) {
+                if (subnet.Ipv6CidrBlockAssociationSet) {
+                    subnet.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
+                        ipv6CidrBlockAssociation['SubnetId'] = subnet.SubnetId;
+                        $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('append', [{
+                            f2id: ipv6CidrBlockAssociation.AssociationId,
+                            f2type: 'ec2.subnetipv6cidrblock',
+                            f2data: ipv6CidrBlockAssociation,
+                            f2region: region,
+                            subnetid: subnet.SubnetId,
+                            ipv6cidrblock: subnet.Ipv6CidrBlock,
+                            associationid: subnet.AssociationId
+                        }]);
+                    });
+                }
 
-            $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('append', [{
-                f2id: subnet.SubnetId,
-                f2type: 'ec2.subnet',
-                f2data: subnet,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#subnets:filter=' + subnet.SubnetId,
-                subnetid: subnet.SubnetId,
-                availabilityzone: subnet.AvailabilityZone,
-                cidrblock: subnet.CidrBlock,
-                vpcid: subnet.VpcId,
-                availableipaddresscount: subnet.AvailableIpAddressCount
-            }]);
+                $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('append', [{
+                    f2id: subnet.SubnetId,
+                    f2type: 'ec2.subnet',
+                    f2data: subnet,
+                    f2region: region,
+                    f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#subnets:filter=' + subnet.SubnetId,
+                    subnetid: subnet.SubnetId,
+                    availabilityzone: subnet.AvailabilityZone,
+                    cidrblock: subnet.CidrBlock,
+                    vpcid: subnet.VpcId,
+                    availableipaddresscount: subnet.AvailableIpAddressCount
+                }]);
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-subnets-datatable');
@@ -2729,30 +2737,38 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             // no params
         }, true).then((data) => {
             data.InternetGateways.forEach(internetGateway => {
+                var skipIG = false;
+
                 if (internetGateway.Attachments) {
                     internetGateway.Attachments.forEach(attachment => {
-                        $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('append', [{
-                            f2id: attachment.VpcId + " " + internetGateway.InternetGatewayId,
-                            f2type: 'ec2.gatewayattachment',
-                            f2data: {
-                                'VpcId': attachment.VpcId,
-                                'InternetGatewayId': internetGateway.InternetGatewayId
-                            },
-                            f2region: region,
-                            vpcid: attachment.VpcId,
-                            gatewayid: attachment.InternetGatewayId
-                        }]);
+                        if (attachment.VpcId == defaultVPC) {
+                            skipIG = true;
+                        } else {
+                            $('#section-networkingandcontentdelivery-vpc-gatewayattachments-datatable').deferredBootstrapTable('append', [{
+                                f2id: attachment.VpcId + " " + internetGateway.InternetGatewayId,
+                                f2type: 'ec2.gatewayattachment',
+                                f2data: {
+                                    'VpcId': attachment.VpcId,
+                                    'InternetGatewayId': internetGateway.InternetGatewayId
+                                },
+                                f2region: region,
+                                vpcid: attachment.VpcId,
+                                gatewayid: attachment.InternetGatewayId
+                            }]);
+                        }
                     });
                 }
 
-                $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').deferredBootstrapTable('append', [{
-                    f2id: internetGateway.InternetGatewayId,
-                    f2type: 'ec2.internetgateway',
-                    f2data: internetGateway,
-                    f2region: region,
-                    f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#igws:filter=' + internetGateway.InternetGatewayId,
-                    gatewayid: internetGateway.InternetGatewayId
-                }]);
+                if (!skipIG) {
+                    $('#section-networkingandcontentdelivery-vpc-internetgateways-datatable').deferredBootstrapTable('append', [{
+                        f2id: internetGateway.InternetGatewayId,
+                        f2type: 'ec2.internetgateway',
+                        f2data: internetGateway,
+                        f2region: region,
+                        f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#igws:filter=' + internetGateway.InternetGatewayId,
+                        gatewayid: internetGateway.InternetGatewayId
+                    }]);
+                }
             });
         });
 
@@ -2803,13 +2819,20 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('removeAll');
 
         data.DhcpOptions.forEach(dhcpOptions => {
-            $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
-                f2id: dhcpOptions.DhcpOptionsId,
-                f2type: 'ec2.dhcpoptions',
-                f2data: dhcpOptions,
-                f2region: region,
-                dhcpoptionsid: dhcpOptions.DhcpOptionsId
-            }]);
+            if (
+                dhcpOptions.DhcpConfigurations.length != 2 ||
+                dhcpOptions.DhcpConfigurations[0].Key != "domain-name" ||
+                dhcpOptions.DhcpConfigurations[0].Values.length != 1 ||
+                dhcpOptions.DhcpConfigurations[0].Values[0].Value != "ec2.internal"
+            ) {
+                $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
+                    f2id: dhcpOptions.DhcpOptionsId,
+                    f2type: 'ec2.dhcpoptions',
+                    f2data: dhcpOptions,
+                    f2region: region,
+                    dhcpoptionsid: dhcpOptions.DhcpOptionsId
+                }]);
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable');
@@ -2878,56 +2901,58 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
-            if (networkAcl.Associations) {
-                networkAcl.Associations.forEach(association => {
-                    $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('append', [{
-                        f2id: association.NetworkAclAssociationId,
-                        f2type: 'ec2.subnetnetworkaclassociation',
-                        f2data: association,
-                        f2region: region,
-                        networkaclassociationid: association.NetworkAclAssociationId,
-                        networkaclid: association.NetworkAclId,
-                        subnetid: association.SubnetId
-                    }]);
-                });
-            }
-
-            if (networkAcl.Entries) {
-                networkAcl.Entries.forEach(entry => {
-                    if (entry.RuleNumber < 32767) {
-                        entry['NetworkAclId'] = networkAcl.NetworkAclId;
-                        var range = "";
-                        if (entry.PortRange) {
-                            range = entry.PortRange.From;
-                            if (entry.PortRange.From != entry.PortRange.To) {
-                                range = entry.PortRange.From + "-" + entry.PortRange.To;
-                            }
-                        }
-                        $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').deferredBootstrapTable('append', [{
-                            f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
-                            f2type: 'ec2.networkaclentry',
-                            f2data: entry,
+            if (!networkAcl.IsDefault) {
+                if (networkAcl.Associations) {
+                    networkAcl.Associations.forEach(association => {
+                        $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: association.NetworkAclAssociationId,
+                            f2type: 'ec2.subnetnetworkaclassociation',
+                            f2data: association,
                             f2region: region,
-                            networkaclid: entry.NetworkAclId,
-                            cidrblocks: (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || ""),
-                            egress: entry.Egress,
-                            protocol: entry.Protocol,
-                            action: entry.RuleAction,
-                            range: range
+                            networkaclassociationid: association.NetworkAclAssociationId,
+                            networkaclid: association.NetworkAclId,
+                            subnetid: association.SubnetId
                         }]);
-                    }
-                });
-            }
+                    });
+                }
 
-            $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').deferredBootstrapTable('append', [{
-                f2id: networkAcl.NetworkAclId,
-                f2type: 'ec2.networkacl',
-                f2data: networkAcl,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#acls:filter=' + networkAcl.NetworkAclId,
-                networkaclid: networkAcl.NetworkAclId,
-                vpcid: networkAcl.VpcId
-            }]);
+                if (networkAcl.Entries) {
+                    networkAcl.Entries.forEach(entry => {
+                        if (entry.RuleNumber < 32767) {
+                            entry['NetworkAclId'] = networkAcl.NetworkAclId;
+                            var range = "";
+                            if (entry.PortRange) {
+                                range = entry.PortRange.From;
+                                if (entry.PortRange.From != entry.PortRange.To) {
+                                    range = entry.PortRange.From + "-" + entry.PortRange.To;
+                                }
+                            }
+                            $('#section-networkingandcontentdelivery-vpc-networkaclentries-datatable').deferredBootstrapTable('append', [{
+                                f2id: entry.NetworkAclId + " " + (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || "") + " " + entry.Egress + " " + entry.Protocol + " " + entry.RuleAction + " " + range,
+                                f2type: 'ec2.networkaclentry',
+                                f2data: entry,
+                                f2region: region,
+                                networkaclid: entry.NetworkAclId,
+                                cidrblocks: (entry.CidrBlock || "") + " " + (entry.Ipv6CidrBlock || ""),
+                                egress: entry.Egress,
+                                protocol: entry.Protocol,
+                                action: entry.RuleAction,
+                                range: range
+                            }]);
+                        }
+                    });
+                }
+
+                $('#section-networkingandcontentdelivery-vpc-networkacls-datatable').deferredBootstrapTable('append', [{
+                    f2id: networkAcl.NetworkAclId,
+                    f2type: 'ec2.networkacl',
+                    f2data: networkAcl,
+                    f2region: region,
+                    f2link: 'https://console.aws.amazon.com/vpc/home?region=' + region + '#acls:filter=' + networkAcl.NetworkAclId,
+                    networkaclid: networkAcl.NetworkAclId,
+                    vpcid: networkAcl.VpcId
+                }]);
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-networkacls-datatable');
@@ -2945,20 +2970,22 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-gatewayroutetableassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.RouteTables.forEach(routeTable => {
-            routeTable.Routes.forEach(route => {
-                if (route.Origin == "CreateRoute") {
-                    route['RouteTableId'] = routeTable.RouteTableId;
-                    $('#section-networkingandcontentdelivery-vpc-routes-datatable').deferredBootstrapTable('append', [{
-                        f2id: (route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId) + " to " + (route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId),
-                        f2type: 'ec2.route',
-                        f2data: route,
-                        f2region: region,
-                        destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
-                        routetableid: routeTable.RouteTableId,
-                        resource: route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId
-                    }]);
-                }
-            });
+            if (routeTable.VpcId != defaultVPC) {
+                routeTable.Routes.forEach(route => {
+                    if (route.Origin == "CreateRoute") {
+                        route['RouteTableId'] = routeTable.RouteTableId;
+                        $('#section-networkingandcontentdelivery-vpc-routes-datatable').deferredBootstrapTable('append', [{
+                            f2id: (route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId) + " to " + (route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId),
+                            f2type: 'ec2.route',
+                            f2data: route,
+                            f2region: region,
+                            destination: route.DestinationCidrBlock || route.DestinationIpv6CidrBlock || route.DestinationPrefixListId,
+                            routetableid: routeTable.RouteTableId,
+                            resource: route.EgressOnlyInternetGatewayId || route.GatewayId || route.InstanceId || route.NatGatewayId || route.TransitGatewayId || route.NetworkInterfaceId || route.VpcPeeringConnectionId
+                        }]);
+                    }
+                });
+            }
 
             if (routeTable.Associations) {
                 routeTable.Associations.forEach(association => {
@@ -3002,14 +3029,16 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 });
             }
 
-            $('#section-networkingandcontentdelivery-vpc-routetables-datatable').deferredBootstrapTable('append', [{
-                f2id: routeTable.RouteTableId,
-                f2type: 'ec2.routetable',
-                f2data: routeTable,
-                f2region: region,
-                routetableid: routeTable.RouteTableId,
-                vpcid: routeTable.VpcId
-            }]);
+            if (routeTable.VpcId != defaultVPC) {
+                $('#section-networkingandcontentdelivery-vpc-routetables-datatable').deferredBootstrapTable('append', [{
+                    f2id: routeTable.RouteTableId,
+                    f2type: 'ec2.routetable',
+                    f2data: routeTable,
+                    f2region: region,
+                    routetableid: routeTable.RouteTableId,
+                    vpcid: routeTable.VpcId
+                }]);
+            }
         });
 
         unblockUI('#section-networkingandcontentdelivery-vpc-routetables-datatable');

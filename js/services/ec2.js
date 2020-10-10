@@ -2144,16 +2144,21 @@ async function updateDatatableComputeEC2() {
         $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('removeAll');
 
         data.SecurityGroups.forEach(securityGroup => {
-            $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('append', [{
-                f2id: securityGroup.GroupId,
-                f2type: 'ec2.securitygroup',
-                f2data: securityGroup,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#SecurityGroups:search=' + securityGroup.GroupId,
-                id: securityGroup.GroupId,
-                description: securityGroup.Description,
-                vpcid: securityGroup.VpcId
-            }]);
+            if (
+                securityGroup.Description != "default VPC security group" ||
+                securityGroup.GroupName != "default"
+            ) {
+                $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: securityGroup.GroupId,
+                    f2type: 'ec2.securitygroup',
+                    f2data: securityGroup,
+                    f2region: region,
+                    f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#SecurityGroups:search=' + securityGroup.GroupId,
+                    id: securityGroup.GroupId,
+                    description: securityGroup.Description,
+                    vpcid: securityGroup.VpcId
+                }]);
+            }
         });
 
         unblockUI('#section-compute-ec2-securitygroups-datatable');
