@@ -21,6 +21,8 @@ Though [some AWS services](https://github.com/aws/aws-sdk-js/blob/master/SERVICE
 
 [Install Former2 Helper for Mozilla Firefox](https://addons.mozilla.org/en-US/firefox/addon/former2-helper/)
 
+[Install Former2 Helper for Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/okkjnfohglnomdbpimkcdkiojbeiedof)
+
 Alternatively, you can [download and install](https://github.com/iann0036/former2-helper) the extension yourself.
 
 ## Usage
@@ -47,13 +49,13 @@ A command-line version of Former2 with limited functionality is available for in
 
 ## Security
 
-Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
+Former2 does not create any resources within your AWS account. Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data is kept entirely in memory or on local disk and is never sent over the internet or anywhere else. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
 
 If you prefer not to use a publicly hosted site to use Former2, you can [host your own version](HOSTING.md) by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1 or localhost, otherwise you can [modify the extension](HOSTING.md) as needed.
 
 ## Pricing
 
-Though Former2 is free to access or use locally, some [AWS services](https://aws.amazon.com/secrets-manager/pricing/) have small charges associated with API calls, so usage may attract an extra couple cents to your AWS bill.
+Though Former2 is free to access or use locally, some [AWS services](https://aws.amazon.com/secrets-manager/pricing/) have small charges associated with API calls so usage may attract an extra couple cents to your AWS bill.
 
 ## FAQ
 
