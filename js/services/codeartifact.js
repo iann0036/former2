@@ -7,7 +7,6 @@ sections.push({
     'service': 'CodeArtifact',
     'resourcetypes': {
         'Domains': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -73,7 +72,6 @@ sections.push({
             ]
         },
         'Repositories': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -133,23 +131,25 @@ async function updateDatatableDeveloperToolsCodeArtifact() {
         $('#section-developertools-codeartifact-domains-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.domains.map(async (domain) => {
-            await sdkcall("CodeArtifact", "describeDomain", {
-                domain: domain.name
-            }, true).then((data) => {
-                $('#section-developertools-codeartifact-domains-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.domain.arn,
-                    f2type: 'codeartifact.domain',
-                    f2data: data.domain,
-                    f2region: region,
-                    name: data.domain.name,
-                    status: data.domain.status
-                }]);
-            });
-
             return sdkcall("CodeArtifact", "getDomainPermissionsPolicy", {
                 domain: domain.name
-            }, false).then((data) => {
+            }, false).then(async (data) => {
                 data.policy['domain'] = domain.name;
+
+                await sdkcall("CodeArtifact", "describeDomain", {
+                    domain: domain.name
+                }, true).then((domaindata) => {
+                    domaindata.domain['policy'] = data.policy;
+
+                    $('#section-developertools-codeartifact-domains-datatable').deferredBootstrapTable('append', [{
+                        f2id: domaindata.domain.arn,
+                        f2type: 'codeartifact.domain',
+                        f2data: domaindata.domain,
+                        f2region: region,
+                        name: domaindata.domain.name,
+                        status: domaindata.domain.status
+                    }]);
+                });
 
                 $('#section-developertools-codeartifact-domainpermissionspolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: domain.name + " Domain Permissions Policy",
@@ -171,7 +171,16 @@ async function updateDatatableDeveloperToolsCodeArtifact() {
             return sdkcall("CodeArtifact", "describeRepository", {
                 repository: repository.name,
                 domain: repository.domainName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                await sdkcall("CodeArtifact", "getRepositoryPermissionsPolicy", {
+                    repository: repository.name,
+                    domain: repository.domainName
+                }, false).then((permissionsdata) => {
+                    if (permissionsdata.policy) {
+                        data.repository['permissions'] = policy.document;
+                    }
+                }).catch(() => { });
+
                 $('#section-developertools-codeartifact-repositories-datatable').deferredBootstrapTable('append', [{
                     f2id: data.repository.arn,
                     f2type: 'codeartifact.repository',
@@ -192,14 +201,20 @@ async function updateDatatableDeveloperToolsCodeArtifact() {
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "codeartifact.domain") {
+        reqParams.cfn['DomainName'] = obj.data.name;
         reqParams.tf['domain'] = obj.data.name;
+        reqParams.cfn['EncryptionKey'] = obj.data.encryptionKey;
         reqParams.tf['encryption_key'] = obj.data.encryptionKey;
+        if (obj.data.policy) {
+            reqParams.cfn['PermissionsPolicyDocument'] = obj.data.policy.document;
+        }
 
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('codeartifact', obj.id, 'AWS::CodeArtifact::Domain'),
             'region': obj.region,
             'service': 'codeartifact',
+            'type': 'AWS::CodeArtifact::Domain',
             'terraformType': 'aws_codeartifact_domain',
             'options': reqParams
         });
@@ -217,24 +232,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "codeartifact.repository") {
+        reqParams.cfn['RepositoryName'] = obj.data.name;
         reqParams.tf['repository'] = obj.data.name;
+        reqParams.cfn['DomainName'] = obj.data.domainName;
         reqParams.tf['domain'] = obj.data.domainName;
+        reqParams.cfn['DomainOwner'] = obj.data.domainOwner;
         reqParams.tf['domain_owner'] = obj.data.domainOwner;
+        reqParams.cfn['Description'] = obj.data.description;
         reqParams.tf['description'] = obj.data.description;
         if (obj.data.upstreams) {
+            reqParams.cfn['Upstream'] = [];
             reqParams.tf['upstream'] = [];
             obj.data.upstreams.forEach(upstream => {
+                reqParams.cfn['Upstream'].push(upstream.repositoryName);
                 reqParams.tf['upstream'].push({
                     'repository_name': upstream.repositoryName
                 });
             });
         }
+        if (obj.data.externalConnections) {
+            reqParams.cfn['ExternalConnections'] = [];
+            obj.data.externalConnections.forEach(externalConnection => {
+                reqParams.cfn['ExternalConnections'].push(externalConnection.externalConnectionName);
+            });
+        }
+        reqParams.cfn['PermissionsPolicyDocument'] = obj.data.permissions;
 
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('codeartifact', obj.id, 'AWS::CodeArtifact::Repository'),
             'region': obj.region,
             'service': 'codeartifact',
+            'type': 'AWS::CodeArtifact::Repository',
             'terraformType': 'aws_codeartifact_repository',
             'options': reqParams
         });

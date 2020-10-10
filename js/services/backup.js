@@ -279,7 +279,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         reqParams.cfn['BackupPlan'] = {
             'BackupPlanName': obj.data.BackupPlan.BackupPlanName,
-            'BackupPlanRule': rules
+            'BackupPlanRule': rules,
+            'AdvancedBackupSettings': obj.data.BackupPlan.AdvancedBackupSettings
         };
 
         reqParams.tf['name'] = obj.data.BackupPlan.BackupPlanName;

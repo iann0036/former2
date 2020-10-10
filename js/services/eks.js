@@ -255,6 +255,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.kubernetesNetworkConfig) {
+            reqParams.cfn['KubernetesNetworkConfig'] = {
+                'ServiceIpv4Cidr': obj.data.kubernetesNetworkConfig.serviceIpv4Cidr
+            };
+        }
 
         tracked_resources.push({
             'obj': obj,

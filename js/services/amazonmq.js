@@ -286,6 +286,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['EncryptionOptions'] = obj.data.EncryptionOptions;
+        if (obj.data.LdapServerMetadata) {
+            reqParams.cfn['LdapServerMetadata'] = {
+                'Hosts': obj.data.LdapServerMetadata.Hosts,
+                'RoleBase': obj.data.LdapServerMetadata.RoleBase,
+                'RoleName': obj.data.LdapServerMetadata.RoleName,
+                'RoleSearchMatching': obj.data.LdapServerMetadata.RoleSearchMatching,
+                'RoleSearchSubtree': obj.data.LdapServerMetadata.RoleSearchSubtree,
+                'ServiceAccountPassword': 'REPLACEME',
+                'ServiceAccountUsername': obj.data.LdapServerMetadata.ServiceAccountUsername,
+                'UserBase': obj.data.LdapServerMetadata.UserBase,
+                'UserRoleName': obj.data.LdapServerMetadata.UserRoleName,
+                'UserSearchMatching': obj.data.LdapServerMetadata.UserSearchMatching,
+                'UserSearchSubtree': obj.data.LdapServerMetadata.UserSearchSubtree
+            };
+        }
 
         /*
         TODO:
