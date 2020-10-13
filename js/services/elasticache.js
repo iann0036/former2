@@ -259,8 +259,8 @@ async function updateDatatableDatabaseElastiCache() {
     }, true).then((data) => {
         $('#section-database-elasticache-clusters-datatable').deferredBootstrapTable('removeAll');
 
-        if (data.Clusters) {
-            data.Clusters.forEach(cluster => {
+        if (data.CacheClusters) {
+            data.CacheClusters.forEach(cluster => {
                 $('#section-database-elasticache-clusters-datatable').deferredBootstrapTable('append', [{
                     f2id: cluster.CacheClusterId,
                     f2type: 'elasticache.cluster',
