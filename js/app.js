@@ -1515,6 +1515,19 @@ $(document).ready(function(){
         window.localStorage.setItem('skipirrelevantresources', $(this).is(':checked').toString());
     });
 
+    if (window.localStorage.getItem('includedefaultresources') == "true") {
+        $('#includedefaultresources').prop('checked', true);
+        include_default_resources = true;
+    }
+    $('#includedefaultresources').change(function() {
+        window.localStorage.setItem('includedefaultresources', $(this).is(':checked').toString());
+        if ($(this).is(':checked')) {
+            include_default_resources = true;
+        } else {
+            include_default_resources = false;
+        }
+    });
+
     if (window.localStorage.getItem('credentials-secretkey')) {
         $('.scan-account').removeAttr('disabled');
     }
@@ -1607,7 +1620,8 @@ function saveSettings() {
             'defaultoutput': window.localStorage.getItem('defaultoutput') || 'cloudformation',
             'iaclangselect': window.localStorage.getItem('iaclangselect') || 'typescript',
             'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting'),
-            'skipirrelevantresources': window.localStorage.getItem('skipirrelevantresources')
+            'skipirrelevantresources': window.localStorage.getItem('skipirrelevantresources'),
+            'includedefaultresources': window.localStorage.getItem('includedefaultresources')
         }
     };
 
@@ -1654,6 +1668,15 @@ function loadSettings() {
                     $('#skipirrelevantresources').prop('checked', true);
                 } else {
                     $('#skipirrelevantresources').prop('checked', false);
+                }
+            }
+            if ('includedefaultresources' in loaded_settings.settings) {
+                if (loaded_settings.settings.includedefaultresources == "true") {
+                    $('#includedefaultresources').prop('checked', true);
+                    include_default_resources = true;
+                } else {
+                    $('#includedefaultresources').prop('checked', false);
+                    include_default_resources = false;
                 }
             }
         }

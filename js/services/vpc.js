@@ -2558,7 +2558,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-dhcpoptionsassociations-datatable').deferredBootstrapTable('removeAll');
 
         return Promise.all(data.Vpcs.map(vpc => {
-            if (vpc.IsDefault) {
+            if (vpc.IsDefault && !include_default_resources) {
                 defaultVPC = vpc.VpcId;
             } else {
                 if (vpc.DhcpOptionsId) {
@@ -2823,7 +2823,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                 dhcpOptions.DhcpConfigurations.length != 2 ||
                 dhcpOptions.DhcpConfigurations[0].Key != "domain-name" ||
                 dhcpOptions.DhcpConfigurations[0].Values.length != 1 ||
-                dhcpOptions.DhcpConfigurations[0].Values[0].Value != "ec2.internal"
+                dhcpOptions.DhcpConfigurations[0].Values[0].Value != "ec2.internal" ||
+                include_default_resources
             ) {
                 $('#section-networkingandcontentdelivery-vpc-dhcpoptions-datatable').deferredBootstrapTable('append', [{
                     f2id: dhcpOptions.DhcpOptionsId,
@@ -2901,7 +2902,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.NetworkAcls.forEach(networkAcl => {
-            if (!networkAcl.IsDefault) {
+            if (!networkAcl.IsDefault || include_default_resources) {
                 if (networkAcl.Associations) {
                     networkAcl.Associations.forEach(association => {
                         $('#section-networkingandcontentdelivery-vpc-subnetnetworkaclassociations-datatable').deferredBootstrapTable('append', [{

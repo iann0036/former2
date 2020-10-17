@@ -62,6 +62,7 @@ Options:
   --services <value>                     list of services to include (can be comma separated (default: ALL))
   --exclude-services <value>             list of services to exclude (can be comma separated)
   --sort-output                          sort resources by their ID before outputting
+  --include-default-resources            include default resources such as default VPCs and their subnets
   --region <regionname>                  overrides the default AWS region to scan
   --profile <profilename>                uses the profile specified from the shared credentials file
   --proxy <protocol://host:port>         use proxy

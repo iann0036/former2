@@ -2146,7 +2146,8 @@ async function updateDatatableComputeEC2() {
         data.SecurityGroups.forEach(securityGroup => {
             if (
                 securityGroup.Description != "default VPC security group" ||
-                securityGroup.GroupName != "default"
+                securityGroup.GroupName != "default" ||
+                include_default_resources
             ) {
                 $('#section-compute-ec2-securitygroups-datatable').deferredBootstrapTable('append', [{
                     f2id: securityGroup.GroupId,

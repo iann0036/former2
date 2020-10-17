@@ -66,6 +66,10 @@ async function main(opts) {
         f2debug = function(msg){ console.log(Date.now().toString() + ": " + msg); };
     }
 
+    if (opts.includeDefaultResources) {
+        include_default_resources = true;
+    }
+
     if (opts.profile) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: opts.profile});
     }
@@ -209,6 +213,7 @@ cliargs
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
+    .option('--include-default-resources', 'include default resources such as default VPCs and their subnets')
     .option('--region <regionname>', 'overrides the default AWS region to scan')
     .option('--profile <profilename>', 'uses the profile specified from the shared credentials file')
     .option('--proxy <protocol://host:port>', 'use proxy')

@@ -13,6 +13,7 @@ var cfnspacing = "    ";
 var logicalidstrategy = "longtypeprefixoptionalindexsuffix";
 var service_mapping_functions = [];
 var tracked_relationships = {};
+var include_default_resources = false;
 
 function MD5(e) {
     function h(a, b) {
