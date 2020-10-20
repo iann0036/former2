@@ -2393,8 +2393,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['HibernationOptions'] = obj.data.HibernationOptions;
-        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
-        reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
+        if (['t2', 'm4'].includes(obj.data.InstanceType.split(".")[0])) {
+            reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
+        }
 
         /*
         TODO:
