@@ -733,6 +733,7 @@ async function updateDatatableMachineLearningSageMaker() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "sagemaker.model") {
         reqParams.cfn['ModelName'] = obj.data.ModelName;
+        reqParams.tf['name'] = obj.data.ModelName;
         if (obj.data.PrimaryContainer) {
             reqParams.cfn['PrimaryContainer'] = {
                 'ContainerHostname': obj.data.PrimaryContainer.ContainerHostname,
@@ -740,9 +741,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ModelDataUrl': obj.data.PrimaryContainer.ModelDataUrl,
                 'Image': obj.data.PrimaryContainer.Image
             };
+            reqParams.tf['primary_container'] = {
+                'container_hostname': obj.data.PrimaryContainer.ContainerHostname,
+                'environment': obj.data.PrimaryContainer.Environment,
+                'model_data_url': obj.data.PrimaryContainer.ModelDataUrl,
+                'image': obj.data.PrimaryContainer.Image
+            };
         }
         if (obj.data.Containers) {
             reqParams.cfn['Containers'] = [];
+            reqParams.tf['container'] = [];
             obj.data.Containers.forEach(container => {
                 reqParams.cfn['Containers'] = {
                     'ContainerHostname': container.ContainerHostname,
@@ -750,10 +758,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ModelDataUrl': container.ModelDataUrl,
                     'Image': container.Image
                 };
+                reqParams.tf['container'] = {
+                    'container_hostname': container.ContainerHostname,
+                    'environment': container.Environment,
+                    'model_data_url': container.ModelDataUrl,
+                    'image': container.Image
+                };
             });
         }
         reqParams.cfn['ExecutionRoleArn'] = obj.data.ExecutionRoleArn;
+        reqParams.tf['execution_role_arn'] = obj.data.ExecutionRoleArn;
         reqParams.cfn['VpcConfig'] = obj.data.VpcConfig;
+        reqParams.tf['vpc_config'] = obj.data.VpcConfig;
 
         /*
         TODO:
@@ -767,11 +783,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Model',
+            'terraformType': 'aws_sagemaker_model',
             'options': reqParams
         });
     } else if (obj.type == "sagemaker.endpoint") {
         reqParams.cfn['EndpointName'] = obj.data.EndpointName;
+        reqParams.tf['name'] = obj.data.EndpointName;
         reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+        reqParams.tf['endpoint_config_name'] = obj.data.EndpointConfigName;
 
         /*
         TODO:
@@ -785,13 +804,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::Endpoint',
+            'terraformType': 'aws_sagemaker_endpoint',
             'options': reqParams
         });
     } else if (obj.type == "sagemaker.endpointconfig") {
         reqParams.cfn['EndpointConfigName'] = obj.data.EndpointConfigName;
+        reqParams.tf['name'] = obj.data.EndpointConfigName;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_arn'] = obj.data.KmsKeyId;
         if (obj.data.ProductionVariants) {
             reqParams.cfn['ProductionVariants'] = [];
+            reqParams.tf['production_variants'] = [];
             obj.data.ProductionVariants.forEach(productionVariant => {
                 reqParams.cfn['ProductionVariants'].push({
                     'VariantName': productionVariant.VariantName,
@@ -799,6 +822,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'InitialInstanceCount': productionVariant.InitialInstanceCount,
                     'InstanceType': productionVariant.InstanceType,
                     'InitialVariantWeight': productionVariant.InitialVariantWeight
+                });
+                reqParams.tf['production_variants'].push({
+                    'variant_name': productionVariant.VariantName,
+                    'model_name': productionVariant.ModelName,
+                    'initial_instance_count': productionVariant.InitialInstanceCount,
+                    'instance_type': productionVariant.InstanceType,
+                    'initial_variant_weight': productionVariant.InitialVariantWeight
                 });
             });
         }
@@ -816,19 +846,30 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::EndpointConfig',
+            'terraformType': 'aws_sagemaker_endpoint_configuration',
             'options': reqParams
         });
     } else if (obj.type == "sagemaker.notebookinstance") {
         reqParams.cfn['NotebookInstanceName'] = obj.data.NotebookInstanceName;
+        reqParams.tf['name'] = obj.data.NotebookInstanceName;
         reqParams.cfn['InstanceType'] = obj.data.InstanceType;
+        reqParams.tf['instance_type'] = obj.data.InstanceType;
         reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+        reqParams.tf['subnet_id'] = obj.data.SubnetId;
         reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroups;
+        reqParams.tf['security_groups'] = obj.data.SecurityGroups;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.tf['role_arn'] = obj.data.RoleArn;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
         reqParams.cfn['LifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+        reqParams.tf['lifecycle_config_name'] = obj.data.NotebookInstanceLifecycleConfigName;
         reqParams.cfn['DirectInternetAccess'] = obj.data.DirectInternetAccess;
+        reqParams.tf['direct_internet_access'] = obj.data.DirectInternetAccess;
         reqParams.cfn['VolumeSizeInGB'] = obj.data.VolumeSizeInGB;
+        reqParams.tf['volume_size'] = obj.data.VolumeSizeInGB;
         reqParams.cfn['RootAccess'] = obj.data.RootAccess;
+        reqParams.tf['root_access'] = obj.data.RootAccess;
 
         /*
         TODO:
@@ -842,12 +883,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::NotebookInstance',
+            'terraformType': 'aws_sagemaker_notebook_instance',
             'options': reqParams
         });
     } else if (obj.type == "sagemaker.notebookinstancelifecycleconfig") {
         reqParams.cfn['NotebookInstanceLifecycleConfigName'] = obj.data.NotebookInstanceLifecycleConfigName;
+        reqParams.tf['name'] = obj.data.NotebookInstanceLifecycleConfigName;
         reqParams.cfn['OnCreate'] = obj.data.OnCreate;
+        reqParams.tf['on_create'] = obj.data.OnCreate;
         reqParams.cfn['OnStart'] = obj.data.OnStart;
+        reqParams.tf['on_start'] = obj.data.OnStart;
 
         tracked_resources.push({
             'obj': obj,
@@ -855,6 +900,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::NotebookInstanceLifecycleConfig',
+            'terraformType': 'aws_sagemaker_notebook_instance_lifecycle_configuration',
             'options': reqParams
         });
     } else if (obj.type == "sagemaker.coderepository") {
