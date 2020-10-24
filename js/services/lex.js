@@ -263,7 +263,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::Bot'), // not real
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::Bot'), // not real resource type
             'region': obj.region,
             'service': 'lex',
             'terraformType': 'aws_lex_bot',
@@ -402,7 +402,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::Intent'), // not real
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::Intent'), // not real resource type
             'region': obj.region,
             'service': 'lex',
             'terraformType': 'aws_lex_intent',
@@ -416,7 +416,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::SlotType'), // not real
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::SlotType'), // not real resource type
             'region': obj.region,
             'service': 'lex',
             'terraformType': 'aws_lex_slot_type',

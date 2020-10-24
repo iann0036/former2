@@ -34,7 +34,10 @@ cfn_exceptions = {
     'AWS::ApiGatewayV2::ApiGatewayManagedOverrides': 'N/A',
     'AWS::Cassandra::Keyspace': 'N/A',
     'AWS::Cassandra::Table': 'N/A',
-    'AWS::CloudFormation::StackSet': 'N/A'
+    'AWS::CloudFormation::StackSet': 'N/A',
+    'AWS::MediaPackage::Asset': 'N/A',
+    'AWS::MediaPackage::PackagingConfiguration': 'N/A',
+    'AWS::MediaPackage::PackagingGroup': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',

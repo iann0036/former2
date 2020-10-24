@@ -556,6 +556,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['CustomAmiId'] = obj.data.CustomAmiId;
         reqParams.cfn['EbsRootVolumeSize'] = obj.data.EbsRootVolumeSize;
         reqParams.cfn['KerberosAttributes'] = obj.data.KerberosAttributes;
+        reqParams.cfn['LogEncryptionKmsKeyId'] = obj.data.LogEncryptionKmsKeyId;
+        reqParams.cfn['StepConcurrencyLevel'] = obj.data.StepConcurrencyLevel;
 
         /*
         TODO:
@@ -565,6 +567,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         Instances:
             JobFlowInstancesConfig
         JobFlowRole: String
+        ManagedScalingPolicy
         Steps:
             - StepConfig
         */

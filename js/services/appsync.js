@@ -710,6 +710,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['expires'] = obj.data.expires;
         reqParams.cfn['ApiId'] = obj.data.apiId;
         reqParams.tf['api_id'] = obj.data.apiId;
+        reqParams.cfn['ApiKeyId'] = obj.data.id;
 
         tracked_resources.push({
             'obj': obj,

@@ -324,6 +324,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['S3Path'] = obj.data.S3Path;
+        reqParams.cfn['FileFormat'] = obj.data.FileFormat;
 
         /*
         TODO:

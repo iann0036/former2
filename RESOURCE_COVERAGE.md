@@ -1,6 +1,6 @@
 ## CloudFormation Resource Coverage
 
-**578/578 (100%)** Resources Covered
+**581/581 (100%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -119,7 +119,6 @@
 | *AWS::CloudWatch::Dashboard* | :thumbsup: |
 | *AWS::CloudWatch::InsightRule* | :thumbsup: |
 | *AWS::CodeArtifact::Domain* | :thumbsup: |
-| *AWS::CodeArtifact::DomainPermissionsPolicy* | :thumbsup: |
 | *AWS::CodeArtifact::Repository* | :thumbsup: |
 | *AWS::CodeBuild::Project* | :thumbsup: |
 | *AWS::CodeBuild::ReportGroup* | :thumbsup: |
@@ -396,9 +395,6 @@
 | *AWS::Lambda::LayerVersionPermission* | :thumbsup: |
 | *AWS::Lambda::Permission* | :thumbsup: |
 | *AWS::Lambda::Version* | :thumbsup: |
-| *AWS::Lex::Bot* | :thumbsup: |
-| *AWS::Lex::Intent* | :thumbsup: |
-| *AWS::Lex::SlotType* | :thumbsup: |
 | *AWS::Logs::Destination* | :thumbsup: |
 | *AWS::Logs::LogGroup* | :thumbsup: |
 | *AWS::Logs::LogStream* | :thumbsup: |
@@ -416,6 +412,11 @@
 | *AWS::MediaLive::Channel* | :thumbsup: |
 | *AWS::MediaLive::Input* | :thumbsup: |
 | *AWS::MediaLive::InputSecurityGroup* | :thumbsup: |
+| *AWS::MediaPackage::Asset* | N/A |
+| *AWS::MediaPackage::Channel* | :thumbsup: |
+| *AWS::MediaPackage::OriginEndpoint* | :thumbsup: |
+| *AWS::MediaPackage::PackagingConfiguration* | N/A |
+| *AWS::MediaPackage::PackagingGroup* | N/A |
 | *AWS::MediaStore::Container* | :thumbsup: |
 | *AWS::Neptune::DBCluster* | :thumbsup: |
 | *AWS::Neptune::DBClusterParameterGroup* | :thumbsup: |
@@ -554,6 +555,8 @@
 | *AWS::StepFunctions::Activity* | :thumbsup: |
 | *AWS::StepFunctions::StateMachine* | :thumbsup: |
 | *AWS::Synthetics::Canary* | :thumbsup: |
+| *AWS::Timestream::Database* | :thumbsup: |
+| *AWS::Timestream::Table* | :thumbsup: |
 | *AWS::Transfer::Server* | :thumbsup: |
 | *AWS::Transfer::User* | :thumbsup: |
 | *AWS::WAF::ByteMatchSet* | :thumbsup: |
@@ -585,7 +588,7 @@
 
 ## Terraform Coverage
 
-**315/604 (52%)** Resources Covered
+**320/604 (52%)** Resources Covered
 
 | Type | Coverage |
 | --- | --- |
@@ -1063,11 +1066,11 @@
 | *aws_s3_bucket_object* |  |
 | *aws_s3_bucket_policy* | :thumbsup: |
 | *aws_s3_bucket_public_access_block* |  |
-| *aws_sagemaker_endpoint* |  |
-| *aws_sagemaker_endpoint_configuration* |  |
-| *aws_sagemaker_model* |  |
-| *aws_sagemaker_notebook_instance* |  |
-| *aws_sagemaker_notebook_instance_lifecycle_configuration* |  |
+| *aws_sagemaker_endpoint* | :thumbsup: |
+| *aws_sagemaker_endpoint_configuration* | :thumbsup: |
+| *aws_sagemaker_model* | :thumbsup: |
+| *aws_sagemaker_notebook_instance* | :thumbsup: |
+| *aws_sagemaker_notebook_instance_lifecycle_configuration* | :thumbsup: |
 | *aws_secretsmanager_secret* | :thumbsup: |
 | *aws_secretsmanager_secret_rotation* |  |
 | *aws_secretsmanager_secret_version* | :thumbsup: |

@@ -225,7 +225,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('codeartifact', obj.id, 'AWS::CodeArtifact::DomainPermissionsPolicy'),
+            'logicalId': getResourceName('codeartifact', obj.id, 'AWS::CodeArtifact::DomainPermissionsPolicy'), // not real resource type
             'region': obj.region,
             'service': 'codeartifact',
             'terraformType': 'aws_codeartifact_domain_permissions_policy',

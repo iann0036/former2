@@ -701,6 +701,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['ComputeCapacity'] = obj.data.ComputeCapacityStatus.Desired;
         }
         reqParams.cfn['IdleDisconnectTimeoutInSeconds'] = obj.data.IdleDisconnectTimeoutInSeconds;
+        reqParams.cfn['IamRoleArn'] = obj.data.IamRoleArn;
+        reqParams.cfn['StreamView'] = obj.data.StreamView;
 
         /*
         TODO:
@@ -778,6 +780,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AppstreamAgentVersion'] = obj.data.AppstreamAgentVersion;
         reqParams.cfn['AccessEndpoints'] = obj.data.AccessEndpoints;
         reqParams.cfn['ImageName'] = obj.data.ImageArn.split("/").pop();
+        reqParams.cfn['IamRoleArn'] = obj.data.IamRoleArn;
 
         /*
         TODO:

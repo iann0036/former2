@@ -152,10 +152,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('timestream', obj.id, 'AWS::Timestream::Table'),
+            'logicalId': getResourceName('timestream', obj.id, 'AWS::Timestream::Database'),
             'region': obj.region,
             'service': 'timestream',
-            'type': 'AWS::Timestream::Table',
+            'type': 'AWS::Timestream::Database',
             'options': reqParams
         });
     } else if (obj.type == "timestream.table") {

@@ -971,6 +971,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'RoleARN': obj.data.Source.KinesisStreamSourceDescription.RoleARN
             };
         }
+        if (obj.data.DeliveryStreamEncryptionConfiguration) {
+            reqParams.cfn['DeliveryStreamEncryptionConfigurationInput'] = {
+                'KeyARN': obj.data.DeliveryStreamEncryptionConfiguration.KeyARN,
+                'KeyType': obj.data.DeliveryStreamEncryptionConfiguration.KeyType
+            };
+        }
         obj.data.Destinations.forEach(destination => {
             if (destination.S3DestinationDescription) {
                 reqParams.cfn['S3DestinationConfiguration'] = {

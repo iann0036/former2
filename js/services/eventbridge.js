@@ -515,7 +515,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'KinesisParameters': target.KinesisParameters,
                     'RoleArn': target.RoleArn,
                     'RunCommandParameters': target.RunCommandParameters,
-                    'SqsParameters': target.SqsParameters
+                    'SqsParameters': target.SqsParameters,
+                    'DeadLetterConfig': target.DeadLetterConfig,
+                    'RetryPolicy': target.RetryPolicy
                 });
             });
         }
