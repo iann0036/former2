@@ -196,10 +196,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Attributes.TopicArn.endsWith(".fifo")) {
             reqParams.cfn['FifoTopic'] = true;
         }
+        reqParams.cfn['ContentBasedDeduplication'] = obj.data.Attributes.ContentBasedDeduplication;
 
         /*
         TODO:
-        ContentBasedDeduplication
         SKIPPED:
         Subscription:
             - SNS Subscription
