@@ -1252,29 +1252,29 @@ Certificate: [X]
 AnalyzerName: [X]
 ArchiveRules: [X]
     Filter: [ ]
-    (inherited)
+    RuleName: [ ]
 Type: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::AmazonMQ::Broker
 
 ```
 Configuration: [X]
-    (inherited)
-    (inherited)
+    Id: [ ]
+    Revision: [ ]
 Logs: [X]
-    (inherited)
-    (inherited)
+    Audit: [ ]
+    General: [ ]
 PubliclyAccessible: [X]
 HostInstanceType: [X]
 StorageType: [ ]
 SubnetIds: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Value: [ ]
+    Key: [ ]
 MaintenanceWindowStartTime: [X]
     DayOfWeek: [ ]
     TimeZone: [ ]
@@ -1282,24 +1282,24 @@ MaintenanceWindowStartTime: [X]
 AutoMinorVersionUpgrade: [X]
 SecurityGroups: [X]
 Users: [X]
-    (inherited)
+    Username: [ ]
     ConsoleAccess: [ ]
-    (inherited)
+    Password: [ ]
     Groups: [ ]
 EngineVersion: [X]
 BrokerName: [X]
 LdapServerMetadata: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ServiceAccountUsername: [ ]
+    UserRoleName: [ ]
+    UserBase: [ ]
+    RoleSearchMatching: [ ]
+    UserSearchMatching: [ ]
+    RoleBase: [ ]
+    UserSearchSubtree: [ ]
+    Hosts: [ ]
+    RoleSearchSubtree: [ ]
+    RoleName: [ ]
+    ServiceAccountPassword: [ ]
 EngineType: [X]
 EncryptionOptions: [X]
     KmsKeyId: [ ]
@@ -1313,8 +1313,8 @@ AuthenticationStrategy: [ ]
 ```
 Name: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Value: [ ]
+    Key: [ ]
 EngineType: [X]
 EngineVersion: [X]
 Data: [X]
@@ -1325,8 +1325,8 @@ Description: [X]
 
 ```
 Configuration: [X]
-    (inherited)
-    (inherited)
+    Id: [ ]
+    Revision: [ ]
 Broker: [X]
 ```
 
@@ -1338,34 +1338,39 @@ EnableBranchAutoDeletion: [X]
 Description: [X]
 Repository: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 OauthToken: [ ]
 BasicAuthConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Username: [ ]
+    Password: [ ]
+    EnableBasicAuth: [ ]
 AccessToken: [ ]
 EnvironmentVariables: [X]
-    (inherited)
-    (inherited)
+    Name: [ ]
+    Value: [ ]
 IAMServiceRole: [X]
 AutoBranchCreationConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    BuildSpec: [ ]
+    EnablePullRequestPreview: [ ]
+    EnableAutoBranchCreation: [ ]
+    EnableAutoBuild: [ ]
+    AutoBranchCreationPatterns: [ ]
+    EnvironmentVariables: [X]
+        Name: [ ]
+        Value: [ ]
     EnablePerformanceMode: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    BasicAuthConfig: [X]
+        Username: [ ]
+        Password: [ ]
+        EnableBasicAuth: [ ]
+    PullRequestEnvironmentName: [ ]
+    Stage: [ ]
 CustomRules: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Status: [ ]
+    Source: [ ]
+    Target: [ ]
+    Condition: [ ]
 Name: [X]
 ```
 
@@ -1378,17 +1383,17 @@ Description: [X]
 EnablePerformanceMode: [ ]
 EnableAutoBuild: [X]
 EnvironmentVariables: [X]
-    (inherited)
-    (inherited)
+    Name: [ ]
+    Value: [ ]
 BasicAuthConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Username: [ ]
+    Password: [ ]
+    EnableBasicAuth: [ ]
 PullRequestEnvironmentName: [X]
 AppId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 BranchName: [X]
 Stage: [X]
 ```
@@ -1400,8 +1405,8 @@ EnableAutoSubDomain: [X]
 DomainName: [X]
 AutoSubDomainIAMRole: [X]
 SubDomainSettings: [X]
-    (inherited)
-    (inherited)
+    Prefix: [ ]
+    BranchName: [ ]
 AutoSubDomainCreationPatterns: [X]
 AppId: [X]
 ```
@@ -1417,8 +1422,8 @@ CloudWatchRoleArn: [X]
 ```
 Name: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Enabled: [X]
 Value: [X]
 StageKeys: [ ]
@@ -1456,8 +1461,8 @@ Stage: [X]
 ```
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::ApiGateway::Deployment
@@ -1475,11 +1480,11 @@ StageName: [ ]
 ```
 RestApiId: [X]
 Location: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Path: [ ]
+    Name: [ ]
+    Type: [ ]
+    Method: [ ]
+    StatusCode: [ ]
 Properties: [X]
 ```
 
@@ -1497,10 +1502,10 @@ DocumentationVersion: [X]
 CertificateArn: [X]
 MutualTlsAuthentication: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 EndpointConfiguration: [X]
-    (inherited)
+    Types: [ ]
 DomainName: [X]
 RegionalCertificateArn: [X]
 SecurityPolicy: [X]
@@ -1522,29 +1527,34 @@ StatusCode: [X]
 RestApiId: [X]
 RequestParameters: [X]
 MethodResponses: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ResponseModels: [ ]
+    ResponseParameters: [ ]
+    StatusCode: [ ]
 AuthorizationScopes: [X]
 RequestModels: [X]
 ResourceId: [X]
 AuthorizationType: [X]
 OperationName: [X]
 Integration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    IntegrationResponses: [X]
+        ResponseParameters: [ ]
+        ResponseTemplates: [ ]
+        ContentHandling: [ ]
+        SelectionPattern: [ ]
+        StatusCode: [ ]
+    ContentHandling: [ ]
+    CacheKeyParameters: [ ]
+    RequestParameters: [ ]
+    IntegrationHttpMethod: [ ]
+    ConnectionId: [ ]
+    Uri: [ ]
+    ConnectionType: [ ]
+    PassthroughBehavior: [ ]
+    RequestTemplates: [ ]
+    CacheNamespace: [ ]
+    Credentials: [ ]
+    Type: [ ]
+    TimeoutInMillis: [ ]
 ApiKeyRequired: [X]
 HttpMethod: [X]
 RequestValidatorId: [X]
@@ -1585,11 +1595,11 @@ Body: [ ]
 Description: [X]
 CloneFrom: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 EndpointConfiguration: [X]
-    (inherited)
-    (inherited)
+    VpcEndpointIds: [ ]
+    Types: [ ]
 MinimumCompressionSize: [X]
 BodyS3Location: [ ]
 Parameters: [ ]
@@ -1604,10 +1614,10 @@ Name: [X]
 
 ```
 CanarySetting: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PercentTraffic: [ ]
+    DeploymentId: [ ]
+    UseStageCache: [ ]
+    StageVariableOverrides: [ ]
 ClientCertificateId: [X]
 TracingEnabled: [X]
 RestApiId: [X]
@@ -1616,45 +1626,47 @@ StageName: [X]
 CacheClusterSize: [X]
 Variables: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 CacheClusterEnabled: [X]
 DocumentationVersion: [X]
 DeploymentId: [X]
 MethodSettings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    CacheTtlInSeconds: [ ]
+    ResourcePath: [ ]
+    DataTraceEnabled: [ ]
+    HttpMethod: [ ]
+    CacheDataEncrypted: [ ]
+    LoggingLevel: [ ]
+    MetricsEnabled: [ ]
+    CachingEnabled: [ ]
+    ThrottlingBurstLimit: [ ]
+    ThrottlingRateLimit: [ ]
 AccessLogSetting: [X]
-    (inherited)
-    (inherited)
+    DestinationArn: [ ]
+    Format: [ ]
 ```
 
 #### AWS::ApiGateway::UsagePlan
 
 ```
 ApiStages: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ApiId: [ ]
+    Throttle: [X]
+        RateLimit: [ ]
+        BurstLimit: [ ]
+    Stage: [ ]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Quota: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Limit: [ ]
+    Period: [ ]
+    Offset: [ ]
 Throttle: [X]
-    (inherited)
-    (inherited)
+    RateLimit: [ ]
+    BurstLimit: [ ]
 UsagePlanName: [X]
 ```
 
@@ -1705,21 +1717,26 @@ Description: [X]
 #### AWS::ApiGatewayV2::ApiGatewayManagedOverrides
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    AuthorizationType: [ ]
+    OperationName: [ ]
+    Target: [ ]
+    AuthorizerId: [ ]
+    AuthorizationScopes: [ ]
+    Description: [ ]
+        DestinationArn: [ ]
+        Format: [ ]
+    AutoDeploy: [ ]
+        LoggingLevel: [ ]
+        DetailedMetricsEnabled: [ ]
+        DataTraceEnabled: [ ]
+        ThrottlingBurstLimit: [ ]
+        ThrottlingRateLimit: [ ]
+    StageVariables: [ ]
+    RouteSettings: [ ]
+    PayloadFormatVersion: [ ]
+    IntegrationMethod: [ ]
+    Description: [ ]
+    TimeoutInMillis: [ ]
 ```
 
 #### AWS::ApiGatewayV2::ApiMapping
@@ -1763,10 +1780,10 @@ StageName: [ ]
 MutualTlsAuthentication: [ ]
 DomainName: [X]
 DomainNameConfigurations: [X]
-    (inherited)
-    (inherited)
+    CertificateArn: [ ]
+    CertificateName: [ ]
     SecurityPolicy: [ ]
-    (inherited)
+    EndpointType: [ ]
 Tags: [ ]
 ```
 
@@ -1948,53 +1965,104 @@ ApplicationId: [X]
 
 ```
 ConnectorProfileConfig: [X]
-    (inherited)
+    ConnectorProfileProperties: [X]
+        Marketo: [X]
+            InstanceUrl: [ ]
+        Datadog: [X]
+            InstanceUrl: [ ]
+        Salesforce: [X]
+            isSandboxEnvironment: [ ]
+            InstanceUrl: [ ]
+        ServiceNow: [X]
+            InstanceUrl: [ ]
+        Redshift: [X]
+            DatabaseUrl: [ ]
+            BucketPrefix: [ ]
+            BucketName: [ ]
+            RoleArn: [ ]
+        InforNexus: [X]
+            InstanceUrl: [ ]
+        Dynatrace: [X]
+            InstanceUrl: [ ]
+        Veeva: [X]
+            InstanceUrl: [ ]
+        Zendesk: [X]
+            InstanceUrl: [ ]
+        Snowflake: [X]
+            BucketName: [ ]
+            BucketPrefix: [ ]
+            AccountName: [ ]
+            PrivateLinkServiceName: [ ]
+            Warehouse: [ ]
+            Region: [ ]
+            Stage: [ ]
+        Slack: [X]
+            InstanceUrl: [ ]
     ConnectorProfileCredentials: [X]
         Marketo: [X]
             ConnectorOAuthRequest: [X]
                 AuthCode: [ ]
                 RedirectUri: [ ]
-            (inherited)
-            (inherited)
-            (inherited)
-        (inherited)
+            ClientSecret: [ ]
+            ClientId: [ ]
+            AccessToken: [ ]
+        Datadog: [X]
+            ApplicationKey: [ ]
+            ApiKey: [ ]
         GoogleAnalytics: [X]
             ConnectorOAuthRequest: [X]
                 AuthCode: [ ]
                 RedirectUri: [ ]
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+            ClientSecret: [ ]
+            RefreshToken: [ ]
+            ClientId: [ ]
+            AccessToken: [ ]
+        ServiceNow: [X]
+            Username: [ ]
+            Password: [ ]
+        Redshift: [X]
+            Username: [ ]
+            Password: [ ]
+        Singular: [X]
+            ApiKey: [ ]
+        Amplitude: [X]
+            SecretKey: [ ]
+            ApiKey: [ ]
         Slack: [X]
             ConnectorOAuthRequest: [X]
                 AuthCode: [ ]
                 RedirectUri: [ ]
-            (inherited)
-            (inherited)
-            (inherited)
-        (inherited)
-        (inherited)
+            ClientSecret: [ ]
+            ClientId: [ ]
+            AccessToken: [ ]
+        InforNexus: [X]
+            SecretAccessKey: [ ]
+            Datakey: [ ]
+            UserId: [ ]
+            AccessKeyId: [ ]
+        Dynatrace: [X]
+            ApiToken: [ ]
         Salesforce: [X]
             ConnectorOAuthRequest: [X]
                 AuthCode: [ ]
                 RedirectUri: [ ]
-            (inherited)
-            (inherited)
-        (inherited)
+            RefreshToken: [ ]
+            AccessToken: [ ]
+        Veeva: [X]
+            Username: [ ]
+            Password: [ ]
         Zendesk: [X]
             ConnectorOAuthRequest: [X]
                 AuthCode: [ ]
                 RedirectUri: [ ]
-            (inherited)
-            (inherited)
-            (inherited)
-        (inherited)
-        (inherited)
+            ClientSecret: [ ]
+            ClientId: [ ]
+            AccessToken: [ ]
+        Snowflake: [X]
+            Username: [ ]
+            Password: [ ]
+        Trendmicro: [X]
+            ApiSecretKey: [ ]
 ConnectorProfileName: [X]
 KMSArn: [X]
 ConnectorType: [X]
@@ -2006,27 +2074,117 @@ ConnectionMode: [X]
 ```
 FlowName: [X]
 TriggerConfig: [X]
-    (inherited)
-    (inherited)
+    TriggerProperties: [X]
+        TimeZone: [ ]
+        ScheduleExpression: [ ]
+        DataPullMode: [ ]
+        ScheduleEndTime: [ ]
+        ScheduleStartTime: [ ]
+    TriggerType: [ ]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 KMSArn: [X]
 Tasks: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    SourceFields: [ ]
+    ConnectorOperator: [X]
+        Marketo: [ ]
+        Datadog: [ ]
+        GoogleAnalytics: [ ]
+        ServiceNow: [ ]
+        Singular: [ ]
+        S3: [ ]
+        Amplitude: [ ]
+        Slack: [ ]
+        Dynatrace: [ ]
+        Salesforce: [ ]
+        Veeva: [ ]
+        Zendesk: [ ]
+        InforNexus: [ ]
+        Trendmicro: [ ]
+    TaskProperties: [X]
+        Key: [ ]
+        Value: [ ]
+    DestinationField: [ ]
+    TaskType: [ ]
 SourceFlowConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ConnectorProfileName: [ ]
+    ConnectorType: [ ]
+    SourceConnectorProperties: [X]
+        Marketo: [X]
+            Object: [ ]
+        Datadog: [X]
+            Object: [ ]
+        GoogleAnalytics: [X]
+            Object: [ ]
+        ServiceNow: [X]
+            Object: [ ]
+        Singular: [X]
+            Object: [ ]
+        S3: [X]
+            BucketPrefix: [ ]
+            BucketName: [ ]
+        Amplitude: [X]
+            Object: [ ]
+        Slack: [X]
+            Object: [ ]
+        Dynatrace: [X]
+            Object: [ ]
+        Salesforce: [X]
+            Object: [ ]
+            EnableDynamicFieldUpdate: [ ]
+            IncludeDeletedRecords: [ ]
+        Veeva: [X]
+            Object: [ ]
+        Zendesk: [X]
+            Object: [ ]
+        InforNexus: [X]
+            Object: [ ]
+        Trendmicro: [X]
+            Object: [ ]
 DestinationFlowConfigList: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    DestinationConnectorProperties: [X]
+        S3: [X]
+            BucketPrefix: [ ]
+            BucketName: [ ]
+            S3OutputFormatConfig: [X]
+                FileType: [ ]
+                PrefixConfig: [X]
+                    PrefixFormat: [ ]
+                    PrefixType: [ ]
+                AggregationConfig: [X]
+                    AggregationType: [ ]
+        Salesforce: [X]
+            ErrorHandlingConfig: [X]
+                BucketPrefix: [ ]
+                BucketName: [ ]
+                FailOnFirstError: [ ]
+            Object: [ ]
+        EventBridge: [X]
+            ErrorHandlingConfig: [X]
+                BucketPrefix: [ ]
+                BucketName: [ ]
+                FailOnFirstError: [ ]
+            Object: [ ]
+        Snowflake: [X]
+            ErrorHandlingConfig: [X]
+                BucketPrefix: [ ]
+                BucketName: [ ]
+                FailOnFirstError: [ ]
+            IntermediateBucketName: [ ]
+            Object: [ ]
+            BucketPrefix: [ ]
+        Redshift: [X]
+            ErrorHandlingConfig: [X]
+                BucketPrefix: [ ]
+                BucketName: [ ]
+                FailOnFirstError: [ ]
+            IntermediateBucketName: [ ]
+            Object: [ ]
+            BucketPrefix: [ ]
+    ConnectorProfileName: [ ]
+    ConnectorType: [ ]
 ```
 
 #### AWS::AppMesh::GatewayRoute
@@ -2041,15 +2199,18 @@ Spec: [X]
     GrpcRoute: [X]
         Action: [X]
             Target: [ ]
-        (inherited)
+        Match: [X]
+            ServiceName: [ ]
     HttpRoute: [X]
         Action: [X]
             Target: [ ]
-        (inherited)
+        Match: [X]
+            Prefix: [ ]
     Http2Route: [X]
         Action: [X]
             Target: [ ]
-        (inherited)
+        Match: [X]
+            Prefix: [ ]
 ```
 
 #### AWS::AppMesh::Mesh
@@ -2057,7 +2218,8 @@ Spec: [X]
 ```
 MeshName: [X]
 Spec: [X]
-    (inherited)
+    EgressFilter: [X]
+        Type: [ ]
 Tags: [ ]
 ```
 
@@ -2070,25 +2232,97 @@ VirtualRouterName: [X]
 RouteName: [X]
 MeshOwner: [X]
 Spec: [X]
-    (inherited)
+    Priority: [ ]
     GrpcRoute: [X]
-        (inherited)
+        Action: [X]
+            WeightedTargets: [X]
+                VirtualNode: [ ]
+                Weight: [ ]
         Timeout: [ ]
-        (inherited)
-        (inherited)
+        Match: [X]
+            ServiceName: [ ]
+            MethodName: [ ]
+            Metadata: [X]
+                Invert: [ ]
+                Name: [ ]
+                Match: [X]
+                    Regex: [ ]
+                    Prefix: [ ]
+                    Exact: [ ]
+                    Range: [X]
+                        Start: [ ]
+                        End: [ ]
+                    Suffix: [ ]
+        RetryPolicy: [X]
+            TcpRetryEvents: [ ]
+            PerRetryTimeout: [X]
+                Value: [ ]
+                Unit: [ ]
+            MaxRetries: [ ]
+            HttpRetryEvents: [ ]
+            GrpcRetryEvents: [ ]
     TcpRoute: [X]
-        (inherited)
+        Action: [X]
+            WeightedTargets: [X]
+                VirtualNode: [ ]
+                Weight: [ ]
         Timeout: [ ]
     HttpRoute: [X]
-        (inherited)
+        Action: [X]
+            WeightedTargets: [X]
+                VirtualNode: [ ]
+                Weight: [ ]
         Timeout: [ ]
-        (inherited)
-        (inherited)
+        Match: [X]
+            Headers: [X]
+                Invert: [ ]
+                Name: [ ]
+                Match: [X]
+                    Regex: [ ]
+                    Prefix: [ ]
+                    Exact: [ ]
+                    Range: [X]
+                        Start: [ ]
+                        End: [ ]
+                    Suffix: [ ]
+            Prefix: [ ]
+            Scheme: [ ]
+            Method: [ ]
+        RetryPolicy: [X]
+            TcpRetryEvents: [ ]
+            PerRetryTimeout: [X]
+                Value: [ ]
+                Unit: [ ]
+            MaxRetries: [ ]
+            HttpRetryEvents: [ ]
     Http2Route: [X]
-        (inherited)
+        Action: [X]
+            WeightedTargets: [X]
+                VirtualNode: [ ]
+                Weight: [ ]
         Timeout: [ ]
-        (inherited)
-        (inherited)
+        Match: [X]
+            Headers: [X]
+                Invert: [ ]
+                Name: [ ]
+                Match: [X]
+                    Regex: [ ]
+                    Prefix: [ ]
+                    Exact: [ ]
+                    Range: [X]
+                        Start: [ ]
+                        End: [ ]
+                    Suffix: [ ]
+            Prefix: [ ]
+            Scheme: [ ]
+            Method: [ ]
+        RetryPolicy: [X]
+            TcpRetryEvents: [ ]
+            PerRetryTimeout: [X]
+                Value: [ ]
+                Unit: [ ]
+            MaxRetries: [ ]
+            HttpRetryEvents: [ ]
 ```
 
 #### AWS::AppMesh::VirtualGateway
@@ -2097,9 +2331,41 @@ Spec: [X]
 VirtualGatewayName: [X]
 MeshName: [X]
 Spec: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    BackendDefaults: [X]
+        ClientPolicy: [X]
+            TLS: [X]
+                Validation: [X]
+                    Trust: [X]
+                        ACM: [X]
+                            CertificateAuthorityArns: [ ]
+                        File: [X]
+                            CertificateChain: [ ]
+                Enforce: [ ]
+                Ports: [ ]
+    Listeners: [X]
+        TLS: [X]
+            Mode: [ ]
+            Certificate: [X]
+                ACM: [X]
+                    CertificateArn: [ ]
+                File: [X]
+                    PrivateKey: [ ]
+                    CertificateChain: [ ]
+        HealthCheck: [X]
+            Protocol: [ ]
+            TimeoutMillis: [ ]
+            IntervalMillis: [ ]
+            HealthyThreshold: [ ]
+            Path: [ ]
+            UnhealthyThreshold: [ ]
+            Port: [ ]
+        PortMapping: [X]
+            Protocol: [ ]
+            Port: [ ]
+    Logging: [X]
+        AccessLog: [X]
+            File: [X]
+                Path: [ ]
 MeshOwner: [X]
 Tags: [ ]
 ```
@@ -2108,17 +2374,59 @@ Tags: [ ]
 
 ```
 Spec: [X]
-    (inherited)
+    BackendDefaults: [X]
+        ClientPolicy: [X]
+            TLS: [X]
+                Validation: [X]
+                    Trust: [X]
+                        ACM: [X]
+                            CertificateAuthorityArns: [ ]
+                        File: [X]
+                            CertificateChain: [ ]
+                Enforce: [ ]
+                Ports: [ ]
     Listeners: [X]
-        (inherited)
-        (inherited)
+        TLS: [X]
+            Mode: [ ]
+            Certificate: [X]
+                ACM: [X]
+                    CertificateArn: [ ]
+                File: [X]
+                    PrivateKey: [ ]
+                    CertificateChain: [ ]
+        HealthCheck: [X]
+            Protocol: [ ]
+            TimeoutMillis: [ ]
+            IntervalMillis: [ ]
+            HealthyThreshold: [ ]
+            Path: [ ]
+            UnhealthyThreshold: [ ]
+            Port: [ ]
         Timeout: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
+        PortMapping: [X]
+            Protocol: [ ]
+            Port: [ ]
+    Backends: [X]
+        VirtualService: [X]
+            VirtualServiceName: [ ]
+            ClientPolicy: [X]
+                TLS: [X]
+                    Validation: [X]
+                        Trust: [X]
+                            ACM: [X]
+                                CertificateAuthorityArns: [ ]
+                            File: [X]
+                                CertificateChain: [ ]
+                    Enforce: [ ]
+                    Ports: [ ]
+    Logging: [X]
+        AccessLog: [X]
+            File: [X]
+                Path: [ ]
     ServiceDiscovery: [X]
         AWSCloudMap: [ ]
-        (inherited)
+        DNS: [X]
+            Hostname: [ ]
 MeshName: [X]
 VirtualNodeName: [X]
 MeshOwner: [X]
@@ -2129,7 +2437,10 @@ Tags: [ ]
 
 ```
 Spec: [X]
-    (inherited)
+    Listeners: [X]
+        PortMapping: [X]
+            Protocol: [ ]
+            Port: [ ]
 MeshName: [X]
 MeshOwner: [X]
 VirtualRouterName: [X]
@@ -2142,7 +2453,11 @@ Tags: [ ]
 MeshName: [X]
 VirtualServiceName: [X]
 Spec: [X]
-    (inherited)
+    Provider: [X]
+        VirtualNode: [X]
+            VirtualNodeName: [ ]
+        VirtualRouter: [X]
+            VirtualRouterName: [ ]
 MeshOwner: [X]
 Tags: [ ]
 ```
@@ -2277,25 +2592,37 @@ ApiKeyId: [X]
 ```
 ServiceRoleArn: [X]
 ElasticsearchConfig: [X]
-    (inherited)
-    (inherited)
+    Endpoint: [ ]
+    AwsRegion: [ ]
 Description: [X]
 ApiId: [X]
 DynamoDBConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DeltaSyncConfig: [X]
+        DeltaSyncTableTTL: [ ]
+        DeltaSyncTableName: [ ]
+        BaseTableTTL: [ ]
+    TableName: [ ]
+    AwsRegion: [ ]
+    Versioned: [ ]
+    UseCallerCredentials: [ ]
 HttpConfig: [X]
-    (inherited)
-    (inherited)
+    AuthorizationConfig: [X]
+        AuthorizationType: [ ]
+        AwsIamConfig: [X]
+            SigningRegion: [ ]
+            SigningServiceName: [ ]
+    Endpoint: [ ]
 LambdaConfig: [X]
-    (inherited)
+    LambdaFunctionArn: [ ]
 Type: [X]
 RelationalDatabaseConfig: [X]
-    (inherited)
-    (inherited)
+    RdsHttpEndpointConfig: [X]
+        DatabaseName: [ ]
+        AwsRegion: [ ]
+        DbClusterIdentifier: [ ]
+        AwsSecretStoreArn: [ ]
+        Schema: [ ]
+    RelationalDatabaseSourceType: [ ]
 Name: [X]
 ```
 
@@ -2323,19 +2650,19 @@ Name: [X]
 AuthenticationType: [X]
 Tags: [ ]
 OpenIDConnectConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    IatTTL: [ ]
+    AuthTTL: [ ]
+    ClientId: [ ]
+    Issuer: [ ]
 LogConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    FieldLogLevel: [ ]
+    ExcludeVerboseContent: [ ]
+    CloudWatchLogsRoleArn: [ ]
 UserPoolConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    AppIdClientRegex: [ ]
+    DefaultAction: [ ]
+    UserPoolId: [ ]
+    AwsRegion: [ ]
 ```
 
 #### AWS::AppSync::GraphQLSchema
@@ -2352,19 +2679,20 @@ DefinitionS3Location: [ ]
 Kind: [X]
 DataSourceName: [X]
 CachingConfig: [X]
-    (inherited)
-    (inherited)
+    CachingKeys: [ ]
+    Ttl: [ ]
 ResponseMappingTemplateS3Location: [ ]
 RequestMappingTemplateS3Location: [ ]
 RequestMappingTemplate: [X]
 TypeName: [X]
 FieldName: [X]
 PipelineConfig: [X]
-    (inherited)
+    Functions: [ ]
 SyncConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ConflictHandler: [ ]
+    LambdaConflictHandlerConfig: [X]
+        LambdaConflictHandlerArn: [ ]
+    ConflictDetection: [ ]
 ResponseMappingTemplate: [X]
 ApiId: [X]
 ```
@@ -2383,11 +2711,13 @@ MaxCapacity: [X]
 MinCapacity: [X]
 ServiceNamespace: [X]
 ScheduledActions: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    EndTime: [ ]
+    ScalableTargetAction: [X]
+        MinCapacity: [ ]
+        MaxCapacity: [ ]
+    ScheduledActionName: [ ]
+    StartTime: [ ]
+    Schedule: [ ]
 ```
 
 #### AWS::ApplicationAutoScaling::ScalingPolicy
@@ -2398,19 +2728,31 @@ ScalableDimension: [X]
 ScalingTargetId: [ ]
 ResourceId: [X]
 StepScalingPolicyConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    StepAdjustments: [X]
+        ScalingAdjustment: [ ]
+        MetricIntervalLowerBound: [ ]
+        MetricIntervalUpperBound: [ ]
+    MetricAggregationType: [ ]
+    Cooldown: [ ]
+    AdjustmentType: [ ]
+    MinAdjustmentMagnitude: [ ]
 PolicyType: [X]
 TargetTrackingScalingPolicyConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ScaleOutCooldown: [ ]
+    DisableScaleIn: [ ]
+    CustomizedMetricSpecification: [X]
+        MetricName: [ ]
+        Namespace: [ ]
+        Dimensions: [X]
+            Name: [ ]
+            Value: [ ]
+        Unit: [ ]
+        Statistic: [ ]
+    TargetValue: [ ]
+    PredefinedMetricSpecification: [X]
+        PredefinedMetricType: [ ]
+        ResourceLabel: [ ]
+    ScaleInCooldown: [ ]
 ServiceNamespace: [X]
 ```
 
@@ -2457,13 +2799,13 @@ WorkGroupConfigurationUpdates: [ ]
 RecursiveDeleteOption: [ ]
 State: [X]
 WorkGroupConfiguration: [X]
-    (inherited)
+    PublishCloudWatchMetricsEnabled: [ ]
     ResultConfiguration: [X]
         EncryptionConfiguration: [ ]
         OutputLocation: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    BytesScannedCutoffPerQuery: [ ]
+    RequesterPaysEnabled: [ ]
+    EnforceWorkGroupConfiguration: [ ]
 Description: [X]
 ```
 
@@ -2481,15 +2823,15 @@ MixedInstancesPolicy: [X]
         LaunchTemplateSpecification: [ ]
         Overrides: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    PropagateAtLaunch: [ ]
+    Value: [ ]
+    Key: [ ]
 InstanceId: [ ]
 MaxSize: [X]
 TerminationPolicies: [X]
 MetricsCollection: [X]
-    (inherited)
-    (inherited)
+    Metrics: [ ]
+    Granularity: [ ]
 TargetGroupARNs: [X]
 HealthCheckType: [X]
 LaunchTemplate: [X]
@@ -2560,7 +2902,7 @@ AutoScalingGroupName: [X]
 Cooldown: [X]
 PolicyType: [X]
 StepAdjustments: [X]
-    (inherited)
+    ScalingAdjustment: [ ]
     MetricIntervalLowerBound: [ ]
     MetricIntervalUpperBound: [ ]
 AdjustmentType: [X]
@@ -2591,9 +2933,9 @@ ApplicationSource: [X]
     CloudFormationStackARN: [ ]
     TagFilters: [ ]
 ScalingInstructions: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ScalingPolicyUpdateBehavior: [ ]
+    ScalableDimension: [ ]
+    ScheduledActionBufferTime: [ ]
     TargetTrackingConfigurations: [X]
         CustomizedScalingMetricSpecification: [ ]
         EstimatedInstanceWarmup: [ ]
@@ -2602,11 +2944,11 @@ ScalingInstructions: [X]
         PredefinedScalingMetricSpecification: [ ]
         TargetValue: [ ]
         ScaleInCooldown: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PredictiveScalingMaxCapacityBehavior: [ ]
+    PredictiveScalingMaxCapacityBuffer: [ ]
+    ResourceId: [ ]
+    DisableDynamicScaling: [ ]
+    PredictiveScalingMode: [ ]
     CustomizedLoadMetricSpecification: [X]
         MetricName: [ ]
         Namespace: [ ]
@@ -2616,26 +2958,26 @@ ScalingInstructions: [X]
     PredefinedLoadMetricSpecification: [X]
         ResourceLabel: [ ]
         PredefinedLoadMetricType: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    MinCapacity: [ ]
+    ServiceNamespace: [ ]
+    MaxCapacity: [ ]
 ```
 
 #### AWS::Backup::BackupPlan
 
 ```
 BackupPlan: [X]
-    (inherited)
+    BackupPlanName: [ ]
     AdvancedBackupSettings: [X]
         ResourceType: [ ]
         BackupOptions: [ ]
     BackupPlanRule: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        CompletionWindowMinutes: [ ]
+        ScheduleExpression: [ ]
+        StartWindowMinutes: [ ]
+        RuleName: [ ]
+        TargetBackupVault: [ ]
+        RecoveryPointTags: [ ]
         Lifecycle: [X]
             DeleteAfterDays: [ ]
             MoveToColdStorageAfterDays: [ ]
@@ -2672,22 +3014,25 @@ BackupVaultTags: [ ]
 ServiceRole: [X]
 Tags: [X]
 ComputeResources: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    AllocationStrategy: [ ]
+    Subnets: [ ]
+    Type: [ ]
+    PlacementGroup: [ ]
+    SpotIamFleetRole: [ ]
+    Tags: [ ]
+    DesiredvCpus: [ ]
+    MinvCpus: [ ]
+    InstanceTypes: [ ]
+    SecurityGroupIds: [ ]
+    InstanceRole: [ ]
+    MaxvCpus: [ ]
+    ImageId: [ ]
+    BidPercentage: [ ]
+    Ec2KeyPair: [ ]
+    LaunchTemplate: [X]
+        LaunchTemplateName: [ ]
+        Version: [ ]
+        LaunchTemplateId: [ ]
 State: [X]
 ComputeEnvironmentName: [X]
 Type: [X]
@@ -2699,52 +3044,112 @@ Type: [X]
 Parameters: [X]
 Tags: [ ]
 RetryStrategy: [X]
-    (inherited)
+    Attempts: [ ]
 NodeProperties: [X]
-    (inherited)
+    MainNode: [ ]
     NodeRangeProperties: [X]
-        (inherited)
+        TargetNodes: [ ]
         Container: [X]
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
+            ReadonlyRootFilesystem: [ ]
+            MountPoints: [X]
+                SourceVolume: [ ]
+                ReadOnly: [ ]
+                ContainerPath: [ ]
+            Secrets: [X]
+                ValueFrom: [ ]
+                Name: [ ]
+            LinuxParameters: [X]
+                Swappiness: [ ]
+                MaxSwap: [ ]
+                SharedMemorySize: [ ]
+                Devices: [X]
+                    HostPath: [ ]
+                    ContainerPath: [ ]
+                    Permissions: [ ]
+                InitProcessEnabled: [ ]
+                Tmpfs: [X]
+                    MountOptions: [ ]
+                    ContainerPath: [ ]
+                    Size: [ ]
+            Image: [ ]
+            Privileged: [ ]
+            LogConfiguration: [X]
+                SecretOptions: [X]
+                    ValueFrom: [ ]
+                    Name: [ ]
+                Options: [ ]
+                LogDriver: [ ]
+            Environment: [X]
+                Name: [ ]
+                Value: [ ]
+            Vcpus: [ ]
+            ExecutionRoleArn: [ ]
+            JobRoleArn: [ ]
+            User: [ ]
+            Volumes: [X]
+                Host: [X]
+                    SourcePath: [ ]
+                Name: [ ]
+            Memory: [ ]
             ResourceRequirements: [ ]
-            (inherited)
+            Command: [ ]
             InstanceType: [ ]
-            (inherited)
-    (inherited)
+            Ulimits: [X]
+                SoftLimit: [ ]
+                HardLimit: [ ]
+                Name: [ ]
+    NumNodes: [ ]
 Timeout: [X]
-    (inherited)
+    AttemptDurationSeconds: [ ]
 ContainerProperties: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ReadonlyRootFilesystem: [ ]
+    MountPoints: [X]
+        SourceVolume: [ ]
+        ReadOnly: [ ]
+        ContainerPath: [ ]
+    Secrets: [X]
+        ValueFrom: [ ]
+        Name: [ ]
+    LinuxParameters: [X]
+        Swappiness: [ ]
+        MaxSwap: [ ]
+        SharedMemorySize: [ ]
+        Devices: [X]
+            HostPath: [ ]
+            ContainerPath: [ ]
+            Permissions: [ ]
+        InitProcessEnabled: [ ]
+        Tmpfs: [X]
+            MountOptions: [ ]
+            ContainerPath: [ ]
+            Size: [ ]
+    Image: [ ]
+    Privileged: [ ]
+    LogConfiguration: [X]
+        SecretOptions: [X]
+            ValueFrom: [ ]
+            Name: [ ]
+        Options: [ ]
+        LogDriver: [ ]
+    Environment: [X]
+        Name: [ ]
+        Value: [ ]
+    Vcpus: [ ]
+    ExecutionRoleArn: [ ]
+    JobRoleArn: [ ]
+    User: [ ]
+    Volumes: [X]
+        Host: [X]
+            SourcePath: [ ]
+        Name: [ ]
+    Memory: [ ]
     ResourceRequirements: [ ]
-    (inherited)
+    Command: [ ]
     InstanceType: [ ]
-    (inherited)
+    Ulimits: [X]
+        SoftLimit: [ ]
+        HardLimit: [ ]
+        Name: [ ]
 Type: [X]
 JobDefinitionName: [X]
 ```
@@ -2756,8 +3161,8 @@ Priority: [X]
 State: [X]
 JobQueueName: [X]
 ComputeEnvironmentOrder: [X]
-    (inherited)
-    (inherited)
+    ComputeEnvironment: [ ]
+    Order: [ ]
 Tags: [ ]
 ```
 
@@ -2766,12 +3171,12 @@ Tags: [ ]
 ```
 NotificationsWithSubscribers: [ ]
 Budget: [X]
-    (inherited)
-    (inherited)
+    BudgetType: [ ]
+    PlannedBudgetLimits: [ ]
     BudgetLimit: [X]
         Amount: [ ]
         Unit: [ ]
-    (inherited)
+    BudgetName: [ ]
     CostTypes: [X]
         IncludeOtherSubscription: [ ]
         IncludeUpfront: [ ]
@@ -2784,11 +3189,11 @@ Budget: [X]
         IncludeCredit: [ ]
         IncludeRecurring: [ ]
         IncludeSubscription: [ ]
-    (inherited)
+    TimeUnit: [ ]
     TimePeriod: [X]
         Start: [ ]
         End: [ ]
-    (inherited)
+    CostFilters: [ ]
 ```
 
 #### AWS::CE::CostCategory
@@ -2807,14 +3212,16 @@ RuleVersion: [X]
 #### AWS::Cassandra::Table
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        ColumnName: [ ]
+        ColumnType: [ ]
+    OrderBy: [ ]
+        WriteCapacityUnits: [ ]
+        ReadCapacityUnits: [ ]
+    Mode: [ ]
+    ColumnName: [ ]
+    ColumnType: [ ]
+    ColumnName: [ ]
+    ColumnType: [ ]
 ```
 
 #### AWS::CertificateManager::Certificate
@@ -2826,8 +3233,8 @@ CertificateTransparencyLoggingPreference: [X]
 Tags: [ ]
 DomainValidationOptions: [X]
     HostedZoneId: [ ]
-    (inherited)
-    (inherited)
+    ValidationDomain: [ ]
+    DomainName: [ ]
 ValidationMethod: [ ]
 CertificateAuthorityArn: [X]
 ```
@@ -2864,27 +3271,29 @@ Name: [X]
 #### AWS::CloudFormation::Stack
 
 ```
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::CloudFormation::StackSet
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        Accounts: [ ]
+        OrganizationalUnitIds: [ ]
+    Regions: [ ]
+        ParameterValue: [ ]
+        ParameterKey: [ ]
+    Key: [ ]
+    Value: [ ]
+    FailureToleranceCount: [ ]
+    MaxConcurrentCount: [ ]
+    FailureTolerancePercentage: [ ]
+    MaxConcurrentPercentage: [ ]
+    RegionOrder: [ ]
+    ParameterValue: [ ]
+    ParameterKey: [ ]
+    RetainStacksOnAccountRemoval: [ ]
+    Enabled: [ ]
 ```
 
 #### AWS::CloudFormation::WaitCondition
@@ -2901,67 +3310,98 @@ Name: [X]
 
 ```
 CachePolicyConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Comment: [ ]
+    Name: [ ]
+    MaxTTL: [ ]
+    ParametersInCacheKeyAndForwardedToOrigin: [X]
+        EnableAcceptEncodingBrotli: [ ]
+        HeadersConfig: [X]
+            Headers: [ ]
+            HeaderBehavior: [ ]
+        CookiesConfig: [X]
+            Cookies: [ ]
+            CookieBehavior: [ ]
+        EnableAcceptEncodingGzip: [ ]
+        QueryStringsConfig: [X]
+            QueryStrings: [ ]
+            QueryStringBehavior: [ ]
+    DefaultTTL: [ ]
+    MinTTL: [ ]
 ```
 
 #### AWS::CloudFront::CloudFrontOriginAccessIdentity
 
 ```
 CloudFrontOriginAccessIdentityConfig: [X]
-    (inherited)
+    Comment: [ ]
 ```
 
 #### AWS::CloudFront::Distribution
 
 ```
 DistributionConfig: [X]
-    (inherited)
-    (inherited)
+    Comment: [ ]
+    Restrictions: [X]
+        GeoRestriction: [X]
+            Locations: [ ]
+            RestrictionType: [ ]
     Logging: [ ]
-    (inherited)
+    WebACLId: [ ]
     Origins: [X]
-        (inherited)
-        (inherited)
+        OriginPath: [ ]
+        DomainName: [ ]
         S3OriginConfig: [X]
             OriginAccessIdentity: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
+        CustomOriginConfig: [X]
+            OriginSSLProtocols: [ ]
+            OriginProtocolPolicy: [ ]
+            OriginReadTimeout: [ ]
+            HTTPPort: [ ]
+            HTTPSPort: [ ]
+            OriginKeepaliveTimeout: [ ]
+        ConnectionAttempts: [ ]
+        ConnectionTimeout: [ ]
         OriginShield: [ ]
         OriginCustomHeaders: [X]
             HeaderName: [ ]
             HeaderValue: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        Id: [ ]
+    PriceClass: [ ]
+    DefaultRootObject: [ ]
+    Enabled: [ ]
+    IPV6Enabled: [ ]
     DefaultCacheBehavior: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        ViewerProtocolPolicy: [ ]
+        TrustedSigners: [ ]
+        OriginRequestPolicyId: [ ]
+        TargetOriginId: [ ]
         LambdaFunctionAssociations: [X]
-            (inherited)
+            EventType: [ ]
             IncludeBody: [ ]
-            (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-    (inherited)
+            LambdaFunctionARN: [ ]
+        Compress: [ ]
+        RealtimeLogConfigArn: [ ]
+        FieldLevelEncryptionId: [ ]
+        ForwardedValues: [X]
+            Headers: [ ]
+            Cookies: [X]
+                WhitelistedNames: [ ]
+                Forward: [ ]
+            QueryStringCacheKeys: [ ]
+            QueryString: [ ]
+        MaxTTL: [ ]
+        CachePolicyId: [ ]
+        SmoothStreaming: [ ]
+        CachedMethods: [ ]
+        DefaultTTL: [ ]
+        AllowedMethods: [ ]
+        MinTTL: [ ]
+    ViewerCertificate: [X]
+        SslSupportMethod: [ ]
+        CloudFrontDefaultCertificate: [ ]
+        MinimumProtocolVersion: [ ]
+        IamCertificateId: [ ]
+        AcmCertificateArn: [ ]
     CustomErrorResponses: [X]
         ErrorCode: [ ]
         ResponsePagePath: [ ]
@@ -2970,29 +3410,35 @@ DistributionConfig: [X]
     OriginGroups: [X]
         Items: [ ]
         Quantity: [ ]
-    (inherited)
+    Aliases: [ ]
     CacheBehaviors: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        ViewerProtocolPolicy: [ ]
+        TrustedSigners: [ ]
+        PathPattern: [ ]
+        OriginRequestPolicyId: [ ]
         LambdaFunctionAssociations: [X]
-            (inherited)
+            EventType: [ ]
             IncludeBody: [ ]
-            (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-    (inherited)
+            LambdaFunctionARN: [ ]
+        TargetOriginId: [ ]
+        RealtimeLogConfigArn: [ ]
+        FieldLevelEncryptionId: [ ]
+        ForwardedValues: [X]
+            Headers: [ ]
+            Cookies: [X]
+                WhitelistedNames: [ ]
+                Forward: [ ]
+            QueryStringCacheKeys: [ ]
+            QueryString: [ ]
+        MaxTTL: [ ]
+        CachePolicyId: [ ]
+        SmoothStreaming: [ ]
+        CachedMethods: [ ]
+        DefaultTTL: [ ]
+        AllowedMethods: [ ]
+        MinTTL: [ ]
+        Compress: [ ]
+    HttpVersion: [ ]
 Tags: [ ]
 ```
 
@@ -3000,11 +3446,17 @@ Tags: [ ]
 
 ```
 OriginRequestPolicyConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Comment: [ ]
+    HeadersConfig: [X]
+        Headers: [ ]
+        HeaderBehavior: [ ]
+    CookiesConfig: [X]
+        Cookies: [ ]
+        CookieBehavior: [ ]
+    Name: [ ]
+    QueryStringsConfig: [X]
+        QueryStrings: [ ]
+        QueryStringBehavior: [ ]
 ```
 
 #### AWS::CloudFront::RealtimeLogConfig
@@ -3012,8 +3464,10 @@ OriginRequestPolicyConfig: [X]
 ```
 Fields: [X]
 EndPoints: [X]
-    (inherited)
-    (inherited)
+    StreamType: [ ]
+    KinesisStreamConfig: [X]
+        RoleArn: [ ]
+        StreamArn: [ ]
 Name: [X]
 SamplingRate: [X]
 ```
@@ -3022,15 +3476,17 @@ SamplingRate: [X]
 
 ```
 StreamingDistributionConfig: [X]
-    (inherited)
+    Comment: [ ]
     S3Origin: [X]
         OriginAccessIdentity: [ ]
         DomainName: [ ]
     Logging: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PriceClass: [ ]
+    TrustedSigners: [X]
+        Enabled: [ ]
+        AwsAccountNumbers: [ ]
+    Enabled: [ ]
+    Aliases: [ ]
 Tags: [ ]
 ```
 
@@ -3069,7 +3525,7 @@ Period: [X]
 EvaluateLowSampleCountPercentile: [X]
 Metrics: [X]
     MetricStat: [ ]
-    (inherited)
+    Period: [ ]
     Label: [ ]
     ReturnData: [ ]
     Expression: [ ]
@@ -3094,7 +3550,7 @@ Configuration: [X]
     ExcludedTimeRanges: [X]
         EndTime: [ ]
         StartTime: [ ]
-    (inherited)
+    MetricTimeZone: [ ]
 Namespace: [X]
 Dimensions: [X]
     Name: [ ]
@@ -3151,81 +3607,102 @@ Upstreams: [ ]
 
 ```
 LogsConfig: [X]
-    (inherited)
-    (inherited)
+    S3Logs: [X]
+        Status: [ ]
+        EncryptionDisabled: [ ]
+        Location: [ ]
+    CloudWatchLogs: [X]
+        Status: [ ]
+        GroupName: [ ]
+        StreamName: [ ]
 Cache: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Type: [ ]
+    Modes: [ ]
+    Location: [ ]
 Description: [X]
 VpcConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Subnets: [ ]
+    VpcId: [ ]
+    SecurityGroupIds: [ ]
 Triggers: [ ]
 Artifacts: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Packaging: [ ]
+    Name: [ ]
+    ArtifactIdentifier: [ ]
+    NamespaceType: [ ]
+    EncryptionDisabled: [ ]
+    Location: [ ]
+    OverrideArtifactName: [ ]
+    Path: [ ]
+    Type: [ ]
 TimeoutInMinutes: [X]
 BadgeEnabled: [X]
 ServiceRole: [X]
 SourceVersion: [ ]
 Source: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    BuildSpec: [ ]
+    InsecureSsl: [ ]
+    GitSubmodulesConfig: [X]
+        FetchSubmodules: [ ]
+    BuildStatusConfig: [X]
+        Context: [ ]
+        TargetUrl: [ ]
+    Auth: [X]
+        Type: [ ]
+        Resource: [ ]
+    Location: [ ]
+    SourceIdentifier: [ ]
+    GitCloneDepth: [ ]
+    Type: [ ]
+    ReportBuildStatus: [ ]
 BuildBatchConfig: [ ]
 QueuedTimeoutInMinutes: [X]
 FileSystemLocations: [ ]
 Name: [X]
 SecondaryArtifacts: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Packaging: [ ]
+    Name: [ ]
+    ArtifactIdentifier: [ ]
+    NamespaceType: [ ]
+    EncryptionDisabled: [ ]
+    Location: [ ]
+    OverrideArtifactName: [ ]
+    Path: [ ]
+    Type: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 SecondarySources: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    BuildSpec: [ ]
+    InsecureSsl: [ ]
+    GitSubmodulesConfig: [X]
+        FetchSubmodules: [ ]
+    BuildStatusConfig: [X]
+        Context: [ ]
+        TargetUrl: [ ]
+    Auth: [X]
+        Type: [ ]
+        Resource: [ ]
+    Location: [ ]
+    SourceIdentifier: [ ]
+    GitCloneDepth: [ ]
+    Type: [ ]
+    ReportBuildStatus: [ ]
 EncryptionKey: [X]
 Environment: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ImagePullCredentialsType: [ ]
+    ComputeType: [ ]
+    Certificate: [ ]
+    PrivilegedMode: [ ]
+    Image: [ ]
+    EnvironmentVariables: [X]
+        Type: [ ]
+        Name: [ ]
+        Value: [ ]
+    RegistryCredential: [X]
+        Credential: [ ]
+        CredentialProvider: [ ]
+    Type: [ ]
 SecondarySourceVersions: [ ]
 ```
 
@@ -3235,8 +3712,13 @@ SecondarySourceVersions: [ ]
 Type: [X]
 DeleteReports: [ ]
 ExportConfig: [X]
-    (inherited)
-    (inherited)
+    ExportConfigType: [ ]
+    S3Destination: [X]
+        Packaging: [ ]
+        Path: [ ]
+        Bucket: [ ]
+        EncryptionKey: [ ]
+        EncryptionDisabled: [ ]
 Name: [X]
 Tags: [ ]
 ```
@@ -3271,8 +3753,8 @@ ComputePlatform: [X]
 
 ```
 MinimumHealthyHosts: [X]
-    (inherited)
-    (inherited)
+    Type: [ ]
+    Value: [ ]
 DeploymentConfigName: [X]
 ```
 
@@ -3281,18 +3763,21 @@ DeploymentConfigName: [X]
 ```
 ApplicationName: [X]
 AutoRollbackConfiguration: [X]
-    (inherited)
-    (inherited)
+    Enabled: [ ]
+    Events: [ ]
 LoadBalancerInfo: [X]
-    (inherited)
-    (inherited)
+    ElbInfoList: [X]
+        Name: [ ]
+    TargetGroupInfoList: [X]
+        Name: [ ]
 Deployment: [ ]
 DeploymentConfigName: [X]
 AutoScalingGroups: [X]
 AlarmConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Alarms: [X]
+        Name: [ ]
+    IgnorePollAlarmFailure: [ ]
+    Enabled: [ ]
 Ec2TagFilters: [X]
     Type: [ ]
     Key: [ ]
@@ -3304,12 +3789,12 @@ Ec2TagSet: [X]
             Key: [ ]
             Value: [ ]
 TriggerConfigurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    TriggerEvents: [ ]
+    TriggerTargetArn: [ ]
+    TriggerName: [ ]
 DeploymentStyle: [X]
-    (inherited)
-    (inherited)
+    DeploymentType: [ ]
+    DeploymentOption: [ ]
 ServiceRoleArn: [X]
 DeploymentGroupName: [X]
 OnPremisesTagSet: [X]
@@ -3330,8 +3815,8 @@ OnPremisesInstanceTagFilters: [X]
 AgentPermissions: [ ]
 ProfilingGroupName: [X]
 AnomalyDetectionNotificationConfiguration: [X]
-    (inherited)
-    (inherited)
+    channelId: [ ]
+    channelUri: [ ]
 ComputePlatform: [X]
 Tags: [ ]
 ```
@@ -3351,26 +3836,26 @@ Name: [X]
 Category: [X]
 Tags: [ ]
 Settings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    EntityUrlTemplate: [ ]
+    ExecutionUrlTemplate: [ ]
+    RevisionUrlTemplate: [ ]
+    ThirdPartyConfigurationUrl: [ ]
 ConfigurationProperties: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Description: [ ]
+    Required: [ ]
+    Secret: [ ]
+    Key: [ ]
+    Type: [ ]
+    Queryable: [ ]
+    Name: [ ]
 Version: [X]
 Provider: [X]
 InputArtifactDetails: [X]
-    (inherited)
-    (inherited)
+    MaximumCount: [ ]
+    MinimumCount: [ ]
 OutputArtifactDetails: [X]
-    (inherited)
-    (inherited)
+    MaximumCount: [ ]
+    MinimumCount: [ ]
 ```
 
 #### AWS::CodePipeline::Pipeline
@@ -3381,25 +3866,49 @@ Tags: [ ]
 RoleArn: [X]
 DisableInboundStageTransitions: [ ]
 ArtifactStore: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Type: [ ]
+    EncryptionKey: [X]
+        Type: [ ]
+        Id: [ ]
+    Location: [ ]
 Stages: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Blockers: [X]
+        Type: [ ]
+        Name: [ ]
+    Name: [ ]
+    Actions: [X]
+        InputArtifacts: [X]
+            Name: [ ]
+        Name: [ ]
+        Region: [ ]
+        Namespace: [ ]
+        ActionTypeId: [X]
+            Category: [ ]
+            Owner: [ ]
+            Version: [ ]
+            Provider: [ ]
+        OutputArtifacts: [X]
+            Name: [ ]
+        Configuration: [ ]
+        RoleArn: [ ]
+        RunOrder: [ ]
 RestartExecutionOnUpdate: [ ]
 ArtifactStores: [X]
-    (inherited)
-    (inherited)
+    Region: [ ]
+    ArtifactStore: [X]
+        Type: [ ]
+        EncryptionKey: [X]
+            Type: [ ]
+            Id: [ ]
+        Location: [ ]
 ```
 
 #### AWS::CodePipeline::Webhook
 
 ```
 AuthenticationConfiguration: [X]
-    (inherited)
-    (inherited)
+    SecretToken: [ ]
+    AllowedIPRange: [ ]
 Name: [X]
 TargetPipelineVersion: [ ]
 RegisterWithThirdParty: [ ]
@@ -3407,8 +3916,8 @@ Authentication: [X]
 TargetPipeline: [X]
 TargetAction: [X]
 Filters: [X]
-    (inherited)
-    (inherited)
+    MatchEquals: [ ]
+    JsonPath: [ ]
 ```
 
 #### AWS::CodeStar::GitHubRepository
@@ -3442,8 +3951,8 @@ Name: [X]
 Tags: [X]
 DetailType: [X]
 Targets: [X]
-    (inherited)
-    (inherited)
+    TargetAddress: [ ]
+    TargetType: [ ]
 ```
 
 #### AWS::Cognito::IdentityPool
@@ -3511,15 +4020,15 @@ EmailConfiguration: [X]
 EnabledMfas: [ ]
 UsernameAttributes: [X]
 LambdaConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PostConfirmation: [ ]
+    CreateAuthChallenge: [ ]
+    VerifyAuthChallengeResponse: [ ]
+    PreAuthentication: [ ]
+    PostAuthentication: [ ]
+    CustomMessage: [ ]
+    PreSignUp: [ ]
     PreTokenGeneration: [ ]
-    (inherited)
+    DefineAuthChallenge: [ ]
     UserMigration: [ ]
 UserPoolName: [X]
 VerificationMessageTemplate: [X]
@@ -3685,14 +4194,14 @@ Scope: [X]
 
 ```
 OrganizationAggregationSource: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    AllAwsRegions: [ ]
+    AwsRegions: [ ]
+    RoleArn: [ ]
 ConfigurationAggregatorName: [X]
 AccountAggregationSources: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    AllAwsRegions: [ ]
+    AccountIds: [ ]
+    AwsRegions: [ ]
 Tags: [ ]
 ```
 
@@ -3700,9 +4209,9 @@ Tags: [ ]
 
 ```
 RecordingGroup: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    AllSupported: [ ]
+    ResourceTypes: [ ]
+    IncludeGlobalResourceTypes: [ ]
 RoleARN: [X]
 Name: [X]
 ```
@@ -3726,7 +4235,7 @@ TemplateS3Uri: [ ]
 S3KeyPrefix: [X]
 Name: [X]
 ConfigSnapshotDeliveryProperties: [X]
-    (inherited)
+    DeliveryFrequency: [ ]
 S3BucketName: [X]
 SnsTopicARN: [X]
 ```
@@ -3801,7 +4310,7 @@ IAMRoleARN: [X]
 SecurityGroupIds: [X]
 ParameterGroupName: [X]
 SSESpecification: [X]
-    (inherited)
+    SSEEnabled: [ ]
 NotificationTopicARN: [X]
 PreferredMaintenanceWindow: [X]
 ```
@@ -3853,37 +4362,37 @@ NeptuneSettings: [X]
     IamAuthEnabled: [ ]
     MaxFileSize: [ ]
     ErrorRetryDuration: [ ]
-    (inherited)
+    ServiceAccessRoleArn: [ ]
     MaxRetryCount: [ ]
     S3BucketName: [ ]
     S3BucketFolder: [ ]
 ElasticsearchSettings: [ ]
 DynamoDbSettings: [X]
-    (inherited)
+    ServiceAccessRoleArn: [ ]
 MongoDbSettings: [X]
-    (inherited)
+    Username: [ ]
     NestingLevel: [ ]
     DocsToInvestigate: [ ]
     AuthSource: [ ]
-    (inherited)
+    ServerName: [ ]
     AuthMechanism: [ ]
     AuthType: [ ]
-    (inherited)
+    DatabaseName: [ ]
     ExtractDocId: [ ]
     Password: [ ]
-    (inherited)
+    Port: [ ]
 Tags: [ ]
 Port: [X]
 EndpointType: [X]
 EngineName: [X]
 S3Settings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    CompressionType: [ ]
+    BucketFolder: [ ]
+    CsvRowDelimiter: [ ]
+    CsvDelimiter: [ ]
+    ServiceAccessRoleArn: [ ]
+    ExternalTableDefinition: [ ]
+    BucketName: [ ]
 ExtraConnectionAttributes: [X]
 DatabaseName: [X]
 KmsKeyId: [X]
@@ -3895,9 +4404,9 @@ Password: [ ]
 EndpointIdentifier: [X]
 ServerName: [X]
 KinesisSettings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ServiceAccessRoleArn: [ ]
+    StreamArn: [ ]
+    MessageFormat: [ ]
 ```
 
 #### AWS::DMS::EventSubscription
@@ -3966,8 +4475,8 @@ PipelineObjects: [ ]
 ParameterValues: [ ]
 ParameterObjects: [ ]
 PipelineTags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Name: [X]
 ```
 
@@ -3991,8 +4500,8 @@ MemberId: [X]
 CreateAlias: [X]
 Name: [X]
 VpcSettings: [X]
-    (inherited)
-    (inherited)
+    SubnetIds: [ ]
+    VpcId: [ ]
 Edition: [X]
 EnableSso: [X]
 ShortName: [X]
@@ -4005,8 +4514,8 @@ Password: [X]
 CreateAlias: [X]
 Description: [X]
 VpcSettings: [X]
-    (inherited)
-    (inherited)
+    SubnetIds: [ ]
+    VpcId: [ ]
 EnableSso: [X]
 Name: [X]
 ShortName: [X]
@@ -4075,11 +4584,13 @@ GlobalSecondaryIndexes: [X]
     KeySchema: [X]
         KeyType: [ ]
         AttributeName: [ ]
-    (inherited)
+    IndexName: [ ]
     Projection: [X]
         ProjectionType: [ ]
         NonKeyAttributes: [ ]
-    (inherited)
+    ProvisionedThroughput: [X]
+        WriteCapacityUnits: [ ]
+        ReadCapacityUnits: [ ]
 AttributeDefinitions: [X]
     AttributeName: [ ]
     AttributeType: [ ]
@@ -4087,7 +4598,7 @@ LocalSecondaryIndexes: [X]
     KeySchema: [X]
         KeyType: [ ]
         AttributeName: [ ]
-    (inherited)
+    IndexName: [ ]
     Projection: [X]
         ProjectionType: [ ]
         NonKeyAttributes: [ ]
@@ -4095,21 +4606,21 @@ Tags: [X]
     Key: [ ]
     Value: [ ]
 ProvisionedThroughput: [X]
-    (inherited)
-    (inherited)
+    WriteCapacityUnits: [ ]
+    ReadCapacityUnits: [ ]
 TableName: [X]
 BillingMode: [X]
 PointInTimeRecoverySpecification: [ ]
 StreamSpecification: [X]
-    (inherited)
+    StreamViewType: [ ]
 TimeToLiveSpecification: [ ]
 KeySchema: [X]
     KeyType: [ ]
     AttributeName: [ ]
 SSESpecification: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    SSEEnabled: [ ]
+    KMSMasterKeyId: [ ]
+    SSEType: [ ]
 ```
 
 #### AWS::EC2::CapacityReservation
@@ -4120,7 +4631,7 @@ AvailabilityZone: [X]
 EndDate: [X]
 InstanceMatchCriteria: [X]
 TagSpecifications: [X]
-    (inherited)
+    ResourceType: [ ]
     Tags: [X]
         Key: [ ]
         Value: [ ]
@@ -4159,7 +4670,7 @@ VpcId: [X]
 Description: [X]
 TransportProtocol: [X]
 TagSpecifications: [X]
-    (inherited)
+    ResourceType: [ ]
     Tags: [X]
         Key: [ ]
         Value: [ ]
@@ -4168,11 +4679,13 @@ ConnectionLogOptions: [X]
     Enabled: [ ]
     CloudwatchLogGroup: [ ]
 AuthenticationOptions: [X]
-    (inherited)
-    (inherited)
+    Type: [ ]
+    FederatedAuthentication: [X]
+        SAMLProviderArn: [ ]
     ActiveDirectory: [X]
         DirectoryId: [ ]
-    (inherited)
+    MutualAuthentication: [X]
+        ClientRootCertificateChainArn: [ ]
 ClientCidrBlock: [X]
 SecurityGroupIds: [X]
 ServerCertificateArn: [X]
@@ -4204,8 +4717,8 @@ BgpAsn: [X]
 IpAddress: [X]
 Type: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::DHCPOptions
@@ -4213,8 +4726,8 @@ Tags: [X]
 ```
 DomainName: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 DomainNameServers: [X]
 NtpServers: [ ]
 NetbiosNameServers: [ ]
@@ -4226,41 +4739,44 @@ NetbiosNodeType: [ ]
 ```
 ValidUntil: [X]
 LaunchTemplateConfigs: [X]
-    (inherited)
+    LaunchTemplateSpecification: [X]
+        LaunchTemplateName: [ ]
+        Version: [ ]
+        LaunchTemplateId: [ ]
     Overrides: [X]
-        (inherited)
+        AvailabilityZone: [ ]
         Placement: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        MaxPrice: [ ]
+        WeightedCapacity: [ ]
+        Priority: [ ]
+        SubnetId: [ ]
+        InstanceType: [ ]
 TagSpecifications: [X]
-    (inherited)
+    ResourceType: [ ]
     Tags: [X]
         Key: [ ]
         Value: [ ]
 ExcessCapacityTerminationPolicy: [X]
 TargetCapacitySpecification: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    OnDemandTargetCapacity: [ ]
+    DefaultTargetCapacityType: [ ]
+    TotalTargetCapacity: [ ]
+    SpotTargetCapacity: [ ]
 OnDemandOptions: [X]
     MinTargetCapacity: [ ]
     SingleAvailabilityZone: [ ]
     MaxTotalPrice: [ ]
     SingleInstanceType: [ ]
     CapacityReservationOptions: [ ]
-    (inherited)
+    AllocationStrategy: [ ]
 SpotOptions: [X]
     MinTargetCapacity: [ ]
-    (inherited)
+    InstancePoolsToUseCount: [ ]
     SingleAvailabilityZone: [ ]
-    (inherited)
+    InstanceInterruptionBehavior: [ ]
     MaxTotalPrice: [ ]
     SingleInstanceType: [ ]
-    (inherited)
+    AllocationStrategy: [ ]
 ValidFrom: [X]
 Type: [X]
 ReplaceUnhealthyInstances: [X]
@@ -4340,8 +4856,8 @@ CpuOptions: [X]
     CoreCount: [ ]
     ThreadsPerCore: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 PlacementGroupName: [X]
 ImageId: [X]
 KeyName: [X]
@@ -4355,7 +4871,7 @@ AdditionalInfo: [ ]
 SourceDestCheck: [X]
 LaunchTemplate: [ ]
 ElasticGpuSpecifications: [X]
-    (inherited)
+    Type: [ ]
 InstanceInitiatedShutdownBehavior: [ ]
 SecurityGroupIds: [X]
 SubnetId: [X]
@@ -4370,14 +4886,14 @@ Ipv6AddressCount: [ ]
 ElasticInferenceAccelerators: [ ]
 BlockDeviceMappings: [X]
     Ebs: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        VolumeSize: [ ]
+        Encrypted: [ ]
+        VolumeType: [ ]
+        DeleteOnTermination: [ ]
         KmsKeyId: [ ]
-        (inherited)
-        (inherited)
-    (inherited)
+        SnapshotId: [ ]
+        Iops: [ ]
+    DeviceName: [ ]
     VirtualName: [ ]
     NoDevice: [ ]
 HibernationOptions: [X]
@@ -4390,8 +4906,8 @@ DisableApiTermination: [ ]
 
 ```
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::LaunchTemplate
@@ -4404,14 +4920,14 @@ LaunchTemplateData: [X]
         ResourceType: [ ]
         Tags: [ ]
     LicenseSpecifications: [ ]
-    (inherited)
+    EbsOptimized: [ ]
     CpuOptions: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    ImageId: [ ]
+    KeyName: [ ]
+    SecurityGroups: [ ]
     CreditSpecification: [X]
         CpuCredits: [ ]
-    (inherited)
+    InstanceType: [ ]
     NetworkInterfaces: [X]
         DeviceIndex: [ ]
         Description: [ ]
@@ -4438,18 +4954,18 @@ LaunchTemplateData: [X]
     ElasticGpuSpecifications: [X]
         Type: [ ]
     CapacityReservationSpecification: [ ]
-    (inherited)
-    (inherited)
+    InstanceInitiatedShutdownBehavior: [ ]
+    SecurityGroupIds: [ ]
     BlockDeviceMappings: [X]
         Ebs: [ ]
         DeviceName: [ ]
         VirtualName: [ ]
         NoDevice: [ ]
-    (inherited)
+    KernelId: [ ]
     IamInstanceProfile: [X]
         Name: [ ]
         Arn: [ ]
-    (inherited)
+    UserData: [ ]
     InstanceMarketOptions: [X]
         SpotOptions: [ ]
         MarketType: [ ]
@@ -4457,9 +4973,12 @@ LaunchTemplateData: [X]
         Count: [ ]
         Type: [ ]
     HibernationOptions: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    MetadataOptions: [X]
+        HttpPutResponseHopLimit: [ ]
+        HttpTokens: [ ]
+        HttpEndpoint: [ ]
+    RamDiskId: [ ]
+    DisableApiTermination: [ ]
 LaunchTemplateName: [X]
 ```
 
@@ -4488,8 +5007,8 @@ Tags: [X]
 SubnetId: [X]
 AllocationId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::NetworkAcl
@@ -4497,8 +5016,8 @@ Tags: [X]
 ```
 VpcId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::NetworkAclEntry
@@ -4526,12 +5045,12 @@ SourceDestCheck: [X]
 GroupSet: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Ipv6AddressCount: [ ]
 PrivateIpAddresses: [X]
-    (inherited)
-    (inherited)
+    Primary: [ ]
+    PrivateIpAddress: [ ]
 Ipv6Addresses: [X]
     Ipv6Address: [ ]
 SecondaryPrivateIpAddressCount: [ ]
@@ -4600,8 +5119,8 @@ DestinationIpv6CidrBlock: [ ]
 ```
 VpcId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::SecurityGroup
@@ -4609,28 +5128,28 @@ Tags: [X]
 ```
 VpcId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 SecurityGroupEgress: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DestinationPrefixListId: [ ]
+    Description: [ ]
+    CidrIp: [ ]
+    FromPort: [ ]
+    CidrIpv6: [ ]
+    ToPort: [ ]
+    IpProtocol: [ ]
+    DestinationSecurityGroupId: [ ]
 SecurityGroupIngress: [X]
-    (inherited)
+    Description: [ ]
     SourcePrefixListId: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    CidrIp: [ ]
+    SourceSecurityGroupId: [ ]
+    FromPort: [ ]
+    SourceSecurityGroupOwnerId: [ ]
+    SourceSecurityGroupName: [ ]
+    CidrIpv6: [ ]
+    ToPort: [ ]
+    IpProtocol: [ ]
 GroupName: [X]
 GroupDescription: [X]
 ```
@@ -4649,42 +5168,49 @@ GroupDescription: [X]
 
 ```
 SpotFleetRequestConfigData: [X]
-    (inherited)
+    ValidUntil: [ ]
     LaunchTemplateConfigs: [X]
         LaunchTemplateSpecification: [X]
             LaunchTemplateId: [ ]
             Version: [ ]
             LaunchTemplateName: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
+        Overrides: [X]
+            SubnetId: [ ]
+            AvailabilityZone: [ ]
+            InstanceType: [ ]
+            SpotPrice: [ ]
+            WeightedCapacity: [ ]
+    TerminateInstancesWithExpiration: [ ]
+    InstanceInterruptionBehavior: [ ]
     LaunchSpecifications: [X]
-        (inherited)
-        (inherited)
+        UserData: [ ]
+        IamInstanceProfile: [X]
+            Arn: [ ]
         Monitoring: [X]
             Enabled: [ ]
         Placement: [X]
             GroupName: [ ]
             Tenancy: [ ]
-            (inherited)
+            AvailabilityZone: [ ]
         TagSpecifications: [X]
             ResourceType: [ ]
             Tags: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
+        EbsOptimized: [ ]
+        ImageId: [ ]
+        KernelId: [ ]
         BlockDeviceMappings: [X]
             Ebs: [ ]
             DeviceName: [ ]
             VirtualName: [ ]
             NoDevice: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        KeyName: [ ]
+        SecurityGroups: [X]
+            GroupId: [ ]
+        SubnetId: [ ]
+        RamdiskId: [ ]
+        WeightedCapacity: [ ]
+        InstanceType: [ ]
+        SpotPrice: [ ]
         NetworkInterfaces: [X]
             DeviceIndex: [ ]
             Description: [ ]
@@ -4693,21 +5219,21 @@ SpotFleetRequestConfigData: [X]
             Ipv6Addresses: [ ]
             DeleteOnTermination: [ ]
             Groups: [ ]
-            (inherited)
+            SubnetId: [ ]
             NetworkInterfaceId: [ ]
             AssociatePublicIpAddress: [ ]
             SecondaryPrivateIpAddressCount: [ ]
     LoadBalancersConfig: [X]
         TargetGroupsConfig: [ ]
         ClassicLoadBalancersConfig: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    IamFleetRole: [ ]
+    ExcessCapacityTerminationPolicy: [ ]
+    TargetCapacity: [ ]
+    ValidFrom: [ ]
+    Type: [ ]
+    ReplaceUnhealthyInstances: [ ]
+    SpotPrice: [ ]
+    AllocationStrategy: [ ]
 ```
 
 #### AWS::EC2::Subnet
@@ -4806,8 +5332,8 @@ DefaultRouteTableAssociation: [X]
 DnsSupport: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 AutoAcceptSharedAttachments: [X]
 MulticastSupport: [ ]
 AmazonSideAsn: [X]
@@ -4822,8 +5348,8 @@ SubnetIds: [X]
 VpcId: [X]
 TransitGatewayId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::TransitGatewayRoute
@@ -4864,8 +5390,8 @@ EnableDnsSupport: [X]
 InstanceTenancy: [X]
 EnableDnsHostnames: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::EC2::VPCCidrBlock
@@ -4934,8 +5460,8 @@ VpnGatewayId: [ ]
 PeerRegion: [X]
 VpcId: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 PeerRoleArn: [ ]
 PeerOwnerId: [X]
 PeerVpcId: [X]
@@ -4945,8 +5471,8 @@ PeerVpcId: [X]
 
 ```
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Type: [X]
 VpnGatewayId: [X]
 TransitGatewayId: [ ]
@@ -4983,8 +5509,8 @@ VpnGatewayId: [X]
 AvailabilityZone: [X]
 MultiAttachEnabled: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 Encrypted: [X]
 VolumeType: [X]
 KmsKeyId: [X]
@@ -5009,8 +5535,8 @@ VolumeId: [X]
 Tags: [ ]
 RepositoryPolicyText: [X]
 LifecyclePolicy: [X]
-    (inherited)
-    (inherited)
+    LifecyclePolicyText: [ ]
+    RegistryId: [ ]
 ImageScanningConfiguration: [ ]
 ImageTagMutability: [ ]
 RepositoryName: [X]
@@ -5021,12 +5547,16 @@ RepositoryName: [X]
 ```
 Name: [X]
 AutoScalingGroupProvider: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    AutoScalingGroupArn: [ ]
+    ManagedTerminationProtection: [ ]
+    ManagedScaling: [X]
+        MinimumScalingStepSize: [ ]
+        Status: [ ]
+        MaximumScalingStepSize: [ ]
+        TargetCapacity: [ ]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::ECS::Cluster
@@ -5034,16 +5564,16 @@ Tags: [X]
 ```
 ClusterName: [X]
 DefaultCapacityProviderStrategy: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    CapacityProvider: [ ]
+    Base: [ ]
+    Weight: [ ]
 ClusterSettings: [X]
-    (inherited)
-    (inherited)
+    Name: [ ]
+    Value: [ ]
 CapacityProviders: [X]
 Tags: [X]
     Key: [ ]
-    (inherited)
+    Value: [ ]
 ```
 
 #### AWS::ECS::PrimaryTaskSet
@@ -5058,26 +5588,29 @@ Service: [X]
 
 ```
 NetworkConfiguration: [X]
-    (inherited)
+    AwsvpcConfiguration: [X]
+        AssignPublicIp: [ ]
+        SecurityGroups: [ ]
+        Subnets: [ ]
 HealthCheckGracePeriodSeconds: [X]
 LaunchType: [X]
 EnableECSManagedTags: [ ]
 ServiceRegistries: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerName: [ ]
+    Port: [ ]
+    RegistryArn: [ ]
+    ContainerPort: [ ]
 LoadBalancers: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerName: [ ]
+    TargetGroupArn: [ ]
+    ContainerPort: [ ]
+    LoadBalancerName: [ ]
 SchedulingStrategy: [X]
 PlacementConstraints: [X]
-    (inherited)
-    (inherited)
+    Expression: [ ]
+    Type: [ ]
 DeploymentController: [X]
-    (inherited)
+    Type: [ ]
 PropagateTags: [ ]
 DesiredCount: [X]
 Cluster: [X]
@@ -5085,17 +5618,17 @@ ServiceName: [X]
 Role: [X]
 ServiceArn: [ ]
 CapacityProviderStrategy: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Base: [ ]
+    CapacityProvider: [ ]
+    Weight: [ ]
 PlatformVersion: [X]
 Tags: [ ]
 PlacementStrategies: [X]
-    (inherited)
-    (inherited)
+    Field: [ ]
+    Type: [ ]
 DeploymentConfiguration: [X]
-    (inherited)
-    (inherited)
+    MaximumPercent: [ ]
+    MinimumHealthyPercent: [ ]
 TaskDefinition: [X]
 ```
 
@@ -5103,67 +5636,131 @@ TaskDefinition: [X]
 
 ```
 ContainerDefinitions: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    MountPoints: [X]
+        SourceVolume: [ ]
+        ReadOnly: [ ]
+        ContainerPath: [ ]
+    RepositoryCredentials: [X]
+        CredentialsParameter: [ ]
+    Hostname: [ ]
+    DockerLabels: [ ]
+    Environment: [X]
+        Name: [ ]
+        Value: [ ]
+    Memory: [ ]
+    SystemControls: [X]
+        Namespace: [ ]
+        Value: [ ]
+    Privileged: [ ]
+    DnsSearchDomains: [ ]
+    Ulimits: [X]
+        SoftLimit: [ ]
+        HardLimit: [ ]
+        Name: [ ]
     StartTimeout: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    FirelensConfiguration: [X]
+        Type: [ ]
+        Options: [ ]
+    DnsServers: [ ]
+    DockerSecurityOptions: [ ]
+    EnvironmentFiles: [X]
+        Type: [ ]
+        Value: [ ]
+    User: [ ]
+    MemoryReservation: [ ]
+    ReadonlyRootFilesystem: [ ]
+    Name: [ ]
+    WorkingDirectory: [ ]
+    Secrets: [X]
+        ValueFrom: [ ]
+        Name: [ ]
+    HealthCheck: [X]
+        Retries: [ ]
+        Command: [ ]
+        Interval: [ ]
+        StartPeriod: [ ]
+        Timeout: [ ]
+    DisableNetworking: [ ]
     StopTimeout: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Command: [ ]
+    ExtraHosts: [X]
+        Hostname: [ ]
+        IpAddress: [ ]
+    Essential: [ ]
+    VolumesFrom: [X]
+        ReadOnly: [ ]
+        SourceContainer: [ ]
+    Interactive: [ ]
     DependsOn: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PortMappings: [X]
+        Protocol: [ ]
+        ContainerPort: [ ]
+        HostPort: [ ]
+    PseudoTerminal: [ ]
+    Links: [ ]
+    Image: [ ]
+    LogConfiguration: [X]
+        SecretOptions: [X]
+            ValueFrom: [ ]
+            Name: [ ]
+        LogDriver: [ ]
+        Options: [ ]
+    Cpu: [ ]
+    EntryPoint: [ ]
     ResourceRequirements: [ ]
-    (inherited)
+    LinuxParameters: [X]
+        Swappiness: [ ]
+        MaxSwap: [ ]
+        Capabilities: [X]
+            Add: [ ]
+            Drop: [ ]
+        SharedMemorySize: [ ]
+        InitProcessEnabled: [ ]
+        Devices: [X]
+            HostPath: [ ]
+            ContainerPath: [ ]
+            Permissions: [ ]
+        Tmpfs: [X]
+            MountOptions: [ ]
+            ContainerPath: [ ]
+            Size: [ ]
 NetworkMode: [X]
 Family: [X]
 Tags: [ ]
 IpcMode: [X]
 PlacementConstraints: [X]
-    (inherited)
-    (inherited)
+    Type: [ ]
+    Expression: [ ]
 RequiresCompatibilities: [X]
 ExecutionRoleArn: [X]
 ProxyConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerName: [ ]
+    Type: [ ]
+    ProxyConfigurationProperties: [X]
+        Name: [ ]
+        Value: [ ]
 Volumes: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Host: [X]
+        SourcePath: [ ]
+    DockerVolumeConfiguration: [X]
+        Scope: [ ]
+        Labels: [ ]
+        Driver: [ ]
+        DriverOpts: [ ]
+        Autoprovision: [ ]
+    EFSVolumeConfiguration: [X]
+        TransitEncryptionPort: [ ]
+        AuthorizationConfig: [X]
+            IAM: [ ]
+            AccessPointId: [ ]
+        RootDirectory: [ ]
+        FilesystemId: [ ]
+        TransitEncryption: [ ]
+    Name: [ ]
 Memory: [X]
 InferenceAccelerators: [X]
-    (inherited)
-    (inherited)
+    DeviceName: [ ]
+    DeviceType: [ ]
 PidMode: [X]
 TaskRoleArn: [X]
 Cpu: [X]
@@ -5173,23 +5770,26 @@ Cpu: [X]
 
 ```
 NetworkConfiguration: [X]
-    (inherited)
+    AwsVpcConfiguration: [X]
+        AssignPublicIp: [ ]
+        SecurityGroups: [ ]
+        Subnets: [ ]
 ServiceRegistries: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerName: [ ]
+    Port: [ ]
+    RegistryArn: [ ]
+    ContainerPort: [ ]
 LaunchType: [X]
 Service: [X]
 LoadBalancers: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerName: [ ]
+    TargetGroupArn: [ ]
+    ContainerPort: [ ]
+    LoadBalancerName: [ ]
 Cluster: [X]
 Scale: [X]
-    (inherited)
-    (inherited)
+    Unit: [ ]
+    Value: [ ]
 ExternalId: [X]
 PlatformVersion: [X]
 TaskDefinition: [X]
@@ -5216,8 +5816,8 @@ ClientToken: [X]
 
 ```
 FileSystemTags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 FileSystemPolicy: [X]
 ThroughputMode: [X]
 Encrypted: [X]
@@ -5244,14 +5844,15 @@ SecurityGroups: [X]
 Name: [X]
 RoleArn: [X]
 KubernetesNetworkConfig: [X]
-    (inherited)
+    ServiceIpv4Cidr: [ ]
 ResourcesVpcConfig: [X]
-    (inherited)
-    (inherited)
+    SubnetIds: [ ]
+    SecurityGroupIds: [ ]
 Version: [X]
 EncryptionConfig: [X]
-    (inherited)
-    (inherited)
+    Resources: [ ]
+    Provider: [X]
+        KeyArn: [ ]
 ```
 
 #### AWS::EKS::FargateProfile
@@ -5259,12 +5860,14 @@ EncryptionConfig: [X]
 ```
 Subnets: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ClusterName: [X]
 Selectors: [X]
-    (inherited)
-    (inherited)
+    Labels: [X]
+        Key: [ ]
+        Value: [ ]
+    Namespace: [ ]
 FargateProfileName: [X]
 PodExecutionRoleArn: [X]
 ```
@@ -5273,15 +5876,15 @@ PodExecutionRoleArn: [X]
 
 ```
 ScalingConfig: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    MinSize: [ ]
+    DesiredSize: [ ]
+    MaxSize: [ ]
 Subnets: [X]
 ReleaseVersion: [X]
 LaunchTemplate: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Version: [ ]
+    Id: [ ]
+    Name: [ ]
 Tags: [X]
 ClusterName: [X]
 Labels: [X]
@@ -5292,8 +5895,8 @@ DiskSize: [X]
 ForceUpdateEnabled: [ ]
 NodeRole: [X]
 RemoteAccess: [X]
-    (inherited)
-    (inherited)
+    Ec2SshKey: [ ]
+    SourceSecurityGroups: [ ]
 NodegroupName: [X]
 ```
 
@@ -5312,7 +5915,7 @@ Applications: [X]
     AdditionalInfo: [ ]
     Args: [ ]
     Version: [ ]
-    (inherited)
+    Name: [ ]
 JobFlowRole: [ ]
 CustomAmiId: [X]
 ScaleDownBehavior: [X]
@@ -5323,9 +5926,36 @@ ServiceRole: [X]
 SecurityConfiguration: [X]
 Steps: [ ]
 Configurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ConfigurationProperties: [ ]
+    Classification: [ ]
+    Configurations: [X]
+        ConfigurationProperties: [ ]
+        Classification: [ ]
+        Configurations: [X]
+            ConfigurationProperties: [ ]
+            Classification: [ ]
+            Configurations: [X]
+                ConfigurationProperties: [ ]
+                Classification: [ ]
+                Configurations: [X]
+                    ConfigurationProperties: [ ]
+                    Classification: [ ]
+                    Configurations: [X]
+                        ConfigurationProperties: [ ]
+                        Classification: [ ]
+                        Configurations: [X]
+                            ConfigurationProperties: [ ]
+                            Classification: [ ]
+                            Configurations: [X]
+                                ConfigurationProperties: [ ]
+                                Classification: [ ]
+                                Configurations: [X]
+                                    ConfigurationProperties: [ ]
+                                    Classification: [ ]
+                                    Configurations: [X]
+                                        ConfigurationProperties: [ ]
+                                        Classification: [ ]
+                                        Configurations: [ ]
 LogEncryptionKmsKeyId: [X]
 StepConcurrencyLevel: [X]
 Instances: [ ]
@@ -5349,19 +5979,46 @@ LaunchSpecifications: [X]
 ClusterId: [X]
 TargetSpotCapacity: [X]
 InstanceTypeConfigs: [X]
-    (inherited)
+    WeightedCapacity: [ ]
     EbsConfiguration: [X]
-        (inherited)
+        EbsOptimized: [ ]
         EbsBlockDeviceConfigs: [X]
             VolumeSpecification: [X]
                 Iops: [ ]
                 VolumeType: [ ]
                 SizeInGB: [ ]
             VolumesPerInstance: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    BidPrice: [ ]
+    BidPriceAsPercentageOfOnDemandPrice: [ ]
+    InstanceType: [ ]
+    Configurations: [X]
+        ConfigurationProperties: [ ]
+        Classification: [ ]
+        Configurations: [X]
+            ConfigurationProperties: [ ]
+            Classification: [ ]
+            Configurations: [X]
+                ConfigurationProperties: [ ]
+                Classification: [ ]
+                Configurations: [X]
+                    ConfigurationProperties: [ ]
+                    Classification: [ ]
+                    Configurations: [X]
+                        ConfigurationProperties: [ ]
+                        Classification: [ ]
+                        Configurations: [X]
+                            ConfigurationProperties: [ ]
+                            Classification: [ ]
+                            Configurations: [X]
+                                ConfigurationProperties: [ ]
+                                Classification: [ ]
+                                Configurations: [X]
+                                    ConfigurationProperties: [ ]
+                                    Classification: [ ]
+                                    Configurations: [X]
+                                        ConfigurationProperties: [ ]
+                                        Classification: [ ]
+                                        Configurations: [ ]
 TargetOnDemandCapacity: [X]
 ```
 
@@ -5376,12 +6033,12 @@ AutoScalingPolicy: [X]
         Action: [ ]
         Trigger: [ ]
         Description: [ ]
-        (inherited)
+        Name: [ ]
     Constraints: [X]
         MinCapacity: [ ]
         MaxCapacity: [ ]
 EbsConfiguration: [X]
-    (inherited)
+    EbsOptimized: [ ]
     EbsBlockDeviceConfigs: [X]
         VolumeSpecification: [X]
             Iops: [ ]
@@ -5393,9 +6050,36 @@ JobFlowId: [X]
 InstanceType: [X]
 Market: [X]
 Configurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ConfigurationProperties: [ ]
+    Classification: [ ]
+    Configurations: [X]
+        ConfigurationProperties: [ ]
+        Classification: [ ]
+        Configurations: [X]
+            ConfigurationProperties: [ ]
+            Classification: [ ]
+            Configurations: [X]
+                ConfigurationProperties: [ ]
+                Classification: [ ]
+                Configurations: [X]
+                    ConfigurationProperties: [ ]
+                    Classification: [ ]
+                    Configurations: [X]
+                        ConfigurationProperties: [ ]
+                        Classification: [ ]
+                        Configurations: [X]
+                            ConfigurationProperties: [ ]
+                            Classification: [ ]
+                            Configurations: [X]
+                                ConfigurationProperties: [ ]
+                                Classification: [ ]
+                                Configurations: [X]
+                                    ConfigurationProperties: [ ]
+                                    Classification: [ ]
+                                    Configurations: [X]
+                                        ConfigurationProperties: [ ]
+                                        Classification: [ ]
+                                        Configurations: [ ]
 ```
 
 #### AWS::EMR::SecurityConfiguration
@@ -5409,9 +6093,9 @@ Name: [X]
 
 ```
 HadoopJarStep: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Jar: [ ]
+    Args: [ ]
+    MainClass: [ ]
     StepProperties: [X]
         Key: [ ]
         Value: [ ]
@@ -5585,12 +6269,12 @@ LBCookieStickinessPolicy: [X]
 Tags: [ ]
 Instances: [X]
 Listeners: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    InstancePort: [ ]
+    Protocol: [ ]
+    InstanceProtocol: [ ]
+    LoadBalancerPort: [ ]
+    PolicyNames: [ ]
+    SSLCertificateId: [ ]
 CrossZone: [ ]
 SecurityGroups: [X]
 ConnectionSettings: [ ]
@@ -5607,7 +6291,7 @@ DefaultActions: [ ]
 SslPolicy: [ ]
 AlpnPolicy: [ ]
 Certificates: [X]
-    (inherited)
+    CertificateArn: [ ]
 LoadBalancerArn: [ ]
 Port: [ ]
 ```
@@ -5616,7 +6300,7 @@ Port: [ ]
 
 ```
 Certificates: [X]
-    (inherited)
+    CertificateArn: [ ]
 ListenerArn: [X]
 ```
 
@@ -5627,10 +6311,10 @@ Priority: [X]
 Conditions: [X]
     SourceIpConfig: [ ]
     HostHeaderConfig: [ ]
-    (inherited)
+    Field: [ ]
     QueryStringConfig: [ ]
     HttpRequestMethodConfig: [ ]
-    (inherited)
+    Values: [ ]
     PathPatternConfig: [ ]
     HttpHeaderConfig: [ ]
 Actions: [X]
@@ -5653,9 +6337,9 @@ Subnets: [X]
 Name: [X]
 Tags: [ ]
 SubnetMappings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    SubnetId: [ ]
+    PrivateIPv4Address: [ ]
+    AllocationId: [ ]
     IPv6Address: [ ]
 LoadBalancerAttributes: [X]
     Key: [ ]
@@ -5680,7 +6364,7 @@ Matcher: [X]
 Targets: [X]
     AvailabilityZone: [ ]
     Id: [ ]
-    (inherited)
+    Port: [ ]
 HealthyThresholdCount: [X]
 VpcId: [X]
 TargetGroupAttributes: [X]
@@ -5721,20 +6405,20 @@ EBSOptions: [X]
 ElasticsearchClusterConfig: [X]
     ZoneAwarenessConfig: [X]
         AvailabilityZoneCount: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DedicatedMasterEnabled: [ ]
+    InstanceCount: [ ]
+    WarmCount: [ ]
+    WarmType: [ ]
+    WarmEnabled: [ ]
+    ZoneAwarenessEnabled: [ ]
+    DedicatedMasterType: [ ]
+    InstanceType: [ ]
+    DedicatedMasterCount: [ ]
 SnapshotOptions: [X]
     AutomatedSnapshotStartHour: [ ]
 VPCOptions: [X]
-    (inherited)
-    (inherited)
+    SubnetIds: [ ]
+    SecurityGroupIds: [ ]
 LogPublishingOptions: [X]
     CloudWatchLogsLogGroupArn: [ ]
     Enabled: [ ]
@@ -5751,8 +6435,8 @@ AccessPolicies: [X]
 Description: [X]
 SourceArn: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Value: [ ]
+    Key: [ ]
 ```
 
 #### AWS::EventSchemas::Registry
@@ -5761,8 +6445,8 @@ Tags: [X]
 RegistryName: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Value: [ ]
+    Key: [ ]
 ```
 
 #### AWS::EventSchemas::RegistryPolicy
@@ -5779,8 +6463,8 @@ RevisionId: [X]
 Content: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Value: [ ]
+    Key: [ ]
 RegistryName: [X]
 SchemaName: [X]
 Type: [X]
@@ -5800,9 +6484,9 @@ Action: [X]
 EventBusName: [X]
 StatementId: [X]
 Condition: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Type: [ ]
+    Value: [ ]
+    Key: [ ]
 Principal: [X]
 ```
 
@@ -5819,11 +6503,12 @@ Targets: [X]
         HeaderParameters: [ ]
         QueryStringParameters: [ ]
         PathParameterValues: [ ]
-    (inherited)
+    DeadLetterConfig: [X]
+        Arn: [ ]
     RetryPolicy: [X]
         MaximumEventAgeInSeconds: [ ]
         MaximumRetryAttempts: [ ]
-    (inherited)
+    RoleArn: [ ]
     BatchParameters: [X]
         JobDefinition: [ ]
         ArrayProperties: [ ]
@@ -5838,22 +6523,22 @@ Targets: [X]
                 AssignPublicIp: [ ]
                 SecurityGroups: [ ]
                 Subnets: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-    (inherited)
+        LaunchType: [ ]
+        Group: [ ]
+        TaskCount: [ ]
+        PlatformVersion: [ ]
+        TaskDefinitionArn: [ ]
+    Id: [ ]
     KinesisParameters: [X]
         PartitionKeyPath: [ ]
     RunCommandParameters: [X]
         RunCommandTargets: [ ]
-    (inherited)
-    (inherited)
+    InputPath: [ ]
+    Input: [ ]
     SqsParameters: [X]
         MessageGroupId: [ ]
     RedshiftDataParameters: [ ]
-    (inherited)
+    Arn: [ ]
 RoleArn: [X]
 Name: [X]
 ```
@@ -5899,35 +6584,35 @@ FileSystemType: [X]
 SecurityGroupIds: [ ]
 StorageCapacity: [X]
 LustreConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    CopyTagsToBackups: [ ]
+    WeeklyMaintenanceStartTime: [ ]
+    ExportPath: [ ]
+    AutomaticBackupRetentionDays: [ ]
+    DriveCacheType: [ ]
+    ImportPath: [ ]
+    DeploymentType: [ ]
+    PerUnitStorageThroughput: [ ]
+    DailyAutomaticBackupStartTime: [ ]
     AutoImportPolicy: [ ]
-    (inherited)
+    ImportedFileChunkSize: [ ]
 KmsKeyId: [X]
 BackupId: [ ]
 WindowsConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ThroughputCapacity: [ ]
+    CopyTagsToBackups: [ ]
+    WeeklyMaintenanceStartTime: [ ]
+    AutomaticBackupRetentionDays: [ ]
+    DeploymentType: [ ]
     SelfManagedActiveDirectoryConfiguration: [X]
         UserName: [ ]
         FileSystemAdministratorsGroup: [ ]
         DnsIps: [ ]
         OrganizationalUnitDistinguishedName: [ ]
         DomainName: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        Password: [ ]
+    DailyAutomaticBackupStartTime: [ ]
+    ActiveDirectoryId: [ ]
+    PreferredSubnetId: [ ]
 ```
 
 #### AWS::GameLift::Alias
@@ -6082,9 +6767,9 @@ EndpointGroupRegion: [X]
 HealthCheckProtocol: [X]
 HealthCheckPath: [X]
 EndpointConfigurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ClientIPPreservationEnabled: [ ]
+    EndpointId: [ ]
+    Weight: [ ]
 ThresholdCount: [X]
 ListenerArn: [X]
 ```
@@ -6104,40 +6789,40 @@ Protocol: [X]
 
 ```
 GrokClassifier: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Classification: [ ]
+    Name: [ ]
+    GrokPattern: [ ]
+    CustomPatterns: [ ]
 CsvClassifier: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DisableValueTrimming: [ ]
+    AllowSingleColumn: [ ]
+    Name: [ ]
+    ContainsHeader: [ ]
+    Header: [ ]
+    Delimiter: [ ]
+    QuoteSymbol: [ ]
 XMLClassifier: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    RowTag: [ ]
+    Name: [ ]
+    Classification: [ ]
 JsonClassifier: [X]
-    (inherited)
-    (inherited)
+    JsonPath: [ ]
+    Name: [ ]
 ```
 
 #### AWS::Glue::Connection
 
 ```
 ConnectionInput: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Description: [ ]
+    MatchCriteria: [ ]
+    ConnectionType: [ ]
     PhysicalConnectionRequirements: [X]
         SubnetId: [ ]
         AvailabilityZone: [ ]
         SecurityGroupIdList: [ ]
-    (inherited)
-    (inherited)
+    ConnectionProperties: [ ]
+    Name: [ ]
 CatalogId: [X]
 ```
 
@@ -6148,7 +6833,7 @@ Configuration: [X]
 Description: [X]
 Tags: [ ]
 Schedule: [X]
-    (inherited)
+    ScheduleExpression: [ ]
 Classifiers: [X]
 CrawlerSecurityConfiguration: [ ]
 Role: [X]
@@ -6164,7 +6849,7 @@ Targets: [X]
         ConnectionName: [ ]
     CatalogTargets: [X]
         Tables: [ ]
-        (inherited)
+        DatabaseName: [ ]
     DynamoDBTargets: [X]
         Path: [ ]
     S3Targets: [X]
@@ -6177,7 +6862,9 @@ Name: [X]
 
 ```
 DataCatalogEncryptionSettings: [X]
-    (inherited)
+    ConnectionPasswordEncryption: [X]
+        KmsKeyId: [ ]
+        ReturnConnectionPasswordEncrypted: [ ]
     EncryptionAtRest: [X]
         SseAwsKmsKeyId: [ ]
         CatalogEncryptionMode: [ ]
@@ -6188,10 +6875,10 @@ CatalogId: [X]
 
 ```
 DatabaseInput: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    LocationUri: [ ]
+    Description: [ ]
+    Parameters: [ ]
+    Name: [ ]
 CatalogId: [X]
 ```
 
@@ -6229,12 +6916,12 @@ NotificationProperty: [X]
     NotifyDelayAfter: [ ]
 DefaultArguments: [X]
 Connections: [X]
-    (inherited)
+    Connections: [ ]
 SecurityConfiguration: [ ]
 MaxRetries: [X]
 Command: [X]
     ScriptLocation: [ ]
-    (inherited)
+    Name: [ ]
     PythonVersion: [ ]
 GlueVersion: [X]
 NumberOfWorkers: [X]
@@ -6275,7 +6962,7 @@ PartitionInput: [X]
     Values: [ ]
     StorageDescriptor: [X]
         OutputFormat: [ ]
-        (inherited)
+        Parameters: [ ]
         InputFormat: [ ]
         BucketColumns: [ ]
         SkewedInfo: [ ]
@@ -6286,7 +6973,7 @@ PartitionInput: [X]
         StoredAsSubDirectories: [ ]
         SerdeInfo: [ ]
         Compressed: [ ]
-    (inherited)
+    Parameters: [ ]
 TableName: [X]
 DatabaseName: [X]
 CatalogId: [X]
@@ -6314,7 +7001,7 @@ Name: [X]
 TableInput: [X]
     StorageDescriptor: [X]
         OutputFormat: [ ]
-        (inherited)
+        Parameters: [ ]
         InputFormat: [ ]
         BucketColumns: [ ]
         SkewedInfo: [ ]
@@ -6328,15 +7015,15 @@ TableInput: [X]
     PartitionKeys: [X]
         Comment: [ ]
         Type: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        Name: [ ]
+    Description: [ ]
+    Parameters: [ ]
+    ViewOriginalText: [ ]
+    Owner: [ ]
+    ViewExpandedText: [ ]
+    Retention: [ ]
+    TableType: [ ]
+    Name: [ ]
 DatabaseName: [X]
 CatalogId: [X]
 ```
@@ -6348,20 +7035,20 @@ Predicate: [X]
     Conditions: [X]
         CrawlState: [ ]
         CrawlerName: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-    (inherited)
+        State: [ ]
+        LogicalOperator: [ ]
+        JobName: [ ]
+    Logical: [ ]
 StartOnCreation: [ ]
 Description: [X]
 Tags: [ ]
 Schedule: [X]
 Actions: [X]
     NotificationProperty: [ ]
-    (inherited)
+    JobName: [ ]
     SecurityConfiguration: [ ]
     CrawlerName: [ ]
-    (inherited)
+    Arguments: [ ]
     Timeout: [ ]
 WorkflowName: [X]
 Type: [X]
@@ -6646,8 +7333,8 @@ Users: [X]
 ManagedPolicyArns: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 MaxSessionDuration: [X]
 AssumeRolePolicyDocument: [X]
 Policies: [ ]
@@ -6671,8 +7358,8 @@ UserName: [X]
 ManagedPolicyArns: [X]
 Groups: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 LoginProfile: [ ]
 Policies: [ ]
 Path: [X]
@@ -6704,9 +7391,9 @@ Description: [X]
 ```
 Description: [X]
 Distributions: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    AmiDistributionConfiguration: [ ]
+    Region: [ ]
+    LicenseConfigurationArns: [ ]
 Name: [X]
 Tags: [X]
 ```
@@ -6717,8 +7404,8 @@ Tags: [X]
 InfrastructureConfigurationArn: [X]
 Tags: [X]
 ImageTestsConfiguration: [X]
-    (inherited)
-    (inherited)
+    ImageTestsEnabled: [ ]
+    TimeoutMinutes: [ ]
 ImageRecipeArn: [X]
 DistributionConfigurationArn: [X]
 EnhancedImageMetadataEnabled: [ ]
@@ -6733,8 +7420,8 @@ Name: [X]
 Tags: [X]
 Schedule: [ ]
 ImageTestsConfiguration: [X]
-    (inherited)
-    (inherited)
+    ImageTestsEnabled: [ ]
+    TimeoutMinutes: [ ]
 ImageRecipeArn: [X]
 DistributionConfigurationArn: [X]
 EnhancedImageMetadataEnabled: [ ]
@@ -6749,12 +7436,19 @@ Name: [X]
 WorkingDirectory: [ ]
 Tags: [X]
 BlockDeviceMappings: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DeviceName: [ ]
+    VirtualName: [ ]
+    NoDevice: [ ]
+    Ebs: [X]
+        VolumeSize: [ ]
+        Encrypted: [ ]
+        VolumeType: [ ]
+        DeleteOnTermination: [ ]
+        KmsKeyId: [ ]
+        SnapshotId: [ ]
+        Iops: [ ]
 Components: [X]
-    (inherited)
+    ComponentArn: [ ]
 ParentImage: [X]
 Description: [X]
 ```
@@ -6765,7 +7459,9 @@ Description: [X]
 TerminateInstanceOnFailure: [X]
 ResourceTags: [ ]
 Logging: [X]
-    (inherited)
+    S3Logs: [X]
+        S3KeyPrefix: [ ]
+        S3BucketName: [ ]
 Name: [X]
 Tags: [X]
 InstanceTypes: [X]
@@ -6790,8 +7486,8 @@ ResourceGroupArn: [X]
 AssessmentTargetArn: [X]
 AssessmentTemplateName: [X]
 UserAttributesForFindings: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 DurationInSeconds: [X]
 RulesPackageArns: [X]
 ```
@@ -6800,8 +7496,8 @@ RulesPackageArns: [X]
 
 ```
 ResourceGroupTags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::IoT1Click::Device
@@ -6826,8 +7522,8 @@ PlacementName: [X]
 ProjectName: [X]
 Description: [X]
 PlacementTemplate: [X]
-    (inherited)
-    (inherited)
+    DeviceTemplates: [ ]
+    DefaultAttributes: [ ]
 ```
 
 #### AWS::IoT::Authorizer
@@ -6876,15 +7572,15 @@ TemplateName: [X]
 Enabled: [X]
 ProvisioningRoleArn: [X]
 PreProvisioningHook: [X]
-    (inherited)
-    (inherited)
+    PayloadVersion: [ ]
+    TargetArn: [ ]
 ```
 
 #### AWS::IoT::Thing
 
 ```
 AttributePayload: [X]
-    (inherited)
+    Attributes: [ ]
 ThingName: [X]
 ```
 
@@ -6899,46 +7595,168 @@ Principal: [X]
 
 ```
 TopicRulePayload: [X]
-    (inherited)
+    Description: [ ]
     Actions: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        DynamoDBv2: [X]
+            PutItem: [X]
+                TableName: [ ]
+            RoleArn: [ ]
+        Http: [X]
+            Url: [ ]
+            Headers: [X]
+                Key: [ ]
+                Value: [ ]
+            ConfirmationUrl: [ ]
+            Auth: [X]
+                Sigv4: [X]
+                    SigningRegion: [ ]
+                    RoleArn: [ ]
+                    ServiceName: [ ]
+        Kinesis: [X]
+            RoleArn: [ ]
+            PartitionKey: [ ]
+            StreamName: [ ]
+        Sqs: [X]
+            QueueUrl: [ ]
+            RoleArn: [ ]
+            UseBase64: [ ]
         IotSiteWise: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        DynamoDB: [X]
+            HashKeyValue: [ ]
+            PayloadField: [ ]
+            HashKeyType: [ ]
+            HashKeyField: [ ]
+            RoleArn: [ ]
+            TableName: [ ]
+            RangeKeyType: [ ]
+            RangeKeyValue: [ ]
+            RangeKeyField: [ ]
+        CloudwatchMetric: [X]
+            MetricUnit: [ ]
+            RoleArn: [ ]
+            MetricTimestamp: [ ]
+            MetricNamespace: [ ]
+            MetricValue: [ ]
+            MetricName: [ ]
+        Lambda: [X]
+            FunctionArn: [ ]
+        CloudwatchAlarm: [X]
+            StateReason: [ ]
+            RoleArn: [ ]
+            AlarmName: [ ]
+            StateValue: [ ]
+        Sns: [X]
+            TargetArn: [ ]
+            RoleArn: [ ]
+            MessageFormat: [ ]
+        StepFunctions: [X]
+            ExecutionNamePrefix: [ ]
+            RoleArn: [ ]
+            StateMachineName: [ ]
+        Elasticsearch: [X]
+            Index: [ ]
+            RoleArn: [ ]
+            Endpoint: [ ]
+            Type: [ ]
+            Id: [ ]
         IotEvents: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        Firehose: [X]
+            RoleArn: [ ]
+            DeliveryStreamName: [ ]
+            Separator: [ ]
+        IotAnalytics: [X]
+            RoleArn: [ ]
+            ChannelName: [ ]
+        S3: [X]
+            RoleArn: [ ]
+            BucketName: [ ]
+            Key: [ ]
+        Republish: [X]
+            Topic: [ ]
+            RoleArn: [ ]
+            Qos: [ ]
+    Sql: [ ]
+    AwsIotSqlVersion: [ ]
+    RuleDisabled: [ ]
     ErrorAction: [X]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        DynamoDBv2: [X]
+            PutItem: [X]
+                TableName: [ ]
+            RoleArn: [ ]
+        Http: [X]
+            Url: [ ]
+            Headers: [X]
+                Key: [ ]
+                Value: [ ]
+            ConfirmationUrl: [ ]
+            Auth: [X]
+                Sigv4: [X]
+                    SigningRegion: [ ]
+                    RoleArn: [ ]
+                    ServiceName: [ ]
+        Kinesis: [X]
+            RoleArn: [ ]
+            PartitionKey: [ ]
+            StreamName: [ ]
+        Sqs: [X]
+            QueueUrl: [ ]
+            RoleArn: [ ]
+            UseBase64: [ ]
         IotSiteWise: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        DynamoDB: [X]
+            HashKeyValue: [ ]
+            PayloadField: [ ]
+            HashKeyType: [ ]
+            HashKeyField: [ ]
+            RoleArn: [ ]
+            TableName: [ ]
+            RangeKeyType: [ ]
+            RangeKeyValue: [ ]
+            RangeKeyField: [ ]
+        CloudwatchMetric: [X]
+            MetricUnit: [ ]
+            RoleArn: [ ]
+            MetricTimestamp: [ ]
+            MetricNamespace: [ ]
+            MetricValue: [ ]
+            MetricName: [ ]
+        Lambda: [X]
+            FunctionArn: [ ]
+        CloudwatchAlarm: [X]
+            StateReason: [ ]
+            RoleArn: [ ]
+            AlarmName: [ ]
+            StateValue: [ ]
+        Sns: [X]
+            TargetArn: [ ]
+            RoleArn: [ ]
+            MessageFormat: [ ]
+        StepFunctions: [X]
+            ExecutionNamePrefix: [ ]
+            RoleArn: [ ]
+            StateMachineName: [ ]
+        Elasticsearch: [X]
+            Index: [ ]
+            RoleArn: [ ]
+            Endpoint: [ ]
+            Type: [ ]
+            Id: [ ]
         IotEvents: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        Firehose: [X]
+            RoleArn: [ ]
+            DeliveryStreamName: [ ]
+            Separator: [ ]
+        IotAnalytics: [X]
+            RoleArn: [ ]
+            ChannelName: [ ]
+        S3: [X]
+            RoleArn: [ ]
+            BucketName: [ ]
+            Key: [ ]
+        Republish: [X]
+            Topic: [ ]
+            RoleArn: [ ]
+            Qos: [ ]
 RuleName: [X]
 ```
 
@@ -6947,11 +7765,14 @@ RuleName: [X]
 ```
 ChannelName: [X]
 ChannelStorage: [X]
-    (inherited)
-    (inherited)
+    ServiceManagedS3: [ ]
+    CustomerManagedS3: [X]
+        KeyPrefix: [ ]
+        RoleArn: [ ]
+        Bucket: [ ]
 RetentionPeriod: [X]
-    (inherited)
-    (inherited)
+    NumberOfDays: [ ]
+    Unlimited: [ ]
 Tags: [ ]
 ```
 
@@ -6962,15 +7783,35 @@ DatasetName: [X]
 ContentDeliveryRules: [ ]
 Tags: [ ]
 Triggers: [X]
-    (inherited)
-    (inherited)
+    TriggeringDataset: [X]
+        DatasetName: [ ]
+    Schedule: [X]
+        ScheduleExpression: [ ]
 RetentionPeriod: [X]
-    (inherited)
-    (inherited)
+    NumberOfDays: [ ]
+    Unlimited: [ ]
 Actions: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    ContainerAction: [X]
+        Variables: [X]
+            StringValue: [ ]
+            OutputFileUriValue: [X]
+                FileName: [ ]
+            DoubleValue: [ ]
+            DatasetContentVersionValue: [X]
+                DatasetName: [ ]
+            VariableName: [ ]
+        ExecutionRoleArn: [ ]
+        Image: [ ]
+        ResourceConfiguration: [X]
+            ComputeType: [ ]
+            VolumeSizeInGB: [ ]
+    ActionName: [ ]
+    QueryAction: [X]
+        SqlQuery: [ ]
+        Filters: [X]
+            DeltaTime: [X]
+                TimeExpression: [ ]
+                OffsetSeconds: [ ]
 VersioningConfiguration: [ ]
 ```
 
@@ -6979,11 +7820,14 @@ VersioningConfiguration: [ ]
 ```
 DatastoreName: [X]
 DatastoreStorage: [X]
-    (inherited)
-    (inherited)
+    ServiceManagedS3: [ ]
+    CustomerManagedS3: [X]
+        KeyPrefix: [ ]
+        RoleArn: [ ]
+        Bucket: [ ]
 RetentionPeriod: [X]
-    (inherited)
-    (inherited)
+    NumberOfDays: [ ]
+    Unlimited: [ ]
 Tags: [ ]
 ```
 
@@ -6992,16 +7836,51 @@ Tags: [ ]
 ```
 Tags: [ ]
 PipelineActivities: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DeviceRegistryEnrich: [X]
+        Attribute: [ ]
+        RoleArn: [ ]
+        ThingName: [ ]
+        Name: [ ]
+        Next: [ ]
+    SelectAttributes: [X]
+        Attributes: [ ]
+        Name: [ ]
+        Next: [ ]
+    Filter: [X]
+        Filter: [ ]
+        Name: [ ]
+        Next: [ ]
+    DeviceShadowEnrich: [X]
+        Attribute: [ ]
+        RoleArn: [ ]
+        ThingName: [ ]
+        Name: [ ]
+        Next: [ ]
+    Channel: [X]
+        ChannelName: [ ]
+        Name: [ ]
+        Next: [ ]
+    AddAttributes: [X]
+        Attributes: [ ]
+        Name: [ ]
+        Next: [ ]
+    Datastore: [X]
+        DatastoreName: [ ]
+        Name: [ ]
+    RemoveAttributes: [X]
+        Attributes: [ ]
+        Name: [ ]
+        Next: [ ]
+    Math: [X]
+        Attribute: [ ]
+        Name: [ ]
+        Math: [ ]
+        Next: [ ]
+    Lambda: [X]
+        BatchSize: [ ]
+        Name: [ ]
+        LambdaName: [ ]
+        Next: [ ]
 PipelineName: [X]
 ```
 
@@ -7015,146 +7894,162 @@ DetectorModelDefinition: [X]
     States: [X]
         OnInput: [X]
             TransitionEvents: [X]
-                (inherited)
-                (inherited)
+                EventName: [ ]
+                Condition: [ ]
                 Actions: [X]
                     DynamoDBv2: [ ]
                     SetTimer: [X]
-                        (inherited)
+                        Seconds: [ ]
                         DurationExpression: [ ]
-                        (inherited)
-                    (inherited)
+                        TimerName: [ ]
+                    ResetTimer: [X]
+                        TimerName: [ ]
                     Sqs: [X]
-                        (inherited)
-                        (inherited)
+                        QueueUrl: [ ]
+                        UseBase64: [ ]
                         Payload: [ ]
                     IotSiteWise: [ ]
                     DynamoDB: [ ]
                     Sns: [X]
-                        (inherited)
+                        TargetArn: [ ]
                         Payload: [ ]
-                    (inherited)
+                    ClearTimer: [X]
+                        TimerName: [ ]
                     IotTopicPublish: [X]
                         Payload: [ ]
-                        (inherited)
+                        MqttTopic: [ ]
                     Firehose: [X]
-                        (inherited)
-                        (inherited)
+                        DeliveryStreamName: [ ]
+                        Separator: [ ]
                         Payload: [ ]
                     IotEvents: [X]
-                        (inherited)
+                        InputName: [ ]
                         Payload: [ ]
-                    (inherited)
+                    SetVariable: [X]
+                        VariableName: [ ]
+                        Value: [ ]
                     Lambda: [X]
                         Payload: [ ]
-                        (inherited)
-                (inherited)
+                        FunctionArn: [ ]
+                NextState: [ ]
             Events: [X]
-                (inherited)
-                (inherited)
+                EventName: [ ]
+                Condition: [ ]
                 Actions: [X]
                     DynamoDBv2: [ ]
                     SetTimer: [X]
-                        (inherited)
+                        Seconds: [ ]
                         DurationExpression: [ ]
-                        (inherited)
-                    (inherited)
+                        TimerName: [ ]
+                    ResetTimer: [X]
+                        TimerName: [ ]
                     Sqs: [X]
-                        (inherited)
-                        (inherited)
+                        QueueUrl: [ ]
+                        UseBase64: [ ]
                         Payload: [ ]
                     IotSiteWise: [ ]
                     DynamoDB: [ ]
                     Sns: [X]
-                        (inherited)
+                        TargetArn: [ ]
                         Payload: [ ]
-                    (inherited)
+                    ClearTimer: [X]
+                        TimerName: [ ]
                     IotTopicPublish: [X]
                         Payload: [ ]
-                        (inherited)
+                        MqttTopic: [ ]
                     Firehose: [X]
-                        (inherited)
-                        (inherited)
+                        DeliveryStreamName: [ ]
+                        Separator: [ ]
                         Payload: [ ]
                     IotEvents: [X]
-                        (inherited)
+                        InputName: [ ]
                         Payload: [ ]
-                    (inherited)
+                    SetVariable: [X]
+                        VariableName: [ ]
+                        Value: [ ]
                     Lambda: [X]
                         Payload: [ ]
-                        (inherited)
-        (inherited)
+                        FunctionArn: [ ]
+        StateName: [ ]
         OnEnter: [X]
             Events: [X]
-                (inherited)
-                (inherited)
+                EventName: [ ]
+                Condition: [ ]
                 Actions: [X]
                     DynamoDBv2: [ ]
                     SetTimer: [X]
-                        (inherited)
+                        Seconds: [ ]
                         DurationExpression: [ ]
-                        (inherited)
-                    (inherited)
+                        TimerName: [ ]
+                    ResetTimer: [X]
+                        TimerName: [ ]
                     Sqs: [X]
-                        (inherited)
-                        (inherited)
+                        QueueUrl: [ ]
+                        UseBase64: [ ]
                         Payload: [ ]
                     IotSiteWise: [ ]
                     DynamoDB: [ ]
                     Sns: [X]
-                        (inherited)
+                        TargetArn: [ ]
                         Payload: [ ]
-                    (inherited)
+                    ClearTimer: [X]
+                        TimerName: [ ]
                     IotTopicPublish: [X]
                         Payload: [ ]
-                        (inherited)
+                        MqttTopic: [ ]
                     Firehose: [X]
-                        (inherited)
-                        (inherited)
+                        DeliveryStreamName: [ ]
+                        Separator: [ ]
                         Payload: [ ]
                     IotEvents: [X]
-                        (inherited)
+                        InputName: [ ]
                         Payload: [ ]
-                    (inherited)
+                    SetVariable: [X]
+                        VariableName: [ ]
+                        Value: [ ]
                     Lambda: [X]
                         Payload: [ ]
-                        (inherited)
+                        FunctionArn: [ ]
         OnExit: [X]
             Events: [X]
-                (inherited)
-                (inherited)
+                EventName: [ ]
+                Condition: [ ]
                 Actions: [X]
                     DynamoDBv2: [ ]
                     SetTimer: [X]
-                        (inherited)
+                        Seconds: [ ]
                         DurationExpression: [ ]
-                        (inherited)
-                    (inherited)
+                        TimerName: [ ]
+                    ResetTimer: [X]
+                        TimerName: [ ]
                     Sqs: [X]
-                        (inherited)
-                        (inherited)
+                        QueueUrl: [ ]
+                        UseBase64: [ ]
                         Payload: [ ]
                     IotSiteWise: [ ]
                     DynamoDB: [ ]
                     Sns: [X]
-                        (inherited)
+                        TargetArn: [ ]
                         Payload: [ ]
-                    (inherited)
+                    ClearTimer: [X]
+                        TimerName: [ ]
                     IotTopicPublish: [X]
                         Payload: [ ]
-                        (inherited)
+                        MqttTopic: [ ]
                     Firehose: [X]
-                        (inherited)
-                        (inherited)
+                        DeliveryStreamName: [ ]
+                        Separator: [ ]
                         Payload: [ ]
                     IotEvents: [X]
-                        (inherited)
+                        InputName: [ ]
                         Payload: [ ]
-                    (inherited)
+                    SetVariable: [X]
+                        VariableName: [ ]
+                        Value: [ ]
                     Lambda: [X]
                         Payload: [ ]
-                        (inherited)
-    (inherited)
+                        FunctionArn: [ ]
+    InitialStateName: [ ]
 EvaluationMethod: [ ]
 Key: [X]
 DetectorModelName: [X]
@@ -7164,7 +8059,8 @@ DetectorModelName: [X]
 
 ```
 InputDefinition: [X]
-    (inherited)
+    Attributes: [X]
+        JsonPath: [ ]
 InputDescription: [X]
 InputName: [X]
 Tags: [ ]
@@ -7174,8 +8070,8 @@ Tags: [ ]
 
 ```
 Definition: [X]
-    (inherited)
-    (inherited)
+    Text: [ ]
+    Language: [ ]
 CompatibleNamespaceVersion: [X]
 ```
 
@@ -7254,8 +8150,8 @@ Description: [X]
 ShardCount: [X]
 RetentionPeriodHours: [X]
 StreamEncryption: [X]
-    (inherited)
-    (inherited)
+    KeyId: [ ]
+    EncryptionType: [ ]
 Name: [X]
 Tags: [ ]
 ```
@@ -7272,10 +8168,17 @@ StreamARN: [X]
 ```
 ApplicationName: [X]
 Inputs: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    KinesisFirehoseInput: [X]
+        ResourceARN: [ ]
+        RoleARN: [ ]
+    KinesisStreamsInput: [X]
+        ResourceARN: [ ]
+        RoleARN: [ ]
+    InputProcessingConfiguration: [X]
+        InputLambdaProcessor: [X]
+            ResourceARN: [ ]
+            RoleARN: [ ]
+    NamePrefix: [ ]
     InputParallelism: [X]
         Count: [ ]
     InputSchema: [X]
@@ -7299,7 +8202,7 @@ Output: [X]
     KinesisFirehoseOutput: [X]
         ResourceARN: [ ]
         RoleARN: [ ]
-    (inherited)
+    Name: [ ]
     LambdaOutput: [X]
         ResourceARN: [ ]
         RoleARN: [ ]
@@ -7310,7 +8213,7 @@ Output: [X]
 ```
 ApplicationName: [X]
 ReferenceDataSource: [X]
-    (inherited)
+    TableName: [ ]
     ReferenceSchema: [X]
         RecordColumns: [ ]
         RecordFormat: [ ]
@@ -7329,38 +8232,49 @@ ApplicationConfiguration: [X]
     ApplicationSnapshotConfiguration: [X]
         SnapshotsEnabled: [ ]
     FlinkApplicationConfiguration: [X]
-        (inherited)
+        ParallelismConfiguration: [X]
+            AutoScalingEnabled: [ ]
+            Parallelism: [ ]
+            ParallelismPerKPU: [ ]
+            ConfigurationType: [ ]
         CheckpointConfiguration: [X]
-            (inherited)
+            ConfigurationType: [ ]
             MinPauseBetweenCheckpoints: [ ]
             CheckpointInterval: [ ]
             CheckpointingEnabled: [ ]
         MonitoringConfiguration: [X]
             LogLevel: [ ]
             MetricsLevel: [ ]
-            (inherited)
+            ConfigurationType: [ ]
     ApplicationCodeConfiguration: [X]
-        (inherited)
+        CodeContentType: [ ]
         CodeContent: [X]
             S3ContentLocation: [X]
                 FileKey: [ ]
                 BucketARN: [ ]
                 ObjectVersion: [ ]
-            (inherited)
+            TextContent: [ ]
             ZipFileContent: [ ]
     SqlApplicationConfiguration: [X]
         Inputs: [X]
-            (inherited)
-            (inherited)
-            (inherited)
-            (inherited)
+            KinesisFirehoseInput: [X]
+                ResourceARN: [ ]
+            KinesisStreamsInput: [X]
+                ResourceARN: [ ]
+            InputProcessingConfiguration: [X]
+                InputLambdaProcessor: [X]
+                    ResourceARN: [ ]
+            NamePrefix: [ ]
             InputParallelism: [X]
                 Count: [ ]
             InputSchema: [X]
                 RecordColumns: [ ]
                 RecordFormat: [ ]
                 RecordEncoding: [ ]
-    (inherited)
+    EnvironmentProperties: [X]
+        PropertyGroups: [X]
+            PropertyGroupId: [ ]
+            PropertyMap: [ ]
 RuntimeEnvironment: [X]
 ApplicationDescription: [X]
 Tags: [ ]
@@ -7372,7 +8286,7 @@ ServiceExecutionRole: [X]
 ```
 ApplicationName: [X]
 CloudWatchLoggingOption: [X]
-    (inherited)
+    LogStreamARN: [ ]
 ```
 
 #### AWS::KinesisAnalyticsV2::ApplicationOutput
@@ -7386,7 +8300,7 @@ Output: [X]
         ResourceARN: [ ]
     KinesisFirehoseOutput: [X]
         ResourceARN: [ ]
-    (inherited)
+    Name: [ ]
     LambdaOutput: [X]
         ResourceARN: [ ]
 ```
@@ -7396,7 +8310,7 @@ Output: [X]
 ```
 ApplicationName: [X]
 ReferenceDataSource: [X]
-    (inherited)
+    TableName: [ ]
     ReferenceSchema: [X]
         RecordColumns: [ ]
         RecordFormat: [ ]
@@ -7412,16 +8326,16 @@ ReferenceDataSource: [X]
 ExtendedS3DestinationConfiguration: [X]
     ErrorOutputPrefix: [ ]
     DataFormatConversionConfiguration: [ ]
-    (inherited)
-    (inherited)
+    BucketARN: [ ]
+    CompressionFormat: [ ]
     BufferingHints: [X]
         IntervalInSeconds: [ ]
         SizeInMBs: [ ]
     EncryptionConfiguration: [X]
         KMSEncryptionConfig: [ ]
         NoEncryptionConfig: [ ]
-    (inherited)
-    (inherited)
+    Prefix: [ ]
+    S3BackupMode: [ ]
     CloudWatchLoggingOptions: [X]
         Enabled: [ ]
         LogGroupName: [ ]
@@ -7430,53 +8344,53 @@ ExtendedS3DestinationConfiguration: [X]
         EncryptionConfiguration: [X]
             KMSEncryptionConfig: [ ]
             NoEncryptionConfig: [ ]
-        (inherited)
-        (inherited)
+        BucketARN: [ ]
+        Prefix: [ ]
         BufferingHints: [X]
             IntervalInSeconds: [ ]
             SizeInMBs: [ ]
         ErrorOutputPrefix: [ ]
-        (inherited)
+        CompressionFormat: [ ]
         CloudWatchLoggingOptions: [X]
             Enabled: [ ]
             LogGroupName: [ ]
             LogStreamName: [ ]
-        (inherited)
-    (inherited)
+        RoleARN: [ ]
+    RoleARN: [ ]
     ProcessingConfiguration: [X]
         Enabled: [ ]
         Processors: [ ]
 DeliveryStreamType: [X]
 DeliveryStreamEncryptionConfigurationInput: [X]
-    (inherited)
-    (inherited)
+    KeyARN: [ ]
+    KeyType: [ ]
 KinesisStreamSourceConfiguration: [X]
-    (inherited)
-    (inherited)
+    RoleARN: [ ]
+    KinesisStreamARN: [ ]
 SplunkDestinationConfiguration: [X]
     S3Configuration: [X]
         EncryptionConfiguration: [X]
             KMSEncryptionConfig: [ ]
             NoEncryptionConfig: [ ]
-        (inherited)
-        (inherited)
+        BucketARN: [ ]
+        Prefix: [ ]
         BufferingHints: [X]
             IntervalInSeconds: [ ]
             SizeInMBs: [ ]
         ErrorOutputPrefix: [ ]
-        (inherited)
+        CompressionFormat: [ ]
         CloudWatchLoggingOptions: [X]
             Enabled: [ ]
             LogGroupName: [ ]
             LogStreamName: [ ]
-        (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        RoleARN: [ ]
+    HECEndpointType: [ ]
+    HECToken: [ ]
+    HECAcknowledgmentTimeoutInSeconds: [ ]
     RetryOptions: [X]
         DurationInSeconds: [ ]
-    (inherited)
-    (inherited)
+    HECEndpoint: [ ]
+    S3BackupMode: [ ]
     CloudWatchLoggingOptions: [X]
         Enabled: [ ]
         LogGroupName: [ ]
@@ -7489,65 +8403,65 @@ ElasticsearchDestinationConfiguration: [X]
         EncryptionConfiguration: [X]
             KMSEncryptionConfig: [ ]
             NoEncryptionConfig: [ ]
-        (inherited)
-        (inherited)
+        BucketARN: [ ]
+        Prefix: [ ]
         BufferingHints: [X]
             IntervalInSeconds: [ ]
             SizeInMBs: [ ]
         ErrorOutputPrefix: [ ]
-        (inherited)
+        CompressionFormat: [ ]
         CloudWatchLoggingOptions: [X]
             Enabled: [ ]
             LogGroupName: [ ]
             LogStreamName: [ ]
-        (inherited)
-    (inherited)
+        RoleARN: [ ]
+    IndexName: [ ]
     VpcConfiguration: [X]
-        (inherited)
+        RoleARN: [ ]
         SubnetIds: [ ]
         SecurityGroupIds: [ ]
     RetryOptions: [X]
         DurationInSeconds: [ ]
-    (inherited)
+    RoleARN: [ ]
     BufferingHints: [X]
         IntervalInSeconds: [ ]
         SizeInMBs: [ ]
-    (inherited)
+    TypeName: [ ]
     ClusterEndpoint: [ ]
-    (inherited)
+    S3BackupMode: [ ]
     CloudWatchLoggingOptions: [X]
         Enabled: [ ]
         LogGroupName: [ ]
         LogStreamName: [ ]
-    (inherited)
-    (inherited)
+    DomainARN: [ ]
+    IndexRotationPeriod: [ ]
     ProcessingConfiguration: [X]
         Enabled: [ ]
         Processors: [ ]
 Tags: [ ]
 RedshiftDestinationConfiguration: [X]
-    (inherited)
+    Username: [ ]
     S3Configuration: [X]
         EncryptionConfiguration: [X]
             KMSEncryptionConfig: [ ]
             NoEncryptionConfig: [ ]
-        (inherited)
-        (inherited)
+        BucketARN: [ ]
+        Prefix: [ ]
         BufferingHints: [X]
             IntervalInSeconds: [ ]
             SizeInMBs: [ ]
         ErrorOutputPrefix: [ ]
-        (inherited)
+        CompressionFormat: [ ]
         CloudWatchLoggingOptions: [X]
             Enabled: [ ]
             LogGroupName: [ ]
             LogStreamName: [ ]
-        (inherited)
+        RoleARN: [ ]
     RetryOptions: [X]
         DurationInSeconds: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    RoleARN: [ ]
+    Password: [ ]
+    ClusterJDBCURL: [ ]
     CopyCommand: [X]
         DataTableName: [ ]
         CopyOptions: [ ]
@@ -7560,40 +8474,40 @@ RedshiftDestinationConfiguration: [X]
         EncryptionConfiguration: [X]
             KMSEncryptionConfig: [ ]
             NoEncryptionConfig: [ ]
-        (inherited)
-        (inherited)
+        BucketARN: [ ]
+        Prefix: [ ]
         BufferingHints: [X]
             IntervalInSeconds: [ ]
             SizeInMBs: [ ]
         ErrorOutputPrefix: [ ]
-        (inherited)
+        CompressionFormat: [ ]
         CloudWatchLoggingOptions: [X]
             Enabled: [ ]
             LogGroupName: [ ]
             LogStreamName: [ ]
-        (inherited)
+        RoleARN: [ ]
     ProcessingConfiguration: [X]
         Enabled: [ ]
         Processors: [ ]
-    (inherited)
+    S3BackupMode: [ ]
 HttpEndpointDestinationConfiguration: [ ]
 DeliveryStreamName: [X]
 S3DestinationConfiguration: [X]
     EncryptionConfiguration: [X]
         KMSEncryptionConfig: [ ]
         NoEncryptionConfig: [ ]
-    (inherited)
-    (inherited)
+    BucketARN: [ ]
+    Prefix: [ ]
     BufferingHints: [X]
         IntervalInSeconds: [ ]
         SizeInMBs: [ ]
     ErrorOutputPrefix: [ ]
-    (inherited)
+    CompressionFormat: [ ]
     CloudWatchLoggingOptions: [X]
         Enabled: [ ]
         LogGroupName: [ ]
         LogStreamName: [ ]
-    (inherited)
+    RoleARN: [ ]
 ```
 
 #### AWS::LakeFormation::DataLakeSettings
@@ -7620,7 +8534,7 @@ Resource: [X]
         Name: [ ]
         CatalogId: [ ]
     DataLocationResource: [X]
-        (inherited)
+        S3Resource: [ ]
         CatalogId: [ ]
     TableResource: [X]
         CatalogId: [ ]
@@ -7644,7 +8558,7 @@ RoleArn: [X]
 Description: [X]
 RoutingConfig: [X]
     AdditionalVersionWeights: [X]
-        (inherited)
+        FunctionVersion: [ ]
         FunctionWeight: [ ]
 FunctionVersion: [X]
 ProvisionedConcurrencyConfig: [X]
@@ -7674,7 +8588,8 @@ MaximumRecordAgeInSeconds: [X]
 Topics: [X]
 BatchSize: [X]
 DestinationConfig: [X]
-    (inherited)
+    OnFailure: [X]
+        Destination: [ ]
 Enabled: [X]
 EventSourceArn: [X]
 StartingPosition: [ ]
@@ -7692,22 +8607,22 @@ Layers: [X]
 TracingConfig: [X]
     Mode: [ ]
 Code: [X]
-    (inherited)
-    (inherited)
+    S3Bucket: [ ]
+    S3Key: [ ]
     ZipFile: [ ]
-    (inherited)
+    S3ObjectVersion: [ ]
 DeadLetterConfig: [X]
-    (inherited)
+    TargetArn: [ ]
 Description: [X]
 VpcConfig: [X]
-    (inherited)
-    (inherited)
+    SubnetIds: [ ]
+    SecurityGroupIds: [ ]
 Tags: [ ]
 KmsKeyArn: [X]
 ReservedConcurrentExecutions: [X]
 MemorySize: [X]
 Environment: [X]
-    (inherited)
+    Variables: [ ]
 Handler: [X]
 Role: [X]
 Timeout: [X]
@@ -7722,9 +8637,9 @@ FunctionName: [X]
 
 ```
 Content: [X]
-    (inherited)
+    S3Bucket: [ ]
     S3ObjectVersion: [ ]
-    (inherited)
+    S3Key: [ ]
 LayerName: [X]
 Description: [X]
 LicenseInfo: [X]
@@ -7789,10 +8704,10 @@ LogStreamName: [X]
 
 ```
 MetricTransformations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DefaultValue: [ ]
+    MetricValue: [ ]
+    MetricNamespace: [ ]
+    MetricName: [ ]
 FilterPattern: [X]
 LogGroupName: [X]
 ```
@@ -7818,13 +8733,13 @@ Tags: [X]
 ClusterName: [X]
 KafkaVersion: [X]
 BrokerNodeGroupInfo: [X]
-    (inherited)
+    ClientSubnets: [ ]
     StorageInfo: [X]
         EBSStorageInfo: [X]
             VolumeSize: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
+    BrokerAZDistribution: [ ]
+    SecurityGroups: [ ]
+    InstanceType: [ ]
 NumberOfBrokerNodes: [X]
 ClientAuthentication: [X]
     Tls: [ ]
@@ -7833,8 +8748,8 @@ EnhancedMonitoring: [X]
 OpenMonitoring: [X]
     Prometheus: [ ]
 ConfigurationInfo: [X]
-    (inherited)
-    (inherited)
+    Arn: [ ]
+    Revision: [ ]
 ```
 
 #### AWS::Macie::CustomDataIdentifier
@@ -7854,7 +8769,7 @@ Description: [X]
 Action: [X]
 Position: [X]
 FindingCriteria: [X]
-    (inherited)
+    Criterion: [ ]
 Name: [X]
 Description: [X]
 ```
@@ -7870,19 +8785,24 @@ FindingPublishingFrequency: [X]
 
 ```
 NetworkConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Name: [ ]
+    NetworkFrameworkConfiguration: [X]
+        NetworkFabricConfiguration: [X]
+            Edition: [ ]
+    Framework: [ ]
+    Description: [ ]
+    FrameworkVersion: [ ]
     VotingPolicy: [X]
         ApprovalThresholdPolicy: [ ]
 NetworkId: [X]
 InvitationId: [ ]
 MemberConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    MemberFrameworkConfiguration: [X]
+        MemberFabricConfiguration: [X]
+            AdminUsername: [ ]
+            AdminPassword: [ ]
+    Description: [ ]
+    Name: [ ]
 ```
 
 #### AWS::ManagedBlockchain::Node
@@ -7890,8 +8810,8 @@ MemberConfiguration: [X]
 ```
 NetworkId: [X]
 NodeConfiguration: [X]
-    (inherited)
-    (inherited)
+    AvailabilityZone: [ ]
+    InstanceType: [ ]
 MemberId: [X]
 ```
 
@@ -7993,10 +8913,10 @@ Tags: [X]
 #### AWS::MediaPackage::Asset
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
+    Url: [ ]
+    PackagingConfigurationId: [ ]
 ```
 
 #### AWS::MediaPackage::Channel
@@ -8005,8 +8925,8 @@ Tags: [X]
 Description: [X]
 Id: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::MediaPackage::OriginEndpoint
@@ -8018,7 +8938,7 @@ CmafPackage: [X]
         KeyRotationIntervalSeconds: [ ]
     SegmentPrefix: [ ]
     HlsManifests: [ ]
-    (inherited)
+    SegmentDurationSeconds: [ ]
     StreamSelection: [X]
         MaxVideoBitsPerSecond: [ ]
         StreamOrder: [ ]
@@ -8029,20 +8949,21 @@ Tags: [X]
 TimeDelaySeconds: [X]
 Description: [X]
 DashPackage: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Profile: [ ]
+    ManifestWindowSeconds: [ ]
+    SegmentTemplateFormat: [ ]
     Encryption: [X]
         SpekeKeyProvider: [ ]
         KeyRotationIntervalSeconds: [ ]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    PeriodTriggers: [ ]
+    ManifestLayout: [ ]
+    AdsOnDeliveryRestrictions: [ ]
+    MinBufferTimeSeconds: [ ]
+    SuggestedPresentationDelaySeconds: [ ]
+    AdTriggers: [X]
+        AdTriggers: [ ]
+    SegmentDurationSeconds: [ ]
+    MinUpdatePeriodSeconds: [ ]
     StreamSelection: [X]
         MaxVideoBitsPerSecond: [ ]
         StreamOrder: [ ]
@@ -8053,8 +8974,8 @@ Id: [X]
 MssPackage: [X]
     Encryption: [X]
         SpekeKeyProvider: [ ]
-    (inherited)
-    (inherited)
+    ManifestWindowSeconds: [ ]
+    SegmentDurationSeconds: [ ]
     StreamSelection: [X]
         MaxVideoBitsPerSecond: [ ]
         StreamOrder: [ ]
@@ -8070,11 +8991,12 @@ HlsPackage: [X]
         RepeatExtXKey: [ ]
         EncryptionMethod: [ ]
         KeyRotationIntervalSeconds: [ ]
-    (inherited)
+    AdsOnDeliveryRestrictions: [ ]
     ProgramDateTimeIntervalSeconds: [ ]
     IncludeIframeOnlyStream: [ ]
-    (inherited)
-    (inherited)
+    AdTriggers: [X]
+        AdTriggers: [ ]
+    SegmentDurationSeconds: [ ]
     AdMarkers: [ ]
     StreamSelection: [X]
         MaxVideoBitsPerSecond: [ ]
@@ -8090,32 +9012,57 @@ Authorization: [X]
 #### AWS::MediaPackage::PackagingConfiguration
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+        SpekeKeyProvider: [ ]
+            MaxVideoBitsPerSecond: [ ]
+            StreamOrder: [ ]
+            MinVideoBitsPerSecond: [ ]
+        IncludeIframeOnlyStream: [ ]
+        RepeatExtXKey: [ ]
+        AdMarkers: [ ]
+        ManifestName: [ ]
+        ProgramDateTimeIntervalSeconds: [ ]
+    SegmentDurationSeconds: [ ]
+    Key: [ ]
+    Value: [ ]
+        SpekeKeyProvider: [ ]
+        ConstantInitializationVector: [ ]
+        EncryptionMethod: [ ]
+            MaxVideoBitsPerSecond: [ ]
+            StreamOrder: [ ]
+            MinVideoBitsPerSecond: [ ]
+        IncludeIframeOnlyStream: [ ]
+        RepeatExtXKey: [ ]
+        AdMarkers: [ ]
+        ManifestName: [ ]
+        ProgramDateTimeIntervalSeconds: [ ]
+    SegmentDurationSeconds: [ ]
+    UseAudioRenditionGroup: [ ]
+        SpekeKeyProvider: [ ]
+    PeriodTriggers: [ ]
+    SegmentDurationSeconds: [ ]
+    SegmentTemplateFormat: [ ]
+        MinBufferTimeSeconds: [ ]
+        Profile: [ ]
+        ManifestLayout: [ ]
+            MaxVideoBitsPerSecond: [ ]
+            StreamOrder: [ ]
+            MinVideoBitsPerSecond: [ ]
+        ManifestName: [ ]
+        SpekeKeyProvider: [ ]
+            MaxVideoBitsPerSecond: [ ]
+            StreamOrder: [ ]
+            MinVideoBitsPerSecond: [ ]
+        ManifestName: [ ]
+    SegmentDurationSeconds: [ ]
 ```
 
 #### AWS::MediaPackage::PackagingGroup
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    SecretsRoleArn: [ ]
+    CdnIdentifierSecret: [ ]
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::MediaStore::Container
@@ -8301,10 +9248,10 @@ AppSource: [X]
     SshKey: [ ]
     Url: [ ]
     Password: [ ]
-    (inherited)
+    Type: [ ]
     Revision: [ ]
 DataSources: [X]
-    (inherited)
+    Type: [ ]
     Arn: [ ]
     DatabaseName: [ ]
 Description: [X]
@@ -8404,7 +9351,7 @@ InstallUpdatesOnBoot: [X]
 ```
 ConfigurationManager: [X]
     Version: [ ]
-    (inherited)
+    Name: [ ]
 UseCustomCookbooks: [X]
 DefaultSshKeyName: [X]
 CloneAppIds: [ ]
@@ -8561,18 +9508,18 @@ Tags: [ ]
 
 ```
 QuietTime: [X]
-    (inherited)
-    (inherited)
+    Start: [ ]
+    End: [ ]
 CampaignHook: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    LambdaFunctionName: [ ]
+    WebUrl: [ ]
+    Mode: [ ]
 ApplicationId: [X]
 Limits: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    MessagesPerSecond: [ ]
+    MaximumDuration: [ ]
+    Total: [ ]
+    Daily: [ ]
 CloudWatchMetricsEnabled: [ ]
 ```
 
@@ -8608,8 +9555,8 @@ HoldoutPercent: [X]
 Tags: [ ]
 Description: [X]
 AdditionalTreatments: [X]
-    (inherited)
-    (inherited)
+    TreatmentName: [ ]
+    SizePercent: [ ]
     Schedule: [X]
         EventFilter: [ ]
         QuietTime: [ ]
@@ -8618,7 +9565,7 @@ AdditionalTreatments: [X]
         StartTime: [ ]
         TimeZone: [ ]
         EndTime: [ ]
-    (inherited)
+    TreatmentDescription: [ ]
     MessageConfiguration: [X]
         BaiduMessage: [ ]
         APNSMessage: [ ]
@@ -8783,25 +9730,33 @@ ApplicationId: [X]
 Name: [X]
 Tags: [ ]
 SendingOptions: [X]
-    (inherited)
+    SendingEnabled: [ ]
 DeliveryOptions: [X]
-    (inherited)
+    SendingPoolName: [ ]
 ReputationOptions: [X]
-    (inherited)
+    ReputationMetricsEnabled: [ ]
 TrackingOptions: [X]
-    (inherited)
+    CustomRedirectDomain: [ ]
 ```
 
 #### AWS::PinpointEmail::ConfigurationSetEventDestination
 
 ```
 EventDestination: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    CloudWatchDestination: [X]
+        DimensionConfigurations: [X]
+            DimensionName: [ ]
+            DimensionValueSource: [ ]
+            DefaultDimensionValue: [ ]
+    MatchingEventTypes: [ ]
+    SnsDestination: [X]
+        TopicArn: [ ]
+    Enabled: [ ]
+    KinesisFirehoseDestination: [X]
+        DeliveryStreamArn: [ ]
+        IamRoleArn: [ ]
+    PinpointDestination: [X]
+        ApplicationArn: [ ]
 EventDestinationName: [X]
 ConfigurationSetName: [X]
 ```
@@ -8817,8 +9772,8 @@ Tags: [ ]
 
 ```
 MailFromAttributes: [X]
-    (inherited)
-    (inherited)
+    MailFromDomain: [ ]
+    BehaviorOnMxFailure: [ ]
 DkimSigningEnabled: [X]
 Name: [X]
 FeedbackForwardingEnabled: [X]
@@ -8856,8 +9811,8 @@ Principals: [X]
 ResourceArns: [X]
 Name: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::RDS::DBCluster
@@ -8880,10 +9835,10 @@ PreferredMaintenanceWindow: [X]
 DBClusterParameterGroupName: [ ]
 DatabaseName: [X]
 ScalingConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    MinCapacity: [ ]
+    AutoPause: [ ]
+    MaxCapacity: [ ]
+    SecondsUntilAutoPause: [ ]
 UseLatestRestorableTime: [ ]
 BacktrackWindow: [X]
 ReplicationSourceIdentifier: [X]
@@ -8895,8 +9850,8 @@ MasterUserPassword: [X]
 KmsKeyId: [X]
 StorageEncrypted: [X]
 AssociatedRoles: [X]
-    (inherited)
-    (inherited)
+    RoleArn: [ ]
+    FeatureName: [ ]
 EnableCloudwatchLogsExports: [X]
 AvailabilityZones: [X]
 Port: [X]
@@ -8964,8 +9919,8 @@ MasterUserPassword: [X]
 Iops: [X]
 StorageEncrypted: [X]
 AssociatedRoles: [X]
-    (inherited)
-    (inherited)
+    RoleArn: [ ]
+    FeatureName: [ ]
 KmsKeyId: [X]
 Timezone: [X]
 DBInstanceClass: [X]
@@ -9021,10 +9976,10 @@ ConnectionPoolConfigurationInfo: [X]
 
 ```
 DBSecurityGroupIngress: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    EC2SecurityGroupName: [ ]
+    EC2SecurityGroupOwnerId: [ ]
+    EC2SecurityGroupId: [ ]
+    CIDRIP: [ ]
 EC2VpcId: [X]
 GroupDescription: [X]
 Tags: [ ]
@@ -9042,8 +9997,8 @@ DBSubnetGroupName: [X]
 DBSubnetGroupDescription: [X]
 SubnetIds: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::RDS::EventSubscription
@@ -9062,12 +10017,14 @@ SnsTopicArn: [X]
 OptionGroupDescription: [X]
 EngineName: [X]
 OptionConfigurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    DBSecurityGroupMemberships: [ ]
+    OptionName: [ ]
+    VpcSecurityGroupMemberships: [ ]
+    OptionSettings: [X]
+        Name: [ ]
+        Value: [ ]
+    OptionVersion: [ ]
+    Port: [ ]
 MajorEngineVersion: [X]
 Tags: [ ]
 ```
@@ -9085,8 +10042,8 @@ NumberOfNodes: [X]
 ClusterVersion: [X]
 PubliclyAccessible: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 AutomatedSnapshotRetentionPeriod: [X]
 DBName: [X]
 PreferredMaintenanceWindow: [X]
@@ -9139,8 +10096,8 @@ Tags: [X]
 SubnetIds: [X]
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::ResourceGroups::Group
@@ -9153,7 +10110,7 @@ ResourceQuery: [X]
         TagFilters: [ ]
         ResourceTypeFilters: [ ]
         StackIdentifier: [ ]
-    (inherited)
+    Type: [ ]
 Tags: [ ]
 ```
 
@@ -9178,12 +10135,12 @@ Architecture: [X]
 
 ```
 Sources: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    S3Bucket: [ ]
+    S3Key: [ ]
+    Architecture: [ ]
 RobotSoftwareSuite: [X]
-    (inherited)
-    (inherited)
+    Version: [ ]
+    Name: [ ]
 Name: [X]
 CurrentRevisionId: [X]
 Tags: [X]
@@ -9200,21 +10157,21 @@ CurrentRevisionId: [X]
 
 ```
 RenderingEngine: [X]
-    (inherited)
-    (inherited)
+    Version: [ ]
+    Name: [ ]
 Name: [X]
 Tags: [X]
 Sources: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    S3Bucket: [ ]
+    S3Key: [ ]
+    Architecture: [ ]
 CurrentRevisionId: [X]
 SimulationSoftwareSuite: [X]
-    (inherited)
-    (inherited)
+    Version: [ ]
+    Name: [ ]
 RobotSoftwareSuite: [X]
-    (inherited)
-    (inherited)
+    Version: [ ]
+    Name: [ ]
 ```
 
 #### AWS::RoboMaker::SimulationApplicationVersion
@@ -9238,7 +10195,7 @@ VPCs: [X]
     VPCId: [ ]
     VPCRegion: [ ]
 HostedZoneConfig: [X]
-    (inherited)
+    Comment: [ ]
 HostedZoneTags: [ ]
 Name: [X]
 QueryLoggingConfig: [ ]
@@ -9260,7 +10217,7 @@ SetIdentifier: [X]
 Failover: [X]
 AliasTarget: [X]
     EvaluateTargetHealth: [ ]
-    (inherited)
+    HostedZoneId: [ ]
     DNSName: [ ]
 ResourceRecords: [X]
 MultiValueAnswer: [X]
@@ -9273,21 +10230,25 @@ Region: [X]
 #### AWS::Route53::RecordSetGroup
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Comment: [ ]
+        SubdivisionCode: [ ]
+        ContinentCode: [ ]
+        CountryCode: [ ]
+    HealthCheckId: [ ]
+    Name: [ ]
+    Weight: [ ]
+    HostedZoneName: [ ]
+    SetIdentifier: [ ]
+    Failover: [ ]
+        EvaluateTargetHealth: [ ]
+        HostedZoneId: [ ]
+        DNSName: [ ]
+    ResourceRecords: [ ]
+    MultiValueAnswer: [ ]
+    TTL: [ ]
+    HostedZoneId: [ ]
+    Type: [ ]
+    Region: [ ]
 ```
 
 #### AWS::Route53Resolver::ResolverEndpoint
@@ -9297,8 +10258,8 @@ Direction: [X]
 SecurityGroupIds: [X]
 Name: [X]
 IpAddresses: [X]
-    (inherited)
-    (inherited)
+    SubnetId: [ ]
+    Ip: [ ]
 Tags: [ ]
 ```
 
@@ -9361,10 +10322,10 @@ VpcConfiguration: [X]
 AccessControl: [ ]
 ReplicationConfiguration: [X]
     Rules: [X]
-        (inherited)
+        Status: [ ]
         Filter: [X]
             And: [ ]
-            (inherited)
+            Prefix: [ ]
             TagFilter: [ ]
         SourceSelectionCriteria: [X]
             SseKmsEncryptedObjects: [ ]
@@ -9377,64 +10338,73 @@ ReplicationConfiguration: [X]
             Bucket: [ ]
             ReplicationTime: [ ]
             Metrics: [ ]
-            (inherited)
+            StorageClass: [ ]
         Priority: [ ]
-        (inherited)
-        (inherited)
-    (inherited)
+        Prefix: [ ]
+        Id: [ ]
+    Role: [ ]
 CorsConfiguration: [X]
     CorsRules: [X]
-        (inherited)
+        AllowedHeaders: [ ]
         MaxAge: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        ExposedHeaders: [ ]
+        AllowedMethods: [ ]
+        Id: [ ]
+        AllowedOrigins: [ ]
 Tags: [X]
     Key: [ ]
     Value: [ ]
 ObjectLockEnabled: [ ]
 AccelerateConfiguration: [X]
-    (inherited)
+    AccelerationStatus: [ ]
 InventoryConfigurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ScheduleFrequency: [ ]
+    Destination: [X]
+        BucketArn: [ ]
+        BucketAccountId: [ ]
+        Prefix: [ ]
+        Format: [ ]
+    Enabled: [ ]
+    OptionalFields: [ ]
+    Prefix: [ ]
+    IncludedObjectVersions: [ ]
+    Id: [ ]
 ObjectLockConfiguration: [X]
     ObjectLockEnabled: [ ]
     Rule: [ ]
 LoggingConfiguration: [X]
-    (inherited)
-    (inherited)
+    DestinationBucketName: [ ]
+    LogFilePrefix: [ ]
 LifecycleConfiguration: [X]
     Rules: [X]
-        (inherited)
+        Status: [ ]
         TagFilters: [X]
             Key: [ ]
             Value: [ ]
-        (inherited)
+        NoncurrentVersionExpirationInDays: [ ]
         Transition: [ ]
-        (inherited)
-        (inherited)
-        (inherited)
-        (inherited)
+        NoncurrentVersionTransitions: [X]
+            TransitionInDays: [ ]
+            StorageClass: [ ]
+        Prefix: [ ]
+        ExpirationInDays: [ ]
+        ExpirationDate: [ ]
         AbortIncompleteMultipartUpload: [X]
             DaysAfterInitiation: [ ]
         NoncurrentVersionTransition: [ ]
-        (inherited)
-        (inherited)
+        Transitions: [X]
+            TransitionInDays: [ ]
+            TransitionDate: [ ]
+            StorageClass: [ ]
+        Id: [ ]
 VersioningConfiguration: [X]
-    (inherited)
+    Status: [ ]
 WebsiteConfiguration: [X]
     RedirectAllRequestsTo: [X]
         HostName: [ ]
         Protocol: [ ]
-    (inherited)
-    (inherited)
+    IndexDocument: [ ]
+    ErrorDocument: [ ]
     RoutingRules: [X]
         RoutingRuleCondition: [X]
             HttpErrorCodeReturnedEquals: [ ]
@@ -9447,11 +10417,11 @@ WebsiteConfiguration: [X]
             ReplaceKeyPrefixWith: [ ]
 PublicAccessBlockConfiguration: [ ]
 MetricsConfigurations: [X]
-    (inherited)
+    Prefix: [ ]
     TagFilters: [X]
         Key: [ ]
         Value: [ ]
-    (inherited)
+    Id: [ ]
 NotificationConfiguration: [X]
     QueueConfigurations: [X]
         Filter: [X]
@@ -9459,33 +10429,40 @@ NotificationConfiguration: [X]
                 Rules: [X]
                     Name: [ ]
                     Value: [ ]
-        (inherited)
-        (inherited)
+        Queue: [ ]
+        Event: [ ]
     LambdaConfigurations: [X]
         Filter: [X]
             S3Key: [X]
                 Rules: [X]
                     Name: [ ]
                     Value: [ ]
-        (inherited)
-        (inherited)
+        Function: [ ]
+        Event: [ ]
     TopicConfigurations: [X]
         Filter: [X]
             S3Key: [X]
                 Rules: [X]
                     Name: [ ]
                     Value: [ ]
-        (inherited)
-        (inherited)
+        Topic: [ ]
+        Event: [ ]
 BucketEncryption: [X]
     ServerSideEncryptionConfiguration: [X]
         ServerSideEncryptionByDefault: [X]
             KMSMasterKeyID: [ ]
             SSEAlgorithm: [ ]
 AnalyticsConfigurations: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    Prefix: [ ]
+    StorageClassAnalysis: [X]
+        DataExport: [X]
+            Destination: [X]
+                BucketArn: [ ]
+                BucketAccountId: [ ]
+                Prefix: [ ]
+                Format: [ ]
+            OutputSchemaVersion: [ ]
+    Id: [ ]
     TagFilters: [X]
         Key: [ ]
         Value: [ ]
@@ -9514,11 +10491,11 @@ Name: [X]
 
 ```
 EventDestination: [X]
-    (inherited)
+    Enabled: [ ]
     CloudWatchDestination: [X]
         DimensionConfigurations: [ ]
-    (inherited)
-    (inherited)
+    MatchingEventTypes: [ ]
+    Name: [ ]
     KinesisFirehoseDestination: [X]
         DeliveryStreamARN: [ ]
         IAMRoleARN: [ ]
@@ -9539,10 +10516,10 @@ Filter: [X]
 After: [X]
 RuleSetName: [X]
 Rule: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    Name: [ ]
+    Recipients: [ ]
+    Enabled: [ ]
+    ScanEnabled: [ ]
     Actions: [X]
         LambdaAction: [ ]
         S3Action: [ ]
@@ -9551,7 +10528,7 @@ Rule: [X]
         AddHeaderAction: [ ]
         StopAction: [ ]
         WorkmailAction: [ ]
-    (inherited)
+    TlsPolicy: [ ]
 ```
 
 #### AWS::SES::ReceiptRuleSet
@@ -9636,8 +10613,8 @@ MaxErrors: [ ]
 ScheduleExpression: [X]
 OutputLocation: [X]
     S3Location: [X]
-        (inherited)
-        (inherited)
+        OutputS3KeyPrefix: [ ]
+        OutputS3BucketName: [ ]
         OutputS3Region: [ ]
 Name: [X]
 Parameters: [X]
@@ -9663,8 +10640,8 @@ Content: [X]
 DocumentType: [X]
 Name: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 ```
 
 #### AWS::SSM::MaintenanceWindow
@@ -9701,9 +10678,9 @@ Description: [X]
 ```
 ServiceRoleArn: [X]
 LoggingInfo: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    S3Bucket: [ ]
+    Region: [ ]
+    S3Prefix: [ ]
 MaxErrors: [X]
 TaskArn: [X]
 Description: [X]
@@ -9717,7 +10694,7 @@ TaskInvocationParameters: [X]
         DocumentVersion: [ ]
     MaintenanceWindowRunCommandParameters: [X]
         Comment: [ ]
-        (inherited)
+        ServiceRoleArn: [ ]
         TimeoutSeconds: [ ]
         Parameters: [ ]
         DocumentHash: [ ]
@@ -9727,7 +10704,7 @@ TaskInvocationParameters: [X]
         OutputS3KeyPrefix: [ ]
     MaintenanceWindowStepFunctionsParameters: [X]
         Input: [ ]
-        (inherited)
+        Name: [ ]
     MaintenanceWindowLambdaParameters: [X]
         ClientContext: [ ]
         Payload: [ ]
@@ -9766,7 +10743,7 @@ GlobalFilters: [X]
 Sources: [X]
     Configuration: [ ]
     Products: [ ]
-    (inherited)
+    Name: [ ]
 ApprovalRules: [ ]
 Description: [X]
 ApprovedPatchesComplianceLevel: [X]
@@ -9779,10 +10756,12 @@ RejectedPatchesAction: [X]
 
 ```
 SyncSource: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    AwsOrganizationsSource: [X]
+        OrganizationSourceType: [ ]
+        OrganizationalUnits: [ ]
+    SourceRegions: [ ]
+    IncludeFutureRegions: [ ]
+    SourceType: [ ]
 BucketRegion: [X]
 SyncFormat: [X]
 KMSKeyArn: [X]
@@ -9840,17 +10819,17 @@ Tags: [ ]
 EndpointConfigName: [X]
 KmsKeyId: [X]
 ProductionVariants: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ModelName: [ ]
+    InitialVariantWeight: [ ]
+    VariantName: [ ]
+    InitialInstanceCount: [ ]
     AcceleratorType: [ ]
-    (inherited)
+    InstanceType: [ ]
 DataCaptureConfig: [X]
     DestinationS3Uri: [ ]
     EnableCapture: [ ]
     CaptureOptions: [ ]
-    (inherited)
+    KmsKeyId: [ ]
     InitialSamplingPercentage: [ ]
     CaptureContentTypeHeader: [ ]
 Tags: [ ]
@@ -9867,18 +10846,18 @@ Tags: [ ]
 EnableNetworkIsolation: [ ]
 ExecutionRoleArn: [X]
 Containers: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ModelDataUrl: [ ]
+    Image: [ ]
+    ContainerHostname: [ ]
+    Environment: [ ]
     Mode: [ ]
     ModelPackageName: [ ]
     ImageConfig: [ ]
 PrimaryContainer: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ModelDataUrl: [ ]
+    Image: [ ]
+    ContainerHostname: [ ]
+    Environment: [ ]
     Mode: [ ]
     ModelPackageName: [ ]
     ImageConfig: [ ]
@@ -9934,7 +10913,10 @@ NotebookInstanceLifecycleConfigName: [X]
 
 ```
 MemberDefinitions: [X]
-    (inherited)
+    CognitoMemberDefinition: [X]
+        CognitoUserGroup: [ ]
+        CognitoClientId: [ ]
+        CognitoUserPool: [ ]
 WorkteamName: [X]
 NotificationConfiguration: [X]
     NotificationTopicArn: [ ]
@@ -9964,8 +10946,8 @@ RotationRules: [X]
 ```
 Description: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 GenerateSecretString: [ ]
 SecretString: [X]
 KmsKeyId: [X]
@@ -10166,8 +11148,8 @@ DnsConfig: [X]
     DnsRecords: [X]
         Type: [ ]
         TTL: [ ]
-    (inherited)
-    (inherited)
+    NamespaceId: [ ]
+    RoutingPolicy: [ ]
 Tags: [ ]
 HealthCheckConfig: [X]
     Type: [ ]
@@ -10196,9 +11178,11 @@ TracingConfiguration: [ ]
 StateMachineName: [X]
 DefinitionSubstitutions: [ ]
 LoggingConfiguration: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    IncludeExecutionData: [ ]
+    Level: [ ]
+    Destinations: [X]
+        CloudWatchLogsLogGroup: [X]
+            LogGroupArn: [ ]
 StateMachineType: [X]
 DefinitionS3Location: [ ]
 ```
@@ -10208,11 +11192,11 @@ DefinitionS3Location: [ ]
 ```
 SuccessRetentionPeriod: [X]
 Code: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    S3Bucket: [ ]
+    S3Key: [ ]
+    Handler: [ ]
+    S3ObjectVersion: [ ]
+    Script: [ ]
 Name: [X]
 RuntimeVersion: [X]
 Tags: [X]
@@ -10257,21 +11241,21 @@ Tags: [ ]
 ```
 Certificate: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 LoggingRole: [X]
 SecurityPolicyName: [ ]
 EndpointDetails: [X]
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    VpcEndpointId: [ ]
+    SubnetIds: [ ]
+    VpcId: [ ]
+    AddressAllocationIds: [ ]
     SecurityGroupIds: [ ]
 EndpointType: [X]
 IdentityProviderType: [X]
 IdentityProviderDetails: [X]
-    (inherited)
-    (inherited)
+    Url: [ ]
+    InvocationRole: [ ]
 Protocols: [X]
 ```
 
@@ -10280,8 +11264,8 @@ Protocols: [X]
 ```
 UserName: [X]
 Tags: [X]
-    (inherited)
-    (inherited)
+    Key: [ ]
+    Value: [ ]
 HomeDirectoryType: [X]
 SshPublicKeys: [X]
 Role: [X]
@@ -10353,8 +11337,8 @@ DefaultAction: [X]
 Rules: [X]
     Action: [X]
         Type: [ ]
-    (inherited)
-    (inherited)
+    Priority: [ ]
+    RuleId: [ ]
 Name: [X]
 MetricName: [X]
 ```
@@ -10405,9 +11389,9 @@ RateLimit: [X]
 RateKey: [X]
 Name: [X]
 MatchPredicates: [X]
-    (inherited)
-    (inherited)
-    (inherited)
+    DataId: [ ]
+    Type: [ ]
+    Negated: [ ]
 MetricName: [X]
 ```
 
@@ -10457,8 +11441,8 @@ DefaultAction: [X]
 Rules: [X]
     Action: [X]
         Type: [ ]
-    (inherited)
-    (inherited)
+    Priority: [ ]
+    RuleId: [ ]
 Name: [X]
 MetricName: [X]
 ```
@@ -10507,7 +11491,7 @@ Capacity: [X]
 Description: [X]
 Tags: [ ]
 Rules: [X]
-    (inherited)
+    Priority: [ ]
     Action: [X]
         Count: [ ]
         Allow: [ ]
@@ -10515,9 +11499,9 @@ Rules: [X]
     Statement: [X]
         RegexPatternSetReferenceStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
-            (inherited)
+            Arn: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
                 Body: [ ]
@@ -10529,7 +11513,7 @@ Rules: [X]
         ByteMatchStatement: [X]
             SearchStringBase64: [ ]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             PositionalConstraint: [ ]
             SearchString: [ ]
@@ -10548,10 +11532,10 @@ Rules: [X]
             AggregateKeyType: [ ]
         IPSetReferenceStatement: [X]
             IPSetForwardedIPConfig: [ ]
-            (inherited)
+            Arn: [ ]
         XssMatchStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10565,7 +11549,7 @@ Rules: [X]
             Statements: [ ]
         SqliMatchStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10578,7 +11562,7 @@ Rules: [X]
         SizeConstraintStatement: [X]
             ComparisonOperator: [ ]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10596,9 +11580,9 @@ Rules: [X]
             Statement: [X]
                 RegexPatternSetReferenceStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
-                    (inherited)
+                    Arn: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
                         Body: [ ]
@@ -10610,7 +11594,7 @@ Rules: [X]
                 ByteMatchStatement: [X]
                     SearchStringBase64: [ ]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     PositionalConstraint: [ ]
                     SearchString: [ ]
@@ -10629,10 +11613,10 @@ Rules: [X]
                     AggregateKeyType: [ ]
                 IPSetReferenceStatement: [X]
                     IPSetForwardedIPConfig: [ ]
-                    (inherited)
+                    Arn: [ ]
                 XssMatchStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10646,7 +11630,7 @@ Rules: [X]
                     Statements: [ ]
                 SqliMatchStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10659,7 +11643,7 @@ Rules: [X]
                 SizeConstraintStatement: [X]
                     ComparisonOperator: [ ]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10677,9 +11661,9 @@ Rules: [X]
                     Statement: [X]
                         RegexPatternSetReferenceStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
-                            (inherited)
+                            Arn: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
                                 Body: [ ]
@@ -10691,7 +11675,7 @@ Rules: [X]
                         ByteMatchStatement: [X]
                             SearchStringBase64: [ ]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             PositionalConstraint: [ ]
                             SearchString: [ ]
@@ -10705,10 +11689,10 @@ Rules: [X]
                                 SingleHeader: [ ]
                         IPSetReferenceStatement: [X]
                             IPSetForwardedIPConfig: [ ]
-                            (inherited)
+                            Arn: [ ]
                         XssMatchStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -10720,7 +11704,7 @@ Rules: [X]
                                 SingleHeader: [ ]
                         SqliMatchStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -10733,7 +11717,7 @@ Rules: [X]
                         SizeConstraintStatement: [X]
                             ComparisonOperator: [ ]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -10751,7 +11735,7 @@ Rules: [X]
                     Statements: [ ]
         AndStatement: [X]
             Statements: [ ]
-    (inherited)
+    Name: [ ]
     VisibilityConfig: [X]
         SampledRequestsEnabled: [ ]
         CloudWatchMetricsEnabled: [ ]
@@ -10773,18 +11757,18 @@ Rules: [X]
     OverrideAction: [X]
         Count: [ ]
         None: [ ]
-    (inherited)
+    Name: [ ]
     VisibilityConfig: [X]
         SampledRequestsEnabled: [ ]
         CloudWatchMetricsEnabled: [ ]
         MetricName: [ ]
-    (inherited)
+    Priority: [ ]
     Statement: [X]
         RegexPatternSetReferenceStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
-            (inherited)
+            Arn: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
                 Body: [ ]
@@ -10796,7 +11780,7 @@ Rules: [X]
         ByteMatchStatement: [X]
             SearchStringBase64: [ ]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             PositionalConstraint: [ ]
             SearchString: [ ]
@@ -10813,17 +11797,21 @@ Rules: [X]
             ForwardedIPConfig: [ ]
             ScopeDownStatement: [ ]
             AggregateKeyType: [ ]
-        (inherited)
+        RuleGroupReferenceStatement: [X]
+            ExcludedRules: [X]
+                Name: [ ]
+            Arn: [ ]
         IPSetReferenceStatement: [X]
             IPSetForwardedIPConfig: [ ]
-            (inherited)
+            Arn: [ ]
         ManagedRuleGroupStatement: [X]
-            (inherited)
-            (inherited)
+            ExcludedRules: [X]
+                Name: [ ]
+            Name: [ ]
             VendorName: [ ]
         XssMatchStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10837,7 +11825,7 @@ Rules: [X]
             Statements: [ ]
         SqliMatchStatement: [X]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10850,7 +11838,7 @@ Rules: [X]
         SizeConstraintStatement: [X]
             ComparisonOperator: [ ]
             TextTransformations: [X]
-                (inherited)
+                Priority: [ ]
                 Type: [ ]
             FieldToMatch: [X]
                 AllQueryArguments: [ ]
@@ -10868,9 +11856,9 @@ Rules: [X]
             Statement: [X]
                 RegexPatternSetReferenceStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
-                    (inherited)
+                    Arn: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
                         Body: [ ]
@@ -10882,7 +11870,7 @@ Rules: [X]
                 ByteMatchStatement: [X]
                     SearchStringBase64: [ ]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     PositionalConstraint: [ ]
                     SearchString: [ ]
@@ -10899,17 +11887,21 @@ Rules: [X]
                     ForwardedIPConfig: [ ]
                     ScopeDownStatement: [ ]
                     AggregateKeyType: [ ]
-                (inherited)
+                RuleGroupReferenceStatement: [X]
+                    ExcludedRules: [X]
+                        Name: [ ]
+                    Arn: [ ]
                 IPSetReferenceStatement: [X]
                     IPSetForwardedIPConfig: [ ]
-                    (inherited)
+                    Arn: [ ]
                 ManagedRuleGroupStatement: [X]
-                    (inherited)
-                    (inherited)
+                    ExcludedRules: [X]
+                        Name: [ ]
+                    Name: [ ]
                     VendorName: [ ]
                 XssMatchStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10923,7 +11915,7 @@ Rules: [X]
                     Statements: [ ]
                 SqliMatchStatement: [X]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10936,7 +11928,7 @@ Rules: [X]
                 SizeConstraintStatement: [X]
                     ComparisonOperator: [ ]
                     TextTransformations: [X]
-                        (inherited)
+                        Priority: [ ]
                         Type: [ ]
                     FieldToMatch: [X]
                         AllQueryArguments: [ ]
@@ -10954,9 +11946,9 @@ Rules: [X]
                     Statement: [X]
                         RegexPatternSetReferenceStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
-                            (inherited)
+                            Arn: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
                                 Body: [ ]
@@ -10968,7 +11960,7 @@ Rules: [X]
                         ByteMatchStatement: [X]
                             SearchStringBase64: [ ]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             PositionalConstraint: [ ]
                             SearchString: [ ]
@@ -10980,17 +11972,21 @@ Rules: [X]
                                 SingleQueryArgument: [ ]
                                 Method: [ ]
                                 SingleHeader: [ ]
-                        (inherited)
+                        RuleGroupReferenceStatement: [X]
+                            ExcludedRules: [X]
+                                Name: [ ]
+                            Arn: [ ]
                         ManagedRuleGroupStatement: [X]
-                            (inherited)
-                            (inherited)
+                            ExcludedRules: [X]
+                                Name: [ ]
+                            Name: [ ]
                             VendorName: [ ]
                         IPSetReferenceStatement: [X]
                             IPSetForwardedIPConfig: [ ]
-                            (inherited)
+                            Arn: [ ]
                         XssMatchStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -11002,7 +11998,7 @@ Rules: [X]
                                 SingleHeader: [ ]
                         SqliMatchStatement: [X]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -11015,7 +12011,7 @@ Rules: [X]
                         SizeConstraintStatement: [X]
                             ComparisonOperator: [ ]
                             TextTransformations: [X]
-                                (inherited)
+                                Priority: [ ]
                                 Type: [ ]
                             FieldToMatch: [X]
                                 AllQueryArguments: [ ]
@@ -11083,13 +12079,13 @@ BundleId: [X]
 #### Alexa::ASK::Skill
 
 ```
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
-    (inherited)
+    ClientSecret: [ ]
+    RefreshToken: [ ]
+    ClientId: [ ]
+    S3Bucket: [ ]
+    S3ObjectVersion: [ ]
+    S3BucketRole: [ ]
+    S3Key: [ ]
+        Manifest: [ ]
 ```
 
