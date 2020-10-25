@@ -229,7 +229,7 @@ async function updateDatatableStorageEFS() {
                 }),
                 sdkcall("EFS", "describeAccessPoints", {
                     FileSystemId: fileSystem.FileSystemId
-                }, true).then((apdata) => {
+                }, false).then((apdata) => {
                     apdata.AccessPoints.forEach(ap => {
                         $('#section-storage-efs-accesspoints-datatable').deferredBootstrapTable('append', [{
                             f2id: ap.AccessPointArn,
@@ -241,7 +241,7 @@ async function updateDatatableStorageEFS() {
                             name: ap.Name
                         }]);
                     });
-                })
+                }).catch(() => { })
             ]);
         }));
 
