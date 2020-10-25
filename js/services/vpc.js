@@ -2619,11 +2619,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
     await sdkcall("EC2", "describeSubnets", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-vpc-subnetipv6cidrblocks-datatable').deferredBootstrapTable('removeAll');
 
-        data.Subnets.forEach(subnet => {
+        data.Subnets.forEach(async (subnet) => {
             if (subnet.VpcId != defaultVPC) {
                 if (subnet.Ipv6CidrBlockAssociationSet) {
                     subnet.Ipv6CidrBlockAssociationSet.forEach(ipv6CidrBlockAssociation => {
@@ -2639,6 +2639,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                         }]);
                     });
                 }
+
+                subnet['Tags'] = await getResourceTags(subnet.SubnetArn);
 
                 $('#section-networkingandcontentdelivery-vpc-subnets-datatable').deferredBootstrapTable('append', [{
                     f2id: subnet.SubnetId,
@@ -4162,11 +4164,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['ipv6_cidr_block'] = obj.data.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock;
             }
         }
-
-        /* TODO:
-        Tags:
-            - Resource Tag
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

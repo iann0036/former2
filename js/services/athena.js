@@ -191,13 +191,15 @@ async function updateDatatableAnalyticsAthena() {
     }, true).then(async (data) => {
         $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.WorkGroups.map(workgroup => {
+        await Promise.all(data.WorkGroups.map(async (workgroup) => {
             return sdkcall("Athena", "getWorkGroup", {
                 WorkGroup: workgroup.Name
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 if (
                     data.WorkGroup.Name != "primary"
                 ) {
+                    data.WorkGroup['Tags'] = await getResourceTags("arn:aws:athena:region:account:workgroup/" + data.WorkGroup.Name);
+
                     $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('append', [{
                         f2id: data.WorkGroup.Name + " Workgroup",
                         f2type: 'athena.workgroup',
@@ -218,10 +220,12 @@ async function updateDatatableAnalyticsAthena() {
     }, true).then(async (data) => {
         $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.DataCatalogsSummary.map(datacatalog => {
+        await Promise.all(data.DataCatalogsSummary.map(async (datacatalog) => {
             return sdkcall("Athena", "getDataCatalog", {
                 Name: datacatalog.CatalogName
-            }, false).then((data) => {
+            }, false).then(async (data) => {
+                data.DataCatalog['Tags'] = await getResourceTags("arn:aws:athena:region:account:datacatalog/" + data.DataCatalog.Name);
+
                 $('#section-analytics-athena-datacatalogs-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DataCatalog.Name + " Data Catalog",
                     f2type: 'athena.datacatalog',
@@ -270,19 +274,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['State'] = obj.data.State;
         if (obj.data.Configuration) {
             reqParams.cfn['WorkGroupConfiguration'] = {
-                'BytesScannedCutoffPerQuery': obj.data.Configuration.ResultConfiguration.BytesScannedCutoffPerQuery,
-                'EnforceWorkGroupConfiguration': obj.data.Configuration.ResultConfiguration.EnforceWorkGroupConfiguration,
-                'PublishCloudWatchMetricsEnabled': obj.data.Configuration.ResultConfiguration.PublishCloudWatchMetricsEnabled,
-                'RequesterPaysEnabled': obj.data.Configuration.ResultConfiguration.RequesterPaysEnabled,
-                'ResultConfiguration': obj.data.Configuration.ResultConfiguration.ResultConfiguration
+                'BytesScannedCutoffPerQuery': obj.data.Configuration.BytesScannedCutoffPerQuery,
+                'EnforceWorkGroupConfiguration': obj.data.Configuration.EnforceWorkGroupConfiguration,
+                'PublishCloudWatchMetricsEnabled': obj.data.Configuration.PublishCloudWatchMetricsEnabled,
+                'RequesterPaysEnabled': obj.data.Configuration.RequesterPaysEnabled,
+                'ResultConfiguration': obj.data.Configuration.ResultConfiguration
             };
         }
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
         RecursiveDeleteOption: Boolean
-        Tags: 
-            Tags
         WorkGroupConfigurationUpdates: 
             WorkGroupConfigurationUpdates
         */

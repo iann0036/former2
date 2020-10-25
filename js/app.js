@@ -1637,7 +1637,14 @@ async function getResourceTags(arn) {
     }
 
     for (var res of resource_tag_cache[ service/* + "." + type*/ ]) {
-        if (res['ResourceARN'] == arn) {
+        var resarnparts = res['ResourceARN'].split(":");
+        resarnparts[3] = "";
+        resarnparts[4] = "";
+        var arnparts = arn.split(":");
+        arnparts[3] = "";
+        arnparts[4] = "";
+
+        if (resarnparts.join(":") == arnparts.join(":")) {
             return res['Tags'].filter(tag => !tag['Key'].startsWith("aws:"));
         }
     }
