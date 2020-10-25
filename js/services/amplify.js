@@ -305,6 +305,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'BuildSpec': obj.data.autoBranchCreationConfig.buildSpec,
                 'EnableAutoBranchCreation': obj.data.enableAutoBranchCreation,
                 'EnableAutoBuild': obj.data.autoBranchCreationConfig.enableAutoBuild,
+                'EnablePerformanceMode': obj.data.autoBranchCreationConfig.enablePerformanceMode,
                 'EnablePullRequestPreview': obj.data.autoBranchCreationConfig.enablePullRequestPreview,
                 'EnvironmentVariables': obj.data.autoBranchCreationConfig.environmentVariables,
                 'PullRequestEnvironmentName': obj.data.autoBranchCreationConfig.pullRequestEnvironmentName,
@@ -313,12 +314,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['BuildSpec'] = obj.data.buildSpec;
         reqParams.cfn['EnableBranchAutoDeletion'] = obj.data.enableBranchAutoDeletion;
-
-        /*
-        TODO:
-        AccessToken: String
-        OauthToken: String
-        */
+        reqParams.cfn['AccessToken'] = "REPLACEME";
+        reqParams.cfn['OauthToken'] = "REPLACEME";
 
         tracked_resources.push({
             'obj': obj,
@@ -364,6 +361,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['EnablePullRequestPreview'] = obj.data.enablePullRequestPreview;
         reqParams.cfn['PullRequestEnvironmentName'] = obj.data.pullRequestEnvironmentName;
         reqParams.cfn['EnableAutoBuild'] = obj.data.enableAutoBuild;
+        reqParams.cfn['EnablePerformanceMode'] = obj.data.enablePerformanceMode;
 
         tracked_resources.push({
             'obj': obj,

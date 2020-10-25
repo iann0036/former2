@@ -174,10 +174,10 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
         $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('removeAll');
         $('#section-applicationintegration-amazonmq-configurationassociations-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.BrokerSummaries.map(brokerSummary => {
+        await Promise.all(data.BrokerSummaries.map(async (brokerSummary) => {
             return sdkcall("MQ", "describeBroker", {
                 BrokerId: brokerSummary.BrokerId
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 if (data.Configurations && data.Configurations.Current) {
                     $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Configurations.Current.Id,
@@ -190,6 +190,19 @@ async function updateDatatableApplicationIntegrationAmazonMQ() {
                         brokerid: brokerSummary.BrokerId,
                         configurationid: data.Configurations.Current.Id
                     }]);
+                }
+
+                if (data.Users) {
+                    var users = [];
+                    await Promise.all(data.Users.map(async (user) => {
+                        return sdkcall("MQ", "describeUser", {
+                            BrokerId: data.BrokerId,
+                            Username: user.Username
+                        }, true).then(async (data) => {
+                            users.push(data);
+                        });
+                    }));
+                    data.Users = users;
                 }
 
                 $('#section-applicationintegration-amazonmq-brokers-datatable').deferredBootstrapTable('append', [{
@@ -252,6 +265,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
         reqParams.cfn['HostInstanceType'] = obj.data.HostInstanceType;
         reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
+        reqParams.cfn['StorageType'] = obj.data.StorageType;
+        reqParams.cfn['AuthenticationStrategy'] = obj.data.AuthenticationStrategy;
         if (obj.data.Configurations && obj.data.Configurations.Current) {
             reqParams.cfn['Configuration'] = {
                 'Id': obj.data.Configurations.Current.Id,
@@ -281,7 +296,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.Users.forEach(user => {
                 reqParams.cfn['Users'].push({
                     'Username': user.Username,
-                    'Password': 'REPLACEME'
+                    'Password': 'REPLACEME',
+                    'ConsoleAccess': user.ConsoleAccess,
+                    'Groups': user.Groups
                 });
             });
         }
@@ -301,14 +318,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'UserSearchSubtree': obj.data.LdapServerMetadata.UserSearchSubtree
             };
         }
-
-        /*
-        TODO:
-        Users: 
-            - User
-                Groups
-                ConsoleAccess
-        */
 
         tracked_resources.push({
             'obj': obj,

@@ -1994,14 +1994,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        TODO:
-        Body: JSON object
-        BodyS3Location:
-            S3Location
-        CloneFrom: String
-        FailOnWarnings: Boolean
-        Parameters:
-            String: String
+        SKIPPED: Body
+        SKIPPED: BodyS3Location
+        SKIPPED: CloneFrom
+        SKIPPED: FailOnWarnings
+        SKIPPED: Parameters
         */
 
         tracked_resources.push({
@@ -2441,10 +2438,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        TODO:
-        GenerateDistinctId: Boolean
-        StageKeys:
-        - StageKey
+        SKIPPED: GenerateDistinctId
+        SKIPPED: StageKeys
         */
 
         tracked_resources.push({
@@ -2491,6 +2486,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RegionalCertificateArn'] = obj.data.regionalCertificateArn;
         reqParams.tf['regional_certificate_arn'] = obj.data.regionalCertificateArn;
         reqParams.cfn['SecurityPolicy'] = obj.data.securityPolicy;
+        if (obj.data.mutualTlsAuthentication) {
+            reqParams.cfn['SecurityPolicy'] = {
+                'TruststoreUri': obj.data.mutualTlsAuthentication.truststoreUri,
+                'TruststoreVersion': obj.data.mutualTlsAuthentication.truststoreVersion
+            };
+        }
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             reqParams.tf['Tags'] = {};

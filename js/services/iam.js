@@ -1058,7 +1058,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
 
                 reqParams.cfn['ArchiveRules'].push({
-                    'Filters': filters,
+                    'Filter': filters,
                     'RuleName': archiveRule.ruleName
                 });
             });
