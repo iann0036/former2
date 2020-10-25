@@ -134,14 +134,18 @@ def find_occs(resourcetype, prop, indent, subprops):
                 if endpos > -1:
                     startpos = text.rfind("if (obj.type ==", 0, endpos)
                     if "\'" + prop + "\'" in text[startpos:endpos]:
-                        ret += (' '*indent) + prop + ": [ ]\n"
-                    else:
                         ret += (' '*indent) + prop + ": [X]\n"
+                    else:
+                        ret += (' '*indent) + prop + ": [ ]\n"
                         process_subs = False
                     break_loop = True
     if process_subs:
         for k, v in subprops.items():
-            ret += find_occs(resourcetype, k, indent + 4, v)
+            subpropret = find_occs(resourcetype, k, indent + 4, v)
+            if "[ ]" in subpropret:
+                ret += subpropret
+            else:
+                ret += (' '*(indent + 4)) + "(inherited)\n"
     return ret
 
 for resourcetype, props in spec.items():
@@ -196,4 +200,4 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
 
     ospec = collections.OrderedDict(sorted(spec.items()))
     for k, v in ospec.items():
-        f.write("#### %s\n\n```%s```\n" % (k, v))
+        f.write("#### %s\n\n```\n%s```\n\n" % (k, v))

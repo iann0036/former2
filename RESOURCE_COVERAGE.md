@@ -1201,9610 +1201,9895 @@
 
 #### AWS::ACMPCA::Certificate
 
-```CertificateSigningRequest: [X]
-SigningAlgorithm: [ ]
-TemplateArn: [X]
-CertificateAuthorityArn: [X]
-Validity: [X]
 ```
+CertificateSigningRequest: [ ]
+SigningAlgorithm: [X]
+TemplateArn: [ ]
+CertificateAuthorityArn: [ ]
+Validity: [ ]
+```
+
 #### AWS::ACMPCA::CertificateAuthority
 
-```Tags: [ ]
-    Key: [X]
-    Value: [X]
-SigningAlgorithm: [ ]
-KeyAlgorithm: [ ]
-Type: [ ]
-RevocationConfiguration: [ ]
-    CrlConfiguration: [X]
-Subject: [ ]
-    Surname: [X]
-    Locality: [X]
-    Country: [X]
-    SerialNumber: [X]
-    CommonName: [X]
-    State: [X]
-    GenerationQualifier: [X]
-    DistinguishedNameQualifier: [X]
-    Title: [X]
-    Organization: [X]
-    Initials: [X]
-    GivenName: [X]
-    OrganizationalUnit: [X]
-    Pseudonym: [X]
 ```
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+SigningAlgorithm: [X]
+KeyAlgorithm: [X]
+Type: [X]
+RevocationConfiguration: [X]
+    CrlConfiguration: [ ]
+Subject: [X]
+    Surname: [ ]
+    Locality: [ ]
+    Country: [ ]
+    SerialNumber: [ ]
+    CommonName: [ ]
+    State: [ ]
+    GenerationQualifier: [ ]
+    DistinguishedNameQualifier: [ ]
+    Title: [ ]
+    Organization: [ ]
+    Initials: [ ]
+    GivenName: [ ]
+    OrganizationalUnit: [ ]
+    Pseudonym: [ ]
+```
+
 #### AWS::ACMPCA::CertificateAuthorityActivation
 
-```Status: [ ]
-CertificateChain: [ ]
-CertificateAuthorityArn: [ ]
-Certificate: [ ]
 ```
+Status: [X]
+CertificateChain: [X]
+CertificateAuthorityArn: [X]
+Certificate: [X]
+```
+
 #### AWS::AccessAnalyzer::Analyzer
 
-```AnalyzerName: [ ]
-ArchiveRules: [ ]
-    Filter: [X]
-    RuleName: [ ]
-Type: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
 ```
-#### AWS::AmazonMQ::Broker
-
-```Configuration: [ ]
-    Id: [ ]
-    Revision: [ ]
-Logs: [ ]
-    Audit: [ ]
-    General: [ ]
-PubliclyAccessible: [ ]
-HostInstanceType: [ ]
-StorageType: [X]
-SubnetIds: [ ]
-Tags: [ ]
-    Value: [ ]
-    Key: [ ]
-MaintenanceWindowStartTime: [ ]
-    DayOfWeek: [X]
-    TimeZone: [X]
-    TimeOfDay: [X]
-AutoMinorVersionUpgrade: [ ]
-SecurityGroups: [ ]
-Users: [ ]
-    Username: [ ]
-    ConsoleAccess: [X]
-    Password: [ ]
-    Groups: [X]
-EngineVersion: [ ]
-BrokerName: [ ]
-LdapServerMetadata: [ ]
-    ServiceAccountUsername: [ ]
-    UserRoleName: [ ]
-    UserBase: [ ]
-    RoleSearchMatching: [ ]
-    UserSearchMatching: [ ]
-    RoleBase: [ ]
-    UserSearchSubtree: [ ]
-    Hosts: [ ]
-    RoleSearchSubtree: [ ]
-    RoleName: [ ]
-    ServiceAccountPassword: [ ]
-EngineType: [ ]
-EncryptionOptions: [ ]
-    KmsKeyId: [X]
-    UseAwsOwnedKey: [X]
-DeploymentMode: [ ]
-AuthenticationStrategy: [X]
-```
-#### AWS::AmazonMQ::Configuration
-
-```Name: [ ]
-Tags: [ ]
-    Value: [ ]
-    Key: [ ]
-EngineType: [ ]
-EngineVersion: [ ]
-Data: [ ]
-Description: [ ]
-```
-#### AWS::AmazonMQ::ConfigurationAssociation
-
-```Configuration: [ ]
-    Id: [ ]
-    Revision: [ ]
-Broker: [ ]
-```
-#### AWS::Amplify::App
-
-```BuildSpec: [ ]
-EnableBranchAutoDeletion: [ ]
-Description: [ ]
-Repository: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-OauthToken: [X]
-BasicAuthConfig: [ ]
-    Username: [ ]
-    Password: [ ]
-    EnableBasicAuth: [ ]
-AccessToken: [X]
-EnvironmentVariables: [ ]
-    Name: [ ]
-    Value: [ ]
-IAMServiceRole: [ ]
-AutoBranchCreationConfig: [ ]
-    BuildSpec: [ ]
-    EnablePullRequestPreview: [ ]
-    EnableAutoBranchCreation: [ ]
-    EnableAutoBuild: [ ]
-    AutoBranchCreationPatterns: [ ]
-    EnvironmentVariables: [ ]
-        Name: [ ]
-        Value: [ ]
-    EnablePerformanceMode: [X]
-    BasicAuthConfig: [ ]
-        Username: [ ]
-        Password: [ ]
-        EnableBasicAuth: [ ]
-    PullRequestEnvironmentName: [ ]
-    Stage: [ ]
-CustomRules: [ ]
-    Status: [ ]
-    Source: [ ]
-    Target: [ ]
-    Condition: [ ]
-Name: [ ]
-```
-#### AWS::Amplify::Branch
-
-```BuildSpec: [ ]
-EnablePullRequestPreview: [ ]
-Description: [ ]
-EnablePerformanceMode: [X]
-EnableAutoBuild: [ ]
-EnvironmentVariables: [ ]
-    Name: [ ]
-    Value: [ ]
-BasicAuthConfig: [ ]
-    Username: [ ]
-    Password: [ ]
-    EnableBasicAuth: [ ]
-PullRequestEnvironmentName: [ ]
-AppId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-BranchName: [ ]
-Stage: [ ]
-```
-#### AWS::Amplify::Domain
-
-```EnableAutoSubDomain: [ ]
-DomainName: [ ]
-AutoSubDomainIAMRole: [ ]
-SubDomainSettings: [ ]
-    Prefix: [ ]
-    BranchName: [ ]
-AutoSubDomainCreationPatterns: [ ]
-AppId: [ ]
-```
-#### AWS::ApiGateway::Account
-
-```CloudWatchRoleArn: [ ]
-```
-#### AWS::ApiGateway::ApiKey
-
-```Name: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-Enabled: [ ]
-Value: [ ]
-StageKeys: [X]
-GenerateDistinctId: [X]
-CustomerId: [ ]
-Description: [ ]
-```
-#### AWS::ApiGateway::Authorizer
-
-```AuthType: [ ]
-RestApiId: [ ]
-Name: [ ]
-ProviderARNs: [ ]
-AuthorizerUri: [ ]
-IdentityValidationExpression: [ ]
-AuthorizerResultTtlInSeconds: [ ]
-AuthorizerCredentials: [ ]
-IdentitySource: [ ]
-Type: [ ]
-```
-#### AWS::ApiGateway::BasePathMapping
-
-```BasePath: [ ]
-DomainName: [ ]
-RestApiId: [ ]
-Stage: [ ]
-```
-#### AWS::ApiGateway::ClientCertificate
-
-```Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::ApiGateway::Deployment
-
-```StageDescription: [X]
-DeploymentCanarySettings: [X]
-RestApiId: [ ]
-Description: [ ]
-StageName: [X]
-```
-#### AWS::ApiGateway::DocumentationPart
-
-```RestApiId: [ ]
-Location: [ ]
-    Path: [ ]
-    Name: [ ]
-    Type: [ ]
-    Method: [ ]
-    StatusCode: [ ]
-Properties: [ ]
-```
-#### AWS::ApiGateway::DocumentationVersion
-
-```RestApiId: [ ]
-Description: [ ]
-DocumentationVersion: [ ]
-```
-#### AWS::ApiGateway::DomainName
-
-```CertificateArn: [ ]
-MutualTlsAuthentication: [X]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-EndpointConfiguration: [ ]
-    Types: [ ]
-DomainName: [ ]
-RegionalCertificateArn: [ ]
-SecurityPolicy: [ ]
-```
-#### AWS::ApiGateway::GatewayResponse
-
-```ResponseType: [ ]
-ResponseParameters: [ ]
-ResponseTemplates: [ ]
-RestApiId: [ ]
-StatusCode: [ ]
-```
-#### AWS::ApiGateway::Method
-
-```RestApiId: [ ]
-RequestParameters: [ ]
-MethodResponses: [ ]
-    ResponseModels: [ ]
-    ResponseParameters: [ ]
-    StatusCode: [ ]
-AuthorizationScopes: [ ]
-RequestModels: [ ]
-ResourceId: [ ]
-AuthorizationType: [ ]
-OperationName: [ ]
-Integration: [ ]
-    IntegrationResponses: [ ]
-        ResponseParameters: [ ]
-        ResponseTemplates: [ ]
-        ContentHandling: [ ]
-        SelectionPattern: [ ]
-        StatusCode: [ ]
-    ContentHandling: [ ]
-    CacheKeyParameters: [ ]
-    RequestParameters: [ ]
-    IntegrationHttpMethod: [ ]
-    ConnectionId: [ ]
-    Uri: [ ]
-    ConnectionType: [ ]
-    PassthroughBehavior: [ ]
-    RequestTemplates: [ ]
-    CacheNamespace: [ ]
-    Credentials: [ ]
-    Type: [ ]
-    TimeoutInMillis: [ ]
-ApiKeyRequired: [ ]
-HttpMethod: [ ]
-RequestValidatorId: [ ]
-AuthorizerId: [ ]
-```
-#### AWS::ApiGateway::Model
-
-```ContentType: [ ]
-Name: [ ]
-RestApiId: [ ]
-Description: [ ]
-Schema: [ ]
-```
-#### AWS::ApiGateway::RequestValidator
-
-```ValidateRequestParameters: [ ]
-ValidateRequestBody: [ ]
-RestApiId: [ ]
-Name: [ ]
-```
-#### AWS::ApiGateway::Resource
-
-```RestApiId: [ ]
-PathPart: [ ]
-ParentId: [ ]
-```
-#### AWS::ApiGateway::RestApi
-
-```Body: [X]
-Description: [ ]
-CloneFrom: [X]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-EndpointConfiguration: [ ]
-    VpcEndpointIds: [ ]
-    Types: [ ]
-MinimumCompressionSize: [ ]
-BodyS3Location: [X]
-Parameters: [X]
-BinaryMediaTypes: [ ]
-Policy: [ ]
-FailOnWarnings: [X]
-ApiKeySourceType: [ ]
-Name: [ ]
-```
-#### AWS::ApiGateway::Stage
-
-```CanarySetting: [ ]
-    PercentTraffic: [ ]
-    DeploymentId: [ ]
-    UseStageCache: [ ]
-    StageVariableOverrides: [ ]
-ClientCertificateId: [ ]
-TracingEnabled: [ ]
-RestApiId: [ ]
-Description: [ ]
-StageName: [ ]
-CacheClusterSize: [ ]
-Variables: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-CacheClusterEnabled: [ ]
-DocumentationVersion: [ ]
-DeploymentId: [ ]
-MethodSettings: [ ]
-    CacheTtlInSeconds: [ ]
-    ResourcePath: [ ]
-    DataTraceEnabled: [ ]
-    HttpMethod: [ ]
-    CacheDataEncrypted: [ ]
-    LoggingLevel: [ ]
-    MetricsEnabled: [ ]
-    CachingEnabled: [ ]
-    ThrottlingBurstLimit: [ ]
-    ThrottlingRateLimit: [ ]
-AccessLogSetting: [ ]
-    DestinationArn: [ ]
-    Format: [ ]
-```
-#### AWS::ApiGateway::UsagePlan
-
-```ApiStages: [ ]
-    ApiId: [ ]
-    Throttle: [ ]
-        RateLimit: [ ]
-        BurstLimit: [ ]
-    Stage: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-Quota: [ ]
-    Limit: [ ]
-    Period: [ ]
-    Offset: [ ]
-Throttle: [ ]
-    RateLimit: [ ]
-    BurstLimit: [ ]
-UsagePlanName: [ ]
-```
-#### AWS::ApiGateway::UsagePlanKey
-
-```KeyType: [ ]
-KeyId: [ ]
-UsagePlanId: [ ]
-```
-#### AWS::ApiGateway::VpcLink
-
-```TargetArns: [ ]
-Description: [ ]
-Name: [ ]
-```
-#### AWS::ApiGatewayV2::Api
-
-```Body: [X]
-Target: [X]
-CorsConfiguration: [ ]
-    AllowMethods: [X]
-    AllowOrigins: [X]
-    MaxAge: [X]
-    AllowCredentials: [X]
-    AllowHeaders: [X]
-    ExposeHeaders: [X]
-Tags: [ ]
-ProtocolType: [ ]
-RouteSelectionExpression: [ ]
-BasePath: [X]
-BodyS3Location: [X]
-Version: [ ]
-RouteKey: [X]
-ApiKeySelectionExpression: [ ]
-CredentialsArn: [X]
-DisableExecuteApiEndpoint: [ ]
-Name: [ ]
-DisableSchemaValidation: [ ]
-FailOnWarnings: [X]
-Description: [ ]
-```
-#### AWS::ApiGatewayV2::ApiGatewayManagedOverrides
-
-``````
-#### AWS::ApiGatewayV2::ApiMapping
-
-```ApiMappingKey: [ ]
-DomainName: [ ]
-ApiId: [ ]
-Stage: [ ]
-```
-#### AWS::ApiGatewayV2::Authorizer
-
-```Name: [ ]
-AuthorizerPayloadFormatVersion: [X]
-EnableSimpleResponses: [X]
-AuthorizerCredentialsArn: [ ]
-JwtConfiguration: [ ]
-    Audience: [X]
-    Issuer: [X]
-AuthorizerUri: [ ]
-AuthorizerType: [ ]
-IdentityValidationExpression: [ ]
-AuthorizerResultTtlInSeconds: [ ]
-IdentitySource: [ ]
-ApiId: [ ]
-```
-#### AWS::ApiGatewayV2::Deployment
-
-```ApiId: [ ]
-Description: [ ]
-StageName: [X]
-```
-#### AWS::ApiGatewayV2::DomainName
-
-```MutualTlsAuthentication: [X]
-DomainName: [ ]
-DomainNameConfigurations: [ ]
-    CertificateArn: [ ]
-    CertificateName: [ ]
-    SecurityPolicy: [X]
-    EndpointType: [ ]
-Tags: [X]
-```
-#### AWS::ApiGatewayV2::Integration
-
-```TlsConfig: [X]
-PassthroughBehavior: [X]
-IntegrationMethod: [X]
-Description: [X]
-RequestParameters: [X]
-TemplateSelectionExpression: [ ]
-IntegrationSubtype: [X]
-ConnectionId: [X]
-ConnectionType: [X]
-PayloadFormatVersion: [X]
-IntegrationUri: [X]
-RequestTemplates: [X]
-CredentialsArn: [X]
-IntegrationType: [X]
-ContentHandlingStrategy: [ ]
-ApiId: [ ]
-TimeoutInMillis: [X]
-```
-#### AWS::ApiGatewayV2::IntegrationResponse
-
-```IntegrationResponseKey: [ ]
-ApiId: [ ]
-ResponseTemplates: [ ]
-TemplateSelectionExpression: [ ]
-ContentHandlingStrategy: [ ]
-IntegrationId: [ ]
-ResponseParameters: [ ]
-```
-#### AWS::ApiGatewayV2::Model
-
-```ApiId: [ ]
-Schema: [ ]
-ContentType: [ ]
-Description: [ ]
-Name: [ ]
-```
-#### AWS::ApiGatewayV2::Route
-
-```Target: [X]
-RouteResponseSelectionExpression: [X]
-AuthorizationScopes: [X]
-RequestModels: [X]
-AuthorizationType: [X]
-OperationName: [X]
-ApiKeyRequired: [X]
-RouteKey: [X]
-AuthorizerId: [X]
-ModelSelectionExpression: [ ]
-ApiId: [ ]
-RequestParameters: [X]
-```
-#### AWS::ApiGatewayV2::RouteResponse
-
-```ResponseModels: [ ]
-ApiId: [ ]
-RouteResponseKey: [ ]
-ModelSelectionExpression: [ ]
-RouteId: [ ]
-ResponseParameters: [ ]
-```
-#### AWS::ApiGatewayV2::Stage
-
-```ClientCertificateId: [ ]
-Description: [ ]
-StageName: [ ]
-Tags: [ ]
-ApiId: [ ]
-AutoDeploy: [ ]
-DeploymentId: [ ]
-DefaultRouteSettings: [ ]
-    LoggingLevel: [X]
-    DetailedMetricsEnabled: [X]
-    DataTraceEnabled: [X]
-    ThrottlingBurstLimit: [X]
-    ThrottlingRateLimit: [X]
-AccessLogSettings: [ ]
-    DestinationArn: [X]
-    Format: [X]
-StageVariables: [ ]
-RouteSettings: [ ]
-```
-#### AWS::ApiGatewayV2::VpcLink
-
-```SubnetIds: [ ]
-SecurityGroupIds: [ ]
-Name: [ ]
-Tags: [ ]
-```
-#### AWS::AppConfig::Application
-
-```Tags: [X]
-Name: [ ]
-Description: [ ]
-```
-#### AWS::AppConfig::ConfigurationProfile
-
-```Description: [ ]
-Tags: [X]
-RetrievalRoleArn: [ ]
-Validators: [ ]
-    Content: [X]
-    Type: [X]
-ApplicationId: [ ]
-LocationUri: [ ]
-Name: [ ]
-```
-#### AWS::AppConfig::Deployment
-
-```ConfigurationProfileId: [ ]
-EnvironmentId: [ ]
-Description: [ ]
-Tags: [X]
-DeploymentStrategyId: [ ]
-ApplicationId: [ ]
-ConfigurationVersion: [ ]
-```
-#### AWS::AppConfig::DeploymentStrategy
-
-```DeploymentDurationInMinutes: [ ]
-Description: [ ]
-FinalBakeTimeInMinutes: [ ]
-Tags: [X]
-GrowthType: [ ]
-GrowthFactor: [ ]
-ReplicateTo: [ ]
-Name: [ ]
-```
-#### AWS::AppConfig::Environment
-
-```Description: [ ]
-Monitors: [ ]
-    AlarmArn: [X]
-    AlarmRoleArn: [X]
-ApplicationId: [ ]
-Name: [ ]
-Tags: [X]
-```
-#### AWS::AppConfig::HostedConfigurationVersion
-
-```ConfigurationProfileId: [ ]
-LatestVersionNumber: [X]
-ContentType: [ ]
-Description: [ ]
-Content: [ ]
-ApplicationId: [ ]
-```
-#### AWS::AppFlow::ConnectorProfile
-
-```ConnectorProfileConfig: [ ]
-    ConnectorProfileProperties: [ ]
-        Marketo: [ ]
-            InstanceUrl: [ ]
-        Datadog: [ ]
-            InstanceUrl: [ ]
-        Salesforce: [ ]
-            isSandboxEnvironment: [ ]
-            InstanceUrl: [ ]
-        ServiceNow: [ ]
-            InstanceUrl: [ ]
-        Redshift: [ ]
-            DatabaseUrl: [ ]
-            BucketPrefix: [ ]
-            BucketName: [ ]
-            RoleArn: [ ]
-        InforNexus: [ ]
-            InstanceUrl: [ ]
-        Dynatrace: [ ]
-            InstanceUrl: [ ]
-        Veeva: [ ]
-            InstanceUrl: [ ]
-        Zendesk: [ ]
-            InstanceUrl: [ ]
-        Snowflake: [ ]
-            BucketName: [ ]
-            BucketPrefix: [ ]
-            AccountName: [ ]
-            PrivateLinkServiceName: [ ]
-            Warehouse: [ ]
-            Region: [ ]
-            Stage: [ ]
-        Slack: [ ]
-            InstanceUrl: [ ]
-    ConnectorProfileCredentials: [ ]
-        Marketo: [ ]
-            ConnectorOAuthRequest: [ ]
-                AuthCode: [X]
-                RedirectUri: [X]
-            ClientSecret: [ ]
-            ClientId: [ ]
-            AccessToken: [ ]
-        Datadog: [ ]
-            ApplicationKey: [ ]
-            ApiKey: [ ]
-        GoogleAnalytics: [ ]
-            ConnectorOAuthRequest: [ ]
-                AuthCode: [X]
-                RedirectUri: [X]
-            ClientSecret: [ ]
-            RefreshToken: [ ]
-            ClientId: [ ]
-            AccessToken: [ ]
-        ServiceNow: [ ]
-            Username: [ ]
-            Password: [ ]
-        Redshift: [ ]
-            Username: [ ]
-            Password: [ ]
-        Singular: [ ]
-            ApiKey: [ ]
-        Amplitude: [ ]
-            SecretKey: [ ]
-            ApiKey: [ ]
-        Slack: [ ]
-            ConnectorOAuthRequest: [ ]
-                AuthCode: [X]
-                RedirectUri: [X]
-            ClientSecret: [ ]
-            ClientId: [ ]
-            AccessToken: [ ]
-        InforNexus: [ ]
-            SecretAccessKey: [ ]
-            Datakey: [ ]
-            UserId: [ ]
-            AccessKeyId: [ ]
-        Dynatrace: [ ]
-            ApiToken: [ ]
-        Salesforce: [ ]
-            ConnectorOAuthRequest: [ ]
-                AuthCode: [X]
-                RedirectUri: [X]
-            RefreshToken: [ ]
-            AccessToken: [ ]
-        Veeva: [ ]
-            Username: [ ]
-            Password: [ ]
-        Zendesk: [ ]
-            ConnectorOAuthRequest: [ ]
-                AuthCode: [X]
-                RedirectUri: [X]
-            ClientSecret: [ ]
-            ClientId: [ ]
-            AccessToken: [ ]
-        Snowflake: [ ]
-            Username: [ ]
-            Password: [ ]
-        Trendmicro: [ ]
-            ApiSecretKey: [ ]
-ConnectorProfileName: [ ]
-KMSArn: [ ]
-ConnectorType: [ ]
-ConnectionMode: [ ]
-```
-#### AWS::AppFlow::Flow
-
-```FlowName: [ ]
-TriggerConfig: [ ]
-    TriggerProperties: [ ]
-        TimeZone: [ ]
-        ScheduleExpression: [ ]
-        DataPullMode: [ ]
-        ScheduleEndTime: [ ]
-        ScheduleStartTime: [ ]
-    TriggerType: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-KMSArn: [ ]
-Tasks: [ ]
-    SourceFields: [ ]
-    ConnectorOperator: [ ]
-        Marketo: [ ]
-        Datadog: [ ]
-        GoogleAnalytics: [ ]
-        ServiceNow: [ ]
-        Singular: [ ]
-        S3: [ ]
-        Amplitude: [ ]
-        Slack: [ ]
-        Dynatrace: [ ]
-        Salesforce: [ ]
-        Veeva: [ ]
-        Zendesk: [ ]
-        InforNexus: [ ]
-        Trendmicro: [ ]
-    TaskProperties: [ ]
-        Key: [ ]
-        Value: [ ]
-    DestinationField: [ ]
-    TaskType: [ ]
-SourceFlowConfig: [ ]
-    ConnectorProfileName: [ ]
-    ConnectorType: [ ]
-    SourceConnectorProperties: [ ]
-        Marketo: [ ]
-            Object: [ ]
-        Datadog: [ ]
-            Object: [ ]
-        GoogleAnalytics: [ ]
-            Object: [ ]
-        ServiceNow: [ ]
-            Object: [ ]
-        Singular: [ ]
-            Object: [ ]
-        S3: [ ]
-            BucketPrefix: [ ]
-            BucketName: [ ]
-        Amplitude: [ ]
-            Object: [ ]
-        Slack: [ ]
-            Object: [ ]
-        Dynatrace: [ ]
-            Object: [ ]
-        Salesforce: [ ]
-            Object: [ ]
-            EnableDynamicFieldUpdate: [ ]
-            IncludeDeletedRecords: [ ]
-        Veeva: [ ]
-            Object: [ ]
-        Zendesk: [ ]
-            Object: [ ]
-        InforNexus: [ ]
-            Object: [ ]
-        Trendmicro: [ ]
-            Object: [ ]
-DestinationFlowConfigList: [ ]
-    DestinationConnectorProperties: [ ]
-        S3: [ ]
-            BucketPrefix: [ ]
-            BucketName: [ ]
-            S3OutputFormatConfig: [ ]
-                FileType: [ ]
-                PrefixConfig: [ ]
-                    PrefixFormat: [ ]
-                    PrefixType: [ ]
-                AggregationConfig: [ ]
-                    AggregationType: [ ]
-        Salesforce: [ ]
-            ErrorHandlingConfig: [ ]
-                BucketPrefix: [ ]
-                BucketName: [ ]
-                FailOnFirstError: [ ]
-            Object: [ ]
-        EventBridge: [ ]
-            ErrorHandlingConfig: [ ]
-                BucketPrefix: [ ]
-                BucketName: [ ]
-                FailOnFirstError: [ ]
-            Object: [ ]
-        Snowflake: [ ]
-            ErrorHandlingConfig: [ ]
-                BucketPrefix: [ ]
-                BucketName: [ ]
-                FailOnFirstError: [ ]
-            IntermediateBucketName: [ ]
-            Object: [ ]
-            BucketPrefix: [ ]
-        Redshift: [ ]
-            ErrorHandlingConfig: [ ]
-                BucketPrefix: [ ]
-                BucketName: [ ]
-                FailOnFirstError: [ ]
-            IntermediateBucketName: [ ]
-            Object: [ ]
-            BucketPrefix: [ ]
-    ConnectorProfileName: [ ]
-    ConnectorType: [ ]
-```
-#### AWS::AppMesh::GatewayRoute
-
-```Tags: [X]
-MeshName: [ ]
-VirtualGatewayName: [ ]
-MeshOwner: [ ]
-GatewayRouteName: [ ]
-Spec: [ ]
-    GrpcRoute: [ ]
-        Action: [ ]
-            Target: [X]
-        Match: [ ]
-            ServiceName: [ ]
-    HttpRoute: [ ]
-        Action: [ ]
-            Target: [X]
-        Match: [ ]
-            Prefix: [ ]
-    Http2Route: [ ]
-        Action: [ ]
-            Target: [X]
-        Match: [ ]
-            Prefix: [ ]
-```
-#### AWS::AppMesh::Mesh
-
-```MeshName: [ ]
-Spec: [ ]
-    EgressFilter: [ ]
-        Type: [ ]
-Tags: [X]
-```
-#### AWS::AppMesh::Route
-
-```Tags: [X]
-MeshName: [ ]
-VirtualRouterName: [ ]
-RouteName: [ ]
-MeshOwner: [ ]
-Spec: [ ]
-    Priority: [ ]
-    GrpcRoute: [ ]
-        Action: [ ]
-            WeightedTargets: [ ]
-                VirtualNode: [ ]
-                Weight: [ ]
-        Timeout: [X]
-        Match: [ ]
-            ServiceName: [ ]
-            MethodName: [ ]
-            Metadata: [ ]
-                Invert: [ ]
-                Name: [ ]
-                Match: [ ]
-                    Regex: [ ]
-                    Prefix: [ ]
-                    Exact: [ ]
-                    Range: [ ]
-                        Start: [ ]
-                        End: [ ]
-                    Suffix: [ ]
-        RetryPolicy: [ ]
-            TcpRetryEvents: [ ]
-            PerRetryTimeout: [ ]
-                Value: [ ]
-                Unit: [ ]
-            MaxRetries: [ ]
-            HttpRetryEvents: [ ]
-            GrpcRetryEvents: [ ]
-    TcpRoute: [ ]
-        Action: [ ]
-            WeightedTargets: [ ]
-                VirtualNode: [ ]
-                Weight: [ ]
-        Timeout: [X]
-    HttpRoute: [ ]
-        Action: [ ]
-            WeightedTargets: [ ]
-                VirtualNode: [ ]
-                Weight: [ ]
-        Timeout: [X]
-        Match: [ ]
-            Headers: [ ]
-                Invert: [ ]
-                Name: [ ]
-                Match: [ ]
-                    Regex: [ ]
-                    Prefix: [ ]
-                    Exact: [ ]
-                    Range: [ ]
-                        Start: [ ]
-                        End: [ ]
-                    Suffix: [ ]
-            Prefix: [ ]
-            Scheme: [ ]
-            Method: [ ]
-        RetryPolicy: [ ]
-            TcpRetryEvents: [ ]
-            PerRetryTimeout: [ ]
-                Value: [ ]
-                Unit: [ ]
-            MaxRetries: [ ]
-            HttpRetryEvents: [ ]
-    Http2Route: [ ]
-        Action: [ ]
-            WeightedTargets: [ ]
-                VirtualNode: [ ]
-                Weight: [ ]
-        Timeout: [X]
-        Match: [ ]
-            Headers: [ ]
-                Invert: [ ]
-                Name: [ ]
-                Match: [ ]
-                    Regex: [ ]
-                    Prefix: [ ]
-                    Exact: [ ]
-                    Range: [ ]
-                        Start: [ ]
-                        End: [ ]
-                    Suffix: [ ]
-            Prefix: [ ]
-            Scheme: [ ]
-            Method: [ ]
-        RetryPolicy: [ ]
-            TcpRetryEvents: [ ]
-            PerRetryTimeout: [ ]
-                Value: [ ]
-                Unit: [ ]
-            MaxRetries: [ ]
-            HttpRetryEvents: [ ]
-```
-#### AWS::AppMesh::VirtualGateway
-
-```VirtualGatewayName: [ ]
-MeshName: [ ]
-Spec: [ ]
-    BackendDefaults: [ ]
-        ClientPolicy: [ ]
-            TLS: [ ]
-                Validation: [ ]
-                    Trust: [ ]
-                        ACM: [ ]
-                            CertificateAuthorityArns: [ ]
-                        File: [ ]
-                            CertificateChain: [ ]
-                Enforce: [ ]
-                Ports: [ ]
-    Listeners: [ ]
-        TLS: [ ]
-            Mode: [ ]
-            Certificate: [ ]
-                ACM: [ ]
-                    CertificateArn: [ ]
-                File: [ ]
-                    PrivateKey: [ ]
-                    CertificateChain: [ ]
-        HealthCheck: [ ]
-            Protocol: [ ]
-            TimeoutMillis: [ ]
-            IntervalMillis: [ ]
-            HealthyThreshold: [ ]
-            Path: [ ]
-            UnhealthyThreshold: [ ]
-            Port: [ ]
-        PortMapping: [ ]
-            Protocol: [ ]
-            Port: [ ]
-    Logging: [ ]
-        AccessLog: [ ]
-            File: [ ]
-                Path: [ ]
-MeshOwner: [ ]
-Tags: [X]
-```
-#### AWS::AppMesh::VirtualNode
-
-```Spec: [ ]
-    BackendDefaults: [ ]
-        ClientPolicy: [ ]
-            TLS: [ ]
-                Validation: [ ]
-                    Trust: [ ]
-                        ACM: [ ]
-                            CertificateAuthorityArns: [ ]
-                        File: [ ]
-                            CertificateChain: [ ]
-                Enforce: [ ]
-                Ports: [ ]
-    Listeners: [ ]
-        TLS: [ ]
-            Mode: [ ]
-            Certificate: [ ]
-                ACM: [ ]
-                    CertificateArn: [ ]
-                File: [ ]
-                    PrivateKey: [ ]
-                    CertificateChain: [ ]
-        HealthCheck: [ ]
-            Protocol: [ ]
-            TimeoutMillis: [ ]
-            IntervalMillis: [ ]
-            HealthyThreshold: [ ]
-            Path: [ ]
-            UnhealthyThreshold: [ ]
-            Port: [ ]
-        Timeout: [X]
-        PortMapping: [ ]
-            Protocol: [ ]
-            Port: [ ]
-    Backends: [ ]
-        VirtualService: [ ]
-            VirtualServiceName: [ ]
-            ClientPolicy: [ ]
-                TLS: [ ]
-                    Validation: [ ]
-                        Trust: [ ]
-                            ACM: [ ]
-                                CertificateAuthorityArns: [ ]
-                            File: [ ]
-                                CertificateChain: [ ]
-                    Enforce: [ ]
-                    Ports: [ ]
-    Logging: [ ]
-        AccessLog: [ ]
-            File: [ ]
-                Path: [ ]
-    ServiceDiscovery: [ ]
-        AWSCloudMap: [X]
-        DNS: [ ]
-            Hostname: [ ]
-MeshName: [ ]
-VirtualNodeName: [ ]
-MeshOwner: [ ]
-Tags: [X]
-```
-#### AWS::AppMesh::VirtualRouter
-
-```Spec: [ ]
-    Listeners: [ ]
-        PortMapping: [ ]
-            Protocol: [ ]
-            Port: [ ]
-MeshName: [ ]
-MeshOwner: [ ]
-VirtualRouterName: [ ]
-Tags: [X]
-```
-#### AWS::AppMesh::VirtualService
-
-```MeshName: [ ]
-VirtualServiceName: [ ]
-Spec: [ ]
-    Provider: [ ]
-        VirtualNode: [ ]
-            VirtualNodeName: [ ]
-        VirtualRouter: [ ]
-            VirtualRouterName: [ ]
-MeshOwner: [ ]
-Tags: [X]
-```
-#### AWS::AppStream::DirectoryConfig
-
-```OrganizationalUnitDistinguishedNames: [ ]
-ServiceAccountCredentials: [ ]
-    AccountPassword: [X]
-    AccountName: [X]
-DirectoryName: [ ]
-```
-#### AWS::AppStream::Fleet
-
-```ImageArn: [ ]
-MaxUserDurationInSeconds: [ ]
-VpcConfig: [ ]
-    SubnetIds: [X]
-    SecurityGroupIds: [X]
-Tags: [X]
-DisconnectTimeoutInSeconds: [ ]
-IdleDisconnectTimeoutInSeconds: [ ]
-IamRoleArn: [ ]
-FleetType: [ ]
-StreamView: [ ]
-EnableDefaultInternetAccess: [ ]
-ImageName: [ ]
-ComputeCapacity: [ ]
-    DesiredInstances: [X]
-DisplayName: [ ]
-Name: [ ]
-InstanceType: [ ]
-DomainJoinInfo: [ ]
-    DirectoryName: [X]
-    OrganizationalUnitDistinguishedName: [X]
-Description: [ ]
-```
-#### AWS::AppStream::ImageBuilder
-
-```DisplayName: [ ]
-Description: [ ]
-VpcConfig: [ ]
-    SubnetIds: [X]
-    SecurityGroupIds: [X]
-Tags: [X]
-AccessEndpoints: [ ]
-    EndpointType: [X]
-    VpceId: [X]
-IamRoleArn: [ ]
-AppstreamAgentVersion: [ ]
-EnableDefaultInternetAccess: [ ]
-ImageName: [ ]
-ImageArn: [ ]
-InstanceType: [ ]
-DomainJoinInfo: [ ]
-    DirectoryName: [X]
-    OrganizationalUnitDistinguishedName: [X]
-Name: [ ]
-```
-#### AWS::AppStream::Stack
-
-```AttributesToDelete: [X]
-DisplayName: [X]
-Description: [X]
-UserSettings: [X]
-DeleteStorageConnectors: [X]
-Tags: [X]
-StorageConnectors: [X]
-EmbedHostDomains: [X]
-RedirectURL: [X]
-AccessEndpoints: [X]
-ApplicationSettings: [X]
-FeedbackURL: [X]
-Name: [X]
-```
-#### AWS::AppStream::StackFleetAssociation
-
-```StackName: [ ]
-FleetName: [ ]
-```
-#### AWS::AppStream::StackUserAssociation
-
-```UserName: [ ]
-StackName: [ ]
-SendEmailNotification: [ ]
-AuthenticationType: [ ]
-```
-#### AWS::AppStream::User
-
-```UserName: [ ]
-LastName: [ ]
-MessageAction: [X]
-FirstName: [ ]
-AuthenticationType: [ ]
-```
-#### AWS::AppSync::ApiCache
-
-```TransitEncryptionEnabled: [ ]
-ApiId: [ ]
-ApiCachingBehavior: [ ]
-Ttl: [ ]
-Type: [ ]
-AtRestEncryptionEnabled: [ ]
-```
-#### AWS::AppSync::ApiKey
-
-```ApiId: [ ]
-Expires: [ ]
-Description: [ ]
-ApiKeyId: [ ]
-```
-#### AWS::AppSync::DataSource
-
-```ServiceRoleArn: [ ]
-ElasticsearchConfig: [ ]
-    Endpoint: [ ]
-    AwsRegion: [ ]
-Description: [ ]
-ApiId: [ ]
-DynamoDBConfig: [ ]
-    DeltaSyncConfig: [ ]
-        DeltaSyncTableTTL: [ ]
-        DeltaSyncTableName: [ ]
-        BaseTableTTL: [ ]
-    TableName: [ ]
-    AwsRegion: [ ]
-    Versioned: [ ]
-    UseCallerCredentials: [ ]
-HttpConfig: [ ]
-    AuthorizationConfig: [ ]
-        AuthorizationType: [ ]
-        AwsIamConfig: [ ]
-            SigningRegion: [ ]
-            SigningServiceName: [ ]
-    Endpoint: [ ]
-LambdaConfig: [ ]
-    LambdaFunctionArn: [ ]
-Type: [ ]
-RelationalDatabaseConfig: [ ]
-    RdsHttpEndpointConfig: [ ]
-        DatabaseName: [ ]
-        AwsRegion: [ ]
-        DbClusterIdentifier: [ ]
-        AwsSecretStoreArn: [ ]
-        Schema: [ ]
-    RelationalDatabaseSourceType: [ ]
-Name: [ ]
-```
-#### AWS::AppSync::FunctionConfiguration
-
-```DataSourceName: [ ]
-Description: [ ]
-ResponseMappingTemplateS3Location: [X]
-RequestMappingTemplateS3Location: [X]
-RequestMappingTemplate: [ ]
-FunctionVersion: [ ]
-SyncConfig: [X]
-ResponseMappingTemplate: [ ]
-ApiId: [ ]
-Name: [ ]
-```
-#### AWS::AppSync::GraphQLApi
-
-```AdditionalAuthenticationProviders: [X]
-XrayEnabled: [ ]
-Name: [ ]
-AuthenticationType: [ ]
-Tags: [X]
-OpenIDConnectConfig: [ ]
-    IatTTL: [ ]
-    AuthTTL: [ ]
-    ClientId: [ ]
-    Issuer: [ ]
-LogConfig: [ ]
-    FieldLogLevel: [ ]
-    ExcludeVerboseContent: [ ]
-    CloudWatchLogsRoleArn: [ ]
-UserPoolConfig: [ ]
-    AppIdClientRegex: [ ]
-    DefaultAction: [ ]
-    UserPoolId: [ ]
-    AwsRegion: [ ]
-```
-#### AWS::AppSync::GraphQLSchema
-
-```Definition: [ ]
-ApiId: [ ]
-DefinitionS3Location: [X]
-```
-#### AWS::AppSync::Resolver
-
-```Kind: [ ]
-DataSourceName: [ ]
-CachingConfig: [ ]
-    CachingKeys: [ ]
-    Ttl: [ ]
-ResponseMappingTemplateS3Location: [X]
-RequestMappingTemplateS3Location: [X]
-RequestMappingTemplate: [ ]
-TypeName: [ ]
-FieldName: [ ]
-PipelineConfig: [ ]
-    Functions: [ ]
-SyncConfig: [ ]
-    ConflictHandler: [ ]
-    LambdaConflictHandlerConfig: [ ]
-        LambdaConflictHandlerArn: [ ]
-    ConflictDetection: [ ]
-ResponseMappingTemplate: [ ]
-ApiId: [ ]
-```
-#### AWS::ApplicationAutoScaling::ScalableTarget
-
-```ScalableDimension: [ ]
-SuspendedState: [ ]
-    ScheduledScalingSuspended: [X]
-    DynamicScalingInSuspended: [X]
-    DynamicScalingOutSuspended: [X]
-ResourceId: [ ]
-RoleARN: [ ]
-MaxCapacity: [ ]
-MinCapacity: [ ]
-ServiceNamespace: [ ]
-ScheduledActions: [ ]
-    EndTime: [ ]
-    ScalableTargetAction: [ ]
-        MinCapacity: [ ]
-        MaxCapacity: [ ]
-    ScheduledActionName: [ ]
-    StartTime: [ ]
-    Schedule: [ ]
-```
-#### AWS::ApplicationAutoScaling::ScalingPolicy
-
-```PolicyName: [ ]
-ScalableDimension: [ ]
-ScalingTargetId: [X]
-ResourceId: [ ]
-StepScalingPolicyConfiguration: [ ]
-    StepAdjustments: [ ]
-        ScalingAdjustment: [ ]
-        MetricIntervalLowerBound: [ ]
-        MetricIntervalUpperBound: [ ]
-    MetricAggregationType: [ ]
-    Cooldown: [ ]
-    AdjustmentType: [ ]
-    MinAdjustmentMagnitude: [ ]
-PolicyType: [ ]
-TargetTrackingScalingPolicyConfiguration: [ ]
-    ScaleOutCooldown: [ ]
-    DisableScaleIn: [ ]
-    CustomizedMetricSpecification: [ ]
-        MetricName: [ ]
-        Namespace: [ ]
-        Dimensions: [ ]
-            Name: [ ]
-            Value: [ ]
-        Unit: [ ]
-        Statistic: [ ]
-    TargetValue: [ ]
-    PredefinedMetricSpecification: [ ]
-        PredefinedMetricType: [ ]
-        ResourceLabel: [ ]
-    ScaleInCooldown: [ ]
-ServiceNamespace: [ ]
-```
-#### AWS::ApplicationInsights::Application
-
-```CustomComponents: [X]
-ComponentMonitoringSettings: [X]
-Tags: [X]
-AutoConfigurationEnabled: [X]
-ResourceGroupName: [ ]
-OpsItemSNSTopicArn: [ ]
-OpsCenterEnabled: [ ]
-CWEMonitorEnabled: [ ]
-LogPatternSets: [X]
-```
-#### AWS::Athena::DataCatalog
-
-```Description: [ ]
-Type: [ ]
-Name: [ ]
-Parameters: [ ]
-Tags: [X]
-```
-#### AWS::Athena::NamedQuery
-
-```Name: [ ]
-Database: [ ]
-QueryString: [ ]
-Description: [ ]
-WorkGroup: [X]
-```
-#### AWS::Athena::WorkGroup
-
-```Name: [ ]
-Tags: [X]
-WorkGroupConfigurationUpdates: [X]
-RecursiveDeleteOption: [X]
-State: [ ]
-WorkGroupConfiguration: [ ]
-    PublishCloudWatchMetricsEnabled: [ ]
-    ResultConfiguration: [ ]
-        EncryptionConfiguration: [X]
-        OutputLocation: [X]
-    BytesScannedCutoffPerQuery: [ ]
-    RequesterPaysEnabled: [ ]
-    EnforceWorkGroupConfiguration: [ ]
-Description: [ ]
-```
-#### AWS::AutoScaling::AutoScalingGroup
-
-```PlacementGroup: [ ]
-NotificationConfigurations: [X]
-LifecycleHookSpecificationList: [X]
-VPCZoneIdentifier: [ ]
-LoadBalancerNames: [ ]
-MixedInstancesPolicy: [ ]
-    InstancesDistribution: [X]
-    LaunchTemplate: [ ]
-        LaunchTemplateSpecification: [X]
-        Overrides: [X]
-Tags: [ ]
-    PropagateAtLaunch: [ ]
-    Value: [ ]
-    Key: [ ]
-InstanceId: [X]
-MaxSize: [ ]
-TerminationPolicies: [ ]
-MetricsCollection: [ ]
-    Metrics: [ ]
-    Granularity: [ ]
-TargetGroupARNs: [ ]
-HealthCheckType: [ ]
-LaunchTemplate: [ ]
-    LaunchTemplateId: [X]
-    Version: [X]
-    LaunchTemplateName: [X]
-ServiceLinkedRoleARN: [ ]
-AutoScalingGroupName: [ ]
-MinSize: [ ]
-LaunchConfigurationName: [ ]
-CapacityRebalance: [X]
-HealthCheckGracePeriod: [ ]
-DesiredCapacity: [ ]
-Cooldown: [ ]
-MaxInstanceLifetime: [ ]
-AvailabilityZones: [ ]
-NewInstancesProtectedFromScaleIn: [X]
-```
-#### AWS::AutoScaling::LaunchConfiguration
-
-```UserData: [ ]
-IamInstanceProfile: [ ]
-ClassicLinkVPCId: [ ]
-InstanceId: [X]
-LaunchConfigurationName: [ ]
-InstanceMonitoring: [ ]
-ClassicLinkVPCSecurityGroups: [ ]
-KernelId: [ ]
-EbsOptimized: [ ]
-BlockDeviceMappings: [ ]
-    Ebs: [X]
-    DeviceName: [X]
-    VirtualName: [X]
-    NoDevice: [X]
-SecurityGroups: [ ]
-AssociatePublicIpAddress: [ ]
-PlacementTenancy: [ ]
-MetadataOptions: [X]
-RamDiskId: [ ]
-KeyName: [ ]
-ImageId: [ ]
-InstanceType: [ ]
-SpotPrice: [ ]
-```
-#### AWS::AutoScaling::LifecycleHook
-
-```LifecycleHookName: [ ]
-RoleARN: [ ]
-AutoScalingGroupName: [ ]
-HeartbeatTimeout: [ ]
-NotificationMetadata: [ ]
-DefaultResult: [ ]
-NotificationTargetARN: [ ]
-LifecycleTransition: [ ]
-```
-#### AWS::AutoScaling::ScalingPolicy
-
-```EstimatedInstanceWarmup: [ ]
-MinAdjustmentMagnitude: [ ]
-MetricAggregationType: [ ]
-AutoScalingGroupName: [ ]
-Cooldown: [ ]
-PolicyType: [ ]
-StepAdjustments: [ ]
-    ScalingAdjustment: [ ]
-    MetricIntervalLowerBound: [X]
-    MetricIntervalUpperBound: [X]
-AdjustmentType: [ ]
-ScalingAdjustment: [ ]
-TargetTrackingConfiguration: [ ]
-    TargetValue: [X]
-    PredefinedMetricSpecification: [X]
-    DisableScaleIn: [X]
-    CustomizedMetricSpecification: [X]
-```
-#### AWS::AutoScaling::ScheduledAction
-
-```MinSize: [ ]
-DesiredCapacity: [ ]
-AutoScalingGroupName: [ ]
-Recurrence: [ ]
-MaxSize: [ ]
-StartTime: [ ]
-EndTime: [ ]
-```
-#### AWS::AutoScalingPlans::ScalingPlan
-
-```ApplicationSource: [ ]
-    CloudFormationStackARN: [X]
-    TagFilters: [X]
-ScalingInstructions: [ ]
-    ScalingPolicyUpdateBehavior: [ ]
-    ScalableDimension: [ ]
-    ScheduledActionBufferTime: [ ]
-    TargetTrackingConfigurations: [ ]
-        CustomizedScalingMetricSpecification: [X]
-        EstimatedInstanceWarmup: [X]
-        ScaleOutCooldown: [X]
-        DisableScaleIn: [X]
-        PredefinedScalingMetricSpecification: [X]
-        TargetValue: [X]
-        ScaleInCooldown: [X]
-    PredictiveScalingMaxCapacityBehavior: [ ]
-    PredictiveScalingMaxCapacityBuffer: [ ]
-    ResourceId: [ ]
-    DisableDynamicScaling: [ ]
-    PredictiveScalingMode: [ ]
-    CustomizedLoadMetricSpecification: [ ]
-        MetricName: [X]
-        Namespace: [X]
-        Dimensions: [X]
-        Unit: [X]
-        Statistic: [X]
-    PredefinedLoadMetricSpecification: [ ]
-        ResourceLabel: [X]
-        PredefinedLoadMetricType: [X]
-    MinCapacity: [ ]
-    ServiceNamespace: [ ]
-    MaxCapacity: [ ]
-```
-#### AWS::Backup::BackupPlan
-
-```BackupPlan: [ ]
-    BackupPlanName: [ ]
-    AdvancedBackupSettings: [ ]
-        ResourceType: [X]
-        BackupOptions: [X]
-    BackupPlanRule: [ ]
-        CompletionWindowMinutes: [ ]
-        ScheduleExpression: [ ]
-        StartWindowMinutes: [ ]
-        RuleName: [ ]
-        TargetBackupVault: [ ]
-        RecoveryPointTags: [ ]
-        Lifecycle: [ ]
-            DeleteAfterDays: [X]
-            MoveToColdStorageAfterDays: [X]
-        CopyActions: [X]
-BackupPlanTags: [X]
-```
-#### AWS::Backup::BackupSelection
-
-```BackupPlanId: [ ]
-BackupSelection: [ ]
-    SelectionName: [X]
-    ListOfTags: [X]
-    IamRoleArn: [X]
-    Resources: [X]
-```
-#### AWS::Backup::BackupVault
-
-```AccessPolicy: [ ]
-Notifications: [ ]
-    BackupVaultEvents: [X]
-    SNSTopicArn: [X]
-BackupVaultName: [ ]
-EncryptionKeyArn: [ ]
-BackupVaultTags: [X]
-```
-#### AWS::Batch::ComputeEnvironment
-
-```ServiceRole: [ ]
-Tags: [ ]
-ComputeResources: [ ]
-    AllocationStrategy: [ ]
-    Subnets: [ ]
-    Type: [ ]
-    PlacementGroup: [ ]
-    SpotIamFleetRole: [ ]
-    Tags: [ ]
-    DesiredvCpus: [ ]
-    MinvCpus: [ ]
-    InstanceTypes: [ ]
-    SecurityGroupIds: [ ]
-    InstanceRole: [ ]
-    MaxvCpus: [ ]
-    ImageId: [ ]
-    BidPercentage: [ ]
-    Ec2KeyPair: [ ]
-    LaunchTemplate: [ ]
-        LaunchTemplateName: [ ]
-        Version: [ ]
-        LaunchTemplateId: [ ]
-State: [ ]
-ComputeEnvironmentName: [ ]
-Type: [ ]
-```
-#### AWS::Batch::JobDefinition
-
-```Parameters: [ ]
-Tags: [X]
-RetryStrategy: [ ]
-    Attempts: [ ]
-NodeProperties: [ ]
-    MainNode: [ ]
-    NodeRangeProperties: [ ]
-        TargetNodes: [ ]
-        Container: [ ]
-            ReadonlyRootFilesystem: [ ]
-            MountPoints: [ ]
-                SourceVolume: [ ]
-                ReadOnly: [ ]
-                ContainerPath: [ ]
-            Secrets: [ ]
-                ValueFrom: [ ]
-                Name: [ ]
-            LinuxParameters: [ ]
-                Swappiness: [ ]
-                MaxSwap: [ ]
-                SharedMemorySize: [ ]
-                Devices: [ ]
-                    HostPath: [ ]
-                    ContainerPath: [ ]
-                    Permissions: [ ]
-                InitProcessEnabled: [ ]
-                Tmpfs: [ ]
-                    MountOptions: [ ]
-                    ContainerPath: [ ]
-                    Size: [ ]
-            Image: [ ]
-            Privileged: [ ]
-            LogConfiguration: [ ]
-                SecretOptions: [ ]
-                    ValueFrom: [ ]
-                    Name: [ ]
-                Options: [ ]
-                LogDriver: [ ]
-            Environment: [ ]
-                Name: [ ]
-                Value: [ ]
-            Vcpus: [ ]
-            ExecutionRoleArn: [ ]
-            JobRoleArn: [ ]
-            User: [ ]
-            Volumes: [ ]
-                Host: [ ]
-                    SourcePath: [ ]
-                Name: [ ]
-            Memory: [ ]
-            ResourceRequirements: [X]
-            Command: [ ]
-            InstanceType: [X]
-            Ulimits: [ ]
-                SoftLimit: [ ]
-                HardLimit: [ ]
-                Name: [ ]
-    NumNodes: [ ]
-Timeout: [ ]
-    AttemptDurationSeconds: [ ]
-ContainerProperties: [ ]
-    ReadonlyRootFilesystem: [ ]
-    MountPoints: [ ]
-        SourceVolume: [ ]
-        ReadOnly: [ ]
-        ContainerPath: [ ]
-    Secrets: [ ]
-        ValueFrom: [ ]
-        Name: [ ]
-    LinuxParameters: [ ]
-        Swappiness: [ ]
-        MaxSwap: [ ]
-        SharedMemorySize: [ ]
-        Devices: [ ]
-            HostPath: [ ]
-            ContainerPath: [ ]
-            Permissions: [ ]
-        InitProcessEnabled: [ ]
-        Tmpfs: [ ]
-            MountOptions: [ ]
-            ContainerPath: [ ]
-            Size: [ ]
-    Image: [ ]
-    Privileged: [ ]
-    LogConfiguration: [ ]
-        SecretOptions: [ ]
-            ValueFrom: [ ]
-            Name: [ ]
-        Options: [ ]
-        LogDriver: [ ]
-    Environment: [ ]
-        Name: [ ]
-        Value: [ ]
-    Vcpus: [ ]
-    ExecutionRoleArn: [ ]
-    JobRoleArn: [ ]
-    User: [ ]
-    Volumes: [ ]
-        Host: [ ]
-            SourcePath: [ ]
-        Name: [ ]
-    Memory: [ ]
-    ResourceRequirements: [X]
-    Command: [ ]
-    InstanceType: [X]
-    Ulimits: [ ]
-        SoftLimit: [ ]
-        HardLimit: [ ]
-        Name: [ ]
-Type: [ ]
-JobDefinitionName: [ ]
-```
-#### AWS::Batch::JobQueue
-
-```Priority: [ ]
-State: [ ]
-JobQueueName: [ ]
-ComputeEnvironmentOrder: [ ]
-    ComputeEnvironment: [ ]
-    Order: [ ]
-Tags: [X]
-```
-#### AWS::Budgets::Budget
-
-```NotificationsWithSubscribers: [X]
-Budget: [ ]
-    BudgetType: [ ]
-    PlannedBudgetLimits: [ ]
-    BudgetLimit: [ ]
-        Amount: [X]
-        Unit: [X]
-    BudgetName: [ ]
-    CostTypes: [ ]
-        IncludeOtherSubscription: [X]
-        IncludeUpfront: [X]
-        IncludeRefund: [X]
-        IncludeSupport: [X]
-        UseBlended: [X]
-        IncludeDiscount: [X]
-        UseAmortized: [X]
-        IncludeTax: [X]
-        IncludeCredit: [X]
-        IncludeRecurring: [X]
-        IncludeSubscription: [X]
-    TimeUnit: [ ]
-    TimePeriod: [ ]
-        Start: [X]
-        End: [X]
-    CostFilters: [ ]
-```
-#### AWS::CE::CostCategory
-
-```Rules: [ ]
-Name: [ ]
-RuleVersion: [ ]
-```
-#### AWS::Cassandra::Keyspace
-
-``````
-#### AWS::Cassandra::Table
-
-``````
-#### AWS::CertificateManager::Certificate
-
-```SubjectAlternativeNames: [ ]
-DomainName: [ ]
-CertificateTransparencyLoggingPreference: [ ]
-Tags: [X]
-DomainValidationOptions: [ ]
-    HostedZoneId: [X]
-    ValidationDomain: [ ]
-    DomainName: [ ]
-ValidationMethod: [X]
-CertificateAuthorityArn: [ ]
-```
-#### AWS::Chatbot::SlackChannelConfiguration
-
-``````
-#### AWS::Cloud9::EnvironmentEC2
-
-```Description: [ ]
-Tags: [X]
-Repositories: [X]
-ConnectionType: [X]
-OwnerArn: [ ]
-SubnetId: [ ]
-AutomaticStopTimeMinutes: [X]
-InstanceType: [ ]
-Name: [ ]
-```
-#### AWS::CloudFormation::CustomResource
-
-``````
-#### AWS::CloudFormation::Macro
-
-``````
-#### AWS::CloudFormation::Stack
-
-``````
-#### AWS::CloudFormation::StackSet
-
-``````
-#### AWS::CloudFormation::WaitCondition
-
-``````
-#### AWS::CloudFormation::WaitConditionHandle
-
-``````
-#### AWS::CloudFront::CachePolicy
-
-```CachePolicyConfig: [ ]
-    Comment: [ ]
-    Name: [ ]
-    MaxTTL: [ ]
-    ParametersInCacheKeyAndForwardedToOrigin: [ ]
-        EnableAcceptEncodingBrotli: [ ]
-        HeadersConfig: [ ]
-            Headers: [ ]
-            HeaderBehavior: [ ]
-        CookiesConfig: [ ]
-            Cookies: [ ]
-            CookieBehavior: [ ]
-        EnableAcceptEncodingGzip: [ ]
-        QueryStringsConfig: [ ]
-            QueryStrings: [ ]
-            QueryStringBehavior: [ ]
-    DefaultTTL: [ ]
-    MinTTL: [ ]
-```
-#### AWS::CloudFront::CloudFrontOriginAccessIdentity
-
-```CloudFrontOriginAccessIdentityConfig: [ ]
-    Comment: [ ]
-```
-#### AWS::CloudFront::Distribution
-
-```DistributionConfig: [ ]
-    Comment: [ ]
-    Restrictions: [ ]
-        GeoRestriction: [ ]
-            Locations: [ ]
-            RestrictionType: [ ]
-    Logging: [X]
-    WebACLId: [ ]
-    Origins: [ ]
-        OriginPath: [ ]
-        DomainName: [ ]
-        S3OriginConfig: [ ]
-            OriginAccessIdentity: [X]
-        CustomOriginConfig: [ ]
-            OriginSSLProtocols: [ ]
-            OriginProtocolPolicy: [ ]
-            OriginReadTimeout: [ ]
-            HTTPPort: [ ]
-            HTTPSPort: [ ]
-            OriginKeepaliveTimeout: [ ]
-        ConnectionAttempts: [ ]
-        ConnectionTimeout: [ ]
-        OriginShield: [X]
-        OriginCustomHeaders: [ ]
-            HeaderName: [X]
-            HeaderValue: [X]
-        Id: [ ]
-    PriceClass: [ ]
-    DefaultRootObject: [ ]
-    Enabled: [ ]
-    IPV6Enabled: [ ]
-    DefaultCacheBehavior: [ ]
-        ViewerProtocolPolicy: [ ]
-        TrustedSigners: [ ]
-        OriginRequestPolicyId: [ ]
-        TargetOriginId: [ ]
-        LambdaFunctionAssociations: [ ]
-            EventType: [ ]
-            IncludeBody: [X]
-            LambdaFunctionARN: [ ]
-        Compress: [ ]
-        RealtimeLogConfigArn: [ ]
-        FieldLevelEncryptionId: [ ]
-        ForwardedValues: [ ]
-            Headers: [ ]
-            Cookies: [ ]
-                WhitelistedNames: [ ]
-                Forward: [ ]
-            QueryStringCacheKeys: [ ]
-            QueryString: [ ]
-        MaxTTL: [ ]
-        CachePolicyId: [ ]
-        SmoothStreaming: [ ]
-        CachedMethods: [ ]
-        DefaultTTL: [ ]
-        AllowedMethods: [ ]
-        MinTTL: [ ]
-    ViewerCertificate: [ ]
-        SslSupportMethod: [ ]
-        CloudFrontDefaultCertificate: [ ]
-        MinimumProtocolVersion: [ ]
-        IamCertificateId: [ ]
-        AcmCertificateArn: [ ]
-    CustomErrorResponses: [ ]
-        ErrorCode: [X]
-        ResponsePagePath: [X]
-        ResponseCode: [X]
-        ErrorCachingMinTTL: [X]
-    OriginGroups: [ ]
-        Items: [X]
-        Quantity: [X]
-    Aliases: [ ]
-    CacheBehaviors: [ ]
-        ViewerProtocolPolicy: [ ]
-        TrustedSigners: [ ]
-        PathPattern: [ ]
-        OriginRequestPolicyId: [ ]
-        LambdaFunctionAssociations: [ ]
-            EventType: [ ]
-            IncludeBody: [X]
-            LambdaFunctionARN: [ ]
-        TargetOriginId: [ ]
-        RealtimeLogConfigArn: [ ]
-        FieldLevelEncryptionId: [ ]
-        ForwardedValues: [ ]
-            Headers: [ ]
-            Cookies: [ ]
-                WhitelistedNames: [ ]
-                Forward: [ ]
-            QueryStringCacheKeys: [ ]
-            QueryString: [ ]
-        MaxTTL: [ ]
-        CachePolicyId: [ ]
-        SmoothStreaming: [ ]
-        CachedMethods: [ ]
-        DefaultTTL: [ ]
-        AllowedMethods: [ ]
-        MinTTL: [ ]
-        Compress: [ ]
-    HttpVersion: [ ]
-Tags: [X]
-```
-#### AWS::CloudFront::OriginRequestPolicy
-
-```OriginRequestPolicyConfig: [ ]
-    Comment: [ ]
-    HeadersConfig: [ ]
-        Headers: [ ]
-        HeaderBehavior: [ ]
-    CookiesConfig: [ ]
-        Cookies: [ ]
-        CookieBehavior: [ ]
-    Name: [ ]
-    QueryStringsConfig: [ ]
-        QueryStrings: [ ]
-        QueryStringBehavior: [ ]
-```
-#### AWS::CloudFront::RealtimeLogConfig
-
-```Fields: [ ]
-EndPoints: [ ]
-    StreamType: [ ]
-    KinesisStreamConfig: [ ]
-        RoleArn: [ ]
-        StreamArn: [ ]
-Name: [ ]
-SamplingRate: [ ]
-```
-#### AWS::CloudFront::StreamingDistribution
-
-```StreamingDistributionConfig: [ ]
-    Comment: [ ]
-    S3Origin: [ ]
-        OriginAccessIdentity: [X]
-        DomainName: [X]
-    Logging: [X]
-    PriceClass: [ ]
-    TrustedSigners: [ ]
-        Enabled: [ ]
-        AwsAccountNumbers: [ ]
-    Enabled: [ ]
-    Aliases: [ ]
-Tags: [X]
-```
-#### AWS::CloudTrail::Trail
-
-```EventSelectors: [X]
-IncludeGlobalServiceEvents: [ ]
-Tags: [X]
-S3KeyPrefix: [ ]
-IsLogging: [ ]
-KMSKeyId: [ ]
-IsMultiRegionTrail: [ ]
-EnableLogFileValidation: [ ]
-CloudWatchLogsRoleArn: [ ]
-TrailName: [ ]
-CloudWatchLogsLogGroupArn: [ ]
-SnsTopicName: [ ]
-S3BucketName: [ ]
-```
-#### AWS::CloudWatch::Alarm
-
-```EvaluationPeriods: [ ]
-ExtendedStatistic: [ ]
-DatapointsToAlarm: [ ]
-Dimensions: [ ]
-    Name: [X]
-    Value: [X]
-AlarmActions: [ ]
-Threshold: [ ]
-AlarmDescription: [ ]
-Namespace: [ ]
-Period: [ ]
-EvaluateLowSampleCountPercentile: [ ]
-Metrics: [ ]
-    MetricStat: [X]
-    Period: [ ]
-    Label: [X]
-    ReturnData: [X]
-    Expression: [X]
-    Id: [X]
-ComparisonOperator: [ ]
-AlarmName: [ ]
-ActionsEnabled: [ ]
-Statistic: [ ]
-TreatMissingData: [ ]
-InsufficientDataActions: [ ]
-OKActions: [ ]
-ThresholdMetricId: [ ]
-Unit: [ ]
-MetricName: [ ]
-```
-#### AWS::CloudWatch::AnomalyDetector
-
-```Stat: [ ]
-Configuration: [ ]
-    ExcludedTimeRanges: [ ]
-        EndTime: [X]
-        StartTime: [X]
-    MetricTimeZone: [ ]
-Namespace: [ ]
-Dimensions: [ ]
-    Name: [X]
-    Value: [X]
-MetricName: [ ]
-```
-#### AWS::CloudWatch::CompositeAlarm
-
-```AlarmActions: [ ]
-AlarmDescription: [ ]
-AlarmRule: [ ]
-AlarmName: [ ]
-InsufficientDataActions: [ ]
-OKActions: [ ]
-ActionsEnabled: [ ]
-```
-#### AWS::CloudWatch::Dashboard
-
-```DashboardName: [ ]
-DashboardBody: [ ]
-```
-#### AWS::CloudWatch::InsightRule
-
-```RuleState: [ ]
-RuleName: [ ]
-RuleBody: [ ]
-Tags: [X]
-```
-#### AWS::CodeArtifact::Domain
-
-```PermissionsPolicyDocument: [ ]
-DomainName: [ ]
-```
-#### AWS::CodeArtifact::Repository
-
-```PermissionsPolicyDocument: [ ]
-RepositoryName: [ ]
-ExternalConnections: [ ]
-Description: [ ]
-Upstreams: [X]
-```
-#### AWS::CodeBuild::Project
-
-```LogsConfig: [ ]
-    S3Logs: [ ]
-        Status: [ ]
-        EncryptionDisabled: [ ]
-        Location: [ ]
-    CloudWatchLogs: [ ]
-        Status: [ ]
-        GroupName: [ ]
-        StreamName: [ ]
-Cache: [ ]
-    Type: [ ]
-    Modes: [ ]
-    Location: [ ]
-Description: [ ]
-VpcConfig: [ ]
-    Subnets: [ ]
-    VpcId: [ ]
-    SecurityGroupIds: [ ]
-Triggers: [X]
-Artifacts: [ ]
-    Packaging: [ ]
-    Name: [ ]
-    ArtifactIdentifier: [ ]
-    NamespaceType: [ ]
-    EncryptionDisabled: [ ]
-    Location: [ ]
-    OverrideArtifactName: [ ]
-    Path: [ ]
-    Type: [ ]
-TimeoutInMinutes: [ ]
-BadgeEnabled: [ ]
-ServiceRole: [ ]
-SourceVersion: [X]
-Source: [ ]
-    BuildSpec: [ ]
-    InsecureSsl: [ ]
-    GitSubmodulesConfig: [ ]
-        FetchSubmodules: [ ]
-    BuildStatusConfig: [ ]
-        Context: [ ]
-        TargetUrl: [ ]
-    Auth: [ ]
-        Type: [ ]
-        Resource: [ ]
-    Location: [ ]
-    SourceIdentifier: [ ]
-    GitCloneDepth: [ ]
-    Type: [ ]
-    ReportBuildStatus: [ ]
-BuildBatchConfig: [X]
-QueuedTimeoutInMinutes: [ ]
-FileSystemLocations: [X]
-Name: [ ]
-SecondaryArtifacts: [ ]
-    Packaging: [ ]
-    Name: [ ]
-    ArtifactIdentifier: [ ]
-    NamespaceType: [ ]
-    EncryptionDisabled: [ ]
-    Location: [ ]
-    OverrideArtifactName: [ ]
-    Path: [ ]
-    Type: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-SecondarySources: [ ]
-    BuildSpec: [ ]
-    InsecureSsl: [ ]
-    GitSubmodulesConfig: [ ]
-        FetchSubmodules: [ ]
-    BuildStatusConfig: [ ]
-        Context: [ ]
-        TargetUrl: [ ]
-    Auth: [ ]
-        Type: [ ]
-        Resource: [ ]
-    Location: [ ]
-    SourceIdentifier: [ ]
-    GitCloneDepth: [ ]
-    Type: [ ]
-    ReportBuildStatus: [ ]
-EncryptionKey: [ ]
-Environment: [ ]
-    ImagePullCredentialsType: [ ]
-    ComputeType: [ ]
-    Certificate: [ ]
-    PrivilegedMode: [ ]
-    Image: [ ]
-    EnvironmentVariables: [ ]
-        Type: [ ]
-        Name: [ ]
-        Value: [ ]
-    RegistryCredential: [ ]
-        Credential: [ ]
-        CredentialProvider: [ ]
-    Type: [ ]
-SecondarySourceVersions: [X]
-```
-#### AWS::CodeBuild::ReportGroup
-
-```Type: [ ]
-DeleteReports: [X]
-ExportConfig: [ ]
-    ExportConfigType: [ ]
-    S3Destination: [ ]
-        Packaging: [ ]
-        Path: [ ]
-        Bucket: [ ]
-        EncryptionKey: [ ]
-        EncryptionDisabled: [ ]
-Name: [ ]
-Tags: [X]
-```
-#### AWS::CodeBuild::SourceCredential
-
-```Username: [ ]
-Token: [ ]
-ServerType: [ ]
-AuthType: [ ]
-```
-#### AWS::CodeCommit::Repository
-
-```Triggers: [X]
-Code: [X]
-RepositoryDescription: [ ]
-RepositoryName: [ ]
-Tags: [X]
-```
-#### AWS::CodeDeploy::Application
-
-```ApplicationName: [ ]
-ComputePlatform: [ ]
-```
-#### AWS::CodeDeploy::DeploymentConfig
-
-```MinimumHealthyHosts: [ ]
-    Type: [ ]
-    Value: [ ]
-DeploymentConfigName: [ ]
-```
-#### AWS::CodeDeploy::DeploymentGroup
-
-```ApplicationName: [ ]
-AutoRollbackConfiguration: [ ]
-    Enabled: [ ]
-    Events: [ ]
-LoadBalancerInfo: [ ]
-    ElbInfoList: [ ]
-        Name: [ ]
-    TargetGroupInfoList: [ ]
-        Name: [ ]
-Deployment: [X]
-DeploymentConfigName: [ ]
-AutoScalingGroups: [ ]
-AlarmConfiguration: [ ]
-    Alarms: [ ]
-        Name: [ ]
-    IgnorePollAlarmFailure: [ ]
-    Enabled: [ ]
-Ec2TagFilters: [ ]
-    Type: [X]
-    Key: [X]
-    Value: [X]
-Ec2TagSet: [ ]
-    Ec2TagSetList: [ ]
-        Ec2TagGroup: [ ]
-            Type: [X]
-            Key: [X]
-            Value: [X]
-TriggerConfigurations: [ ]
-    TriggerEvents: [ ]
-    TriggerTargetArn: [ ]
-    TriggerName: [ ]
-DeploymentStyle: [ ]
-    DeploymentType: [ ]
-    DeploymentOption: [ ]
-ServiceRoleArn: [ ]
-DeploymentGroupName: [ ]
-OnPremisesTagSet: [ ]
-    OnPremisesTagSetList: [ ]
-        OnPremisesTagGroup: [ ]
-            Type: [X]
-            Key: [X]
-            Value: [X]
-OnPremisesInstanceTagFilters: [ ]
-    Type: [X]
-    Key: [X]
-    Value: [X]
-```
-#### AWS::CodeGuruProfiler::ProfilingGroup
-
-```AgentPermissions: [X]
-ProfilingGroupName: [ ]
-AnomalyDetectionNotificationConfiguration: [ ]
-    channelId: [ ]
-    channelUri: [ ]
-ComputePlatform: [ ]
-Tags: [X]
-```
-#### AWS::CodeGuruReviewer::RepositoryAssociation
-
-```Owner: [ ]
-ConnectionArn: [ ]
-Type: [ ]
-Name: [ ]
-```
-#### AWS::CodePipeline::CustomActionType
-
-```Category: [ ]
-Tags: [X]
-Settings: [ ]
-    EntityUrlTemplate: [ ]
-    ExecutionUrlTemplate: [ ]
-    RevisionUrlTemplate: [ ]
-    ThirdPartyConfigurationUrl: [ ]
-ConfigurationProperties: [ ]
-    Description: [ ]
-    Required: [ ]
-    Secret: [ ]
-    Key: [ ]
-    Type: [ ]
-    Queryable: [ ]
-    Name: [ ]
-Version: [ ]
-Provider: [ ]
-InputArtifactDetails: [ ]
-    MaximumCount: [ ]
-    MinimumCount: [ ]
-OutputArtifactDetails: [ ]
-    MaximumCount: [ ]
-    MinimumCount: [ ]
-```
-#### AWS::CodePipeline::Pipeline
-
-```Name: [ ]
-Tags: [X]
-RoleArn: [ ]
-DisableInboundStageTransitions: [X]
-ArtifactStore: [ ]
-    Type: [ ]
-    EncryptionKey: [ ]
-        Type: [ ]
-        Id: [ ]
-    Location: [ ]
-Stages: [ ]
-    Blockers: [ ]
-        Type: [ ]
-        Name: [ ]
-    Name: [ ]
-    Actions: [ ]
-        InputArtifacts: [ ]
-            Name: [ ]
-        Name: [ ]
-        Region: [ ]
-        Namespace: [ ]
-        ActionTypeId: [ ]
-            Category: [ ]
-            Owner: [ ]
-            Version: [ ]
-            Provider: [ ]
-        OutputArtifacts: [ ]
-            Name: [ ]
-        Configuration: [ ]
-        RoleArn: [ ]
-        RunOrder: [ ]
-RestartExecutionOnUpdate: [X]
-ArtifactStores: [ ]
-    Region: [ ]
-    ArtifactStore: [ ]
-        Type: [ ]
-        EncryptionKey: [ ]
-            Type: [ ]
-            Id: [ ]
-        Location: [ ]
-```
-#### AWS::CodePipeline::Webhook
-
-```AuthenticationConfiguration: [ ]
-    SecretToken: [ ]
-    AllowedIPRange: [ ]
-Name: [ ]
-TargetPipelineVersion: [X]
-RegisterWithThirdParty: [X]
-Authentication: [ ]
-TargetPipeline: [ ]
-TargetAction: [ ]
-Filters: [ ]
-    MatchEquals: [ ]
-    JsonPath: [ ]
-```
-#### AWS::CodeStar::GitHubRepository
-
-```EnableIssues: [ ]
-Code: [X]
-RepositoryAccessToken: [ ]
-RepositoryDescription: [X]
-IsPrivate: [X]
-RepositoryName: [ ]
-RepositoryOwner: [ ]
-```
-#### AWS::CodeStarConnections::Connection
-
-```HostArn: [ ]
-ProviderType: [ ]
-ConnectionName: [ ]
-Tags: [X]
-```
-#### AWS::CodeStarNotifications::NotificationRule
-
-```Status: [ ]
-EventTypeIds: [ ]
-Resource: [ ]
-Name: [ ]
-Tags: [ ]
-DetailType: [ ]
-Targets: [ ]
-    TargetAddress: [ ]
-    TargetType: [ ]
-```
-#### AWS::Cognito::IdentityPool
-
-```DeveloperProviderName: [ ]
-SamlProviderARNs: [ ]
-SupportedLoginProviders: [ ]
-AllowUnauthenticatedIdentities: [ ]
-CognitoIdentityProviders: [ ]
-    ServerSideTokenCheck: [X]
-    ProviderName: [X]
-    ClientId: [X]
-IdentityPoolName: [ ]
-PushSync: [X]
-CognitoStreams: [X]
-AllowClassicFlow: [X]
-OpenIdConnectProviderARNs: [ ]
-CognitoEvents: [X]
-```
-#### AWS::Cognito::IdentityPoolRoleAttachment
-
-```RoleMappings: [ ]
-Roles: [ ]
-IdentityPoolId: [ ]
-```
-#### AWS::Cognito::UserPool
-
-```AliasAttributes: [ ]
-EmailVerificationSubject: [ ]
-MfaConfiguration: [ ]
-AccountRecoverySetting: [ ]
-    RecoveryMechanisms: [X]
-SmsAuthenticationMessage: [ ]
-UserPoolAddOns: [ ]
-    AdvancedSecurityMode: [X]
-SmsConfiguration: [ ]
-    ExternalId: [X]
-    SnsCallerArn: [X]
-AutoVerifiedAttributes: [ ]
-UsernameConfiguration: [ ]
-    CaseSensitive: [X]
-Schema: [ ]
-    Name: [X]
-    NumberAttributeConstraints: [X]
-    StringAttributeConstraints: [X]
-    DeveloperOnlyAttribute: [X]
-    Required: [X]
-    AttributeDataType: [X]
-    Mutable: [X]
-AdminCreateUserConfig: [ ]
-    UnusedAccountValidityDays: [X]
-    InviteMessageTemplate: [X]
-    AllowAdminCreateUserOnly: [X]
-EmailConfiguration: [ ]
-    From: [X]
-    EmailSendingAccount: [X]
-    SourceArn: [X]
-    ConfigurationSet: [X]
-    ReplyToEmailAddress: [X]
-EnabledMfas: [X]
-UsernameAttributes: [ ]
-LambdaConfig: [ ]
-    PostConfirmation: [ ]
-    CreateAuthChallenge: [ ]
-    VerifyAuthChallengeResponse: [ ]
-    PreAuthentication: [ ]
-    PostAuthentication: [ ]
-    CustomMessage: [ ]
-    PreSignUp: [ ]
-    PreTokenGeneration: [X]
-    DefineAuthChallenge: [ ]
-    UserMigration: [X]
-UserPoolName: [ ]
-VerificationMessageTemplate: [ ]
-    EmailMessageByLink: [X]
-    EmailSubjectByLink: [X]
-    DefaultEmailOption: [X]
-    EmailMessage: [X]
-    EmailSubject: [X]
-    SmsMessage: [X]
-Policies: [ ]
-    PasswordPolicy: [X]
-UserPoolTags: [ ]
-DeviceConfiguration: [ ]
-    ChallengeRequiredOnNewDevice: [X]
-    DeviceOnlyRememberedOnUserPrompt: [X]
-SmsVerificationMessage: [ ]
-EmailVerificationMessage: [ ]
-```
-#### AWS::Cognito::UserPoolClient
-
-```TokenValidityUnits: [X]
-CallbackURLs: [X]
-AllowedOAuthScopes: [X]
-AccessTokenValidity: [X]
-UserPoolId: [ ]
-AllowedOAuthFlowsUserPoolClient: [X]
-AnalyticsConfiguration: [ ]
-    UserDataShared: [X]
-    ExternalId: [X]
-    RoleArn: [X]
-    ApplicationId: [X]
-IdTokenValidity: [X]
-LogoutURLs: [X]
-AllowedOAuthFlows: [X]
-PreventUserExistenceErrors: [ ]
-GenerateSecret: [ ]
-ExplicitAuthFlows: [ ]
-ReadAttributes: [ ]
-DefaultRedirectURI: [X]
-SupportedIdentityProviders: [X]
-WriteAttributes: [ ]
-RefreshTokenValidity: [ ]
-ClientName: [ ]
-```
-#### AWS::Cognito::UserPoolDomain
-
-```Domain: [ ]
-CustomDomainConfig: [ ]
-    CertificateArn: [X]
-UserPoolId: [ ]
-```
-#### AWS::Cognito::UserPoolGroup
-
-```UserPoolId: [ ]
-GroupName: [ ]
-RoleArn: [ ]
-Description: [ ]
-Precedence: [ ]
-```
-#### AWS::Cognito::UserPoolIdentityProvider
-
-```ProviderName: [ ]
-UserPoolId: [ ]
-ProviderType: [ ]
-ProviderDetails: [ ]
-IdpIdentifiers: [ ]
-AttributeMapping: [ ]
-```
-#### AWS::Cognito::UserPoolResourceServer
-
-```Scopes: [ ]
-    ScopeDescription: [X]
-    ScopeName: [X]
-Identifier: [ ]
-Name: [ ]
-UserPoolId: [ ]
-```
-#### AWS::Cognito::UserPoolRiskConfigurationAttachment
-
-```RiskExceptionConfiguration: [ ]
-    SkippedIPRangeList: [X]
-    BlockedIPRangeList: [X]
-CompromisedCredentialsRiskConfiguration: [ ]
-    EventFilter: [X]
-    Actions: [X]
-AccountTakeoverRiskConfiguration: [ ]
-    NotifyConfiguration: [X]
-    Actions: [X]
-UserPoolId: [ ]
-ClientId: [ ]
-```
-#### AWS::Cognito::UserPoolUICustomizationAttachment
-
-```CSS: [ ]
-UserPoolId: [ ]
-ClientId: [ ]
-```
-#### AWS::Cognito::UserPoolUser
-
-```Username: [ ]
-MessageAction: [X]
-UserPoolId: [ ]
-ValidationData: [X]
-UserAttributes: [ ]
-    Name: [X]
-    Value: [X]
-ForceAliasCreation: [X]
-ClientMetadata: [X]
-DesiredDeliveryMediums: [X]
-```
-#### AWS::Cognito::UserPoolUserToGroupAttachment
-
-```Username: [ ]
-GroupName: [ ]
-UserPoolId: [ ]
-```
-#### AWS::Config::AggregationAuthorization
-
-```AuthorizedAccountId: [ ]
-AuthorizedAwsRegion: [ ]
-Tags: [X]
-```
-#### AWS::Config::ConfigRule
-
-```Description: [ ]
-ConfigRuleName: [ ]
-MaximumExecutionFrequency: [ ]
-Source: [ ]
-    Owner: [X]
-    SourceDetails: [X]
-    SourceIdentifier: [X]
-InputParameters: [ ]
-Scope: [ ]
-    ComplianceResourceTypes: [X]
-    ComplianceResourceId: [X]
-    TagKey: [X]
-    TagValue: [X]
-```
-#### AWS::Config::ConfigurationAggregator
-
-```OrganizationAggregationSource: [ ]
-    AllAwsRegions: [ ]
-    AwsRegions: [ ]
-    RoleArn: [ ]
-ConfigurationAggregatorName: [ ]
-AccountAggregationSources: [ ]
-    AllAwsRegions: [ ]
-    AccountIds: [ ]
-    AwsRegions: [ ]
-Tags: [X]
-```
-#### AWS::Config::ConfigurationRecorder
-
-```RecordingGroup: [ ]
-    AllSupported: [ ]
-    ResourceTypes: [ ]
-    IncludeGlobalResourceTypes: [ ]
-RoleARN: [ ]
-Name: [ ]
-```
-#### AWS::Config::ConformancePack
-
-```TemplateBody: [X]
-ConformancePackInputParameters: [ ]
-    ParameterName: [X]
-    ParameterValue: [X]
-DeliveryS3Bucket: [ ]
-ConformancePackName: [ ]
-DeliveryS3KeyPrefix: [ ]
-TemplateS3Uri: [X]
-```
-#### AWS::Config::DeliveryChannel
-
-```S3KeyPrefix: [ ]
-Name: [ ]
-ConfigSnapshotDeliveryProperties: [ ]
-    DeliveryFrequency: [ ]
-S3BucketName: [ ]
-SnsTopicARN: [ ]
-```
-#### AWS::Config::OrganizationConfigRule
-
-```OrganizationManagedRuleMetadata: [ ]
-    RuleIdentifier: [X]
-    TagKeyScope: [X]
-    Description: [X]
-    MaximumExecutionFrequency: [X]
-    ResourceIdScope: [X]
-    ResourceTypesScope: [X]
-    InputParameters: [X]
-    TagValueScope: [X]
-OrganizationCustomRuleMetadata: [ ]
-    TagKeyScope: [X]
-    Description: [X]
-    LambdaFunctionArn: [X]
-    MaximumExecutionFrequency: [X]
-    ResourceIdScope: [X]
-    ResourceTypesScope: [X]
-    InputParameters: [X]
-    TagValueScope: [X]
-    OrganizationConfigRuleTriggerTypes: [X]
-OrganizationConfigRuleName: [ ]
-ExcludedAccounts: [ ]
-```
-#### AWS::Config::OrganizationConformancePack
-
-```TemplateBody: [X]
-ConformancePackInputParameters: [ ]
-    ParameterName: [X]
-    ParameterValue: [X]
-OrganizationConformancePackName: [ ]
-DeliveryS3Bucket: [ ]
-DeliveryS3KeyPrefix: [ ]
-TemplateS3Uri: [X]
-ExcludedAccounts: [ ]
-```
-#### AWS::Config::RemediationConfiguration
-
-```TargetType: [ ]
-MaximumAutomaticAttempts: [X]
-Parameters: [ ]
-ConfigRuleName: [ ]
-ResourceType: [ ]
-ExecutionControls: [ ]
-    SsmControls: [X]
-TargetId: [ ]
-RetryAttemptSeconds: [X]
-Automatic: [X]
-TargetVersion: [ ]
-```
-#### AWS::DAX::Cluster
-
-```ReplicationFactor: [X]
-AvailabilityZones: [ ]
-NodeType: [ ]
-Description: [ ]
-Tags: [X]
-ClusterName: [ ]
-SubnetGroupName: [ ]
-IAMRoleARN: [ ]
-SecurityGroupIds: [ ]
-ParameterGroupName: [ ]
-SSESpecification: [ ]
-    SSEEnabled: [ ]
-NotificationTopicARN: [ ]
-PreferredMaintenanceWindow: [ ]
-```
-#### AWS::DAX::ParameterGroup
-
-```Description: [ ]
-ParameterGroupName: [ ]
-ParameterNameValues: [ ]
-```
-#### AWS::DAX::SubnetGroup
-
-```SubnetIds: [ ]
-SubnetGroupName: [ ]
-Description: [ ]
-```
-#### AWS::DLM::LifecyclePolicy
-
-```State: [ ]
-ExecutionRoleArn: [ ]
-Description: [ ]
-PolicyDetails: [ ]
-    ResourceTypes: [X]
-    PolicyType: [X]
-    Parameters: [X]
-    TargetTags: [X]
-    Schedules: [X]
-```
-#### AWS::DMS::Certificate
-
-```CertificateIdentifier: [ ]
-CertificatePem: [ ]
-CertificateWallet: [ ]
-```
-#### AWS::DMS::Endpoint
-
-```Username: [ ]
-CertificateArn: [ ]
-NeptuneSettings: [ ]
-    IamAuthEnabled: [X]
-    MaxFileSize: [X]
-    ErrorRetryDuration: [X]
-    ServiceAccessRoleArn: [ ]
-    MaxRetryCount: [X]
-    S3BucketName: [X]
-    S3BucketFolder: [X]
-ElasticsearchSettings: [X]
-DynamoDbSettings: [ ]
-    ServiceAccessRoleArn: [ ]
-MongoDbSettings: [ ]
-    Username: [ ]
-    NestingLevel: [X]
-    DocsToInvestigate: [X]
-    AuthSource: [X]
-    ServerName: [ ]
-    AuthMechanism: [X]
-    AuthType: [X]
-    DatabaseName: [ ]
-    ExtractDocId: [X]
-    Password: [X]
-    Port: [ ]
-Tags: [X]
-Port: [ ]
-EndpointType: [ ]
-EngineName: [ ]
-S3Settings: [ ]
-    CompressionType: [ ]
-    BucketFolder: [ ]
-    CsvRowDelimiter: [ ]
-    CsvDelimiter: [ ]
-    ServiceAccessRoleArn: [ ]
-    ExternalTableDefinition: [ ]
-    BucketName: [ ]
-ExtraConnectionAttributes: [ ]
-DatabaseName: [ ]
-KmsKeyId: [ ]
-SslMode: [ ]
-KafkaSettings: [ ]
-    Topic: [X]
-    Broker: [X]
-Password: [X]
-EndpointIdentifier: [ ]
-ServerName: [ ]
-KinesisSettings: [ ]
-    ServiceAccessRoleArn: [ ]
-    StreamArn: [ ]
-    MessageFormat: [ ]
-```
-#### AWS::DMS::EventSubscription
-
-```EventCategories: [ ]
-SourceType: [ ]
-Tags: [X]
-Enabled: [ ]
-SnsTopicArn: [ ]
-SubscriptionName: [X]
-SourceIds: [ ]
-```
-#### AWS::DMS::ReplicationInstance
-
-```MultiAZ: [ ]
-AvailabilityZone: [ ]
-PubliclyAccessible: [ ]
-AllowMajorVersionUpgrade: [X]
-Tags: [X]
-ReplicationInstanceClass: [ ]
-VpcSecurityGroupIds: [ ]
-AutoMinorVersionUpgrade: [ ]
-KmsKeyId: [ ]
-AllocatedStorage: [ ]
-EngineVersion: [ ]
-ReplicationInstanceIdentifier: [ ]
-PreferredMaintenanceWindow: [ ]
-ReplicationSubnetGroupIdentifier: [ ]
-```
-#### AWS::DMS::ReplicationSubnetGroup
-
-```ReplicationSubnetGroupDescription: [ ]
-SubnetIds: [ ]
-ReplicationSubnetGroupIdentifier: [ ]
-Tags: [X]
-```
-#### AWS::DMS::ReplicationTask
-
-```SourceEndpointArn: [ ]
-CdcStartPosition: [ ]
-CdcStopPosition: [ ]
-ReplicationInstanceArn: [ ]
-ReplicationTaskIdentifier: [ ]
-TableMappings: [ ]
-Tags: [X]
-TaskData: [ ]
-MigrationType: [ ]
-TargetEndpointArn: [ ]
-ReplicationTaskSettings: [ ]
-CdcStartTime: [ ]
-```
-#### AWS::DataPipeline::Pipeline
-
-```Activate: [X]
-Description: [ ]
-PipelineObjects: [X]
-ParameterValues: [X]
-ParameterObjects: [X]
-PipelineTags: [ ]
-    Key: [ ]
-    Value: [ ]
-Name: [ ]
-```
-#### AWS::Detective::Graph
-
-``````
-#### AWS::Detective::MemberInvitation
-
-```MemberEmailAddress: [ ]
-GraphArn: [ ]
-Message: [X]
-MemberId: [ ]
-```
-#### AWS::DirectoryService::MicrosoftAD
-
-```CreateAlias: [ ]
-Name: [ ]
-VpcSettings: [ ]
-    SubnetIds: [ ]
-    VpcId: [ ]
-Edition: [ ]
-EnableSso: [ ]
-ShortName: [ ]
-Password: [ ]
-```
-#### AWS::DirectoryService::SimpleAD
-
-```CreateAlias: [ ]
-Description: [ ]
-VpcSettings: [ ]
-    SubnetIds: [ ]
-    VpcId: [ ]
-EnableSso: [ ]
-Name: [ ]
-ShortName: [ ]
-Password: [ ]
-Size: [ ]
-```
-#### AWS::DocDB::DBCluster
-
-```DBClusterParameterGroupName: [ ]
-DeletionProtection: [X]
-AvailabilityZones: [ ]
-DBClusterIdentifier: [ ]
-Tags: [X]
-MasterUsername: [ ]
-VpcSecurityGroupIds: [ ]
-MasterUserPassword: [ ]
-Port: [ ]
-PreferredBackupWindow: [ ]
-KmsKeyId: [ ]
-StorageEncrypted: [ ]
-EngineVersion: [ ]
-BackupRetentionPeriod: [ ]
-DBSubnetGroupName: [ ]
-EnableCloudwatchLogsExports: [ ]
-PreferredMaintenanceWindow: [ ]
-SnapshotIdentifier: [X]
-```
-#### AWS::DocDB::DBClusterParameterGroup
-
-```Parameters: [ ]
-Tags: [X]
-Name: [ ]
-Family: [ ]
-Description: [ ]
-```
-#### AWS::DocDB::DBInstance
-
-```AvailabilityZone: [ ]
-DBClusterIdentifier: [ ]
-Tags: [X]
-AutoMinorVersionUpgrade: [ ]
-DBInstanceIdentifier: [ ]
-DBInstanceClass: [ ]
-PreferredMaintenanceWindow: [ ]
-```
-#### AWS::DocDB::DBSubnetGroup
-
-```DBSubnetGroupName: [ ]
-DBSubnetGroupDescription: [ ]
-SubnetIds: [ ]
-Tags: [X]
-```
-#### AWS::DynamoDB::Table
-
-```GlobalSecondaryIndexes: [ ]
-    KeySchema: [ ]
-        KeyType: [X]
-        AttributeName: [X]
-    IndexName: [ ]
-    Projection: [ ]
-        ProjectionType: [X]
-        NonKeyAttributes: [X]
-    ProvisionedThroughput: [ ]
-        WriteCapacityUnits: [ ]
-        ReadCapacityUnits: [ ]
-AttributeDefinitions: [ ]
-    AttributeName: [X]
-    AttributeType: [X]
-LocalSecondaryIndexes: [ ]
-    KeySchema: [ ]
-        KeyType: [X]
-        AttributeName: [X]
-    IndexName: [ ]
-    Projection: [ ]
-        ProjectionType: [X]
-        NonKeyAttributes: [X]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-ProvisionedThroughput: [ ]
-    WriteCapacityUnits: [ ]
-    ReadCapacityUnits: [ ]
-TableName: [ ]
-BillingMode: [ ]
-PointInTimeRecoverySpecification: [X]
-StreamSpecification: [ ]
-    StreamViewType: [ ]
-TimeToLiveSpecification: [X]
-KeySchema: [ ]
-    KeyType: [X]
-    AttributeName: [X]
-SSESpecification: [ ]
-    SSEEnabled: [ ]
-    KMSMasterKeyId: [ ]
-    SSEType: [ ]
-```
-#### AWS::EC2::CapacityReservation
-
-```EndDateType: [ ]
-AvailabilityZone: [ ]
-EndDate: [ ]
-InstanceMatchCriteria: [ ]
-TagSpecifications: [ ]
-    ResourceType: [ ]
-    Tags: [ ]
-        Key: [X]
-        Value: [X]
-InstancePlatform: [ ]
-EphemeralStorage: [ ]
-Tenancy: [ ]
-EbsOptimized: [ ]
-InstanceType: [ ]
-InstanceCount: [ ]
-```
-#### AWS::EC2::CarrierGateway
-
-```VpcId: [ ]
-Tags: [ ]
-    Tags: [ ]
-        Key: [X]
-        Value: [X]
-```
-#### AWS::EC2::ClientVpnAuthorizationRule
-
-```ClientVpnEndpointId: [ ]
-TargetNetworkCidr: [ ]
-Description: [ ]
-AuthorizeAllGroups: [ ]
-AccessGroupId: [ ]
-```
-#### AWS::EC2::ClientVpnEndpoint
-
-```VpcId: [ ]
-Description: [ ]
-TransportProtocol: [ ]
-TagSpecifications: [ ]
-    ResourceType: [ ]
-    Tags: [ ]
-        Key: [X]
-        Value: [X]
-ConnectionLogOptions: [ ]
-    CloudwatchLogStream: [X]
-    Enabled: [X]
-    CloudwatchLogGroup: [X]
-AuthenticationOptions: [ ]
-    Type: [ ]
-    FederatedAuthentication: [ ]
-        SAMLProviderArn: [ ]
-    ActiveDirectory: [ ]
-        DirectoryId: [X]
-    MutualAuthentication: [ ]
-        ClientRootCertificateChainArn: [ ]
-ClientCidrBlock: [ ]
-SecurityGroupIds: [ ]
-ServerCertificateArn: [ ]
-VpnPort: [ ]
-SplitTunnel: [ ]
-DnsServers: [ ]
-```
-#### AWS::EC2::ClientVpnRoute
-
-```ClientVpnEndpointId: [ ]
-DestinationCidrBlock: [ ]
-TargetVpcSubnetId: [ ]
-Description: [ ]
-```
-#### AWS::EC2::ClientVpnTargetNetworkAssociation
-
-```ClientVpnEndpointId: [ ]
-SubnetId: [ ]
-```
-#### AWS::EC2::CustomerGateway
-
-```BgpAsn: [ ]
-IpAddress: [ ]
-Type: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::DHCPOptions
-
-```DomainName: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-DomainNameServers: [ ]
-NtpServers: [X]
-NetbiosNameServers: [X]
-NetbiosNodeType: [X]
-```
-#### AWS::EC2::EC2Fleet
-
-```ValidUntil: [ ]
-LaunchTemplateConfigs: [ ]
-    LaunchTemplateSpecification: [ ]
-        LaunchTemplateName: [ ]
-        Version: [ ]
-        LaunchTemplateId: [ ]
-    Overrides: [ ]
-        AvailabilityZone: [ ]
-        Placement: [X]
-        MaxPrice: [ ]
-        WeightedCapacity: [ ]
-        Priority: [ ]
-        SubnetId: [ ]
-        InstanceType: [ ]
-TagSpecifications: [ ]
-    ResourceType: [ ]
-    Tags: [ ]
-        Key: [X]
-        Value: [X]
-ExcessCapacityTerminationPolicy: [ ]
-TargetCapacitySpecification: [ ]
-    OnDemandTargetCapacity: [ ]
-    DefaultTargetCapacityType: [ ]
-    TotalTargetCapacity: [ ]
-    SpotTargetCapacity: [ ]
-OnDemandOptions: [ ]
-    MinTargetCapacity: [X]
-    SingleAvailabilityZone: [X]
-    MaxTotalPrice: [X]
-    SingleInstanceType: [X]
-    CapacityReservationOptions: [X]
-    AllocationStrategy: [ ]
-SpotOptions: [ ]
-    MinTargetCapacity: [X]
-    InstancePoolsToUseCount: [ ]
-    SingleAvailabilityZone: [X]
-    InstanceInterruptionBehavior: [ ]
-    MaxTotalPrice: [X]
-    SingleInstanceType: [X]
-    AllocationStrategy: [ ]
-ValidFrom: [ ]
-Type: [ ]
-ReplaceUnhealthyInstances: [ ]
-TerminateInstancesWithExpiration: [ ]
-```
-#### AWS::EC2::EIP
-
-```InstanceId: [ ]
-Domain: [ ]
-PublicIpv4Pool: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-```
-#### AWS::EC2::EIPAssociation
-
-```InstanceId: [ ]
-EIP: [X]
-NetworkInterfaceId: [ ]
-AllocationId: [ ]
-PrivateIpAddress: [ ]
-```
-#### AWS::EC2::EgressOnlyInternetGateway
-
-```VpcId: [ ]
-```
-#### AWS::EC2::FlowLog
-
-```LogDestinationType: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-ResourceType: [ ]
-ResourceId: [ ]
-LogGroupName: [ ]
-TrafficType: [ ]
-LogFormat: [ ]
-DeliverLogsPermissionArn: [ ]
-MaxAggregationInterval: [ ]
-LogDestination: [ ]
-```
-#### AWS::EC2::GatewayRouteTableAssociation
-
-```GatewayId: [ ]
-RouteTableId: [ ]
-```
-#### AWS::EC2::Host
-
-```AvailabilityZone: [ ]
-InstanceType: [ ]
-AutoPlacement: [ ]
-HostRecovery: [X]
-```
-#### AWS::EC2::Instance
-
-```Monitoring: [ ]
-LicenseSpecifications: [X]
-EbsOptimized: [ ]
-Affinity: [ ]
-RamdiskId: [ ]
-PrivateIpAddress: [X]
-CpuOptions: [ ]
-    CoreCount: [X]
-    ThreadsPerCore: [X]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-PlacementGroupName: [ ]
-ImageId: [ ]
-KeyName: [ ]
-SsmAssociations: [X]
-CreditSpecification: [X]
-HostResourceGroupArn: [ ]
-SecurityGroups: [X]
-InstanceType: [ ]
-NetworkInterfaces: [X]
-AdditionalInfo: [X]
-SourceDestCheck: [ ]
-LaunchTemplate: [X]
-ElasticGpuSpecifications: [ ]
-    Type: [ ]
-InstanceInitiatedShutdownBehavior: [X]
-SecurityGroupIds: [ ]
-SubnetId: [ ]
-AvailabilityZone: [ ]
-Volumes: [X]
-KernelId: [ ]
-IamInstanceProfile: [ ]
-UserData: [ ]
-HostId: [ ]
-Tenancy: [ ]
-Ipv6AddressCount: [X]
-ElasticInferenceAccelerators: [X]
-BlockDeviceMappings: [ ]
-    Ebs: [ ]
-        VolumeSize: [ ]
-        Encrypted: [ ]
-        VolumeType: [ ]
-        DeleteOnTermination: [ ]
-        KmsKeyId: [X]
-        SnapshotId: [ ]
-        Iops: [ ]
-    DeviceName: [ ]
-    VirtualName: [X]
-    NoDevice: [X]
-HibernationOptions: [ ]
-    Configured: [X]
-Ipv6Addresses: [X]
-DisableApiTermination: [X]
-```
-#### AWS::EC2::InternetGateway
-
-```Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::LaunchTemplate
-
-```LaunchTemplateData: [ ]
-    Monitoring: [ ]
-        Enabled: [X]
-    TagSpecifications: [ ]
-        ResourceType: [X]
-        Tags: [X]
-    LicenseSpecifications: [X]
-    EbsOptimized: [ ]
-    CpuOptions: [X]
-    ImageId: [ ]
-    KeyName: [ ]
-    SecurityGroups: [ ]
-    CreditSpecification: [ ]
-        CpuCredits: [X]
-    InstanceType: [ ]
-    NetworkInterfaces: [ ]
-        DeviceIndex: [X]
-        Description: [X]
-        NetworkInterfaceId: [X]
-        PrivateIpAddresses: [X]
-        SubnetId: [X]
-        DeleteOnTermination: [X]
-        InterfaceType: [X]
-        PrivateIpAddress: [X]
-        Groups: [X]
-        Ipv6Addresses: [X]
-        Ipv6AddressCount: [X]
-        AssociatePublicIpAddress: [X]
-        SecondaryPrivateIpAddressCount: [X]
-    Placement: [ ]
-        HostId: [X]
-        AvailabilityZone: [X]
-        SpreadDomain: [X]
-        PartitionNumber: [X]
-        GroupName: [X]
-        Tenancy: [X]
-        Affinity: [X]
-        HostResourceGroupArn: [X]
-    ElasticGpuSpecifications: [ ]
-        Type: [X]
-    CapacityReservationSpecification: [X]
-    InstanceInitiatedShutdownBehavior: [ ]
-    SecurityGroupIds: [ ]
-    BlockDeviceMappings: [ ]
-        Ebs: [X]
-        DeviceName: [X]
-        VirtualName: [X]
-        NoDevice: [X]
-    KernelId: [ ]
-    IamInstanceProfile: [ ]
-        Name: [X]
-        Arn: [X]
-    UserData: [ ]
-    InstanceMarketOptions: [ ]
-        SpotOptions: [X]
-        MarketType: [X]
-    ElasticInferenceAccelerators: [ ]
-        Count: [X]
-        Type: [X]
-    HibernationOptions: [X]
-    MetadataOptions: [ ]
-        HttpPutResponseHopLimit: [ ]
-        HttpTokens: [ ]
-        HttpEndpoint: [ ]
-    RamDiskId: [ ]
-    DisableApiTermination: [ ]
-LaunchTemplateName: [ ]
-```
-#### AWS::EC2::LocalGatewayRoute
-
-```LocalGatewayVirtualInterfaceGroupId: [ ]
-DestinationCidrBlock: [ ]
-LocalGatewayRouteTableId: [ ]
-```
-#### AWS::EC2::LocalGatewayRouteTableVPCAssociation
-
-```LocalGatewayRouteTableId: [ ]
-VpcId: [ ]
-Tags: [ ]
-    Tags: [ ]
-        Key: [X]
-        Value: [X]
-```
-#### AWS::EC2::NatGateway
-
-```SubnetId: [ ]
-AllocationId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::NetworkAcl
-
-```VpcId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::NetworkAclEntry
-
-```NetworkAclId: [ ]
-RuleNumber: [ ]
-Protocol: [ ]
-Ipv6CidrBlock: [ ]
-Egress: [ ]
-RuleAction: [ ]
-PortRange: [ ]
-    To: [X]
-    From: [X]
-Icmp: [ ]
-    Code: [X]
-    Type: [X]
-CidrBlock: [ ]
-```
-#### AWS::EC2::NetworkInterface
-
-```SourceDestCheck: [ ]
-GroupSet: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-Ipv6AddressCount: [X]
-PrivateIpAddresses: [ ]
-    Primary: [ ]
-    PrivateIpAddress: [ ]
-Ipv6Addresses: [ ]
-    Ipv6Address: [X]
-SecondaryPrivateIpAddressCount: [X]
-InterfaceType: [X]
-SubnetId: [ ]
-PrivateIpAddress: [ ]
-```
-#### AWS::EC2::NetworkInterfaceAttachment
-
-```InstanceId: [ ]
-DeviceIndex: [ ]
-NetworkInterfaceId: [ ]
-DeleteOnTermination: [ ]
-```
-#### AWS::EC2::NetworkInterfacePermission
-
-```NetworkInterfaceId: [ ]
-AwsAccountId: [ ]
-Permission: [ ]
-```
-#### AWS::EC2::PlacementGroup
-
-```Strategy: [ ]
-```
-#### AWS::EC2::PrefixList
-
-```MaxEntries: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-PrefixListName: [ ]
-AddressFamily: [ ]
-Entries: [ ]
-    Cidr: [X]
-    Description: [X]
-```
-#### AWS::EC2::Route
-
-```DestinationCidrBlock: [X]
-EgressOnlyInternetGatewayId: [X]
-TransitGatewayId: [X]
-InstanceId: [X]
-NetworkInterfaceId: [X]
-LocalGatewayId: [X]
-RouteTableId: [X]
-GatewayId: [X]
-NatGatewayId: [X]
-CarrierGatewayId: [X]
-VpcPeeringConnectionId: [X]
-VpcEndpointId: [X]
-DestinationIpv6CidrBlock: [X]
-```
-#### AWS::EC2::RouteTable
-
-```VpcId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::SecurityGroup
-
-```VpcId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-SecurityGroupEgress: [ ]
-    DestinationPrefixListId: [ ]
-    Description: [ ]
-    CidrIp: [ ]
-    FromPort: [ ]
-    CidrIpv6: [ ]
-    ToPort: [ ]
-    IpProtocol: [ ]
-    DestinationSecurityGroupId: [ ]
-SecurityGroupIngress: [ ]
-    Description: [ ]
-    SourcePrefixListId: [X]
-    CidrIp: [ ]
-    SourceSecurityGroupId: [ ]
-    FromPort: [ ]
-    SourceSecurityGroupOwnerId: [ ]
-    SourceSecurityGroupName: [ ]
-    CidrIpv6: [ ]
-    ToPort: [ ]
-    IpProtocol: [ ]
-GroupName: [ ]
-GroupDescription: [ ]
-```
-#### AWS::EC2::SecurityGroupEgress
-
-``````
-#### AWS::EC2::SecurityGroupIngress
-
-``````
-#### AWS::EC2::SpotFleet
-
-```SpotFleetRequestConfigData: [ ]
-    ValidUntil: [ ]
-    LaunchTemplateConfigs: [ ]
-        LaunchTemplateSpecification: [ ]
-            LaunchTemplateId: [X]
-            Version: [X]
-            LaunchTemplateName: [X]
-        Overrides: [ ]
-            SubnetId: [ ]
-            AvailabilityZone: [ ]
-            InstanceType: [ ]
-            SpotPrice: [ ]
-            WeightedCapacity: [ ]
-    TerminateInstancesWithExpiration: [ ]
-    InstanceInterruptionBehavior: [ ]
-    LaunchSpecifications: [ ]
-        UserData: [ ]
-        IamInstanceProfile: [ ]
-            Arn: [ ]
-        Monitoring: [ ]
-            Enabled: [X]
-        Placement: [ ]
-            GroupName: [X]
-            Tenancy: [X]
-            AvailabilityZone: [ ]
-        TagSpecifications: [ ]
-            ResourceType: [X]
-            Tags: [X]
-        EbsOptimized: [ ]
-        ImageId: [ ]
-        KernelId: [ ]
-        BlockDeviceMappings: [ ]
-            Ebs: [X]
-            DeviceName: [X]
-            VirtualName: [X]
-            NoDevice: [X]
-        KeyName: [ ]
-        SecurityGroups: [ ]
-            GroupId: [ ]
-        SubnetId: [ ]
-        RamdiskId: [ ]
-        WeightedCapacity: [ ]
-        InstanceType: [ ]
-        SpotPrice: [ ]
-        NetworkInterfaces: [ ]
-            DeviceIndex: [X]
-            Description: [X]
-            Ipv6AddressCount: [X]
-            PrivateIpAddresses: [X]
-            Ipv6Addresses: [X]
-            DeleteOnTermination: [X]
-            Groups: [X]
-            SubnetId: [ ]
-            NetworkInterfaceId: [X]
-            AssociatePublicIpAddress: [X]
-            SecondaryPrivateIpAddressCount: [X]
-    LoadBalancersConfig: [ ]
-        TargetGroupsConfig: [X]
-        ClassicLoadBalancersConfig: [X]
-    IamFleetRole: [ ]
-    ExcessCapacityTerminationPolicy: [ ]
-    TargetCapacity: [ ]
-    ValidFrom: [ ]
-    Type: [ ]
-    ReplaceUnhealthyInstances: [ ]
-    SpotPrice: [ ]
-    AllocationStrategy: [ ]
-```
-#### AWS::EC2::Subnet
-
-```AvailabilityZone: [ ]
-Tags: [X]
-Ipv6CidrBlock: [ ]
-MapPublicIpOnLaunch: [ ]
-VpcId: [ ]
-OutpostArn: [X]
-CidrBlock: [ ]
-AssignIpv6AddressOnCreation: [ ]
-```
-#### AWS::EC2::SubnetCidrBlock
-
-```SubnetId: [ ]
-Ipv6CidrBlock: [ ]
-```
-#### AWS::EC2::SubnetNetworkAclAssociation
-
-```SubnetId: [ ]
-NetworkAclId: [ ]
-```
-#### AWS::EC2::SubnetRouteTableAssociation
-
-```SubnetId: [ ]
-RouteTableId: [ ]
-```
-#### AWS::EC2::TrafficMirrorFilter
-
-```NetworkServices: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-```
-#### AWS::EC2::TrafficMirrorFilterRule
-
-```DestinationCidrBlock: [ ]
-RuleNumber: [ ]
-Protocol: [ ]
-Description: [ ]
-TrafficDirection: [ ]
-DestinationPortRange: [ ]
-    ToPort: [X]
-    FromPort: [X]
-RuleAction: [ ]
-SourceCidrBlock: [ ]
-TrafficMirrorFilterId: [ ]
-SourcePortRange: [ ]
-    ToPort: [X]
-    FromPort: [X]
-```
-#### AWS::EC2::TrafficMirrorSession
-
-```PacketLength: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-NetworkInterfaceId: [ ]
-TrafficMirrorTargetId: [ ]
-SessionNumber: [ ]
-VirtualNetworkId: [ ]
-TrafficMirrorFilterId: [ ]
-```
-#### AWS::EC2::TrafficMirrorTarget
-
-```NetworkInterfaceId: [ ]
-NetworkLoadBalancerArn: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-```
-#### AWS::EC2::TransitGateway
-
-```DefaultRouteTableAssociation: [ ]
-DnsSupport: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-AutoAcceptSharedAttachments: [ ]
-MulticastSupport: [X]
-AmazonSideAsn: [ ]
-DefaultRouteTablePropagation: [ ]
-VpnEcmpSupport: [ ]
-```
-#### AWS::EC2::TransitGatewayAttachment
-
-```SubnetIds: [ ]
-VpcId: [ ]
-TransitGatewayId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::TransitGatewayRoute
-
-```DestinationCidrBlock: [ ]
-TransitGatewayRouteTableId: [ ]
-Blackhole: [ ]
-TransitGatewayAttachmentId: [ ]
-```
-#### AWS::EC2::TransitGatewayRouteTable
-
-```TransitGatewayId: [X]
-Tags: [X]
-```
-#### AWS::EC2::TransitGatewayRouteTableAssociation
-
-```TransitGatewayRouteTableId: [ ]
-TransitGatewayAttachmentId: [ ]
-```
-#### AWS::EC2::TransitGatewayRouteTablePropagation
-
-```TransitGatewayRouteTableId: [ ]
-TransitGatewayAttachmentId: [ ]
-```
-#### AWS::EC2::VPC
-
-```CidrBlock: [ ]
-EnableDnsSupport: [ ]
-InstanceTenancy: [ ]
-EnableDnsHostnames: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::EC2::VPCCidrBlock
-
-```AmazonProvidedIpv6CidrBlock: [X]
-VpcId: [ ]
-CidrBlock: [ ]
-```
-#### AWS::EC2::VPCDHCPOptionsAssociation
-
-```VpcId: [ ]
-DhcpOptionsId: [ ]
-```
-#### AWS::EC2::VPCEndpoint
-
-```VpcId: [ ]
-ServiceName: [ ]
-SubnetIds: [ ]
-SecurityGroupIds: [ ]
-PolicyDocument: [ ]
-RouteTableIds: [ ]
-PrivateDnsEnabled: [ ]
-VpcEndpointType: [ ]
-```
-#### AWS::EC2::VPCEndpointConnectionNotification
-
-```VPCEndpointId: [ ]
-ServiceId: [ ]
-ConnectionEvents: [ ]
-ConnectionNotificationArn: [ ]
-```
-#### AWS::EC2::VPCEndpointService
-
-```AcceptanceRequired: [X]
-NetworkLoadBalancerArns: [X]
-ApplianceLoadBalancerArns: [X]
-```
-#### AWS::EC2::VPCEndpointServicePermissions
-
-```AllowedPrincipals: [ ]
-ServiceId: [ ]
-```
-#### AWS::EC2::VPCGatewayAttachment
-
-```VpcId: [ ]
-InternetGatewayId: [ ]
-VpnGatewayId: [X]
-```
-#### AWS::EC2::VPCPeeringConnection
-
-```PeerRegion: [ ]
-VpcId: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-PeerRoleArn: [X]
-PeerOwnerId: [ ]
-PeerVpcId: [ ]
-```
-#### AWS::EC2::VPNConnection
-
-```Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-Type: [ ]
-VpnGatewayId: [ ]
-TransitGatewayId: [X]
-CustomerGatewayId: [ ]
-StaticRoutesOnly: [ ]
-VpnTunnelOptionsSpecifications: [X]
-```
-#### AWS::EC2::VPNConnectionRoute
-
-```VpnConnectionId: [ ]
-DestinationCidrBlock: [ ]
-```
-#### AWS::EC2::VPNGateway
-
-```AmazonSideAsn: [X]
+AnalyzerName: [X]
+ArchiveRules: [X]
+    Filter: [ ]
+    (inherited)
 Type: [X]
 Tags: [X]
+    (inherited)
+    (inherited)
 ```
-#### AWS::EC2::VPNGatewayRoutePropagation
 
-```RouteTableIds: [ ]
-VpnGatewayId: [ ]
+#### AWS::AmazonMQ::Broker
+
 ```
-#### AWS::EC2::Volume
-
-```AvailabilityZone: [ ]
-MultiAttachEnabled: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-Encrypted: [ ]
-VolumeType: [ ]
-KmsKeyId: [ ]
-OutpostArn: [ ]
-AutoEnableIO: [X]
-SnapshotId: [ ]
-Iops: [ ]
-Size: [ ]
-```
-#### AWS::EC2::VolumeAttachment
-
-```Device: [ ]
-InstanceId: [ ]
-VolumeId: [ ]
-```
-#### AWS::ECR::Repository
-
-```Tags: [X]
-RepositoryPolicyText: [ ]
-LifecyclePolicy: [ ]
-    LifecyclePolicyText: [ ]
-    RegistryId: [ ]
-ImageScanningConfiguration: [X]
-ImageTagMutability: [X]
-RepositoryName: [ ]
-```
-#### AWS::ECS::CapacityProvider
-
-```Name: [ ]
-AutoScalingGroupProvider: [ ]
-    AutoScalingGroupArn: [ ]
-    ManagedTerminationProtection: [ ]
-    ManagedScaling: [ ]
-        MinimumScalingStepSize: [ ]
-        Status: [ ]
-        MaximumScalingStepSize: [ ]
-        TargetCapacity: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::ECS::Cluster
-
-```ClusterName: [ ]
-DefaultCapacityProviderStrategy: [ ]
-    CapacityProvider: [ ]
-    Base: [ ]
-    Weight: [ ]
-ClusterSettings: [ ]
-    Name: [ ]
-    Value: [ ]
-CapacityProviders: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [ ]
-```
-#### AWS::ECS::PrimaryTaskSet
-
-```Cluster: [ ]
-TaskSetId: [ ]
-Service: [ ]
-```
-#### AWS::ECS::Service
-
-```NetworkConfiguration: [ ]
-    AwsvpcConfiguration: [ ]
-        AssignPublicIp: [ ]
-        SecurityGroups: [ ]
-        Subnets: [ ]
-HealthCheckGracePeriodSeconds: [ ]
-LaunchType: [ ]
-EnableECSManagedTags: [X]
-ServiceRegistries: [ ]
-    ContainerName: [ ]
-    Port: [ ]
-    RegistryArn: [ ]
-    ContainerPort: [ ]
-LoadBalancers: [ ]
-    ContainerName: [ ]
-    TargetGroupArn: [ ]
-    ContainerPort: [ ]
-    LoadBalancerName: [ ]
-SchedulingStrategy: [ ]
-PlacementConstraints: [ ]
-    Expression: [ ]
-    Type: [ ]
-DeploymentController: [ ]
-    Type: [ ]
-PropagateTags: [X]
-DesiredCount: [ ]
-Cluster: [ ]
-ServiceName: [ ]
-Role: [ ]
-ServiceArn: [X]
-CapacityProviderStrategy: [ ]
-    Base: [ ]
-    CapacityProvider: [ ]
-    Weight: [ ]
-PlatformVersion: [ ]
+Configuration: [X]
+    (inherited)
+    (inherited)
+Logs: [X]
+    (inherited)
+    (inherited)
+PubliclyAccessible: [X]
+HostInstanceType: [X]
+StorageType: [ ]
+SubnetIds: [X]
 Tags: [X]
-PlacementStrategies: [ ]
-    Field: [ ]
-    Type: [ ]
-DeploymentConfiguration: [ ]
-    MaximumPercent: [ ]
-    MinimumHealthyPercent: [ ]
-TaskDefinition: [ ]
-```
-#### AWS::ECS::TaskDefinition
-
-```ContainerDefinitions: [ ]
-    MountPoints: [ ]
-        SourceVolume: [ ]
-        ReadOnly: [ ]
-        ContainerPath: [ ]
-    RepositoryCredentials: [ ]
-        CredentialsParameter: [ ]
-    Hostname: [ ]
-    DockerLabels: [ ]
-    Environment: [ ]
-        Name: [ ]
-        Value: [ ]
-    Memory: [ ]
-    SystemControls: [ ]
-        Namespace: [ ]
-        Value: [ ]
-    Privileged: [ ]
-    DnsSearchDomains: [ ]
-    Ulimits: [ ]
-        SoftLimit: [ ]
-        HardLimit: [ ]
-        Name: [ ]
-    StartTimeout: [X]
-    FirelensConfiguration: [ ]
-        Type: [ ]
-        Options: [ ]
-    DnsServers: [ ]
-    DockerSecurityOptions: [ ]
-    EnvironmentFiles: [ ]
-        Type: [ ]
-        Value: [ ]
-    User: [ ]
-    MemoryReservation: [ ]
-    ReadonlyRootFilesystem: [ ]
-    Name: [ ]
-    WorkingDirectory: [ ]
-    Secrets: [ ]
-        ValueFrom: [ ]
-        Name: [ ]
-    HealthCheck: [ ]
-        Retries: [ ]
-        Command: [ ]
-        Interval: [ ]
-        StartPeriod: [ ]
-        Timeout: [ ]
-    DisableNetworking: [ ]
-    StopTimeout: [X]
-    Command: [ ]
-    ExtraHosts: [ ]
-        Hostname: [ ]
-        IpAddress: [ ]
-    Essential: [ ]
-    VolumesFrom: [ ]
-        ReadOnly: [ ]
-        SourceContainer: [ ]
-    Interactive: [ ]
-    DependsOn: [X]
-    PortMappings: [ ]
-        Protocol: [ ]
-        ContainerPort: [ ]
-        HostPort: [ ]
-    PseudoTerminal: [ ]
-    Links: [ ]
-    Image: [ ]
-    LogConfiguration: [ ]
-        SecretOptions: [ ]
-            ValueFrom: [ ]
-            Name: [ ]
-        LogDriver: [ ]
-        Options: [ ]
-    Cpu: [ ]
-    EntryPoint: [ ]
-    ResourceRequirements: [X]
-    LinuxParameters: [ ]
-        Swappiness: [ ]
-        MaxSwap: [ ]
-        Capabilities: [ ]
-            Add: [ ]
-            Drop: [ ]
-        SharedMemorySize: [ ]
-        InitProcessEnabled: [ ]
-        Devices: [ ]
-            HostPath: [ ]
-            ContainerPath: [ ]
-            Permissions: [ ]
-        Tmpfs: [ ]
-            MountOptions: [ ]
-            ContainerPath: [ ]
-            Size: [ ]
-NetworkMode: [ ]
-Family: [ ]
-Tags: [X]
-IpcMode: [ ]
-PlacementConstraints: [ ]
-    Type: [ ]
-    Expression: [ ]
-RequiresCompatibilities: [ ]
-ExecutionRoleArn: [ ]
-ProxyConfiguration: [ ]
-    ContainerName: [ ]
-    Type: [ ]
-    ProxyConfigurationProperties: [ ]
-        Name: [ ]
-        Value: [ ]
-Volumes: [ ]
-    Host: [ ]
-        SourcePath: [ ]
-    DockerVolumeConfiguration: [ ]
-        Scope: [ ]
-        Labels: [ ]
-        Driver: [ ]
-        DriverOpts: [ ]
-        Autoprovision: [ ]
-    EFSVolumeConfiguration: [ ]
-        TransitEncryptionPort: [ ]
-        AuthorizationConfig: [ ]
-            IAM: [ ]
-            AccessPointId: [ ]
-        RootDirectory: [ ]
-        FilesystemId: [ ]
-        TransitEncryption: [ ]
-    Name: [ ]
-Memory: [ ]
-InferenceAccelerators: [ ]
-    DeviceName: [ ]
-    DeviceType: [ ]
-PidMode: [ ]
-TaskRoleArn: [ ]
-Cpu: [ ]
-```
-#### AWS::ECS::TaskSet
-
-```NetworkConfiguration: [ ]
-    AwsVpcConfiguration: [ ]
-        AssignPublicIp: [ ]
-        SecurityGroups: [ ]
-        Subnets: [ ]
-ServiceRegistries: [ ]
-    ContainerName: [ ]
-    Port: [ ]
-    RegistryArn: [ ]
-    ContainerPort: [ ]
-LaunchType: [ ]
-Service: [ ]
-LoadBalancers: [ ]
-    ContainerName: [ ]
-    TargetGroupArn: [ ]
-    ContainerPort: [ ]
-    LoadBalancerName: [ ]
-Cluster: [ ]
-Scale: [ ]
-    Unit: [ ]
-    Value: [ ]
-ExternalId: [ ]
-PlatformVersion: [ ]
-TaskDefinition: [ ]
-```
-#### AWS::EFS::AccessPoint
-
-```AccessPointTags: [ ]
-    Key: [X]
-    Value: [X]
-PosixUser: [ ]
-    Gid: [X]
-    SecondaryGids: [X]
-    Uid: [X]
-FileSystemId: [ ]
-RootDirectory: [ ]
-    Path: [X]
-    CreationInfo: [X]
-ClientToken: [ ]
-```
-#### AWS::EFS::FileSystem
-
-```FileSystemTags: [ ]
-    Key: [ ]
-    Value: [ ]
-FileSystemPolicy: [ ]
-ThroughputMode: [ ]
-Encrypted: [ ]
-BackupPolicy: [ ]
-    Status: [X]
-PerformanceMode: [ ]
-KmsKeyId: [ ]
-ProvisionedThroughputInMibps: [ ]
-LifecyclePolicies: [X]
-```
-#### AWS::EFS::MountTarget
-
-```SubnetId: [ ]
-IpAddress: [ ]
-FileSystemId: [ ]
-SecurityGroups: [ ]
-```
-#### AWS::EKS::Cluster
-
-```Name: [ ]
-RoleArn: [ ]
-KubernetesNetworkConfig: [ ]
-    ServiceIpv4Cidr: [ ]
-ResourcesVpcConfig: [ ]
-    SubnetIds: [ ]
-    SecurityGroupIds: [ ]
-Version: [ ]
-EncryptionConfig: [ ]
-    Resources: [ ]
-    Provider: [ ]
-        KeyArn: [ ]
-```
-#### AWS::EKS::FargateProfile
-
-```Subnets: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-ClusterName: [ ]
-Selectors: [ ]
-    Labels: [ ]
-        Key: [ ]
-        Value: [ ]
-    Namespace: [ ]
-FargateProfileName: [ ]
-PodExecutionRoleArn: [ ]
-```
-#### AWS::EKS::Nodegroup
-
-```ScalingConfig: [ ]
-    MinSize: [ ]
-    DesiredSize: [ ]
-    MaxSize: [ ]
-Subnets: [ ]
-ReleaseVersion: [ ]
-LaunchTemplate: [ ]
-    Version: [ ]
-    Id: [ ]
-    Name: [ ]
-Tags: [ ]
-ClusterName: [ ]
-Labels: [ ]
-AmiType: [ ]
-InstanceTypes: [ ]
-Version: [ ]
-DiskSize: [ ]
-ForceUpdateEnabled: [X]
-NodeRole: [ ]
-RemoteAccess: [ ]
-    Ec2SshKey: [ ]
-    SourceSecurityGroups: [ ]
-NodegroupName: [ ]
-```
-#### AWS::EMR::Cluster
-
-```ReleaseLabel: [ ]
-BootstrapActions: [X]
-LogUri: [ ]
-ManagedScalingPolicy: [X]
-AutoScalingRole: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-Applications: [ ]
-    AdditionalInfo: [X]
-    Args: [X]
-    Version: [X]
-    Name: [ ]
-JobFlowRole: [X]
-CustomAmiId: [ ]
-ScaleDownBehavior: [ ]
-EbsRootVolumeSize: [ ]
-AdditionalInfo: [X]
-Name: [ ]
-ServiceRole: [ ]
-SecurityConfiguration: [ ]
-Steps: [X]
-Configurations: [ ]
-    ConfigurationProperties: [ ]
-    Classification: [ ]
-    Configurations: [ ]
-        ConfigurationProperties: [ ]
-        Classification: [ ]
-        Configurations: [ ]
-            ConfigurationProperties: [ ]
-            Classification: [ ]
-            Configurations: [ ]
-                ConfigurationProperties: [ ]
-                Classification: [ ]
-                Configurations: [ ]
-                    ConfigurationProperties: [ ]
-                    Classification: [ ]
-                    Configurations: [ ]
-                        ConfigurationProperties: [ ]
-                        Classification: [ ]
-                        Configurations: [ ]
-                            ConfigurationProperties: [ ]
-                            Classification: [ ]
-                            Configurations: [ ]
-                                ConfigurationProperties: [ ]
-                                Classification: [ ]
-                                Configurations: [ ]
-                                    ConfigurationProperties: [ ]
-                                    Classification: [ ]
-                                    Configurations: [ ]
-                                        ConfigurationProperties: [ ]
-                                        Classification: [ ]
-                                        Configurations: [ ]
-LogEncryptionKmsKeyId: [ ]
-StepConcurrencyLevel: [ ]
-Instances: [X]
-KerberosAttributes: [ ]
-    ADDomainJoinPassword: [X]
-    ADDomainJoinUser: [X]
-    Realm: [X]
-    CrossRealmTrustPrincipalPassword: [X]
-    KdcAdminPassword: [X]
-VisibleToAllUsers: [ ]
-```
-#### AWS::EMR::InstanceFleetConfig
-
-```Name: [ ]
-InstanceFleetType: [ ]
-LaunchSpecifications: [ ]
-    OnDemandSpecification: [X]
-    SpotSpecification: [X]
-ClusterId: [ ]
-TargetSpotCapacity: [ ]
-InstanceTypeConfigs: [ ]
-    WeightedCapacity: [ ]
-    EbsConfiguration: [ ]
-        EbsOptimized: [ ]
-        EbsBlockDeviceConfigs: [ ]
-            VolumeSpecification: [ ]
-                Iops: [X]
-                VolumeType: [X]
-                SizeInGB: [X]
-            VolumesPerInstance: [X]
-    BidPrice: [ ]
-    BidPriceAsPercentageOfOnDemandPrice: [ ]
-    InstanceType: [ ]
-    Configurations: [ ]
-        ConfigurationProperties: [ ]
-        Classification: [ ]
-        Configurations: [ ]
-            ConfigurationProperties: [ ]
-            Classification: [ ]
-            Configurations: [ ]
-                ConfigurationProperties: [ ]
-                Classification: [ ]
-                Configurations: [ ]
-                    ConfigurationProperties: [ ]
-                    Classification: [ ]
-                    Configurations: [ ]
-                        ConfigurationProperties: [ ]
-                        Classification: [ ]
-                        Configurations: [ ]
-                            ConfigurationProperties: [ ]
-                            Classification: [ ]
-                            Configurations: [ ]
-                                ConfigurationProperties: [ ]
-                                Classification: [ ]
-                                Configurations: [ ]
-                                    ConfigurationProperties: [ ]
-                                    Classification: [ ]
-                                    Configurations: [ ]
-                                        ConfigurationProperties: [ ]
-                                        Classification: [ ]
-                                        Configurations: [ ]
-TargetOnDemandCapacity: [ ]
-```
-#### AWS::EMR::InstanceGroupConfig
-
-```InstanceCount: [ ]
-Name: [ ]
-InstanceRole: [X]
-AutoScalingPolicy: [ ]
-    Rules: [ ]
-        Action: [X]
-        Trigger: [X]
-        Description: [X]
-        Name: [ ]
-    Constraints: [ ]
-        MinCapacity: [X]
-        MaxCapacity: [X]
-EbsConfiguration: [ ]
-    EbsOptimized: [ ]
-    EbsBlockDeviceConfigs: [ ]
-        VolumeSpecification: [ ]
-            Iops: [X]
-            VolumeType: [X]
-            SizeInGB: [X]
-        VolumesPerInstance: [X]
-BidPrice: [ ]
-JobFlowId: [ ]
-InstanceType: [ ]
-Market: [ ]
-Configurations: [ ]
-    ConfigurationProperties: [ ]
-    Classification: [ ]
-    Configurations: [ ]
-        ConfigurationProperties: [ ]
-        Classification: [ ]
-        Configurations: [ ]
-            ConfigurationProperties: [ ]
-            Classification: [ ]
-            Configurations: [ ]
-                ConfigurationProperties: [ ]
-                Classification: [ ]
-                Configurations: [ ]
-                    ConfigurationProperties: [ ]
-                    Classification: [ ]
-                    Configurations: [ ]
-                        ConfigurationProperties: [ ]
-                        Classification: [ ]
-                        Configurations: [ ]
-                            ConfigurationProperties: [ ]
-                            Classification: [ ]
-                            Configurations: [ ]
-                                ConfigurationProperties: [ ]
-                                Classification: [ ]
-                                Configurations: [ ]
-                                    ConfigurationProperties: [ ]
-                                    Classification: [ ]
-                                    Configurations: [ ]
-                                        ConfigurationProperties: [ ]
-                                        Classification: [ ]
-                                        Configurations: [ ]
-```
-#### AWS::EMR::SecurityConfiguration
-
-```SecurityConfiguration: [ ]
-Name: [ ]
-```
-#### AWS::EMR::Step
-
-```HadoopJarStep: [ ]
-    Jar: [ ]
-    Args: [ ]
-    MainClass: [ ]
-    StepProperties: [ ]
-        Key: [X]
-        Value: [X]
-Name: [ ]
-ActionOnFailure: [ ]
-JobFlowId: [ ]
-```
-#### AWS::ElastiCache::CacheCluster
-
-```CacheSecurityGroupNames: [ ]
-Engine: [ ]
-CacheParameterGroupName: [ ]
-SnapshotArns: [X]
-SnapshotRetentionLimit: [ ]
-ClusterName: [ ]
-SnapshotName: [X]
-Tags: [X]
-VpcSecurityGroupIds: [ ]
-AutoMinorVersionUpgrade: [ ]
-PreferredAvailabilityZone: [ ]
-PreferredAvailabilityZones: [X]
-SnapshotWindow: [ ]
-EngineVersion: [ ]
-CacheNodeType: [ ]
-AZMode: [X]
-NotificationTopicArn: [ ]
-NumCacheNodes: [ ]
-Port: [ ]
-PreferredMaintenanceWindow: [ ]
-CacheSubnetGroupName: [ ]
-```
-#### AWS::ElastiCache::ParameterGroup
-
-```Description: [ ]
-Properties: [X]
-CacheParameterGroupFamily: [ ]
-```
-#### AWS::ElastiCache::ReplicationGroup
-
-```CacheParameterGroupName: [X]
-NodeGroupConfiguration: [X]
-TransitEncryptionEnabled: [ ]
-GlobalReplicationGroupId: [X]
-ReplicationGroupId: [ ]
-NumNodeGroups: [ ]
-NotificationTopicArn: [X]
-CacheNodeType: [ ]
-AuthToken: [X]
-MultiAZEnabled: [X]
-PrimaryClusterId: [X]
+    (inherited)
+    (inherited)
+MaintenanceWindowStartTime: [X]
+    DayOfWeek: [ ]
+    TimeZone: [ ]
+    TimeOfDay: [ ]
 AutoMinorVersionUpgrade: [X]
-PreferredMaintenanceWindow: [X]
-CacheSubnetGroupName: [X]
-CacheSecurityGroupNames: [X]
-SnapshotName: [X]
-AtRestEncryptionEnabled: [ ]
-ReplicasPerNodeGroup: [X]
-SecurityGroupIds: [X]
-PreferredCacheClusterAZs: [X]
+SecurityGroups: [X]
+Users: [X]
+    (inherited)
+    ConsoleAccess: [ ]
+    (inherited)
+    Groups: [ ]
 EngineVersion: [X]
-Engine: [X]
-ReplicationGroupDescription: [ ]
-NumCacheClusters: [X]
-SnapshotArns: [X]
-SnapshotRetentionLimit: [ ]
+BrokerName: [X]
+LdapServerMetadata: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+EngineType: [X]
+EncryptionOptions: [X]
+    KmsKeyId: [ ]
+    UseAwsOwnedKey: [ ]
+DeploymentMode: [X]
+AuthenticationStrategy: [ ]
+```
+
+#### AWS::AmazonMQ::Configuration
+
+```
+Name: [X]
 Tags: [X]
-KmsKeyId: [ ]
-SnapshotWindow: [ ]
-SnapshottingClusterId: [ ]
-Port: [ ]
-AutomaticFailoverEnabled: [ ]
+    (inherited)
+    (inherited)
+EngineType: [X]
+EngineVersion: [X]
+Data: [X]
+Description: [X]
 ```
-#### AWS::ElastiCache::SecurityGroup
 
-```Description: [ ]
+#### AWS::AmazonMQ::ConfigurationAssociation
+
 ```
-#### AWS::ElastiCache::SecurityGroupIngress
-
-``````
-#### AWS::ElastiCache::SubnetGroup
-
-```SubnetIds: [ ]
-Description: [ ]
-CacheSubnetGroupName: [ ]
+Configuration: [X]
+    (inherited)
+    (inherited)
+Broker: [X]
 ```
-#### AWS::ElasticBeanstalk::Application
 
-```ApplicationName: [ ]
-Description: [ ]
-ResourceLifecycleConfig: [X]
+#### AWS::Amplify::App
+
 ```
-#### AWS::ElasticBeanstalk::ApplicationVersion
-
-```ApplicationName: [ ]
-SourceBundle: [ ]
-    S3Bucket: [X]
-    S3Key: [X]
-Description: [ ]
-```
-#### AWS::ElasticBeanstalk::ConfigurationTemplate
-
-```ApplicationName: [ ]
-EnvironmentId: [ ]
-Description: [ ]
-PlatformArn: [ ]
-SolutionStackName: [ ]
-OptionSettings: [ ]
-    Namespace: [X]
-    OptionName: [X]
-    Value: [X]
-    ResourceName: [X]
-SourceConfiguration: [X]
-```
-#### AWS::ElasticBeanstalk::Environment
-
-```ApplicationName: [ ]
-PlatformArn: [ ]
-VersionLabel: [ ]
-Description: [ ]
-EnvironmentName: [ ]
-CNAMEPrefix: [ ]
+BuildSpec: [X]
+EnableBranchAutoDeletion: [X]
+Description: [X]
+Repository: [X]
 Tags: [X]
-SolutionStackName: [ ]
-OptionSettings: [X]
-Tier: [ ]
-    Version: [X]
-    Type: [X]
-    Name: [X]
-TemplateName: [ ]
-```
-#### AWS::ElasticLoadBalancing::LoadBalancer
-
-```AppCookieStickinessPolicy: [ ]
-    PolicyName: [X]
-    CookieName: [X]
-ConnectionDrainingPolicy: [X]
-AvailabilityZones: [ ]
-AccessLoggingPolicy: [X]
-Subnets: [ ]
-HealthCheck: [ ]
-    HealthyThreshold: [X]
-    Interval: [X]
-    Target: [X]
-    Timeout: [X]
-    UnhealthyThreshold: [X]
-LBCookieStickinessPolicy: [ ]
-    PolicyName: [X]
-    CookieExpirationPeriod: [X]
-Tags: [X]
-Instances: [ ]
-Listeners: [ ]
-    InstancePort: [ ]
-    Protocol: [ ]
-    InstanceProtocol: [ ]
-    LoadBalancerPort: [ ]
-    PolicyNames: [ ]
-    SSLCertificateId: [ ]
-CrossZone: [X]
-SecurityGroups: [ ]
-ConnectionSettings: [X]
-Policies: [X]
-LoadBalancerName: [ ]
-Scheme: [ ]
-```
-#### AWS::ElasticLoadBalancingV2::Listener
-
-```Protocol: [X]
-DefaultActions: [X]
-SslPolicy: [X]
-AlpnPolicy: [X]
-Certificates: [ ]
-    CertificateArn: [ ]
-LoadBalancerArn: [X]
-Port: [X]
-```
-#### AWS::ElasticLoadBalancingV2::ListenerCertificate
-
-```Certificates: [ ]
-    CertificateArn: [ ]
-ListenerArn: [ ]
-```
-#### AWS::ElasticLoadBalancingV2::ListenerRule
-
-```Priority: [ ]
-Conditions: [ ]
-    SourceIpConfig: [X]
-    HostHeaderConfig: [X]
-    Field: [ ]
-    QueryStringConfig: [X]
-    HttpRequestMethodConfig: [X]
-    Values: [ ]
-    PathPatternConfig: [X]
-    HttpHeaderConfig: [X]
-Actions: [ ]
-    TargetGroupArn: [X]
-    FixedResponseConfig: [X]
-    ForwardConfig: [X]
-    RedirectConfig: [X]
-    AuthenticateCognitoConfig: [X]
-    AuthenticateOidcConfig: [X]
-    Type: [X]
-    Order: [X]
-ListenerArn: [ ]
-```
-#### AWS::ElasticLoadBalancingV2::LoadBalancer
-
-```IpAddressType: [ ]
-Subnets: [ ]
-Name: [ ]
-Tags: [X]
-SubnetMappings: [ ]
-    SubnetId: [ ]
-    PrivateIPv4Address: [ ]
-    AllocationId: [ ]
-    IPv6Address: [X]
-LoadBalancerAttributes: [ ]
-    Key: [X]
-    Value: [X]
-SecurityGroups: [ ]
-Scheme: [ ]
-Type: [ ]
-```
-#### AWS::ElasticLoadBalancingV2::TargetGroup
-
-```TargetType: [ ]
-HealthCheckIntervalSeconds: [ ]
-HealthCheckEnabled: [ ]
-HealthCheckPort: [ ]
-Name: [ ]
-Tags: [X]
-HealthCheckProtocol: [ ]
-Matcher: [ ]
-    HttpCode: [X]
-Targets: [ ]
-    AvailabilityZone: [X]
-    Id: [X]
-    Port: [ ]
-HealthyThresholdCount: [ ]
-VpcId: [ ]
-TargetGroupAttributes: [ ]
-    Key: [X]
-    Value: [X]
-HealthCheckPath: [ ]
-Protocol: [ ]
-Port: [ ]
-UnhealthyThresholdCount: [ ]
-HealthCheckTimeoutSeconds: [ ]
-```
-#### AWS::Elasticsearch::Domain
-
-```AdvancedSecurityOptions: [ ]
-    MasterUserOptions: [X]
-    InternalUserDatabaseEnabled: [X]
-    Enabled: [X]
-ElasticsearchVersion: [ ]
-CognitoOptions: [ ]
-    IdentityPoolId: [X]
-    RoleArn: [X]
-    Enabled: [X]
-    UserPoolId: [X]
-NodeToNodeEncryptionOptions: [ ]
-    Enabled: [X]
-DomainName: [ ]
-DomainEndpointOptions: [ ]
-    EnforceHTTPS: [X]
-    TLSSecurityPolicy: [X]
-Tags: [X]
-EBSOptions: [ ]
-    Iops: [X]
-    VolumeType: [X]
-    EBSEnabled: [X]
-    VolumeSize: [X]
-ElasticsearchClusterConfig: [ ]
-    ZoneAwarenessConfig: [ ]
-        AvailabilityZoneCount: [X]
-    DedicatedMasterEnabled: [ ]
-    InstanceCount: [ ]
-    WarmCount: [ ]
-    WarmType: [ ]
-    WarmEnabled: [ ]
-    ZoneAwarenessEnabled: [ ]
-    DedicatedMasterType: [ ]
-    InstanceType: [ ]
-    DedicatedMasterCount: [ ]
-SnapshotOptions: [ ]
-    AutomatedSnapshotStartHour: [X]
-VPCOptions: [ ]
-    SubnetIds: [ ]
-    SecurityGroupIds: [ ]
-LogPublishingOptions: [ ]
-    CloudWatchLogsLogGroupArn: [X]
-    Enabled: [X]
-AdvancedOptions: [ ]
-EncryptionAtRestOptions: [ ]
-    KmsKeyId: [X]
-    Enabled: [X]
-AccessPolicies: [ ]
-```
-#### AWS::EventSchemas::Discoverer
-
-```Description: [ ]
-SourceArn: [ ]
-Tags: [ ]
-    Value: [ ]
-    Key: [ ]
-```
-#### AWS::EventSchemas::Registry
-
-```RegistryName: [ ]
-Description: [ ]
-Tags: [ ]
-    Value: [ ]
-    Key: [ ]
-```
-#### AWS::EventSchemas::RegistryPolicy
-
-```Policy: [ ]
-RegistryName: [ ]
-RevisionId: [ ]
-```
-#### AWS::EventSchemas::Schema
-
-```Content: [ ]
-Description: [ ]
-Tags: [ ]
-    Value: [ ]
-    Key: [ ]
-RegistryName: [ ]
-SchemaName: [ ]
-Type: [ ]
-```
-#### AWS::Events::EventBus
-
-```EventSourceName: [X]
+    (inherited)
+    (inherited)
+OauthToken: [ ]
+BasicAuthConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+AccessToken: [ ]
+EnvironmentVariables: [X]
+    (inherited)
+    (inherited)
+IAMServiceRole: [X]
+AutoBranchCreationConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    EnablePerformanceMode: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+CustomRules: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
 Name: [X]
 ```
-#### AWS::Events::EventBusPolicy
 
-```Action: [ ]
-EventBusName: [ ]
-StatementId: [ ]
-Condition: [ ]
-    Type: [ ]
-    Value: [ ]
-    Key: [ ]
-Principal: [ ]
+#### AWS::Amplify::Branch
+
 ```
-#### AWS::Events::Rule
-
-```ScheduleExpression: [ ]
-Description: [ ]
-EventPattern: [ ]
-EventBusName: [ ]
-State: [ ]
-Targets: [ ]
-    HttpParameters: [ ]
-        HeaderParameters: [X]
-        QueryStringParameters: [X]
-        PathParameterValues: [X]
-    DeadLetterConfig: [ ]
-        Arn: [ ]
-    RetryPolicy: [ ]
-        MaximumEventAgeInSeconds: [X]
-        MaximumRetryAttempts: [X]
-    RoleArn: [ ]
-    BatchParameters: [ ]
-        JobDefinition: [X]
-        ArrayProperties: [X]
-        RetryStrategy: [X]
-        JobName: [X]
-    InputTransformer: [ ]
-        InputPathsMap: [X]
-        InputTemplate: [X]
-    EcsParameters: [ ]
-        NetworkConfiguration: [ ]
-            AwsVpcConfiguration: [ ]
-                AssignPublicIp: [X]
-                SecurityGroups: [X]
-                Subnets: [X]
-        LaunchType: [ ]
-        Group: [ ]
-        TaskCount: [ ]
-        PlatformVersion: [ ]
-        TaskDefinitionArn: [ ]
-    Id: [ ]
-    KinesisParameters: [ ]
-        PartitionKeyPath: [X]
-    RunCommandParameters: [ ]
-        RunCommandTargets: [X]
-    InputPath: [ ]
-    Input: [ ]
-    SqsParameters: [ ]
-        MessageGroupId: [X]
-    RedshiftDataParameters: [X]
-    Arn: [ ]
-RoleArn: [ ]
-Name: [ ]
-```
-#### AWS::FMS::NotificationChannel
-
-```SnsRoleName: [ ]
-SnsTopicArn: [ ]
-```
-#### AWS::FMS::Policy
-
-```PolicyName: [ ]
-ResourceTags: [ ]
-    Key: [X]
-    Value: [X]
-RemediationEnabled: [ ]
+BuildSpec: [X]
+EnablePullRequestPreview: [X]
+Description: [X]
+EnablePerformanceMode: [ ]
+EnableAutoBuild: [X]
+EnvironmentVariables: [X]
+    (inherited)
+    (inherited)
+BasicAuthConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+PullRequestEnvironmentName: [X]
+AppId: [X]
 Tags: [X]
-ResourceType: [ ]
-ResourceTypeList: [ ]
-ExcludeResourceTags: [ ]
-DeleteAllPolicyResources: [X]
-ExcludeMap: [ ]
-    ACCOUNT: [X]
-    ORGUNIT: [X]
-IncludeMap: [ ]
-    ACCOUNT: [X]
-    ORGUNIT: [X]
-SecurityServicePolicyData: [ ]
+    (inherited)
+    (inherited)
+BranchName: [X]
+Stage: [X]
 ```
-#### AWS::FSx::FileSystem
 
-```Tags: [ ]
-    Key: [X]
-    Value: [X]
-StorageType: [ ]
-SubnetIds: [ ]
-FileSystemType: [ ]
+#### AWS::Amplify::Domain
+
+```
+EnableAutoSubDomain: [X]
+DomainName: [X]
+AutoSubDomainIAMRole: [X]
+SubDomainSettings: [X]
+    (inherited)
+    (inherited)
+AutoSubDomainCreationPatterns: [X]
+AppId: [X]
+```
+
+#### AWS::ApiGateway::Account
+
+```
+CloudWatchRoleArn: [X]
+```
+
+#### AWS::ApiGateway::ApiKey
+
+```
+Name: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+Enabled: [X]
+Value: [X]
+StageKeys: [ ]
+GenerateDistinctId: [ ]
+CustomerId: [X]
+Description: [X]
+```
+
+#### AWS::ApiGateway::Authorizer
+
+```
+AuthType: [X]
+RestApiId: [X]
+Name: [X]
+ProviderARNs: [X]
+AuthorizerUri: [X]
+IdentityValidationExpression: [X]
+AuthorizerResultTtlInSeconds: [X]
+AuthorizerCredentials: [X]
+IdentitySource: [X]
+Type: [X]
+```
+
+#### AWS::ApiGateway::BasePathMapping
+
+```
+BasePath: [X]
+DomainName: [X]
+RestApiId: [X]
+Stage: [X]
+```
+
+#### AWS::ApiGateway::ClientCertificate
+
+```
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ApiGateway::Deployment
+
+```
+StageDescription: [ ]
+DeploymentCanarySettings: [ ]
+RestApiId: [X]
+Description: [X]
+StageName: [ ]
+```
+
+#### AWS::ApiGateway::DocumentationPart
+
+```
+RestApiId: [X]
+Location: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Properties: [X]
+```
+
+#### AWS::ApiGateway::DocumentationVersion
+
+```
+RestApiId: [X]
+Description: [X]
+DocumentationVersion: [X]
+```
+
+#### AWS::ApiGateway::DomainName
+
+```
+CertificateArn: [X]
+MutualTlsAuthentication: [ ]
+Tags: [X]
+    (inherited)
+    (inherited)
+EndpointConfiguration: [X]
+    (inherited)
+DomainName: [X]
+RegionalCertificateArn: [X]
+SecurityPolicy: [X]
+```
+
+#### AWS::ApiGateway::GatewayResponse
+
+```
+ResponseType: [X]
+ResponseParameters: [X]
+ResponseTemplates: [X]
+RestApiId: [X]
+StatusCode: [X]
+```
+
+#### AWS::ApiGateway::Method
+
+```
+RestApiId: [X]
+RequestParameters: [X]
+MethodResponses: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+AuthorizationScopes: [X]
+RequestModels: [X]
+ResourceId: [X]
+AuthorizationType: [X]
+OperationName: [X]
+Integration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ApiKeyRequired: [X]
+HttpMethod: [X]
+RequestValidatorId: [X]
+AuthorizerId: [X]
+```
+
+#### AWS::ApiGateway::Model
+
+```
+ContentType: [X]
+Name: [X]
+RestApiId: [X]
+Description: [X]
+Schema: [X]
+```
+
+#### AWS::ApiGateway::RequestValidator
+
+```
+ValidateRequestParameters: [X]
+ValidateRequestBody: [X]
+RestApiId: [X]
+Name: [X]
+```
+
+#### AWS::ApiGateway::Resource
+
+```
+RestApiId: [X]
+PathPart: [X]
+ParentId: [X]
+```
+
+#### AWS::ApiGateway::RestApi
+
+```
+Body: [ ]
+Description: [X]
+CloneFrom: [ ]
+Tags: [X]
+    (inherited)
+    (inherited)
+EndpointConfiguration: [X]
+    (inherited)
+    (inherited)
+MinimumCompressionSize: [X]
+BodyS3Location: [ ]
+Parameters: [ ]
+BinaryMediaTypes: [X]
+Policy: [X]
+FailOnWarnings: [ ]
+ApiKeySourceType: [X]
+Name: [X]
+```
+
+#### AWS::ApiGateway::Stage
+
+```
+CanarySetting: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ClientCertificateId: [X]
+TracingEnabled: [X]
+RestApiId: [X]
+Description: [X]
+StageName: [X]
+CacheClusterSize: [X]
+Variables: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+CacheClusterEnabled: [X]
+DocumentationVersion: [X]
+DeploymentId: [X]
+MethodSettings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+AccessLogSetting: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ApiGateway::UsagePlan
+
+```
+ApiStages: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+Quota: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Throttle: [X]
+    (inherited)
+    (inherited)
+UsagePlanName: [X]
+```
+
+#### AWS::ApiGateway::UsagePlanKey
+
+```
+KeyType: [X]
+KeyId: [X]
+UsagePlanId: [X]
+```
+
+#### AWS::ApiGateway::VpcLink
+
+```
+TargetArns: [X]
+Description: [X]
+Name: [X]
+```
+
+#### AWS::ApiGatewayV2::Api
+
+```
+Body: [ ]
+Target: [ ]
+CorsConfiguration: [X]
+    AllowMethods: [ ]
+    AllowOrigins: [ ]
+    MaxAge: [ ]
+    AllowCredentials: [ ]
+    AllowHeaders: [ ]
+    ExposeHeaders: [ ]
+Tags: [X]
+ProtocolType: [X]
+RouteSelectionExpression: [X]
+BasePath: [ ]
+BodyS3Location: [ ]
+Version: [X]
+RouteKey: [ ]
+ApiKeySelectionExpression: [X]
+CredentialsArn: [ ]
+DisableExecuteApiEndpoint: [X]
+Name: [X]
+DisableSchemaValidation: [X]
+FailOnWarnings: [ ]
+Description: [X]
+```
+
+#### AWS::ApiGatewayV2::ApiGatewayManagedOverrides
+
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ApiGatewayV2::ApiMapping
+
+```
+ApiMappingKey: [X]
+DomainName: [X]
+ApiId: [X]
+Stage: [X]
+```
+
+#### AWS::ApiGatewayV2::Authorizer
+
+```
+Name: [X]
+AuthorizerPayloadFormatVersion: [ ]
+EnableSimpleResponses: [ ]
+AuthorizerCredentialsArn: [X]
+JwtConfiguration: [X]
+    Audience: [ ]
+    Issuer: [ ]
+AuthorizerUri: [X]
+AuthorizerType: [X]
+IdentityValidationExpression: [X]
+AuthorizerResultTtlInSeconds: [X]
+IdentitySource: [X]
+ApiId: [X]
+```
+
+#### AWS::ApiGatewayV2::Deployment
+
+```
+ApiId: [X]
+Description: [X]
+StageName: [ ]
+```
+
+#### AWS::ApiGatewayV2::DomainName
+
+```
+MutualTlsAuthentication: [ ]
+DomainName: [X]
+DomainNameConfigurations: [X]
+    (inherited)
+    (inherited)
+    SecurityPolicy: [ ]
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::ApiGatewayV2::Integration
+
+```
+TlsConfig: [ ]
+PassthroughBehavior: [ ]
+IntegrationMethod: [ ]
+Description: [ ]
+RequestParameters: [ ]
+TemplateSelectionExpression: [X]
+IntegrationSubtype: [ ]
+ConnectionId: [ ]
+ConnectionType: [ ]
+PayloadFormatVersion: [ ]
+IntegrationUri: [ ]
+RequestTemplates: [ ]
+CredentialsArn: [ ]
+IntegrationType: [ ]
+ContentHandlingStrategy: [X]
+ApiId: [X]
+TimeoutInMillis: [ ]
+```
+
+#### AWS::ApiGatewayV2::IntegrationResponse
+
+```
+IntegrationResponseKey: [X]
+ApiId: [X]
+ResponseTemplates: [X]
+TemplateSelectionExpression: [X]
+ContentHandlingStrategy: [X]
+IntegrationId: [X]
+ResponseParameters: [X]
+```
+
+#### AWS::ApiGatewayV2::Model
+
+```
+ApiId: [X]
+Schema: [X]
+ContentType: [X]
+Description: [X]
+Name: [X]
+```
+
+#### AWS::ApiGatewayV2::Route
+
+```
+Target: [ ]
+RouteResponseSelectionExpression: [ ]
+AuthorizationScopes: [ ]
+RequestModels: [ ]
+AuthorizationType: [ ]
+OperationName: [ ]
+ApiKeyRequired: [ ]
+RouteKey: [ ]
+AuthorizerId: [ ]
+ModelSelectionExpression: [X]
+ApiId: [X]
+RequestParameters: [ ]
+```
+
+#### AWS::ApiGatewayV2::RouteResponse
+
+```
+ResponseModels: [X]
+ApiId: [X]
+RouteResponseKey: [X]
+ModelSelectionExpression: [X]
+RouteId: [X]
+ResponseParameters: [X]
+```
+
+#### AWS::ApiGatewayV2::Stage
+
+```
+ClientCertificateId: [X]
+Description: [X]
+StageName: [X]
+Tags: [X]
+ApiId: [X]
+AutoDeploy: [X]
+DeploymentId: [X]
+DefaultRouteSettings: [X]
+    LoggingLevel: [ ]
+    DetailedMetricsEnabled: [ ]
+    DataTraceEnabled: [ ]
+    ThrottlingBurstLimit: [ ]
+    ThrottlingRateLimit: [ ]
+AccessLogSettings: [X]
+    DestinationArn: [ ]
+    Format: [ ]
+StageVariables: [X]
+RouteSettings: [X]
+```
+
+#### AWS::ApiGatewayV2::VpcLink
+
+```
+SubnetIds: [X]
 SecurityGroupIds: [X]
-StorageCapacity: [ ]
-LustreConfiguration: [ ]
-    CopyTagsToBackups: [ ]
-    WeeklyMaintenanceStartTime: [ ]
-    ExportPath: [ ]
-    AutomaticBackupRetentionDays: [ ]
-    DriveCacheType: [ ]
-    ImportPath: [ ]
-    DeploymentType: [ ]
-    PerUnitStorageThroughput: [ ]
-    DailyAutomaticBackupStartTime: [ ]
-    AutoImportPolicy: [X]
-    ImportedFileChunkSize: [ ]
-KmsKeyId: [ ]
-BackupId: [X]
-WindowsConfiguration: [ ]
-    ThroughputCapacity: [ ]
-    CopyTagsToBackups: [ ]
-    WeeklyMaintenanceStartTime: [ ]
-    AutomaticBackupRetentionDays: [ ]
-    DeploymentType: [ ]
-    SelfManagedActiveDirectoryConfiguration: [ ]
-        UserName: [X]
-        FileSystemAdministratorsGroup: [X]
-        DnsIps: [X]
-        OrganizationalUnitDistinguishedName: [X]
-        DomainName: [X]
-        Password: [ ]
-    DailyAutomaticBackupStartTime: [ ]
-    ActiveDirectoryId: [ ]
-    PreferredSubnetId: [ ]
-```
-#### AWS::GameLift::Alias
-
-```RoutingStrategy: [ ]
-    FleetId: [X]
-    Message: [X]
-    Type: [X]
-Description: [ ]
-Name: [ ]
-```
-#### AWS::GameLift::Build
-
-```StorageLocation: [ ]
-    RoleArn: [X]
-    Bucket: [X]
-    Key: [X]
-    ObjectVersion: [X]
-Version: [ ]
-Name: [ ]
-OperatingSystem: [ ]
-```
-#### AWS::GameLift::Fleet
-
-```Description: [ ]
-EC2InboundPermissions: [ ]
-    ToPort: [X]
-    FromPort: [X]
-    Protocol: [X]
-    IpRange: [X]
-PeerVpcAwsAccountId: [X]
-ServerLaunchPath: [ ]
-BuildId: [ ]
-InstanceRoleARN: [ ]
-MaxSize: [ ]
-RuntimeConfiguration: [ ]
-    GameSessionActivationTimeoutSeconds: [X]
-    MaxConcurrentGameSessionActivations: [X]
-    ServerProcesses: [X]
-FleetType: [ ]
-MinSize: [ ]
-NewGameSessionProtectionPolicy: [ ]
-ScriptId: [ ]
-PeerVpcId: [X]
-EC2InstanceType: [ ]
-ResourceCreationLimitPolicy: [ ]
-    NewGameSessionsPerCreator: [X]
-    PolicyPeriodInMinutes: [X]
-Name: [ ]
-DesiredEC2Instances: [ ]
-MetricGroups: [ ]
-LogPaths: [ ]
-ServerLaunchParameters: [ ]
-CertificateConfiguration: [ ]
-    CertificateType: [X]
-```
-#### AWS::GameLift::GameServerGroup
-
-```LaunchTemplate: [X]
-InstanceDefinitions: [ ]
-    InstanceDefinitions: [ ]
-        InstanceType: [X]
-        WeightedCapacity: [X]
+Name: [X]
 Tags: [X]
-RoleArn: [ ]
-GameServerGroupName: [ ]
-BalancingStrategy: [ ]
-MinSize: [X]
+```
+
+#### AWS::AppConfig::Application
+
+```
+Tags: [ ]
+Name: [X]
+Description: [X]
+```
+
+#### AWS::AppConfig::ConfigurationProfile
+
+```
+Description: [X]
+Tags: [ ]
+RetrievalRoleArn: [X]
+Validators: [X]
+    Content: [ ]
+    Type: [ ]
+ApplicationId: [X]
+LocationUri: [X]
+Name: [X]
+```
+
+#### AWS::AppConfig::Deployment
+
+```
+ConfigurationProfileId: [X]
+EnvironmentId: [X]
+Description: [X]
+Tags: [ ]
+DeploymentStrategyId: [X]
+ApplicationId: [X]
+ConfigurationVersion: [X]
+```
+
+#### AWS::AppConfig::DeploymentStrategy
+
+```
+DeploymentDurationInMinutes: [X]
+Description: [X]
+FinalBakeTimeInMinutes: [X]
+Tags: [ ]
+GrowthType: [X]
+GrowthFactor: [X]
+ReplicateTo: [X]
+Name: [X]
+```
+
+#### AWS::AppConfig::Environment
+
+```
+Description: [X]
+Monitors: [X]
+    AlarmArn: [ ]
+    AlarmRoleArn: [ ]
+ApplicationId: [X]
+Name: [X]
+Tags: [ ]
+```
+
+#### AWS::AppConfig::HostedConfigurationVersion
+
+```
+ConfigurationProfileId: [X]
+LatestVersionNumber: [ ]
+ContentType: [X]
+Description: [X]
+Content: [X]
+ApplicationId: [X]
+```
+
+#### AWS::AppFlow::ConnectorProfile
+
+```
+ConnectorProfileConfig: [X]
+    (inherited)
+    ConnectorProfileCredentials: [X]
+        Marketo: [X]
+            ConnectorOAuthRequest: [X]
+                AuthCode: [ ]
+                RedirectUri: [ ]
+            (inherited)
+            (inherited)
+            (inherited)
+        (inherited)
+        GoogleAnalytics: [X]
+            ConnectorOAuthRequest: [X]
+                AuthCode: [ ]
+                RedirectUri: [ ]
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        Slack: [X]
+            ConnectorOAuthRequest: [X]
+                AuthCode: [ ]
+                RedirectUri: [ ]
+            (inherited)
+            (inherited)
+            (inherited)
+        (inherited)
+        (inherited)
+        Salesforce: [X]
+            ConnectorOAuthRequest: [X]
+                AuthCode: [ ]
+                RedirectUri: [ ]
+            (inherited)
+            (inherited)
+        (inherited)
+        Zendesk: [X]
+            ConnectorOAuthRequest: [X]
+                AuthCode: [ ]
+                RedirectUri: [ ]
+            (inherited)
+            (inherited)
+            (inherited)
+        (inherited)
+        (inherited)
+ConnectorProfileName: [X]
+KMSArn: [X]
+ConnectorType: [X]
+ConnectionMode: [X]
+```
+
+#### AWS::AppFlow::Flow
+
+```
+FlowName: [X]
+TriggerConfig: [X]
+    (inherited)
+    (inherited)
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+KMSArn: [X]
+Tasks: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+SourceFlowConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+DestinationFlowConfigList: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::AppMesh::GatewayRoute
+
+```
+Tags: [ ]
+MeshName: [X]
+VirtualGatewayName: [X]
+MeshOwner: [X]
+GatewayRouteName: [X]
+Spec: [X]
+    GrpcRoute: [X]
+        Action: [X]
+            Target: [ ]
+        (inherited)
+    HttpRoute: [X]
+        Action: [X]
+            Target: [ ]
+        (inherited)
+    Http2Route: [X]
+        Action: [X]
+            Target: [ ]
+        (inherited)
+```
+
+#### AWS::AppMesh::Mesh
+
+```
+MeshName: [X]
+Spec: [X]
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::AppMesh::Route
+
+```
+Tags: [ ]
+MeshName: [X]
+VirtualRouterName: [X]
+RouteName: [X]
+MeshOwner: [X]
+Spec: [X]
+    (inherited)
+    GrpcRoute: [X]
+        (inherited)
+        Timeout: [ ]
+        (inherited)
+        (inherited)
+    TcpRoute: [X]
+        (inherited)
+        Timeout: [ ]
+    HttpRoute: [X]
+        (inherited)
+        Timeout: [ ]
+        (inherited)
+        (inherited)
+    Http2Route: [X]
+        (inherited)
+        Timeout: [ ]
+        (inherited)
+        (inherited)
+```
+
+#### AWS::AppMesh::VirtualGateway
+
+```
+VirtualGatewayName: [X]
+MeshName: [X]
+Spec: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+MeshOwner: [X]
+Tags: [ ]
+```
+
+#### AWS::AppMesh::VirtualNode
+
+```
+Spec: [X]
+    (inherited)
+    Listeners: [X]
+        (inherited)
+        (inherited)
+        Timeout: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    ServiceDiscovery: [X]
+        AWSCloudMap: [ ]
+        (inherited)
+MeshName: [X]
+VirtualNodeName: [X]
+MeshOwner: [X]
+Tags: [ ]
+```
+
+#### AWS::AppMesh::VirtualRouter
+
+```
+Spec: [X]
+    (inherited)
+MeshName: [X]
+MeshOwner: [X]
+VirtualRouterName: [X]
+Tags: [ ]
+```
+
+#### AWS::AppMesh::VirtualService
+
+```
+MeshName: [X]
+VirtualServiceName: [X]
+Spec: [X]
+    (inherited)
+MeshOwner: [X]
+Tags: [ ]
+```
+
+#### AWS::AppStream::DirectoryConfig
+
+```
+OrganizationalUnitDistinguishedNames: [X]
+ServiceAccountCredentials: [X]
+    AccountPassword: [ ]
+    AccountName: [ ]
+DirectoryName: [X]
+```
+
+#### AWS::AppStream::Fleet
+
+```
+ImageArn: [X]
+MaxUserDurationInSeconds: [X]
+VpcConfig: [X]
+    SubnetIds: [ ]
+    SecurityGroupIds: [ ]
+Tags: [ ]
+DisconnectTimeoutInSeconds: [X]
+IdleDisconnectTimeoutInSeconds: [X]
+IamRoleArn: [X]
+FleetType: [X]
+StreamView: [X]
+EnableDefaultInternetAccess: [X]
+ImageName: [X]
+ComputeCapacity: [X]
+    DesiredInstances: [ ]
+DisplayName: [X]
+Name: [X]
+InstanceType: [X]
+DomainJoinInfo: [X]
+    DirectoryName: [ ]
+    OrganizationalUnitDistinguishedName: [ ]
+Description: [X]
+```
+
+#### AWS::AppStream::ImageBuilder
+
+```
+DisplayName: [X]
+Description: [X]
+VpcConfig: [X]
+    SubnetIds: [ ]
+    SecurityGroupIds: [ ]
+Tags: [ ]
+AccessEndpoints: [X]
+    EndpointType: [ ]
+    VpceId: [ ]
+IamRoleArn: [X]
+AppstreamAgentVersion: [X]
+EnableDefaultInternetAccess: [X]
+ImageName: [X]
+ImageArn: [X]
+InstanceType: [X]
+DomainJoinInfo: [X]
+    DirectoryName: [ ]
+    OrganizationalUnitDistinguishedName: [ ]
+Name: [X]
+```
+
+#### AWS::AppStream::Stack
+
+```
+AttributesToDelete: [ ]
+DisplayName: [ ]
+Description: [ ]
+UserSettings: [ ]
+DeleteStorageConnectors: [ ]
+Tags: [ ]
+StorageConnectors: [ ]
+EmbedHostDomains: [ ]
+RedirectURL: [ ]
+AccessEndpoints: [ ]
+ApplicationSettings: [ ]
+FeedbackURL: [ ]
+Name: [ ]
+```
+
+#### AWS::AppStream::StackFleetAssociation
+
+```
+StackName: [X]
+FleetName: [X]
+```
+
+#### AWS::AppStream::StackUserAssociation
+
+```
+UserName: [X]
+StackName: [X]
+SendEmailNotification: [X]
+AuthenticationType: [X]
+```
+
+#### AWS::AppStream::User
+
+```
+UserName: [X]
+LastName: [X]
+MessageAction: [ ]
+FirstName: [X]
+AuthenticationType: [X]
+```
+
+#### AWS::AppSync::ApiCache
+
+```
+TransitEncryptionEnabled: [X]
+ApiId: [X]
+ApiCachingBehavior: [X]
+Ttl: [X]
+Type: [X]
+AtRestEncryptionEnabled: [X]
+```
+
+#### AWS::AppSync::ApiKey
+
+```
+ApiId: [X]
+Expires: [X]
+Description: [X]
+ApiKeyId: [X]
+```
+
+#### AWS::AppSync::DataSource
+
+```
+ServiceRoleArn: [X]
+ElasticsearchConfig: [X]
+    (inherited)
+    (inherited)
+Description: [X]
+ApiId: [X]
+DynamoDBConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+HttpConfig: [X]
+    (inherited)
+    (inherited)
+LambdaConfig: [X]
+    (inherited)
+Type: [X]
+RelationalDatabaseConfig: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+```
+
+#### AWS::AppSync::FunctionConfiguration
+
+```
+DataSourceName: [X]
+Description: [X]
+ResponseMappingTemplateS3Location: [ ]
+RequestMappingTemplateS3Location: [ ]
+RequestMappingTemplate: [X]
+FunctionVersion: [X]
+SyncConfig: [ ]
+ResponseMappingTemplate: [X]
+ApiId: [X]
+Name: [X]
+```
+
+#### AWS::AppSync::GraphQLApi
+
+```
+AdditionalAuthenticationProviders: [ ]
+XrayEnabled: [X]
+Name: [X]
+AuthenticationType: [X]
+Tags: [ ]
+OpenIDConnectConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+LogConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+UserPoolConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::AppSync::GraphQLSchema
+
+```
+Definition: [X]
+ApiId: [X]
+DefinitionS3Location: [ ]
+```
+
+#### AWS::AppSync::Resolver
+
+```
+Kind: [X]
+DataSourceName: [X]
+CachingConfig: [X]
+    (inherited)
+    (inherited)
+ResponseMappingTemplateS3Location: [ ]
+RequestMappingTemplateS3Location: [ ]
+RequestMappingTemplate: [X]
+TypeName: [X]
+FieldName: [X]
+PipelineConfig: [X]
+    (inherited)
+SyncConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+ResponseMappingTemplate: [X]
+ApiId: [X]
+```
+
+#### AWS::ApplicationAutoScaling::ScalableTarget
+
+```
+ScalableDimension: [X]
+SuspendedState: [X]
+    ScheduledScalingSuspended: [ ]
+    DynamicScalingInSuspended: [ ]
+    DynamicScalingOutSuspended: [ ]
+ResourceId: [X]
+RoleARN: [X]
+MaxCapacity: [X]
+MinCapacity: [X]
+ServiceNamespace: [X]
+ScheduledActions: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ApplicationAutoScaling::ScalingPolicy
+
+```
+PolicyName: [X]
+ScalableDimension: [X]
+ScalingTargetId: [ ]
+ResourceId: [X]
+StepScalingPolicyConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+PolicyType: [X]
+TargetTrackingScalingPolicyConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ServiceNamespace: [X]
+```
+
+#### AWS::ApplicationInsights::Application
+
+```
+CustomComponents: [ ]
+ComponentMonitoringSettings: [ ]
+Tags: [ ]
+AutoConfigurationEnabled: [ ]
+ResourceGroupName: [X]
+OpsItemSNSTopicArn: [X]
+OpsCenterEnabled: [X]
+CWEMonitorEnabled: [X]
+LogPatternSets: [ ]
+```
+
+#### AWS::Athena::DataCatalog
+
+```
+Description: [X]
+Type: [X]
+Name: [X]
+Parameters: [X]
+Tags: [ ]
+```
+
+#### AWS::Athena::NamedQuery
+
+```
+Name: [X]
+Database: [X]
+QueryString: [X]
+Description: [X]
+WorkGroup: [ ]
+```
+
+#### AWS::Athena::WorkGroup
+
+```
+Name: [X]
+Tags: [ ]
+WorkGroupConfigurationUpdates: [ ]
+RecursiveDeleteOption: [ ]
+State: [X]
+WorkGroupConfiguration: [X]
+    (inherited)
+    ResultConfiguration: [X]
+        EncryptionConfiguration: [ ]
+        OutputLocation: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+Description: [X]
+```
+
+#### AWS::AutoScaling::AutoScalingGroup
+
+```
+PlacementGroup: [X]
+NotificationConfigurations: [ ]
+LifecycleHookSpecificationList: [ ]
+VPCZoneIdentifier: [X]
+LoadBalancerNames: [X]
+MixedInstancesPolicy: [X]
+    InstancesDistribution: [ ]
+    LaunchTemplate: [X]
+        LaunchTemplateSpecification: [ ]
+        Overrides: [ ]
+Tags: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+InstanceId: [ ]
 MaxSize: [X]
-GameServerProtectionPolicy: [ ]
-AutoScalingPolicy: [X]
-DeleteOption: [X]
-VpcSubnets: [X]
+TerminationPolicies: [X]
+MetricsCollection: [X]
+    (inherited)
+    (inherited)
+TargetGroupARNs: [X]
+HealthCheckType: [X]
+LaunchTemplate: [X]
+    LaunchTemplateId: [ ]
+    Version: [ ]
+    LaunchTemplateName: [ ]
+ServiceLinkedRoleARN: [X]
+AutoScalingGroupName: [X]
+MinSize: [X]
+LaunchConfigurationName: [X]
+CapacityRebalance: [ ]
+HealthCheckGracePeriod: [X]
+DesiredCapacity: [X]
+Cooldown: [X]
+MaxInstanceLifetime: [X]
+AvailabilityZones: [X]
+NewInstancesProtectedFromScaleIn: [ ]
 ```
-#### AWS::GameLift::GameSessionQueue
 
-```TimeoutInSeconds: [ ]
-PlayerLatencyPolicies: [ ]
-    MaximumIndividualPlayerLatencyMilliseconds: [X]
-    PolicyDurationSeconds: [X]
-Name: [ ]
-Destinations: [ ]
-    DestinationArn: [X]
+#### AWS::AutoScaling::LaunchConfiguration
+
 ```
-#### AWS::GameLift::MatchmakingConfiguration
-
-```AcceptanceTimeoutSeconds: [ ]
-Description: [ ]
-AdditionalPlayerCount: [ ]
-CustomEventData: [ ]
-GameProperties: [ ]
-    Value: [X]
-    Key: [X]
-RuleSetName: [ ]
-GameSessionQueueArns: [ ]
-NotificationTarget: [ ]
-BackfillMode: [ ]
-AcceptanceRequired: [ ]
-FlexMatchMode: [X]
-GameSessionData: [ ]
-RequestTimeoutSeconds: [ ]
-Name: [ ]
-```
-#### AWS::GameLift::MatchmakingRuleSet
-
-```RuleSetBody: [ ]
-Name: [ ]
-```
-#### AWS::GameLift::Script
-
-```StorageLocation: [ ]
-    RoleArn: [X]
-    Bucket: [X]
-    ObjectVersion: [X]
-    Key: [X]
-Version: [ ]
-Name: [ ]
-```
-#### AWS::GlobalAccelerator::Accelerator
-
-```IpAddressType: [ ]
-Enabled: [ ]
-Name: [ ]
-IpAddresses: [ ]
-Tags: [X]
-```
-#### AWS::GlobalAccelerator::EndpointGroup
-
-```TrafficDialPercentage: [ ]
-HealthCheckIntervalSeconds: [ ]
-HealthCheckPort: [ ]
-EndpointGroupRegion: [ ]
-HealthCheckProtocol: [ ]
-HealthCheckPath: [ ]
-EndpointConfigurations: [ ]
-    ClientIPPreservationEnabled: [ ]
-    EndpointId: [ ]
-    Weight: [ ]
-ThresholdCount: [ ]
-ListenerArn: [ ]
-```
-#### AWS::GlobalAccelerator::Listener
-
-```AcceleratorArn: [ ]
-PortRanges: [ ]
-    ToPort: [X]
-    FromPort: [X]
-ClientAffinity: [ ]
-Protocol: [ ]
-```
-#### AWS::Glue::Classifier
-
-```GrokClassifier: [ ]
-    Classification: [ ]
-    Name: [ ]
-    GrokPattern: [ ]
-    CustomPatterns: [ ]
-CsvClassifier: [ ]
-    DisableValueTrimming: [ ]
-    AllowSingleColumn: [ ]
-    Name: [ ]
-    ContainsHeader: [ ]
-    Header: [ ]
-    Delimiter: [ ]
-    QuoteSymbol: [ ]
-XMLClassifier: [ ]
-    RowTag: [ ]
-    Name: [ ]
-    Classification: [ ]
-JsonClassifier: [ ]
-    JsonPath: [ ]
-    Name: [ ]
-```
-#### AWS::Glue::Connection
-
-```ConnectionInput: [ ]
-    Description: [ ]
-    MatchCriteria: [ ]
-    ConnectionType: [ ]
-    PhysicalConnectionRequirements: [ ]
-        SubnetId: [X]
-        AvailabilityZone: [X]
-        SecurityGroupIdList: [X]
-    ConnectionProperties: [ ]
-    Name: [ ]
-CatalogId: [ ]
-```
-#### AWS::Glue::Crawler
-
-```Configuration: [ ]
-Description: [ ]
-Tags: [X]
-Schedule: [ ]
-    ScheduleExpression: [ ]
-Classifiers: [ ]
-CrawlerSecurityConfiguration: [X]
-Role: [ ]
-DatabaseName: [ ]
-SchemaChangePolicy: [ ]
-    DeleteBehavior: [X]
-    UpdateBehavior: [X]
-TablePrefix: [ ]
-Targets: [ ]
-    JdbcTargets: [ ]
-        Path: [X]
-        Exclusions: [X]
-        ConnectionName: [X]
-    CatalogTargets: [ ]
-        Tables: [X]
-        DatabaseName: [ ]
-    DynamoDBTargets: [ ]
-        Path: [X]
-    S3Targets: [ ]
-        Path: [X]
-        Exclusions: [X]
-Name: [ ]
-```
-#### AWS::Glue::DataCatalogEncryptionSettings
-
-```DataCatalogEncryptionSettings: [ ]
-    ConnectionPasswordEncryption: [ ]
-        KmsKeyId: [ ]
-        ReturnConnectionPasswordEncrypted: [ ]
-    EncryptionAtRest: [ ]
-        SseAwsKmsKeyId: [X]
-        CatalogEncryptionMode: [X]
-CatalogId: [ ]
-```
-#### AWS::Glue::Database
-
-```DatabaseInput: [ ]
-    LocationUri: [ ]
-    Description: [ ]
-    Parameters: [ ]
-    Name: [ ]
-CatalogId: [ ]
-```
-#### AWS::Glue::DevEndpoint
-
-```WorkerType: [ ]
-SecurityConfiguration: [X]
-Tags: [X]
-RoleArn: [ ]
-NumberOfNodes: [ ]
-ExtraJarsS3Path: [ ]
-GlueVersion: [ ]
-SecurityGroupIds: [ ]
-PublicKeys: [ ]
-EndpointName: [ ]
-PublicKey: [ ]
-Arguments: [ ]
-NumberOfWorkers: [ ]
-SubnetId: [ ]
-ExtraPythonLibsS3Path: [ ]
-```
-#### AWS::Glue::Job
-
-```WorkerType: [ ]
-ExecutionProperty: [ ]
-    MaxConcurrentRuns: [X]
-AllocatedCapacity: [ ]
-Description: [ ]
-Tags: [X]
-Timeout: [ ]
-NotificationProperty: [ ]
-    NotifyDelayAfter: [X]
-DefaultArguments: [ ]
-Connections: [ ]
-    Connections: [ ]
-SecurityConfiguration: [X]
-MaxRetries: [ ]
-Command: [ ]
-    ScriptLocation: [X]
-    Name: [ ]
-    PythonVersion: [X]
-GlueVersion: [ ]
-NumberOfWorkers: [ ]
-Role: [ ]
-LogUri: [ ]
-MaxCapacity: [ ]
-Name: [ ]
-```
-#### AWS::Glue::MLTransform
-
-```WorkerType: [ ]
-TransformParameters: [ ]
-    TransformType: [X]
-    FindMatchesParameters: [X]
-Description: [ ]
-Tags: [X]
-Timeout: [ ]
-GlueVersion: [ ]
-Role: [ ]
-NumberOfWorkers: [ ]
-InputRecordTables: [ ]
-    GlueTables: [ ]
-        ConnectionName: [X]
-        TableName: [X]
-        DatabaseName: [X]
-        CatalogId: [X]
-MaxRetries: [ ]
-MaxCapacity: [ ]
-Name: [ ]
-```
-#### AWS::Glue::Partition
-
-```PartitionInput: [ ]
-    Values: [X]
-    StorageDescriptor: [ ]
-        OutputFormat: [X]
-        Parameters: [ ]
-        InputFormat: [X]
-        BucketColumns: [X]
-        SkewedInfo: [X]
-        Columns: [X]
-        Location: [X]
-        NumberOfBuckets: [X]
-        SortColumns: [X]
-        StoredAsSubDirectories: [X]
-        SerdeInfo: [X]
-        Compressed: [X]
-    Parameters: [ ]
-TableName: [ ]
-DatabaseName: [ ]
-CatalogId: [ ]
-```
-#### AWS::Glue::SecurityConfiguration
-
-```EncryptionConfiguration: [ ]
-    JobBookmarksEncryption: [ ]
-        KmsKeyArn: [X]
-        JobBookmarksEncryptionMode: [X]
-    CloudWatchEncryption: [ ]
-        KmsKeyArn: [X]
-        CloudWatchEncryptionMode: [X]
-    S3Encryptions: [ ]
-        KmsKeyArn: [X]
-        S3EncryptionMode: [X]
-Name: [ ]
-```
-#### AWS::Glue::Table
-
-```TableInput: [ ]
-    StorageDescriptor: [ ]
-        OutputFormat: [X]
-        Parameters: [ ]
-        InputFormat: [X]
-        BucketColumns: [X]
-        SkewedInfo: [X]
-        Columns: [X]
-        Location: [X]
-        NumberOfBuckets: [X]
-        SortColumns: [X]
-        StoredAsSubDirectories: [X]
-        SerdeInfo: [X]
-        Compressed: [X]
-    PartitionKeys: [ ]
-        Comment: [X]
-        Type: [X]
-        Name: [ ]
-    Description: [ ]
-    Parameters: [ ]
-    ViewOriginalText: [ ]
-    Owner: [ ]
-    ViewExpandedText: [ ]
-    Retention: [ ]
-    TableType: [ ]
-    Name: [ ]
-DatabaseName: [ ]
-CatalogId: [ ]
-```
-#### AWS::Glue::Trigger
-
-```Predicate: [ ]
-    Conditions: [ ]
-        CrawlState: [X]
-        CrawlerName: [X]
-        State: [ ]
-        LogicalOperator: [ ]
-        JobName: [ ]
-    Logical: [ ]
-StartOnCreation: [X]
-Description: [ ]
-Tags: [X]
-Schedule: [ ]
-Actions: [ ]
-    NotificationProperty: [X]
-    JobName: [ ]
-    SecurityConfiguration: [X]
-    CrawlerName: [X]
-    Arguments: [ ]
-    Timeout: [X]
-WorkflowName: [ ]
-Type: [ ]
-Name: [ ]
-```
-#### AWS::Glue::Workflow
-
-```DefaultRunProperties: [ ]
-Tags: [X]
-Name: [ ]
-Description: [ ]
-```
-#### AWS::Greengrass::ConnectorDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::ConnectorDefinitionVersion
-
-```Connectors: [ ]
-    ConnectorArn: [X]
-    Parameters: [X]
-    Id: [X]
-ConnectorDefinitionId: [ ]
-```
-#### AWS::Greengrass::CoreDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::CoreDefinitionVersion
-
-```Cores: [ ]
-    CertificateArn: [X]
-    ThingArn: [X]
-    SyncShadow: [X]
-    Id: [X]
-CoreDefinitionId: [ ]
-```
-#### AWS::Greengrass::DeviceDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::DeviceDefinitionVersion
-
-```DeviceDefinitionId: [ ]
-Devices: [ ]
-    CertificateArn: [X]
-    ThingArn: [X]
-    SyncShadow: [X]
-    Id: [X]
-```
-#### AWS::Greengrass::FunctionDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::FunctionDefinitionVersion
-
-```DefaultConfig: [ ]
-    Execution: [X]
-FunctionDefinitionId: [ ]
-Functions: [ ]
-    FunctionConfiguration: [X]
-    Id: [X]
-    FunctionArn: [X]
-```
-#### AWS::Greengrass::Group
-
-```RoleArn: [X]
-Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::GroupVersion
-
-```ResourceDefinitionVersionArn: [ ]
-DeviceDefinitionVersionArn: [ ]
-SubscriptionDefinitionVersionArn: [ ]
-FunctionDefinitionVersionArn: [ ]
-ConnectorDefinitionVersionArn: [ ]
-CoreDefinitionVersionArn: [ ]
-LoggerDefinitionVersionArn: [ ]
-GroupId: [ ]
-```
-#### AWS::Greengrass::LoggerDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::LoggerDefinitionVersion
-
-```Loggers: [ ]
-    Type: [X]
-    Space: [X]
-    Component: [X]
-    Id: [X]
-    Level: [X]
-LoggerDefinitionId: [ ]
-```
-#### AWS::Greengrass::ResourceDefinition
-
-```Name: [ ]
-InitialVersion: [ ]
-    Resources: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::ResourceDefinitionVersion
-
-```ResourceDefinitionId: [ ]
-Resources: [ ]
-    ResourceDataContainer: [X]
-    Id: [X]
-    Name: [X]
-```
-#### AWS::Greengrass::SubscriptionDefinition
-
-```Name: [ ]
-InitialVersion: [X]
-Tags: [X]
-```
-#### AWS::Greengrass::SubscriptionDefinitionVersion
-
-```SubscriptionDefinitionId: [ ]
-Subscriptions: [ ]
-    Source: [X]
-    Id: [X]
-    Target: [X]
-    Subject: [X]
-```
-#### AWS::GuardDuty::Detector
-
-```FindingPublishingFrequency: [ ]
-Enable: [ ]
-DataSources: [X]
-```
-#### AWS::GuardDuty::Filter
-
-```FindingCriteria: [ ]
-    Criterion: [X]
-    ItemType: [X]
-Name: [ ]
-Rank: [ ]
-DetectorId: [ ]
-Action: [ ]
-Description: [ ]
-```
-#### AWS::GuardDuty::IPSet
-
-```Format: [ ]
-Activate: [ ]
-Location: [ ]
-DetectorId: [ ]
-Name: [ ]
-```
-#### AWS::GuardDuty::Master
-
-```MasterId: [ ]
-InvitationId: [ ]
-DetectorId: [ ]
-```
-#### AWS::GuardDuty::Member
-
-```Status: [X]
-MemberId: [ ]
-DisableEmailNotification: [X]
-DetectorId: [ ]
-Message: [X]
-Email: [ ]
-```
-#### AWS::GuardDuty::ThreatIntelSet
-
-```Format: [ ]
-Activate: [ ]
-Location: [ ]
-DetectorId: [ ]
-Name: [ ]
-```
-#### AWS::IAM::AccessKey
-
-```Status: [ ]
-UserName: [ ]
-Serial: [X]
-```
-#### AWS::IAM::Group
-
-```GroupName: [ ]
-ManagedPolicyArns: [ ]
-Policies: [X]
-Path: [ ]
-```
-#### AWS::IAM::InstanceProfile
-
-```Path: [ ]
-InstanceProfileName: [ ]
-Roles: [ ]
-```
-#### AWS::IAM::ManagedPolicy
-
-```Description: [ ]
-Roles: [X]
-PolicyDocument: [ ]
-Groups: [X]
-Path: [ ]
-ManagedPolicyName: [ ]
-Users: [X]
-```
-#### AWS::IAM::Policy
-
-```PolicyName: [ ]
-PolicyDocument: [ ]
-Groups: [ ]
-Roles: [ ]
-Users: [ ]
-```
-#### AWS::IAM::Role
-
-```ManagedPolicyArns: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-MaxSessionDuration: [ ]
-AssumeRolePolicyDocument: [ ]
-Policies: [X]
-Path: [ ]
-RoleName: [ ]
-PermissionsBoundary: [ ]
-```
-#### AWS::IAM::ServiceLinkedRole
-
-```AWSServiceName: [ ]
-Description: [ ]
-CustomSuffix: [ ]
-```
-#### AWS::IAM::User
-
-```UserName: [ ]
-ManagedPolicyArns: [ ]
-Groups: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-LoginProfile: [X]
-Policies: [X]
-Path: [ ]
-PermissionsBoundary: [ ]
-```
-#### AWS::IAM::UserToGroupAddition
-
-``````
-#### AWS::ImageBuilder::Component
-
-```Name: [ ]
-Tags: [ ]
-ChangeDescription: [ ]
-Uri: [X]
-Platform: [ ]
-Version: [ ]
-SupportedOsVersions: [X]
-KmsKeyId: [ ]
-Data: [X]
-Description: [ ]
-```
-#### AWS::ImageBuilder::DistributionConfiguration
-
-```Description: [ ]
-Distributions: [ ]
-    AmiDistributionConfiguration: [ ]
-    Region: [ ]
-    LicenseConfigurationArns: [ ]
-Name: [ ]
-Tags: [ ]
-```
-#### AWS::ImageBuilder::Image
-
-```InfrastructureConfigurationArn: [ ]
-Tags: [ ]
-ImageTestsConfiguration: [ ]
-    ImageTestsEnabled: [ ]
-    TimeoutMinutes: [ ]
-ImageRecipeArn: [ ]
-DistributionConfigurationArn: [ ]
-EnhancedImageMetadataEnabled: [X]
-```
-#### AWS::ImageBuilder::ImagePipeline
-
-```Status: [ ]
-InfrastructureConfigurationArn: [ ]
-Name: [ ]
-Tags: [ ]
-Schedule: [X]
-ImageTestsConfiguration: [ ]
-    ImageTestsEnabled: [ ]
-    TimeoutMinutes: [ ]
-ImageRecipeArn: [ ]
-DistributionConfigurationArn: [ ]
-EnhancedImageMetadataEnabled: [X]
-Description: [ ]
-```
-#### AWS::ImageBuilder::ImageRecipe
-
-```Version: [ ]
-Name: [ ]
-WorkingDirectory: [X]
-Tags: [ ]
-BlockDeviceMappings: [ ]
+UserData: [X]
+IamInstanceProfile: [X]
+ClassicLinkVPCId: [X]
+InstanceId: [ ]
+LaunchConfigurationName: [X]
+InstanceMonitoring: [X]
+ClassicLinkVPCSecurityGroups: [X]
+KernelId: [X]
+EbsOptimized: [X]
+BlockDeviceMappings: [X]
+    Ebs: [ ]
     DeviceName: [ ]
     VirtualName: [ ]
     NoDevice: [ ]
-    Ebs: [ ]
-        VolumeSize: [ ]
-        Encrypted: [ ]
-        VolumeType: [ ]
-        DeleteOnTermination: [ ]
-        KmsKeyId: [ ]
-        SnapshotId: [ ]
-        Iops: [ ]
-Components: [ ]
-    ComponentArn: [ ]
-ParentImage: [ ]
-Description: [ ]
+SecurityGroups: [X]
+AssociatePublicIpAddress: [X]
+PlacementTenancy: [X]
+MetadataOptions: [ ]
+RamDiskId: [X]
+KeyName: [X]
+ImageId: [X]
+InstanceType: [X]
+SpotPrice: [X]
 ```
-#### AWS::ImageBuilder::InfrastructureConfiguration
 
-```TerminateInstanceOnFailure: [ ]
-ResourceTags: [X]
-Logging: [ ]
-    S3Logs: [ ]
-        S3KeyPrefix: [ ]
-        S3BucketName: [ ]
-Name: [ ]
+#### AWS::AutoScaling::LifecycleHook
+
+```
+LifecycleHookName: [X]
+RoleARN: [X]
+AutoScalingGroupName: [X]
+HeartbeatTimeout: [X]
+NotificationMetadata: [X]
+DefaultResult: [X]
+NotificationTargetARN: [X]
+LifecycleTransition: [X]
+```
+
+#### AWS::AutoScaling::ScalingPolicy
+
+```
+EstimatedInstanceWarmup: [X]
+MinAdjustmentMagnitude: [X]
+MetricAggregationType: [X]
+AutoScalingGroupName: [X]
+Cooldown: [X]
+PolicyType: [X]
+StepAdjustments: [X]
+    (inherited)
+    MetricIntervalLowerBound: [ ]
+    MetricIntervalUpperBound: [ ]
+AdjustmentType: [X]
+ScalingAdjustment: [X]
+TargetTrackingConfiguration: [X]
+    TargetValue: [ ]
+    PredefinedMetricSpecification: [ ]
+    DisableScaleIn: [ ]
+    CustomizedMetricSpecification: [ ]
+```
+
+#### AWS::AutoScaling::ScheduledAction
+
+```
+MinSize: [X]
+DesiredCapacity: [X]
+AutoScalingGroupName: [X]
+Recurrence: [X]
+MaxSize: [X]
+StartTime: [X]
+EndTime: [X]
+```
+
+#### AWS::AutoScalingPlans::ScalingPlan
+
+```
+ApplicationSource: [X]
+    CloudFormationStackARN: [ ]
+    TagFilters: [ ]
+ScalingInstructions: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    TargetTrackingConfigurations: [X]
+        CustomizedScalingMetricSpecification: [ ]
+        EstimatedInstanceWarmup: [ ]
+        ScaleOutCooldown: [ ]
+        DisableScaleIn: [ ]
+        PredefinedScalingMetricSpecification: [ ]
+        TargetValue: [ ]
+        ScaleInCooldown: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    CustomizedLoadMetricSpecification: [X]
+        MetricName: [ ]
+        Namespace: [ ]
+        Dimensions: [ ]
+        Unit: [ ]
+        Statistic: [ ]
+    PredefinedLoadMetricSpecification: [X]
+        ResourceLabel: [ ]
+        PredefinedLoadMetricType: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::Backup::BackupPlan
+
+```
+BackupPlan: [X]
+    (inherited)
+    AdvancedBackupSettings: [X]
+        ResourceType: [ ]
+        BackupOptions: [ ]
+    BackupPlanRule: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        Lifecycle: [X]
+            DeleteAfterDays: [ ]
+            MoveToColdStorageAfterDays: [ ]
+        CopyActions: [ ]
+BackupPlanTags: [ ]
+```
+
+#### AWS::Backup::BackupSelection
+
+```
+BackupPlanId: [X]
+BackupSelection: [X]
+    SelectionName: [ ]
+    ListOfTags: [ ]
+    IamRoleArn: [ ]
+    Resources: [ ]
+```
+
+#### AWS::Backup::BackupVault
+
+```
+AccessPolicy: [X]
+Notifications: [X]
+    BackupVaultEvents: [ ]
+    SNSTopicArn: [ ]
+BackupVaultName: [X]
+EncryptionKeyArn: [X]
+BackupVaultTags: [ ]
+```
+
+#### AWS::Batch::ComputeEnvironment
+
+```
+ServiceRole: [X]
+Tags: [X]
+ComputeResources: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+State: [X]
+ComputeEnvironmentName: [X]
+Type: [X]
+```
+
+#### AWS::Batch::JobDefinition
+
+```
+Parameters: [X]
 Tags: [ ]
-InstanceTypes: [ ]
-SecurityGroupIds: [ ]
-KeyPair: [ ]
-InstanceProfileName: [ ]
-SubnetId: [ ]
-SnsTopicArn: [ ]
-Description: [ ]
+RetryStrategy: [X]
+    (inherited)
+NodeProperties: [X]
+    (inherited)
+    NodeRangeProperties: [X]
+        (inherited)
+        Container: [X]
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            ResourceRequirements: [ ]
+            (inherited)
+            InstanceType: [ ]
+            (inherited)
+    (inherited)
+Timeout: [X]
+    (inherited)
+ContainerProperties: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    ResourceRequirements: [ ]
+    (inherited)
+    InstanceType: [ ]
+    (inherited)
+Type: [X]
+JobDefinitionName: [X]
 ```
-#### AWS::Inspector::AssessmentTarget
 
-```AssessmentTargetName: [ ]
-ResourceGroupArn: [ ]
+#### AWS::Batch::JobQueue
+
 ```
-#### AWS::Inspector::AssessmentTemplate
+Priority: [X]
+State: [X]
+JobQueueName: [X]
+ComputeEnvironmentOrder: [X]
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
 
-```AssessmentTargetArn: [ ]
-AssessmentTemplateName: [ ]
-UserAttributesForFindings: [ ]
-    Key: [ ]
+#### AWS::Budgets::Budget
+
+```
+NotificationsWithSubscribers: [ ]
+Budget: [X]
+    (inherited)
+    (inherited)
+    BudgetLimit: [X]
+        Amount: [ ]
+        Unit: [ ]
+    (inherited)
+    CostTypes: [X]
+        IncludeOtherSubscription: [ ]
+        IncludeUpfront: [ ]
+        IncludeRefund: [ ]
+        IncludeSupport: [ ]
+        UseBlended: [ ]
+        IncludeDiscount: [ ]
+        UseAmortized: [ ]
+        IncludeTax: [ ]
+        IncludeCredit: [ ]
+        IncludeRecurring: [ ]
+        IncludeSubscription: [ ]
+    (inherited)
+    TimePeriod: [X]
+        Start: [ ]
+        End: [ ]
+    (inherited)
+```
+
+#### AWS::CE::CostCategory
+
+```
+Rules: [X]
+Name: [X]
+RuleVersion: [X]
+```
+
+#### AWS::Cassandra::Keyspace
+
+```
+```
+
+#### AWS::Cassandra::Table
+
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CertificateManager::Certificate
+
+```
+SubjectAlternativeNames: [X]
+DomainName: [X]
+CertificateTransparencyLoggingPreference: [X]
+Tags: [ ]
+DomainValidationOptions: [X]
+    HostedZoneId: [ ]
+    (inherited)
+    (inherited)
+ValidationMethod: [ ]
+CertificateAuthorityArn: [X]
+```
+
+#### AWS::Chatbot::SlackChannelConfiguration
+
+```
+```
+
+#### AWS::Cloud9::EnvironmentEC2
+
+```
+Description: [X]
+Tags: [ ]
+Repositories: [ ]
+ConnectionType: [ ]
+OwnerArn: [X]
+SubnetId: [X]
+AutomaticStopTimeMinutes: [ ]
+InstanceType: [X]
+Name: [X]
+```
+
+#### AWS::CloudFormation::CustomResource
+
+```
+```
+
+#### AWS::CloudFormation::Macro
+
+```
+```
+
+#### AWS::CloudFormation::Stack
+
+```
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CloudFormation::StackSet
+
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CloudFormation::WaitCondition
+
+```
+```
+
+#### AWS::CloudFormation::WaitConditionHandle
+
+```
+```
+
+#### AWS::CloudFront::CachePolicy
+
+```
+CachePolicyConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CloudFront::CloudFrontOriginAccessIdentity
+
+```
+CloudFrontOriginAccessIdentityConfig: [X]
+    (inherited)
+```
+
+#### AWS::CloudFront::Distribution
+
+```
+DistributionConfig: [X]
+    (inherited)
+    (inherited)
+    Logging: [ ]
+    (inherited)
+    Origins: [X]
+        (inherited)
+        (inherited)
+        S3OriginConfig: [X]
+            OriginAccessIdentity: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        OriginShield: [ ]
+        OriginCustomHeaders: [X]
+            HeaderName: [ ]
+            HeaderValue: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    DefaultCacheBehavior: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        LambdaFunctionAssociations: [X]
+            (inherited)
+            IncludeBody: [ ]
+            (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+    (inherited)
+    CustomErrorResponses: [X]
+        ErrorCode: [ ]
+        ResponsePagePath: [ ]
+        ResponseCode: [ ]
+        ErrorCachingMinTTL: [ ]
+    OriginGroups: [X]
+        Items: [ ]
+        Quantity: [ ]
+    (inherited)
+    CacheBehaviors: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        LambdaFunctionAssociations: [X]
+            (inherited)
+            IncludeBody: [ ]
+            (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::CloudFront::OriginRequestPolicy
+
+```
+OriginRequestPolicyConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CloudFront::RealtimeLogConfig
+
+```
+Fields: [X]
+EndPoints: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+SamplingRate: [X]
+```
+
+#### AWS::CloudFront::StreamingDistribution
+
+```
+StreamingDistributionConfig: [X]
+    (inherited)
+    S3Origin: [X]
+        OriginAccessIdentity: [ ]
+        DomainName: [ ]
+    Logging: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::CloudTrail::Trail
+
+```
+EventSelectors: [ ]
+IncludeGlobalServiceEvents: [X]
+Tags: [ ]
+S3KeyPrefix: [X]
+IsLogging: [X]
+KMSKeyId: [X]
+IsMultiRegionTrail: [X]
+EnableLogFileValidation: [X]
+CloudWatchLogsRoleArn: [X]
+TrailName: [X]
+CloudWatchLogsLogGroupArn: [X]
+SnsTopicName: [X]
+S3BucketName: [X]
+```
+
+#### AWS::CloudWatch::Alarm
+
+```
+EvaluationPeriods: [X]
+ExtendedStatistic: [X]
+DatapointsToAlarm: [X]
+Dimensions: [X]
+    Name: [ ]
     Value: [ ]
-DurationInSeconds: [ ]
-RulesPackageArns: [ ]
+AlarmActions: [X]
+Threshold: [X]
+AlarmDescription: [X]
+Namespace: [X]
+Period: [X]
+EvaluateLowSampleCountPercentile: [X]
+Metrics: [X]
+    MetricStat: [ ]
+    (inherited)
+    Label: [ ]
+    ReturnData: [ ]
+    Expression: [ ]
+    Id: [ ]
+ComparisonOperator: [X]
+AlarmName: [X]
+ActionsEnabled: [X]
+Statistic: [X]
+TreatMissingData: [X]
+InsufficientDataActions: [X]
+OKActions: [X]
+ThresholdMetricId: [X]
+Unit: [X]
+MetricName: [X]
 ```
-#### AWS::Inspector::ResourceGroup
 
-```ResourceGroupTags: [ ]
-    Key: [ ]
+#### AWS::CloudWatch::AnomalyDetector
+
+```
+Stat: [X]
+Configuration: [X]
+    ExcludedTimeRanges: [X]
+        EndTime: [ ]
+        StartTime: [ ]
+    (inherited)
+Namespace: [X]
+Dimensions: [X]
+    Name: [ ]
     Value: [ ]
+MetricName: [X]
 ```
-#### AWS::IoT1Click::Device
 
-```Enabled: [ ]
-DeviceId: [ ]
+#### AWS::CloudWatch::CompositeAlarm
+
 ```
-#### AWS::IoT1Click::Placement
-
-```Attributes: [ ]
-ProjectName: [ ]
-AssociatedDevices: [X]
-PlacementName: [ ]
+AlarmActions: [X]
+AlarmDescription: [X]
+AlarmRule: [X]
+AlarmName: [X]
+InsufficientDataActions: [X]
+OKActions: [X]
+ActionsEnabled: [X]
 ```
-#### AWS::IoT1Click::Project
 
-```ProjectName: [ ]
-Description: [ ]
-PlacementTemplate: [ ]
-    DeviceTemplates: [ ]
-    DefaultAttributes: [ ]
+#### AWS::CloudWatch::Dashboard
+
 ```
-#### AWS::IoT::Authorizer
-
-```Status: [ ]
-Tags: [X]
-AuthorizerName: [ ]
-TokenKeyName: [ ]
-TokenSigningPublicKeys: [ ]
-SigningDisabled: [ ]
-AuthorizerFunctionArn: [ ]
+DashboardName: [X]
+DashboardBody: [X]
 ```
-#### AWS::IoT::Certificate
 
-```CertificateSigningRequest: [ ]
-Status: [ ]
-CertificatePem: [X]
-CACertificatePem: [X]
-CertificateMode: [X]
+#### AWS::CloudWatch::InsightRule
+
 ```
-#### AWS::IoT::Policy
-
-```PolicyName: [ ]
-PolicyDocument: [ ]
+RuleState: [X]
+RuleName: [X]
+RuleBody: [X]
+Tags: [ ]
 ```
-#### AWS::IoT::PolicyPrincipalAttachment
 
-```PolicyName: [ ]
-Principal: [ ]
+#### AWS::CodeArtifact::Domain
+
 ```
-#### AWS::IoT::ProvisioningTemplate
-
-```Description: [ ]
-TemplateBody: [ ]
-Tags: [X]
-TemplateName: [ ]
-Enabled: [ ]
-ProvisioningRoleArn: [ ]
-PreProvisioningHook: [ ]
-    PayloadVersion: [ ]
-    TargetArn: [ ]
+PermissionsPolicyDocument: [X]
+DomainName: [X]
 ```
-#### AWS::IoT::Thing
 
-```AttributePayload: [ ]
-    Attributes: [ ]
-ThingName: [ ]
+#### AWS::CodeArtifact::Repository
+
 ```
-#### AWS::IoT::ThingPrincipalAttachment
-
-```ThingName: [ ]
-Principal: [ ]
+PermissionsPolicyDocument: [X]
+RepositoryName: [X]
+ExternalConnections: [X]
+Description: [X]
+Upstreams: [ ]
 ```
-#### AWS::IoT::TopicRule
 
-```TopicRulePayload: [ ]
-    Description: [ ]
-    Actions: [ ]
-        DynamoDBv2: [ ]
-            PutItem: [ ]
-                TableName: [ ]
-            RoleArn: [ ]
-        Http: [ ]
-            Url: [ ]
-            Headers: [ ]
-                Key: [ ]
-                Value: [ ]
-            ConfirmationUrl: [ ]
-            Auth: [ ]
-                Sigv4: [ ]
-                    SigningRegion: [ ]
-                    RoleArn: [ ]
-                    ServiceName: [ ]
-        Kinesis: [ ]
-            RoleArn: [ ]
-            PartitionKey: [ ]
-            StreamName: [ ]
-        Sqs: [ ]
-            QueueUrl: [ ]
-            RoleArn: [ ]
-            UseBase64: [ ]
-        IotSiteWise: [X]
-        DynamoDB: [ ]
-            HashKeyValue: [ ]
-            PayloadField: [ ]
-            HashKeyType: [ ]
-            HashKeyField: [ ]
-            RoleArn: [ ]
-            TableName: [ ]
-            RangeKeyType: [ ]
-            RangeKeyValue: [ ]
-            RangeKeyField: [ ]
-        CloudwatchMetric: [ ]
-            MetricUnit: [ ]
-            RoleArn: [ ]
-            MetricTimestamp: [ ]
-            MetricNamespace: [ ]
-            MetricValue: [ ]
-            MetricName: [ ]
-        Lambda: [ ]
-            FunctionArn: [ ]
-        CloudwatchAlarm: [ ]
-            StateReason: [ ]
-            RoleArn: [ ]
-            AlarmName: [ ]
-            StateValue: [ ]
-        Sns: [ ]
-            TargetArn: [ ]
-            RoleArn: [ ]
-            MessageFormat: [ ]
-        StepFunctions: [ ]
-            ExecutionNamePrefix: [ ]
-            RoleArn: [ ]
-            StateMachineName: [ ]
-        Elasticsearch: [ ]
-            Index: [ ]
-            RoleArn: [ ]
-            Endpoint: [ ]
-            Type: [ ]
-            Id: [ ]
-        IotEvents: [X]
-        Firehose: [ ]
-            RoleArn: [ ]
-            DeliveryStreamName: [ ]
-            Separator: [ ]
-        IotAnalytics: [ ]
-            RoleArn: [ ]
-            ChannelName: [ ]
-        S3: [ ]
-            RoleArn: [ ]
-            BucketName: [ ]
-            Key: [ ]
-        Republish: [ ]
-            Topic: [ ]
-            RoleArn: [ ]
-            Qos: [ ]
-    Sql: [ ]
-    AwsIotSqlVersion: [ ]
-    RuleDisabled: [ ]
-    ErrorAction: [ ]
-        DynamoDBv2: [ ]
-            PutItem: [ ]
-                TableName: [ ]
-            RoleArn: [ ]
-        Http: [ ]
-            Url: [ ]
-            Headers: [ ]
-                Key: [ ]
-                Value: [ ]
-            ConfirmationUrl: [ ]
-            Auth: [ ]
-                Sigv4: [ ]
-                    SigningRegion: [ ]
-                    RoleArn: [ ]
-                    ServiceName: [ ]
-        Kinesis: [ ]
-            RoleArn: [ ]
-            PartitionKey: [ ]
-            StreamName: [ ]
-        Sqs: [ ]
-            QueueUrl: [ ]
-            RoleArn: [ ]
-            UseBase64: [ ]
-        IotSiteWise: [X]
-        DynamoDB: [ ]
-            HashKeyValue: [ ]
-            PayloadField: [ ]
-            HashKeyType: [ ]
-            HashKeyField: [ ]
-            RoleArn: [ ]
-            TableName: [ ]
-            RangeKeyType: [ ]
-            RangeKeyValue: [ ]
-            RangeKeyField: [ ]
-        CloudwatchMetric: [ ]
-            MetricUnit: [ ]
-            RoleArn: [ ]
-            MetricTimestamp: [ ]
-            MetricNamespace: [ ]
-            MetricValue: [ ]
-            MetricName: [ ]
-        Lambda: [ ]
-            FunctionArn: [ ]
-        CloudwatchAlarm: [ ]
-            StateReason: [ ]
-            RoleArn: [ ]
-            AlarmName: [ ]
-            StateValue: [ ]
-        Sns: [ ]
-            TargetArn: [ ]
-            RoleArn: [ ]
-            MessageFormat: [ ]
-        StepFunctions: [ ]
-            ExecutionNamePrefix: [ ]
-            RoleArn: [ ]
-            StateMachineName: [ ]
-        Elasticsearch: [ ]
-            Index: [ ]
-            RoleArn: [ ]
-            Endpoint: [ ]
-            Type: [ ]
-            Id: [ ]
-        IotEvents: [X]
-        Firehose: [ ]
-            RoleArn: [ ]
-            DeliveryStreamName: [ ]
-            Separator: [ ]
-        IotAnalytics: [ ]
-            RoleArn: [ ]
-            ChannelName: [ ]
-        S3: [ ]
-            RoleArn: [ ]
-            BucketName: [ ]
-            Key: [ ]
-        Republish: [ ]
-            Topic: [ ]
-            RoleArn: [ ]
-            Qos: [ ]
-RuleName: [ ]
+#### AWS::CodeBuild::Project
+
 ```
-#### AWS::IoTAnalytics::Channel
-
-```ChannelName: [ ]
-ChannelStorage: [ ]
-    ServiceManagedS3: [ ]
-    CustomerManagedS3: [ ]
-        KeyPrefix: [ ]
-        RoleArn: [ ]
-        Bucket: [ ]
-RetentionPeriod: [ ]
-    NumberOfDays: [ ]
-    Unlimited: [ ]
-Tags: [X]
-```
-#### AWS::IoTAnalytics::Dataset
-
-```DatasetName: [ ]
-ContentDeliveryRules: [X]
-Tags: [X]
+LogsConfig: [X]
+    (inherited)
+    (inherited)
+Cache: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Description: [X]
+VpcConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
 Triggers: [ ]
-    TriggeringDataset: [ ]
-        DatasetName: [ ]
-    Schedule: [ ]
-        ScheduleExpression: [ ]
-RetentionPeriod: [ ]
-    NumberOfDays: [ ]
-    Unlimited: [ ]
-Actions: [ ]
-    ContainerAction: [ ]
-        Variables: [ ]
-            StringValue: [ ]
-            OutputFileUriValue: [ ]
-                FileName: [ ]
-            DoubleValue: [ ]
-            DatasetContentVersionValue: [ ]
-                DatasetName: [ ]
-            VariableName: [ ]
-        ExecutionRoleArn: [ ]
-        Image: [ ]
-        ResourceConfiguration: [ ]
-            ComputeType: [ ]
-            VolumeSizeInGB: [ ]
-    ActionName: [ ]
-    QueryAction: [ ]
-        SqlQuery: [ ]
-        Filters: [ ]
-            DeltaTime: [ ]
-                TimeExpression: [ ]
-                OffsetSeconds: [ ]
-VersioningConfiguration: [X]
-```
-#### AWS::IoTAnalytics::Datastore
-
-```DatastoreName: [ ]
-DatastoreStorage: [ ]
-    ServiceManagedS3: [ ]
-    CustomerManagedS3: [ ]
-        KeyPrefix: [ ]
-        RoleArn: [ ]
-        Bucket: [ ]
-RetentionPeriod: [ ]
-    NumberOfDays: [ ]
-    Unlimited: [ ]
+Artifacts: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+TimeoutInMinutes: [X]
+BadgeEnabled: [X]
+ServiceRole: [X]
+SourceVersion: [ ]
+Source: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+BuildBatchConfig: [ ]
+QueuedTimeoutInMinutes: [X]
+FileSystemLocations: [ ]
+Name: [X]
+SecondaryArtifacts: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
 Tags: [X]
+    (inherited)
+    (inherited)
+SecondarySources: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+EncryptionKey: [X]
+Environment: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+SecondarySourceVersions: [ ]
 ```
-#### AWS::IoTAnalytics::Pipeline
 
-```Tags: [X]
-PipelineActivities: [ ]
-    DeviceRegistryEnrich: [ ]
-        Attribute: [ ]
-        RoleArn: [ ]
-        ThingName: [ ]
-        Name: [ ]
-        Next: [ ]
-    SelectAttributes: [ ]
-        Attributes: [ ]
-        Name: [ ]
-        Next: [ ]
-    Filter: [ ]
-        Filter: [ ]
-        Name: [ ]
-        Next: [ ]
-    DeviceShadowEnrich: [ ]
-        Attribute: [ ]
-        RoleArn: [ ]
-        ThingName: [ ]
-        Name: [ ]
-        Next: [ ]
-    Channel: [ ]
-        ChannelName: [ ]
-        Name: [ ]
-        Next: [ ]
-    AddAttributes: [ ]
-        Attributes: [ ]
-        Name: [ ]
-        Next: [ ]
-    Datastore: [ ]
-        DatastoreName: [ ]
-        Name: [ ]
-    RemoveAttributes: [ ]
-        Attributes: [ ]
-        Name: [ ]
-        Next: [ ]
-    Math: [ ]
-        Attribute: [ ]
-        Name: [ ]
-        Math: [ ]
-        Next: [ ]
-    Lambda: [ ]
-        BatchSize: [ ]
-        Name: [ ]
-        LambdaName: [ ]
-        Next: [ ]
-PipelineName: [ ]
+#### AWS::CodeBuild::ReportGroup
+
 ```
-#### AWS::IoTEvents::DetectorModel
-
-```DetectorModelDescription: [ ]
-Tags: [X]
-RoleArn: [ ]
-DetectorModelDefinition: [ ]
-    States: [ ]
-        OnInput: [ ]
-            TransitionEvents: [ ]
-                EventName: [ ]
-                Condition: [ ]
-                Actions: [ ]
-                    DynamoDBv2: [X]
-                    SetTimer: [ ]
-                        Seconds: [ ]
-                        DurationExpression: [X]
-                        TimerName: [ ]
-                    ResetTimer: [ ]
-                        TimerName: [ ]
-                    Sqs: [ ]
-                        QueueUrl: [ ]
-                        UseBase64: [ ]
-                        Payload: [X]
-                    IotSiteWise: [X]
-                    DynamoDB: [X]
-                    Sns: [ ]
-                        TargetArn: [ ]
-                        Payload: [X]
-                    ClearTimer: [ ]
-                        TimerName: [ ]
-                    IotTopicPublish: [ ]
-                        Payload: [X]
-                        MqttTopic: [ ]
-                    Firehose: [ ]
-                        DeliveryStreamName: [ ]
-                        Separator: [ ]
-                        Payload: [X]
-                    IotEvents: [ ]
-                        InputName: [ ]
-                        Payload: [X]
-                    SetVariable: [ ]
-                        VariableName: [ ]
-                        Value: [ ]
-                    Lambda: [ ]
-                        Payload: [X]
-                        FunctionArn: [ ]
-                NextState: [ ]
-            Events: [ ]
-                EventName: [ ]
-                Condition: [ ]
-                Actions: [ ]
-                    DynamoDBv2: [X]
-                    SetTimer: [ ]
-                        Seconds: [ ]
-                        DurationExpression: [X]
-                        TimerName: [ ]
-                    ResetTimer: [ ]
-                        TimerName: [ ]
-                    Sqs: [ ]
-                        QueueUrl: [ ]
-                        UseBase64: [ ]
-                        Payload: [X]
-                    IotSiteWise: [X]
-                    DynamoDB: [X]
-                    Sns: [ ]
-                        TargetArn: [ ]
-                        Payload: [X]
-                    ClearTimer: [ ]
-                        TimerName: [ ]
-                    IotTopicPublish: [ ]
-                        Payload: [X]
-                        MqttTopic: [ ]
-                    Firehose: [ ]
-                        DeliveryStreamName: [ ]
-                        Separator: [ ]
-                        Payload: [X]
-                    IotEvents: [ ]
-                        InputName: [ ]
-                        Payload: [X]
-                    SetVariable: [ ]
-                        VariableName: [ ]
-                        Value: [ ]
-                    Lambda: [ ]
-                        Payload: [X]
-                        FunctionArn: [ ]
-        StateName: [ ]
-        OnEnter: [ ]
-            Events: [ ]
-                EventName: [ ]
-                Condition: [ ]
-                Actions: [ ]
-                    DynamoDBv2: [X]
-                    SetTimer: [ ]
-                        Seconds: [ ]
-                        DurationExpression: [X]
-                        TimerName: [ ]
-                    ResetTimer: [ ]
-                        TimerName: [ ]
-                    Sqs: [ ]
-                        QueueUrl: [ ]
-                        UseBase64: [ ]
-                        Payload: [X]
-                    IotSiteWise: [X]
-                    DynamoDB: [X]
-                    Sns: [ ]
-                        TargetArn: [ ]
-                        Payload: [X]
-                    ClearTimer: [ ]
-                        TimerName: [ ]
-                    IotTopicPublish: [ ]
-                        Payload: [X]
-                        MqttTopic: [ ]
-                    Firehose: [ ]
-                        DeliveryStreamName: [ ]
-                        Separator: [ ]
-                        Payload: [X]
-                    IotEvents: [ ]
-                        InputName: [ ]
-                        Payload: [X]
-                    SetVariable: [ ]
-                        VariableName: [ ]
-                        Value: [ ]
-                    Lambda: [ ]
-                        Payload: [X]
-                        FunctionArn: [ ]
-        OnExit: [ ]
-            Events: [ ]
-                EventName: [ ]
-                Condition: [ ]
-                Actions: [ ]
-                    DynamoDBv2: [X]
-                    SetTimer: [ ]
-                        Seconds: [ ]
-                        DurationExpression: [X]
-                        TimerName: [ ]
-                    ResetTimer: [ ]
-                        TimerName: [ ]
-                    Sqs: [ ]
-                        QueueUrl: [ ]
-                        UseBase64: [ ]
-                        Payload: [X]
-                    IotSiteWise: [X]
-                    DynamoDB: [X]
-                    Sns: [ ]
-                        TargetArn: [ ]
-                        Payload: [X]
-                    ClearTimer: [ ]
-                        TimerName: [ ]
-                    IotTopicPublish: [ ]
-                        Payload: [X]
-                        MqttTopic: [ ]
-                    Firehose: [ ]
-                        DeliveryStreamName: [ ]
-                        Separator: [ ]
-                        Payload: [X]
-                    IotEvents: [ ]
-                        InputName: [ ]
-                        Payload: [X]
-                    SetVariable: [ ]
-                        VariableName: [ ]
-                        Value: [ ]
-                    Lambda: [ ]
-                        Payload: [X]
-                        FunctionArn: [ ]
-    InitialStateName: [ ]
-EvaluationMethod: [X]
-Key: [ ]
-DetectorModelName: [ ]
+Type: [X]
+DeleteReports: [ ]
+ExportConfig: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+Tags: [ ]
 ```
-#### AWS::IoTEvents::Input
 
-```InputDefinition: [ ]
-    Attributes: [ ]
-        JsonPath: [ ]
-InputDescription: [ ]
-InputName: [ ]
-Tags: [X]
+#### AWS::CodeBuild::SourceCredential
+
 ```
-#### AWS::IoTThingsGraph::FlowTemplate
-
-```Definition: [ ]
-    Text: [ ]
-    Language: [ ]
-CompatibleNamespaceVersion: [ ]
+Username: [X]
+Token: [X]
+ServerType: [X]
+AuthType: [X]
 ```
-#### AWS::KMS::Alias
 
-```AliasName: [ ]
-TargetKeyId: [ ]
+#### AWS::CodeCommit::Repository
+
 ```
-#### AWS::KMS::Key
-
-```KeyPolicy: [ ]
-Description: [ ]
-Tags: [X]
-Enabled: [ ]
-KeyUsage: [ ]
-PendingWindowInDays: [X]
-EnableKeyRotation: [ ]
-```
-#### AWS::Kendra::DataSource
-
-```Name: [ ]
-Tags: [X]
-DataSourceConfiguration: [ ]
-    S3Configuration: [X]
-    OneDriveConfiguration: [X]
-    ServiceNowConfiguration: [X]
-    DatabaseConfiguration: [X]
-    SalesforceConfiguration: [X]
-    SharePointConfiguration: [X]
-RoleArn: [ ]
-Schedule: [ ]
-IndexId: [ ]
-Type: [ ]
-Description: [ ]
-```
-#### AWS::Kendra::Faq
-
-```Name: [ ]
-Tags: [X]
-RoleArn: [ ]
-IndexId: [ ]
-S3Path: [ ]
-    Bucket: [X]
-    Key: [X]
-FileFormat: [ ]
-Description: [ ]
-```
-#### AWS::Kendra::Index
-
-```Name: [ ]
-ServerSideEncryptionConfiguration: [ ]
-    KmsKeyId: [X]
-Tags: [X]
-RoleArn: [ ]
-DocumentMetadataConfigurations: [ ]
-    DocumentMetadataConfigurationList: [X]
-Edition: [ ]
-CapacityUnits: [ ]
-    StorageCapacityUnits: [X]
-    QueryCapacityUnits: [X]
-Description: [ ]
-```
-#### AWS::Kinesis::Stream
-
-```ShardCount: [ ]
-RetentionPeriodHours: [ ]
-StreamEncryption: [ ]
-    KeyId: [ ]
-    EncryptionType: [ ]
-Name: [ ]
-Tags: [X]
-```
-#### AWS::Kinesis::StreamConsumer
-
-```ConsumerName: [ ]
-StreamARN: [ ]
-```
-#### AWS::KinesisAnalytics::Application
-
-```ApplicationName: [ ]
-Inputs: [ ]
-    KinesisFirehoseInput: [ ]
-        ResourceARN: [ ]
-        RoleARN: [ ]
-    KinesisStreamsInput: [ ]
-        ResourceARN: [ ]
-        RoleARN: [ ]
-    InputProcessingConfiguration: [ ]
-        InputLambdaProcessor: [ ]
-            ResourceARN: [ ]
-            RoleARN: [ ]
-    NamePrefix: [ ]
-    InputParallelism: [ ]
-        Count: [X]
-    InputSchema: [ ]
-        RecordColumns: [X]
-        RecordFormat: [X]
-        RecordEncoding: [X]
-ApplicationDescription: [ ]
-ApplicationCode: [ ]
-```
-#### AWS::KinesisAnalytics::ApplicationOutput
-
-```ApplicationName: [ ]
-Output: [ ]
-    DestinationSchema: [ ]
-        RecordFormatType: [X]
-    KinesisStreamsOutput: [ ]
-        ResourceARN: [X]
-        RoleARN: [X]
-    KinesisFirehoseOutput: [ ]
-        ResourceARN: [X]
-        RoleARN: [X]
-    Name: [ ]
-    LambdaOutput: [ ]
-        ResourceARN: [X]
-        RoleARN: [X]
-```
-#### AWS::KinesisAnalytics::ApplicationReferenceDataSource
-
-```ApplicationName: [ ]
-ReferenceDataSource: [ ]
-    TableName: [ ]
-    ReferenceSchema: [ ]
-        RecordColumns: [X]
-        RecordFormat: [X]
-        RecordEncoding: [X]
-    S3ReferenceDataSource: [ ]
-        FileKey: [X]
-        ReferenceRoleARN: [X]
-        BucketARN: [X]
-```
-#### AWS::KinesisAnalyticsV2::Application
-
-```ApplicationName: [ ]
-ApplicationConfiguration: [ ]
-    ApplicationSnapshotConfiguration: [ ]
-        SnapshotsEnabled: [X]
-    FlinkApplicationConfiguration: [ ]
-        ParallelismConfiguration: [ ]
-            AutoScalingEnabled: [ ]
-            Parallelism: [ ]
-            ParallelismPerKPU: [ ]
-            ConfigurationType: [ ]
-        CheckpointConfiguration: [ ]
-            ConfigurationType: [ ]
-            MinPauseBetweenCheckpoints: [X]
-            CheckpointInterval: [X]
-            CheckpointingEnabled: [X]
-        MonitoringConfiguration: [ ]
-            LogLevel: [X]
-            MetricsLevel: [X]
-            ConfigurationType: [ ]
-    ApplicationCodeConfiguration: [ ]
-        CodeContentType: [ ]
-        CodeContent: [ ]
-            S3ContentLocation: [ ]
-                FileKey: [X]
-                BucketARN: [X]
-                ObjectVersion: [X]
-            TextContent: [ ]
-            ZipFileContent: [X]
-    SqlApplicationConfiguration: [ ]
-        Inputs: [ ]
-            KinesisFirehoseInput: [ ]
-                ResourceARN: [ ]
-            KinesisStreamsInput: [ ]
-                ResourceARN: [ ]
-            InputProcessingConfiguration: [ ]
-                InputLambdaProcessor: [ ]
-                    ResourceARN: [ ]
-            NamePrefix: [ ]
-            InputParallelism: [ ]
-                Count: [X]
-            InputSchema: [ ]
-                RecordColumns: [X]
-                RecordFormat: [X]
-                RecordEncoding: [X]
-    EnvironmentProperties: [ ]
-        PropertyGroups: [ ]
-            PropertyGroupId: [ ]
-            PropertyMap: [ ]
-RuntimeEnvironment: [ ]
-ApplicationDescription: [ ]
-Tags: [X]
-ServiceExecutionRole: [ ]
-```
-#### AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption
-
-```ApplicationName: [ ]
-CloudWatchLoggingOption: [ ]
-    LogStreamARN: [ ]
-```
-#### AWS::KinesisAnalyticsV2::ApplicationOutput
-
-```ApplicationName: [ ]
-Output: [ ]
-    DestinationSchema: [ ]
-        RecordFormatType: [X]
-    KinesisStreamsOutput: [ ]
-        ResourceARN: [X]
-    KinesisFirehoseOutput: [ ]
-        ResourceARN: [X]
-    Name: [ ]
-    LambdaOutput: [ ]
-        ResourceARN: [X]
-```
-#### AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource
-
-```ApplicationName: [ ]
-ReferenceDataSource: [ ]
-    TableName: [ ]
-    ReferenceSchema: [ ]
-        RecordColumns: [X]
-        RecordFormat: [X]
-        RecordEncoding: [X]
-    S3ReferenceDataSource: [ ]
-        FileKey: [X]
-        BucketARN: [X]
-```
-#### AWS::KinesisFirehose::DeliveryStream
-
-```ExtendedS3DestinationConfiguration: [ ]
-    ErrorOutputPrefix: [X]
-    DataFormatConversionConfiguration: [X]
-    BucketARN: [ ]
-    CompressionFormat: [ ]
-    BufferingHints: [ ]
-        IntervalInSeconds: [X]
-        SizeInMBs: [X]
-    EncryptionConfiguration: [ ]
-        KMSEncryptionConfig: [X]
-        NoEncryptionConfig: [X]
-    Prefix: [ ]
-    S3BackupMode: [ ]
-    CloudWatchLoggingOptions: [ ]
-        Enabled: [X]
-        LogGroupName: [X]
-        LogStreamName: [X]
-    S3BackupConfiguration: [ ]
-        EncryptionConfiguration: [ ]
-            KMSEncryptionConfig: [X]
-            NoEncryptionConfig: [X]
-        BucketARN: [ ]
-        Prefix: [ ]
-        BufferingHints: [ ]
-            IntervalInSeconds: [X]
-            SizeInMBs: [X]
-        ErrorOutputPrefix: [X]
-        CompressionFormat: [ ]
-        CloudWatchLoggingOptions: [ ]
-            Enabled: [X]
-            LogGroupName: [X]
-            LogStreamName: [X]
-        RoleARN: [ ]
-    RoleARN: [ ]
-    ProcessingConfiguration: [ ]
-        Enabled: [X]
-        Processors: [X]
-DeliveryStreamType: [ ]
-DeliveryStreamEncryptionConfigurationInput: [ ]
-    KeyARN: [ ]
-    KeyType: [ ]
-KinesisStreamSourceConfiguration: [ ]
-    RoleARN: [ ]
-    KinesisStreamARN: [ ]
-SplunkDestinationConfiguration: [ ]
-    S3Configuration: [ ]
-        EncryptionConfiguration: [ ]
-            KMSEncryptionConfig: [X]
-            NoEncryptionConfig: [X]
-        BucketARN: [ ]
-        Prefix: [ ]
-        BufferingHints: [ ]
-            IntervalInSeconds: [X]
-            SizeInMBs: [X]
-        ErrorOutputPrefix: [X]
-        CompressionFormat: [ ]
-        CloudWatchLoggingOptions: [ ]
-            Enabled: [X]
-            LogGroupName: [X]
-            LogStreamName: [X]
-        RoleARN: [ ]
-    HECEndpointType: [ ]
-    HECToken: [ ]
-    HECAcknowledgmentTimeoutInSeconds: [ ]
-    RetryOptions: [ ]
-        DurationInSeconds: [X]
-    HECEndpoint: [ ]
-    S3BackupMode: [ ]
-    CloudWatchLoggingOptions: [ ]
-        Enabled: [X]
-        LogGroupName: [X]
-        LogStreamName: [X]
-    ProcessingConfiguration: [ ]
-        Enabled: [X]
-        Processors: [X]
-ElasticsearchDestinationConfiguration: [ ]
-    S3Configuration: [ ]
-        EncryptionConfiguration: [ ]
-            KMSEncryptionConfig: [X]
-            NoEncryptionConfig: [X]
-        BucketARN: [ ]
-        Prefix: [ ]
-        BufferingHints: [ ]
-            IntervalInSeconds: [X]
-            SizeInMBs: [X]
-        ErrorOutputPrefix: [X]
-        CompressionFormat: [ ]
-        CloudWatchLoggingOptions: [ ]
-            Enabled: [X]
-            LogGroupName: [X]
-            LogStreamName: [X]
-        RoleARN: [ ]
-    IndexName: [ ]
-    VpcConfiguration: [ ]
-        RoleARN: [ ]
-        SubnetIds: [X]
-        SecurityGroupIds: [X]
-    RetryOptions: [ ]
-        DurationInSeconds: [X]
-    RoleARN: [ ]
-    BufferingHints: [ ]
-        IntervalInSeconds: [X]
-        SizeInMBs: [X]
-    TypeName: [ ]
-    ClusterEndpoint: [X]
-    S3BackupMode: [ ]
-    CloudWatchLoggingOptions: [ ]
-        Enabled: [X]
-        LogGroupName: [X]
-        LogStreamName: [X]
-    DomainARN: [ ]
-    IndexRotationPeriod: [ ]
-    ProcessingConfiguration: [ ]
-        Enabled: [X]
-        Processors: [X]
-Tags: [X]
-RedshiftDestinationConfiguration: [ ]
-    Username: [ ]
-    S3Configuration: [ ]
-        EncryptionConfiguration: [ ]
-            KMSEncryptionConfig: [X]
-            NoEncryptionConfig: [X]
-        BucketARN: [ ]
-        Prefix: [ ]
-        BufferingHints: [ ]
-            IntervalInSeconds: [X]
-            SizeInMBs: [X]
-        ErrorOutputPrefix: [X]
-        CompressionFormat: [ ]
-        CloudWatchLoggingOptions: [ ]
-            Enabled: [X]
-            LogGroupName: [X]
-            LogStreamName: [X]
-        RoleARN: [ ]
-    RetryOptions: [ ]
-        DurationInSeconds: [X]
-    RoleARN: [ ]
-    Password: [ ]
-    ClusterJDBCURL: [ ]
-    CopyCommand: [ ]
-        DataTableName: [X]
-        CopyOptions: [X]
-        DataTableColumns: [X]
-    CloudWatchLoggingOptions: [ ]
-        Enabled: [X]
-        LogGroupName: [X]
-        LogStreamName: [X]
-    S3BackupConfiguration: [ ]
-        EncryptionConfiguration: [ ]
-            KMSEncryptionConfig: [X]
-            NoEncryptionConfig: [X]
-        BucketARN: [ ]
-        Prefix: [ ]
-        BufferingHints: [ ]
-            IntervalInSeconds: [X]
-            SizeInMBs: [X]
-        ErrorOutputPrefix: [X]
-        CompressionFormat: [ ]
-        CloudWatchLoggingOptions: [ ]
-            Enabled: [X]
-            LogGroupName: [X]
-            LogStreamName: [X]
-        RoleARN: [ ]
-    ProcessingConfiguration: [ ]
-        Enabled: [X]
-        Processors: [X]
-    S3BackupMode: [ ]
-HttpEndpointDestinationConfiguration: [X]
-DeliveryStreamName: [ ]
-S3DestinationConfiguration: [ ]
-    EncryptionConfiguration: [ ]
-        KMSEncryptionConfig: [X]
-        NoEncryptionConfig: [X]
-    BucketARN: [ ]
-    Prefix: [ ]
-    BufferingHints: [ ]
-        IntervalInSeconds: [X]
-        SizeInMBs: [X]
-    ErrorOutputPrefix: [X]
-    CompressionFormat: [ ]
-    CloudWatchLoggingOptions: [ ]
-        Enabled: [X]
-        LogGroupName: [X]
-        LogStreamName: [X]
-    RoleARN: [ ]
-```
-#### AWS::LakeFormation::DataLakeSettings
-
-```Admins: [ ]
-    DataLakePrincipalIdentifier: [X]
-```
-#### AWS::LakeFormation::Permissions
-
-```DataLakePrincipal: [ ]
-    DataLakePrincipalIdentifier: [X]
-Permissions: [ ]
-Resource: [ ]
-    TableWithColumnsResource: [ ]
-        ColumnNames: [X]
-        DatabaseName: [X]
-        Name: [X]
-        ColumnWildcard: [X]
-        CatalogId: [X]
-    DatabaseResource: [ ]
-        Name: [X]
-        CatalogId: [X]
-    DataLocationResource: [ ]
-        S3Resource: [ ]
-        CatalogId: [X]
-    TableResource: [ ]
-        CatalogId: [X]
-        Name: [X]
-        DatabaseName: [X]
-        TableWildcard: [X]
-PermissionsWithGrantOption: [ ]
-```
-#### AWS::LakeFormation::Resource
-
-```ResourceArn: [ ]
-UseServiceLinkedRole: [X]
-RoleArn: [ ]
-```
-#### AWS::Lambda::Alias
-
-```Description: [ ]
-RoutingConfig: [ ]
-    AdditionalVersionWeights: [ ]
-        FunctionVersion: [ ]
-        FunctionWeight: [X]
-FunctionVersion: [ ]
-ProvisionedConcurrencyConfig: [ ]
-    ProvisionedConcurrentExecutions: [X]
-FunctionName: [ ]
-Name: [ ]
-```
-#### AWS::Lambda::EventInvokeConfig
-
-```MaximumEventAgeInSeconds: [ ]
-MaximumRetryAttempts: [ ]
-DestinationConfig: [ ]
-    OnSuccess: [X]
-    OnFailure: [X]
-FunctionName: [ ]
-Qualifier: [ ]
-```
-#### AWS::Lambda::EventSourceMapping
-
-```MaximumBatchingWindowInSeconds: [ ]
-FunctionName: [ ]
-MaximumRecordAgeInSeconds: [ ]
-Topics: [ ]
-BatchSize: [ ]
-DestinationConfig: [ ]
-    OnFailure: [ ]
-        Destination: [ ]
-Enabled: [ ]
-EventSourceArn: [ ]
-StartingPosition: [X]
-ParallelizationFactor: [ ]
-MaximumRetryAttempts: [ ]
-Queues: [X]
-SourceAccessConfigurations: [X]
-BisectBatchOnFunctionError: [ ]
-```
-#### AWS::Lambda::Function
-
-```Layers: [ ]
-TracingConfig: [ ]
-    Mode: [X]
+Triggers: [ ]
 Code: [ ]
-    S3Bucket: [ ]
-    S3Key: [ ]
-    ZipFile: [X]
-    S3ObjectVersion: [ ]
-DeadLetterConfig: [ ]
-    TargetArn: [ ]
-Description: [ ]
-VpcConfig: [ ]
-    SubnetIds: [ ]
-    SecurityGroupIds: [ ]
-Tags: [X]
-KmsKeyArn: [ ]
-ReservedConcurrentExecutions: [ ]
-MemorySize: [ ]
-Environment: [ ]
-    Variables: [ ]
-Handler: [ ]
-Role: [ ]
-Timeout: [ ]
-FileSystemConfigs: [ ]
-    Arn: [X]
-    LocalMountPath: [X]
-Runtime: [ ]
-FunctionName: [ ]
-```
-#### AWS::Lambda::LayerVersion
-
-```Content: [ ]
-    S3Bucket: [ ]
-    S3ObjectVersion: [X]
-    S3Key: [ ]
-LayerName: [ ]
-Description: [ ]
-LicenseInfo: [ ]
-CompatibleRuntimes: [ ]
-```
-#### AWS::Lambda::LayerVersionPermission
-
-```Action: [ ]
-LayerVersionArn: [ ]
-OrganizationId: [ ]
-Principal: [ ]
-```
-#### AWS::Lambda::Permission
-
-```FunctionName: [ ]
-Action: [ ]
-SourceAccount: [X]
-SourceArn: [ ]
-EventSourceToken: [X]
-Principal: [ ]
-```
-#### AWS::Lambda::Version
-
-```CodeSha256: [X]
-ProvisionedConcurrencyConfig: [ ]
-    ProvisionedConcurrentExecutions: [X]
-FunctionName: [ ]
-Description: [ ]
-```
-#### AWS::Logs::Destination
-
-```TargetArn: [ ]
-RoleArn: [ ]
-DestinationName: [ ]
-DestinationPolicy: [ ]
-```
-#### AWS::Logs::LogGroup
-
-```RetentionInDays: [ ]
-KmsKeyId: [X]
-LogGroupName: [ ]
-```
-#### AWS::Logs::LogStream
-
-```LogGroupName: [ ]
-LogStreamName: [ ]
-```
-#### AWS::Logs::MetricFilter
-
-```MetricTransformations: [ ]
-    DefaultValue: [ ]
-    MetricValue: [ ]
-    MetricNamespace: [ ]
-    MetricName: [ ]
-FilterPattern: [ ]
-LogGroupName: [ ]
-```
-#### AWS::Logs::SubscriptionFilter
-
-```RoleArn: [ ]
-DestinationArn: [ ]
-FilterPattern: [ ]
-LogGroupName: [ ]
-```
-#### AWS::MSK::Cluster
-
-```LoggingInfo: [ ]
-    BrokerLogs: [X]
-EncryptionInfo: [ ]
-    EncryptionInTransit: [X]
-    EncryptionAtRest: [X]
+RepositoryDescription: [X]
+RepositoryName: [X]
 Tags: [ ]
-ClusterName: [ ]
-KafkaVersion: [ ]
-BrokerNodeGroupInfo: [ ]
-    ClientSubnets: [ ]
-    StorageInfo: [ ]
-        EBSStorageInfo: [ ]
-            VolumeSize: [X]
-    BrokerAZDistribution: [ ]
-    SecurityGroups: [ ]
-    InstanceType: [ ]
-NumberOfBrokerNodes: [ ]
-ClientAuthentication: [ ]
-    Tls: [X]
-    Sasl: [X]
-EnhancedMonitoring: [ ]
-OpenMonitoring: [ ]
-    Prometheus: [X]
-ConfigurationInfo: [ ]
-    Arn: [ ]
-    Revision: [ ]
 ```
-#### AWS::Macie::CustomDataIdentifier
 
-```Regex: [ ]
-Name: [ ]
-MaximumMatchDistance: [ ]
-Keywords: [ ]
-IgnoreWords: [ ]
-Description: [ ]
+#### AWS::CodeDeploy::Application
+
 ```
-#### AWS::Macie::FindingsFilter
-
-```Action: [ ]
-Position: [ ]
-FindingCriteria: [ ]
-    Criterion: [ ]
-Name: [ ]
-Description: [ ]
+ApplicationName: [X]
+ComputePlatform: [X]
 ```
-#### AWS::Macie::Session
 
-```Status: [ ]
-FindingPublishingFrequency: [ ]
+#### AWS::CodeDeploy::DeploymentConfig
+
 ```
-#### AWS::ManagedBlockchain::Member
-
-```NetworkConfiguration: [ ]
-    Name: [ ]
-    NetworkFrameworkConfiguration: [ ]
-        NetworkFabricConfiguration: [ ]
-            Edition: [ ]
-    Framework: [ ]
-    Description: [ ]
-    FrameworkVersion: [ ]
-    VotingPolicy: [ ]
-        ApprovalThresholdPolicy: [X]
-NetworkId: [ ]
-InvitationId: [X]
-MemberConfiguration: [ ]
-    MemberFrameworkConfiguration: [ ]
-        MemberFabricConfiguration: [ ]
-            AdminUsername: [ ]
-            AdminPassword: [ ]
-    Description: [ ]
-    Name: [ ]
+MinimumHealthyHosts: [X]
+    (inherited)
+    (inherited)
+DeploymentConfigName: [X]
 ```
-#### AWS::ManagedBlockchain::Node
 
-```NetworkId: [ ]
-NodeConfiguration: [ ]
-    AvailabilityZone: [ ]
-    InstanceType: [ ]
-MemberId: [ ]
+#### AWS::CodeDeploy::DeploymentGroup
+
 ```
-#### AWS::MediaConvert::JobTemplate
-
-```Category: [ ]
-Priority: [ ]
-Description: [ ]
-Tags: [X]
-Queue: [ ]
-StatusUpdateInterval: [ ]
-SettingsJson: [ ]
-AccelerationSettings: [ ]
-    Mode: [X]
-HopDestinations: [X]
-Name: [ ]
+ApplicationName: [X]
+AutoRollbackConfiguration: [X]
+    (inherited)
+    (inherited)
+LoadBalancerInfo: [X]
+    (inherited)
+    (inherited)
+Deployment: [ ]
+DeploymentConfigName: [X]
+AutoScalingGroups: [X]
+AlarmConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Ec2TagFilters: [X]
+    Type: [ ]
+    Key: [ ]
+    Value: [ ]
+Ec2TagSet: [X]
+    Ec2TagSetList: [X]
+        Ec2TagGroup: [X]
+            Type: [ ]
+            Key: [ ]
+            Value: [ ]
+TriggerConfigurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+DeploymentStyle: [X]
+    (inherited)
+    (inherited)
+ServiceRoleArn: [X]
+DeploymentGroupName: [X]
+OnPremisesTagSet: [X]
+    OnPremisesTagSetList: [X]
+        OnPremisesTagGroup: [X]
+            Type: [ ]
+            Key: [ ]
+            Value: [ ]
+OnPremisesInstanceTagFilters: [X]
+    Type: [ ]
+    Key: [ ]
+    Value: [ ]
 ```
-#### AWS::MediaConvert::Preset
 
-```Category: [ ]
-Description: [ ]
-SettingsJson: [ ]
-Name: [ ]
-Tags: [X]
+#### AWS::CodeGuruProfiler::ProfilingGroup
+
 ```
-#### AWS::MediaConvert::Queue
-
-```Status: [ ]
-Tags: [X]
-PricingPlan: [ ]
-Name: [ ]
-Description: [ ]
-```
-#### AWS::MediaLive::Channel
-
-```InputAttachments: [ ]
-    AutomaticInputFailoverSettings: [X]
-    InputId: [X]
-    InputAttachmentName: [X]
-    InputSettings: [X]
-Name: [ ]
+AgentPermissions: [ ]
+ProfilingGroupName: [X]
+AnomalyDetectionNotificationConfiguration: [X]
+    (inherited)
+    (inherited)
+ComputePlatform: [X]
 Tags: [ ]
-LogLevel: [ ]
-RoleArn: [ ]
-InputSpecification: [ ]
-    Codec: [X]
-    Resolution: [X]
-    MaximumBitrate: [X]
-ChannelClass: [ ]
-EncoderSettings: [ ]
-    NielsenConfiguration: [X]
-    TimecodeConfig: [X]
-    AvailConfiguration: [X]
-    AvailBlanking: [X]
-    OutputGroups: [X]
-    GlobalConfiguration: [X]
-    CaptionDescriptions: [X]
-    VideoDescriptions: [X]
-    BlackoutSlate: [X]
-    FeatureActivations: [X]
-    AudioDescriptions: [X]
-Destinations: [ ]
-    MultiplexSettings: [X]
-    Settings: [X]
-    Id: [X]
-    MediaPackageSettings: [X]
 ```
-#### AWS::MediaLive::Input
 
-```MediaConnectFlows: [X]
-InputSecurityGroups: [X]
-InputDevices: [X]
-RoleArn: [X]
-Tags: [ ]
-Sources: [X]
-Vpc: [X]
-Destinations: [X]
+#### AWS::CodeGuruReviewer::RepositoryAssociation
+
+```
+Owner: [X]
+ConnectionArn: [X]
 Type: [X]
 Name: [X]
 ```
-#### AWS::MediaLive::InputSecurityGroup
 
-```WhitelistRules: [ ]
-    Cidr: [X]
+#### AWS::CodePipeline::CustomActionType
+
+```
+Category: [X]
+Tags: [ ]
+Settings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ConfigurationProperties: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Version: [X]
+Provider: [X]
+InputArtifactDetails: [X]
+    (inherited)
+    (inherited)
+OutputArtifactDetails: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CodePipeline::Pipeline
+
+```
+Name: [X]
+Tags: [ ]
+RoleArn: [X]
+DisableInboundStageTransitions: [ ]
+ArtifactStore: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Stages: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+RestartExecutionOnUpdate: [ ]
+ArtifactStores: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CodePipeline::Webhook
+
+```
+AuthenticationConfiguration: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+TargetPipelineVersion: [ ]
+RegisterWithThirdParty: [ ]
+Authentication: [X]
+TargetPipeline: [X]
+TargetAction: [X]
+Filters: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::CodeStar::GitHubRepository
+
+```
+EnableIssues: [X]
+Code: [ ]
+RepositoryAccessToken: [X]
+RepositoryDescription: [ ]
+IsPrivate: [ ]
+RepositoryName: [X]
+RepositoryOwner: [X]
+```
+
+#### AWS::CodeStarConnections::Connection
+
+```
+HostArn: [X]
+ProviderType: [X]
+ConnectionName: [X]
 Tags: [ ]
 ```
-#### AWS::MediaPackage::Asset
 
-``````
-#### AWS::MediaPackage::Channel
+#### AWS::CodeStarNotifications::NotificationRule
 
-```Description: [ ]
-Id: [ ]
+```
+Status: [X]
+EventTypeIds: [X]
+Resource: [X]
+Name: [X]
+Tags: [X]
+DetailType: [X]
+Targets: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::Cognito::IdentityPool
+
+```
+DeveloperProviderName: [X]
+SamlProviderARNs: [X]
+SupportedLoginProviders: [X]
+AllowUnauthenticatedIdentities: [X]
+CognitoIdentityProviders: [X]
+    ServerSideTokenCheck: [ ]
+    ProviderName: [ ]
+    ClientId: [ ]
+IdentityPoolName: [X]
+PushSync: [ ]
+CognitoStreams: [ ]
+AllowClassicFlow: [ ]
+OpenIdConnectProviderARNs: [X]
+CognitoEvents: [ ]
+```
+
+#### AWS::Cognito::IdentityPoolRoleAttachment
+
+```
+RoleMappings: [X]
+Roles: [X]
+IdentityPoolId: [X]
+```
+
+#### AWS::Cognito::UserPool
+
+```
+AliasAttributes: [X]
+EmailVerificationSubject: [X]
+MfaConfiguration: [X]
+AccountRecoverySetting: [X]
+    RecoveryMechanisms: [ ]
+SmsAuthenticationMessage: [X]
+UserPoolAddOns: [X]
+    AdvancedSecurityMode: [ ]
+SmsConfiguration: [X]
+    ExternalId: [ ]
+    SnsCallerArn: [ ]
+AutoVerifiedAttributes: [X]
+UsernameConfiguration: [X]
+    CaseSensitive: [ ]
+Schema: [X]
+    Name: [ ]
+    NumberAttributeConstraints: [ ]
+    StringAttributeConstraints: [ ]
+    DeveloperOnlyAttribute: [ ]
+    Required: [ ]
+    AttributeDataType: [ ]
+    Mutable: [ ]
+AdminCreateUserConfig: [X]
+    UnusedAccountValidityDays: [ ]
+    InviteMessageTemplate: [ ]
+    AllowAdminCreateUserOnly: [ ]
+EmailConfiguration: [X]
+    From: [ ]
+    EmailSendingAccount: [ ]
+    SourceArn: [ ]
+    ConfigurationSet: [ ]
+    ReplyToEmailAddress: [ ]
+EnabledMfas: [ ]
+UsernameAttributes: [X]
+LambdaConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    PreTokenGeneration: [ ]
+    (inherited)
+    UserMigration: [ ]
+UserPoolName: [X]
+VerificationMessageTemplate: [X]
+    EmailMessageByLink: [ ]
+    EmailSubjectByLink: [ ]
+    DefaultEmailOption: [ ]
+    EmailMessage: [ ]
+    EmailSubject: [ ]
+    SmsMessage: [ ]
+Policies: [X]
+    PasswordPolicy: [ ]
+UserPoolTags: [X]
+DeviceConfiguration: [X]
+    ChallengeRequiredOnNewDevice: [ ]
+    DeviceOnlyRememberedOnUserPrompt: [ ]
+SmsVerificationMessage: [X]
+EmailVerificationMessage: [X]
+```
+
+#### AWS::Cognito::UserPoolClient
+
+```
+TokenValidityUnits: [ ]
+CallbackURLs: [ ]
+AllowedOAuthScopes: [ ]
+AccessTokenValidity: [ ]
+UserPoolId: [X]
+AllowedOAuthFlowsUserPoolClient: [ ]
+AnalyticsConfiguration: [X]
+    UserDataShared: [ ]
+    ExternalId: [ ]
+    RoleArn: [ ]
+    ApplicationId: [ ]
+IdTokenValidity: [ ]
+LogoutURLs: [ ]
+AllowedOAuthFlows: [ ]
+PreventUserExistenceErrors: [X]
+GenerateSecret: [X]
+ExplicitAuthFlows: [X]
+ReadAttributes: [X]
+DefaultRedirectURI: [ ]
+SupportedIdentityProviders: [ ]
+WriteAttributes: [X]
+RefreshTokenValidity: [X]
+ClientName: [X]
+```
+
+#### AWS::Cognito::UserPoolDomain
+
+```
+Domain: [X]
+CustomDomainConfig: [X]
+    CertificateArn: [ ]
+UserPoolId: [X]
+```
+
+#### AWS::Cognito::UserPoolGroup
+
+```
+UserPoolId: [X]
+GroupName: [X]
+RoleArn: [X]
+Description: [X]
+Precedence: [X]
+```
+
+#### AWS::Cognito::UserPoolIdentityProvider
+
+```
+ProviderName: [X]
+UserPoolId: [X]
+ProviderType: [X]
+ProviderDetails: [X]
+IdpIdentifiers: [X]
+AttributeMapping: [X]
+```
+
+#### AWS::Cognito::UserPoolResourceServer
+
+```
+Scopes: [X]
+    ScopeDescription: [ ]
+    ScopeName: [ ]
+Identifier: [X]
+Name: [X]
+UserPoolId: [X]
+```
+
+#### AWS::Cognito::UserPoolRiskConfigurationAttachment
+
+```
+RiskExceptionConfiguration: [X]
+    SkippedIPRangeList: [ ]
+    BlockedIPRangeList: [ ]
+CompromisedCredentialsRiskConfiguration: [X]
+    EventFilter: [ ]
+    Actions: [ ]
+AccountTakeoverRiskConfiguration: [X]
+    NotifyConfiguration: [ ]
+    Actions: [ ]
+UserPoolId: [X]
+ClientId: [X]
+```
+
+#### AWS::Cognito::UserPoolUICustomizationAttachment
+
+```
+CSS: [X]
+UserPoolId: [X]
+ClientId: [X]
+```
+
+#### AWS::Cognito::UserPoolUser
+
+```
+Username: [X]
+MessageAction: [ ]
+UserPoolId: [X]
+ValidationData: [ ]
+UserAttributes: [X]
+    Name: [ ]
+    Value: [ ]
+ForceAliasCreation: [ ]
+ClientMetadata: [ ]
+DesiredDeliveryMediums: [ ]
+```
+
+#### AWS::Cognito::UserPoolUserToGroupAttachment
+
+```
+Username: [X]
+GroupName: [X]
+UserPoolId: [X]
+```
+
+#### AWS::Config::AggregationAuthorization
+
+```
+AuthorizedAccountId: [X]
+AuthorizedAwsRegion: [X]
 Tags: [ ]
+```
+
+#### AWS::Config::ConfigRule
+
+```
+Description: [X]
+ConfigRuleName: [X]
+MaximumExecutionFrequency: [X]
+Source: [X]
+    Owner: [ ]
+    SourceDetails: [ ]
+    SourceIdentifier: [ ]
+InputParameters: [X]
+Scope: [X]
+    ComplianceResourceTypes: [ ]
+    ComplianceResourceId: [ ]
+    TagKey: [ ]
+    TagValue: [ ]
+```
+
+#### AWS::Config::ConfigurationAggregator
+
+```
+OrganizationAggregationSource: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+ConfigurationAggregatorName: [X]
+AccountAggregationSources: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::Config::ConfigurationRecorder
+
+```
+RecordingGroup: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+RoleARN: [X]
+Name: [X]
+```
+
+#### AWS::Config::ConformancePack
+
+```
+TemplateBody: [ ]
+ConformancePackInputParameters: [X]
+    ParameterName: [ ]
+    ParameterValue: [ ]
+DeliveryS3Bucket: [X]
+ConformancePackName: [X]
+DeliveryS3KeyPrefix: [X]
+TemplateS3Uri: [ ]
+```
+
+#### AWS::Config::DeliveryChannel
+
+```
+S3KeyPrefix: [X]
+Name: [X]
+ConfigSnapshotDeliveryProperties: [X]
+    (inherited)
+S3BucketName: [X]
+SnsTopicARN: [X]
+```
+
+#### AWS::Config::OrganizationConfigRule
+
+```
+OrganizationManagedRuleMetadata: [X]
+    RuleIdentifier: [ ]
+    TagKeyScope: [ ]
+    Description: [ ]
+    MaximumExecutionFrequency: [ ]
+    ResourceIdScope: [ ]
+    ResourceTypesScope: [ ]
+    InputParameters: [ ]
+    TagValueScope: [ ]
+OrganizationCustomRuleMetadata: [X]
+    TagKeyScope: [ ]
+    Description: [ ]
+    LambdaFunctionArn: [ ]
+    MaximumExecutionFrequency: [ ]
+    ResourceIdScope: [ ]
+    ResourceTypesScope: [ ]
+    InputParameters: [ ]
+    TagValueScope: [ ]
+    OrganizationConfigRuleTriggerTypes: [ ]
+OrganizationConfigRuleName: [X]
+ExcludedAccounts: [X]
+```
+
+#### AWS::Config::OrganizationConformancePack
+
+```
+TemplateBody: [ ]
+ConformancePackInputParameters: [X]
+    ParameterName: [ ]
+    ParameterValue: [ ]
+OrganizationConformancePackName: [X]
+DeliveryS3Bucket: [X]
+DeliveryS3KeyPrefix: [X]
+TemplateS3Uri: [ ]
+ExcludedAccounts: [X]
+```
+
+#### AWS::Config::RemediationConfiguration
+
+```
+TargetType: [X]
+MaximumAutomaticAttempts: [ ]
+Parameters: [X]
+ConfigRuleName: [X]
+ResourceType: [X]
+ExecutionControls: [X]
+    SsmControls: [ ]
+TargetId: [X]
+RetryAttemptSeconds: [ ]
+Automatic: [ ]
+TargetVersion: [X]
+```
+
+#### AWS::DAX::Cluster
+
+```
+ReplicationFactor: [ ]
+AvailabilityZones: [X]
+NodeType: [X]
+Description: [X]
+Tags: [ ]
+ClusterName: [X]
+SubnetGroupName: [X]
+IAMRoleARN: [X]
+SecurityGroupIds: [X]
+ParameterGroupName: [X]
+SSESpecification: [X]
+    (inherited)
+NotificationTopicARN: [X]
+PreferredMaintenanceWindow: [X]
+```
+
+#### AWS::DAX::ParameterGroup
+
+```
+Description: [X]
+ParameterGroupName: [X]
+ParameterNameValues: [X]
+```
+
+#### AWS::DAX::SubnetGroup
+
+```
+SubnetIds: [X]
+SubnetGroupName: [X]
+Description: [X]
+```
+
+#### AWS::DLM::LifecyclePolicy
+
+```
+State: [X]
+ExecutionRoleArn: [X]
+Description: [X]
+PolicyDetails: [X]
+    ResourceTypes: [ ]
+    PolicyType: [ ]
+    Parameters: [ ]
+    TargetTags: [ ]
+    Schedules: [ ]
+```
+
+#### AWS::DMS::Certificate
+
+```
+CertificateIdentifier: [X]
+CertificatePem: [X]
+CertificateWallet: [X]
+```
+
+#### AWS::DMS::Endpoint
+
+```
+Username: [X]
+CertificateArn: [X]
+NeptuneSettings: [X]
+    IamAuthEnabled: [ ]
+    MaxFileSize: [ ]
+    ErrorRetryDuration: [ ]
+    (inherited)
+    MaxRetryCount: [ ]
+    S3BucketName: [ ]
+    S3BucketFolder: [ ]
+ElasticsearchSettings: [ ]
+DynamoDbSettings: [X]
+    (inherited)
+MongoDbSettings: [X]
+    (inherited)
+    NestingLevel: [ ]
+    DocsToInvestigate: [ ]
+    AuthSource: [ ]
+    (inherited)
+    AuthMechanism: [ ]
+    AuthType: [ ]
+    (inherited)
+    ExtractDocId: [ ]
+    Password: [ ]
+    (inherited)
+Tags: [ ]
+Port: [X]
+EndpointType: [X]
+EngineName: [X]
+S3Settings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ExtraConnectionAttributes: [X]
+DatabaseName: [X]
+KmsKeyId: [X]
+SslMode: [X]
+KafkaSettings: [X]
+    Topic: [ ]
+    Broker: [ ]
+Password: [ ]
+EndpointIdentifier: [X]
+ServerName: [X]
+KinesisSettings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::DMS::EventSubscription
+
+```
+EventCategories: [X]
+SourceType: [X]
+Tags: [ ]
+Enabled: [X]
+SnsTopicArn: [X]
+SubscriptionName: [ ]
+SourceIds: [X]
+```
+
+#### AWS::DMS::ReplicationInstance
+
+```
+MultiAZ: [X]
+AvailabilityZone: [X]
+PubliclyAccessible: [X]
+AllowMajorVersionUpgrade: [ ]
+Tags: [ ]
+ReplicationInstanceClass: [X]
+VpcSecurityGroupIds: [X]
+AutoMinorVersionUpgrade: [X]
+KmsKeyId: [X]
+AllocatedStorage: [X]
+EngineVersion: [X]
+ReplicationInstanceIdentifier: [X]
+PreferredMaintenanceWindow: [X]
+ReplicationSubnetGroupIdentifier: [X]
+```
+
+#### AWS::DMS::ReplicationSubnetGroup
+
+```
+ReplicationSubnetGroupDescription: [X]
+SubnetIds: [X]
+ReplicationSubnetGroupIdentifier: [X]
+Tags: [ ]
+```
+
+#### AWS::DMS::ReplicationTask
+
+```
+SourceEndpointArn: [X]
+CdcStartPosition: [X]
+CdcStopPosition: [X]
+ReplicationInstanceArn: [X]
+ReplicationTaskIdentifier: [X]
+TableMappings: [X]
+Tags: [ ]
+TaskData: [X]
+MigrationType: [X]
+TargetEndpointArn: [X]
+ReplicationTaskSettings: [X]
+CdcStartTime: [X]
+```
+
+#### AWS::DataPipeline::Pipeline
+
+```
+Activate: [ ]
+Description: [X]
+PipelineObjects: [ ]
+ParameterValues: [ ]
+ParameterObjects: [ ]
+PipelineTags: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+```
+
+#### AWS::Detective::Graph
+
+```
+```
+
+#### AWS::Detective::MemberInvitation
+
+```
+MemberEmailAddress: [X]
+GraphArn: [X]
+Message: [ ]
+MemberId: [X]
+```
+
+#### AWS::DirectoryService::MicrosoftAD
+
+```
+CreateAlias: [X]
+Name: [X]
+VpcSettings: [X]
+    (inherited)
+    (inherited)
+Edition: [X]
+EnableSso: [X]
+ShortName: [X]
+Password: [X]
+```
+
+#### AWS::DirectoryService::SimpleAD
+
+```
+CreateAlias: [X]
+Description: [X]
+VpcSettings: [X]
+    (inherited)
+    (inherited)
+EnableSso: [X]
+Name: [X]
+ShortName: [X]
+Password: [X]
+Size: [X]
+```
+
+#### AWS::DocDB::DBCluster
+
+```
+DBClusterParameterGroupName: [X]
+DeletionProtection: [ ]
+AvailabilityZones: [X]
+DBClusterIdentifier: [X]
+Tags: [ ]
+MasterUsername: [X]
+VpcSecurityGroupIds: [X]
+MasterUserPassword: [X]
+Port: [X]
+PreferredBackupWindow: [X]
+KmsKeyId: [X]
+StorageEncrypted: [X]
+EngineVersion: [X]
+BackupRetentionPeriod: [X]
+DBSubnetGroupName: [X]
+EnableCloudwatchLogsExports: [X]
+PreferredMaintenanceWindow: [X]
+SnapshotIdentifier: [ ]
+```
+
+#### AWS::DocDB::DBClusterParameterGroup
+
+```
+Parameters: [X]
+Tags: [ ]
+Name: [X]
+Family: [X]
+Description: [X]
+```
+
+#### AWS::DocDB::DBInstance
+
+```
+AvailabilityZone: [X]
+DBClusterIdentifier: [X]
+Tags: [ ]
+AutoMinorVersionUpgrade: [X]
+DBInstanceIdentifier: [X]
+DBInstanceClass: [X]
+PreferredMaintenanceWindow: [X]
+```
+
+#### AWS::DocDB::DBSubnetGroup
+
+```
+DBSubnetGroupName: [X]
+DBSubnetGroupDescription: [X]
+SubnetIds: [X]
+Tags: [ ]
+```
+
+#### AWS::DynamoDB::Table
+
+```
+GlobalSecondaryIndexes: [X]
+    KeySchema: [X]
+        KeyType: [ ]
+        AttributeName: [ ]
+    (inherited)
+    Projection: [X]
+        ProjectionType: [ ]
+        NonKeyAttributes: [ ]
+    (inherited)
+AttributeDefinitions: [X]
+    AttributeName: [ ]
+    AttributeType: [ ]
+LocalSecondaryIndexes: [X]
+    KeySchema: [X]
+        KeyType: [ ]
+        AttributeName: [ ]
+    (inherited)
+    Projection: [X]
+        ProjectionType: [ ]
+        NonKeyAttributes: [ ]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+ProvisionedThroughput: [X]
+    (inherited)
+    (inherited)
+TableName: [X]
+BillingMode: [X]
+PointInTimeRecoverySpecification: [ ]
+StreamSpecification: [X]
+    (inherited)
+TimeToLiveSpecification: [ ]
+KeySchema: [X]
+    KeyType: [ ]
+    AttributeName: [ ]
+SSESpecification: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::CapacityReservation
+
+```
+EndDateType: [X]
+AvailabilityZone: [X]
+EndDate: [X]
+InstanceMatchCriteria: [X]
+TagSpecifications: [X]
+    (inherited)
+    Tags: [X]
+        Key: [ ]
+        Value: [ ]
+InstancePlatform: [X]
+EphemeralStorage: [X]
+Tenancy: [X]
+EbsOptimized: [X]
+InstanceType: [X]
+InstanceCount: [X]
+```
+
+#### AWS::EC2::CarrierGateway
+
+```
+VpcId: [X]
+Tags: [X]
+    Tags: [X]
+        Key: [ ]
+        Value: [ ]
+```
+
+#### AWS::EC2::ClientVpnAuthorizationRule
+
+```
+ClientVpnEndpointId: [X]
+TargetNetworkCidr: [X]
+Description: [X]
+AuthorizeAllGroups: [X]
+AccessGroupId: [X]
+```
+
+#### AWS::EC2::ClientVpnEndpoint
+
+```
+VpcId: [X]
+Description: [X]
+TransportProtocol: [X]
+TagSpecifications: [X]
+    (inherited)
+    Tags: [X]
+        Key: [ ]
+        Value: [ ]
+ConnectionLogOptions: [X]
+    CloudwatchLogStream: [ ]
+    Enabled: [ ]
+    CloudwatchLogGroup: [ ]
+AuthenticationOptions: [X]
+    (inherited)
+    (inherited)
+    ActiveDirectory: [X]
+        DirectoryId: [ ]
+    (inherited)
+ClientCidrBlock: [X]
+SecurityGroupIds: [X]
+ServerCertificateArn: [X]
+VpnPort: [X]
+SplitTunnel: [X]
+DnsServers: [X]
+```
+
+#### AWS::EC2::ClientVpnRoute
+
+```
+ClientVpnEndpointId: [X]
+DestinationCidrBlock: [X]
+TargetVpcSubnetId: [X]
+Description: [X]
+```
+
+#### AWS::EC2::ClientVpnTargetNetworkAssociation
+
+```
+ClientVpnEndpointId: [X]
+SubnetId: [X]
+```
+
+#### AWS::EC2::CustomerGateway
+
+```
+BgpAsn: [X]
+IpAddress: [X]
+Type: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::DHCPOptions
+
+```
+DomainName: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+DomainNameServers: [X]
+NtpServers: [ ]
+NetbiosNameServers: [ ]
+NetbiosNodeType: [ ]
+```
+
+#### AWS::EC2::EC2Fleet
+
+```
+ValidUntil: [X]
+LaunchTemplateConfigs: [X]
+    (inherited)
+    Overrides: [X]
+        (inherited)
+        Placement: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+TagSpecifications: [X]
+    (inherited)
+    Tags: [X]
+        Key: [ ]
+        Value: [ ]
+ExcessCapacityTerminationPolicy: [X]
+TargetCapacitySpecification: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+OnDemandOptions: [X]
+    MinTargetCapacity: [ ]
+    SingleAvailabilityZone: [ ]
+    MaxTotalPrice: [ ]
+    SingleInstanceType: [ ]
+    CapacityReservationOptions: [ ]
+    (inherited)
+SpotOptions: [X]
+    MinTargetCapacity: [ ]
+    (inherited)
+    SingleAvailabilityZone: [ ]
+    (inherited)
+    MaxTotalPrice: [ ]
+    SingleInstanceType: [ ]
+    (inherited)
+ValidFrom: [X]
+Type: [X]
+ReplaceUnhealthyInstances: [X]
+TerminateInstancesWithExpiration: [X]
+```
+
+#### AWS::EC2::EIP
+
+```
+InstanceId: [X]
+Domain: [X]
+PublicIpv4Pool: [X]
+Tags: [X]
     Key: [ ]
     Value: [ ]
 ```
+
+#### AWS::EC2::EIPAssociation
+
+```
+InstanceId: [X]
+EIP: [ ]
+NetworkInterfaceId: [X]
+AllocationId: [X]
+PrivateIpAddress: [X]
+```
+
+#### AWS::EC2::EgressOnlyInternetGateway
+
+```
+VpcId: [X]
+```
+
+#### AWS::EC2::FlowLog
+
+```
+LogDestinationType: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+ResourceType: [X]
+ResourceId: [X]
+LogGroupName: [X]
+TrafficType: [X]
+LogFormat: [X]
+DeliverLogsPermissionArn: [X]
+MaxAggregationInterval: [X]
+LogDestination: [X]
+```
+
+#### AWS::EC2::GatewayRouteTableAssociation
+
+```
+GatewayId: [X]
+RouteTableId: [X]
+```
+
+#### AWS::EC2::Host
+
+```
+AvailabilityZone: [X]
+InstanceType: [X]
+AutoPlacement: [X]
+HostRecovery: [ ]
+```
+
+#### AWS::EC2::Instance
+
+```
+Monitoring: [X]
+LicenseSpecifications: [ ]
+EbsOptimized: [X]
+Affinity: [X]
+RamdiskId: [X]
+PrivateIpAddress: [ ]
+CpuOptions: [X]
+    CoreCount: [ ]
+    ThreadsPerCore: [ ]
+Tags: [X]
+    (inherited)
+    (inherited)
+PlacementGroupName: [X]
+ImageId: [X]
+KeyName: [X]
+SsmAssociations: [ ]
+CreditSpecification: [ ]
+HostResourceGroupArn: [X]
+SecurityGroups: [ ]
+InstanceType: [X]
+NetworkInterfaces: [ ]
+AdditionalInfo: [ ]
+SourceDestCheck: [X]
+LaunchTemplate: [ ]
+ElasticGpuSpecifications: [X]
+    (inherited)
+InstanceInitiatedShutdownBehavior: [ ]
+SecurityGroupIds: [X]
+SubnetId: [X]
+AvailabilityZone: [X]
+Volumes: [ ]
+KernelId: [X]
+IamInstanceProfile: [X]
+UserData: [X]
+HostId: [X]
+Tenancy: [X]
+Ipv6AddressCount: [ ]
+ElasticInferenceAccelerators: [ ]
+BlockDeviceMappings: [X]
+    Ebs: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        KmsKeyId: [ ]
+        (inherited)
+        (inherited)
+    (inherited)
+    VirtualName: [ ]
+    NoDevice: [ ]
+HibernationOptions: [X]
+    Configured: [ ]
+Ipv6Addresses: [ ]
+DisableApiTermination: [ ]
+```
+
+#### AWS::EC2::InternetGateway
+
+```
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::LaunchTemplate
+
+```
+LaunchTemplateData: [X]
+    Monitoring: [X]
+        Enabled: [ ]
+    TagSpecifications: [X]
+        ResourceType: [ ]
+        Tags: [ ]
+    LicenseSpecifications: [ ]
+    (inherited)
+    CpuOptions: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    CreditSpecification: [X]
+        CpuCredits: [ ]
+    (inherited)
+    NetworkInterfaces: [X]
+        DeviceIndex: [ ]
+        Description: [ ]
+        NetworkInterfaceId: [ ]
+        PrivateIpAddresses: [ ]
+        SubnetId: [ ]
+        DeleteOnTermination: [ ]
+        InterfaceType: [ ]
+        PrivateIpAddress: [ ]
+        Groups: [ ]
+        Ipv6Addresses: [ ]
+        Ipv6AddressCount: [ ]
+        AssociatePublicIpAddress: [ ]
+        SecondaryPrivateIpAddressCount: [ ]
+    Placement: [X]
+        HostId: [ ]
+        AvailabilityZone: [ ]
+        SpreadDomain: [ ]
+        PartitionNumber: [ ]
+        GroupName: [ ]
+        Tenancy: [ ]
+        Affinity: [ ]
+        HostResourceGroupArn: [ ]
+    ElasticGpuSpecifications: [X]
+        Type: [ ]
+    CapacityReservationSpecification: [ ]
+    (inherited)
+    (inherited)
+    BlockDeviceMappings: [X]
+        Ebs: [ ]
+        DeviceName: [ ]
+        VirtualName: [ ]
+        NoDevice: [ ]
+    (inherited)
+    IamInstanceProfile: [X]
+        Name: [ ]
+        Arn: [ ]
+    (inherited)
+    InstanceMarketOptions: [X]
+        SpotOptions: [ ]
+        MarketType: [ ]
+    ElasticInferenceAccelerators: [X]
+        Count: [ ]
+        Type: [ ]
+    HibernationOptions: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+LaunchTemplateName: [X]
+```
+
+#### AWS::EC2::LocalGatewayRoute
+
+```
+LocalGatewayVirtualInterfaceGroupId: [X]
+DestinationCidrBlock: [X]
+LocalGatewayRouteTableId: [X]
+```
+
+#### AWS::EC2::LocalGatewayRouteTableVPCAssociation
+
+```
+LocalGatewayRouteTableId: [X]
+VpcId: [X]
+Tags: [X]
+    Tags: [X]
+        Key: [ ]
+        Value: [ ]
+```
+
+#### AWS::EC2::NatGateway
+
+```
+SubnetId: [X]
+AllocationId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::NetworkAcl
+
+```
+VpcId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::NetworkAclEntry
+
+```
+NetworkAclId: [X]
+RuleNumber: [X]
+Protocol: [X]
+Ipv6CidrBlock: [X]
+Egress: [X]
+RuleAction: [X]
+PortRange: [X]
+    To: [ ]
+    From: [ ]
+Icmp: [X]
+    Code: [ ]
+    Type: [ ]
+CidrBlock: [X]
+```
+
+#### AWS::EC2::NetworkInterface
+
+```
+SourceDestCheck: [X]
+GroupSet: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+Ipv6AddressCount: [ ]
+PrivateIpAddresses: [X]
+    (inherited)
+    (inherited)
+Ipv6Addresses: [X]
+    Ipv6Address: [ ]
+SecondaryPrivateIpAddressCount: [ ]
+InterfaceType: [ ]
+SubnetId: [X]
+PrivateIpAddress: [X]
+```
+
+#### AWS::EC2::NetworkInterfaceAttachment
+
+```
+InstanceId: [X]
+DeviceIndex: [X]
+NetworkInterfaceId: [X]
+DeleteOnTermination: [X]
+```
+
+#### AWS::EC2::NetworkInterfacePermission
+
+```
+NetworkInterfaceId: [X]
+AwsAccountId: [X]
+Permission: [X]
+```
+
+#### AWS::EC2::PlacementGroup
+
+```
+Strategy: [X]
+```
+
+#### AWS::EC2::PrefixList
+
+```
+MaxEntries: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+PrefixListName: [X]
+AddressFamily: [X]
+Entries: [X]
+    Cidr: [ ]
+    Description: [ ]
+```
+
+#### AWS::EC2::Route
+
+```
+DestinationCidrBlock: [ ]
+EgressOnlyInternetGatewayId: [ ]
+TransitGatewayId: [ ]
+InstanceId: [ ]
+NetworkInterfaceId: [ ]
+LocalGatewayId: [ ]
+RouteTableId: [ ]
+GatewayId: [ ]
+NatGatewayId: [ ]
+CarrierGatewayId: [ ]
+VpcPeeringConnectionId: [ ]
+VpcEndpointId: [ ]
+DestinationIpv6CidrBlock: [ ]
+```
+
+#### AWS::EC2::RouteTable
+
+```
+VpcId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::SecurityGroup
+
+```
+VpcId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+SecurityGroupEgress: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+SecurityGroupIngress: [X]
+    (inherited)
+    SourcePrefixListId: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+GroupName: [X]
+GroupDescription: [X]
+```
+
+#### AWS::EC2::SecurityGroupEgress
+
+```
+```
+
+#### AWS::EC2::SecurityGroupIngress
+
+```
+```
+
+#### AWS::EC2::SpotFleet
+
+```
+SpotFleetRequestConfigData: [X]
+    (inherited)
+    LaunchTemplateConfigs: [X]
+        LaunchTemplateSpecification: [X]
+            LaunchTemplateId: [ ]
+            Version: [ ]
+            LaunchTemplateName: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    LaunchSpecifications: [X]
+        (inherited)
+        (inherited)
+        Monitoring: [X]
+            Enabled: [ ]
+        Placement: [X]
+            GroupName: [ ]
+            Tenancy: [ ]
+            (inherited)
+        TagSpecifications: [X]
+            ResourceType: [ ]
+            Tags: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        BlockDeviceMappings: [X]
+            Ebs: [ ]
+            DeviceName: [ ]
+            VirtualName: [ ]
+            NoDevice: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        NetworkInterfaces: [X]
+            DeviceIndex: [ ]
+            Description: [ ]
+            Ipv6AddressCount: [ ]
+            PrivateIpAddresses: [ ]
+            Ipv6Addresses: [ ]
+            DeleteOnTermination: [ ]
+            Groups: [ ]
+            (inherited)
+            NetworkInterfaceId: [ ]
+            AssociatePublicIpAddress: [ ]
+            SecondaryPrivateIpAddressCount: [ ]
+    LoadBalancersConfig: [X]
+        TargetGroupsConfig: [ ]
+        ClassicLoadBalancersConfig: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::Subnet
+
+```
+AvailabilityZone: [X]
+Tags: [ ]
+Ipv6CidrBlock: [X]
+MapPublicIpOnLaunch: [X]
+VpcId: [X]
+OutpostArn: [ ]
+CidrBlock: [X]
+AssignIpv6AddressOnCreation: [X]
+```
+
+#### AWS::EC2::SubnetCidrBlock
+
+```
+SubnetId: [X]
+Ipv6CidrBlock: [X]
+```
+
+#### AWS::EC2::SubnetNetworkAclAssociation
+
+```
+SubnetId: [X]
+NetworkAclId: [X]
+```
+
+#### AWS::EC2::SubnetRouteTableAssociation
+
+```
+SubnetId: [X]
+RouteTableId: [X]
+```
+
+#### AWS::EC2::TrafficMirrorFilter
+
+```
+NetworkServices: [X]
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
+#### AWS::EC2::TrafficMirrorFilterRule
+
+```
+DestinationCidrBlock: [X]
+RuleNumber: [X]
+Protocol: [X]
+Description: [X]
+TrafficDirection: [X]
+DestinationPortRange: [X]
+    ToPort: [ ]
+    FromPort: [ ]
+RuleAction: [X]
+SourceCidrBlock: [X]
+TrafficMirrorFilterId: [X]
+SourcePortRange: [X]
+    ToPort: [ ]
+    FromPort: [ ]
+```
+
+#### AWS::EC2::TrafficMirrorSession
+
+```
+PacketLength: [X]
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+NetworkInterfaceId: [X]
+TrafficMirrorTargetId: [X]
+SessionNumber: [X]
+VirtualNetworkId: [X]
+TrafficMirrorFilterId: [X]
+```
+
+#### AWS::EC2::TrafficMirrorTarget
+
+```
+NetworkInterfaceId: [X]
+NetworkLoadBalancerArn: [X]
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
+#### AWS::EC2::TransitGateway
+
+```
+DefaultRouteTableAssociation: [X]
+DnsSupport: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+AutoAcceptSharedAttachments: [X]
+MulticastSupport: [ ]
+AmazonSideAsn: [X]
+DefaultRouteTablePropagation: [X]
+VpnEcmpSupport: [X]
+```
+
+#### AWS::EC2::TransitGatewayAttachment
+
+```
+SubnetIds: [X]
+VpcId: [X]
+TransitGatewayId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::TransitGatewayRoute
+
+```
+DestinationCidrBlock: [X]
+TransitGatewayRouteTableId: [X]
+Blackhole: [X]
+TransitGatewayAttachmentId: [X]
+```
+
+#### AWS::EC2::TransitGatewayRouteTable
+
+```
+TransitGatewayId: [ ]
+Tags: [ ]
+```
+
+#### AWS::EC2::TransitGatewayRouteTableAssociation
+
+```
+TransitGatewayRouteTableId: [X]
+TransitGatewayAttachmentId: [X]
+```
+
+#### AWS::EC2::TransitGatewayRouteTablePropagation
+
+```
+TransitGatewayRouteTableId: [X]
+TransitGatewayAttachmentId: [X]
+```
+
+#### AWS::EC2::VPC
+
+```
+CidrBlock: [X]
+EnableDnsSupport: [X]
+InstanceTenancy: [X]
+EnableDnsHostnames: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EC2::VPCCidrBlock
+
+```
+AmazonProvidedIpv6CidrBlock: [ ]
+VpcId: [X]
+CidrBlock: [X]
+```
+
+#### AWS::EC2::VPCDHCPOptionsAssociation
+
+```
+VpcId: [X]
+DhcpOptionsId: [X]
+```
+
+#### AWS::EC2::VPCEndpoint
+
+```
+VpcId: [X]
+ServiceName: [X]
+SubnetIds: [X]
+SecurityGroupIds: [X]
+PolicyDocument: [X]
+RouteTableIds: [X]
+PrivateDnsEnabled: [X]
+VpcEndpointType: [X]
+```
+
+#### AWS::EC2::VPCEndpointConnectionNotification
+
+```
+VPCEndpointId: [X]
+ServiceId: [X]
+ConnectionEvents: [X]
+ConnectionNotificationArn: [X]
+```
+
+#### AWS::EC2::VPCEndpointService
+
+```
+AcceptanceRequired: [ ]
+NetworkLoadBalancerArns: [ ]
+ApplianceLoadBalancerArns: [ ]
+```
+
+#### AWS::EC2::VPCEndpointServicePermissions
+
+```
+AllowedPrincipals: [X]
+ServiceId: [X]
+```
+
+#### AWS::EC2::VPCGatewayAttachment
+
+```
+VpcId: [X]
+InternetGatewayId: [X]
+VpnGatewayId: [ ]
+```
+
+#### AWS::EC2::VPCPeeringConnection
+
+```
+PeerRegion: [X]
+VpcId: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+PeerRoleArn: [ ]
+PeerOwnerId: [X]
+PeerVpcId: [X]
+```
+
+#### AWS::EC2::VPNConnection
+
+```
+Tags: [X]
+    (inherited)
+    (inherited)
+Type: [X]
+VpnGatewayId: [X]
+TransitGatewayId: [ ]
+CustomerGatewayId: [X]
+StaticRoutesOnly: [X]
+VpnTunnelOptionsSpecifications: [ ]
+```
+
+#### AWS::EC2::VPNConnectionRoute
+
+```
+VpnConnectionId: [X]
+DestinationCidrBlock: [X]
+```
+
+#### AWS::EC2::VPNGateway
+
+```
+AmazonSideAsn: [ ]
+Type: [ ]
+Tags: [ ]
+```
+
+#### AWS::EC2::VPNGatewayRoutePropagation
+
+```
+RouteTableIds: [X]
+VpnGatewayId: [X]
+```
+
+#### AWS::EC2::Volume
+
+```
+AvailabilityZone: [X]
+MultiAttachEnabled: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+Encrypted: [X]
+VolumeType: [X]
+KmsKeyId: [X]
+OutpostArn: [X]
+AutoEnableIO: [ ]
+SnapshotId: [X]
+Iops: [X]
+Size: [X]
+```
+
+#### AWS::EC2::VolumeAttachment
+
+```
+Device: [X]
+InstanceId: [X]
+VolumeId: [X]
+```
+
+#### AWS::ECR::Repository
+
+```
+Tags: [ ]
+RepositoryPolicyText: [X]
+LifecyclePolicy: [X]
+    (inherited)
+    (inherited)
+ImageScanningConfiguration: [ ]
+ImageTagMutability: [ ]
+RepositoryName: [X]
+```
+
+#### AWS::ECS::CapacityProvider
+
+```
+Name: [X]
+AutoScalingGroupProvider: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ECS::Cluster
+
+```
+ClusterName: [X]
+DefaultCapacityProviderStrategy: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+ClusterSettings: [X]
+    (inherited)
+    (inherited)
+CapacityProviders: [X]
+Tags: [X]
+    Key: [ ]
+    (inherited)
+```
+
+#### AWS::ECS::PrimaryTaskSet
+
+```
+Cluster: [X]
+TaskSetId: [X]
+Service: [X]
+```
+
+#### AWS::ECS::Service
+
+```
+NetworkConfiguration: [X]
+    (inherited)
+HealthCheckGracePeriodSeconds: [X]
+LaunchType: [X]
+EnableECSManagedTags: [ ]
+ServiceRegistries: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+LoadBalancers: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+SchedulingStrategy: [X]
+PlacementConstraints: [X]
+    (inherited)
+    (inherited)
+DeploymentController: [X]
+    (inherited)
+PropagateTags: [ ]
+DesiredCount: [X]
+Cluster: [X]
+ServiceName: [X]
+Role: [X]
+ServiceArn: [ ]
+CapacityProviderStrategy: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+PlatformVersion: [X]
+Tags: [ ]
+PlacementStrategies: [X]
+    (inherited)
+    (inherited)
+DeploymentConfiguration: [X]
+    (inherited)
+    (inherited)
+TaskDefinition: [X]
+```
+
+#### AWS::ECS::TaskDefinition
+
+```
+ContainerDefinitions: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    StartTimeout: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    StopTimeout: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    DependsOn: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    ResourceRequirements: [ ]
+    (inherited)
+NetworkMode: [X]
+Family: [X]
+Tags: [ ]
+IpcMode: [X]
+PlacementConstraints: [X]
+    (inherited)
+    (inherited)
+RequiresCompatibilities: [X]
+ExecutionRoleArn: [X]
+ProxyConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Volumes: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Memory: [X]
+InferenceAccelerators: [X]
+    (inherited)
+    (inherited)
+PidMode: [X]
+TaskRoleArn: [X]
+Cpu: [X]
+```
+
+#### AWS::ECS::TaskSet
+
+```
+NetworkConfiguration: [X]
+    (inherited)
+ServiceRegistries: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+LaunchType: [X]
+Service: [X]
+LoadBalancers: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Cluster: [X]
+Scale: [X]
+    (inherited)
+    (inherited)
+ExternalId: [X]
+PlatformVersion: [X]
+TaskDefinition: [X]
+```
+
+#### AWS::EFS::AccessPoint
+
+```
+AccessPointTags: [X]
+    Key: [ ]
+    Value: [ ]
+PosixUser: [X]
+    Gid: [ ]
+    SecondaryGids: [ ]
+    Uid: [ ]
+FileSystemId: [X]
+RootDirectory: [X]
+    Path: [ ]
+    CreationInfo: [ ]
+ClientToken: [X]
+```
+
+#### AWS::EFS::FileSystem
+
+```
+FileSystemTags: [X]
+    (inherited)
+    (inherited)
+FileSystemPolicy: [X]
+ThroughputMode: [X]
+Encrypted: [X]
+BackupPolicy: [X]
+    Status: [ ]
+PerformanceMode: [X]
+KmsKeyId: [X]
+ProvisionedThroughputInMibps: [X]
+LifecyclePolicies: [ ]
+```
+
+#### AWS::EFS::MountTarget
+
+```
+SubnetId: [X]
+IpAddress: [X]
+FileSystemId: [X]
+SecurityGroups: [X]
+```
+
+#### AWS::EKS::Cluster
+
+```
+Name: [X]
+RoleArn: [X]
+KubernetesNetworkConfig: [X]
+    (inherited)
+ResourcesVpcConfig: [X]
+    (inherited)
+    (inherited)
+Version: [X]
+EncryptionConfig: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EKS::FargateProfile
+
+```
+Subnets: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+ClusterName: [X]
+Selectors: [X]
+    (inherited)
+    (inherited)
+FargateProfileName: [X]
+PodExecutionRoleArn: [X]
+```
+
+#### AWS::EKS::Nodegroup
+
+```
+ScalingConfig: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Subnets: [X]
+ReleaseVersion: [X]
+LaunchTemplate: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Tags: [X]
+ClusterName: [X]
+Labels: [X]
+AmiType: [X]
+InstanceTypes: [X]
+Version: [X]
+DiskSize: [X]
+ForceUpdateEnabled: [ ]
+NodeRole: [X]
+RemoteAccess: [X]
+    (inherited)
+    (inherited)
+NodegroupName: [X]
+```
+
+#### AWS::EMR::Cluster
+
+```
+ReleaseLabel: [X]
+BootstrapActions: [ ]
+LogUri: [X]
+ManagedScalingPolicy: [ ]
+AutoScalingRole: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+Applications: [X]
+    AdditionalInfo: [ ]
+    Args: [ ]
+    Version: [ ]
+    (inherited)
+JobFlowRole: [ ]
+CustomAmiId: [X]
+ScaleDownBehavior: [X]
+EbsRootVolumeSize: [X]
+AdditionalInfo: [ ]
+Name: [X]
+ServiceRole: [X]
+SecurityConfiguration: [X]
+Steps: [ ]
+Configurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+LogEncryptionKmsKeyId: [X]
+StepConcurrencyLevel: [X]
+Instances: [ ]
+KerberosAttributes: [X]
+    ADDomainJoinPassword: [ ]
+    ADDomainJoinUser: [ ]
+    Realm: [ ]
+    CrossRealmTrustPrincipalPassword: [ ]
+    KdcAdminPassword: [ ]
+VisibleToAllUsers: [X]
+```
+
+#### AWS::EMR::InstanceFleetConfig
+
+```
+Name: [X]
+InstanceFleetType: [X]
+LaunchSpecifications: [X]
+    OnDemandSpecification: [ ]
+    SpotSpecification: [ ]
+ClusterId: [X]
+TargetSpotCapacity: [X]
+InstanceTypeConfigs: [X]
+    (inherited)
+    EbsConfiguration: [X]
+        (inherited)
+        EbsBlockDeviceConfigs: [X]
+            VolumeSpecification: [X]
+                Iops: [ ]
+                VolumeType: [ ]
+                SizeInGB: [ ]
+            VolumesPerInstance: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+TargetOnDemandCapacity: [X]
+```
+
+#### AWS::EMR::InstanceGroupConfig
+
+```
+InstanceCount: [X]
+Name: [X]
+InstanceRole: [ ]
+AutoScalingPolicy: [X]
+    Rules: [X]
+        Action: [ ]
+        Trigger: [ ]
+        Description: [ ]
+        (inherited)
+    Constraints: [X]
+        MinCapacity: [ ]
+        MaxCapacity: [ ]
+EbsConfiguration: [X]
+    (inherited)
+    EbsBlockDeviceConfigs: [X]
+        VolumeSpecification: [X]
+            Iops: [ ]
+            VolumeType: [ ]
+            SizeInGB: [ ]
+        VolumesPerInstance: [ ]
+BidPrice: [X]
+JobFlowId: [X]
+InstanceType: [X]
+Market: [X]
+Configurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EMR::SecurityConfiguration
+
+```
+SecurityConfiguration: [X]
+Name: [X]
+```
+
+#### AWS::EMR::Step
+
+```
+HadoopJarStep: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    StepProperties: [X]
+        Key: [ ]
+        Value: [ ]
+Name: [X]
+ActionOnFailure: [X]
+JobFlowId: [X]
+```
+
+#### AWS::ElastiCache::CacheCluster
+
+```
+CacheSecurityGroupNames: [X]
+Engine: [X]
+CacheParameterGroupName: [X]
+SnapshotArns: [ ]
+SnapshotRetentionLimit: [X]
+ClusterName: [X]
+SnapshotName: [ ]
+Tags: [ ]
+VpcSecurityGroupIds: [X]
+AutoMinorVersionUpgrade: [X]
+PreferredAvailabilityZone: [X]
+PreferredAvailabilityZones: [ ]
+SnapshotWindow: [X]
+EngineVersion: [X]
+CacheNodeType: [X]
+AZMode: [ ]
+NotificationTopicArn: [X]
+NumCacheNodes: [X]
+Port: [X]
+PreferredMaintenanceWindow: [X]
+CacheSubnetGroupName: [X]
+```
+
+#### AWS::ElastiCache::ParameterGroup
+
+```
+Description: [X]
+Properties: [ ]
+CacheParameterGroupFamily: [X]
+```
+
+#### AWS::ElastiCache::ReplicationGroup
+
+```
+CacheParameterGroupName: [ ]
+NodeGroupConfiguration: [ ]
+TransitEncryptionEnabled: [X]
+GlobalReplicationGroupId: [ ]
+ReplicationGroupId: [X]
+NumNodeGroups: [X]
+NotificationTopicArn: [ ]
+CacheNodeType: [X]
+AuthToken: [ ]
+MultiAZEnabled: [ ]
+PrimaryClusterId: [ ]
+AutoMinorVersionUpgrade: [ ]
+PreferredMaintenanceWindow: [ ]
+CacheSubnetGroupName: [ ]
+CacheSecurityGroupNames: [ ]
+SnapshotName: [ ]
+AtRestEncryptionEnabled: [X]
+ReplicasPerNodeGroup: [ ]
+SecurityGroupIds: [ ]
+PreferredCacheClusterAZs: [ ]
+EngineVersion: [ ]
+Engine: [ ]
+ReplicationGroupDescription: [X]
+NumCacheClusters: [ ]
+SnapshotArns: [ ]
+SnapshotRetentionLimit: [X]
+Tags: [ ]
+KmsKeyId: [X]
+SnapshotWindow: [X]
+SnapshottingClusterId: [X]
+Port: [X]
+AutomaticFailoverEnabled: [X]
+```
+
+#### AWS::ElastiCache::SecurityGroup
+
+```
+Description: [X]
+```
+
+#### AWS::ElastiCache::SecurityGroupIngress
+
+```
+```
+
+#### AWS::ElastiCache::SubnetGroup
+
+```
+SubnetIds: [X]
+Description: [X]
+CacheSubnetGroupName: [X]
+```
+
+#### AWS::ElasticBeanstalk::Application
+
+```
+ApplicationName: [X]
+Description: [X]
+ResourceLifecycleConfig: [ ]
+```
+
+#### AWS::ElasticBeanstalk::ApplicationVersion
+
+```
+ApplicationName: [X]
+SourceBundle: [X]
+    S3Bucket: [ ]
+    S3Key: [ ]
+Description: [X]
+```
+
+#### AWS::ElasticBeanstalk::ConfigurationTemplate
+
+```
+ApplicationName: [X]
+EnvironmentId: [X]
+Description: [X]
+PlatformArn: [X]
+SolutionStackName: [X]
+OptionSettings: [X]
+    Namespace: [ ]
+    OptionName: [ ]
+    Value: [ ]
+    ResourceName: [ ]
+SourceConfiguration: [ ]
+```
+
+#### AWS::ElasticBeanstalk::Environment
+
+```
+ApplicationName: [X]
+PlatformArn: [X]
+VersionLabel: [X]
+Description: [X]
+EnvironmentName: [X]
+CNAMEPrefix: [X]
+Tags: [ ]
+SolutionStackName: [X]
+OptionSettings: [ ]
+Tier: [X]
+    Version: [ ]
+    Type: [ ]
+    Name: [ ]
+TemplateName: [X]
+```
+
+#### AWS::ElasticLoadBalancing::LoadBalancer
+
+```
+AppCookieStickinessPolicy: [X]
+    PolicyName: [ ]
+    CookieName: [ ]
+ConnectionDrainingPolicy: [ ]
+AvailabilityZones: [X]
+AccessLoggingPolicy: [ ]
+Subnets: [X]
+HealthCheck: [X]
+    HealthyThreshold: [ ]
+    Interval: [ ]
+    Target: [ ]
+    Timeout: [ ]
+    UnhealthyThreshold: [ ]
+LBCookieStickinessPolicy: [X]
+    PolicyName: [ ]
+    CookieExpirationPeriod: [ ]
+Tags: [ ]
+Instances: [X]
+Listeners: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+CrossZone: [ ]
+SecurityGroups: [X]
+ConnectionSettings: [ ]
+Policies: [ ]
+LoadBalancerName: [X]
+Scheme: [X]
+```
+
+#### AWS::ElasticLoadBalancingV2::Listener
+
+```
+Protocol: [ ]
+DefaultActions: [ ]
+SslPolicy: [ ]
+AlpnPolicy: [ ]
+Certificates: [X]
+    (inherited)
+LoadBalancerArn: [ ]
+Port: [ ]
+```
+
+#### AWS::ElasticLoadBalancingV2::ListenerCertificate
+
+```
+Certificates: [X]
+    (inherited)
+ListenerArn: [X]
+```
+
+#### AWS::ElasticLoadBalancingV2::ListenerRule
+
+```
+Priority: [X]
+Conditions: [X]
+    SourceIpConfig: [ ]
+    HostHeaderConfig: [ ]
+    (inherited)
+    QueryStringConfig: [ ]
+    HttpRequestMethodConfig: [ ]
+    (inherited)
+    PathPatternConfig: [ ]
+    HttpHeaderConfig: [ ]
+Actions: [X]
+    TargetGroupArn: [ ]
+    FixedResponseConfig: [ ]
+    ForwardConfig: [ ]
+    RedirectConfig: [ ]
+    AuthenticateCognitoConfig: [ ]
+    AuthenticateOidcConfig: [ ]
+    Type: [ ]
+    Order: [ ]
+ListenerArn: [X]
+```
+
+#### AWS::ElasticLoadBalancingV2::LoadBalancer
+
+```
+IpAddressType: [X]
+Subnets: [X]
+Name: [X]
+Tags: [ ]
+SubnetMappings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    IPv6Address: [ ]
+LoadBalancerAttributes: [X]
+    Key: [ ]
+    Value: [ ]
+SecurityGroups: [X]
+Scheme: [X]
+Type: [X]
+```
+
+#### AWS::ElasticLoadBalancingV2::TargetGroup
+
+```
+TargetType: [X]
+HealthCheckIntervalSeconds: [X]
+HealthCheckEnabled: [X]
+HealthCheckPort: [X]
+Name: [X]
+Tags: [ ]
+HealthCheckProtocol: [X]
+Matcher: [X]
+    HttpCode: [ ]
+Targets: [X]
+    AvailabilityZone: [ ]
+    Id: [ ]
+    (inherited)
+HealthyThresholdCount: [X]
+VpcId: [X]
+TargetGroupAttributes: [X]
+    Key: [ ]
+    Value: [ ]
+HealthCheckPath: [X]
+Protocol: [X]
+Port: [X]
+UnhealthyThresholdCount: [X]
+HealthCheckTimeoutSeconds: [X]
+```
+
+#### AWS::Elasticsearch::Domain
+
+```
+AdvancedSecurityOptions: [X]
+    MasterUserOptions: [ ]
+    InternalUserDatabaseEnabled: [ ]
+    Enabled: [ ]
+ElasticsearchVersion: [X]
+CognitoOptions: [X]
+    IdentityPoolId: [ ]
+    RoleArn: [ ]
+    Enabled: [ ]
+    UserPoolId: [ ]
+NodeToNodeEncryptionOptions: [X]
+    Enabled: [ ]
+DomainName: [X]
+DomainEndpointOptions: [X]
+    EnforceHTTPS: [ ]
+    TLSSecurityPolicy: [ ]
+Tags: [ ]
+EBSOptions: [X]
+    Iops: [ ]
+    VolumeType: [ ]
+    EBSEnabled: [ ]
+    VolumeSize: [ ]
+ElasticsearchClusterConfig: [X]
+    ZoneAwarenessConfig: [X]
+        AvailabilityZoneCount: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+SnapshotOptions: [X]
+    AutomatedSnapshotStartHour: [ ]
+VPCOptions: [X]
+    (inherited)
+    (inherited)
+LogPublishingOptions: [X]
+    CloudWatchLogsLogGroupArn: [ ]
+    Enabled: [ ]
+AdvancedOptions: [X]
+EncryptionAtRestOptions: [X]
+    KmsKeyId: [ ]
+    Enabled: [ ]
+AccessPolicies: [X]
+```
+
+#### AWS::EventSchemas::Discoverer
+
+```
+Description: [X]
+SourceArn: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EventSchemas::Registry
+
+```
+RegistryName: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::EventSchemas::RegistryPolicy
+
+```
+Policy: [X]
+RegistryName: [X]
+RevisionId: [X]
+```
+
+#### AWS::EventSchemas::Schema
+
+```
+Content: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+RegistryName: [X]
+SchemaName: [X]
+Type: [X]
+```
+
+#### AWS::Events::EventBus
+
+```
+EventSourceName: [ ]
+Name: [ ]
+```
+
+#### AWS::Events::EventBusPolicy
+
+```
+Action: [X]
+EventBusName: [X]
+StatementId: [X]
+Condition: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Principal: [X]
+```
+
+#### AWS::Events::Rule
+
+```
+ScheduleExpression: [X]
+Description: [X]
+EventPattern: [X]
+EventBusName: [X]
+State: [X]
+Targets: [X]
+    HttpParameters: [X]
+        HeaderParameters: [ ]
+        QueryStringParameters: [ ]
+        PathParameterValues: [ ]
+    (inherited)
+    RetryPolicy: [X]
+        MaximumEventAgeInSeconds: [ ]
+        MaximumRetryAttempts: [ ]
+    (inherited)
+    BatchParameters: [X]
+        JobDefinition: [ ]
+        ArrayProperties: [ ]
+        RetryStrategy: [ ]
+        JobName: [ ]
+    InputTransformer: [X]
+        InputPathsMap: [ ]
+        InputTemplate: [ ]
+    EcsParameters: [X]
+        NetworkConfiguration: [X]
+            AwsVpcConfiguration: [X]
+                AssignPublicIp: [ ]
+                SecurityGroups: [ ]
+                Subnets: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+    (inherited)
+    KinesisParameters: [X]
+        PartitionKeyPath: [ ]
+    RunCommandParameters: [X]
+        RunCommandTargets: [ ]
+    (inherited)
+    (inherited)
+    SqsParameters: [X]
+        MessageGroupId: [ ]
+    RedshiftDataParameters: [ ]
+    (inherited)
+RoleArn: [X]
+Name: [X]
+```
+
+#### AWS::FMS::NotificationChannel
+
+```
+SnsRoleName: [X]
+SnsTopicArn: [X]
+```
+
+#### AWS::FMS::Policy
+
+```
+PolicyName: [X]
+ResourceTags: [X]
+    Key: [ ]
+    Value: [ ]
+RemediationEnabled: [X]
+Tags: [ ]
+ResourceType: [X]
+ResourceTypeList: [X]
+ExcludeResourceTags: [X]
+DeleteAllPolicyResources: [ ]
+ExcludeMap: [X]
+    ACCOUNT: [ ]
+    ORGUNIT: [ ]
+IncludeMap: [X]
+    ACCOUNT: [ ]
+    ORGUNIT: [ ]
+SecurityServicePolicyData: [X]
+```
+
+#### AWS::FSx::FileSystem
+
+```
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+StorageType: [X]
+SubnetIds: [X]
+FileSystemType: [X]
+SecurityGroupIds: [ ]
+StorageCapacity: [X]
+LustreConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    AutoImportPolicy: [ ]
+    (inherited)
+KmsKeyId: [X]
+BackupId: [ ]
+WindowsConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    SelfManagedActiveDirectoryConfiguration: [X]
+        UserName: [ ]
+        FileSystemAdministratorsGroup: [ ]
+        DnsIps: [ ]
+        OrganizationalUnitDistinguishedName: [ ]
+        DomainName: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::GameLift::Alias
+
+```
+RoutingStrategy: [X]
+    FleetId: [ ]
+    Message: [ ]
+    Type: [ ]
+Description: [X]
+Name: [X]
+```
+
+#### AWS::GameLift::Build
+
+```
+StorageLocation: [X]
+    RoleArn: [ ]
+    Bucket: [ ]
+    Key: [ ]
+    ObjectVersion: [ ]
+Version: [X]
+Name: [X]
+OperatingSystem: [X]
+```
+
+#### AWS::GameLift::Fleet
+
+```
+Description: [X]
+EC2InboundPermissions: [X]
+    ToPort: [ ]
+    FromPort: [ ]
+    Protocol: [ ]
+    IpRange: [ ]
+PeerVpcAwsAccountId: [ ]
+ServerLaunchPath: [X]
+BuildId: [X]
+InstanceRoleARN: [X]
+MaxSize: [X]
+RuntimeConfiguration: [X]
+    GameSessionActivationTimeoutSeconds: [ ]
+    MaxConcurrentGameSessionActivations: [ ]
+    ServerProcesses: [ ]
+FleetType: [X]
+MinSize: [X]
+NewGameSessionProtectionPolicy: [X]
+ScriptId: [X]
+PeerVpcId: [ ]
+EC2InstanceType: [X]
+ResourceCreationLimitPolicy: [X]
+    NewGameSessionsPerCreator: [ ]
+    PolicyPeriodInMinutes: [ ]
+Name: [X]
+DesiredEC2Instances: [X]
+MetricGroups: [X]
+LogPaths: [X]
+ServerLaunchParameters: [X]
+CertificateConfiguration: [X]
+    CertificateType: [ ]
+```
+
+#### AWS::GameLift::GameServerGroup
+
+```
+LaunchTemplate: [ ]
+InstanceDefinitions: [X]
+    InstanceDefinitions: [X]
+        InstanceType: [ ]
+        WeightedCapacity: [ ]
+Tags: [ ]
+RoleArn: [X]
+GameServerGroupName: [X]
+BalancingStrategy: [X]
+MinSize: [ ]
+MaxSize: [ ]
+GameServerProtectionPolicy: [X]
+AutoScalingPolicy: [ ]
+DeleteOption: [ ]
+VpcSubnets: [ ]
+```
+
+#### AWS::GameLift::GameSessionQueue
+
+```
+TimeoutInSeconds: [X]
+PlayerLatencyPolicies: [X]
+    MaximumIndividualPlayerLatencyMilliseconds: [ ]
+    PolicyDurationSeconds: [ ]
+Name: [X]
+Destinations: [X]
+    DestinationArn: [ ]
+```
+
+#### AWS::GameLift::MatchmakingConfiguration
+
+```
+AcceptanceTimeoutSeconds: [X]
+Description: [X]
+AdditionalPlayerCount: [X]
+CustomEventData: [X]
+GameProperties: [X]
+    Value: [ ]
+    Key: [ ]
+RuleSetName: [X]
+GameSessionQueueArns: [X]
+NotificationTarget: [X]
+BackfillMode: [X]
+AcceptanceRequired: [X]
+FlexMatchMode: [ ]
+GameSessionData: [X]
+RequestTimeoutSeconds: [X]
+Name: [X]
+```
+
+#### AWS::GameLift::MatchmakingRuleSet
+
+```
+RuleSetBody: [X]
+Name: [X]
+```
+
+#### AWS::GameLift::Script
+
+```
+StorageLocation: [X]
+    RoleArn: [ ]
+    Bucket: [ ]
+    ObjectVersion: [ ]
+    Key: [ ]
+Version: [X]
+Name: [X]
+```
+
+#### AWS::GlobalAccelerator::Accelerator
+
+```
+IpAddressType: [X]
+Enabled: [X]
+Name: [X]
+IpAddresses: [X]
+Tags: [ ]
+```
+
+#### AWS::GlobalAccelerator::EndpointGroup
+
+```
+TrafficDialPercentage: [X]
+HealthCheckIntervalSeconds: [X]
+HealthCheckPort: [X]
+EndpointGroupRegion: [X]
+HealthCheckProtocol: [X]
+HealthCheckPath: [X]
+EndpointConfigurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+ThresholdCount: [X]
+ListenerArn: [X]
+```
+
+#### AWS::GlobalAccelerator::Listener
+
+```
+AcceleratorArn: [X]
+PortRanges: [X]
+    ToPort: [ ]
+    FromPort: [ ]
+ClientAffinity: [X]
+Protocol: [X]
+```
+
+#### AWS::Glue::Classifier
+
+```
+GrokClassifier: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+CsvClassifier: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+XMLClassifier: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+JsonClassifier: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::Glue::Connection
+
+```
+ConnectionInput: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    PhysicalConnectionRequirements: [X]
+        SubnetId: [ ]
+        AvailabilityZone: [ ]
+        SecurityGroupIdList: [ ]
+    (inherited)
+    (inherited)
+CatalogId: [X]
+```
+
+#### AWS::Glue::Crawler
+
+```
+Configuration: [X]
+Description: [X]
+Tags: [ ]
+Schedule: [X]
+    (inherited)
+Classifiers: [X]
+CrawlerSecurityConfiguration: [ ]
+Role: [X]
+DatabaseName: [X]
+SchemaChangePolicy: [X]
+    DeleteBehavior: [ ]
+    UpdateBehavior: [ ]
+TablePrefix: [X]
+Targets: [X]
+    JdbcTargets: [X]
+        Path: [ ]
+        Exclusions: [ ]
+        ConnectionName: [ ]
+    CatalogTargets: [X]
+        Tables: [ ]
+        (inherited)
+    DynamoDBTargets: [X]
+        Path: [ ]
+    S3Targets: [X]
+        Path: [ ]
+        Exclusions: [ ]
+Name: [X]
+```
+
+#### AWS::Glue::DataCatalogEncryptionSettings
+
+```
+DataCatalogEncryptionSettings: [X]
+    (inherited)
+    EncryptionAtRest: [X]
+        SseAwsKmsKeyId: [ ]
+        CatalogEncryptionMode: [ ]
+CatalogId: [X]
+```
+
+#### AWS::Glue::Database
+
+```
+DatabaseInput: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+CatalogId: [X]
+```
+
+#### AWS::Glue::DevEndpoint
+
+```
+WorkerType: [X]
+SecurityConfiguration: [ ]
+Tags: [ ]
+RoleArn: [X]
+NumberOfNodes: [X]
+ExtraJarsS3Path: [X]
+GlueVersion: [X]
+SecurityGroupIds: [X]
+PublicKeys: [X]
+EndpointName: [X]
+PublicKey: [X]
+Arguments: [X]
+NumberOfWorkers: [X]
+SubnetId: [X]
+ExtraPythonLibsS3Path: [X]
+```
+
+#### AWS::Glue::Job
+
+```
+WorkerType: [X]
+ExecutionProperty: [X]
+    MaxConcurrentRuns: [ ]
+AllocatedCapacity: [X]
+Description: [X]
+Tags: [ ]
+Timeout: [X]
+NotificationProperty: [X]
+    NotifyDelayAfter: [ ]
+DefaultArguments: [X]
+Connections: [X]
+    (inherited)
+SecurityConfiguration: [ ]
+MaxRetries: [X]
+Command: [X]
+    ScriptLocation: [ ]
+    (inherited)
+    PythonVersion: [ ]
+GlueVersion: [X]
+NumberOfWorkers: [X]
+Role: [X]
+LogUri: [X]
+MaxCapacity: [X]
+Name: [X]
+```
+
+#### AWS::Glue::MLTransform
+
+```
+WorkerType: [X]
+TransformParameters: [X]
+    TransformType: [ ]
+    FindMatchesParameters: [ ]
+Description: [X]
+Tags: [ ]
+Timeout: [X]
+GlueVersion: [X]
+Role: [X]
+NumberOfWorkers: [X]
+InputRecordTables: [X]
+    GlueTables: [X]
+        ConnectionName: [ ]
+        TableName: [ ]
+        DatabaseName: [ ]
+        CatalogId: [ ]
+MaxRetries: [X]
+MaxCapacity: [X]
+Name: [X]
+```
+
+#### AWS::Glue::Partition
+
+```
+PartitionInput: [X]
+    Values: [ ]
+    StorageDescriptor: [X]
+        OutputFormat: [ ]
+        (inherited)
+        InputFormat: [ ]
+        BucketColumns: [ ]
+        SkewedInfo: [ ]
+        Columns: [ ]
+        Location: [ ]
+        NumberOfBuckets: [ ]
+        SortColumns: [ ]
+        StoredAsSubDirectories: [ ]
+        SerdeInfo: [ ]
+        Compressed: [ ]
+    (inherited)
+TableName: [X]
+DatabaseName: [X]
+CatalogId: [X]
+```
+
+#### AWS::Glue::SecurityConfiguration
+
+```
+EncryptionConfiguration: [X]
+    JobBookmarksEncryption: [X]
+        KmsKeyArn: [ ]
+        JobBookmarksEncryptionMode: [ ]
+    CloudWatchEncryption: [X]
+        KmsKeyArn: [ ]
+        CloudWatchEncryptionMode: [ ]
+    S3Encryptions: [X]
+        KmsKeyArn: [ ]
+        S3EncryptionMode: [ ]
+Name: [X]
+```
+
+#### AWS::Glue::Table
+
+```
+TableInput: [X]
+    StorageDescriptor: [X]
+        OutputFormat: [ ]
+        (inherited)
+        InputFormat: [ ]
+        BucketColumns: [ ]
+        SkewedInfo: [ ]
+        Columns: [ ]
+        Location: [ ]
+        NumberOfBuckets: [ ]
+        SortColumns: [ ]
+        StoredAsSubDirectories: [ ]
+        SerdeInfo: [ ]
+        Compressed: [ ]
+    PartitionKeys: [X]
+        Comment: [ ]
+        Type: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+DatabaseName: [X]
+CatalogId: [X]
+```
+
+#### AWS::Glue::Trigger
+
+```
+Predicate: [X]
+    Conditions: [X]
+        CrawlState: [ ]
+        CrawlerName: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+    (inherited)
+StartOnCreation: [ ]
+Description: [X]
+Tags: [ ]
+Schedule: [X]
+Actions: [X]
+    NotificationProperty: [ ]
+    (inherited)
+    SecurityConfiguration: [ ]
+    CrawlerName: [ ]
+    (inherited)
+    Timeout: [ ]
+WorkflowName: [X]
+Type: [X]
+Name: [X]
+```
+
+#### AWS::Glue::Workflow
+
+```
+DefaultRunProperties: [X]
+Tags: [ ]
+Name: [X]
+Description: [X]
+```
+
+#### AWS::Greengrass::ConnectorDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::ConnectorDefinitionVersion
+
+```
+Connectors: [X]
+    ConnectorArn: [ ]
+    Parameters: [ ]
+    Id: [ ]
+ConnectorDefinitionId: [X]
+```
+
+#### AWS::Greengrass::CoreDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::CoreDefinitionVersion
+
+```
+Cores: [X]
+    CertificateArn: [ ]
+    ThingArn: [ ]
+    SyncShadow: [ ]
+    Id: [ ]
+CoreDefinitionId: [X]
+```
+
+#### AWS::Greengrass::DeviceDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::DeviceDefinitionVersion
+
+```
+DeviceDefinitionId: [X]
+Devices: [X]
+    CertificateArn: [ ]
+    ThingArn: [ ]
+    SyncShadow: [ ]
+    Id: [ ]
+```
+
+#### AWS::Greengrass::FunctionDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::FunctionDefinitionVersion
+
+```
+DefaultConfig: [X]
+    Execution: [ ]
+FunctionDefinitionId: [X]
+Functions: [X]
+    FunctionConfiguration: [ ]
+    Id: [ ]
+    FunctionArn: [ ]
+```
+
+#### AWS::Greengrass::Group
+
+```
+RoleArn: [ ]
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::GroupVersion
+
+```
+ResourceDefinitionVersionArn: [X]
+DeviceDefinitionVersionArn: [X]
+SubscriptionDefinitionVersionArn: [X]
+FunctionDefinitionVersionArn: [X]
+ConnectorDefinitionVersionArn: [X]
+CoreDefinitionVersionArn: [X]
+LoggerDefinitionVersionArn: [X]
+GroupId: [X]
+```
+
+#### AWS::Greengrass::LoggerDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::LoggerDefinitionVersion
+
+```
+Loggers: [X]
+    Type: [ ]
+    Space: [ ]
+    Component: [ ]
+    Id: [ ]
+    Level: [ ]
+LoggerDefinitionId: [X]
+```
+
+#### AWS::Greengrass::ResourceDefinition
+
+```
+Name: [X]
+InitialVersion: [X]
+    Resources: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::ResourceDefinitionVersion
+
+```
+ResourceDefinitionId: [X]
+Resources: [X]
+    ResourceDataContainer: [ ]
+    Id: [ ]
+    Name: [ ]
+```
+
+#### AWS::Greengrass::SubscriptionDefinition
+
+```
+Name: [X]
+InitialVersion: [ ]
+Tags: [ ]
+```
+
+#### AWS::Greengrass::SubscriptionDefinitionVersion
+
+```
+SubscriptionDefinitionId: [X]
+Subscriptions: [X]
+    Source: [ ]
+    Id: [ ]
+    Target: [ ]
+    Subject: [ ]
+```
+
+#### AWS::GuardDuty::Detector
+
+```
+FindingPublishingFrequency: [X]
+Enable: [X]
+DataSources: [ ]
+```
+
+#### AWS::GuardDuty::Filter
+
+```
+FindingCriteria: [X]
+    Criterion: [ ]
+    ItemType: [ ]
+Name: [X]
+Rank: [X]
+DetectorId: [X]
+Action: [X]
+Description: [X]
+```
+
+#### AWS::GuardDuty::IPSet
+
+```
+Format: [X]
+Activate: [X]
+Location: [X]
+DetectorId: [X]
+Name: [X]
+```
+
+#### AWS::GuardDuty::Master
+
+```
+MasterId: [X]
+InvitationId: [X]
+DetectorId: [X]
+```
+
+#### AWS::GuardDuty::Member
+
+```
+Status: [ ]
+MemberId: [X]
+DisableEmailNotification: [ ]
+DetectorId: [X]
+Message: [ ]
+Email: [X]
+```
+
+#### AWS::GuardDuty::ThreatIntelSet
+
+```
+Format: [X]
+Activate: [X]
+Location: [X]
+DetectorId: [X]
+Name: [X]
+```
+
+#### AWS::IAM::AccessKey
+
+```
+Status: [X]
+UserName: [X]
+Serial: [ ]
+```
+
+#### AWS::IAM::Group
+
+```
+GroupName: [X]
+ManagedPolicyArns: [X]
+Policies: [ ]
+Path: [X]
+```
+
+#### AWS::IAM::InstanceProfile
+
+```
+Path: [X]
+InstanceProfileName: [X]
+Roles: [X]
+```
+
+#### AWS::IAM::ManagedPolicy
+
+```
+Description: [X]
+Roles: [ ]
+PolicyDocument: [X]
+Groups: [ ]
+Path: [X]
+ManagedPolicyName: [X]
+Users: [ ]
+```
+
+#### AWS::IAM::Policy
+
+```
+PolicyName: [X]
+PolicyDocument: [X]
+Groups: [X]
+Roles: [X]
+Users: [X]
+```
+
+#### AWS::IAM::Role
+
+```
+ManagedPolicyArns: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+MaxSessionDuration: [X]
+AssumeRolePolicyDocument: [X]
+Policies: [ ]
+Path: [X]
+RoleName: [X]
+PermissionsBoundary: [X]
+```
+
+#### AWS::IAM::ServiceLinkedRole
+
+```
+AWSServiceName: [X]
+Description: [X]
+CustomSuffix: [X]
+```
+
+#### AWS::IAM::User
+
+```
+UserName: [X]
+ManagedPolicyArns: [X]
+Groups: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+LoginProfile: [ ]
+Policies: [ ]
+Path: [X]
+PermissionsBoundary: [X]
+```
+
+#### AWS::IAM::UserToGroupAddition
+
+```
+```
+
+#### AWS::ImageBuilder::Component
+
+```
+Name: [X]
+Tags: [X]
+ChangeDescription: [X]
+Uri: [ ]
+Platform: [X]
+Version: [X]
+SupportedOsVersions: [ ]
+KmsKeyId: [X]
+Data: [ ]
+Description: [X]
+```
+
+#### AWS::ImageBuilder::DistributionConfiguration
+
+```
+Description: [X]
+Distributions: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+Name: [X]
+Tags: [X]
+```
+
+#### AWS::ImageBuilder::Image
+
+```
+InfrastructureConfigurationArn: [X]
+Tags: [X]
+ImageTestsConfiguration: [X]
+    (inherited)
+    (inherited)
+ImageRecipeArn: [X]
+DistributionConfigurationArn: [X]
+EnhancedImageMetadataEnabled: [ ]
+```
+
+#### AWS::ImageBuilder::ImagePipeline
+
+```
+Status: [X]
+InfrastructureConfigurationArn: [X]
+Name: [X]
+Tags: [X]
+Schedule: [ ]
+ImageTestsConfiguration: [X]
+    (inherited)
+    (inherited)
+ImageRecipeArn: [X]
+DistributionConfigurationArn: [X]
+EnhancedImageMetadataEnabled: [ ]
+Description: [X]
+```
+
+#### AWS::ImageBuilder::ImageRecipe
+
+```
+Version: [X]
+Name: [X]
+WorkingDirectory: [ ]
+Tags: [X]
+BlockDeviceMappings: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Components: [X]
+    (inherited)
+ParentImage: [X]
+Description: [X]
+```
+
+#### AWS::ImageBuilder::InfrastructureConfiguration
+
+```
+TerminateInstanceOnFailure: [X]
+ResourceTags: [ ]
+Logging: [X]
+    (inherited)
+Name: [X]
+Tags: [X]
+InstanceTypes: [X]
+SecurityGroupIds: [X]
+KeyPair: [X]
+InstanceProfileName: [X]
+SubnetId: [X]
+SnsTopicArn: [X]
+Description: [X]
+```
+
+#### AWS::Inspector::AssessmentTarget
+
+```
+AssessmentTargetName: [X]
+ResourceGroupArn: [X]
+```
+
+#### AWS::Inspector::AssessmentTemplate
+
+```
+AssessmentTargetArn: [X]
+AssessmentTemplateName: [X]
+UserAttributesForFindings: [X]
+    (inherited)
+    (inherited)
+DurationInSeconds: [X]
+RulesPackageArns: [X]
+```
+
+#### AWS::Inspector::ResourceGroup
+
+```
+ResourceGroupTags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::IoT1Click::Device
+
+```
+Enabled: [X]
+DeviceId: [X]
+```
+
+#### AWS::IoT1Click::Placement
+
+```
+Attributes: [X]
+ProjectName: [X]
+AssociatedDevices: [ ]
+PlacementName: [X]
+```
+
+#### AWS::IoT1Click::Project
+
+```
+ProjectName: [X]
+Description: [X]
+PlacementTemplate: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::IoT::Authorizer
+
+```
+Status: [X]
+Tags: [ ]
+AuthorizerName: [X]
+TokenKeyName: [X]
+TokenSigningPublicKeys: [X]
+SigningDisabled: [X]
+AuthorizerFunctionArn: [X]
+```
+
+#### AWS::IoT::Certificate
+
+```
+CertificateSigningRequest: [X]
+Status: [X]
+CertificatePem: [ ]
+CACertificatePem: [ ]
+CertificateMode: [ ]
+```
+
+#### AWS::IoT::Policy
+
+```
+PolicyName: [X]
+PolicyDocument: [X]
+```
+
+#### AWS::IoT::PolicyPrincipalAttachment
+
+```
+PolicyName: [X]
+Principal: [X]
+```
+
+#### AWS::IoT::ProvisioningTemplate
+
+```
+Description: [X]
+TemplateBody: [X]
+Tags: [ ]
+TemplateName: [X]
+Enabled: [X]
+ProvisioningRoleArn: [X]
+PreProvisioningHook: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::IoT::Thing
+
+```
+AttributePayload: [X]
+    (inherited)
+ThingName: [X]
+```
+
+#### AWS::IoT::ThingPrincipalAttachment
+
+```
+ThingName: [X]
+Principal: [X]
+```
+
+#### AWS::IoT::TopicRule
+
+```
+TopicRulePayload: [X]
+    (inherited)
+    Actions: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        IotSiteWise: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        IotEvents: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    ErrorAction: [X]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        IotSiteWise: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        IotEvents: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+RuleName: [X]
+```
+
+#### AWS::IoTAnalytics::Channel
+
+```
+ChannelName: [X]
+ChannelStorage: [X]
+    (inherited)
+    (inherited)
+RetentionPeriod: [X]
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::IoTAnalytics::Dataset
+
+```
+DatasetName: [X]
+ContentDeliveryRules: [ ]
+Tags: [ ]
+Triggers: [X]
+    (inherited)
+    (inherited)
+RetentionPeriod: [X]
+    (inherited)
+    (inherited)
+Actions: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+VersioningConfiguration: [ ]
+```
+
+#### AWS::IoTAnalytics::Datastore
+
+```
+DatastoreName: [X]
+DatastoreStorage: [X]
+    (inherited)
+    (inherited)
+RetentionPeriod: [X]
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
+
+#### AWS::IoTAnalytics::Pipeline
+
+```
+Tags: [ ]
+PipelineActivities: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+PipelineName: [X]
+```
+
+#### AWS::IoTEvents::DetectorModel
+
+```
+DetectorModelDescription: [X]
+Tags: [ ]
+RoleArn: [X]
+DetectorModelDefinition: [X]
+    States: [X]
+        OnInput: [X]
+            TransitionEvents: [X]
+                (inherited)
+                (inherited)
+                Actions: [X]
+                    DynamoDBv2: [ ]
+                    SetTimer: [X]
+                        (inherited)
+                        DurationExpression: [ ]
+                        (inherited)
+                    (inherited)
+                    Sqs: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotSiteWise: [ ]
+                    DynamoDB: [ ]
+                    Sns: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    IotTopicPublish: [X]
+                        Payload: [ ]
+                        (inherited)
+                    Firehose: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotEvents: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    Lambda: [X]
+                        Payload: [ ]
+                        (inherited)
+                (inherited)
+            Events: [X]
+                (inherited)
+                (inherited)
+                Actions: [X]
+                    DynamoDBv2: [ ]
+                    SetTimer: [X]
+                        (inherited)
+                        DurationExpression: [ ]
+                        (inherited)
+                    (inherited)
+                    Sqs: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotSiteWise: [ ]
+                    DynamoDB: [ ]
+                    Sns: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    IotTopicPublish: [X]
+                        Payload: [ ]
+                        (inherited)
+                    Firehose: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotEvents: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    Lambda: [X]
+                        Payload: [ ]
+                        (inherited)
+        (inherited)
+        OnEnter: [X]
+            Events: [X]
+                (inherited)
+                (inherited)
+                Actions: [X]
+                    DynamoDBv2: [ ]
+                    SetTimer: [X]
+                        (inherited)
+                        DurationExpression: [ ]
+                        (inherited)
+                    (inherited)
+                    Sqs: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotSiteWise: [ ]
+                    DynamoDB: [ ]
+                    Sns: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    IotTopicPublish: [X]
+                        Payload: [ ]
+                        (inherited)
+                    Firehose: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotEvents: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    Lambda: [X]
+                        Payload: [ ]
+                        (inherited)
+        OnExit: [X]
+            Events: [X]
+                (inherited)
+                (inherited)
+                Actions: [X]
+                    DynamoDBv2: [ ]
+                    SetTimer: [X]
+                        (inherited)
+                        DurationExpression: [ ]
+                        (inherited)
+                    (inherited)
+                    Sqs: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotSiteWise: [ ]
+                    DynamoDB: [ ]
+                    Sns: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    IotTopicPublish: [X]
+                        Payload: [ ]
+                        (inherited)
+                    Firehose: [X]
+                        (inherited)
+                        (inherited)
+                        Payload: [ ]
+                    IotEvents: [X]
+                        (inherited)
+                        Payload: [ ]
+                    (inherited)
+                    Lambda: [X]
+                        Payload: [ ]
+                        (inherited)
+    (inherited)
+EvaluationMethod: [ ]
+Key: [X]
+DetectorModelName: [X]
+```
+
+#### AWS::IoTEvents::Input
+
+```
+InputDefinition: [X]
+    (inherited)
+InputDescription: [X]
+InputName: [X]
+Tags: [ ]
+```
+
+#### AWS::IoTThingsGraph::FlowTemplate
+
+```
+Definition: [X]
+    (inherited)
+    (inherited)
+CompatibleNamespaceVersion: [X]
+```
+
+#### AWS::KMS::Alias
+
+```
+AliasName: [X]
+TargetKeyId: [X]
+```
+
+#### AWS::KMS::Key
+
+```
+KeyPolicy: [X]
+Description: [X]
+Tags: [ ]
+Enabled: [X]
+KeyUsage: [X]
+PendingWindowInDays: [ ]
+EnableKeyRotation: [X]
+```
+
+#### AWS::Kendra::DataSource
+
+```
+Name: [X]
+Tags: [ ]
+DataSourceConfiguration: [X]
+    S3Configuration: [ ]
+    OneDriveConfiguration: [ ]
+    ServiceNowConfiguration: [ ]
+    DatabaseConfiguration: [ ]
+    SalesforceConfiguration: [ ]
+    SharePointConfiguration: [ ]
+RoleArn: [X]
+Schedule: [X]
+IndexId: [X]
+Type: [X]
+Description: [X]
+```
+
+#### AWS::Kendra::Faq
+
+```
+Name: [X]
+Tags: [ ]
+RoleArn: [X]
+IndexId: [X]
+S3Path: [X]
+    Bucket: [ ]
+    Key: [ ]
+FileFormat: [X]
+Description: [X]
+```
+
+#### AWS::Kendra::Index
+
+```
+Name: [X]
+ServerSideEncryptionConfiguration: [X]
+    KmsKeyId: [ ]
+Tags: [ ]
+RoleArn: [X]
+DocumentMetadataConfigurations: [X]
+    DocumentMetadataConfigurationList: [ ]
+Edition: [X]
+CapacityUnits: [X]
+    StorageCapacityUnits: [ ]
+    QueryCapacityUnits: [ ]
+Description: [X]
+```
+
+#### AWS::Kinesis::Stream
+
+```
+ShardCount: [X]
+RetentionPeriodHours: [X]
+StreamEncryption: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+Tags: [ ]
+```
+
+#### AWS::Kinesis::StreamConsumer
+
+```
+ConsumerName: [X]
+StreamARN: [X]
+```
+
+#### AWS::KinesisAnalytics::Application
+
+```
+ApplicationName: [X]
+Inputs: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    InputParallelism: [X]
+        Count: [ ]
+    InputSchema: [X]
+        RecordColumns: [ ]
+        RecordFormat: [ ]
+        RecordEncoding: [ ]
+ApplicationDescription: [X]
+ApplicationCode: [X]
+```
+
+#### AWS::KinesisAnalytics::ApplicationOutput
+
+```
+ApplicationName: [X]
+Output: [X]
+    DestinationSchema: [X]
+        RecordFormatType: [ ]
+    KinesisStreamsOutput: [X]
+        ResourceARN: [ ]
+        RoleARN: [ ]
+    KinesisFirehoseOutput: [X]
+        ResourceARN: [ ]
+        RoleARN: [ ]
+    (inherited)
+    LambdaOutput: [X]
+        ResourceARN: [ ]
+        RoleARN: [ ]
+```
+
+#### AWS::KinesisAnalytics::ApplicationReferenceDataSource
+
+```
+ApplicationName: [X]
+ReferenceDataSource: [X]
+    (inherited)
+    ReferenceSchema: [X]
+        RecordColumns: [ ]
+        RecordFormat: [ ]
+        RecordEncoding: [ ]
+    S3ReferenceDataSource: [X]
+        FileKey: [ ]
+        ReferenceRoleARN: [ ]
+        BucketARN: [ ]
+```
+
+#### AWS::KinesisAnalyticsV2::Application
+
+```
+ApplicationName: [X]
+ApplicationConfiguration: [X]
+    ApplicationSnapshotConfiguration: [X]
+        SnapshotsEnabled: [ ]
+    FlinkApplicationConfiguration: [X]
+        (inherited)
+        CheckpointConfiguration: [X]
+            (inherited)
+            MinPauseBetweenCheckpoints: [ ]
+            CheckpointInterval: [ ]
+            CheckpointingEnabled: [ ]
+        MonitoringConfiguration: [X]
+            LogLevel: [ ]
+            MetricsLevel: [ ]
+            (inherited)
+    ApplicationCodeConfiguration: [X]
+        (inherited)
+        CodeContent: [X]
+            S3ContentLocation: [X]
+                FileKey: [ ]
+                BucketARN: [ ]
+                ObjectVersion: [ ]
+            (inherited)
+            ZipFileContent: [ ]
+    SqlApplicationConfiguration: [X]
+        Inputs: [X]
+            (inherited)
+            (inherited)
+            (inherited)
+            (inherited)
+            InputParallelism: [X]
+                Count: [ ]
+            InputSchema: [X]
+                RecordColumns: [ ]
+                RecordFormat: [ ]
+                RecordEncoding: [ ]
+    (inherited)
+RuntimeEnvironment: [X]
+ApplicationDescription: [X]
+Tags: [ ]
+ServiceExecutionRole: [X]
+```
+
+#### AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption
+
+```
+ApplicationName: [X]
+CloudWatchLoggingOption: [X]
+    (inherited)
+```
+
+#### AWS::KinesisAnalyticsV2::ApplicationOutput
+
+```
+ApplicationName: [X]
+Output: [X]
+    DestinationSchema: [X]
+        RecordFormatType: [ ]
+    KinesisStreamsOutput: [X]
+        ResourceARN: [ ]
+    KinesisFirehoseOutput: [X]
+        ResourceARN: [ ]
+    (inherited)
+    LambdaOutput: [X]
+        ResourceARN: [ ]
+```
+
+#### AWS::KinesisAnalyticsV2::ApplicationReferenceDataSource
+
+```
+ApplicationName: [X]
+ReferenceDataSource: [X]
+    (inherited)
+    ReferenceSchema: [X]
+        RecordColumns: [ ]
+        RecordFormat: [ ]
+        RecordEncoding: [ ]
+    S3ReferenceDataSource: [X]
+        FileKey: [ ]
+        BucketARN: [ ]
+```
+
+#### AWS::KinesisFirehose::DeliveryStream
+
+```
+ExtendedS3DestinationConfiguration: [X]
+    ErrorOutputPrefix: [ ]
+    DataFormatConversionConfiguration: [ ]
+    (inherited)
+    (inherited)
+    BufferingHints: [X]
+        IntervalInSeconds: [ ]
+        SizeInMBs: [ ]
+    EncryptionConfiguration: [X]
+        KMSEncryptionConfig: [ ]
+        NoEncryptionConfig: [ ]
+    (inherited)
+    (inherited)
+    CloudWatchLoggingOptions: [X]
+        Enabled: [ ]
+        LogGroupName: [ ]
+        LogStreamName: [ ]
+    S3BackupConfiguration: [X]
+        EncryptionConfiguration: [X]
+            KMSEncryptionConfig: [ ]
+            NoEncryptionConfig: [ ]
+        (inherited)
+        (inherited)
+        BufferingHints: [X]
+            IntervalInSeconds: [ ]
+            SizeInMBs: [ ]
+        ErrorOutputPrefix: [ ]
+        (inherited)
+        CloudWatchLoggingOptions: [X]
+            Enabled: [ ]
+            LogGroupName: [ ]
+            LogStreamName: [ ]
+        (inherited)
+    (inherited)
+    ProcessingConfiguration: [X]
+        Enabled: [ ]
+        Processors: [ ]
+DeliveryStreamType: [X]
+DeliveryStreamEncryptionConfigurationInput: [X]
+    (inherited)
+    (inherited)
+KinesisStreamSourceConfiguration: [X]
+    (inherited)
+    (inherited)
+SplunkDestinationConfiguration: [X]
+    S3Configuration: [X]
+        EncryptionConfiguration: [X]
+            KMSEncryptionConfig: [ ]
+            NoEncryptionConfig: [ ]
+        (inherited)
+        (inherited)
+        BufferingHints: [X]
+            IntervalInSeconds: [ ]
+            SizeInMBs: [ ]
+        ErrorOutputPrefix: [ ]
+        (inherited)
+        CloudWatchLoggingOptions: [X]
+            Enabled: [ ]
+            LogGroupName: [ ]
+            LogStreamName: [ ]
+        (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    RetryOptions: [X]
+        DurationInSeconds: [ ]
+    (inherited)
+    (inherited)
+    CloudWatchLoggingOptions: [X]
+        Enabled: [ ]
+        LogGroupName: [ ]
+        LogStreamName: [ ]
+    ProcessingConfiguration: [X]
+        Enabled: [ ]
+        Processors: [ ]
+ElasticsearchDestinationConfiguration: [X]
+    S3Configuration: [X]
+        EncryptionConfiguration: [X]
+            KMSEncryptionConfig: [ ]
+            NoEncryptionConfig: [ ]
+        (inherited)
+        (inherited)
+        BufferingHints: [X]
+            IntervalInSeconds: [ ]
+            SizeInMBs: [ ]
+        ErrorOutputPrefix: [ ]
+        (inherited)
+        CloudWatchLoggingOptions: [X]
+            Enabled: [ ]
+            LogGroupName: [ ]
+            LogStreamName: [ ]
+        (inherited)
+    (inherited)
+    VpcConfiguration: [X]
+        (inherited)
+        SubnetIds: [ ]
+        SecurityGroupIds: [ ]
+    RetryOptions: [X]
+        DurationInSeconds: [ ]
+    (inherited)
+    BufferingHints: [X]
+        IntervalInSeconds: [ ]
+        SizeInMBs: [ ]
+    (inherited)
+    ClusterEndpoint: [ ]
+    (inherited)
+    CloudWatchLoggingOptions: [X]
+        Enabled: [ ]
+        LogGroupName: [ ]
+        LogStreamName: [ ]
+    (inherited)
+    (inherited)
+    ProcessingConfiguration: [X]
+        Enabled: [ ]
+        Processors: [ ]
+Tags: [ ]
+RedshiftDestinationConfiguration: [X]
+    (inherited)
+    S3Configuration: [X]
+        EncryptionConfiguration: [X]
+            KMSEncryptionConfig: [ ]
+            NoEncryptionConfig: [ ]
+        (inherited)
+        (inherited)
+        BufferingHints: [X]
+            IntervalInSeconds: [ ]
+            SizeInMBs: [ ]
+        ErrorOutputPrefix: [ ]
+        (inherited)
+        CloudWatchLoggingOptions: [X]
+            Enabled: [ ]
+            LogGroupName: [ ]
+            LogStreamName: [ ]
+        (inherited)
+    RetryOptions: [X]
+        DurationInSeconds: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    CopyCommand: [X]
+        DataTableName: [ ]
+        CopyOptions: [ ]
+        DataTableColumns: [ ]
+    CloudWatchLoggingOptions: [X]
+        Enabled: [ ]
+        LogGroupName: [ ]
+        LogStreamName: [ ]
+    S3BackupConfiguration: [X]
+        EncryptionConfiguration: [X]
+            KMSEncryptionConfig: [ ]
+            NoEncryptionConfig: [ ]
+        (inherited)
+        (inherited)
+        BufferingHints: [X]
+            IntervalInSeconds: [ ]
+            SizeInMBs: [ ]
+        ErrorOutputPrefix: [ ]
+        (inherited)
+        CloudWatchLoggingOptions: [X]
+            Enabled: [ ]
+            LogGroupName: [ ]
+            LogStreamName: [ ]
+        (inherited)
+    ProcessingConfiguration: [X]
+        Enabled: [ ]
+        Processors: [ ]
+    (inherited)
+HttpEndpointDestinationConfiguration: [ ]
+DeliveryStreamName: [X]
+S3DestinationConfiguration: [X]
+    EncryptionConfiguration: [X]
+        KMSEncryptionConfig: [ ]
+        NoEncryptionConfig: [ ]
+    (inherited)
+    (inherited)
+    BufferingHints: [X]
+        IntervalInSeconds: [ ]
+        SizeInMBs: [ ]
+    ErrorOutputPrefix: [ ]
+    (inherited)
+    CloudWatchLoggingOptions: [X]
+        Enabled: [ ]
+        LogGroupName: [ ]
+        LogStreamName: [ ]
+    (inherited)
+```
+
+#### AWS::LakeFormation::DataLakeSettings
+
+```
+Admins: [X]
+    DataLakePrincipalIdentifier: [ ]
+```
+
+#### AWS::LakeFormation::Permissions
+
+```
+DataLakePrincipal: [X]
+    DataLakePrincipalIdentifier: [ ]
+Permissions: [X]
+Resource: [X]
+    TableWithColumnsResource: [X]
+        ColumnNames: [ ]
+        DatabaseName: [ ]
+        Name: [ ]
+        ColumnWildcard: [ ]
+        CatalogId: [ ]
+    DatabaseResource: [X]
+        Name: [ ]
+        CatalogId: [ ]
+    DataLocationResource: [X]
+        (inherited)
+        CatalogId: [ ]
+    TableResource: [X]
+        CatalogId: [ ]
+        Name: [ ]
+        DatabaseName: [ ]
+        TableWildcard: [ ]
+PermissionsWithGrantOption: [X]
+```
+
+#### AWS::LakeFormation::Resource
+
+```
+ResourceArn: [X]
+UseServiceLinkedRole: [ ]
+RoleArn: [X]
+```
+
+#### AWS::Lambda::Alias
+
+```
+Description: [X]
+RoutingConfig: [X]
+    AdditionalVersionWeights: [X]
+        (inherited)
+        FunctionWeight: [ ]
+FunctionVersion: [X]
+ProvisionedConcurrencyConfig: [X]
+    ProvisionedConcurrentExecutions: [ ]
+FunctionName: [X]
+Name: [X]
+```
+
+#### AWS::Lambda::EventInvokeConfig
+
+```
+MaximumEventAgeInSeconds: [X]
+MaximumRetryAttempts: [X]
+DestinationConfig: [X]
+    OnSuccess: [ ]
+    OnFailure: [ ]
+FunctionName: [X]
+Qualifier: [X]
+```
+
+#### AWS::Lambda::EventSourceMapping
+
+```
+MaximumBatchingWindowInSeconds: [X]
+FunctionName: [X]
+MaximumRecordAgeInSeconds: [X]
+Topics: [X]
+BatchSize: [X]
+DestinationConfig: [X]
+    (inherited)
+Enabled: [X]
+EventSourceArn: [X]
+StartingPosition: [ ]
+ParallelizationFactor: [X]
+MaximumRetryAttempts: [X]
+Queues: [ ]
+SourceAccessConfigurations: [ ]
+BisectBatchOnFunctionError: [X]
+```
+
+#### AWS::Lambda::Function
+
+```
+Layers: [X]
+TracingConfig: [X]
+    Mode: [ ]
+Code: [X]
+    (inherited)
+    (inherited)
+    ZipFile: [ ]
+    (inherited)
+DeadLetterConfig: [X]
+    (inherited)
+Description: [X]
+VpcConfig: [X]
+    (inherited)
+    (inherited)
+Tags: [ ]
+KmsKeyArn: [X]
+ReservedConcurrentExecutions: [X]
+MemorySize: [X]
+Environment: [X]
+    (inherited)
+Handler: [X]
+Role: [X]
+Timeout: [X]
+FileSystemConfigs: [X]
+    Arn: [ ]
+    LocalMountPath: [ ]
+Runtime: [X]
+FunctionName: [X]
+```
+
+#### AWS::Lambda::LayerVersion
+
+```
+Content: [X]
+    (inherited)
+    S3ObjectVersion: [ ]
+    (inherited)
+LayerName: [X]
+Description: [X]
+LicenseInfo: [X]
+CompatibleRuntimes: [X]
+```
+
+#### AWS::Lambda::LayerVersionPermission
+
+```
+Action: [X]
+LayerVersionArn: [X]
+OrganizationId: [X]
+Principal: [X]
+```
+
+#### AWS::Lambda::Permission
+
+```
+FunctionName: [X]
+Action: [X]
+SourceAccount: [ ]
+SourceArn: [X]
+EventSourceToken: [ ]
+Principal: [X]
+```
+
+#### AWS::Lambda::Version
+
+```
+CodeSha256: [ ]
+ProvisionedConcurrencyConfig: [X]
+    ProvisionedConcurrentExecutions: [ ]
+FunctionName: [X]
+Description: [X]
+```
+
+#### AWS::Logs::Destination
+
+```
+TargetArn: [X]
+RoleArn: [X]
+DestinationName: [X]
+DestinationPolicy: [X]
+```
+
+#### AWS::Logs::LogGroup
+
+```
+RetentionInDays: [X]
+KmsKeyId: [ ]
+LogGroupName: [X]
+```
+
+#### AWS::Logs::LogStream
+
+```
+LogGroupName: [X]
+LogStreamName: [X]
+```
+
+#### AWS::Logs::MetricFilter
+
+```
+MetricTransformations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+FilterPattern: [X]
+LogGroupName: [X]
+```
+
+#### AWS::Logs::SubscriptionFilter
+
+```
+RoleArn: [X]
+DestinationArn: [X]
+FilterPattern: [X]
+LogGroupName: [X]
+```
+
+#### AWS::MSK::Cluster
+
+```
+LoggingInfo: [X]
+    BrokerLogs: [ ]
+EncryptionInfo: [X]
+    EncryptionInTransit: [ ]
+    EncryptionAtRest: [ ]
+Tags: [X]
+ClusterName: [X]
+KafkaVersion: [X]
+BrokerNodeGroupInfo: [X]
+    (inherited)
+    StorageInfo: [X]
+        EBSStorageInfo: [X]
+            VolumeSize: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+NumberOfBrokerNodes: [X]
+ClientAuthentication: [X]
+    Tls: [ ]
+    Sasl: [ ]
+EnhancedMonitoring: [X]
+OpenMonitoring: [X]
+    Prometheus: [ ]
+ConfigurationInfo: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::Macie::CustomDataIdentifier
+
+```
+Regex: [X]
+Name: [X]
+MaximumMatchDistance: [X]
+Keywords: [X]
+IgnoreWords: [X]
+Description: [X]
+```
+
+#### AWS::Macie::FindingsFilter
+
+```
+Action: [X]
+Position: [X]
+FindingCriteria: [X]
+    (inherited)
+Name: [X]
+Description: [X]
+```
+
+#### AWS::Macie::Session
+
+```
+Status: [X]
+FindingPublishingFrequency: [X]
+```
+
+#### AWS::ManagedBlockchain::Member
+
+```
+NetworkConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    VotingPolicy: [X]
+        ApprovalThresholdPolicy: [ ]
+NetworkId: [X]
+InvitationId: [ ]
+MemberConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::ManagedBlockchain::Node
+
+```
+NetworkId: [X]
+NodeConfiguration: [X]
+    (inherited)
+    (inherited)
+MemberId: [X]
+```
+
+#### AWS::MediaConvert::JobTemplate
+
+```
+Category: [X]
+Priority: [X]
+Description: [X]
+Tags: [ ]
+Queue: [X]
+StatusUpdateInterval: [X]
+SettingsJson: [X]
+AccelerationSettings: [X]
+    Mode: [ ]
+HopDestinations: [ ]
+Name: [X]
+```
+
+#### AWS::MediaConvert::Preset
+
+```
+Category: [X]
+Description: [X]
+SettingsJson: [X]
+Name: [X]
+Tags: [ ]
+```
+
+#### AWS::MediaConvert::Queue
+
+```
+Status: [X]
+Tags: [ ]
+PricingPlan: [X]
+Name: [X]
+Description: [X]
+```
+
+#### AWS::MediaLive::Channel
+
+```
+InputAttachments: [X]
+    AutomaticInputFailoverSettings: [ ]
+    InputId: [ ]
+    InputAttachmentName: [ ]
+    InputSettings: [ ]
+Name: [X]
+Tags: [X]
+LogLevel: [X]
+RoleArn: [X]
+InputSpecification: [X]
+    Codec: [ ]
+    Resolution: [ ]
+    MaximumBitrate: [ ]
+ChannelClass: [X]
+EncoderSettings: [X]
+    NielsenConfiguration: [ ]
+    TimecodeConfig: [ ]
+    AvailConfiguration: [ ]
+    AvailBlanking: [ ]
+    OutputGroups: [ ]
+    GlobalConfiguration: [ ]
+    CaptionDescriptions: [ ]
+    VideoDescriptions: [ ]
+    BlackoutSlate: [ ]
+    FeatureActivations: [ ]
+    AudioDescriptions: [ ]
+Destinations: [X]
+    MultiplexSettings: [ ]
+    Settings: [ ]
+    Id: [ ]
+    MediaPackageSettings: [ ]
+```
+
+#### AWS::MediaLive::Input
+
+```
+MediaConnectFlows: [ ]
+InputSecurityGroups: [ ]
+InputDevices: [ ]
+RoleArn: [ ]
+Tags: [X]
+Sources: [ ]
+Vpc: [ ]
+Destinations: [ ]
+Type: [ ]
+Name: [ ]
+```
+
+#### AWS::MediaLive::InputSecurityGroup
+
+```
+WhitelistRules: [X]
+    Cidr: [ ]
+Tags: [X]
+```
+
+#### AWS::MediaPackage::Asset
+
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
+#### AWS::MediaPackage::Channel
+
+```
+Description: [X]
+Id: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
 #### AWS::MediaPackage::OriginEndpoint
 
-```CmafPackage: [ ]
-    Encryption: [ ]
-        SpekeKeyProvider: [X]
-        KeyRotationIntervalSeconds: [X]
-    SegmentPrefix: [X]
-    HlsManifests: [X]
-    SegmentDurationSeconds: [ ]
-    StreamSelection: [ ]
-        MaxVideoBitsPerSecond: [X]
-        StreamOrder: [X]
-        MinVideoBitsPerSecond: [X]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-TimeDelaySeconds: [ ]
-Description: [ ]
-DashPackage: [ ]
-    Profile: [ ]
-    ManifestWindowSeconds: [ ]
-    SegmentTemplateFormat: [ ]
-    Encryption: [ ]
-        SpekeKeyProvider: [X]
-        KeyRotationIntervalSeconds: [X]
-    PeriodTriggers: [ ]
-    ManifestLayout: [ ]
-    AdsOnDeliveryRestrictions: [ ]
-    MinBufferTimeSeconds: [ ]
-    SuggestedPresentationDelaySeconds: [ ]
-    AdTriggers: [ ]
-        AdTriggers: [ ]
-    SegmentDurationSeconds: [ ]
-    MinUpdatePeriodSeconds: [ ]
-    StreamSelection: [ ]
-        MaxVideoBitsPerSecond: [X]
-        StreamOrder: [X]
-        MinVideoBitsPerSecond: [X]
-Whitelist: [ ]
-StartoverWindowSeconds: [ ]
-Id: [ ]
-MssPackage: [ ]
-    Encryption: [ ]
-        SpekeKeyProvider: [X]
-    ManifestWindowSeconds: [ ]
-    SegmentDurationSeconds: [ ]
-    StreamSelection: [ ]
-        MaxVideoBitsPerSecond: [X]
-        StreamOrder: [X]
-        MinVideoBitsPerSecond: [X]
-ManifestName: [ ]
-HlsPackage: [ ]
-    UseAudioRenditionGroup: [X]
-    PlaylistType: [X]
-    PlaylistWindowSeconds: [X]
-    Encryption: [ ]
-        SpekeKeyProvider: [X]
-        ConstantInitializationVector: [X]
-        RepeatExtXKey: [X]
-        EncryptionMethod: [X]
-        KeyRotationIntervalSeconds: [X]
-    AdsOnDeliveryRestrictions: [ ]
-    ProgramDateTimeIntervalSeconds: [X]
-    IncludeIframeOnlyStream: [X]
-    AdTriggers: [ ]
-        AdTriggers: [ ]
-    SegmentDurationSeconds: [ ]
-    AdMarkers: [X]
-    StreamSelection: [ ]
-        MaxVideoBitsPerSecond: [X]
-        StreamOrder: [X]
-        MinVideoBitsPerSecond: [X]
-ChannelId: [ ]
-Origination: [ ]
-Authorization: [ ]
-    SecretsRoleArn: [X]
-    CdnIdentifierSecret: [X]
 ```
+CmafPackage: [X]
+    Encryption: [X]
+        SpekeKeyProvider: [ ]
+        KeyRotationIntervalSeconds: [ ]
+    SegmentPrefix: [ ]
+    HlsManifests: [ ]
+    (inherited)
+    StreamSelection: [X]
+        MaxVideoBitsPerSecond: [ ]
+        StreamOrder: [ ]
+        MinVideoBitsPerSecond: [ ]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+TimeDelaySeconds: [X]
+Description: [X]
+DashPackage: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    Encryption: [X]
+        SpekeKeyProvider: [ ]
+        KeyRotationIntervalSeconds: [ ]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    StreamSelection: [X]
+        MaxVideoBitsPerSecond: [ ]
+        StreamOrder: [ ]
+        MinVideoBitsPerSecond: [ ]
+Whitelist: [X]
+StartoverWindowSeconds: [X]
+Id: [X]
+MssPackage: [X]
+    Encryption: [X]
+        SpekeKeyProvider: [ ]
+    (inherited)
+    (inherited)
+    StreamSelection: [X]
+        MaxVideoBitsPerSecond: [ ]
+        StreamOrder: [ ]
+        MinVideoBitsPerSecond: [ ]
+ManifestName: [X]
+HlsPackage: [X]
+    UseAudioRenditionGroup: [ ]
+    PlaylistType: [ ]
+    PlaylistWindowSeconds: [ ]
+    Encryption: [X]
+        SpekeKeyProvider: [ ]
+        ConstantInitializationVector: [ ]
+        RepeatExtXKey: [ ]
+        EncryptionMethod: [ ]
+        KeyRotationIntervalSeconds: [ ]
+    (inherited)
+    ProgramDateTimeIntervalSeconds: [ ]
+    IncludeIframeOnlyStream: [ ]
+    (inherited)
+    (inherited)
+    AdMarkers: [ ]
+    StreamSelection: [X]
+        MaxVideoBitsPerSecond: [ ]
+        StreamOrder: [ ]
+        MinVideoBitsPerSecond: [ ]
+ChannelId: [X]
+Origination: [X]
+Authorization: [X]
+    SecretsRoleArn: [ ]
+    CdnIdentifierSecret: [ ]
+```
+
 #### AWS::MediaPackage::PackagingConfiguration
 
-``````
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
 #### AWS::MediaPackage::PackagingGroup
 
-``````
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
 #### AWS::MediaStore::Container
 
-```ContainerName: [ ]
-Tags: [X]
-CorsPolicy: [ ]
-    AllowedHeaders: [X]
-    AllowedOrigins: [X]
-    MaxAgeSeconds: [X]
-    AllowedMethods: [X]
-    ExposeHeaders: [X]
-LifecyclePolicy: [ ]
-MetricPolicy: [ ]
-    MetricPolicyRules: [X]
-    ContainerLevelMetrics: [X]
-Policy: [ ]
-AccessLoggingEnabled: [ ]
 ```
+ContainerName: [X]
+Tags: [ ]
+CorsPolicy: [X]
+    AllowedHeaders: [ ]
+    AllowedOrigins: [ ]
+    MaxAgeSeconds: [ ]
+    AllowedMethods: [ ]
+    ExposeHeaders: [ ]
+LifecyclePolicy: [X]
+MetricPolicy: [X]
+    MetricPolicyRules: [ ]
+    ContainerLevelMetrics: [ ]
+Policy: [X]
+AccessLoggingEnabled: [X]
+```
+
 #### AWS::Neptune::DBCluster
 
-```VpcSecurityGroupIds: [ ]
-RestoreToTime: [X]
-SourceDBClusterIdentifier: [X]
-IamAuthEnabled: [ ]
-Tags: [X]
-PreferredBackupWindow: [ ]
-BackupRetentionPeriod: [ ]
-PreferredMaintenanceWindow: [ ]
-DBClusterParameterGroupName: [ ]
-UseLatestRestorableTime: [X]
-EngineVersion: [ ]
-DBSubnetGroupName: [ ]
-RestoreType: [X]
-DeletionProtection: [ ]
-DBClusterIdentifier: [ ]
-KmsKeyId: [ ]
-StorageEncrypted: [ ]
-AssociatedRoles: [X]
-EnableCloudwatchLogsExports: [ ]
-AvailabilityZones: [ ]
-Port: [ ]
-SnapshotIdentifier: [X]
 ```
+VpcSecurityGroupIds: [X]
+RestoreToTime: [ ]
+SourceDBClusterIdentifier: [ ]
+IamAuthEnabled: [X]
+Tags: [ ]
+PreferredBackupWindow: [X]
+BackupRetentionPeriod: [X]
+PreferredMaintenanceWindow: [X]
+DBClusterParameterGroupName: [X]
+UseLatestRestorableTime: [ ]
+EngineVersion: [X]
+DBSubnetGroupName: [X]
+RestoreType: [ ]
+DeletionProtection: [X]
+DBClusterIdentifier: [X]
+KmsKeyId: [X]
+StorageEncrypted: [X]
+AssociatedRoles: [ ]
+EnableCloudwatchLogsExports: [X]
+AvailabilityZones: [X]
+Port: [X]
+SnapshotIdentifier: [ ]
+```
+
 #### AWS::Neptune::DBClusterParameterGroup
 
-```Parameters: [ ]
-Tags: [X]
-Name: [ ]
-Family: [ ]
-Description: [ ]
 ```
+Parameters: [X]
+Tags: [ ]
+Name: [X]
+Family: [X]
+Description: [X]
+```
+
 #### AWS::Neptune::DBInstance
 
-```DBParameterGroupName: [X]
-AvailabilityZone: [ ]
-AllowMajorVersionUpgrade: [X]
-DBClusterIdentifier: [ ]
-Tags: [X]
-AutoMinorVersionUpgrade: [ ]
-DBSnapshotIdentifier: [X]
-PreferredMaintenanceWindow: [ ]
-DBInstanceClass: [ ]
-DBSubnetGroupName: [ ]
-DBInstanceIdentifier: [ ]
 ```
+DBParameterGroupName: [ ]
+AvailabilityZone: [X]
+AllowMajorVersionUpgrade: [ ]
+DBClusterIdentifier: [X]
+Tags: [ ]
+AutoMinorVersionUpgrade: [X]
+DBSnapshotIdentifier: [ ]
+PreferredMaintenanceWindow: [X]
+DBInstanceClass: [X]
+DBSubnetGroupName: [X]
+DBInstanceIdentifier: [X]
+```
+
 #### AWS::Neptune::DBParameterGroup
 
-```Parameters: [ ]
-Tags: [X]
-Name: [ ]
-Family: [ ]
-Description: [ ]
 ```
+Parameters: [X]
+Tags: [ ]
+Name: [X]
+Family: [X]
+Description: [X]
+```
+
 #### AWS::Neptune::DBSubnetGroup
 
-```DBSubnetGroupName: [ ]
-DBSubnetGroupDescription: [ ]
-SubnetIds: [ ]
-Tags: [X]
 ```
+DBSubnetGroupName: [X]
+DBSubnetGroupDescription: [X]
+SubnetIds: [X]
+Tags: [ ]
+```
+
 #### AWS::NetworkManager::CustomerGatewayAssociation
 
-```GlobalNetworkId: [ ]
-DeviceId: [ ]
-CustomerGatewayArn: [ ]
-LinkId: [ ]
 ```
+GlobalNetworkId: [X]
+DeviceId: [X]
+CustomerGatewayArn: [X]
+LinkId: [X]
+```
+
 #### AWS::NetworkManager::Device
 
-```Vendor: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-SerialNumber: [ ]
-SiteId: [ ]
-Location: [ ]
-    Latitude: [X]
-    Longitude: [X]
-    Address: [X]
-GlobalNetworkId: [ ]
-Model: [ ]
-Type: [ ]
 ```
+Vendor: [X]
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+SerialNumber: [X]
+SiteId: [X]
+Location: [X]
+    Latitude: [ ]
+    Longitude: [ ]
+    Address: [ ]
+GlobalNetworkId: [X]
+Model: [X]
+Type: [X]
+```
+
 #### AWS::NetworkManager::GlobalNetwork
 
-```Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
 ```
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
 #### AWS::NetworkManager::Link
 
-```Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-Bandwidth: [ ]
-    DownloadSpeed: [X]
-    UploadSpeed: [X]
-SiteId: [ ]
-Provider: [ ]
-GlobalNetworkId: [ ]
-Type: [ ]
 ```
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+Bandwidth: [X]
+    DownloadSpeed: [ ]
+    UploadSpeed: [ ]
+SiteId: [X]
+Provider: [X]
+GlobalNetworkId: [X]
+Type: [X]
+```
+
 #### AWS::NetworkManager::LinkAssociation
 
-```GlobalNetworkId: [ ]
-DeviceId: [ ]
-LinkId: [ ]
 ```
+GlobalNetworkId: [X]
+DeviceId: [X]
+LinkId: [X]
+```
+
 #### AWS::NetworkManager::Site
 
-```GlobalNetworkId: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-Location: [ ]
-    Latitude: [X]
-    Longitude: [X]
-    Address: [X]
-Description: [ ]
 ```
+GlobalNetworkId: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+Location: [X]
+    Latitude: [ ]
+    Longitude: [ ]
+    Address: [ ]
+Description: [X]
+```
+
 #### AWS::NetworkManager::TransitGatewayRegistration
 
-```GlobalNetworkId: [ ]
-TransitGatewayArn: [ ]
 ```
+GlobalNetworkId: [X]
+TransitGatewayArn: [X]
+```
+
 #### AWS::OpsWorks::App
 
-```StackId: [ ]
-EnableSsl: [ ]
-AppSource: [ ]
-    Username: [X]
-    SshKey: [X]
-    Url: [X]
-    Password: [X]
-    Type: [ ]
-    Revision: [X]
-DataSources: [ ]
-    Type: [ ]
-    Arn: [X]
-    DatabaseName: [X]
-Description: [ ]
-Environment: [ ]
-    Secure: [X]
-    Value: [X]
-    Key: [X]
-SslConfiguration: [ ]
-    PrivateKey: [X]
-    Certificate: [X]
-    Chain: [X]
-Domains: [ ]
-Attributes: [ ]
-Shortname: [ ]
-Type: [ ]
-Name: [ ]
 ```
+StackId: [X]
+EnableSsl: [X]
+AppSource: [X]
+    Username: [ ]
+    SshKey: [ ]
+    Url: [ ]
+    Password: [ ]
+    (inherited)
+    Revision: [ ]
+DataSources: [X]
+    (inherited)
+    Arn: [ ]
+    DatabaseName: [ ]
+Description: [X]
+Environment: [X]
+    Secure: [ ]
+    Value: [ ]
+    Key: [ ]
+SslConfiguration: [X]
+    PrivateKey: [ ]
+    Certificate: [ ]
+    Chain: [ ]
+Domains: [X]
+Attributes: [X]
+Shortname: [X]
+Type: [X]
+Name: [X]
+```
+
 #### AWS::OpsWorks::ElasticLoadBalancerAttachment
 
-```ElasticLoadBalancerName: [ ]
-LayerId: [ ]
 ```
+ElasticLoadBalancerName: [X]
+LayerId: [X]
+```
+
 #### AWS::OpsWorks::Instance
 
-```StackId: [ ]
-AmiId: [ ]
-AvailabilityZone: [ ]
-VirtualizationType: [ ]
-EbsOptimized: [ ]
-Os: [ ]
-LayerIds: [ ]
-Hostname: [ ]
-SubnetId: [ ]
-BlockDeviceMappings: [ ]
-    Ebs: [X]
-    DeviceName: [X]
-    VirtualName: [X]
-    NoDevice: [X]
-Tenancy: [ ]
-TimeBasedAutoScaling: [X]
-AgentVersion: [ ]
-Volumes: [X]
-AutoScalingType: [ ]
-RootDeviceType: [ ]
-ElasticIps: [ ]
-InstallUpdatesOnBoot: [ ]
-SshKeyName: [ ]
-InstanceType: [ ]
-Architecture: [ ]
 ```
+StackId: [X]
+AmiId: [X]
+AvailabilityZone: [X]
+VirtualizationType: [X]
+EbsOptimized: [X]
+Os: [X]
+LayerIds: [X]
+Hostname: [X]
+SubnetId: [X]
+BlockDeviceMappings: [X]
+    Ebs: [ ]
+    DeviceName: [ ]
+    VirtualName: [ ]
+    NoDevice: [ ]
+Tenancy: [X]
+TimeBasedAutoScaling: [ ]
+AgentVersion: [X]
+Volumes: [ ]
+AutoScalingType: [X]
+RootDeviceType: [X]
+ElasticIps: [X]
+InstallUpdatesOnBoot: [X]
+SshKeyName: [X]
+InstanceType: [X]
+Architecture: [X]
+```
+
 #### AWS::OpsWorks::Layer
 
-```StackId: [ ]
-LifecycleEventConfiguration: [ ]
-    ShutdownEventConfiguration: [ ]
-        DelayUntilElbConnectionsDrained: [X]
-        ExecutionTimeout: [X]
-AutoAssignElasticIps: [ ]
-Name: [ ]
-CustomSecurityGroupIds: [ ]
-LoadBasedAutoScaling: [X]
-CustomJson: [ ]
-Shortname: [ ]
-CustomRecipes: [ ]
-    Undeploy: [X]
-    Setup: [X]
-    Configure: [X]
-    Shutdown: [X]
-    Deploy: [X]
-AutoAssignPublicIps: [ ]
-EnableAutoHealing: [ ]
-CustomInstanceProfileArn: [ ]
-UseEbsOptimizedInstances: [X]
-VolumeConfigurations: [ ]
-    NumberOfDisks: [X]
-    Encrypted: [X]
-    RaidLevel: [X]
-    VolumeType: [X]
-    Iops: [X]
-    MountPoint: [X]
-    Size: [X]
-Attributes: [ ]
-Tags: [X]
-Packages: [ ]
-Type: [ ]
-InstallUpdatesOnBoot: [ ]
 ```
+StackId: [X]
+LifecycleEventConfiguration: [X]
+    ShutdownEventConfiguration: [X]
+        DelayUntilElbConnectionsDrained: [ ]
+        ExecutionTimeout: [ ]
+AutoAssignElasticIps: [X]
+Name: [X]
+CustomSecurityGroupIds: [X]
+LoadBasedAutoScaling: [ ]
+CustomJson: [X]
+Shortname: [X]
+CustomRecipes: [X]
+    Undeploy: [ ]
+    Setup: [ ]
+    Configure: [ ]
+    Shutdown: [ ]
+    Deploy: [ ]
+AutoAssignPublicIps: [X]
+EnableAutoHealing: [X]
+CustomInstanceProfileArn: [X]
+UseEbsOptimizedInstances: [ ]
+VolumeConfigurations: [X]
+    NumberOfDisks: [ ]
+    Encrypted: [ ]
+    RaidLevel: [ ]
+    VolumeType: [ ]
+    Iops: [ ]
+    MountPoint: [ ]
+    Size: [ ]
+Attributes: [X]
+Tags: [ ]
+Packages: [X]
+Type: [X]
+InstallUpdatesOnBoot: [X]
+```
+
 #### AWS::OpsWorks::Stack
 
-```ConfigurationManager: [ ]
-    Version: [X]
-    Name: [ ]
-UseCustomCookbooks: [ ]
-DefaultSshKeyName: [ ]
-CloneAppIds: [X]
-ChefConfiguration: [ ]
-    BerkshelfVersion: [X]
-    ManageBerkshelf: [X]
-UseOpsworksSecurityGroups: [ ]
-ServiceRoleArn: [ ]
-VpcId: [ ]
-Tags: [X]
-HostnameTheme: [ ]
-CustomCookbooksSource: [ ]
-    Username: [X]
-    SshKey: [X]
-    Url: [X]
-    Password: [X]
-    Type: [X]
-    Revision: [X]
-ElasticIps: [X]
-AgentVersion: [ ]
-DefaultAvailabilityZone: [ ]
-ClonePermissions: [X]
-Name: [ ]
-SourceStackId: [X]
-EcsClusterArn: [X]
-DefaultInstanceProfileArn: [ ]
-Attributes: [ ]
-RdsDbInstances: [X]
-DefaultOs: [ ]
-DefaultSubnetId: [ ]
-DefaultRootDeviceType: [ ]
-CustomJson: [ ]
 ```
+ConfigurationManager: [X]
+    Version: [ ]
+    (inherited)
+UseCustomCookbooks: [X]
+DefaultSshKeyName: [X]
+CloneAppIds: [ ]
+ChefConfiguration: [X]
+    BerkshelfVersion: [ ]
+    ManageBerkshelf: [ ]
+UseOpsworksSecurityGroups: [X]
+ServiceRoleArn: [X]
+VpcId: [X]
+Tags: [ ]
+HostnameTheme: [X]
+CustomCookbooksSource: [X]
+    Username: [ ]
+    SshKey: [ ]
+    Url: [ ]
+    Password: [ ]
+    Type: [ ]
+    Revision: [ ]
+ElasticIps: [ ]
+AgentVersion: [X]
+DefaultAvailabilityZone: [X]
+ClonePermissions: [ ]
+Name: [X]
+SourceStackId: [ ]
+EcsClusterArn: [ ]
+DefaultInstanceProfileArn: [X]
+Attributes: [X]
+RdsDbInstances: [ ]
+DefaultOs: [X]
+DefaultSubnetId: [X]
+DefaultRootDeviceType: [X]
+CustomJson: [X]
+```
+
 #### AWS::OpsWorks::UserProfile
 
-```IamUserArn: [ ]
-SshPublicKey: [ ]
-AllowSelfManagement: [ ]
-SshUsername: [ ]
 ```
+IamUserArn: [X]
+SshPublicKey: [X]
+AllowSelfManagement: [X]
+SshUsername: [X]
+```
+
 #### AWS::OpsWorks::Volume
 
-```Ec2VolumeId: [ ]
-MountPoint: [ ]
-Name: [ ]
-StackId: [ ]
 ```
+Ec2VolumeId: [X]
+MountPoint: [X]
+Name: [X]
+StackId: [X]
+```
+
 #### AWS::OpsWorksCM::Server
 
-```ServiceRoleArn: [ ]
-Engine: [ ]
-ServerName: [ ]
-DisableAutomatedBackup: [ ]
-Tags: [X]
-CustomDomain: [ ]
-SubnetIds: [ ]
-BackupRetentionCount: [ ]
-SecurityGroupIds: [ ]
-PreferredBackupWindow: [ ]
-EngineModel: [ ]
-KeyPair: [ ]
-PreferredMaintenanceWindow: [ ]
-EngineVersion: [ ]
-BackupId: [X]
-EngineAttributes: [ ]
-    Name: [X]
-    Value: [X]
-InstanceProfileArn: [ ]
-CustomPrivateKey: [X]
-InstanceType: [ ]
-AssociatePublicIpAddress: [ ]
-CustomCertificate: [X]
 ```
+ServiceRoleArn: [X]
+Engine: [X]
+ServerName: [X]
+DisableAutomatedBackup: [X]
+Tags: [ ]
+CustomDomain: [X]
+SubnetIds: [X]
+BackupRetentionCount: [X]
+SecurityGroupIds: [X]
+PreferredBackupWindow: [X]
+EngineModel: [X]
+KeyPair: [X]
+PreferredMaintenanceWindow: [X]
+EngineVersion: [X]
+BackupId: [ ]
+EngineAttributes: [X]
+    Name: [ ]
+    Value: [ ]
+InstanceProfileArn: [X]
+CustomPrivateKey: [ ]
+InstanceType: [X]
+AssociatePublicIpAddress: [X]
+CustomCertificate: [ ]
+```
+
 #### AWS::Pinpoint::ADMChannel
 
-```Enabled: [ ]
-ClientSecret: [ ]
-ApplicationId: [ ]
-ClientId: [X]
 ```
+Enabled: [X]
+ClientSecret: [X]
+ApplicationId: [X]
+ClientId: [ ]
+```
+
 #### AWS::Pinpoint::APNSChannel
 
-```TokenKey: [X]
-Certificate: [X]
-PrivateKey: [X]
-Enabled: [ ]
-TokenKeyId: [X]
-TeamId: [X]
-DefaultAuthenticationMethod: [ ]
-ApplicationId: [ ]
-BundleId: [X]
 ```
+TokenKey: [ ]
+Certificate: [ ]
+PrivateKey: [ ]
+Enabled: [X]
+TokenKeyId: [ ]
+TeamId: [ ]
+DefaultAuthenticationMethod: [X]
+ApplicationId: [X]
+BundleId: [ ]
+```
+
 #### AWS::Pinpoint::APNSSandboxChannel
 
-```TokenKey: [X]
-Certificate: [X]
-PrivateKey: [X]
-Enabled: [ ]
-TokenKeyId: [X]
-TeamId: [X]
-DefaultAuthenticationMethod: [ ]
-ApplicationId: [ ]
-BundleId: [X]
 ```
+TokenKey: [ ]
+Certificate: [ ]
+PrivateKey: [ ]
+Enabled: [X]
+TokenKeyId: [ ]
+TeamId: [ ]
+DefaultAuthenticationMethod: [X]
+ApplicationId: [X]
+BundleId: [ ]
+```
+
 #### AWS::Pinpoint::APNSVoipChannel
 
-```TokenKey: [X]
-Certificate: [X]
-PrivateKey: [X]
-Enabled: [ ]
-TokenKeyId: [X]
-TeamId: [X]
-DefaultAuthenticationMethod: [ ]
-ApplicationId: [ ]
-BundleId: [X]
 ```
+TokenKey: [ ]
+Certificate: [ ]
+PrivateKey: [ ]
+Enabled: [X]
+TokenKeyId: [ ]
+TeamId: [ ]
+DefaultAuthenticationMethod: [X]
+ApplicationId: [X]
+BundleId: [ ]
+```
+
 #### AWS::Pinpoint::APNSVoipSandboxChannel
 
-```TokenKey: [X]
-Certificate: [X]
-PrivateKey: [X]
-Enabled: [ ]
-TokenKeyId: [X]
-TeamId: [X]
-DefaultAuthenticationMethod: [ ]
-ApplicationId: [ ]
-BundleId: [X]
 ```
+TokenKey: [ ]
+Certificate: [ ]
+PrivateKey: [ ]
+Enabled: [X]
+TokenKeyId: [ ]
+TeamId: [ ]
+DefaultAuthenticationMethod: [X]
+ApplicationId: [X]
+BundleId: [ ]
+```
+
 #### AWS::Pinpoint::App
 
-```Name: [ ]
-Tags: [X]
 ```
+Name: [X]
+Tags: [ ]
+```
+
 #### AWS::Pinpoint::ApplicationSettings
 
-```QuietTime: [ ]
-    Start: [ ]
-    End: [ ]
-CampaignHook: [ ]
-    LambdaFunctionName: [ ]
-    WebUrl: [ ]
-    Mode: [ ]
-ApplicationId: [ ]
-Limits: [ ]
+```
+QuietTime: [X]
+    (inherited)
+    (inherited)
+CampaignHook: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+ApplicationId: [X]
+Limits: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+CloudWatchMetricsEnabled: [ ]
+```
+
+#### AWS::Pinpoint::BaiduChannel
+
+```
+SecretKey: [X]
+Enabled: [X]
+ApiKey: [X]
+ApplicationId: [X]
+```
+
+#### AWS::Pinpoint::Campaign
+
+```
+Name: [X]
+Limits: [X]
     MessagesPerSecond: [ ]
     MaximumDuration: [ ]
     Total: [ ]
     Daily: [ ]
-CloudWatchMetricsEnabled: [X]
+SegmentVersion: [X]
+TreatmentName: [X]
+Schedule: [X]
+    EventFilter: [ ]
+    QuietTime: [ ]
+    Frequency: [ ]
+    IsLocalTime: [ ]
+    StartTime: [ ]
+    TimeZone: [ ]
+    EndTime: [ ]
+HoldoutPercent: [X]
+Tags: [ ]
+Description: [X]
+AdditionalTreatments: [X]
+    (inherited)
+    (inherited)
+    Schedule: [X]
+        EventFilter: [ ]
+        QuietTime: [ ]
+        Frequency: [ ]
+        IsLocalTime: [ ]
+        StartTime: [ ]
+        TimeZone: [ ]
+        EndTime: [ ]
+    (inherited)
+    MessageConfiguration: [X]
+        BaiduMessage: [ ]
+        APNSMessage: [ ]
+        GCMMessage: [ ]
+        EmailMessage: [ ]
+        DefaultMessage: [ ]
+        SMSMessage: [ ]
+        ADMMessage: [ ]
+IsPaused: [X]
+MessageConfiguration: [X]
+    BaiduMessage: [ ]
+    APNSMessage: [ ]
+    GCMMessage: [ ]
+    EmailMessage: [ ]
+    DefaultMessage: [ ]
+    SMSMessage: [ ]
+    ADMMessage: [ ]
+CampaignHook: [X]
+    LambdaFunctionName: [ ]
+    WebUrl: [ ]
+    Mode: [ ]
+ApplicationId: [X]
+TreatmentDescription: [X]
+SegmentId: [X]
 ```
-#### AWS::Pinpoint::BaiduChannel
 
-```SecretKey: [ ]
-Enabled: [ ]
-ApiKey: [ ]
-ApplicationId: [ ]
-```
-#### AWS::Pinpoint::Campaign
-
-```Name: [ ]
-Limits: [ ]
-    MessagesPerSecond: [X]
-    MaximumDuration: [X]
-    Total: [X]
-    Daily: [X]
-SegmentVersion: [ ]
-TreatmentName: [ ]
-Schedule: [ ]
-    EventFilter: [X]
-    QuietTime: [X]
-    Frequency: [X]
-    IsLocalTime: [X]
-    StartTime: [X]
-    TimeZone: [X]
-    EndTime: [X]
-HoldoutPercent: [ ]
-Tags: [X]
-Description: [ ]
-AdditionalTreatments: [ ]
-    TreatmentName: [ ]
-    SizePercent: [ ]
-    Schedule: [ ]
-        EventFilter: [X]
-        QuietTime: [X]
-        Frequency: [X]
-        IsLocalTime: [X]
-        StartTime: [X]
-        TimeZone: [X]
-        EndTime: [X]
-    TreatmentDescription: [ ]
-    MessageConfiguration: [ ]
-        BaiduMessage: [X]
-        APNSMessage: [X]
-        GCMMessage: [X]
-        EmailMessage: [X]
-        DefaultMessage: [X]
-        SMSMessage: [X]
-        ADMMessage: [X]
-IsPaused: [ ]
-MessageConfiguration: [ ]
-    BaiduMessage: [X]
-    APNSMessage: [X]
-    GCMMessage: [X]
-    EmailMessage: [X]
-    DefaultMessage: [X]
-    SMSMessage: [X]
-    ADMMessage: [X]
-CampaignHook: [ ]
-    LambdaFunctionName: [X]
-    WebUrl: [X]
-    Mode: [X]
-ApplicationId: [ ]
-TreatmentDescription: [ ]
-SegmentId: [ ]
-```
 #### AWS::Pinpoint::EmailChannel
 
-```ConfigurationSet: [ ]
-RoleArn: [ ]
-Enabled: [ ]
-FromAddress: [ ]
-ApplicationId: [ ]
-Identity: [ ]
 ```
+ConfigurationSet: [X]
+RoleArn: [X]
+Enabled: [X]
+FromAddress: [X]
+ApplicationId: [X]
+Identity: [X]
+```
+
 #### AWS::Pinpoint::EmailTemplate
 
-```Tags: [ ]
-HtmlPart: [ ]
-TextPart: [ ]
-TemplateName: [ ]
-TemplateDescription: [ ]
-DefaultSubstitutions: [ ]
-Subject: [ ]
 ```
+Tags: [X]
+HtmlPart: [X]
+TextPart: [X]
+TemplateName: [X]
+TemplateDescription: [X]
+DefaultSubstitutions: [X]
+Subject: [X]
+```
+
 #### AWS::Pinpoint::EventStream
 
-```DestinationStreamArn: [ ]
-RoleArn: [ ]
-ApplicationId: [ ]
 ```
+DestinationStreamArn: [X]
+RoleArn: [X]
+ApplicationId: [X]
+```
+
 #### AWS::Pinpoint::GCMChannel
 
-```Enabled: [ ]
-ApiKey: [X]
-ApplicationId: [ ]
 ```
+Enabled: [X]
+ApiKey: [ ]
+ApplicationId: [X]
+```
+
 #### AWS::Pinpoint::PushTemplate
 
-```Baidu: [ ]
-    Sound: [X]
-    Body: [X]
-    Title: [X]
-    Url: [X]
-    ImageUrl: [X]
-    SmallImageIconUrl: [X]
-    Action: [X]
-    ImageIconUrl: [X]
-Tags: [ ]
-TemplateDescription: [ ]
-Default: [ ]
-    Action: [X]
-    Sound: [X]
-    Title: [X]
-    Url: [X]
-    Body: [X]
-TemplateName: [ ]
-GCM: [ ]
-    Sound: [X]
-    Body: [X]
-    Title: [X]
-    Url: [X]
-    ImageUrl: [X]
-    SmallImageIconUrl: [X]
-    Action: [X]
-    ImageIconUrl: [X]
-DefaultSubstitutions: [ ]
-APNS: [ ]
-    Sound: [X]
-    Body: [X]
-    MediaUrl: [X]
-    Url: [X]
-    Title: [X]
-    Action: [X]
-ADM: [ ]
-    Sound: [X]
-    Body: [X]
-    Title: [X]
-    Url: [X]
-    ImageUrl: [X]
-    SmallImageIconUrl: [X]
-    Action: [X]
-    ImageIconUrl: [X]
 ```
+Baidu: [X]
+    Sound: [ ]
+    Body: [ ]
+    Title: [ ]
+    Url: [ ]
+    ImageUrl: [ ]
+    SmallImageIconUrl: [ ]
+    Action: [ ]
+    ImageIconUrl: [ ]
+Tags: [X]
+TemplateDescription: [X]
+Default: [X]
+    Action: [ ]
+    Sound: [ ]
+    Title: [ ]
+    Url: [ ]
+    Body: [ ]
+TemplateName: [X]
+GCM: [X]
+    Sound: [ ]
+    Body: [ ]
+    Title: [ ]
+    Url: [ ]
+    ImageUrl: [ ]
+    SmallImageIconUrl: [ ]
+    Action: [ ]
+    ImageIconUrl: [ ]
+DefaultSubstitutions: [X]
+APNS: [X]
+    Sound: [ ]
+    Body: [ ]
+    MediaUrl: [ ]
+    Url: [ ]
+    Title: [ ]
+    Action: [ ]
+ADM: [X]
+    Sound: [ ]
+    Body: [ ]
+    Title: [ ]
+    Url: [ ]
+    ImageUrl: [ ]
+    SmallImageIconUrl: [ ]
+    Action: [ ]
+    ImageIconUrl: [ ]
+```
+
 #### AWS::Pinpoint::SMSChannel
 
-```ApplicationId: [ ]
-Enabled: [ ]
-ShortCode: [ ]
-SenderId: [ ]
 ```
+ApplicationId: [X]
+Enabled: [X]
+ShortCode: [X]
+SenderId: [X]
+```
+
 #### AWS::Pinpoint::Segment
 
-```Tags: [X]
-ApplicationId: [ ]
-Name: [ ]
-SegmentGroups: [ ]
-    Include: [X]
-    Groups: [X]
-Dimensions: [ ]
-    Demographic: [X]
-    Metrics: [X]
-    UserAttributes: [X]
-    Location: [X]
-    Behavior: [X]
-    Attributes: [X]
 ```
+Tags: [ ]
+ApplicationId: [X]
+Name: [X]
+SegmentGroups: [X]
+    Include: [ ]
+    Groups: [ ]
+Dimensions: [X]
+    Demographic: [ ]
+    Metrics: [ ]
+    UserAttributes: [ ]
+    Location: [ ]
+    Behavior: [ ]
+    Attributes: [ ]
+```
+
 #### AWS::Pinpoint::SmsTemplate
 
-```Body: [ ]
-TemplateDescription: [ ]
-DefaultSubstitutions: [ ]
-TemplateName: [ ]
-Tags: [ ]
 ```
+Body: [X]
+TemplateDescription: [X]
+DefaultSubstitutions: [X]
+TemplateName: [X]
+Tags: [X]
+```
+
 #### AWS::Pinpoint::VoiceChannel
 
-```Enabled: [ ]
-ApplicationId: [ ]
 ```
+Enabled: [X]
+ApplicationId: [X]
+```
+
 #### AWS::PinpointEmail::ConfigurationSet
 
-```Name: [ ]
-Tags: [X]
-SendingOptions: [ ]
-    SendingEnabled: [ ]
-DeliveryOptions: [ ]
-    SendingPoolName: [ ]
-ReputationOptions: [ ]
-    ReputationMetricsEnabled: [ ]
-TrackingOptions: [ ]
-    CustomRedirectDomain: [ ]
 ```
+Name: [X]
+Tags: [ ]
+SendingOptions: [X]
+    (inherited)
+DeliveryOptions: [X]
+    (inherited)
+ReputationOptions: [X]
+    (inherited)
+TrackingOptions: [X]
+    (inherited)
+```
+
 #### AWS::PinpointEmail::ConfigurationSetEventDestination
 
-```EventDestination: [ ]
-    CloudWatchDestination: [ ]
-        DimensionConfigurations: [ ]
-            DimensionName: [ ]
-            DimensionValueSource: [ ]
-            DefaultDimensionValue: [ ]
-    MatchingEventTypes: [ ]
-    SnsDestination: [ ]
-        TopicArn: [ ]
-    Enabled: [ ]
-    KinesisFirehoseDestination: [ ]
-        DeliveryStreamArn: [ ]
-        IamRoleArn: [ ]
-    PinpointDestination: [ ]
-        ApplicationArn: [ ]
-EventDestinationName: [ ]
-ConfigurationSetName: [ ]
 ```
+EventDestination: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+EventDestinationName: [X]
+ConfigurationSetName: [X]
+```
+
 #### AWS::PinpointEmail::DedicatedIpPool
 
-```PoolName: [ ]
-Tags: [X]
 ```
+PoolName: [X]
+Tags: [ ]
+```
+
 #### AWS::PinpointEmail::Identity
 
-```MailFromAttributes: [ ]
-    MailFromDomain: [ ]
-    BehaviorOnMxFailure: [ ]
-DkimSigningEnabled: [ ]
-Name: [ ]
-FeedbackForwardingEnabled: [ ]
-Tags: [X]
 ```
+MailFromAttributes: [X]
+    (inherited)
+    (inherited)
+DkimSigningEnabled: [X]
+Name: [X]
+FeedbackForwardingEnabled: [X]
+Tags: [ ]
+```
+
 #### AWS::QLDB::Ledger
 
-```DeletionProtection: [ ]
-PermissionsMode: [ ]
-Name: [ ]
-Tags: [X]
 ```
+DeletionProtection: [X]
+PermissionsMode: [X]
+Name: [X]
+Tags: [ ]
+```
+
 #### AWS::QLDB::Stream
 
-```KinesisConfiguration: [ ]
-    StreamArn: [X]
-    AggregationEnabled: [X]
-InclusiveStartTime: [ ]
-Tags: [X]
-RoleArn: [ ]
-StreamName: [ ]
-ExclusiveEndTime: [ ]
-LedgerName: [ ]
 ```
+KinesisConfiguration: [X]
+    StreamArn: [ ]
+    AggregationEnabled: [ ]
+InclusiveStartTime: [X]
+Tags: [ ]
+RoleArn: [X]
+StreamName: [X]
+ExclusiveEndTime: [X]
+LedgerName: [X]
+```
+
 #### AWS::RAM::ResourceShare
 
-```AllowExternalPrincipals: [ ]
-Principals: [ ]
-ResourceArns: [ ]
-Name: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
 ```
+AllowExternalPrincipals: [X]
+Principals: [X]
+ResourceArns: [X]
+Name: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
 #### AWS::RDS::DBCluster
 
-```MasterUsername: [ ]
-VpcSecurityGroupIds: [ ]
-EnableIAMDatabaseAuthentication: [ ]
-GlobalClusterIdentifier: [X]
-EnableHttpEndpoint: [ ]
-SourceDBClusterIdentifier: [X]
-EngineMode: [ ]
-Engine: [ ]
-Tags: [X]
-RestoreType: [X]
-PreferredBackupWindow: [ ]
-SourceRegion: [X]
-BackupRetentionPeriod: [ ]
-PreferredMaintenanceWindow: [ ]
-DBClusterParameterGroupName: [X]
-DatabaseName: [ ]
-ScalingConfiguration: [ ]
-    MinCapacity: [ ]
-    AutoPause: [ ]
-    MaxCapacity: [ ]
-    SecondsUntilAutoPause: [ ]
-UseLatestRestorableTime: [X]
-BacktrackWindow: [ ]
-ReplicationSourceIdentifier: [ ]
-EngineVersion: [ ]
-DBSubnetGroupName: [ ]
-DeletionProtection: [ ]
-DBClusterIdentifier: [ ]
-MasterUserPassword: [ ]
-KmsKeyId: [ ]
-StorageEncrypted: [ ]
-AssociatedRoles: [ ]
-    RoleArn: [ ]
-    FeatureName: [ ]
-EnableCloudwatchLogsExports: [ ]
-AvailabilityZones: [ ]
-Port: [ ]
-SnapshotIdentifier: [X]
 ```
+MasterUsername: [X]
+VpcSecurityGroupIds: [X]
+EnableIAMDatabaseAuthentication: [X]
+GlobalClusterIdentifier: [ ]
+EnableHttpEndpoint: [X]
+SourceDBClusterIdentifier: [ ]
+EngineMode: [X]
+Engine: [X]
+Tags: [ ]
+RestoreType: [ ]
+PreferredBackupWindow: [X]
+SourceRegion: [ ]
+BackupRetentionPeriod: [X]
+PreferredMaintenanceWindow: [X]
+DBClusterParameterGroupName: [ ]
+DatabaseName: [X]
+ScalingConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+UseLatestRestorableTime: [ ]
+BacktrackWindow: [X]
+ReplicationSourceIdentifier: [X]
+EngineVersion: [X]
+DBSubnetGroupName: [X]
+DeletionProtection: [X]
+DBClusterIdentifier: [X]
+MasterUserPassword: [X]
+KmsKeyId: [X]
+StorageEncrypted: [X]
+AssociatedRoles: [X]
+    (inherited)
+    (inherited)
+EnableCloudwatchLogsExports: [X]
+AvailabilityZones: [X]
+Port: [X]
+SnapshotIdentifier: [ ]
+```
+
 #### AWS::RDS::DBClusterParameterGroup
 
-```Family: [ ]
-Description: [ ]
-Parameters: [ ]
-Tags: [X]
 ```
-#### AWS::RDS::DBInstance
-
-```DBParameterGroupName: [ ]
-EnablePerformanceInsights: [ ]
-AllowMajorVersionUpgrade: [X]
-DomainIAMRoleName: [ ]
-MasterUsername: [ ]
-EngineVersion: [ ]
-LicenseModel: [ ]
-EnableIAMDatabaseAuthentication: [ ]
-VPCSecurityGroups: [ ]
-CopyTagsToSnapshot: [ ]
-EnableCloudwatchLogsExports: [ ]
-Engine: [ ]
-MultiAZ: [ ]
-MaxAllocatedStorage: [ ]
-DBSecurityGroups: [ ]
-PubliclyAccessible: [ ]
-UseDefaultProcessorFeatures: [X]
-Tags: [X]
-PerformanceInsightsRetentionPeriod: [ ]
-AutoMinorVersionUpgrade: [ ]
-PreferredBackupWindow: [ ]
-PromotionTier: [ ]
-DBSnapshotIdentifier: [X]
-AllocatedStorage: [ ]
-BackupRetentionPeriod: [ ]
-DBName: [ ]
-PreferredMaintenanceWindow: [ ]
-SourceRegion: [X]
-PerformanceInsightsKMSKeyId: [ ]
-CharacterSetName: [ ]
-MonitoringInterval: [ ]
-ProcessorFeatures: [ ]
-    Name: [X]
-    Value: [X]
-SourceDBInstanceIdentifier: [X]
-DBSubnetGroupName: [ ]
-OptionGroupName: [ ]
-DeletionProtection: [ ]
-Domain: [ ]
-AvailabilityZone: [ ]
-DeleteAutomatedBackups: [X]
-DBClusterIdentifier: [ ]
-MonitoringRoleArn: [ ]
-StorageType: [ ]
-CACertificateIdentifier: [ ]
-MasterUserPassword: [ ]
-Iops: [ ]
-StorageEncrypted: [ ]
-AssociatedRoles: [ ]
-    RoleArn: [ ]
-    FeatureName: [ ]
-KmsKeyId: [ ]
-Timezone: [ ]
-DBInstanceClass: [ ]
-Port: [ ]
-DBInstanceIdentifier: [ ]
-```
-#### AWS::RDS::DBParameterGroup
-
-```Family: [ ]
-Description: [ ]
-Parameters: [ ]
-Tags: [X]
-```
-#### AWS::RDS::DBProxy
-
-```DebugLogging: [ ]
-RequireTLS: [ ]
-Tags: [X]
-RoleArn: [ ]
-VpcSecurityGroupIds: [ ]
-Auth: [ ]
-    SecretArn: [X]
-    UserName: [X]
-    AuthScheme: [X]
-    IAMAuth: [X]
-    Description: [X]
-IdleClientTimeout: [ ]
-VpcSubnetIds: [ ]
-DBProxyName: [ ]
-EngineFamily: [ ]
-```
-#### AWS::RDS::DBProxyTargetGroup
-
-```DBInstanceIdentifiers: [ ]
-DBClusterIdentifiers: [ ]
-DBProxyName: [ ]
-TargetGroupName: [ ]
-ConnectionPoolConfigurationInfo: [ ]
-    MaxIdleConnectionsPercent: [X]
-    InitQuery: [X]
-    ConnectionBorrowTimeout: [X]
-    MaxConnectionsPercent: [X]
-    SessionPinningFilters: [X]
-```
-#### AWS::RDS::DBSecurityGroup
-
-```DBSecurityGroupIngress: [ ]
-    EC2SecurityGroupName: [ ]
-    EC2SecurityGroupOwnerId: [ ]
-    EC2SecurityGroupId: [ ]
-    CIDRIP: [ ]
-EC2VpcId: [ ]
-GroupDescription: [ ]
-Tags: [X]
-```
-#### AWS::RDS::DBSecurityGroupIngress
-
-``````
-#### AWS::RDS::DBSubnetGroup
-
-```DBSubnetGroupName: [ ]
-DBSubnetGroupDescription: [ ]
-SubnetIds: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-```
-#### AWS::RDS::EventSubscription
-
-```SourceIds: [ ]
-EventCategories: [ ]
-Enabled: [ ]
-SourceType: [ ]
-SnsTopicArn: [ ]
-```
-#### AWS::RDS::OptionGroup
-
-```OptionGroupDescription: [ ]
-EngineName: [ ]
-OptionConfigurations: [ ]
-    DBSecurityGroupMemberships: [ ]
-    OptionName: [ ]
-    VpcSecurityGroupMemberships: [ ]
-    OptionSettings: [ ]
-        Name: [ ]
-        Value: [ ]
-    OptionVersion: [ ]
-    Port: [ ]
-MajorEngineVersion: [ ]
-Tags: [X]
-```
-#### AWS::Redshift::Cluster
-
-```ClusterParameterGroupName: [X]
-SnapshotClusterIdentifier: [X]
-MasterUsername: [ ]
-OwnerAccount: [X]
-VpcSecurityGroupIds: [ ]
-ClusterSubnetGroupName: [ ]
-NumberOfNodes: [ ]
-ClusterVersion: [ ]
-PubliclyAccessible: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-AutomatedSnapshotRetentionPeriod: [ ]
-DBName: [ ]
-PreferredMaintenanceWindow: [ ]
-ClusterType: [X]
-IamRoles: [ ]
-AllowVersionUpgrade: [ ]
-HsmClientCertificateIdentifier: [ ]
-ClusterSecurityGroups: [ ]
-ClusterIdentifier: [ ]
-LoggingProperties: [X]
-AvailabilityZone: [ ]
-NodeType: [ ]
-ElasticIp: [ ]
-Encrypted: [ ]
-MasterUserPassword: [ ]
-KmsKeyId: [ ]
-SnapshotIdentifier: [X]
-Port: [ ]
-HsmConfigurationIdentifier: [ ]
-```
-#### AWS::Redshift::ClusterParameterGroup
-
-```ParameterGroupFamily: [ ]
-Description: [ ]
+Family: [X]
+Description: [X]
 Parameters: [X]
 Tags: [ ]
-    Key: [X]
-    Value: [X]
 ```
+
+#### AWS::RDS::DBInstance
+
+```
+DBParameterGroupName: [X]
+EnablePerformanceInsights: [X]
+AllowMajorVersionUpgrade: [ ]
+DomainIAMRoleName: [X]
+MasterUsername: [X]
+EngineVersion: [X]
+LicenseModel: [X]
+EnableIAMDatabaseAuthentication: [X]
+VPCSecurityGroups: [X]
+CopyTagsToSnapshot: [X]
+EnableCloudwatchLogsExports: [X]
+Engine: [X]
+MultiAZ: [X]
+MaxAllocatedStorage: [X]
+DBSecurityGroups: [X]
+PubliclyAccessible: [X]
+UseDefaultProcessorFeatures: [ ]
+Tags: [ ]
+PerformanceInsightsRetentionPeriod: [X]
+AutoMinorVersionUpgrade: [X]
+PreferredBackupWindow: [X]
+PromotionTier: [X]
+DBSnapshotIdentifier: [ ]
+AllocatedStorage: [X]
+BackupRetentionPeriod: [X]
+DBName: [X]
+PreferredMaintenanceWindow: [X]
+SourceRegion: [ ]
+PerformanceInsightsKMSKeyId: [X]
+CharacterSetName: [X]
+MonitoringInterval: [X]
+ProcessorFeatures: [X]
+    Name: [ ]
+    Value: [ ]
+SourceDBInstanceIdentifier: [ ]
+DBSubnetGroupName: [X]
+OptionGroupName: [X]
+DeletionProtection: [X]
+Domain: [X]
+AvailabilityZone: [X]
+DeleteAutomatedBackups: [ ]
+DBClusterIdentifier: [X]
+MonitoringRoleArn: [X]
+StorageType: [X]
+CACertificateIdentifier: [X]
+MasterUserPassword: [X]
+Iops: [X]
+StorageEncrypted: [X]
+AssociatedRoles: [X]
+    (inherited)
+    (inherited)
+KmsKeyId: [X]
+Timezone: [X]
+DBInstanceClass: [X]
+Port: [X]
+DBInstanceIdentifier: [X]
+```
+
+#### AWS::RDS::DBParameterGroup
+
+```
+Family: [X]
+Description: [X]
+Parameters: [X]
+Tags: [ ]
+```
+
+#### AWS::RDS::DBProxy
+
+```
+DebugLogging: [X]
+RequireTLS: [X]
+Tags: [ ]
+RoleArn: [X]
+VpcSecurityGroupIds: [X]
+Auth: [X]
+    SecretArn: [ ]
+    UserName: [ ]
+    AuthScheme: [ ]
+    IAMAuth: [ ]
+    Description: [ ]
+IdleClientTimeout: [X]
+VpcSubnetIds: [X]
+DBProxyName: [X]
+EngineFamily: [X]
+```
+
+#### AWS::RDS::DBProxyTargetGroup
+
+```
+DBInstanceIdentifiers: [X]
+DBClusterIdentifiers: [X]
+DBProxyName: [X]
+TargetGroupName: [X]
+ConnectionPoolConfigurationInfo: [X]
+    MaxIdleConnectionsPercent: [ ]
+    InitQuery: [ ]
+    ConnectionBorrowTimeout: [ ]
+    MaxConnectionsPercent: [ ]
+    SessionPinningFilters: [ ]
+```
+
+#### AWS::RDS::DBSecurityGroup
+
+```
+DBSecurityGroupIngress: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+EC2VpcId: [X]
+GroupDescription: [X]
+Tags: [ ]
+```
+
+#### AWS::RDS::DBSecurityGroupIngress
+
+```
+```
+
+#### AWS::RDS::DBSubnetGroup
+
+```
+DBSubnetGroupName: [X]
+DBSubnetGroupDescription: [X]
+SubnetIds: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
+#### AWS::RDS::EventSubscription
+
+```
+SourceIds: [X]
+EventCategories: [X]
+Enabled: [X]
+SourceType: [X]
+SnsTopicArn: [X]
+```
+
+#### AWS::RDS::OptionGroup
+
+```
+OptionGroupDescription: [X]
+EngineName: [X]
+OptionConfigurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+MajorEngineVersion: [X]
+Tags: [ ]
+```
+
+#### AWS::Redshift::Cluster
+
+```
+ClusterParameterGroupName: [ ]
+SnapshotClusterIdentifier: [ ]
+MasterUsername: [X]
+OwnerAccount: [ ]
+VpcSecurityGroupIds: [X]
+ClusterSubnetGroupName: [X]
+NumberOfNodes: [X]
+ClusterVersion: [X]
+PubliclyAccessible: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+AutomatedSnapshotRetentionPeriod: [X]
+DBName: [X]
+PreferredMaintenanceWindow: [X]
+ClusterType: [ ]
+IamRoles: [X]
+AllowVersionUpgrade: [X]
+HsmClientCertificateIdentifier: [X]
+ClusterSecurityGroups: [X]
+ClusterIdentifier: [X]
+LoggingProperties: [ ]
+AvailabilityZone: [X]
+NodeType: [X]
+ElasticIp: [X]
+Encrypted: [X]
+MasterUserPassword: [X]
+KmsKeyId: [X]
+SnapshotIdentifier: [ ]
+Port: [X]
+HsmConfigurationIdentifier: [X]
+```
+
+#### AWS::Redshift::ClusterParameterGroup
+
+```
+ParameterGroupFamily: [X]
+Description: [X]
+Parameters: [ ]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
 #### AWS::Redshift::ClusterSecurityGroup
 
-```Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
 ```
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
 #### AWS::Redshift::ClusterSecurityGroupIngress
 
-``````
+```
+```
+
 #### AWS::Redshift::ClusterSubnetGroup
 
-```SubnetIds: [ ]
-Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
 ```
+SubnetIds: [X]
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
 #### AWS::ResourceGroups::Group
 
-```Description: [ ]
-Name: [ ]
-ResourceQuery: [ ]
-    Query: [ ]
-        TagFilters: [X]
-        ResourceTypeFilters: [X]
-        StackIdentifier: [X]
-    Type: [ ]
-Tags: [X]
 ```
+Description: [X]
+Name: [X]
+ResourceQuery: [X]
+    Query: [X]
+        TagFilters: [ ]
+        ResourceTypeFilters: [ ]
+        StackIdentifier: [ ]
+    (inherited)
+Tags: [ ]
+```
+
 #### AWS::RoboMaker::Fleet
 
-```Name: [ ]
-Tags: [ ]
 ```
+Name: [X]
+Tags: [X]
+```
+
 #### AWS::RoboMaker::Robot
 
-```GreengrassGroupId: [ ]
-Fleet: [ ]
-Tags: [ ]
-Name: [ ]
-Architecture: [ ]
 ```
+GreengrassGroupId: [X]
+Fleet: [X]
+Tags: [X]
+Name: [X]
+Architecture: [X]
+```
+
 #### AWS::RoboMaker::RobotApplication
 
-```Sources: [ ]
-    S3Bucket: [ ]
-    S3Key: [ ]
-    Architecture: [ ]
-RobotSoftwareSuite: [ ]
-    Version: [ ]
-    Name: [ ]
-Name: [ ]
-CurrentRevisionId: [ ]
-Tags: [ ]
 ```
+Sources: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+RobotSoftwareSuite: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+CurrentRevisionId: [X]
+Tags: [X]
+```
+
 #### AWS::RoboMaker::RobotApplicationVersion
 
-```Application: [ ]
-CurrentRevisionId: [ ]
 ```
+Application: [X]
+CurrentRevisionId: [X]
+```
+
 #### AWS::RoboMaker::SimulationApplication
 
-```RenderingEngine: [ ]
-    Version: [ ]
-    Name: [ ]
-Name: [ ]
-Tags: [ ]
-Sources: [ ]
-    S3Bucket: [ ]
-    S3Key: [ ]
-    Architecture: [ ]
-CurrentRevisionId: [ ]
-SimulationSoftwareSuite: [ ]
-    Version: [ ]
-    Name: [ ]
-RobotSoftwareSuite: [ ]
-    Version: [ ]
-    Name: [ ]
 ```
+RenderingEngine: [X]
+    (inherited)
+    (inherited)
+Name: [X]
+Tags: [X]
+Sources: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+CurrentRevisionId: [X]
+SimulationSoftwareSuite: [X]
+    (inherited)
+    (inherited)
+RobotSoftwareSuite: [X]
+    (inherited)
+    (inherited)
+```
+
 #### AWS::RoboMaker::SimulationApplicationVersion
 
-```Application: [ ]
-CurrentRevisionId: [ ]
 ```
+Application: [X]
+CurrentRevisionId: [X]
+```
+
 #### AWS::Route53::HealthCheck
 
-```HealthCheckConfig: [ ]
-HealthCheckTags: [X]
 ```
+HealthCheckConfig: [X]
+HealthCheckTags: [ ]
+```
+
 #### AWS::Route53::HostedZone
 
-```VPCs: [ ]
-    VPCId: [X]
-    VPCRegion: [X]
-HostedZoneConfig: [ ]
-    Comment: [ ]
-HostedZoneTags: [X]
-Name: [ ]
-QueryLoggingConfig: [X]
 ```
+VPCs: [X]
+    VPCId: [ ]
+    VPCRegion: [ ]
+HostedZoneConfig: [X]
+    (inherited)
+HostedZoneTags: [ ]
+Name: [X]
+QueryLoggingConfig: [ ]
+```
+
 #### AWS::Route53::RecordSet
 
-```Comment: [X]
-GeoLocation: [ ]
-    SubdivisionCode: [X]
-    ContinentCode: [X]
-    CountryCode: [X]
-HealthCheckId: [ ]
-Name: [ ]
-Weight: [ ]
-HostedZoneName: [X]
-SetIdentifier: [ ]
-Failover: [ ]
-AliasTarget: [ ]
-    EvaluateTargetHealth: [X]
-    HostedZoneId: [ ]
-    DNSName: [X]
-ResourceRecords: [ ]
-MultiValueAnswer: [ ]
-TTL: [ ]
-HostedZoneId: [ ]
-Type: [ ]
-Region: [ ]
 ```
+Comment: [ ]
+GeoLocation: [X]
+    SubdivisionCode: [ ]
+    ContinentCode: [ ]
+    CountryCode: [ ]
+HealthCheckId: [X]
+Name: [X]
+Weight: [X]
+HostedZoneName: [ ]
+SetIdentifier: [X]
+Failover: [X]
+AliasTarget: [X]
+    EvaluateTargetHealth: [ ]
+    (inherited)
+    DNSName: [ ]
+ResourceRecords: [X]
+MultiValueAnswer: [X]
+TTL: [X]
+HostedZoneId: [X]
+Type: [X]
+Region: [X]
+```
+
 #### AWS::Route53::RecordSetGroup
 
-``````
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
 #### AWS::Route53Resolver::ResolverEndpoint
 
-```Direction: [ ]
-SecurityGroupIds: [ ]
-Name: [ ]
-IpAddresses: [ ]
-    SubnetId: [ ]
-    Ip: [ ]
-Tags: [X]
 ```
+Direction: [X]
+SecurityGroupIds: [X]
+Name: [X]
+IpAddresses: [X]
+    (inherited)
+    (inherited)
+Tags: [ ]
+```
+
 #### AWS::Route53Resolver::ResolverQueryLoggingConfig
 
-```DestinationArn: [ ]
-Name: [ ]
 ```
+DestinationArn: [X]
+Name: [X]
+```
+
 #### AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation
 
-```ResourceId: [ ]
-ResolverQueryLogConfigId: [ ]
 ```
+ResourceId: [X]
+ResolverQueryLogConfigId: [X]
+```
+
 #### AWS::Route53Resolver::ResolverRule
 
-```RuleType: [ ]
-ResolverEndpointId: [ ]
-Name: [ ]
-DomainName: [ ]
-TargetIps: [ ]
-    Ip: [X]
-    Port: [X]
-Tags: [X]
 ```
+RuleType: [X]
+ResolverEndpointId: [X]
+Name: [X]
+DomainName: [X]
+TargetIps: [X]
+    Ip: [ ]
+    Port: [ ]
+Tags: [ ]
+```
+
 #### AWS::Route53Resolver::ResolverRuleAssociation
 
-```VPCId: [ ]
-ResolverRuleId: [ ]
-Name: [ ]
 ```
+VPCId: [X]
+ResolverRuleId: [X]
+Name: [X]
+```
+
 #### AWS::S3::AccessPoint
 
-```Name: [ ]
-Bucket: [ ]
-NetworkOrigin: [X]
-PolicyStatus: [X]
-PublicAccessBlockConfiguration: [ ]
-    IgnorePublicAcls: [X]
-    BlockPublicPolicy: [X]
-    BlockPublicAcls: [X]
-    RestrictPublicBuckets: [X]
-Policy: [ ]
-CreationDate: [X]
-VpcConfiguration: [ ]
-    VpcId: [X]
 ```
+Name: [X]
+Bucket: [X]
+NetworkOrigin: [ ]
+PolicyStatus: [ ]
+PublicAccessBlockConfiguration: [X]
+    IgnorePublicAcls: [ ]
+    BlockPublicPolicy: [ ]
+    BlockPublicAcls: [ ]
+    RestrictPublicBuckets: [ ]
+Policy: [X]
+CreationDate: [ ]
+VpcConfiguration: [X]
+    VpcId: [ ]
+```
+
 #### AWS::S3::Bucket
 
-```AccessControl: [X]
-ReplicationConfiguration: [ ]
-    Rules: [ ]
-        Status: [ ]
-        Filter: [ ]
-            And: [X]
-            Prefix: [ ]
-            TagFilter: [X]
-        SourceSelectionCriteria: [ ]
-            SseKmsEncryptedObjects: [X]
-            ReplicaModifications: [X]
-        DeleteMarkerReplication: [X]
-        Destination: [ ]
-            EncryptionConfiguration: [X]
-            AccessControlTranslation: [X]
-            Account: [X]
-            Bucket: [X]
-            ReplicationTime: [X]
-            Metrics: [X]
-            StorageClass: [ ]
-        Priority: [X]
-        Prefix: [ ]
-        Id: [ ]
-    Role: [ ]
-CorsConfiguration: [ ]
-    CorsRules: [ ]
-        AllowedHeaders: [ ]
-        MaxAge: [X]
-        ExposedHeaders: [ ]
-        AllowedMethods: [ ]
-        Id: [ ]
-        AllowedOrigins: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-ObjectLockEnabled: [X]
-AccelerateConfiguration: [ ]
-    AccelerationStatus: [ ]
-InventoryConfigurations: [ ]
-    ScheduleFrequency: [ ]
-    Destination: [ ]
-        BucketArn: [ ]
-        BucketAccountId: [ ]
-        Prefix: [ ]
-        Format: [ ]
-    Enabled: [ ]
-    OptionalFields: [ ]
-    Prefix: [ ]
-    IncludedObjectVersions: [ ]
-    Id: [ ]
-ObjectLockConfiguration: [ ]
-    ObjectLockEnabled: [X]
-    Rule: [X]
-LoggingConfiguration: [ ]
-    DestinationBucketName: [ ]
-    LogFilePrefix: [ ]
-LifecycleConfiguration: [ ]
-    Rules: [ ]
-        Status: [ ]
-        TagFilters: [ ]
-            Key: [X]
-            Value: [X]
-        NoncurrentVersionExpirationInDays: [ ]
-        Transition: [X]
-        NoncurrentVersionTransitions: [ ]
-            TransitionInDays: [ ]
-            StorageClass: [ ]
-        Prefix: [ ]
-        ExpirationInDays: [ ]
-        ExpirationDate: [ ]
-        AbortIncompleteMultipartUpload: [ ]
-            DaysAfterInitiation: [X]
-        NoncurrentVersionTransition: [X]
-        Transitions: [ ]
-            TransitionInDays: [ ]
-            TransitionDate: [ ]
-            StorageClass: [ ]
-        Id: [ ]
-VersioningConfiguration: [ ]
-    Status: [ ]
-WebsiteConfiguration: [ ]
-    RedirectAllRequestsTo: [ ]
-        HostName: [X]
-        Protocol: [X]
-    IndexDocument: [ ]
-    ErrorDocument: [ ]
-    RoutingRules: [ ]
-        RoutingRuleCondition: [ ]
-            HttpErrorCodeReturnedEquals: [X]
-            KeyPrefixEquals: [X]
-        RedirectRule: [ ]
-            ReplaceKeyWith: [X]
-            Protocol: [X]
-            HostName: [X]
-            HttpRedirectCode: [X]
-            ReplaceKeyPrefixWith: [X]
-PublicAccessBlockConfiguration: [X]
-MetricsConfigurations: [ ]
-    Prefix: [ ]
-    TagFilters: [ ]
-        Key: [X]
-        Value: [X]
-    Id: [ ]
-NotificationConfiguration: [ ]
-    QueueConfigurations: [ ]
-        Filter: [ ]
-            S3Key: [ ]
-                Rules: [ ]
-                    Name: [X]
-                    Value: [X]
-        Queue: [ ]
-        Event: [ ]
-    LambdaConfigurations: [ ]
-        Filter: [ ]
-            S3Key: [ ]
-                Rules: [ ]
-                    Name: [X]
-                    Value: [X]
-        Function: [ ]
-        Event: [ ]
-    TopicConfigurations: [ ]
-        Filter: [ ]
-            S3Key: [ ]
-                Rules: [ ]
-                    Name: [X]
-                    Value: [X]
-        Topic: [ ]
-        Event: [ ]
-BucketEncryption: [ ]
-    ServerSideEncryptionConfiguration: [ ]
-        ServerSideEncryptionByDefault: [ ]
-            KMSMasterKeyID: [X]
-            SSEAlgorithm: [X]
-AnalyticsConfigurations: [ ]
-    Prefix: [ ]
-    StorageClassAnalysis: [ ]
-        DataExport: [ ]
-            Destination: [ ]
-                BucketArn: [ ]
-                BucketAccountId: [ ]
-                Prefix: [ ]
-                Format: [ ]
-            OutputSchemaVersion: [ ]
-    Id: [ ]
-    TagFilters: [ ]
-        Key: [X]
-        Value: [X]
-BucketName: [ ]
 ```
+AccessControl: [ ]
+ReplicationConfiguration: [X]
+    Rules: [X]
+        (inherited)
+        Filter: [X]
+            And: [ ]
+            (inherited)
+            TagFilter: [ ]
+        SourceSelectionCriteria: [X]
+            SseKmsEncryptedObjects: [ ]
+            ReplicaModifications: [ ]
+        DeleteMarkerReplication: [ ]
+        Destination: [X]
+            EncryptionConfiguration: [ ]
+            AccessControlTranslation: [ ]
+            Account: [ ]
+            Bucket: [ ]
+            ReplicationTime: [ ]
+            Metrics: [ ]
+            (inherited)
+        Priority: [ ]
+        (inherited)
+        (inherited)
+    (inherited)
+CorsConfiguration: [X]
+    CorsRules: [X]
+        (inherited)
+        MaxAge: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+ObjectLockEnabled: [ ]
+AccelerateConfiguration: [X]
+    (inherited)
+InventoryConfigurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+ObjectLockConfiguration: [X]
+    ObjectLockEnabled: [ ]
+    Rule: [ ]
+LoggingConfiguration: [X]
+    (inherited)
+    (inherited)
+LifecycleConfiguration: [X]
+    Rules: [X]
+        (inherited)
+        TagFilters: [X]
+            Key: [ ]
+            Value: [ ]
+        (inherited)
+        Transition: [ ]
+        (inherited)
+        (inherited)
+        (inherited)
+        (inherited)
+        AbortIncompleteMultipartUpload: [X]
+            DaysAfterInitiation: [ ]
+        NoncurrentVersionTransition: [ ]
+        (inherited)
+        (inherited)
+VersioningConfiguration: [X]
+    (inherited)
+WebsiteConfiguration: [X]
+    RedirectAllRequestsTo: [X]
+        HostName: [ ]
+        Protocol: [ ]
+    (inherited)
+    (inherited)
+    RoutingRules: [X]
+        RoutingRuleCondition: [X]
+            HttpErrorCodeReturnedEquals: [ ]
+            KeyPrefixEquals: [ ]
+        RedirectRule: [X]
+            ReplaceKeyWith: [ ]
+            Protocol: [ ]
+            HostName: [ ]
+            HttpRedirectCode: [ ]
+            ReplaceKeyPrefixWith: [ ]
+PublicAccessBlockConfiguration: [ ]
+MetricsConfigurations: [X]
+    (inherited)
+    TagFilters: [X]
+        Key: [ ]
+        Value: [ ]
+    (inherited)
+NotificationConfiguration: [X]
+    QueueConfigurations: [X]
+        Filter: [X]
+            S3Key: [X]
+                Rules: [X]
+                    Name: [ ]
+                    Value: [ ]
+        (inherited)
+        (inherited)
+    LambdaConfigurations: [X]
+        Filter: [X]
+            S3Key: [X]
+                Rules: [X]
+                    Name: [ ]
+                    Value: [ ]
+        (inherited)
+        (inherited)
+    TopicConfigurations: [X]
+        Filter: [X]
+            S3Key: [X]
+                Rules: [X]
+                    Name: [ ]
+                    Value: [ ]
+        (inherited)
+        (inherited)
+BucketEncryption: [X]
+    ServerSideEncryptionConfiguration: [X]
+        ServerSideEncryptionByDefault: [X]
+            KMSMasterKeyID: [ ]
+            SSEAlgorithm: [ ]
+AnalyticsConfigurations: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    TagFilters: [X]
+        Key: [ ]
+        Value: [ ]
+BucketName: [X]
+```
+
 #### AWS::S3::BucketPolicy
 
-```PolicyDocument: [ ]
-Bucket: [ ]
 ```
+PolicyDocument: [X]
+Bucket: [X]
+```
+
 #### AWS::SDB::Domain
 
-``````
+```
+```
+
 #### AWS::SES::ConfigurationSet
 
-```Name: [ ]
 ```
+Name: [X]
+```
+
 #### AWS::SES::ConfigurationSetEventDestination
 
-```EventDestination: [ ]
-    Enabled: [ ]
-    CloudWatchDestination: [ ]
-        DimensionConfigurations: [X]
-    MatchingEventTypes: [ ]
-    Name: [ ]
-    KinesisFirehoseDestination: [ ]
-        DeliveryStreamARN: [X]
-        IAMRoleARN: [X]
-ConfigurationSetName: [ ]
 ```
+EventDestination: [X]
+    (inherited)
+    CloudWatchDestination: [X]
+        DimensionConfigurations: [ ]
+    (inherited)
+    (inherited)
+    KinesisFirehoseDestination: [X]
+        DeliveryStreamARN: [ ]
+        IAMRoleARN: [ ]
+ConfigurationSetName: [X]
+```
+
 #### AWS::SES::ReceiptFilter
 
-```Filter: [ ]
-    IpFilter: [X]
-    Name: [X]
 ```
+Filter: [X]
+    IpFilter: [ ]
+    Name: [ ]
+```
+
 #### AWS::SES::ReceiptRule
 
-```After: [ ]
-RuleSetName: [ ]
-Rule: [ ]
-    Name: [ ]
-    Recipients: [ ]
-    Enabled: [ ]
-    ScanEnabled: [ ]
-    Actions: [ ]
-        LambdaAction: [X]
-        S3Action: [X]
-        SNSAction: [X]
-        BounceAction: [X]
-        AddHeaderAction: [X]
-        StopAction: [X]
-        WorkmailAction: [X]
-    TlsPolicy: [ ]
 ```
+After: [X]
+RuleSetName: [X]
+Rule: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    Actions: [X]
+        LambdaAction: [ ]
+        S3Action: [ ]
+        SNSAction: [ ]
+        BounceAction: [ ]
+        AddHeaderAction: [ ]
+        StopAction: [ ]
+        WorkmailAction: [ ]
+    (inherited)
+```
+
 #### AWS::SES::ReceiptRuleSet
 
-```RuleSetName: [ ]
 ```
+RuleSetName: [X]
+```
+
 #### AWS::SES::Template
 
-```Template: [ ]
-    HtmlPart: [X]
-    SubjectPart: [X]
-    TextPart: [X]
-    TemplateName: [X]
 ```
+Template: [X]
+    HtmlPart: [ ]
+    SubjectPart: [ ]
+    TextPart: [ ]
+    TemplateName: [ ]
+```
+
 #### AWS::SNS::Subscription
 
-```RedrivePolicy: [ ]
-Endpoint: [ ]
-Protocol: [ ]
-RawMessageDelivery: [ ]
-SubscriptionRoleArn: [X]
-Region: [ ]
-FilterPolicy: [ ]
-DeliveryPolicy: [ ]
-TopicArn: [ ]
 ```
+RedrivePolicy: [X]
+Endpoint: [X]
+Protocol: [X]
+RawMessageDelivery: [X]
+SubscriptionRoleArn: [ ]
+Region: [X]
+FilterPolicy: [X]
+DeliveryPolicy: [X]
+TopicArn: [X]
+```
+
 #### AWS::SNS::Topic
 
-```KmsMasterKeyId: [ ]
-DisplayName: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-FifoTopic: [ ]
-ContentBasedDeduplication: [ ]
-TopicName: [ ]
-Subscription: [X]
 ```
+KmsMasterKeyId: [X]
+DisplayName: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+FifoTopic: [X]
+ContentBasedDeduplication: [X]
+TopicName: [X]
+Subscription: [ ]
+```
+
 #### AWS::SNS::TopicPolicy
 
-```Topics: [ ]
-PolicyDocument: [ ]
 ```
+Topics: [X]
+PolicyDocument: [X]
+```
+
 #### AWS::SQS::Queue
 
-```KmsDataKeyReusePeriodSeconds: [ ]
-KmsMasterKeyId: [ ]
-ContentBasedDeduplication: [ ]
-Tags: [X]
-MessageRetentionPeriod: [ ]
-RedrivePolicy: [ ]
-MaximumMessageSize: [ ]
-ReceiveMessageWaitTimeSeconds: [ ]
-DelaySeconds: [ ]
-FifoQueue: [ ]
-VisibilityTimeout: [ ]
-QueueName: [ ]
 ```
+KmsDataKeyReusePeriodSeconds: [X]
+KmsMasterKeyId: [X]
+ContentBasedDeduplication: [X]
+Tags: [ ]
+MessageRetentionPeriod: [X]
+RedrivePolicy: [X]
+MaximumMessageSize: [X]
+ReceiveMessageWaitTimeSeconds: [X]
+DelaySeconds: [X]
+FifoQueue: [X]
+VisibilityTimeout: [X]
+QueueName: [X]
+```
+
 #### AWS::SQS::QueuePolicy
 
-```Queues: [ ]
-PolicyDocument: [ ]
 ```
+Queues: [X]
+PolicyDocument: [X]
+```
+
 #### AWS::SSM::Association
 
-```MaxErrors: [X]
-ScheduleExpression: [ ]
-OutputLocation: [ ]
-    S3Location: [ ]
-        OutputS3KeyPrefix: [ ]
-        OutputS3BucketName: [ ]
-        OutputS3Region: [X]
-Name: [ ]
-Parameters: [ ]
-    ParameterValues: [X]
-InstanceId: [X]
-SyncCompliance: [X]
-DocumentVersion: [ ]
-AutomationTargetParameterName: [X]
-WaitForSuccessTimeoutSeconds: [X]
-ApplyOnlyAtCronInterval: [X]
-AssociationName: [ ]
-Targets: [ ]
-    Values: [X]
-    Key: [X]
-ComplianceSeverity: [X]
-MaxConcurrency: [X]
 ```
+MaxErrors: [ ]
+ScheduleExpression: [X]
+OutputLocation: [X]
+    S3Location: [X]
+        (inherited)
+        (inherited)
+        OutputS3Region: [ ]
+Name: [X]
+Parameters: [X]
+    ParameterValues: [ ]
+InstanceId: [ ]
+SyncCompliance: [ ]
+DocumentVersion: [X]
+AutomationTargetParameterName: [ ]
+WaitForSuccessTimeoutSeconds: [ ]
+ApplyOnlyAtCronInterval: [ ]
+AssociationName: [X]
+Targets: [X]
+    Values: [ ]
+    Key: [ ]
+ComplianceSeverity: [ ]
+MaxConcurrency: [ ]
+```
+
 #### AWS::SSM::Document
 
-```Content: [ ]
-DocumentType: [ ]
-Name: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
 ```
+Content: [X]
+DocumentType: [X]
+Name: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+```
+
 #### AWS::SSM::MaintenanceWindow
 
-```StartDate: [ ]
-Cutoff: [ ]
-Description: [ ]
-Tags: [X]
-ScheduleOffset: [X]
-Schedule: [ ]
-ScheduleTimezone: [ ]
-AllowUnassociatedTargets: [ ]
-Duration: [ ]
-EndDate: [ ]
-Name: [ ]
 ```
+StartDate: [X]
+Cutoff: [X]
+Description: [X]
+Tags: [ ]
+ScheduleOffset: [ ]
+Schedule: [X]
+ScheduleTimezone: [X]
+AllowUnassociatedTargets: [X]
+Duration: [X]
+EndDate: [X]
+Name: [X]
+```
+
 #### AWS::SSM::MaintenanceWindowTarget
 
-```Name: [ ]
-ResourceType: [ ]
-OwnerInformation: [ ]
-WindowId: [ ]
-Targets: [ ]
-    Values: [X]
-    Key: [X]
-Description: [ ]
 ```
+Name: [X]
+ResourceType: [X]
+OwnerInformation: [X]
+WindowId: [X]
+Targets: [X]
+    Values: [ ]
+    Key: [ ]
+Description: [X]
+```
+
 #### AWS::SSM::MaintenanceWindowTask
 
-```ServiceRoleArn: [ ]
-LoggingInfo: [ ]
-    S3Bucket: [ ]
-    Region: [ ]
-    S3Prefix: [ ]
-MaxErrors: [ ]
-TaskArn: [ ]
-Description: [ ]
-Targets: [ ]
-    Values: [X]
-    Key: [X]
-Priority: [ ]
-TaskInvocationParameters: [ ]
-    MaintenanceWindowAutomationParameters: [ ]
-        Parameters: [X]
-        DocumentVersion: [X]
-    MaintenanceWindowRunCommandParameters: [ ]
-        Comment: [X]
-        ServiceRoleArn: [ ]
-        TimeoutSeconds: [X]
-        Parameters: [X]
-        DocumentHash: [X]
-        OutputS3BucketName: [X]
-        NotificationConfig: [X]
-        DocumentHashType: [X]
-        OutputS3KeyPrefix: [X]
-    MaintenanceWindowStepFunctionsParameters: [ ]
-        Input: [X]
-        Name: [ ]
-    MaintenanceWindowLambdaParameters: [ ]
-        ClientContext: [X]
-        Payload: [X]
-        Qualifier: [X]
-WindowId: [ ]
-TaskType: [ ]
-MaxConcurrency: [ ]
-TaskParameters: [ ]
-Name: [ ]
 ```
+ServiceRoleArn: [X]
+LoggingInfo: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+MaxErrors: [X]
+TaskArn: [X]
+Description: [X]
+Targets: [X]
+    Values: [ ]
+    Key: [ ]
+Priority: [X]
+TaskInvocationParameters: [X]
+    MaintenanceWindowAutomationParameters: [X]
+        Parameters: [ ]
+        DocumentVersion: [ ]
+    MaintenanceWindowRunCommandParameters: [X]
+        Comment: [ ]
+        (inherited)
+        TimeoutSeconds: [ ]
+        Parameters: [ ]
+        DocumentHash: [ ]
+        OutputS3BucketName: [ ]
+        NotificationConfig: [ ]
+        DocumentHashType: [ ]
+        OutputS3KeyPrefix: [ ]
+    MaintenanceWindowStepFunctionsParameters: [X]
+        Input: [ ]
+        (inherited)
+    MaintenanceWindowLambdaParameters: [X]
+        ClientContext: [ ]
+        Payload: [ ]
+        Qualifier: [ ]
+WindowId: [X]
+TaskType: [X]
+MaxConcurrency: [X]
+TaskParameters: [X]
+Name: [X]
+```
+
 #### AWS::SSM::Parameter
 
-```Description: [ ]
-Tags: [X]
-DataType: [ ]
-Value: [ ]
-AllowedPattern: [ ]
-Policies: [ ]
-Tier: [ ]
-Type: [ ]
-Name: [ ]
 ```
+Description: [X]
+Tags: [ ]
+DataType: [X]
+Value: [X]
+AllowedPattern: [X]
+Policies: [X]
+Tier: [X]
+Type: [X]
+Name: [X]
+```
+
 #### AWS::SSM::PatchBaseline
 
-```ApprovedPatchesEnableNonSecurity: [ ]
-Name: [ ]
-Tags: [X]
-PatchGroups: [ ]
-RejectedPatches: [ ]
-GlobalFilters: [ ]
-    PatchFilters: [X]
-Sources: [ ]
-    Configuration: [X]
-    Products: [X]
-    Name: [ ]
-ApprovalRules: [X]
-Description: [ ]
-ApprovedPatchesComplianceLevel: [ ]
-OperatingSystem: [ ]
-ApprovedPatches: [ ]
-RejectedPatchesAction: [ ]
 ```
+ApprovedPatchesEnableNonSecurity: [X]
+Name: [X]
+Tags: [ ]
+PatchGroups: [X]
+RejectedPatches: [X]
+GlobalFilters: [X]
+    PatchFilters: [ ]
+Sources: [X]
+    Configuration: [ ]
+    Products: [ ]
+    (inherited)
+ApprovalRules: [ ]
+Description: [X]
+ApprovedPatchesComplianceLevel: [X]
+OperatingSystem: [X]
+ApprovedPatches: [X]
+RejectedPatchesAction: [X]
+```
+
 #### AWS::SSM::ResourceDataSync
 
-```SyncSource: [ ]
-    AwsOrganizationsSource: [ ]
-        OrganizationSourceType: [ ]
-        OrganizationalUnits: [ ]
-    SourceRegions: [ ]
-    IncludeFutureRegions: [ ]
-    SourceType: [ ]
-BucketRegion: [ ]
-SyncFormat: [ ]
-KMSKeyArn: [ ]
-SyncType: [ ]
-BucketPrefix: [ ]
-SyncName: [ ]
-BucketName: [ ]
-S3Destination: [X]
 ```
+SyncSource: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+BucketRegion: [X]
+SyncFormat: [X]
+KMSKeyArn: [X]
+SyncType: [X]
+BucketPrefix: [X]
+SyncName: [X]
+BucketName: [X]
+S3Destination: [ ]
+```
+
 #### AWS::SSO::Assignment
 
-```InstanceArn: [ ]
-TargetType: [ ]
-PermissionSetArn: [ ]
-PrincipalType: [ ]
-TargetId: [ ]
-PrincipalId: [ ]
 ```
+InstanceArn: [X]
+TargetType: [X]
+PermissionSetArn: [X]
+PrincipalType: [X]
+TargetId: [X]
+PrincipalId: [X]
+```
+
 #### AWS::SSO::PermissionSet
 
-```RelayStateType: [ ]
-InstanceArn: [ ]
-SessionDuration: [ ]
-Name: [ ]
-Tags: [X]
-InlinePolicy: [ ]
-ManagedPolicies: [ ]
-Description: [ ]
 ```
+RelayStateType: [X]
+InstanceArn: [X]
+SessionDuration: [X]
+Name: [X]
+Tags: [ ]
+InlinePolicy: [X]
+ManagedPolicies: [X]
+Description: [X]
+```
+
 #### AWS::SageMaker::CodeRepository
 
-```CodeRepositoryName: [ ]
-GitConfig: [X]
 ```
+CodeRepositoryName: [X]
+GitConfig: [ ]
+```
+
 #### AWS::SageMaker::Endpoint
 
-```EndpointConfigName: [ ]
-EndpointName: [ ]
-ExcludeRetainedVariantProperties: [X]
-RetainAllVariantProperties: [X]
-Tags: [X]
 ```
+EndpointConfigName: [X]
+EndpointName: [X]
+ExcludeRetainedVariantProperties: [ ]
+RetainAllVariantProperties: [ ]
+Tags: [ ]
+```
+
 #### AWS::SageMaker::EndpointConfig
 
-```EndpointConfigName: [ ]
-KmsKeyId: [ ]
-ProductionVariants: [ ]
-    ModelName: [ ]
-    InitialVariantWeight: [ ]
-    VariantName: [ ]
-    InitialInstanceCount: [ ]
-    AcceleratorType: [X]
-    InstanceType: [ ]
-DataCaptureConfig: [ ]
-    DestinationS3Uri: [X]
-    EnableCapture: [X]
-    CaptureOptions: [X]
-    KmsKeyId: [ ]
-    InitialSamplingPercentage: [X]
-    CaptureContentTypeHeader: [X]
-Tags: [X]
 ```
+EndpointConfigName: [X]
+KmsKeyId: [X]
+ProductionVariants: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    AcceleratorType: [ ]
+    (inherited)
+DataCaptureConfig: [X]
+    DestinationS3Uri: [ ]
+    EnableCapture: [ ]
+    CaptureOptions: [ ]
+    (inherited)
+    InitialSamplingPercentage: [ ]
+    CaptureContentTypeHeader: [ ]
+Tags: [ ]
+```
+
 #### AWS::SageMaker::Model
 
-```ModelName: [ ]
-VpcConfig: [ ]
-    Subnets: [X]
-    SecurityGroupIds: [X]
-Tags: [X]
-EnableNetworkIsolation: [X]
-ExecutionRoleArn: [ ]
-Containers: [ ]
-    ModelDataUrl: [ ]
-    Image: [ ]
-    ContainerHostname: [ ]
-    Environment: [ ]
-    Mode: [X]
-    ModelPackageName: [X]
-    ImageConfig: [X]
-PrimaryContainer: [ ]
-    ModelDataUrl: [ ]
-    Image: [ ]
-    ContainerHostname: [ ]
-    Environment: [ ]
-    Mode: [X]
-    ModelPackageName: [X]
-    ImageConfig: [X]
 ```
+ModelName: [X]
+VpcConfig: [X]
+    Subnets: [ ]
+    SecurityGroupIds: [ ]
+Tags: [ ]
+EnableNetworkIsolation: [ ]
+ExecutionRoleArn: [X]
+Containers: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    Mode: [ ]
+    ModelPackageName: [ ]
+    ImageConfig: [ ]
+PrimaryContainer: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    Mode: [ ]
+    ModelPackageName: [ ]
+    ImageConfig: [ ]
+```
+
 #### AWS::SageMaker::MonitoringSchedule
 
-```MonitoringScheduleConfig: [ ]
-    ScheduleConfig: [X]
-    MonitoringJobDefinition: [X]
-Tags: [X]
-CreationTime: [X]
-MonitoringScheduleName: [ ]
-LastMonitoringExecutionSummary: [X]
-EndpointName: [X]
-MonitoringScheduleArn: [X]
-LastModifiedTime: [X]
-MonitoringScheduleStatus: [X]
-FailureReason: [X]
 ```
+MonitoringScheduleConfig: [X]
+    ScheduleConfig: [ ]
+    MonitoringJobDefinition: [ ]
+Tags: [ ]
+CreationTime: [ ]
+MonitoringScheduleName: [X]
+LastMonitoringExecutionSummary: [ ]
+EndpointName: [ ]
+MonitoringScheduleArn: [ ]
+LastModifiedTime: [ ]
+MonitoringScheduleStatus: [ ]
+FailureReason: [ ]
+```
+
 #### AWS::SageMaker::NotebookInstance
 
-```RootAccess: [ ]
-Tags: [X]
-LifecycleConfigName: [ ]
-DirectInternetAccess: [ ]
-NotebookInstanceName: [ ]
-SecurityGroupIds: [ ]
-VolumeSizeInGB: [ ]
-KmsKeyId: [ ]
-DefaultCodeRepository: [X]
-AdditionalCodeRepositories: [X]
-SubnetId: [ ]
-AcceleratorTypes: [X]
-InstanceType: [ ]
-RoleArn: [ ]
 ```
+RootAccess: [X]
+Tags: [ ]
+LifecycleConfigName: [X]
+DirectInternetAccess: [X]
+NotebookInstanceName: [X]
+SecurityGroupIds: [X]
+VolumeSizeInGB: [X]
+KmsKeyId: [X]
+DefaultCodeRepository: [ ]
+AdditionalCodeRepositories: [ ]
+SubnetId: [X]
+AcceleratorTypes: [ ]
+InstanceType: [X]
+RoleArn: [X]
+```
+
 #### AWS::SageMaker::NotebookInstanceLifecycleConfig
 
-```OnCreate: [ ]
-    Content: [X]
-OnStart: [ ]
-    Content: [X]
-NotebookInstanceLifecycleConfigName: [ ]
 ```
+OnCreate: [X]
+    Content: [ ]
+OnStart: [X]
+    Content: [ ]
+NotebookInstanceLifecycleConfigName: [X]
+```
+
 #### AWS::SageMaker::Workteam
 
-```MemberDefinitions: [ ]
-    CognitoMemberDefinition: [ ]
-        CognitoUserGroup: [ ]
-        CognitoClientId: [ ]
-        CognitoUserPool: [ ]
-WorkteamName: [ ]
-NotificationConfiguration: [ ]
-    NotificationTopicArn: [X]
-Description: [ ]
-Tags: [X]
 ```
+MemberDefinitions: [X]
+    (inherited)
+WorkteamName: [X]
+NotificationConfiguration: [X]
+    NotificationTopicArn: [ ]
+Description: [X]
+Tags: [ ]
+```
+
 #### AWS::SecretsManager::ResourcePolicy
 
-```SecretId: [ ]
-ResourcePolicy: [ ]
 ```
+SecretId: [X]
+ResourcePolicy: [X]
+```
+
 #### AWS::SecretsManager::RotationSchedule
 
-```HostedRotationLambda: [X]
-SecretId: [ ]
-RotationLambdaARN: [ ]
-RotationRules: [ ]
-    AutomaticallyAfterDays: [X]
 ```
+HostedRotationLambda: [ ]
+SecretId: [X]
+RotationLambdaARN: [X]
+RotationRules: [X]
+    AutomaticallyAfterDays: [ ]
+```
+
 #### AWS::SecretsManager::Secret
 
-```Description: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-GenerateSecretString: [X]
-SecretString: [ ]
-KmsKeyId: [ ]
-Name: [ ]
 ```
+Description: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+GenerateSecretString: [ ]
+SecretString: [X]
+KmsKeyId: [X]
+Name: [X]
+```
+
 #### AWS::SecretsManager::SecretTargetAttachment
 
-``````
+```
+```
+
 #### AWS::SecurityHub::Hub
 
-```Tags: [ ]
 ```
+Tags: [X]
+```
+
 #### AWS::ServiceCatalog::AcceptedPortfolioShare
 
-```AcceptLanguage: [X]
-PortfolioId: [ ]
 ```
+AcceptLanguage: [ ]
+PortfolioId: [X]
+```
+
 #### AWS::ServiceCatalog::CloudFormationProduct
 
-```ProvisioningArtifactParameters: [X]
-Description: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-ReplaceProvisioningArtifacts: [X]
-SupportUrl: [ ]
-SupportDescription: [ ]
-Owner: [ ]
-Distributor: [ ]
-SupportEmail: [ ]
-AcceptLanguage: [ ]
-Name: [ ]
 ```
+ProvisioningArtifactParameters: [ ]
+Description: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+ReplaceProvisioningArtifacts: [ ]
+SupportUrl: [X]
+SupportDescription: [X]
+Owner: [X]
+Distributor: [X]
+SupportEmail: [X]
+AcceptLanguage: [X]
+Name: [X]
+```
+
 #### AWS::ServiceCatalog::CloudFormationProvisionedProduct
 
-```ProvisioningArtifactId: [ ]
-ProvisionedProductName: [ ]
-Tags: [X]
-ProvisioningParameters: [X]
-ProductName: [ ]
-NotificationArns: [X]
-PathName: [X]
-PathId: [X]
-ProvisioningPreferences: [X]
-ProvisioningArtifactName: [X]
-AcceptLanguage: [X]
-ProductId: [ ]
 ```
+ProvisioningArtifactId: [X]
+ProvisionedProductName: [X]
+Tags: [ ]
+ProvisioningParameters: [ ]
+ProductName: [X]
+NotificationArns: [ ]
+PathName: [ ]
+PathId: [ ]
+ProvisioningPreferences: [ ]
+ProvisioningArtifactName: [ ]
+AcceptLanguage: [ ]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::LaunchNotificationConstraint
 
-```AcceptLanguage: [X]
-NotificationArns: [X]
-PortfolioId: [ ]
-Description: [ ]
-ProductId: [ ]
 ```
+AcceptLanguage: [ ]
+NotificationArns: [ ]
+PortfolioId: [X]
+Description: [X]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::LaunchRoleConstraint
 
-```PortfolioId: [ ]
-Description: [ ]
-LocalRoleName: [ ]
-RoleArn: [X]
-AcceptLanguage: [X]
-ProductId: [ ]
 ```
+PortfolioId: [X]
+Description: [X]
+LocalRoleName: [X]
+RoleArn: [ ]
+AcceptLanguage: [ ]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::LaunchTemplateConstraint
 
-```AcceptLanguage: [X]
-Rules: [X]
-PortfolioId: [ ]
-Description: [ ]
-ProductId: [ ]
 ```
+AcceptLanguage: [ ]
+Rules: [ ]
+PortfolioId: [X]
+Description: [X]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::Portfolio
 
-```AcceptLanguage: [X]
-DisplayName: [ ]
-Description: [ ]
-ProviderName: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
 ```
+AcceptLanguage: [ ]
+DisplayName: [X]
+Description: [X]
+ProviderName: [X]
+Tags: [X]
+    Key: [ ]
+    Value: [ ]
+```
+
 #### AWS::ServiceCatalog::PortfolioPrincipalAssociation
 
-```AcceptLanguage: [X]
-PrincipalType: [ ]
-PortfolioId: [ ]
-PrincipalARN: [ ]
 ```
+AcceptLanguage: [ ]
+PrincipalType: [X]
+PortfolioId: [X]
+PrincipalARN: [X]
+```
+
 #### AWS::ServiceCatalog::PortfolioProductAssociation
 
-```AcceptLanguage: [X]
-SourcePortfolioId: [X]
-PortfolioId: [ ]
-ProductId: [ ]
 ```
+AcceptLanguage: [ ]
+SourcePortfolioId: [ ]
+PortfolioId: [X]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::PortfolioShare
 
-``````
+```
+```
+
 #### AWS::ServiceCatalog::ResourceUpdateConstraint
 
-``````
+```
+```
+
 #### AWS::ServiceCatalog::StackSetConstraint
 
-```PortfolioId: [ ]
-Description: [ ]
-AccountList: [X]
-ExecutionRole: [X]
-StackInstanceControl: [X]
-AcceptLanguage: [X]
-AdminRole: [X]
-RegionList: [X]
-ProductId: [ ]
 ```
+PortfolioId: [X]
+Description: [X]
+AccountList: [ ]
+ExecutionRole: [ ]
+StackInstanceControl: [ ]
+AcceptLanguage: [ ]
+AdminRole: [ ]
+RegionList: [ ]
+ProductId: [X]
+```
+
 #### AWS::ServiceCatalog::TagOption
 
-```Active: [ ]
-Value: [ ]
-Key: [ ]
 ```
+Active: [X]
+Value: [X]
+Key: [X]
+```
+
 #### AWS::ServiceCatalog::TagOptionAssociation
 
-```ResourceId: [ ]
-TagOptionId: [ ]
 ```
+ResourceId: [X]
+TagOptionId: [X]
+```
+
 #### AWS::ServiceDiscovery::HttpNamespace
 
-```Tags: [X]
-Name: [ ]
-Description: [ ]
 ```
+Tags: [ ]
+Name: [X]
+Description: [X]
+```
+
 #### AWS::ServiceDiscovery::Instance
 
-```InstanceAttributes: [ ]
-InstanceId: [ ]
-ServiceId: [ ]
 ```
+InstanceAttributes: [X]
+InstanceId: [X]
+ServiceId: [X]
+```
+
 #### AWS::ServiceDiscovery::PrivateDnsNamespace
 
-```Tags: [X]
-Name: [ ]
-Vpc: [X]
-Description: [ ]
 ```
+Tags: [ ]
+Name: [X]
+Vpc: [ ]
+Description: [X]
+```
+
 #### AWS::ServiceDiscovery::PublicDnsNamespace
 
-```Tags: [X]
-Name: [ ]
-Description: [ ]
 ```
+Tags: [ ]
+Name: [X]
+Description: [X]
+```
+
 #### AWS::ServiceDiscovery::Service
 
-```Description: [ ]
-DnsConfig: [ ]
-    DnsRecords: [ ]
-        Type: [X]
-        TTL: [X]
-    NamespaceId: [ ]
-    RoutingPolicy: [ ]
-Tags: [X]
-HealthCheckConfig: [ ]
-    Type: [X]
-    ResourcePath: [X]
-    FailureThreshold: [X]
-HealthCheckCustomConfig: [ ]
-    FailureThreshold: [X]
-NamespaceId: [ ]
-Name: [ ]
 ```
+Description: [X]
+DnsConfig: [X]
+    DnsRecords: [X]
+        Type: [ ]
+        TTL: [ ]
+    (inherited)
+    (inherited)
+Tags: [ ]
+HealthCheckConfig: [X]
+    Type: [ ]
+    ResourcePath: [ ]
+    FailureThreshold: [ ]
+HealthCheckCustomConfig: [X]
+    FailureThreshold: [ ]
+NamespaceId: [X]
+Name: [X]
+```
+
 #### AWS::StepFunctions::Activity
 
-```Name: [ ]
-Tags: [X]
 ```
+Name: [X]
+Tags: [ ]
+```
+
 #### AWS::StepFunctions::StateMachine
 
-```DefinitionString: [ ]
-Tags: [X]
-RoleArn: [ ]
-TracingConfiguration: [X]
-StateMachineName: [ ]
-DefinitionSubstitutions: [X]
-LoggingConfiguration: [ ]
-    IncludeExecutionData: [ ]
-    Level: [ ]
-    Destinations: [ ]
-        CloudWatchLogsLogGroup: [ ]
-            LogGroupArn: [ ]
-StateMachineType: [ ]
-DefinitionS3Location: [X]
 ```
+DefinitionString: [X]
+Tags: [ ]
+RoleArn: [X]
+TracingConfiguration: [ ]
+StateMachineName: [X]
+DefinitionSubstitutions: [ ]
+LoggingConfiguration: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+StateMachineType: [X]
+DefinitionS3Location: [ ]
+```
+
 #### AWS::Synthetics::Canary
 
-```SuccessRetentionPeriod: [ ]
-Code: [ ]
-    S3Bucket: [ ]
-    S3Key: [ ]
-    Handler: [ ]
-    S3ObjectVersion: [ ]
-    Script: [ ]
-Name: [ ]
-RuntimeVersion: [ ]
-Tags: [ ]
-    Key: [X]
-    Value: [X]
-Schedule: [ ]
-    Expression: [X]
-    DurationInSeconds: [X]
-VPCConfig: [ ]
-    SubnetIds: [X]
-    VpcId: [X]
-    SecurityGroupIds: [X]
-ExecutionRoleArn: [ ]
-RunConfig: [ ]
-    TimeoutInSeconds: [X]
-    ActiveTracing: [X]
-    MemoryInMB: [X]
-FailureRetentionPeriod: [ ]
-ArtifactS3Location: [ ]
-StartCanaryAfterCreation: [X]
 ```
-#### AWS::Timestream::Database
-
-```KmsKeyId: [ ]
-DatabaseName: [ ]
+SuccessRetentionPeriod: [X]
+Code: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+Name: [X]
+RuntimeVersion: [X]
 Tags: [X]
-```
-#### AWS::Timestream::Table
-
-```TableName: [ ]
-DatabaseName: [ ]
-RetentionProperties: [ ]
-Tags: [X]
-```
-#### AWS::Transfer::Server
-
-```Certificate: [ ]
-Tags: [ ]
     Key: [ ]
     Value: [ ]
-LoggingRole: [ ]
-SecurityPolicyName: [X]
-EndpointDetails: [ ]
-    VpcEndpointId: [ ]
+Schedule: [X]
+    Expression: [ ]
+    DurationInSeconds: [ ]
+VPCConfig: [X]
     SubnetIds: [ ]
     VpcId: [ ]
-    AddressAllocationIds: [ ]
-    SecurityGroupIds: [X]
-EndpointType: [ ]
-IdentityProviderType: [ ]
-IdentityProviderDetails: [ ]
-    Url: [ ]
-    InvocationRole: [ ]
-Protocols: [ ]
+    SecurityGroupIds: [ ]
+ExecutionRoleArn: [X]
+RunConfig: [X]
+    TimeoutInSeconds: [ ]
+    ActiveTracing: [ ]
+    MemoryInMB: [ ]
+FailureRetentionPeriod: [X]
+ArtifactS3Location: [X]
+StartCanaryAfterCreation: [ ]
 ```
+
+#### AWS::Timestream::Database
+
+```
+KmsKeyId: [X]
+DatabaseName: [X]
+Tags: [ ]
+```
+
+#### AWS::Timestream::Table
+
+```
+TableName: [X]
+DatabaseName: [X]
+RetentionProperties: [X]
+Tags: [ ]
+```
+
+#### AWS::Transfer::Server
+
+```
+Certificate: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+LoggingRole: [X]
+SecurityPolicyName: [ ]
+EndpointDetails: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    SecurityGroupIds: [ ]
+EndpointType: [X]
+IdentityProviderType: [X]
+IdentityProviderDetails: [X]
+    (inherited)
+    (inherited)
+Protocols: [X]
+```
+
 #### AWS::Transfer::User
 
-```UserName: [ ]
-Tags: [ ]
-    Key: [ ]
-    Value: [ ]
-HomeDirectoryType: [ ]
-SshPublicKeys: [ ]
-Role: [ ]
-HomeDirectoryMappings: [ ]
-    Entry: [X]
-    Target: [X]
-HomeDirectory: [ ]
-Policy: [ ]
-ServerId: [ ]
 ```
+UserName: [X]
+Tags: [X]
+    (inherited)
+    (inherited)
+HomeDirectoryType: [X]
+SshPublicKeys: [X]
+Role: [X]
+HomeDirectoryMappings: [X]
+    Entry: [ ]
+    Target: [ ]
+HomeDirectory: [X]
+Policy: [X]
+ServerId: [X]
+```
+
 #### AWS::WAF::ByteMatchSet
 
-```Name: [ ]
-ByteMatchTuples: [ ]
-    TargetString: [X]
-    PositionalConstraint: [X]
-    TargetStringBase64: [X]
-    TextTransformation: [X]
-    FieldToMatch: [X]
 ```
+Name: [X]
+ByteMatchTuples: [X]
+    TargetString: [ ]
+    PositionalConstraint: [ ]
+    TargetStringBase64: [ ]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+```
+
 #### AWS::WAF::IPSet
 
-```IPSetDescriptors: [ ]
-    Type: [X]
-    Value: [X]
-Name: [ ]
 ```
+IPSetDescriptors: [X]
+    Type: [ ]
+    Value: [ ]
+Name: [X]
+```
+
 #### AWS::WAF::Rule
 
-```Predicates: [ ]
-    DataId: [X]
-    Type: [X]
-    Negated: [X]
-Name: [ ]
-MetricName: [ ]
 ```
-#### AWS::WAF::SizeConstraintSet
-
-```SizeConstraints: [ ]
-    ComparisonOperator: [X]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-    Size: [X]
-Name: [ ]
-```
-#### AWS::WAF::SqlInjectionMatchSet
-
-```SqlInjectionMatchTuples: [ ]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-Name: [ ]
-```
-#### AWS::WAF::WebACL
-
-```DefaultAction: [ ]
-    Type: [X]
-Rules: [ ]
-    Action: [ ]
-        Type: [X]
-    Priority: [ ]
-    RuleId: [ ]
-Name: [ ]
-MetricName: [ ]
-```
-#### AWS::WAF::XssMatchSet
-
-```XssMatchTuples: [ ]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-Name: [ ]
-```
-#### AWS::WAFRegional::ByteMatchSet
-
-```Name: [ ]
-ByteMatchTuples: [ ]
-    TargetString: [X]
-    TargetStringBase64: [X]
-    PositionalConstraint: [X]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-```
-#### AWS::WAFRegional::GeoMatchSet
-
-```GeoMatchConstraints: [ ]
-    Type: [X]
-    Value: [X]
-Name: [ ]
-```
-#### AWS::WAFRegional::IPSet
-
-```IPSetDescriptors: [ ]
-    Type: [X]
-    Value: [X]
-Name: [ ]
-```
-#### AWS::WAFRegional::RateBasedRule
-
-```RateLimit: [ ]
-RateKey: [ ]
-Name: [ ]
-MatchPredicates: [ ]
+Predicates: [X]
     DataId: [ ]
     Type: [ ]
     Negated: [ ]
-MetricName: [ ]
+Name: [X]
+MetricName: [X]
 ```
+
+#### AWS::WAF::SizeConstraintSet
+
+```
+SizeConstraints: [X]
+    ComparisonOperator: [ ]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+    Size: [ ]
+Name: [X]
+```
+
+#### AWS::WAF::SqlInjectionMatchSet
+
+```
+SqlInjectionMatchTuples: [X]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+Name: [X]
+```
+
+#### AWS::WAF::WebACL
+
+```
+DefaultAction: [X]
+    Type: [ ]
+Rules: [X]
+    Action: [X]
+        Type: [ ]
+    (inherited)
+    (inherited)
+Name: [X]
+MetricName: [X]
+```
+
+#### AWS::WAF::XssMatchSet
+
+```
+XssMatchTuples: [X]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+Name: [X]
+```
+
+#### AWS::WAFRegional::ByteMatchSet
+
+```
+Name: [X]
+ByteMatchTuples: [X]
+    TargetString: [ ]
+    TargetStringBase64: [ ]
+    PositionalConstraint: [ ]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+```
+
+#### AWS::WAFRegional::GeoMatchSet
+
+```
+GeoMatchConstraints: [X]
+    Type: [ ]
+    Value: [ ]
+Name: [X]
+```
+
+#### AWS::WAFRegional::IPSet
+
+```
+IPSetDescriptors: [X]
+    Type: [ ]
+    Value: [ ]
+Name: [X]
+```
+
+#### AWS::WAFRegional::RateBasedRule
+
+```
+RateLimit: [X]
+RateKey: [X]
+Name: [X]
+MatchPredicates: [X]
+    (inherited)
+    (inherited)
+    (inherited)
+MetricName: [X]
+```
+
 #### AWS::WAFRegional::RegexPatternSet
 
-```RegexPatternStrings: [ ]
-Name: [ ]
 ```
+RegexPatternStrings: [X]
+Name: [X]
+```
+
 #### AWS::WAFRegional::Rule
 
-```Predicates: [ ]
-    DataId: [X]
-    Type: [X]
-    Negated: [X]
-Name: [ ]
-MetricName: [ ]
 ```
+Predicates: [X]
+    DataId: [ ]
+    Type: [ ]
+    Negated: [ ]
+Name: [X]
+MetricName: [X]
+```
+
 #### AWS::WAFRegional::SizeConstraintSet
 
-```SizeConstraints: [ ]
-    ComparisonOperator: [X]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-    Size: [X]
-Name: [ ]
 ```
+SizeConstraints: [X]
+    ComparisonOperator: [ ]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+    Size: [ ]
+Name: [X]
+```
+
 #### AWS::WAFRegional::SqlInjectionMatchSet
 
-```SqlInjectionMatchTuples: [ ]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-Name: [ ]
 ```
+SqlInjectionMatchTuples: [X]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+Name: [X]
+```
+
 #### AWS::WAFRegional::WebACL
 
-```DefaultAction: [ ]
-    Type: [X]
-Rules: [ ]
-    Action: [ ]
-        Type: [X]
-    Priority: [ ]
-    RuleId: [ ]
-Name: [ ]
-MetricName: [ ]
 ```
+DefaultAction: [X]
+    Type: [ ]
+Rules: [X]
+    Action: [X]
+        Type: [ ]
+    (inherited)
+    (inherited)
+Name: [X]
+MetricName: [X]
+```
+
 #### AWS::WAFRegional::WebACLAssociation
 
-```ResourceArn: [ ]
-WebACLId: [ ]
 ```
+ResourceArn: [X]
+WebACLId: [X]
+```
+
 #### AWS::WAFRegional::XssMatchSet
 
-```XssMatchTuples: [ ]
-    TextTransformation: [X]
-    FieldToMatch: [X]
-Name: [ ]
 ```
+XssMatchTuples: [X]
+    TextTransformation: [ ]
+    FieldToMatch: [ ]
+Name: [X]
+```
+
 #### AWS::WAFv2::IPSet
 
-```Name: [ ]
-Tags: [X]
-Description: [ ]
-Scope: [ ]
-IPAddressVersion: [ ]
-Addresses: [ ]
 ```
+Name: [X]
+Tags: [ ]
+Description: [X]
+Scope: [X]
+IPAddressVersion: [X]
+Addresses: [X]
+```
+
 #### AWS::WAFv2::RegexPatternSet
 
-```Scope: [ ]
-Name: [ ]
-RegularExpressionList: [ ]
-Description: [ ]
-Tags: [X]
 ```
+Scope: [X]
+Name: [X]
+RegularExpressionList: [X]
+Description: [X]
+Tags: [ ]
+```
+
 #### AWS::WAFv2::RuleGroup
 
-```Capacity: [ ]
-Description: [ ]
-Tags: [X]
-Rules: [ ]
-    Priority: [ ]
-    Action: [ ]
-        Count: [X]
-        Allow: [X]
-        Block: [X]
-    Statement: [ ]
-        RegexPatternSetReferenceStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            Arn: [ ]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        ByteMatchStatement: [ ]
-            SearchStringBase64: [X]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            PositionalConstraint: [X]
-            SearchString: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        RateBasedStatement: [ ]
-            Limit: [X]
-            ForwardedIPConfig: [X]
-            ScopeDownStatement: [X]
-            AggregateKeyType: [X]
-        IPSetReferenceStatement: [ ]
-            IPSetForwardedIPConfig: [X]
-            Arn: [ ]
-        XssMatchStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        OrStatement: [ ]
-            Statements: [X]
-        SqliMatchStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        SizeConstraintStatement: [ ]
-            ComparisonOperator: [X]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-            Size: [X]
-        GeoMatchStatement: [ ]
-            CountryCodes: [X]
-            ForwardedIPConfig: [X]
-        NotStatement: [ ]
-            Statement: [ ]
-                RegexPatternSetReferenceStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    Arn: [ ]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                ByteMatchStatement: [ ]
-                    SearchStringBase64: [X]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    PositionalConstraint: [X]
-                    SearchString: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                RateBasedStatement: [ ]
-                    Limit: [X]
-                    ForwardedIPConfig: [X]
-                    ScopeDownStatement: [X]
-                    AggregateKeyType: [X]
-                IPSetReferenceStatement: [ ]
-                    IPSetForwardedIPConfig: [X]
-                    Arn: [ ]
-                XssMatchStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                OrStatement: [ ]
-                    Statements: [X]
-                SqliMatchStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                SizeConstraintStatement: [ ]
-                    ComparisonOperator: [X]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                    Size: [X]
-                GeoMatchStatement: [ ]
-                    CountryCodes: [X]
-                    ForwardedIPConfig: [X]
-                NotStatement: [ ]
-                    Statement: [ ]
-                        RegexPatternSetReferenceStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            Arn: [ ]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        ByteMatchStatement: [ ]
-                            SearchStringBase64: [X]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            PositionalConstraint: [X]
-                            SearchString: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        IPSetReferenceStatement: [ ]
-                            IPSetForwardedIPConfig: [X]
-                            Arn: [ ]
-                        XssMatchStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        SqliMatchStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        SizeConstraintStatement: [ ]
-                            ComparisonOperator: [X]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                            Size: [X]
-                        GeoMatchStatement: [ ]
-                            CountryCodes: [X]
-                            ForwardedIPConfig: [X]
-                AndStatement: [ ]
-                    Statements: [X]
-        AndStatement: [ ]
-            Statements: [X]
-    Name: [ ]
-    VisibilityConfig: [ ]
-        SampledRequestsEnabled: [X]
-        CloudWatchMetricsEnabled: [X]
-        MetricName: [X]
-VisibilityConfig: [ ]
-    SampledRequestsEnabled: [X]
-    CloudWatchMetricsEnabled: [X]
-    MetricName: [X]
-Scope: [ ]
-Name: [ ]
 ```
+Capacity: [X]
+Description: [X]
+Tags: [ ]
+Rules: [X]
+    (inherited)
+    Action: [X]
+        Count: [ ]
+        Allow: [ ]
+        Block: [ ]
+    Statement: [X]
+        RegexPatternSetReferenceStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            (inherited)
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        ByteMatchStatement: [X]
+            SearchStringBase64: [ ]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            PositionalConstraint: [ ]
+            SearchString: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        RateBasedStatement: [X]
+            Limit: [ ]
+            ForwardedIPConfig: [ ]
+            ScopeDownStatement: [ ]
+            AggregateKeyType: [ ]
+        IPSetReferenceStatement: [X]
+            IPSetForwardedIPConfig: [ ]
+            (inherited)
+        XssMatchStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        OrStatement: [X]
+            Statements: [ ]
+        SqliMatchStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        SizeConstraintStatement: [X]
+            ComparisonOperator: [ ]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+            Size: [ ]
+        GeoMatchStatement: [X]
+            CountryCodes: [ ]
+            ForwardedIPConfig: [ ]
+        NotStatement: [X]
+            Statement: [X]
+                RegexPatternSetReferenceStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    (inherited)
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                ByteMatchStatement: [X]
+                    SearchStringBase64: [ ]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    PositionalConstraint: [ ]
+                    SearchString: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                RateBasedStatement: [X]
+                    Limit: [ ]
+                    ForwardedIPConfig: [ ]
+                    ScopeDownStatement: [ ]
+                    AggregateKeyType: [ ]
+                IPSetReferenceStatement: [X]
+                    IPSetForwardedIPConfig: [ ]
+                    (inherited)
+                XssMatchStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                OrStatement: [X]
+                    Statements: [ ]
+                SqliMatchStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                SizeConstraintStatement: [X]
+                    ComparisonOperator: [ ]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                    Size: [ ]
+                GeoMatchStatement: [X]
+                    CountryCodes: [ ]
+                    ForwardedIPConfig: [ ]
+                NotStatement: [X]
+                    Statement: [X]
+                        RegexPatternSetReferenceStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            (inherited)
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        ByteMatchStatement: [X]
+                            SearchStringBase64: [ ]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            PositionalConstraint: [ ]
+                            SearchString: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        IPSetReferenceStatement: [X]
+                            IPSetForwardedIPConfig: [ ]
+                            (inherited)
+                        XssMatchStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        SqliMatchStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        SizeConstraintStatement: [X]
+                            ComparisonOperator: [ ]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                            Size: [ ]
+                        GeoMatchStatement: [X]
+                            CountryCodes: [ ]
+                            ForwardedIPConfig: [ ]
+                AndStatement: [X]
+                    Statements: [ ]
+        AndStatement: [X]
+            Statements: [ ]
+    (inherited)
+    VisibilityConfig: [X]
+        SampledRequestsEnabled: [ ]
+        CloudWatchMetricsEnabled: [ ]
+        MetricName: [ ]
+VisibilityConfig: [X]
+    SampledRequestsEnabled: [ ]
+    CloudWatchMetricsEnabled: [ ]
+    MetricName: [ ]
+Scope: [X]
+Name: [X]
+```
+
 #### AWS::WAFv2::WebACL
 
-```Description: [ ]
-Tags: [X]
-Rules: [ ]
-    OverrideAction: [ ]
-        Count: [X]
-        None: [X]
-    Name: [ ]
-    VisibilityConfig: [ ]
-        SampledRequestsEnabled: [X]
-        CloudWatchMetricsEnabled: [X]
-        MetricName: [X]
-    Priority: [ ]
-    Statement: [ ]
-        RegexPatternSetReferenceStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            Arn: [ ]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        ByteMatchStatement: [ ]
-            SearchStringBase64: [X]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            PositionalConstraint: [X]
-            SearchString: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        RateBasedStatement: [ ]
-            Limit: [X]
-            ForwardedIPConfig: [X]
-            ScopeDownStatement: [X]
-            AggregateKeyType: [X]
-        RuleGroupReferenceStatement: [ ]
-            ExcludedRules: [ ]
-                Name: [ ]
-            Arn: [ ]
-        IPSetReferenceStatement: [ ]
-            IPSetForwardedIPConfig: [X]
-            Arn: [ ]
-        ManagedRuleGroupStatement: [ ]
-            ExcludedRules: [ ]
-                Name: [ ]
-            Name: [ ]
-            VendorName: [X]
-        XssMatchStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        OrStatement: [ ]
-            Statements: [X]
-        SqliMatchStatement: [ ]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-        SizeConstraintStatement: [ ]
-            ComparisonOperator: [X]
-            TextTransformations: [ ]
-                Priority: [ ]
-                Type: [X]
-            FieldToMatch: [ ]
-                AllQueryArguments: [X]
-                Body: [X]
-                UriPath: [X]
-                QueryString: [X]
-                SingleQueryArgument: [X]
-                Method: [X]
-                SingleHeader: [X]
-            Size: [X]
-        GeoMatchStatement: [ ]
-            CountryCodes: [X]
-            ForwardedIPConfig: [X]
-        NotStatement: [ ]
-            Statement: [ ]
-                RegexPatternSetReferenceStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    Arn: [ ]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                ByteMatchStatement: [ ]
-                    SearchStringBase64: [X]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    PositionalConstraint: [X]
-                    SearchString: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                RateBasedStatement: [ ]
-                    Limit: [X]
-                    ForwardedIPConfig: [X]
-                    ScopeDownStatement: [X]
-                    AggregateKeyType: [X]
-                RuleGroupReferenceStatement: [ ]
-                    ExcludedRules: [ ]
-                        Name: [ ]
-                    Arn: [ ]
-                IPSetReferenceStatement: [ ]
-                    IPSetForwardedIPConfig: [X]
-                    Arn: [ ]
-                ManagedRuleGroupStatement: [ ]
-                    ExcludedRules: [ ]
-                        Name: [ ]
-                    Name: [ ]
-                    VendorName: [X]
-                XssMatchStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                OrStatement: [ ]
-                    Statements: [X]
-                SqliMatchStatement: [ ]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                SizeConstraintStatement: [ ]
-                    ComparisonOperator: [X]
-                    TextTransformations: [ ]
-                        Priority: [ ]
-                        Type: [X]
-                    FieldToMatch: [ ]
-                        AllQueryArguments: [X]
-                        Body: [X]
-                        UriPath: [X]
-                        QueryString: [X]
-                        SingleQueryArgument: [X]
-                        Method: [X]
-                        SingleHeader: [X]
-                    Size: [X]
-                GeoMatchStatement: [ ]
-                    CountryCodes: [X]
-                    ForwardedIPConfig: [X]
-                NotStatement: [ ]
-                    Statement: [ ]
-                        RegexPatternSetReferenceStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            Arn: [ ]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        ByteMatchStatement: [ ]
-                            SearchStringBase64: [X]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            PositionalConstraint: [X]
-                            SearchString: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        RuleGroupReferenceStatement: [ ]
-                            ExcludedRules: [ ]
-                                Name: [ ]
-                            Arn: [ ]
-                        ManagedRuleGroupStatement: [ ]
-                            ExcludedRules: [ ]
-                                Name: [ ]
-                            Name: [ ]
-                            VendorName: [X]
-                        IPSetReferenceStatement: [ ]
-                            IPSetForwardedIPConfig: [X]
-                            Arn: [ ]
-                        XssMatchStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        SqliMatchStatement: [ ]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                        SizeConstraintStatement: [ ]
-                            ComparisonOperator: [X]
-                            TextTransformations: [ ]
-                                Priority: [ ]
-                                Type: [X]
-                            FieldToMatch: [ ]
-                                AllQueryArguments: [X]
-                                Body: [X]
-                                UriPath: [X]
-                                QueryString: [X]
-                                SingleQueryArgument: [X]
-                                Method: [X]
-                                SingleHeader: [X]
-                            Size: [X]
-                        GeoMatchStatement: [ ]
-                            CountryCodes: [X]
-                            ForwardedIPConfig: [X]
-                AndStatement: [ ]
-                    Statements: [X]
-        AndStatement: [ ]
-            Statements: [X]
-    Action: [ ]
-        Count: [X]
-        Allow: [X]
-        Block: [X]
-VisibilityConfig: [ ]
-    SampledRequestsEnabled: [X]
-    CloudWatchMetricsEnabled: [X]
-    MetricName: [X]
-DefaultAction: [ ]
-    Allow: [X]
-    Block: [X]
-Scope: [ ]
-Name: [ ]
 ```
+Description: [X]
+Tags: [ ]
+Rules: [X]
+    OverrideAction: [X]
+        Count: [ ]
+        None: [ ]
+    (inherited)
+    VisibilityConfig: [X]
+        SampledRequestsEnabled: [ ]
+        CloudWatchMetricsEnabled: [ ]
+        MetricName: [ ]
+    (inherited)
+    Statement: [X]
+        RegexPatternSetReferenceStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            (inherited)
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        ByteMatchStatement: [X]
+            SearchStringBase64: [ ]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            PositionalConstraint: [ ]
+            SearchString: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        RateBasedStatement: [X]
+            Limit: [ ]
+            ForwardedIPConfig: [ ]
+            ScopeDownStatement: [ ]
+            AggregateKeyType: [ ]
+        (inherited)
+        IPSetReferenceStatement: [X]
+            IPSetForwardedIPConfig: [ ]
+            (inherited)
+        ManagedRuleGroupStatement: [X]
+            (inherited)
+            (inherited)
+            VendorName: [ ]
+        XssMatchStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        OrStatement: [X]
+            Statements: [ ]
+        SqliMatchStatement: [X]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+        SizeConstraintStatement: [X]
+            ComparisonOperator: [ ]
+            TextTransformations: [X]
+                (inherited)
+                Type: [ ]
+            FieldToMatch: [X]
+                AllQueryArguments: [ ]
+                Body: [ ]
+                UriPath: [ ]
+                QueryString: [ ]
+                SingleQueryArgument: [ ]
+                Method: [ ]
+                SingleHeader: [ ]
+            Size: [ ]
+        GeoMatchStatement: [X]
+            CountryCodes: [ ]
+            ForwardedIPConfig: [ ]
+        NotStatement: [X]
+            Statement: [X]
+                RegexPatternSetReferenceStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    (inherited)
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                ByteMatchStatement: [X]
+                    SearchStringBase64: [ ]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    PositionalConstraint: [ ]
+                    SearchString: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                RateBasedStatement: [X]
+                    Limit: [ ]
+                    ForwardedIPConfig: [ ]
+                    ScopeDownStatement: [ ]
+                    AggregateKeyType: [ ]
+                (inherited)
+                IPSetReferenceStatement: [X]
+                    IPSetForwardedIPConfig: [ ]
+                    (inherited)
+                ManagedRuleGroupStatement: [X]
+                    (inherited)
+                    (inherited)
+                    VendorName: [ ]
+                XssMatchStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                OrStatement: [X]
+                    Statements: [ ]
+                SqliMatchStatement: [X]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                SizeConstraintStatement: [X]
+                    ComparisonOperator: [ ]
+                    TextTransformations: [X]
+                        (inherited)
+                        Type: [ ]
+                    FieldToMatch: [X]
+                        AllQueryArguments: [ ]
+                        Body: [ ]
+                        UriPath: [ ]
+                        QueryString: [ ]
+                        SingleQueryArgument: [ ]
+                        Method: [ ]
+                        SingleHeader: [ ]
+                    Size: [ ]
+                GeoMatchStatement: [X]
+                    CountryCodes: [ ]
+                    ForwardedIPConfig: [ ]
+                NotStatement: [X]
+                    Statement: [X]
+                        RegexPatternSetReferenceStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            (inherited)
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        ByteMatchStatement: [X]
+                            SearchStringBase64: [ ]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            PositionalConstraint: [ ]
+                            SearchString: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        (inherited)
+                        ManagedRuleGroupStatement: [X]
+                            (inherited)
+                            (inherited)
+                            VendorName: [ ]
+                        IPSetReferenceStatement: [X]
+                            IPSetForwardedIPConfig: [ ]
+                            (inherited)
+                        XssMatchStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        SqliMatchStatement: [X]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                        SizeConstraintStatement: [X]
+                            ComparisonOperator: [ ]
+                            TextTransformations: [X]
+                                (inherited)
+                                Type: [ ]
+                            FieldToMatch: [X]
+                                AllQueryArguments: [ ]
+                                Body: [ ]
+                                UriPath: [ ]
+                                QueryString: [ ]
+                                SingleQueryArgument: [ ]
+                                Method: [ ]
+                                SingleHeader: [ ]
+                            Size: [ ]
+                        GeoMatchStatement: [X]
+                            CountryCodes: [ ]
+                            ForwardedIPConfig: [ ]
+                AndStatement: [X]
+                    Statements: [ ]
+        AndStatement: [X]
+            Statements: [ ]
+    Action: [X]
+        Count: [ ]
+        Allow: [ ]
+        Block: [ ]
+VisibilityConfig: [X]
+    SampledRequestsEnabled: [ ]
+    CloudWatchMetricsEnabled: [ ]
+    MetricName: [ ]
+DefaultAction: [X]
+    Allow: [ ]
+    Block: [ ]
+Scope: [X]
+Name: [X]
+```
+
 #### AWS::WAFv2::WebACLAssociation
 
-```ResourceArn: [ ]
-WebACLArn: [ ]
 ```
+ResourceArn: [X]
+WebACLArn: [X]
+```
+
 #### AWS::WorkSpaces::ConnectionAlias
 
-```ConnectionString: [ ]
-Tags: [X]
 ```
+ConnectionString: [X]
+Tags: [ ]
+```
+
 #### AWS::WorkSpaces::Workspace
 
-```UserName: [ ]
-DirectoryId: [ ]
-VolumeEncryptionKey: [ ]
-Tags: [X]
-WorkspaceProperties: [ ]
-    ComputeTypeName: [X]
-    UserVolumeSizeGib: [X]
-    RootVolumeSizeGib: [X]
-    RunningMode: [X]
-    RunningModeAutoStopTimeoutInMinutes: [X]
-RootVolumeEncryptionEnabled: [ ]
-UserVolumeEncryptionEnabled: [ ]
-BundleId: [ ]
 ```
+UserName: [X]
+DirectoryId: [X]
+VolumeEncryptionKey: [X]
+Tags: [ ]
+WorkspaceProperties: [X]
+    ComputeTypeName: [ ]
+    UserVolumeSizeGib: [ ]
+    RootVolumeSizeGib: [ ]
+    RunningMode: [ ]
+    RunningModeAutoStopTimeoutInMinutes: [ ]
+RootVolumeEncryptionEnabled: [X]
+UserVolumeEncryptionEnabled: [X]
+BundleId: [X]
+```
+
 #### Alexa::ASK::Skill
 
-``````
+```
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+    (inherited)
+```
+
