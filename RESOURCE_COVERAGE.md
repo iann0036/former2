@@ -1199,16 +1199,6 @@
 
 ## CloudFormation Property Coverage [BETA]
 
-#### AWS::ACMPCA::Certificate
-
-```
-CertificateSigningRequest: [ ]
-SigningAlgorithm: [X]
-TemplateArn: [ ]
-CertificateAuthorityArn: [ ]
-Validity: [ ]
-```
-
 #### AWS::ACMPCA::CertificateAuthority
 
 ```
@@ -1712,31 +1702,6 @@ Name: [X]
 DisableSchemaValidation: [X]
 FailOnWarnings: [ ]
 Description: [X]
-```
-
-#### AWS::ApiGatewayV2::ApiGatewayManagedOverrides
-
-```
-    AuthorizationType: [X]
-    OperationName: [X]
-    Target: [X]
-    AuthorizerId: [X]
-    AuthorizationScopes: [X]
-    Description: [X]
-        DestinationArn: [X]
-        Format: [X]
-    AutoDeploy: [X]
-        LoggingLevel: [X]
-        DetailedMetricsEnabled: [X]
-        DataTraceEnabled: [X]
-        ThrottlingBurstLimit: [X]
-        ThrottlingRateLimit: [X]
-    StageVariables: [X]
-    RouteSettings: [X]
-    PayloadFormatVersion: [X]
-    IntegrationMethod: [X]
-    Description: [X]
-    TimeoutInMillis: [X]
 ```
 
 #### AWS::ApiGatewayV2::ApiMapping
@@ -3204,26 +3169,6 @@ Name: [X]
 RuleVersion: [X]
 ```
 
-#### AWS::Cassandra::Keyspace
-
-```
-```
-
-#### AWS::Cassandra::Table
-
-```
-        ColumnName: [X]
-        ColumnType: [X]
-    OrderBy: [X]
-        WriteCapacityUnits: [X]
-        ReadCapacityUnits: [X]
-    Mode: [X]
-    ColumnName: [X]
-    ColumnType: [X]
-    ColumnName: [X]
-    ColumnType: [X]
-```
-
 #### AWS::CertificateManager::Certificate
 
 ```
@@ -3239,11 +3184,6 @@ ValidationMethod: [ ]
 CertificateAuthorityArn: [X]
 ```
 
-#### AWS::Chatbot::SlackChannelConfiguration
-
-```
-```
-
 #### AWS::Cloud9::EnvironmentEC2
 
 ```
@@ -3256,54 +3196,6 @@ SubnetId: [X]
 AutomaticStopTimeMinutes: [ ]
 InstanceType: [X]
 Name: [X]
-```
-
-#### AWS::CloudFormation::CustomResource
-
-```
-```
-
-#### AWS::CloudFormation::Macro
-
-```
-```
-
-#### AWS::CloudFormation::Stack
-
-```
-    Key: [X]
-    Value: [X]
-```
-
-#### AWS::CloudFormation::StackSet
-
-```
-        Accounts: [X]
-        OrganizationalUnitIds: [X]
-    Regions: [X]
-        ParameterValue: [X]
-        ParameterKey: [X]
-    Key: [X]
-    Value: [X]
-    FailureToleranceCount: [X]
-    MaxConcurrentCount: [X]
-    FailureTolerancePercentage: [X]
-    MaxConcurrentPercentage: [X]
-    RegionOrder: [X]
-    ParameterValue: [X]
-    ParameterKey: [X]
-    RetainStacksOnAccountRemoval: [X]
-    Enabled: [X]
-```
-
-#### AWS::CloudFormation::WaitCondition
-
-```
-```
-
-#### AWS::CloudFormation::WaitConditionHandle
-
-```
 ```
 
 #### AWS::CloudFront::CachePolicy
@@ -5154,16 +5046,6 @@ GroupName: [X]
 GroupDescription: [X]
 ```
 
-#### AWS::EC2::SecurityGroupEgress
-
-```
-```
-
-#### AWS::EC2::SecurityGroupIngress
-
-```
-```
-
 #### AWS::EC2::SpotFleet
 
 ```
@@ -6179,11 +6061,6 @@ AutomaticFailoverEnabled: [X]
 
 ```
 Description: [X]
-```
-
-#### AWS::ElastiCache::SecurityGroupIngress
-
-```
 ```
 
 #### AWS::ElastiCache::SubnetGroup
@@ -7364,11 +7241,6 @@ LoginProfile: [ ]
 Policies: [ ]
 Path: [X]
 PermissionsBoundary: [X]
-```
-
-#### AWS::IAM::UserToGroupAddition
-
-```
 ```
 
 #### AWS::ImageBuilder::Component
@@ -8910,15 +8782,6 @@ WhitelistRules: [X]
 Tags: [X]
 ```
 
-#### AWS::MediaPackage::Asset
-
-```
-    Key: [X]
-    Value: [X]
-    Url: [X]
-    PackagingConfigurationId: [X]
-```
-
 #### AWS::MediaPackage::Channel
 
 ```
@@ -9007,62 +8870,6 @@ Origination: [X]
 Authorization: [X]
     SecretsRoleArn: [X]
     CdnIdentifierSecret: [X]
-```
-
-#### AWS::MediaPackage::PackagingConfiguration
-
-```
-        SpekeKeyProvider: [X]
-            MaxVideoBitsPerSecond: [X]
-            StreamOrder: [X]
-            MinVideoBitsPerSecond: [X]
-        IncludeIframeOnlyStream: [X]
-        RepeatExtXKey: [X]
-        AdMarkers: [X]
-        ManifestName: [X]
-        ProgramDateTimeIntervalSeconds: [X]
-    SegmentDurationSeconds: [X]
-    Key: [X]
-    Value: [X]
-        SpekeKeyProvider: [X]
-        ConstantInitializationVector: [X]
-        EncryptionMethod: [X]
-            MaxVideoBitsPerSecond: [X]
-            StreamOrder: [X]
-            MinVideoBitsPerSecond: [X]
-        IncludeIframeOnlyStream: [X]
-        RepeatExtXKey: [X]
-        AdMarkers: [X]
-        ManifestName: [X]
-        ProgramDateTimeIntervalSeconds: [X]
-    SegmentDurationSeconds: [X]
-    UseAudioRenditionGroup: [X]
-        SpekeKeyProvider: [X]
-    PeriodTriggers: [X]
-    SegmentDurationSeconds: [X]
-    SegmentTemplateFormat: [X]
-        MinBufferTimeSeconds: [X]
-        Profile: [X]
-        ManifestLayout: [X]
-            MaxVideoBitsPerSecond: [X]
-            StreamOrder: [X]
-            MinVideoBitsPerSecond: [X]
-        ManifestName: [X]
-        SpekeKeyProvider: [X]
-            MaxVideoBitsPerSecond: [X]
-            StreamOrder: [X]
-            MinVideoBitsPerSecond: [X]
-        ManifestName: [X]
-    SegmentDurationSeconds: [X]
-```
-
-#### AWS::MediaPackage::PackagingGroup
-
-```
-    SecretsRoleArn: [X]
-    CdnIdentifierSecret: [X]
-    Key: [X]
-    Value: [X]
 ```
 
 #### AWS::MediaStore::Container
@@ -9985,11 +9792,6 @@ GroupDescription: [X]
 Tags: [ ]
 ```
 
-#### AWS::RDS::DBSecurityGroupIngress
-
-```
-```
-
 #### AWS::RDS::DBSubnetGroup
 
 ```
@@ -10083,11 +9885,6 @@ Description: [X]
 Tags: [X]
     Key: [X]
     Value: [X]
-```
-
-#### AWS::Redshift::ClusterSecurityGroupIngress
-
-```
 ```
 
 #### AWS::Redshift::ClusterSubnetGroup
@@ -10225,30 +10022,6 @@ TTL: [X]
 HostedZoneId: [X]
 Type: [X]
 Region: [X]
-```
-
-#### AWS::Route53::RecordSetGroup
-
-```
-    Comment: [X]
-        SubdivisionCode: [X]
-        ContinentCode: [X]
-        CountryCode: [X]
-    HealthCheckId: [X]
-    Name: [X]
-    Weight: [X]
-    HostedZoneName: [X]
-    SetIdentifier: [X]
-    Failover: [X]
-        EvaluateTargetHealth: [X]
-        HostedZoneId: [X]
-        DNSName: [X]
-    ResourceRecords: [X]
-    MultiValueAnswer: [X]
-    TTL: [X]
-    HostedZoneId: [X]
-    Type: [X]
-    Region: [X]
 ```
 
 #### AWS::Route53Resolver::ResolverEndpoint
@@ -10474,11 +10247,6 @@ BucketName: [X]
 ```
 PolicyDocument: [X]
 Bucket: [X]
-```
-
-#### AWS::SDB::Domain
-
-```
 ```
 
 #### AWS::SES::ConfigurationSet
@@ -10954,11 +10722,6 @@ KmsKeyId: [X]
 Name: [X]
 ```
 
-#### AWS::SecretsManager::SecretTargetAttachment
-
-```
-```
-
 #### AWS::SecurityHub::Hub
 
 ```
@@ -11066,16 +10829,6 @@ AcceptLanguage: [ ]
 SourcePortfolioId: [ ]
 PortfolioId: [X]
 ProductId: [X]
-```
-
-#### AWS::ServiceCatalog::PortfolioShare
-
-```
-```
-
-#### AWS::ServiceCatalog::ResourceUpdateConstraint
-
-```
 ```
 
 #### AWS::ServiceCatalog::StackSetConstraint
@@ -12074,18 +11827,5 @@ WorkspaceProperties: [X]
 RootVolumeEncryptionEnabled: [X]
 UserVolumeEncryptionEnabled: [X]
 BundleId: [X]
-```
-
-#### Alexa::ASK::Skill
-
-```
-    ClientSecret: [X]
-    RefreshToken: [X]
-    ClientId: [X]
-    S3Bucket: [X]
-    S3ObjectVersion: [X]
-    S3BucketRole: [X]
-    S3Key: [X]
-        Manifest: [X]
 ```
 
