@@ -76,6 +76,81 @@ for cfn_occurance in cfn_occurances:
 
 cfn_types = set(cfn_types)
 
+## Property Coverage
+def getProps(resourcetype, propdef, depth):
+    if depth > 10:
+        return {}
+
+    ret = {}
+    if 'Properties' in propdef:
+        for k, v in propdef['Properties'].items():
+            ret[k] = {}
+            if 'Type' in v:
+                if v['Type'] == 'Map':
+                    if 'ItemType' in v:
+                        ret[k] = getProps(resourcetype, loaded_spec['PropertyTypes'][resourcetype + "." + v['ItemType']], depth+1)
+                elif v['Type'] == 'List':
+                    if 'ItemType' in v and v['ItemType'] != 'Json':
+                        if v['ItemType'] == 'Tag':
+                            ret[k] = getProps(resourcetype, loaded_spec['PropertyTypes'][v['ItemType']], depth+1)
+                        else:
+                            ret[k] = getProps(resourcetype, loaded_spec['PropertyTypes'][resourcetype + "." + v['ItemType']], depth+1)
+                elif v['Type'] != "String" and v['Type'] != "Json":
+                    if v['Type'] == 'Tag':
+                        ret[k] = getProps(resourcetype, loaded_spec['PropertyTypes'][v['Type']], depth+1)
+                    else:
+                        ret[k] = getProps(resourcetype, loaded_spec['PropertyTypes'][resourcetype + "." + v['Type']], depth+1)
+    elif 'Type' in propdef and propdef['Type'] == 'List' and 'ItemType' in propdef:
+        if 'ItemType' in propdef and propdef['ItemType'] != 'Json':
+            if propdef['ItemType'] == 'Tag':
+                ret = getProps(resourcetype, loaded_spec['PropertyTypes'][propdef['ItemType']], depth+1)
+            else:
+                ret = getProps(resourcetype, loaded_spec['PropertyTypes'][resourcetype + "." + propdef['ItemType']], depth+1)
+    elif 'PrimitiveType' not in propdef and ''.join(propdef.keys()) != "Documentation":
+        pass
+        print("Skipped propdef")
+        print(resourcetype)
+        print(propdef)
+    return ret
+
+spec = {}
+with open("util/cfnspec.json", "r") as f:
+    loaded_spec = json.loads(f.read())
+
+    for k, v in loaded_spec['ResourceTypes'].items():
+        spec[k] = getProps(k, v, 0)
+
+# Find occurences
+def find_occs(resourcetype, prop, indent, subprops):
+    ret = ""
+    break_loop = False
+    process_subs = True
+    for servicefilename in os.listdir("js/services"):
+        if not break_loop:
+            with open("js/services/" + servicefilename, "r") as f:
+                text = f.read()
+                endpos = text.find(resourcetype)
+                if endpos > -1:
+                    startpos = text.rfind("if (obj.type ==", 0, endpos)
+                    if "\'" + prop + "\'" in text[startpos:endpos]:
+                        ret += (' '*indent) + prop + ": :heavy_check_mark:\n"
+                    else:
+                        ret += (' '*indent) + prop + ": :x:\n"
+                        process_subs = False
+                    break_loop = True
+    if process_subs:
+        for k, v in subprops.items():
+            ret += find_occs(resourcetype, k, indent + 2, v)
+    return ret
+
+for resourcetype, props in spec.items():
+    txt = ''
+    for prop in props.keys():
+        txt += find_occs(resourcetype, prop, 0, props[prop])
+    spec[resourcetype] = txt
+
+####
+
 total_services = 0
 total_operations = 0
 total_unique_occurances = 0
@@ -115,3 +190,10 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
         if tf_resource in tf_exceptions:
             coverage = tf_exceptions[tf_resource]
         f.write("| *%s* | %s |\n" % (tf_resource, coverage))
+
+    f.write("\n## CloudFormation Property Coverage [BETA]\n\n")
+    f.write("\n| Type | Properties |\n")
+    f.write("| --- | --- |\n")
+
+    for k, v in spec.items():
+        f.write("| *%s* | %s |\n" % (k, v))
