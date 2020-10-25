@@ -140,7 +140,7 @@ def find_occs(resourcetype, prop, indent, subprops):
                     break_loop = True
     if process_subs:
         for k, v in subprops.items():
-            ret += find_occs(resourcetype, k, indent + 2, v)
+            ret += find_occs(resourcetype, k, indent + 4, v)
     return ret
 
 for resourcetype, props in spec.items():
@@ -192,8 +192,6 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
         f.write("| *%s* | %s |\n" % (tf_resource, coverage))
 
     f.write("\n## CloudFormation Property Coverage [BETA]\n\n")
-    f.write("\n| Type | Properties |\n")
-    f.write("| --- | --- |\n")
 
     for k, v in spec.items():
-        f.write("| *%s* | %s |\n" % (k, v))
+        f.write("#### %s\n\n%s\n" % (k, v))
