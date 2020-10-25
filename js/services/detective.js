@@ -149,8 +149,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MemberId'] = obj.data.AccountId;
 
         /*
-        SKIPPED:
-        Message
+        SKIPPED: Message
         */
 
         tracked_resources.push({

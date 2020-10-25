@@ -98,11 +98,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RepositoryOwner'] = obj.data.Owner;
 
         /*
-        SKIPPED:
-        Code
-        */
-
-        /*
+        SKIPPED: Code
+        
         TODO:
         IsPrivate
         RepositoryDescription

@@ -205,9 +205,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['SecretString'] = obj.data.SecretString;
 
         /*
-        SKIPPED:
-        GenerateSecretString: 
-            GenerateSecretString
+        SKIPPED: GenerateSecretString
         */
 
         tracked_resources.push({

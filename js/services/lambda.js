@@ -853,15 +853,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "lambda.eventinvokeconfig") {
         reqParams.cfn['DestinationConfig'] = obj.data.DestinationConfig;
-        reqParams.cfn['FunctionName'] = obj.data.FunctionArn;
+        reqParams.cfn['FunctionName'] = obj.data.FunctionArn.split(":")[6];
         reqParams.cfn['MaximumEventAgeInSeconds'] = obj.data.MaximumEventAgeInSeconds;
         reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
-        reqParams.cfn['Qualifier'] = obj.data.Qualifier;
-
-        /*
-        SKIPPED:
-        Qualifier: String
-        */
+        var qualifier = obj.data.FunctionArn.split(":")[7];
+        if (Number.isInteger(qualifier)) {
+            reqParams.cfn['Qualifier'] = qualifier;
+        }
 
         tracked_resources.push({
             'obj': obj,

@@ -2659,12 +2659,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         
         /*
-        SKIPPED:
-        FailOnWarnings: Boolean
-        Body: Json
-        BodyS3Location: 
-            BodyS3Location
-        BasePath: String
+        SKIPPED: FailOnWarnings
+        SKIPPED: Body
+        SKIPPED: BodyS3Location
+        SKIPPED: BasePath
 
         TODO:
         CredentialsArn: String

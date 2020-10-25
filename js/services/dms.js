@@ -503,6 +503,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['EndpointType'] = obj.data.EndpointType;
         reqParams.cfn['EngineName'] = obj.data.EngineName;
         reqParams.cfn['Username'] = obj.data.Username;
+        reqParams.cfn['Password'] = "REPLACEME";
         reqParams.cfn['ServerName'] = obj.data.ServerName;
         reqParams.cfn['Port'] = obj.data.Port;
         reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
@@ -534,8 +535,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['NeptuneSettings'] = obj.data.NeptuneSettings;
 
         /*
-        SKIPPED:
-        Password: String
         TODO:
         Tags:
             - Resource Tag

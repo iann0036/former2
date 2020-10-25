@@ -1982,9 +1982,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        ByteMatchTuples:
-        - TargetStringBase64
+        SKIPPED: TargetStringBase64
         */
 
         tracked_resources.push({
@@ -2224,9 +2222,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        ByteMatchTuples:
-        - TargetStringBase64
+        SKIPPED: TargetStringBase64
         */
 
         tracked_resources.push({

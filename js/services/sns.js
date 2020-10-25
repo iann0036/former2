@@ -200,9 +200,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         /*
         TODO:
-        SKIPPED:
-        Subscription:
-            - SNS Subscription
+        SKIPPED: Subscription
         */
 
         tracked_resources.push({

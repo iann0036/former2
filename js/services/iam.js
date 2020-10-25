@@ -773,9 +773,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        Policies:
-            - Policies
+        SKIPPED: Policies
+        
         TODO:
         LoginProfile:
             LoginProfile Type
@@ -809,9 +808,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        Policies:
-            - Policies
+        SKIPPED: Policies
         */
 
         tracked_resources.push({
@@ -861,9 +858,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        Policies:
-            - Policies
+        SKIPPED: Policies
         */
 
         tracked_resources.push({
@@ -965,8 +960,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['user'] = obj.data.UserName;
 
         /*
-        SKIPPED:
-        Serial
+        SKIPPED: Serial
         */
 
         tracked_resources.push({

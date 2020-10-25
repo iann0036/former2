@@ -1073,12 +1073,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ArtifactS3Location'] = obj.data.ArtifactS3Location;
         reqParams.cfn['RuntimeVersion'] = obj.data.RuntimeVersion;
         reqParams.cfn['VPCConfig'] = obj.data.VpcConfig;
+        reqParams.cfn['StartCanaryAfterCreation'] = true;
         reqParams.cfn['Tags'] = obj.data.Tags;
-
-        /*
-        SKIPPED:
-        StartCanaryAfterCreation: Boolean
-        */
 
         tracked_resources.push({
             'obj': obj,
@@ -1101,7 +1097,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['CWEMonitorEnabled'] = obj.data.CWEMonitorEnabled;
 
         /*
-        SKIPPED:
+        TODO:
         AutoConfigurationEnabled: Boolean
         ComponentMonitoringSettings: 
             - ComponentMonitoringSetting

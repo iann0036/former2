@@ -182,11 +182,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
 
         /*
-        SKIPPED:
-        DefinitionS3Location: 
-            S3Location
-        DefinitionSubstitutions: 
-            DefinitionSubstitutions
+        SKIPPED: DefinitionS3Location
+        SKIPPED: DefinitionSubstitutions
+        
         TODO:
         Tags: 
             - TagsEntry
