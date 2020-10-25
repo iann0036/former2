@@ -145,7 +145,7 @@ def find_occs(resourcetype, prop, indent, subprops):
             if "[ ]" in subpropret:
                 ret += subpropret
             else:
-                ret += (' '*(indent + 4)) + "(inherited)\n"
+                ret += (' '*(indent + 4)) + k + ": [ ]\n"
     return ret
 
 for resourcetype, props in spec.items():
