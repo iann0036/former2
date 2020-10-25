@@ -896,13 +896,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['policy'] = unescape(obj.data.PolicyDocument);
 
         /*
-        TODO:
-        Groups:
-            - String
-        Roles:
-            - String
-        Users:
-            - String
+        SKIPPED: Groups
+        SKIPPED: Roles
+        SKIPPED: Users
         */
 
         tracked_resources.push({

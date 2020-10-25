@@ -1611,6 +1611,40 @@ function unblockUI(selector) {
 
 /* ========================================================================== */
 
+resource_tag_cache = {};
+
+async function getResourceTags(arn) {
+    if (!arn) {
+        return null;
+    }
+
+    if (arn.split(":").length < 7 && !arn.split(":")[5].includes("/")) {
+        return null;
+    }
+
+    var service = arn.split(":")[2];
+    var type = arn.split(":")[5].split("/")[0];
+
+    if (!resource_tag_cache[ service/*+ "." + type*/ ]) {
+        await sdkcall("ResourceGroupsTaggingAPI", "getResources", {
+            ResourceTypeFilters: [ service/* + "." + type*/ ]
+        }, true).then((data) => {
+            resource_tag_cache[ service/* + "." + type*/ ] = data.ResourceTagMappingList;
+        });
+        setTimeout((k) => {
+            delete resource_tag_cache[k];
+        }, 20000, service/* + "." + type*/); // 20s cache
+    }
+
+    for (var res of resource_tag_cache[ service/* + "." + type*/ ]) {
+        if (res['ResourceARN'] == arn) {
+            return res['Tags'].filter(tag => !tag['Key'].startsWith("aws:"));
+        }
+    }
+
+    return null;
+}
+
 function saveSettings() {
     var jsondoc = {
         'parameters': stack_parameters.filter(function(p){ return !p.name.startsWith("AWS::"); }),

@@ -470,10 +470,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['account_id'] = obj.data.AccountId;
 
         /*
+        SKIPPED: Message
+        SKIPPED: DisableEmailNotification
+        
         TODO:
         Status: String
-        Message: String
-        DisableEmailNotification: Boolean
         */
 
         tracked_resources.push({

@@ -381,7 +381,9 @@ async function updateDatatableComputeLambda() {
             return Promise.all([
                 sdkcall("Lambda", "getFunction", {
                     FunctionName: lambdaFunction.FunctionArn
-                }, true).then((data) => {
+                }, true).then(async (data) => {
+                    data['Tags'] = await getResourceTags(data.Configuration.FunctionArn);
+
                     $('#section-compute-lambda-functions-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Configuration.FunctionArn,
                         f2type: 'lambda.function',
@@ -650,11 +652,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         
         reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
-        TODO:
-        Tags: 
-            Resource Tag
+        SKIPPED: ZipFile
         */
 
         tracked_resources.push({
