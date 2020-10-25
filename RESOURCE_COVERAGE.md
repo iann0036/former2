@@ -1755,23 +1755,24 @@ Tags: [ ]
 #### AWS::ApiGatewayV2::Integration
 
 ```
-TlsConfig: [ ]
-PassthroughBehavior: [ ]
-IntegrationMethod: [ ]
-Description: [ ]
-RequestParameters: [ ]
+TlsConfig: [X]
+    ServerNameToVerify: [X]
+PassthroughBehavior: [X]
+IntegrationMethod: [X]
+Description: [X]
+RequestParameters: [X]
 TemplateSelectionExpression: [X]
 IntegrationSubtype: [ ]
 ConnectionId: [ ]
-ConnectionType: [ ]
-PayloadFormatVersion: [ ]
-IntegrationUri: [ ]
-RequestTemplates: [ ]
-CredentialsArn: [ ]
-IntegrationType: [ ]
+ConnectionType: [X]
+PayloadFormatVersion: [X]
+IntegrationUri: [X]
+RequestTemplates: [X]
+CredentialsArn: [X]
+IntegrationType: [X]
 ContentHandlingStrategy: [X]
 ApiId: [X]
-TimeoutInMillis: [ ]
+TimeoutInMillis: [X]
 ```
 
 #### AWS::ApiGatewayV2::IntegrationResponse
@@ -1799,18 +1800,18 @@ Name: [X]
 #### AWS::ApiGatewayV2::Route
 
 ```
-Target: [ ]
-RouteResponseSelectionExpression: [ ]
-AuthorizationScopes: [ ]
-RequestModels: [ ]
-AuthorizationType: [ ]
-OperationName: [ ]
-ApiKeyRequired: [ ]
-RouteKey: [ ]
-AuthorizerId: [ ]
+Target: [X]
+RouteResponseSelectionExpression: [X]
+AuthorizationScopes: [X]
+RequestModels: [X]
+AuthorizationType: [X]
+OperationName: [X]
+ApiKeyRequired: [X]
+RouteKey: [X]
+AuthorizerId: [X]
 ModelSelectionExpression: [X]
 ApiId: [X]
-RequestParameters: [ ]
+RequestParameters: [X]
 ```
 
 #### AWS::ApiGatewayV2::RouteResponse
@@ -2492,18 +2493,27 @@ Name: [X]
 
 ```
 AttributesToDelete: [ ]
-DisplayName: [ ]
-Description: [ ]
-UserSettings: [ ]
+DisplayName: [X]
+Description: [X]
+UserSettings: [X]
+    Action: [X]
+    Permission: [X]
 DeleteStorageConnectors: [ ]
 Tags: [ ]
-StorageConnectors: [ ]
+StorageConnectors: [X]
+    Domains: [X]
+    ConnectorType: [X]
+    ResourceIdentifier: [X]
 EmbedHostDomains: [ ]
-RedirectURL: [ ]
-AccessEndpoints: [ ]
-ApplicationSettings: [ ]
-FeedbackURL: [ ]
-Name: [ ]
+RedirectURL: [X]
+AccessEndpoints: [X]
+    EndpointType: [X]
+    VpceId: [X]
+ApplicationSettings: [X]
+    SettingsGroup: [X]
+    Enabled: [X]
+FeedbackURL: [X]
+Name: [X]
 ```
 
 #### AWS::AppStream::StackFleetAssociation
@@ -4991,19 +5001,19 @@ Entries: [X]
 #### AWS::EC2::Route
 
 ```
-DestinationCidrBlock: [ ]
-EgressOnlyInternetGatewayId: [ ]
+DestinationCidrBlock: [X]
+EgressOnlyInternetGatewayId: [X]
 TransitGatewayId: [ ]
-InstanceId: [ ]
-NetworkInterfaceId: [ ]
+InstanceId: [X]
+NetworkInterfaceId: [X]
 LocalGatewayId: [ ]
-RouteTableId: [ ]
-GatewayId: [ ]
-NatGatewayId: [ ]
+RouteTableId: [X]
+GatewayId: [X]
+NatGatewayId: [X]
 CarrierGatewayId: [ ]
-VpcPeeringConnectionId: [ ]
+VpcPeeringConnectionId: [X]
 VpcEndpointId: [ ]
-DestinationIpv6CidrBlock: [ ]
+DestinationIpv6CidrBlock: [X]
 ```
 
 #### AWS::EC2::RouteTable
@@ -5246,8 +5256,10 @@ TransitGatewayAttachmentId: [X]
 #### AWS::EC2::TransitGatewayRouteTable
 
 ```
-TransitGatewayId: [ ]
-Tags: [ ]
+TransitGatewayId: [X]
+Tags: [X]
+    Key: [X]
+    Value: [X]
 ```
 
 #### AWS::EC2::TransitGatewayRouteTableAssociation
@@ -5316,8 +5328,8 @@ ConnectionNotificationArn: [X]
 #### AWS::EC2::VPCEndpointService
 
 ```
-AcceptanceRequired: [ ]
-NetworkLoadBalancerArns: [ ]
+AcceptanceRequired: [X]
+NetworkLoadBalancerArns: [X]
 ApplianceLoadBalancerArns: [ ]
 ```
 
@@ -5373,9 +5385,11 @@ DestinationCidrBlock: [X]
 #### AWS::EC2::VPNGateway
 
 ```
-AmazonSideAsn: [ ]
-Type: [ ]
-Tags: [ ]
+AmazonSideAsn: [X]
+Type: [X]
+Tags: [X]
+    Key: [X]
+    Value: [X]
 ```
 
 #### AWS::EC2::VPNGatewayRoutePropagation
@@ -6163,14 +6177,50 @@ Scheme: [X]
 #### AWS::ElasticLoadBalancingV2::Listener
 
 ```
-Protocol: [ ]
-DefaultActions: [ ]
-SslPolicy: [ ]
+Protocol: [X]
+DefaultActions: [X]
+    TargetGroupArn: [X]
+    FixedResponseConfig: [X]
+        ContentType: [X]
+        MessageBody: [X]
+        StatusCode: [X]
+    ForwardConfig: [X]
+    RedirectConfig: [X]
+        Protocol: [X]
+        Host: [X]
+        Path: [X]
+        Query: [X]
+        Port: [X]
+        StatusCode: [X]
+    AuthenticateCognitoConfig: [X]
+        UserPoolDomain: [X]
+        UserPoolArn: [X]
+        AuthenticationRequestExtraParams: [X]
+        SessionTimeout: [X]
+        Scope: [X]
+        SessionCookieName: [X]
+        UserPoolClientId: [X]
+        OnUnauthenticatedRequest: [X]
+    AuthenticateOidcConfig: [X]
+        ClientSecret: [X]
+        OnUnauthenticatedRequest: [X]
+        TokenEndpoint: [X]
+        AuthenticationRequestExtraParams: [X]
+        ClientId: [X]
+        SessionTimeout: [X]
+        AuthorizationEndpoint: [X]
+        Scope: [X]
+        SessionCookieName: [X]
+        UserInfoEndpoint: [X]
+        Issuer: [X]
+    Type: [X]
+    Order: [X]
+SslPolicy: [X]
 AlpnPolicy: [ ]
 Certificates: [X]
     CertificateArn: [X]
-LoadBalancerArn: [ ]
-Port: [ ]
+LoadBalancerArn: [X]
+Port: [X]
 ```
 
 #### AWS::ElasticLoadBalancingV2::ListenerCertificate
@@ -6350,8 +6400,8 @@ Type: [X]
 #### AWS::Events::EventBus
 
 ```
-EventSourceName: [ ]
-Name: [ ]
+EventSourceName: [X]
+Name: [X]
 ```
 
 #### AWS::Events::EventBusPolicy
@@ -8762,16 +8812,20 @@ Destinations: [X]
 #### AWS::MediaLive::Input
 
 ```
-MediaConnectFlows: [ ]
-InputSecurityGroups: [ ]
+MediaConnectFlows: [X]
+    FlowArn: [X]
+InputSecurityGroups: [X]
 InputDevices: [ ]
-RoleArn: [ ]
+RoleArn: [X]
 Tags: [X]
-Sources: [ ]
+Sources: [X]
+    Username: [X]
+    Url: [X]
+    PasswordParam: [X]
 Vpc: [ ]
 Destinations: [ ]
-Type: [ ]
-Name: [ ]
+Type: [X]
+Name: [X]
 ```
 
 #### AWS::MediaLive::InputSecurityGroup

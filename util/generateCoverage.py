@@ -131,7 +131,7 @@ def find_occs(resourcetype, prop, indent, subprops):
         if not break_loop:
             with open("js/services/" + servicefilename, "r") as f:
                 text = f.read()
-                endpos = text.find(resourcetype)
+                endpos = text.find("'" + resourcetype + "'")
                 if endpos > -1:
                     startpos = text.rfind("if (obj.type ==", 0, endpos)
                     if "\'" + prop + "\'" in text[startpos:endpos]:
