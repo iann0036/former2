@@ -72,12 +72,15 @@ async function updateDatatableApplicationIntegrationSQS() {
         $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.QueueUrls) {
-            await Promise.all(data.QueueUrls.map(queueUrl => {
+            await Promise.all(data.QueueUrls.map(async (queueUrl) => {
                 return sdkcall("SQS", "getQueueAttributes", {
                     QueueUrl: queueUrl,
                     AttributeNames: ['All']
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     data['QueueUrl'] = queueUrl;
+
+                    data['Tags'] = await getResourceTags(data.Attributes.QueueArn);
+
                     $('#section-applicationintegration-sqs-queues-datatable').deferredBootstrapTable('append', [{
                         f2id: queueUrl,
                         f2type: 'sqs.queue',
@@ -130,12 +133,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['name'] = obj.data.Attributes.QueueArn.split(":").pop();
         reqParams.cfn['RedrivePolicy'] = obj.data.Attributes.RedrivePolicy;
         reqParams.tf['redrive_policy'] = obj.data.Attributes.RedrivePolicy;
-
-        /*
-        TODO:
-        Tags:
-            Resource Tag 
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

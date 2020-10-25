@@ -116,6 +116,8 @@ async function updateDatatableDatabaseQLDB() {
             await sdkcall("QLDB", "describeLedger", {
                 Name: ledger.Name
             }, false).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
                 $('#section-database-qldb-ledgers-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Arn,
                     f2type: 'qldb.ledger',
@@ -136,6 +138,8 @@ async function updateDatatableDatabaseQLDB() {
                         LedgerName: ledger.Name,
                         StreamId: stream.StreamId
                     }, false).then(async (data) => {
+                        data.Stream['Tags'] = await getResourceTags(data.Stream.Arn);
+
                         $('#section-database-qldb-streams-datatable').deferredBootstrapTable('append', [{
                             f2id: data.Stream.Arn,
                             f2type: 'qldb.stream',
@@ -161,15 +165,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
         reqParams.cfn['PermissionsMode'] = 'ALLOW_ALL';
-
-        /*
-        TODO:
-        DeletionProtection: Boolean
-        Name: String
-        PermissionsMode: String
-        Tags: 
-            - Tag
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,
@@ -186,12 +182,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['StreamName'] = obj.data.StreamName;
         reqParams.cfn['KinesisConfiguration'] = obj.data.KinesisConfiguration;
-
-        /*
-        TODO:
-        Tags: 
-            - Tag
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

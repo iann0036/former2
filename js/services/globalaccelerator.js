@@ -153,7 +153,7 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
         $('#section-networkingandcontentdelivery-globalaccelerator-listeners-datatable').deferredBootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-globalaccelerator-endpointgroups-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.Accelerators.map(accelerator => {
+        await Promise.all(data.Accelerators.map(async (accelerator) => {
             return sdkcall("GlobalAccelerator", "describeAccelerator", {
                 AcceleratorArn: accelerator.AcceleratorArn
             }, true).then(async (data) => {
@@ -162,6 +162,8 @@ async function updateDatatableNetworkingAndContentDeliveryGlobalAccelerator() {
                 }, true).then(async (attributedata) => {
                     data.Accelerator['Attributes'] = attributedata.AcceleratorAttributes;
                 });
+
+                data.Accelerator['Tags'] = await getResourceTags(data.Accelerator.AcceleratorArn);
 
                 $('#section-networkingandcontentdelivery-globalaccelerator-accelerators-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Accelerator.AcceleratorArn,
@@ -241,11 +243,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['IpAddresses'] = reqParams.cfn['IpAddresses'].concat(ipset.IpAddresses);
             });
         }
-
-        /*
-        TODO:
-        Tags
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

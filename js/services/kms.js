@@ -136,6 +136,8 @@ async function updateDatatableSecurityIdentityAndComplianceKMS() {
                             keydata['KeyRotationEnabled'] = data.KeyRotationEnabled;
                         }).catch(() => { });
 
+                        keydata.KeyMetadata['Tags'] = await getResourceTags(keydata.KeyMetadata.Arn);
+
                         $('#section-securityidentityandcompliance-kms-keys-datatable').deferredBootstrapTable('append', [{
                             f2id: keydata.KeyMetadata.Arn,
                             f2type: 'kms.key',
@@ -190,12 +192,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['enable_key_rotation'] = obj.data.KeyRotationEnabled;
         reqParams.cfn['KeyPolicy'] = obj.data.Policy;
         reqParams.tf['policy'] = obj.data.Policy;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
         PendingWindowInDays: Integer
-        Tags:
-            - Resource Tag
         */
 
         tracked_resources.push({

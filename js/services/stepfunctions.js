@@ -104,10 +104,12 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
     }, true).then(async (data) => {
         $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.stateMachines.map(stateMachine => {
+        await Promise.all(data.stateMachines.map(async (stateMachine) => {
             return sdkcall("StepFunctions", "describeStateMachine", {
                 stateMachineArn: stateMachine.stateMachineArn
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.stateMachineArn);
+
                 $('#section-applicationintegration-stepfunctions-statemachines-datatable').deferredBootstrapTable('append', [{
                     f2id: data.stateMachineArn,
                     f2type: 'stepfunctions.statemachine',
@@ -128,10 +130,12 @@ async function updateDatatableApplicationIntegrationStepFunctions() {
         $('#section-applicationintegration-stepfunctions-activities-datatable').deferredBootstrapTable('removeAll');
 
         if (data.activities) {
-            await Promise.all(data.activities.map(activity => {
+            await Promise.all(data.activities.map(async (activity) => {
                 return sdkcall("StepFunctions", "describeActivity", {
                     activityArn: activity.activityArn
-                }, true).then((data) => {
+                }, true).then(async (data) => {
+                    data['Tags'] = await getResourceTags(data.activityArn);
+
                     $('#section-applicationintegration-stepfunctions-activities-datatable').deferredBootstrapTable('append', [{
                         f2id: data.activityArn,
                         f2type: 'stepfunctions.activity',
@@ -180,14 +184,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Level': obj.data.loggingConfiguration.level
             };
         }
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         SKIPPED: DefinitionS3Location
         SKIPPED: DefinitionSubstitutions
-        
-        TODO:
-        Tags: 
-            - TagsEntry
         */
 
         tracked_resources.push({
@@ -208,12 +209,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "stepfunctions.activity") {
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.tf['name'] = obj.data.name;
-
-        /*
-        TODO:
-        Tags:
-            - Resource Tag
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

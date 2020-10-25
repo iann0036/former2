@@ -81,11 +81,12 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
     }, true).then(async (data) => {
         $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.trailList.map(trail => {
+        await Promise.all(data.trailList.map(async (trail) => {
             return sdkcall("CloudTrail", "getTrailStatus", {
                 Name: trail.TrailARN
-            }, true).then((trailstatus) => {
+            }, true).then(async (trailstatus) => {
                 trail['IsLogging'] = trailstatus.IsLogging;
+                trail['Tags'] = await getResourceTags(trail.TrailARN);
 
                 $('#section-managementandgovernance-cloudtrail-trails-datatable').deferredBootstrapTable('append', [{
                     f2id: trail.TrailARN,
@@ -131,13 +132,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
         reqParams.cfn['IsLogging'] = obj.data.IsLogging;
         reqParams.tf['enable_logging'] = obj.data.IsLogging;
+        reqParams.cfn['Tags'] = obj.data.Tags;
         
         /*
         TODO:
         EventSelectors:
             - EventSelector
-        Tags:
-            - Resource Tag
         */
 
         tracked_resources.push({

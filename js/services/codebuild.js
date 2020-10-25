@@ -279,10 +279,12 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     }, false).then(async (data) => {
         $('#section-developertools-codebuild-reportgroups-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.reportGroups.map(reportGroup => {
+        await Promise.all(data.reportGroups.map(async (reportGroup) => {
             return sdkcall("CodeBuild", "batchGetReportGroups", {
                 reportGroupArns: [reportGroup]
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data.reportGroups[0]['Tags'] = await getResourceTags(data.reportGroups[0].arn);
+
                 $('#section-developertools-codebuild-reportgroups-datatable').deferredBootstrapTable('append', [{
                     f2id: data.reportGroups[0].arn,
                     f2type: 'codebuild.reportgroup',
@@ -556,6 +558,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         };
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Type'] = obj.data.type;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

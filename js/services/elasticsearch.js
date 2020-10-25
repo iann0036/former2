@@ -71,10 +71,12 @@ async function updateDatatableAnalyticsElasticsearch() {
     }, true).then(async (data) => {
         $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.DomainNames.map(domainName => {
+        await Promise.all(data.DomainNames.map(async (domainName) => {
             return sdkcall("ES", "describeElasticsearchDomains", {
                 DomainNames: [domainName.DomainName]
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data.DomainStatusList[0]['Tags'] = await getResourceTags(data.DomainStatusList[0].ARN);
+
                 $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DomainStatusList[0].ARN,
                     f2type: 'elasticsearch.domain',
@@ -167,12 +169,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['LogPublishingOptions'] = obj.data.LogPublishingOptions;
         reqParams.cfn['DomainEndpointOptions'] = obj.data.DomainEndpointOptions;
         reqParams.cfn['AdvancedSecurityOptions'] = obj.data.AdvancedSecurityOptions;
-
-        /*
-        TODO:
-        Tags:
-            - Resource Tag
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

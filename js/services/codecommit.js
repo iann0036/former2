@@ -102,10 +102,12 @@ async function updateDatatableDeveloperToolsCodeCommit() {
     }, true).then(async (data) => {
         $('#section-developertools-codecommit-repositories-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.repositories.map(repository => {
+        await Promise.all(data.repositories.map(async (repository) => {
             return sdkcall("CodeCommit", "getRepository", {
                 repositoryName: repository.repositoryName
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.repositoryMetadata.Arn);
+
                 $('#section-developertools-codecommit-repositories-datatable').deferredBootstrapTable('append', [{
                     f2id: data.repositoryMetadata.repositoryId,
                     f2type: 'codecommit.repository',
@@ -152,6 +154,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.repositoryDescription;
         reqParams.cfn['RepositoryName'] = obj.data.repositoryName;
         reqParams.tf['repository_name'] = obj.data.repositoryName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:

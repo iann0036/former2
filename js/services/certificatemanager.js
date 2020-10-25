@@ -158,10 +158,12 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.CertificateSummaryList.map(certificate => {
+        await Promise.all(data.CertificateSummaryList.map(async (certificate) => {
             return sdkcall("ACM", "describeCertificate", {
                 CertificateArn: certificate.CertificateArn
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Certificate.CertificateArn);
+
                 $('#section-securityidentityandcompliance-certificatemanager-certificates-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Certificate.CertificateArn,
                     f2type: 'acm.certificate',
@@ -244,11 +246,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Options) {
             reqParams.cfn['CertificateTransparencyLoggingPreference'] = obj.data.Options.CertificateTransparencyLoggingPreference;
         }
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
-        Tags:
-            - Resource Tag
         ValidationMethod: String
         (recheck per Release History)
         */

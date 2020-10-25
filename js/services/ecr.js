@@ -78,6 +78,8 @@ async function updateDatatableComputeECR() {
                 }).catch(() => { });
             }).catch(() => { });
 
+            repository['Tags'] = await getResourceTags(repository.repositoryArn);
+
             $('#section-compute-ecr-repositories-datatable').deferredBootstrapTable('append', [{
                 f2id: repository.repositoryArn,
                 f2type: 'ecr.repository',
@@ -105,6 +107,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'RegistryId': obj.data.registryId
         };
         reqParams.cfn['RepositoryPolicyText'] = obj.data.policy;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,
