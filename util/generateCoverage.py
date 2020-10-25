@@ -141,12 +141,13 @@ def find_occs(resourcetype, prop, indent, subprops):
                         process_subs = False
                     break_loop = True
     if process_subs:
+        subpropret = ''
         for k, v in subprops.items():
-            subpropret = find_occs(resourcetype, k, indent + 4, v)
-            if "[X]" in subpropret:
-                ret += subpropret
-            else:
-                ret += (' '*(indent + 4)) + k + ": [X]\n"
+            subpropret += find_occs(resourcetype, k, indent + 4, v)
+        if "[X]" in subpropret:
+            ret += subpropret
+        else:
+            ret += subpropret.replace("[ ]", "[X]")
     return ret
 
 for resourcetype, props in spec.items():
