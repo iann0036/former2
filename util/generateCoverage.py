@@ -3,6 +3,7 @@ import json
 import pprint
 import math
 import re
+import collections
 
 services = None
 cfn_spec = None
@@ -133,9 +134,9 @@ def find_occs(resourcetype, prop, indent, subprops):
                 if endpos > -1:
                     startpos = text.rfind("if (obj.type ==", 0, endpos)
                     if "\'" + prop + "\'" in text[startpos:endpos]:
-                        ret += (' '*indent) + prop + ": :heavy_check_mark:\n"
+                        ret += ('&nbsp;'*indent) + prop + ": :heavy_check_mark:\n\n"
                     else:
-                        ret += (' '*indent) + prop + ": :x:\n"
+                        ret += ('&nbsp;'*indent) + prop + ": :x:\n\n"
                         process_subs = False
                     break_loop = True
     if process_subs:
@@ -193,5 +194,6 @@ with open("RESOURCE_COVERAGE.md", "w") as f:
 
     f.write("\n## CloudFormation Property Coverage [BETA]\n\n")
 
-    for k, v in spec.items():
+    ospec = collections.OrderedDict(sorted(spec.items()))
+    for k, v in ospec.items():
         f.write("#### %s\n\n%s\n" % (k, v))
