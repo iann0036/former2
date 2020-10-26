@@ -158,7 +158,7 @@ async function updateDatatableMediaServicesMediaLive() {
         $('#section-mediaservices-medialive-channels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Channels.map(channel => {
-            return sdkcall("MediaLive", "describeCluster", {
+            return sdkcall("MediaLive", "describeChannel", {
                 ChannelId: channel.Id
             }, true).then(async (data) => {
                 $('#section-mediaservices-medialive-channels-datatable').deferredBootstrapTable('append', [{
