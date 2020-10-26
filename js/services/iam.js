@@ -930,8 +930,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Roles'] = [];
             reqParams.tf['roles'] = [];
             obj.data.Roles.forEach(role => {
-                reqParams.cfn['Roles'].push(role.Arn);
-                reqParams.tf['roles'].push(role.Arn);
+                reqParams.cfn['Roles'].push(role.Arn.split(":role/")[1]);
+                reqParams.tf['roles'].push(role.Arn.split(":role/")[1]);
             });
         }
 
