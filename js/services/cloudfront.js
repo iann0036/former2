@@ -624,16 +624,16 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     });
                 }
                 var cookiesWhitelistedNames = null;
-                if (cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames) {
+                if (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies && cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames) {
                     cookiesWhitelistedNames = cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames.Items;
                 }
                 var queryStringCacheKeys = null;
-                if (cacheBehaviour.ForwardedValues.QueryStringCacheKeys) {
+                if (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.QueryStringCacheKeys) {
                     queryStringCacheKeys = cacheBehaviour.ForwardedValues.QueryStringCacheKeys.Items;
                 }
                 reqParams.cfn.DistributionConfig['CacheBehaviors'].push({
-                    'AllowedMethods': cacheBehaviour.AllowedMethods.Items,
-                    'CachedMethods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
+                    'AllowedMethods': (cacheBehaviour.AllowedMethods ? cacheBehaviour.AllowedMethods.Items : null),
+                    'CachedMethods': (cacheBehaviour.AllowedMethods && cacheBehaviour.AllowedMethodscacheBehaviour.CachedMethods ? AllowedMethods.CachedMethods.Items : null),
                     'Compress': cacheBehaviour.Compress,
                     'DefaultTTL': cacheBehaviour.DefaultTTL,
                     'CachePolicyId': cacheBehaviour.CachePolicyId,
@@ -659,11 +659,11 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'ViewerProtocolPolicy': cacheBehaviour.ViewerProtocolPolicy
                 });
                 reqParams.tf['ordered_cache_behavior'].push({
-                    'allowed_methods': cacheBehaviour.AllowedMethods.Items,
-                    'cached_methods': cacheBehaviour.AllowedMethods.CachedMethods.Items,
+                    'allowed_methods': (cacheBehaviour.AllowedMethods ? cacheBehaviour.AllowedMethods.Items : null),
+                    'cached_methods': (cacheBehaviour.AllowedMethods && cacheBehaviour.AllowedMethodscacheBehaviour.CachedMethods ? AllowedMethods.CachedMethods.Items : null),
                     'compress': cacheBehaviour.Compress,
                     'default_ttl': cacheBehaviour.DefaultTTL,
-                    'field_level_encryption_id': cacheBehaviour.FieldLevelEncryptionId,
+                    'field_level_encryption_id': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
                     'forwarded_values': {
                         'cookies': {
                             'forward': cacheBehaviour.ForwardedValues.Cookies.Forward,
