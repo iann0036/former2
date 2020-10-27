@@ -191,7 +191,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['StartoverWindowSeconds'] = obj.data.StartoverWindowSeconds;
         reqParams.cfn['TimeDelaySeconds'] = obj.data.TimeDelaySeconds;
         reqParams.cfn['Whitelist'] = obj.data.Whitelist;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var key of obj.data.Tags.keys()) {
+                reqParams.cfn['Tags'].push({
+                    'Key': key,
+                    'Value': obj.data.Tags[key]
+                });
+            }
+        }
 
         tracked_resources.push({
             'obj': obj,
