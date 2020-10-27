@@ -141,12 +141,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['channel_id'] = obj.data.Id;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
-        reqParams.cfn['Tags'] = obj.data.Tags;
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
-            });
+            reqParams.cfn['Tags'] = [];
+            reqParams.tf['tags'] = obj.data.Tags;
+            for (var key of obj.data.Tags.keys()) {
+                reqParams.cfn['Tags'].push({
+                    'Key': key,
+                    'Value': obj.data.Tags[key]
+                });
+            }
         }
 
         tracked_resources.push({
