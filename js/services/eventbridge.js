@@ -356,21 +356,23 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                     }]);
                 }
 
-                var policyobj = JSON.parse(data.Policy);
+                try {
+                    var policyobj = JSON.parse(data.Policy);
 
-                policyobj.Statement.forEach(statement => {
-                    if (data.Name != "default") {
-                        statement["EventBusName"] = data.Name;
-                    }
+                    policyobj.Statement.forEach(statement => {
+                        if (data.Name != "default") {
+                            statement["EventBusName"] = data.Name;
+                        }
 
-                    $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.Arn,
-                        f2type: 'eventbridge.eventbuspolicy',
-                        f2data: statement,
-                        f2region: region,
-                        name: data.Name // TODO: much better datatable keys
-                    }]);
-                });
+                        $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Arn,
+                            f2type: 'eventbridge.eventbuspolicy',
+                            f2data: statement,
+                            f2region: region,
+                            name: data.Name // TODO: much better datatable keys
+                        }]);
+                    });
+                } catch (err) { }
             });
         }));
     });
