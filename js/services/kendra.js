@@ -162,7 +162,7 @@ async function updateDatatableMachineLearningKendra() {
 
     await sdkcall("Kendra", "listIndices", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-machinelearning-kendra-indices-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.IndexConfigurationSummaryItems.map(async (index) => {
