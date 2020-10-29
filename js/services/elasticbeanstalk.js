@@ -312,10 +312,12 @@ async function updateDatatableComputeElasticBeanstalk() {
 
     await sdkcall("ElasticBeanstalk", "describeEnvironments", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-elasticbeanstalk-environments-datatable').deferredBootstrapTable('removeAll');
 
-        data.Environments.forEach(environment => {
+        data.Environments.forEach(async (environment) => {
+            environment['Tags'] = await getResourceTags(environment.EnvironmentArn);
+
             $('#section-compute-elasticbeanstalk-environments-datatable').deferredBootstrapTable('append', [{
                 f2id: environment.EnvironmentId,
                 f2type: 'elasticbeanstalk.environment',
@@ -401,12 +403,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             f2log("Could not determine CNAME prefix for Elastic Beanstalk");
         }
 
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
         /*
         TODO:
         OptionSettings: 
             - OptionSetting
-        Tags:
-            - Resource Tag, ...
         */
 
         tracked_resources.push({

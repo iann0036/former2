@@ -634,10 +634,12 @@ async function updateDatatableDatabaseRDS() {
 
     await sdkcall("RDS", "describeDBClusters", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-database-rds-clusters-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBClusters.forEach(dbCluster => {
+        data.DBClusters.forEach(async (dbCluster) => {
+            dbCluster['Tags'] = await getResourceTags(dbCluster.DBClusterArn);
+
             $('#section-database-rds-clusters-datatable').deferredBootstrapTable('append', [{
                 f2id: dbCluster.DBClusterIdentifier,
                 f2type: 'rds.cluster',
@@ -656,10 +658,10 @@ async function updateDatatableDatabaseRDS() {
 
     await sdkcall("RDS", "describeDBInstances", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-database-rds-instances-datatable').deferredBootstrapTable('removeAll');
 
-        data.DBInstances.forEach(dbInstance => {
+        data.DBInstances.forEach(async (dbInstance) => {
             $('#section-database-rds-instances-datatable').deferredBootstrapTable('append', [{
                 f2id: dbInstance.DBInstanceIdentifier,
                 f2type: 'rds.instance',
@@ -1005,6 +1007,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['Tags'] = obj.data.Tags;
         
 
         /*
@@ -1013,8 +1016,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         SnapshotIdentifier: String
         SourceDBClusterIdentifier: String
         SourceRegion: String
-        Tags: 
-            - Tag
         UseLatestRestorableTime: Boolean
         */
 
@@ -1151,6 +1152,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['Tags'] = obj.data.TagList;
 
         /*
         TODO:
@@ -1159,8 +1161,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         DeleteAutomatedBackups: Boolean
         SourceDBInstanceIdentifier: String
         SourceRegion: String
-        Tags: 
-            - Tag
         UseDefaultProcessorFeatures: Boolean
         */
 

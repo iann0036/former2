@@ -428,7 +428,9 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         await Promise.all(data.HostedZones.map(async (hostedZone) => {
             await sdkcall("Route53", "getHostedZone", {
                 Id: hostedZone.Id.split("/").pop()
-            }, true).then((data) => {
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags("arn:aws:route53:::hostedzone/" + hostedZone.Id.split("/").pop());
+
                 $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('append', [{
                     f2id: hostedZone.Id.split("/").pop(),
                     f2type: 'route53.hostedzone',
@@ -704,11 +706,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['comment'] = obj.data.HostedZone.Config.Comment;
         }
         reqParams.cfn['VPCs'] = obj.data.VPCs;
+        reqParams.cfn['HostedZoneTags'] = obj.data.Tags;
 
         /*
         TODO:
-        HostedZoneTags:
-            - HostedZoneTags
         QueryLoggingConfig: 
             QueryLoggingConfig
         */

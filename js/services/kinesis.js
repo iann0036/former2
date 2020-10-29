@@ -491,6 +491,8 @@ async function updateDatatableAnalyticsKinesis() {
             return sdkcall("Kinesis", "describeStream", {
                 StreamName: streamName
             }, true).then(async (data) => {
+                data.StreamDescription['Tags'] = await getResourceTags(data.StreamDescription.StreamARN);
+
                 $('#section-analytics-kinesis-streams-datatable').deferredBootstrapTable('append', [{
                     f2id: data.StreamDescription.StreamARN,
                     f2type: 'kinesis.stream',
@@ -704,12 +706,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['kms_key_id'] = obj.data.KeyId;
         reqParams.cfn['ShardCount'] = obj.data.Shards.length;
         reqParams.tf['shard_count'] = obj.data.Shards.length;
-
-        /*
-        TODO:
-        Tags:
-            - Resource Tag 
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

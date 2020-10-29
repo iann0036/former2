@@ -1721,10 +1721,12 @@ async function updateDatatableComputeEC2() {
 
     await sdkcall("ELB", "describeLoadBalancers", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('removeAll');
 
-        data.LoadBalancerDescriptions.forEach(loadBalancer => {
+        data.LoadBalancerDescriptions.forEach(async (loadBalancer) => {
+            loadBalancer['Tags'] = await getResourceTags("arn:aws:elasticloadbalancing:region:account:loadbalancer/" + loadBalancer.LoadBalancerName);
+
             $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('append', [{
                 f2id: loadBalancer.LoadBalancerName,
                 f2type: 'elb.loadbalancer',
@@ -2817,6 +2819,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['security_groups'] = obj.data.SecurityGroups;
         reqParams.cfn['Scheme'] = obj.data.Scheme;
         reqParams.tf['internal'] = (obj.data.Scheme == "internal");
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
@@ -2829,8 +2832,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         CrossZone: Boolean
         Policies:
             - ElasticLoadBalancing Policy
-        Tags:
-            - Resource Tag
         */
 
         tracked_resources.push({

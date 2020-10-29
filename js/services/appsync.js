@@ -481,7 +481,9 @@ async function updateDatatableMobileAppSync() {
                 }).catch(() => { }),
                 sdkcall("AppSync", "getGraphqlApi", {
                     apiId: graphqlApi.apiId
-                }, true).then((data) => {
+                }, true).then(async (data) => {
+                    data.graphqlApi['Tags'] = await getResourceTags(data.graphqlApi.arn);
+
                     $('#section-mobile-appsync-graphqlapis-datatable').deferredBootstrapTable('append', [{
                         f2id: data.graphqlApi.apiId,
                         f2type: 'appsync.graphqlapi',
@@ -766,6 +768,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['XrayEnabled'] = obj.data.xrayEnabled;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

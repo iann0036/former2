@@ -169,7 +169,9 @@ async function updateDatatableMachineLearningKendra() {
             return Promise.all([
                 sdkcall("Kendra", "describeIndex", {
                     Id: index.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
+                    data['Tags'] = await getResourceTags("arn:aws:kendra:region:account:index/" + data.Id);
+
                     $('#section-machinelearning-kendra-indices-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Id,
                         f2type: 'kendra.index',
@@ -185,11 +187,13 @@ async function updateDatatableMachineLearningKendra() {
                 }, true).then(async (data) => {
                     $('#section-machinelearning-kendra-datasources-datatable').deferredBootstrapTable('removeAll');
             
-                    await Promise.all(data.SummaryItems.map(datasource => {
+                    await Promise.all(data.SummaryItems.map(async (datasource) => {
                         return sdkcall("Kendra", "describeDataSource", {
                             Id: datasource.Id,
                             IndexId: index.Id
-                        }, true).then((data) => {
+                        }, true).then(async (data) => {
+                            data['Tags'] = await getResourceTags("arn:aws:kendra:region:account:data-source/" + data.IndexId + "/faq/" + data.Id);
+
                             $('#section-machinelearning-kendra-datasources-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Id,
                                 f2type: 'kendra.datasource',
@@ -208,11 +212,13 @@ async function updateDatatableMachineLearningKendra() {
                 }, true).then(async (data) => {
                     $('#section-machinelearning-kendra-faqs-datatable').deferredBootstrapTable('removeAll');
             
-                    await Promise.all(data.FaqSummaryItems.map(faq => {
+                    await Promise.all(data.FaqSummaryItems.map(async (faq) => {
                         return sdkcall("Kendra", "describeFaq", {
                             Id: faq.Id,
                             IndexId: index.Id
-                        }, true).then((data) => {
+                        }, true).then(async (data) => {
+                            data['Tags'] = await getResourceTags("arn:aws:kendra:region:account:index/" + data.IndexId + "/faq/" + data.Id);
+
                             $('#section-machinelearning-kendra-faqs-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Id,
                                 f2type: 'kendra.faq',
@@ -270,12 +276,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-
-        /*
-        TODO:
-        Tags: 
-            TagList
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,
@@ -298,12 +299,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Schedule'] = obj.data.Schedule;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['DataSourceConfiguration'] = obj.data.DataSourceConfiguration;
-
-        /*
-        TODO:
-        Tags: 
-            TagList
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,
@@ -325,12 +321,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['S3Path'] = obj.data.S3Path;
         reqParams.cfn['FileFormat'] = obj.data.FileFormat;
-
-        /*
-        TODO:
-        Tags: 
-            TagList
-        */
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,

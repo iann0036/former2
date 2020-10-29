@@ -350,11 +350,13 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.DistributionList.Items.map(distribution => {
+        await Promise.all(data.DistributionList.Items.map(async (distribution) => {
             return sdkcall("CloudFront", "getDistribution", {
                 Id: distribution.Id
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 distribution['DefaultRootObject'] = data.Distribution.DistributionConfig.DefaultRootObject;
+
+                distribution['Tags'] = await getResourceTags(distribution.ARN);
                 
                 $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
                     f2id: distribution.ARN,
@@ -375,10 +377,12 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
 
     await sdkcall("CloudFront", "listStreamingDistributions", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').deferredBootstrapTable('removeAll');
 
-        data.StreamingDistributionList.Items.forEach(distribution => {
+        data.StreamingDistributionList.Items.forEach(async (distribution) => {
+            distribution['Tags'] = await getResourceTags(distribution.ARN);
+
             $('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable').deferredBootstrapTable('append', [{
                 f2id: distribution.ARN,
                 f2type: 'cloudfront.streamingdistribution',
@@ -746,13 +750,13 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
         reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DefaultRootObject;
         reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
         reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
         DistributionConfig:
             Logging:
                 Logging
-        Tags
         */
 
         tracked_resources.push({
@@ -813,13 +817,12 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'S3Origin': obj.data.S3Origin,
             'TrustedSigners': trustedSigners
         };
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         TODO:
         StreamingDistributionConfig:
             Logging
-        Tags: 
-            - Tag
         */
 
         tracked_resources.push({
