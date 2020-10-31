@@ -309,6 +309,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['PortOverrides'] = obj.data.PortOverrides;
 
         tracked_resources.push({
             'obj': obj,

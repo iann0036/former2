@@ -291,10 +291,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['MaxInstanceLifetime'] = obj.data.MaxInstanceLifetime;
+        reqParams.cfn['NewInstancesProtectedFromScaleIn'] = obj.data.NewInstancesProtectedFromScaleIn;
+        reqParams.cfn['HealthCheckGracePeriod'] = obj.data.HealthCheckGracePeriod;
 
         /*
         TODO:
-        HealthCheckGracePeriod: Integer
         InstanceId: String
         LifecycleHookSpecificationList: 
             - LifecycleHookSpecification
