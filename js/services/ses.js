@@ -266,55 +266,54 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Contact Lists': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableCustomerEngagementSES() {
     if (["us-east-1", "us-west-2", "eu-west-1"].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
-        blockUI('#section-customerengagement-ses-configurationsets-datatable');
-        blockUI('#section-customerengagement-ses-eventdestinations-datatable');
         blockUI('#section-customerengagement-ses-receiptfilters-datatable');
         blockUI('#section-customerengagement-ses-receiptrules-datatable');
         blockUI('#section-customerengagement-ses-receiptrulesets-datatable');
-        blockUI('#section-customerengagement-ses-templates-datatable');
-
-        await sdkcall("SES", "listConfigurationSets", {
-            // no params
-        }, true).then(async (data) => {
-            $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('removeAll');
-            $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('removeAll');
-
-            await Promise.all(data.ConfigurationSets.map(configurationSet => {
-                return sdkcall("SES", "describeConfigurationSet", {
-                    ConfigurationSetName: configurationSet.Name
-                }, true).then((data) => {
-                    data.EventDestinations.forEach(eventDestination => {
-                        eventDestination['ConfigurationSetName'] = configurationSet.Name;
-                        $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('append', [{
-                            f2id: eventDestination.Name,
-                            f2type: 'ses.eventdestination',
-                            f2data: eventDestination,
-                            f2region: region,
-                            name: eventDestination.Name,
-                            enabled: eventDestination.Enabled,
-                            matchingeventtypes: eventDestination.MatchingEventTypes.join(", ")
-                        }]);
-                    });
-
-                    $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.ConfigurationSet.Name,
-                        f2type: 'ses.configurationset',
-                        f2data: data,
-                        f2region: region,
-                        name: data.ConfigurationSet.Name
-                    }]);
-                });
-            }));
-
-            unblockUI('#section-customerengagement-ses-configurationsets-datatable');
-            unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
-        });
 
         await sdkcall("SES", "listReceiptFilters", {
             // no params
@@ -377,6 +376,69 @@ async function updateDatatableCustomerEngagementSES() {
             unblockUI('#section-customerengagement-ses-receiptrules-datatable');
             unblockUI('#section-customerengagement-ses-receiptrulesets-datatable');
         });
+    }
+
+    if ([
+        "us-east-1",
+        "us-east-2",
+        "us-west-1",
+        "us-west-2",
+        "ap-south-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-northeast-1",
+        "ap-northeast-2",
+        "ca-central-1",
+        "eu-central-1",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-west-3",
+        "eu-north-1",
+        "sa-east-1",
+        "us-gov-west-1"
+    ].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
+
+        blockUI('#section-customerengagement-ses-configurationsets-datatable');
+        blockUI('#section-customerengagement-ses-eventdestinations-datatable');
+        blockUI('#section-customerengagement-ses-templates-datatable');
+        blockUI('#section-customerengagement-ses-contactlists-datatable');
+
+        await sdkcall("SES", "listConfigurationSets", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('removeAll');
+            $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('removeAll');
+
+            await Promise.all(data.ConfigurationSets.map(configurationSet => {
+                return sdkcall("SES", "describeConfigurationSet", {
+                    ConfigurationSetName: configurationSet.Name
+                }, true).then((data) => {
+                    data.EventDestinations.forEach(eventDestination => {
+                        eventDestination['ConfigurationSetName'] = configurationSet.Name;
+                        $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('append', [{
+                            f2id: eventDestination.Name,
+                            f2type: 'ses.eventdestination',
+                            f2data: eventDestination,
+                            f2region: region,
+                            name: eventDestination.Name,
+                            enabled: eventDestination.Enabled,
+                            matchingeventtypes: eventDestination.MatchingEventTypes.join(", ")
+                        }]);
+                    });
+
+                    $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.ConfigurationSet.Name,
+                        f2type: 'ses.configurationset',
+                        f2data: data,
+                        f2region: region,
+                        name: data.ConfigurationSet.Name
+                    }]);
+                });
+            }));
+
+            unblockUI('#section-customerengagement-ses-configurationsets-datatable');
+            unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
+        }).catch(() => { });
 
         await sdkcall("SES", "listTemplates", {
             // no params
@@ -399,7 +461,30 @@ async function updateDatatableCustomerEngagementSES() {
             }));
 
             unblockUI('#section-customerengagement-ses-templates-datatable');
-        });
+        }).catch(() => { });
+
+        await sdkcall("SESV2", "listContactLists", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-customerengagement-ses-contactlists-datatable').deferredBootstrapTable('removeAll');
+
+            await Promise.all(data.ContactLists.map(contactlist => {
+                return sdkcall("SESV2", "getContactList", {
+                    ContactListName: contactlist.ContactListName
+                }, true).then((data) => {
+                    $('#section-customerengagement-ses-contactlists-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.ContactListName + " Contact List",
+                        f2type: 'ses.contactlist',
+                        f2data: data,
+                        f2region: region,
+                        name: data.ContactListName,
+                        creationtime: data.Description
+                    }]);
+                });
+            }));
+
+            unblockUI('#section-customerengagement-ses-contactlists-datatable');
+        }).catch(() => { });
     }
 }
 
@@ -615,6 +700,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ses',
             'type': 'AWS::SES::Template',
             'terraformType': 'aws_ses_template',
+            'options': reqParams
+        });
+    } else if (obj.type == "ses.contactlist") {
+        reqParams.cfn['ContactListName'] = obj.data.ContactListName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Topics'] = obj.data.Topics;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::ContactList'),
+            'region': obj.region,
+            'service': 'ses',
+            'type': 'AWS::SES::ContactList',
             'options': reqParams
         });
     } else {

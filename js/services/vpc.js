@@ -4301,6 +4301,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['vpc_peering_connection_id'] = obj.data.VpcPeeringConnectionId;
         reqParams.cfn['RouteTableId'] = obj.data.RouteTableId;
         reqParams.tf['route_table_id'] = obj.data.RouteTableId;
+        reqParams.cfn['CarrierGatewayId'] = obj.data.CarrierGatewayId;
 
         tracked_resources.push({
             'obj': obj,

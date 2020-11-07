@@ -130,6 +130,44 @@ sections.push({
                 ]
             ]
         },
+        'Global Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Global Cluster ID',
+                        field: 'globalclusterid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Subnet Groups': {
             'columns': [
                 [
@@ -621,6 +659,7 @@ sections.push({
 async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-clusters-datatable');
     blockUI('#section-database-rds-instances-datatable');
+    blockUI('#section-database-rds-globalclusters-datatable');
     blockUI('#section-database-rds-subnetgroups-datatable');
     blockUI('#section-database-rds-clusterparametergroups-datatable');
     blockUI('#section-database-rds-parametergroups-datatable');
@@ -677,6 +716,23 @@ async function updateDatatableDatabaseRDS() {
         });
 
         unblockUI('#section-database-rds-instances-datatable');
+    });
+
+    await sdkcall("RDS", "describeGlobalClusters", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-database-rds-globalclusters-datatable').deferredBootstrapTable('removeAll');
+
+        data.GlobalClusters.forEach(async (globalcluster) => {
+            $('#section-database-rds-globalclusters-datatable').deferredBootstrapTable('append', [{
+                f2id: globalcluster.GlobalClusterArn,
+                f2type: 'rds.globalcluster',
+                f2data: globalcluster,
+                f2region: region,
+                globallclusterid: globalcluster.GlobalClusterIdentifier,
+                engine: globalcluster.Engine
+            }]);
+        });
     });
 
     await sdkcall("RDS", "describeDBSubnetGroups", {
@@ -920,6 +976,8 @@ async function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-proxies-datatable');
         unblockUI('#section-database-rds-proxytargetgroups-datatable');
     }).catch(err => { });
+
+    unblockUI('#section-database-rds-globalclusters-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1182,6 +1240,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'DBInstanceIdentifier': obj.data.DBInstanceIdentifier
                 }
             }
+        });
+    } else if (obj.type == "rds.globalcluster") {
+        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        reqParams.cfn['GlobalClusterIdentifier'] = obj.data.GlobalClusterIdentifier;
+        reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+        if (obj.data.GlobalClusterMembers) {
+            reqParams.cfn['SourceDBClusterIdentifier'] = obj.data.GlobalClusterMembers[0].DBClusterArn;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::GlobalCluster'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::GlobalCluster',
+            'options': reqParams
         });
     } else if (obj.type == "rds.eventsubscription") {
         reqParams.cfn['SourceType'] = obj.data.SourceType;

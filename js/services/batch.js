@@ -551,6 +551,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'NodeRangeProperties': nodeRangeProperties
             };
         }
+        if (obj.data.retryStrategy) {
+            var evaluateOnExit = null;
+            if (obj.data.retryStrategy.evaluateOnExit) {
+                evaluateOnExit = [];
+                obj.data.retryStrategy.evaluateOnExit.forEach(evaluateOnExitItem => {
+                    evaluateOnExit.push({
+                        'Action': evaluateOnExitItem.action,
+                        'OnExitCode': evaluateOnExitItem.onExitCode,
+                        'OnReason': evaluateOnExitItem.onReason,
+                        'OnStatusReason': evaluateOnExitItem.onStatusReason,
+                    })
+                });
+            }
+            reqParams.cfn['RetryStrategy'] = {
+                'Attempts': obj.data.retryStrategy.attempts,
+                'EvaluateOnExit': evaluateOnExit,
+            };
+        }
 
         /*
         TODO:

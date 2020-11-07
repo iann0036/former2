@@ -837,6 +837,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['BisectBatchOnFunctionError'] = obj.data.BisectBatchOnFunctionError;
         reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
         reqParams.cfn['Topics'] = obj.data.Topics;
+        reqParams.cfn['Queues'] = obj.data.Queues;
 
         /*
         TODO:

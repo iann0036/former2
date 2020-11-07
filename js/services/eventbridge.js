@@ -292,6 +292,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Archives': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -304,6 +342,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
     blockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
     blockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
+    blockUI('#section-applicationintegration-eventbridge-archives-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -465,6 +504,27 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     }).catch(() => { });
 
+    await sdkcall("EventBridge", "listArchives", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-archives-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Archives.map(async (archive) => {
+            return sdkcall("EventBridge", "describeArchive", {
+                ArchiveName: archive.ArchiveName
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-archives-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ArchiveArn,
+                    f2type: 'eventbridge.archive',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ArchiveName,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
@@ -472,6 +532,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-schemaregistries-datatable');
     unblockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
     unblockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-archives-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -759,6 +820,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::EventSchemas::RegistryPolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.archive") {
+        reqParams.cfn['ArchiveName'] = obj.data.ArchiveName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['EventPattern'] = obj.data.EventPattern;
+        reqParams.cfn['RetentionDays'] = obj.data.RetentionDays;
+        reqParams.cfn['SourceArn'] = obj.data.EventSourceArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::Archive'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::Archive',
             'options': reqParams
         });
     } else {

@@ -341,6 +341,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Domain Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'servicetype',
+                        title: 'Service Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -354,6 +392,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-topicrules-datatable');
     blockUI('#section-internetofthings-core-provisioningtemplates-datatable');
     blockUI('#section-internetofthings-core-authorizers-datatable');
+    blockUI('#section-internetofthings-core-domainconfigurations-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -542,6 +581,31 @@ async function updateDatatableInternetofThingsCore() {
 
         unblockUI('#section-internetofthings-core-authorizers-datatable');
     }).catch(err => { });
+
+    await sdkcall("Iot", "listDomainConfigurations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-domainconfigurations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.domainConfigurations.map(async (domainConfiguration) => {
+            return sdkcall("Iot", "describeDomainConfiguration", {
+                domainConfigurationName: domainConfiguration.domainConfigurationName
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Configuration.FunctionArn);
+
+                $('#section-internetofthings-core-domainconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.domainConfigurationArn,
+                    f2type: 'iot.domainconfiguration',
+                    f2data: data,
+                    f2region: region,
+                    name: data.domainConfigurationName,
+                    servicetype: data.serviceType
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -955,6 +1019,34 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::Authorizer',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.domainconfiguration") {
+        reqParams.cfn['DomainConfigurationName'] = obj.data.domainConfigurationName;
+        reqParams.cfn['DomainName'] = obj.data.domainName;
+        if (obj.data.serverCertificates) {
+            reqParams.cfn['ServerCertificateArns'] = [];
+            obj.data.serverCertificates.forEach(servercertificate => {
+                reqParams.cfn['ServerCertificateArns'].push(servercertificate.serverCertificateArn);
+            });
+        }
+        if (obj.data.authorizerConfig) {
+            reqParams.cfn['DomainConfigurationName'] = {
+                'DefaultAuthorizerName': obj.data.authorizerConfig.defaultAuthorizerName,
+                'AllowAuthorizerOverride': obj.data.authorizerConfig.allowAuthorizerOverride
+            };
+        }
+        reqParams.cfn['DomainConfigurationStatus'] = obj.data.domainConfigurationStatus;
+        reqParams.cfn['ServiceType'] = obj.data.serviceType;
+        reqParams.cfn['DomainConfigurationName'] = obj.data.domainConfigurationName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::DomainConfiguration'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::DomainConfiguration',
             'options': reqParams
         });
     } else {
