@@ -1005,7 +1005,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['database_name'] = obj.data.DatabaseName;
         reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
         reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
-        reqParams.cfn['DBClusterParameterGroup'] = obj.data.DBClusterParameterGroup;
+        reqParams.cfn['DBClusterParameterGroupName'] = obj.data.DBClusterParameterGroup;
         reqParams.tf['db_cluster_parameter_group_name'] = obj.data.DBClusterParameterGroup;
         reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup;
         reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup;
@@ -1115,22 +1115,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "rds.instance") {
         reqParams.cfn['DBInstanceIdentifier'] = obj.data.DBInstanceIdentifier;
         reqParams.tf['identifier'] = obj.data.DBInstanceIdentifier;
-        reqParams.cfn['AllocatedStorage'] = obj.data.AllocatedStorage;
-        reqParams.tf['allocated_storage'] = obj.data.AllocatedStorage;
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['AllocatedStorage'] = obj.data.AllocatedStorage;
+            reqParams.tf['allocated_storage'] = obj.data.AllocatedStorage;
+        }
         reqParams.cfn['DBInstanceClass'] = obj.data.DBInstanceClass;
         reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
         reqParams.cfn['Engine'] = obj.data.Engine;
         reqParams.tf['engine'] = obj.data.Engine;
-        reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
-        reqParams.tf['username'] = obj.data.MasterUsername;
-        reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
-        reqParams.tf['password'] = 'REPLACEME';
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+            reqParams.tf['username'] = obj.data.MasterUsername;
+            reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+            reqParams.tf['password'] = 'REPLACEME';
+        }
         reqParams.cfn['DBName'] = obj.data.DBName;
         reqParams.tf['name'] = obj.data.DBName;
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
         reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
-        reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
-        reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+            reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+        }
         reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
         reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
         reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
@@ -1155,24 +1161,32 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['port'] = obj.data.Endpoint.Port;
         reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
         reqParams.tf['cluster_identifier'] = obj.data.DBClusterIdentifier;
-        reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
-        reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
+        if (!obj.data.DBClusterIdentifier) {
+            reqParams.cfn['StorageEncrypted'] = obj.data.StorageEncrypted;
+            reqParams.tf['storage_encrypted'] = obj.data.StorageEncrypted;
+        }
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
-        reqParams.cfn['CopyTagsToSnapshot'] = obj.data.CopyTagsToSnapshot;
-        reqParams.tf['copy_tags_to_snapshot'] = obj.data.CopyTagsToSnapshot;
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['CopyTagsToSnapshot'] = obj.data.CopyTagsToSnapshot;
+            reqParams.tf['copy_tags_to_snapshot'] = obj.data.CopyTagsToSnapshot;
+        }
         reqParams.cfn['MonitoringInterval'] = obj.data.MonitoringInterval;
         reqParams.tf['monitoring_interval'] = obj.data.MonitoringInterval;
         reqParams.cfn['PromotionTier'] = obj.data.PromotionTier;
         reqParams.cfn['Timezone'] = obj.data.Timezone;
         reqParams.tf['timezone'] = obj.data.Timezone;
-        reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
-        reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['EnableIAMDatabaseAuthentication'] = obj.data.IAMDatabaseAuthenticationEnabled;
+            reqParams.tf['iam_database_authentication_enabled'] = obj.data.IAMDatabaseAuthenticationEnabled;
+        }
         reqParams.cfn['EnablePerformanceInsights'] = obj.data.PerformanceInsightsEnabled;
         reqParams.cfn['PerformanceInsightsKMSKeyId'] = obj.data.PerformanceInsightsKMSKeyId;
         reqParams.cfn['PerformanceInsightsRetentionPeriod'] = obj.data.PerformanceInsightsRetentionPeriod;
-        reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
-        reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
+        if (!obj.data.Engine.startsWith("aurora")) {
+            reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
+            reqParams.tf['deletion_protection'] = obj.data.DeletionProtection;
+        }
         reqParams.cfn['DBSubnetGroupName'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
         reqParams.tf['db_subnet_group_name'] = obj.data.DBSubnetGroup.DBSubnetGroupName;
         reqParams.cfn['ProcessorFeatures'] = obj.data.ProcessorFeatures;

@@ -1362,43 +1362,6 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         unblockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
     });
 
-    await sdkcall("APIGateway", "getDomainNames", {
-        // no params
-    }, true).then(async (data) => {
-        await Promise.all(data.items.map(domainName => {
-            $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').deferredBootstrapTable('append', [{
-                f2id: domainName.domainName,
-                f2type: 'apigateway.domainname',
-                f2data: domainName,
-                f2region: region,
-                domainname: domainName.domainName,
-                certificatename: domainName.certificateName,
-                regionaldomainname: domainName.regionalDomainName,
-                regionalcertificatename: domainName.regionalCertificateName
-            }]);
-
-            return sdkcall("APIGateway", "getBasePathMappings", {
-                domainName: domainName.domainName
-            }, true).then((data) => {
-                data.items.forEach(basePathMapping => {
-                    basePathMapping['domainName'] = domainName.domainName;
-
-                    $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').deferredBootstrapTable('append', [{
-                        f2id: basePathMapping.basePath,
-                        f2type: 'apigateway.basepathmapping',
-                        f2data: basePathMapping,
-                        f2region: region,
-                        basepath: basePathMapping.basePath,
-                        restapiid: basePathMapping.restApiId,
-                        stage: basePathMapping.stage
-                    }]);
-                });
-            });
-        }));
-
-        unblockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
-    });
-
     await sdkcall("APIGateway", "getClientCertificates", {
         // no params
     }, true).then((data) => {
@@ -1471,6 +1434,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         });
     }).catch(() => { });
 
+    // V1
     await sdkcall("APIGateway", "getUsagePlans", {
         // no params
     }, true).then(async (data) => {
@@ -1509,8 +1473,49 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
 
     await sdkcall("APIGateway", "getRestApis", {
         // no params
-    }, true).then(async (data) => {
-        await Promise.all(data.items.map(async (api) => {
+    }, true).then(async (restapis) => {
+        await sdkcall("APIGateway", "getDomainNames", {
+            // no params
+        }, true).then(async (data) => {
+            await Promise.all(data.items.map(domainName => {
+                $('#section-networkingandcontentdelivery-apigateway-domainnames-datatable').deferredBootstrapTable('append', [{
+                    f2id: domainName.domainName,
+                    f2type: 'apigateway.domainname',
+                    f2data: domainName,
+                    f2region: region,
+                    domainname: domainName.domainName,
+                    certificatename: domainName.certificateName,
+                    regionaldomainname: domainName.regionalDomainName,
+                    regionalcertificatename: domainName.regionalCertificateName
+                }]);
+    
+                return sdkcall("APIGateway", "getBasePathMappings", {
+                    domainName: domainName.domainName
+                }, true).then((data) => {
+                    data.items.forEach(basePathMapping => {
+                        basePathMapping['domainName'] = domainName.domainName;
+
+                        restapis.items.forEach(restapi => {
+                            if (restapi.id == basePathMapping.restApiId) {
+                                $('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable').deferredBootstrapTable('append', [{
+                                    f2id: basePathMapping.basePath,
+                                    f2type: 'apigateway.basepathmapping',
+                                    f2data: basePathMapping,
+                                    f2region: region,
+                                    basepath: basePathMapping.basePath,
+                                    restapiid: basePathMapping.restApiId,
+                                    stage: basePathMapping.stage
+                                }]);
+                            }
+                        });
+                    });
+                });
+            }));
+    
+            unblockUI('#section-networkingandcontentdelivery-apigateway-basepathmappings-datatable');
+        });
+
+        await Promise.all(restapis.items.map(async (api) => {
             var rootResourceId = null;
 
             await Promise.all([

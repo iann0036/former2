@@ -3633,10 +3633,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }, false).then((prefixentries) => {
                 prefixlist['Entries'] = prefixentries['Entries'];
 
-                if (
-                    prefixlist.PrefixListName != "com.amazonaws.us-east-1.s3" &&
-                    prefixlist.PrefixListName != "com.amazonaws.us-east-1.dynamodb"
-                ) {
+                if (!prefixlist.PrefixListName.startsWith("com.amazonaws.")) {
                     $('#section-networkingandcontentdelivery-vpc-prefixlists-datatable').deferredBootstrapTable('append', [{
                         f2id: prefixlist.PrefixListArn,
                         f2type: 'ec2.prefixlist',
@@ -4479,6 +4476,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['SecurityGroupIds'].push(group.GroupId);
                 reqParams.tf['security_group_ids'].push(group.GroupId);
             });
+            reqParams.cfn['SecurityGroupIds'] = [...new Set(reqParams.cfn['SecurityGroupIds'])]; // unique list
+            reqParams.tf['security_group_ids'] = [...new Set(reqParams.tf['security_group_ids'])]; // unique list
         }
 
         tracked_resources.push({
