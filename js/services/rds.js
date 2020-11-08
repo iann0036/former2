@@ -1559,8 +1559,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'GetAtt': {
-                    'TargetGroupArn': obj.data.TargetGroupArn,
-                    'TargetGroupName': obj.data.TargetGroupName
+                    'TargetGroupArn': obj.data.TargetGroupArn
                 }
             }
         });
