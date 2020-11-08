@@ -561,8 +561,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             queryStringCacheKeys = obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items;
         }
         reqParams.cfn.DistributionConfig['DefaultCacheBehavior'] = {
-            'AllowedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.Items,
-            'CachedMethods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
+            'AllowedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.Items : null),
+            'CachedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods && obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items : null),
             'Compress': obj.data.DefaultCacheBehavior.Compress,
             'DefaultTTL': obj.data.DefaultCacheBehavior.DefaultTTL,
             'CachePolicyId': obj.data.DefaultCacheBehavior.CachePolicyId,
@@ -587,8 +587,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'ViewerProtocolPolicy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
         };
         reqParams.tf['default_cache_behavior'] = {
-            'allowed_methods': obj.data.DefaultCacheBehavior.AllowedMethods.Items,
-            'cached_methods': obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items,
+            'allowed_methods': (obj.data.DefaultCacheBehavior.AllowedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.Items : null),
+            'cached_methods': (obj.data.DefaultCacheBehavior.CachedMethods ? obj.data.DefaultCacheBehavior.CachedMethods.Items : null),
             'compress': obj.data.DefaultCacheBehavior.Compress,
             'default_ttl': obj.data.DefaultCacheBehavior.DefaultTTL,
             'field_level_encryption_id': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
@@ -637,7 +637,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 }
                 reqParams.cfn.DistributionConfig['CacheBehaviors'].push({
                     'AllowedMethods': (cacheBehaviour.AllowedMethods ? cacheBehaviour.AllowedMethods.Items : null),
-                    'CachedMethods': (cacheBehaviour.AllowedMethods && cacheBehaviour.AllowedMethodscacheBehaviour.CachedMethods ? AllowedMethods.CachedMethods.Items : null),
+                    'CachedMethods': (cacheBehaviour.CachedMethods ? cacheBehaviour.CachedMethods.Items : null),
                     'Compress': cacheBehaviour.Compress,
                     'DefaultTTL': cacheBehaviour.DefaultTTL,
                     'CachePolicyId': cacheBehaviour.CachePolicyId,
@@ -664,7 +664,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 });
                 reqParams.tf['ordered_cache_behavior'].push({
                     'allowed_methods': (cacheBehaviour.AllowedMethods ? cacheBehaviour.AllowedMethods.Items : null),
-                    'cached_methods': (cacheBehaviour.AllowedMethods && cacheBehaviour.AllowedMethodscacheBehaviour.CachedMethods ? AllowedMethods.CachedMethods.Items : null),
+                    'cached_methods': (cacheBehaviour.CachedMethods ? cacheBehaviour.CachedMethods.Items : null),
                     'compress': cacheBehaviour.Compress,
                     'default_ttl': cacheBehaviour.DefaultTTL,
                     'field_level_encryption_id': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
