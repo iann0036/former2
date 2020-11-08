@@ -128,13 +128,14 @@ function processTfParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'tf')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'tf')) {
+                            continue;
+                        }
                         tracked_relationships['tf'].push({
                             'sourceIndex': index,
                             'destinationIndex': i,
@@ -154,13 +155,14 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'tf')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'tf')) {
+                            continue;
+                        }
                         tracked_relationships['tf'].push({
                             'sourceIndex': index,
                             'destinationIndex': i,
@@ -237,13 +239,14 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'pulumi')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'pulumi')) {
+                            continue;
+                        }
                         return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
                     }
                 }
@@ -258,13 +261,14 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'pulumi')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'pulumi')) {
+                            continue;
+                        }
                         return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
                     }
                 }
@@ -336,13 +340,14 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'cdktf')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'cdktf')) {
+                            continue;
+                        }
                         return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
                     }
                 }
@@ -357,13 +362,14 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'cdktf')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
+                        if (circularReferenceFound(i, index, 'cdktf')) {
+                            continue;
+                        }
                         return tracked_resources[i].logicalId.toLowerCase() + "." + attr_name;
                     }
                 }
@@ -439,6 +445,8 @@ function circularReferenceFind(checkindex, references, outputtype) {
     return references;
 }
 
+var circular_reference_cache = {};
+
 function circularReferenceFound(checkindex, baseindex, outputtype) {
     if (checkindex == baseindex) {
         return true;
@@ -453,10 +461,16 @@ function circularReferenceFound(checkindex, baseindex, outputtype) {
         mapped_output_type = 'tf';
     }
 
+    if (circular_reference_cache.hasOwnProperty(checkindex + "-" + baseindex + "-" + outputtype)) {
+        return circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype];
+    }
+
     if (circularReferenceFind(checkindex, [], mapped_output_type).includes(baseindex)) {
+        circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype] = true;
         return true;
     }
 
+    circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype] = false;
     return false;
 }
 
@@ -472,12 +486,13 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'cfn')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues) {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    if (circularReferenceFound(i, index, 'cfn')) {
+                        continue;
+                    }
                     tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
@@ -488,6 +503,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                            if (circularReferenceFound(i, index, 'cfn')) {
+                                continue;
+                            }
                             tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
@@ -517,9 +535,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
 
         var pre_return_str = "";
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'cfn')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && param != "") {
                 if (
@@ -527,6 +543,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
+                    if (circularReferenceFound(i, index, 'cfn')) {
+                        continue;
+                    }
                     tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
@@ -541,6 +560,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
+                            if (circularReferenceFound(i, index, 'cfn')) {
+                                continue;
+                            }
                             tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
@@ -682,12 +704,13 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'cdk')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    if (circularReferenceFound(i, index, 'cdk')) {
+                        continue;
+                    }
                     if (iaclangselect == "python") {
                         return tracked_resources[i].logicalId.toLowerCase() + ".ref";
                     } else if (iaclangselect == "java") {
@@ -700,6 +723,9 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                            if (circularReferenceFound(i, index, 'cdk')) {
+                                continue;
+                            }
                             if (iaclangselect == "python") {
                                 return tracked_resources[i].logicalId.toLowerCase() + ".attr_" + pythonAttr(attr_name);
                             } else if (iaclangselect == "java") {
@@ -817,17 +843,21 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'troposphere')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    if (circularReferenceFound(i, index, 'troposphere')) {
+                        continue;
+                    }
                     return "Ref(" + tracked_resources[i].logicalId + ")";
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                            if (circularReferenceFound(i, index, 'troposphere')) {
+                                continue;
+                            }
                             return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
                         }
                     }
@@ -846,17 +876,21 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            if (circularReferenceFound(i, index, 'troposphere')) {
-                continue;
-            }
+            circular_reference_cache = {};
 
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
+                    if (circularReferenceFound(i, index, 'troposphere')) {
+                        continue;
+                    }
                     return "Ref(" + tracked_resources[i].logicalId + ")";
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
                     for (var attr_name in tracked_resources[i].returnValues.GetAtt) {
                         if (tracked_resources[i].returnValues.GetAtt[attr_name] === param) {
+                            if (circularReferenceFound(i, index, 'troposphere')) {
+                                continue;
+                            }
                             return "GetAtt(" + tracked_resources[i].logicalId + ", '" + attr_name + "')";
                         }
                     }
