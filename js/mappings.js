@@ -128,8 +128,6 @@ function processTfParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -155,8 +153,6 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -239,8 +235,6 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -261,8 +255,6 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -340,8 +332,6 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -362,8 +352,6 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && tracked_resources[i].returnValues.Terraform) {
                 for (var attr_name in tracked_resources[i].returnValues.Terraform) {
                     if (tracked_resources[i].returnValues.Terraform[attr_name] == param) {
@@ -445,8 +433,6 @@ function circularReferenceFind(checkindex, references, outputtype) {
     return references;
 }
 
-var circular_reference_cache = {};
-
 function circularReferenceFound(checkindex, baseindex, outputtype) {
     if (checkindex == baseindex) {
         return true;
@@ -461,16 +447,10 @@ function circularReferenceFound(checkindex, baseindex, outputtype) {
         mapped_output_type = 'tf';
     }
 
-    if (circular_reference_cache.hasOwnProperty(checkindex + "-" + baseindex + "-" + outputtype)) {
-        return circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype];
-    }
-
     if (circularReferenceFind(checkindex, [], mapped_output_type).includes(baseindex)) {
-        circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype] = true;
         return true;
     }
 
-    circular_reference_cache[checkindex + "-" + baseindex + "-" + outputtype] = false;
     return false;
 }
 
@@ -486,8 +466,6 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues) {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (circularReferenceFound(i, index, 'cfn')) {
@@ -535,8 +513,6 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
 
         var pre_return_str = "";
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && param != "") {
                 if (
                     tracked_resources[i].returnValues.Ref == param &&
@@ -577,6 +553,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     tracked_resources[i].returnValues.Ref != "" &&
                     tracked_resources[i].returnValues.Ref != []
                 ) {
+                    if (circularReferenceFound(i, index, 'cfn')) {
+                        continue;
+                    }
                     tracked_relationships['cfn'].push({
                         'sourceIndex': index,
                         'destinationIndex': i,
@@ -594,6 +573,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             tracked_resources[i].returnValues.GetAtt[attr_name] != "" &&
                             tracked_resources[i].returnValues.GetAtt[attr_name] != []
                         ) {
+                            if (circularReferenceFound(i, index, 'cfn')) {
+                                continue;
+                            }
                             tracked_relationships['cfn'].push({
                                 'sourceIndex': index,
                                 'destinationIndex': i,
@@ -704,8 +686,6 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (circularReferenceFound(i, index, 'cdk')) {
@@ -843,8 +823,6 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
     }
     if (typeof param == "number") {
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (circularReferenceFound(i, index, 'troposphere')) {
@@ -876,8 +854,6 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         }
 
         for (var i = 0; i < tracked_resources.length; i++) { // correlate
-            circular_reference_cache = {};
-
             if (tracked_resources[i].returnValues && param != "") {
                 if (tracked_resources[i].returnValues.Ref == param) {
                     if (circularReferenceFound(i, index, 'troposphere')) {
