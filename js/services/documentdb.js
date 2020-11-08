@@ -227,7 +227,10 @@ async function updateDatatableDatabaseDocumentDB() {
     blockUI('#section-database-documentdb-subnetgroups-datatable');
 
     await sdkcall("DocDB", "describeDBClusters", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['docdb']
+        }]
     }, true).then((data) => {
         $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('removeAll');
 
@@ -249,7 +252,10 @@ async function updateDatatableDatabaseDocumentDB() {
     });
 
     await sdkcall("DocDB", "describeDBInstances", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['docdb']
+        }]
     }, true).then((data) => {
         $('#section-database-documentdb-instances-datatable').deferredBootstrapTable('removeAll');
 
@@ -271,7 +277,10 @@ async function updateDatatableDatabaseDocumentDB() {
     });
 
     await sdkcall("DocDB", "describeDBClusterParameterGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['docdb']
+        }]
     }, true).then(async (data) => {
         $('#section-database-documentdb-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -300,7 +309,10 @@ async function updateDatatableDatabaseDocumentDB() {
     });
 
     await sdkcall("DocDB", "describeDBSubnetGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['docdb']
+        }]
     }, true).then((data) => {
         $('#section-database-documentdb-subnetgroups-datatable').deferredBootstrapTable('removeAll');
 

@@ -264,7 +264,10 @@ async function updateDatatableDatabaseNeptune() {
     blockUI('#section-database-neptune-subnetgroups-datatable');
 
     await sdkcall("Neptune", "describeDBClusters", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['neptune']
+        }]
     }, true).then((data) => {
         $('#section-database-neptune-clusters-datatable').deferredBootstrapTable('removeAll');
 
@@ -286,7 +289,10 @@ async function updateDatatableDatabaseNeptune() {
     });
 
     await sdkcall("Neptune", "describeDBInstances", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['neptune']
+        }]
     }, true).then((data) => {
         $('#section-database-neptune-instances-datatable').deferredBootstrapTable('removeAll');
 
@@ -307,7 +313,10 @@ async function updateDatatableDatabaseNeptune() {
     });
 
     await sdkcall("Neptune", "describeDBClusterParameterGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['neptune']
+        }]
     }, true).then(async (data) => {
         $('#section-database-neptune-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -336,7 +345,10 @@ async function updateDatatableDatabaseNeptune() {
     });
 
     await sdkcall("Neptune", "describeDBParameterGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['neptune']
+        }]
     }, true).then(async (data) => {
         $('#section-database-neptune-parametergroups-datatable').deferredBootstrapTable('removeAll');
 

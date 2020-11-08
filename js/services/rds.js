@@ -672,7 +672,10 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-proxytargetgroups-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+        }]
     }, true).then(async (data) => {
         $('#section-database-rds-clusters-datatable').deferredBootstrapTable('removeAll');
 
@@ -696,7 +699,10 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBInstances", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+        }]
     }, true).then(async (data) => {
         $('#section-database-rds-instances-datatable').deferredBootstrapTable('removeAll');
 
@@ -756,7 +762,10 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBParameterGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+        }]
     }, true).then(async (data) => {
         $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -785,7 +794,10 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBClusterParameterGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+        }]
     }, true).then(async (data) => {
         $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -814,7 +826,10 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeOptionGroups", {
-        // no params
+        Filters: [{
+            Name: 'engine',
+            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+        }]
     }, true).then((data) => {
         $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('removeAll');
 
