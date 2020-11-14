@@ -4299,6 +4299,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RouteTableId'] = obj.data.RouteTableId;
         reqParams.tf['route_table_id'] = obj.data.RouteTableId;
         reqParams.cfn['CarrierGatewayId'] = obj.data.CarrierGatewayId;
+        reqParams.cfn['VpcEndpointId'] = obj.data.VpcEndpointId;
 
         tracked_resources.push({
             'obj': obj,
@@ -4542,11 +4543,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         });
     } else if (obj.type == "ec2.vpcendpointservice") {
-        if (obj.data.ServiceType.ServiceType == "Interface") {
-            reqParams.cfn['NetworkLoadBalancerArns'] = [obj.data.ServiceName];
-            reqParams.tf['network_load_balancer_arns'] = [obj.data.ServiceName];
+        if (obj.data.ServiceType.ServiceType == "Interface" || obj.data.ServiceType.ServiceType == "GatewayLoadBalancer") {
+            reqParams.cfn['NetworkLoadBalancerArns'] = obj.data.NetworkLoadBalancerArns;
+            reqParams.tf['network_load_balancer_arns'] = obj.data.AcceptanceRequired;
             reqParams.cfn['AcceptanceRequired'] = obj.data.AcceptanceRequired;
             reqParams.tf['acceptance_required'] = obj.data.AcceptanceRequired;
+            reqParams.cfn['GatewayLoadBalancerArns'] = obj.data.GatewayLoadBalancerArns;
 
             tracked_resources.push({
                 'obj': obj,

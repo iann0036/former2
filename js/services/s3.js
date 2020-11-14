@@ -208,6 +208,16 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['ObjectLockConfiguration'] = data.ObjectLockConfiguration;
+                }).catch(() => { }),
+                sdkcall("S3", "listBucketIntelligentTieringConfigurations", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['IntelligentTieringConfiguration'] = data.IntelligentTieringConfigurationList;
+                }).catch(() => { }),
+                sdkcall("S3", "getBucketOwnershipControls", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['OwnershipControls'] = data.OwnershipControls;
                 }).catch(() => { })
             ]).then(async () => {
                 $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('append', [{
@@ -582,6 +592,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
+        reqParams.cfn['OwnershipControls'] = obj.data.OwnershipControls;
+        if (obj.data.IntelligentTieringConfiguration) {
+            reqParams.cfn['OwnershipControls'] = [];
+            obj.data.IntelligentTieringConfiguration.forEach(itconfig => {
+                reqParams.cfn['OwnershipControls'].push({
+                    'Id': itconfig.Id,
+                    'Prefix': itconfig.Filter.Prefix,
+                    'Status': itconfig.Status,
+                    'TagFilters': itconfig.Filter.Tag,
+                    'Tierings': itconfig.Tierings
+                });
+            });
+        }
 
         /*
         TODO:

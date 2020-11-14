@@ -618,3 +618,4 @@ aws_s3control_bucket_policy
 aws_s3outposts_endpoint
 aws_sagemaker_code_repository
 aws_storagegateway_tape_pool
+aws_secretsmanager_secret_policy
