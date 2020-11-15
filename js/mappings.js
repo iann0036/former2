@@ -3592,6 +3592,27 @@ async function generateDiagram() {
     var placedItems = {};
 
     var cleaned_relationships = tracked_relationships['cfn'];
+
+    /*
+    // indirect links
+    for (var i=0; i<tracked_resources.length; i++) { // for each resource
+        if (!DRAWIO_MAPPINGS[tracked_resources[i].obj.type]) { // that isn't mapped
+            for (var j=0; j<cleaned_relationships.length; j++) {
+                if (cleaned_relationships[j].sourceIndex == i) { // where a link comes from the unmapped resource
+                    for (var k=0; k<cleaned_relationships.length; k++) {
+                        if (cleaned_relationships[k].destinationIndex == j) { // find links to the unmapped resource
+                            cleaned_relationships[k].destinationIndex = cleaned_relationships[j].destinationIndex; // and direct it to the unmapped resource's destination
+                        }
+                    }
+
+                    //cleaned_relationships.splice(j, 1); // finally, remove the unmapped resource
+                    //j -= 1;
+                }
+            }
+        }
+    }
+    */
+
     for (var i=0; i<cleaned_relationships.length; i++) { // deduplicate
         for (var j=i+1; j<cleaned_relationships.length; j++) {
             if (
