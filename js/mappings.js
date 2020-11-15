@@ -3559,7 +3559,10 @@ async function generateDiagram() {
         'default': {
             'friendlyname': '',
             'style': 'outlineConnect=0;gradientDirection=north;outlineConnect=0;fontColor=#232F3E;gradientColor=#505863;fillColor=#1E262E;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.general;',
-            'isregional': true
+            'isregional': true,
+            'namekey': [
+                'Name'
+            ]
         }
     };
 
@@ -3646,6 +3649,15 @@ async function generateDiagram() {
         }
 
         var style = DRAWIO_MAPPINGS['default']['style'];
+
+        /*
+        // All unmapped resources
+        if (!DRAWIO_MAPPINGS[tracked_resources[i].obj.type]) {
+            DRAWIO_MAPPINGS['default']['friendlyname'] = tracked_resources[i].obj.type;
+            tracked_resources[i].obj.type = 'default';
+        }
+        */
+
         if (DRAWIO_MAPPINGS[tracked_resources[i].obj.type]) {
             style = DRAWIO_MAPPINGS[tracked_resources[i].obj.type]['style'];
 
