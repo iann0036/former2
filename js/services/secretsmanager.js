@@ -152,19 +152,19 @@ async function updateDatatableSecurityIdentityAndComplianceSecretsManager() {
                     }, true).then(async (data) => {
                         await sdkcall("SecretsManager", "getSecretValue", {
                             SecretId: secret.ARN
-                        }, true).then((secretvalue) => {
+                        }, false).then((secretvalue) => {
                             data['SecretString'] = secretvalue.SecretString;
+                        }).catch(() => { });
 
-                            $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').deferredBootstrapTable('append', [{
-                                f2id: data.ARN,
-                                f2type: 'secretsmanager.secret',
-                                f2data: data,
-                                f2region: region,
-                                name: data.Name,
-                                description: data.Description,
-                                kmskeyid: data.KmsKeyId
-                            }]);
-                        });
+                        $('#section-securityidentityandcompliance-secretsmanager-secrets-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.ARN,
+                            f2type: 'secretsmanager.secret',
+                            f2data: data,
+                            f2region: region,
+                            name: data.Name,
+                            description: data.Description,
+                            kmskeyid: data.KmsKeyId
+                        }]);
 
                         if (data.RotationEnabled) {
                             $('#section-securityidentityandcompliance-secretsmanager-rotationschedules-datatable').deferredBootstrapTable('append', [{
@@ -202,7 +202,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
-        reqParams.cfn['SecretString'] = obj.data.SecretString;
+        reqParams.cfn['SecretString'] = obj.data.SecretString || "REPLACEME";
 
         /*
         SKIPPED: GenerateSecretString

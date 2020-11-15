@@ -692,8 +692,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['Type'] = obj.data.Type;
         reqParams.tf['type'] = obj.data.Type;
-        reqParams.cfn['Value'] = obj.data.Value;
-        reqParams.tf['value'] = obj.data.Value;
+        reqParams.cfn['Value'] = obj.data.Value || "REPLACEME";
+        reqParams.tf['value'] = obj.data.Value || "REPLACEME";
         reqParams.cfn['DataType'] = obj.data.DataType;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['AllowedPattern'] = obj.data.AllowedPattern;
