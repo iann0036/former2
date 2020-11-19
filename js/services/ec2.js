@@ -2199,16 +2199,16 @@ async function updateDatatableComputeEC2() {
             await Promise.all(data.Policies.map(policy => {
                 return sdkcall("DLM", "getLifecyclePolicy", {
                     PolicyId: policy.PolicyId
-                }, true).then((policy) => {
+                }, true).then((data) => {
                     $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').deferredBootstrapTable('append', [{
-                        f2id: policy.Policy.PolicyId,
+                        f2id: data.Policy.PolicyId,
                         f2type: 'ec2.snapshotlifecyclepolicy',
-                        f2data: policy.Policy,
+                        f2data: data.Policy,
                         f2region: region,
                         f2link: 'https://console.aws.amazon.com/ec2/v2/home?region=' + region + '#Lifecycle:search=' + policy.Policy.PolicyId + ';sort=PolicyId',
-                        id: policy.Policy.PolicyId,
-                        description: policy.Policy.Description,
-                        datecreated: policy.Policy.DateCreated
+                        id: data.Policy.PolicyId,
+                        description: data.Policy.Description,
+                        datecreated: data.Policy.DateCreated
                     }]);
                 });
             }));
