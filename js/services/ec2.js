@@ -2205,7 +2205,7 @@ async function updateDatatableComputeEC2() {
                         f2type: 'ec2.snapshotlifecyclepolicy',
                         f2data: data.Policy,
                         f2region: region,
-                        f2link: 'https://console.aws.amazon.com/ec2/v2/home?region=' + region + '#Lifecycle:search=' + policy.Policy.PolicyId + ';sort=PolicyId',
+                        f2link: 'https://console.aws.amazon.com/ec2/v2/home?region=' + region + '#Lifecycle:search=' + data.Policy.PolicyId + ';sort=PolicyId',
                         id: data.Policy.PolicyId,
                         description: data.Policy.Description,
                         datecreated: data.Policy.DateCreated
