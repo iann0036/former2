@@ -2199,7 +2199,7 @@ async function updateDatatableComputeEC2() {
             await Promise.all(data.Policies.map(policy => {
                 return sdkcall("DLM", "getLifecyclePolicy", {
                     PolicyId: policy.PolicyId
-                }, true).then((data) => {
+                }, true).then((policy) => {
                     $('#section-compute-ec2-snapshotlifecyclepolicies-datatable').deferredBootstrapTable('append', [{
                         f2id: policy.Policy.PolicyId,
                         f2type: 'ec2.snapshotlifecyclepolicy',
