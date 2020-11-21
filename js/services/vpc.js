@@ -2488,6 +2488,167 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Network Firewalls': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'vpcid',
+                        title: 'VPC ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Firewall Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Firewall Logging Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Firewall ARN',
+                        field: 'firewallarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Network Firewall Rule Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2547,6 +2708,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
 
     var defaultVPC = "unset";
 
@@ -3666,6 +3831,84 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
         });
     }).catch(() => { });
+            
+    await sdkcall("NetworkFirewall", "listFirewalls", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Firewalls.map(async (firewall) => {
+            await sdkcall("NetworkFirewall", "describeFirewall", {
+                FirewallName: firewall.FirewallName
+            }, false).then((data) => {
+                $('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Firewall.FirewallArn,
+                    f2type: 'ec2.networkfirewall',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Firewall.FirewallName,
+                    description: data.Firewall.Description,
+                    vpcid: data.Firewall.VpcId
+                }]);
+            });
+
+            return sdkcall("NetworkFirewall", "describeLoggingConfiguration", {
+                FirewallName: firewall.FirewallName
+            }, false).then((data) => {
+                $('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FirewallArn + " Logging Config",
+                    f2type: 'ec2.networkfirewallloggingconfiguration',
+                    f2data: data,
+                    f2region: region,
+                    firewallarn: data.FirewallArn
+                }]);
+            });
+        }));
+    }).catch(() => { });
+            
+    await sdkcall("NetworkFirewall", "listFirewallPolicies", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FirewallPolicies.map(firewallpolicy => {
+            return sdkcall("NetworkFirewall", "describeFirewallPolicy", {
+                FirewallPolicyName: firewallpolicy.Name
+            }, false).then((data) => {
+                $('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FirewallPolicyResponse.FirewallPolicyArn,
+                    f2type: 'ec2.networkfirewallpolicy',
+                    f2data: data,
+                    f2region: region,
+                    name: data.FirewallPolicyResponse.FirewallPolicyName,
+                    description: data.FirewallPolicyResponse.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+            
+    await sdkcall("NetworkFirewall", "listRuleGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.RuleGroups.map(rulegroup => {
+            return sdkcall("NetworkFirewall", "describeRuleGroup", {
+                RuleGroupName: rulegroup.Name
+            }, false).then((data) => {
+                $('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.RuleGroupResponse.RuleGroupArn,
+                    f2type: 'ec2.networkfirewallrulegroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.RuleGroupResponse.RuleGroupName,
+                    description: data.RuleGroupResponse.Description,
+                    type: data.RuleGroupResponse.Type
+                }]);
+            });
+        }));
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -3681,6 +3924,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -5101,6 +5348,90 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'OwnerId': obj.data.OwnerId,
                     'State': obj.data.State
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkfirewall") {
+        reqParams.cfn['FirewallName'] = obj.data.Firewall.FirewallName;
+        reqParams.cfn['FirewallPolicyArn'] = obj.data.Firewall.FirewallPolicyArn;
+        reqParams.cfn['VpcId'] = obj.data.Firewall.VpcId;
+        reqParams.cfn['SubnetMappings'] = obj.data.Firewall.SubnetMappings;
+        reqParams.cfn['DeleteProtection'] = obj.data.Firewall.DeleteProtection;
+        reqParams.cfn['SubnetChangeProtection'] = obj.data.Firewall.SubnetChangeProtection;
+        reqParams.cfn['FirewallPolicyChangeProtection'] = obj.data.Firewall.FirewallPolicyChangeProtection;
+        reqParams.cfn['Description'] = obj.data.Firewall.Description;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkFirewall::Firewall'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkFirewall::Firewall',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Firewall.FirewallArn,
+                'GetAtt': {
+                    'FirewallId': obj.data.Firewall.FirewallId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkfirewallpolicy") {
+        reqParams.cfn['FirewallPolicy'] = obj.data.FirewallPolicy;
+        reqParams.cfn['FirewallPolicyName'] = obj.data.FirewallPolicyResponse.FirewallPolicyName;
+        reqParams.cfn['Description'] = obj.data.FirewallPolicyResponse.Description;
+        reqParams.cfn['Tags'] = obj.data.FirewallPolicyResponse.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkFirewall::FirewallPolicy'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkFirewall::FirewallPolicy',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.FirewallPolicyResponse.FirewallPolicyArn,
+                'GetAtt': {
+                    'FirewallId': obj.data.FirewallPolicyResponse.FirewallPolicyId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkfirewallloggingconfiguration") {
+        reqParams.cfn['FirewallArn'] = obj.data.FirewallArn;
+        reqParams.cfn['LoggingConfiguration'] = obj.data.LoggingConfiguration;
+
+        /*
+        SKIPPED:
+        'FirewallName'
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkFirewall::LoggingConfiguration'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkFirewall::LoggingConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.networkfirewallrulegroup") {
+        reqParams.cfn['RuleGroupName'] = obj.data.RuleGroupResponse.RuleGroupName;
+        reqParams.cfn['Description'] = obj.data.RuleGroupResponse.Description;
+        reqParams.cfn['Type'] = obj.data.RuleGroupResponse.Type;
+        reqParams.cfn['Capacity'] = obj.data.RuleGroupResponse.Capacity;
+        reqParams.cfn['RuleGroup'] = obj.data.RuleGroup;
+        reqParams.cfn['Tags'] = obj.data.RuleGroupResponse.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkFirewall::RuleGroup'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkFirewall::RuleGroup',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.RuleGroupResponse.RuleGroupArn,
+                'GetAtt': {
+                    'RuleGroupId': obj.data.RuleGroupResponse.RuleGroupId
                 }
             }
         });

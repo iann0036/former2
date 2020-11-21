@@ -379,6 +379,37 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Topic Rule Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Confirmation URL',
+                        field: 'confirmationurl',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -393,6 +424,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-provisioningtemplates-datatable');
     blockUI('#section-internetofthings-core-authorizers-datatable');
     blockUI('#section-internetofthings-core-domainconfigurations-datatable');
+    blockUI('#section-internetofthings-core-topicruledestinations-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -605,7 +637,26 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("Iot", "listTopicRuleDestinations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-topicruledestinations-datatable').deferredBootstrapTable('removeAll');
+
+        data.destinationSummaries.forEach(destination => {
+            if (destination && destination.httpUrlSummary) {
+                $('#section-internetofthings-core-topicruledestinations-datatable').deferredBootstrapTable('append', [{
+                    f2id: "Topic Rule Destination " + destination.httpUrlSummary.confirmationUrl,
+                    f2type: 'iot.topicruledestination',
+                    f2data: destination,
+                    f2region: region,
+                    name: destination.httpUrlSummary.confirmationUrl
+                }]);
+            }
+        });
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
+    unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1047,6 +1098,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::DomainConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.topicruledestination") {
+        reqParams.cfn['HttpUrlProperties'] = {
+            'ConfirmationUrl': obj.httpUrlSummary.confirmationUrl
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::TopicRuleDestination'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::TopicRuleDestination',
             'options': reqParams
         });
     } else {

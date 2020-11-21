@@ -313,6 +313,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Key Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Public Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -324,6 +400,8 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
 
     await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
         // no params
@@ -470,6 +548,51 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
     });
+
+    await sdkcall("CloudFront", "listKeyGroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.KeyGroupList.Items.map(keygroup => {
+            return sdkcall("CloudFront", "getKeyGroup", {
+                Id: keygroup.KeyGroup.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.KeyGroup.Id,
+                    f2type: 'cloudfront.keygroup',
+                    f2data: data.KeyGroup,
+                    f2region: region,
+                    name: data.KeyGroup.KeyGroupConfig.Name,
+                    comment: data.KeyGroup.KeyGroupConfig.Comment
+                }]);
+            });
+        }));
+    });
+
+    await sdkcall("CloudFront", "listPublicKeys", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.PublicKeyList.Items.map(publickey => {
+            return sdkcall("CloudFront", "getPublicKey", {
+                Id: publickey.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.PublicKey.Id,
+                    f2type: 'cloudfront.keygroup',
+                    f2data: data.PublicKey,
+                    f2region: region,
+                    name: data.PublicKey.PublicKeyConfig.Name,
+                    comment: data.PublicKey.PublicKeyConfig.Comment
+                }]);
+            });
+        }));
+    });
+
+    unblockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
+    unblockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
 }
 
 service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
@@ -971,6 +1094,28 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::RealtimeLogConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.keygroup") {
+        reqParams.cfn['KeyGroupConfig'] = obj.data.KeyGroupConfig;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::KeyGroup'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::KeyGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.publickey") {
+        reqParams.cfn['PublicKeyConfig'] = obj.data.PublicKeyConfig;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::PublicKey'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::PublicKey',
             'options': reqParams
         });
     } else {
