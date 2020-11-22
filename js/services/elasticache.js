@@ -243,6 +243,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Global Replication Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -253,6 +291,7 @@ async function updateDatatableDatabaseElastiCache() {
     blockUI('#section-database-elasticache-subnetgroups-datatable');
     blockUI('#section-database-elasticache-parametergroups-datatable');
     blockUI('#section-database-elasticache-securitygroups-datatable');
+    blockUI('#section-database-elasticache-globalreplicationgroups-datatable');
 
     await sdkcall("ElastiCache", "describeCacheClusters", {
         // no params
@@ -359,7 +398,25 @@ async function updateDatatableDatabaseElastiCache() {
         });
     }).catch(() => { });
 
+    await sdkcall("ElastiCache", "describeGlobalReplicationGroups", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-elasticache-globalreplicationgroups-datatable').deferredBootstrapTable('removeAll');
+
+        data.describeGlobalReplicationGroups.forEach(globalreplicationgroup => {
+            $('#section-database-elasticache-globalreplicationgroups-datatable').deferredBootstrapTable('append', [{
+                f2id: globalreplicationgroup.GlobalReplicationGroupId,
+                f2type: 'elasticache.globalreplicationgroup',
+                f2data: globalreplicationgroup,
+                f2region: region,
+                id: globalreplicationgroup.GlobalReplicationGroupId,
+                description: globalreplicationgroup.GlobalReplicationGroupDescription
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-database-elasticache-securitygroups-datatable');
+    unblockUI('#section-database-elasticache-globalreplicationgroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -568,6 +625,29 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::ReplicationGroup',
             'terraformType': 'aws_elasticache_replication_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.globalreplicationgroup") {
+        reqParams.cfn['GlobalReplicationGroupDescription'] = obj.data.GlobalReplicationGroupDescription;
+        reqParams.cfn['CacheNodeType'] = obj.data.CacheNodeType;
+        reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
+        if (obj.data.Members) {
+            reqParams.cfn['Members'] = [];
+            obj.data.Members.forEach(member => {
+                reqParams.cfn['Members'].push({
+                    'ReplicationGroupId': member.ReplicationGroupId,
+                    'ReplicationGroupRegion': member.ReplicationGroupRegion,
+                    'Role': member.Role
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::GlobalReplicationGroup'),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::GlobalReplicationGroup',
             'options': reqParams
         });
     } else {

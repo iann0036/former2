@@ -706,7 +706,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'RealtimeLogConfigArn': obj.data.DefaultCacheBehavior.RealtimeLogConfigArn,
             'SmoothStreaming': obj.data.DefaultCacheBehavior.SmoothStreaming,
             'TargetOriginId': obj.data.DefaultCacheBehavior.TargetOriginId,
-            'TrustedSigners': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
+            'TrustedSigners': (obj.data.DefaultCacheBehavior.TrustedSigners ? obj.data.DefaultCacheBehavior.TrustedSigners.Items : null),
+            'TrustedKeyGroups': (obj.data.DefaultCacheBehavior.TrustedKeyGroups ? obj.data.DefaultCacheBehavior.TrustedKeyGroups.Items : null),
             'ViewerProtocolPolicy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
         };
         reqParams.tf['default_cache_behavior'] = {
@@ -782,7 +783,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'RealtimeLogConfigArn': cacheBehaviour.RealtimeLogConfigArn,
                     'SmoothStreaming': cacheBehaviour.SmoothStreaming,
                     'TargetOriginId': cacheBehaviour.TargetOriginId,
-                    'TrustedSigners': cacheBehaviour.TrustedSigners.Items,
+                    'TrustedSigners': (cacheBehaviour.TrustedSigners ? cacheBehaviour.TrustedSigners.Items : null),
+                    'TrustedKeyGroups': (cacheBehaviour.TrustedKeyGroups ? cacheBehaviour.TrustedKeyGroups.Items : null),
                     'ViewerProtocolPolicy': cacheBehaviour.ViewerProtocolPolicy
                 });
                 reqParams.tf['ordered_cache_behavior'].push({

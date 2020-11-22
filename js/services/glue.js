@@ -618,6 +618,162 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Registries': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schemas': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schema Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Schema ARN',
+                        field: 'schemaarn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'versionnumber',
+                        title: 'Version Number',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schema Version Metadata': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Schema Version ID',
+                        field: 'schemaversionid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'key',
+                        title: 'Key',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -636,6 +792,10 @@ async function updateDatatableAnalyticsGlue() {
     blockUI('#section-analytics-glue-workflows-datatable');
     blockUI('#section-analytics-glue-securityconfigurations-datatable');
     blockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
+    blockUI('#section-analytics-glue-registries-datatable');
+    blockUI('#section-analytics-glue-schemas-datatable');
+    blockUI('#section-analytics-glue-schemaversions-datatable');
+    blockUI('#section-analytics-glue-schemaversionmetadata-datatable');
 
     await sdkcall("Glue", "getDatabases", {
         // no params
@@ -858,7 +1018,7 @@ async function updateDatatableAnalyticsGlue() {
                 $('#section-analytics-glue-workflows-datatable').deferredBootstrapTable('append', [{
                     f2id: data.Workflow.Name,
                     f2type: 'glue.workflow',
-                    f2data: devEndpoint,
+                    f2data: data.Workflow,
                     f2region: region,
                     name: data.Workflow.Name,
                     description: data.Workflow.Description,
@@ -904,6 +1064,108 @@ async function updateDatatableAnalyticsGlue() {
         }
     }).catch(() => { });
 
+    await sdkcall("Glue", "listRegistries", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-glue-registries-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Registries.map(registry => {
+            return sdkcall("Glue", "getRegistry", {
+                RegistryId: {
+                    'RegistryName': registry.RegistryName
+                }
+            }, true).then((data) => {
+                $('#section-analytics-glue-registries-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.RegistryArn,
+                    f2type: 'glue.registry',
+                    f2data: data,
+                    f2region: region,
+                    name: data.RegistryName,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("Glue", "listSchemas", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-glue-schemas-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-glue-schemaversions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-glue-schemaversionmetadata-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Schemas.map(async (schema) => {
+            await sdkcall("Glue", "getSchema", {
+                SchemaId: {
+                    'SchemaArn': schema.SchemaArn
+                }
+            }, true).then(async (data) => {
+                await sdkcall("Glue", "getSchemaVersion", {
+                    SchemaId: {
+                        'SchemaArn': schema.SchemaArn
+                    }
+                }, true).then(async (schemadata) => {
+                    data['SchemaDefinition'] = schemadata.SchemaDefinition;
+                });
+
+                $('#section-analytics-glue-schemas-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.SchemaArn,
+                    f2type: 'glue.schema',
+                    f2data: data,
+                    f2region: region,
+                    name: data.SchemaName,
+                    description: data.Description
+                }]);
+            });
+
+            return sdkcall("Glue", "listSchemaVersions", {
+                SchemaId: {
+                    'SchemaArn': schema.SchemaArn
+                }
+            }, true).then(async (data) => {
+                await Promise.all(data.Schemas.map(async (schemaversion) => {
+                    await sdkcall("Glue", "getSchemaVersion", {
+                        SchemaId: {
+                            'SchemaArn': schemaversion.SchemaArn
+                        },
+                        SchemaVersionId: schemaversion.SchemaVersionId
+                    }, true).then(async (data) => {
+                        $('#section-analytics-glue-schemaversions-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.SchemaArn + " Version " + data.SchemaVersionId,
+                            f2type: 'glue.schemaversion',
+                            f2data: data,
+                            f2region: region,
+                            schemaarn: data.SchemaArn,
+                            versionnumber: data.VersionNumber
+                        }]);
+                    });
+
+                    return sdkcall("Glue", "querySchemaVersionMetadata", {
+                        SchemaId: {
+                            'SchemaArn': schemaversion.SchemaArn
+                        },
+                        SchemaVersionId: schemaversion.SchemaVersionId
+                    }, true).then(async (data) => {
+                        Object.keys(data.MetadataInfoMap).forEach(k => {
+                            $('#section-analytics-glue-schemaversionmetadata-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.SchemaVersionId + " Metadata " + k,
+                                f2type: 'glue.schemaversion',
+                                f2data: {
+                                    'Key': k,
+                                    'Value': data.MetadataInfoMap[k].MetadataValue,
+                                    'SchemaVersionId': data.SchemaVersionId
+                                },
+                                f2region: region,
+                                schemaversionid: data.SchemaVersionId,
+                                key: data.k
+                            }]);
+                        });
+                    });
+                }));
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-analytics-glue-databases-datatable');
     unblockUI('#section-analytics-glue-tables-datatable');
     unblockUI('#section-analytics-glue-partitions-datatable');
@@ -917,6 +1179,10 @@ async function updateDatatableAnalyticsGlue() {
     unblockUI('#section-analytics-glue-workflows-datatable');
     unblockUI('#section-analytics-glue-securityconfigurations-datatable');
     unblockUI('#section-analytics-glue-datacatalogencryptionsettings-datatable');
+    unblockUI('#section-analytics-glue-registries-datatable');
+    unblockUI('#section-analytics-glue-schemas-datatable');
+    unblockUI('#section-analytics-glue-schemaversions-datatable');
+    unblockUI('#section-analytics-glue-schemaversionmetadata-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1258,6 +1524,64 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Workflow',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.registry") {
+        reqParams.cfn['Name'] = obj.data.RegistryName;
+        reqParams.cfn['Description'] = obj.data.Description;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Registry'),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Registry',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.schema") {
+        reqParams.cfn['Name'] = obj.data.SchemaName;
+        reqParams.cfn['Registry'] = {
+            'Name': obj.data.RegistryName,
+            'Arn': obj.data.RegistryArn
+        };
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DataFormat'] = obj.data.DataFormat;
+        reqParams.cfn['Compatibility'] = obj.data.Compatibility;
+        reqParams.cfn['SchemaDefinition'] = obj.data.SchemaDefinition;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::Schema'),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::Schema',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.schemaversion") {
+        reqParams.cfn['Schema'] = {
+            'SchemaArn': obj.data.SchemaArn
+        };
+        reqParams.cfn['SchemaDefinition'] = obj.data.SchemaDefinition;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::SchemaVersion'),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::SchemaVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "glue.schemaversionmetadata") {
+        reqParams.cfn['Key'] = obj.data.Key;
+        reqParams.cfn['Value'] = obj.data.Value;
+        reqParams.cfn['SchemaVersionId'] = obj.data.SchemaVersionId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('glue', obj.id, 'AWS::Glue::SchemaVersionMetadata'),
+            'region': obj.region,
+            'service': 'glue',
+            'type': 'AWS::Glue::SchemaVersionMetadata',
             'options': reqParams
         });
     } else {

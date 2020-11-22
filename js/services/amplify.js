@@ -316,7 +316,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['EnableBranchAutoDeletion'] = obj.data.enableBranchAutoDeletion;
         reqParams.cfn['AccessToken'] = "REPLACEME";
         reqParams.cfn['OauthToken'] = "REPLACEME";
-
+        reqParams.cfn['CustomHeaders'] = obj.data.customHeaders;
+        
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('amplify', obj.id, 'AWS::Amplify::App'),

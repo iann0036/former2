@@ -192,6 +192,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['enable_key_rotation'] = obj.data.KeyRotationEnabled;
         reqParams.cfn['KeyPolicy'] = obj.data.Policy;
         reqParams.tf['policy'] = obj.data.Policy;
+        reqParams.cfn['KeySpec'] = obj.data.KeySpec;
         reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*

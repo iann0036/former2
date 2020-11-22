@@ -710,6 +710,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Principal && obj.data.Principal.AWS) {
             reqParams.cfn['Principal'] = obj.data.Principal.AWS;
         }
+        reqParams.cfn['Statement'] = obj.data.Statement;
         reqParams.cfn['StatementId'] = obj.data.Sid;
         reqParams.cfn['EventBusName'] = obj.data.EventBusName;
 

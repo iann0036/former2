@@ -2883,7 +2883,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'RamDiskId': obj.data.LaunchTemplateData.RamDiskId,
             'Monitoring': obj.data.LaunchTemplateData.Monitoring,
             'CreditSpecification': obj.data.LaunchTemplateData.CreditSpecification,
-            'MetadataOptions': metadataoptions
+            'MetadataOptions': metadataoptions,
+            'EnclaveOptions': obj.data.LaunchTemplateData.EnclaveOptions
         };
         reqParams.tf['security_group_names'] = obj.data.LaunchTemplateData.SecurityGroups;
         if (obj.data.LaunchTemplateData.TagSpecifications) {

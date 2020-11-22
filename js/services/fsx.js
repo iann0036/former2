@@ -107,6 +107,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.WindowsConfiguration) {
             var adconfig = obj.data.WindowsConfiguration.SelfManagedActiveDirectoryConfiguration;
             adconfig['Password'] = "REPLACEME";
+            var aliases = null;
+            if (obj.data.WindowsConfiguration.Aliases) {
+                aliases = [];
+                obj.data.WindowsConfiguration.Aliases.forEach(alias => {
+                    aliases.push(alias.Name);
+                });
+            }
             reqParams.cfn['WindowsConfiguration'] = {
                 'ActiveDirectoryId': obj.data.WindowsConfiguration.ActiveDirectoryId,
                 'AutomaticBackupRetentionDays': obj.data.WindowsConfiguration.AutomaticBackupRetentionDays,
@@ -116,7 +123,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'WeeklyMaintenanceStartTime': obj.data.WindowsConfiguration.WeeklyMaintenanceStartTime,
                 'DeploymentType': obj.data.WindowsConfiguration.DeploymentType,
                 'PreferredSubnetId': obj.data.WindowsConfiguration.PreferredSubnetId,
-                'SelfManagedActiveDirectoryConfiguration': adconfig
+                'SelfManagedActiveDirectoryConfiguration': adconfig,
+                'Aliases': aliases
             };
         }
         if (obj.data.LustreConfiguration) {

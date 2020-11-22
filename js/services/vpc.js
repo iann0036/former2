@@ -4952,6 +4952,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['SecurityGroupIds'] = obj.data.SecurityGroupIds;
         reqParams.cfn['VpcId'] = obj.data.VpcId;
         reqParams.cfn['SplitTunnel'] = obj.data.SplitTunnel;
+        if (obj.data.ClientConnectOptions) {
+            reqParams.cfn['ClientConnectOptions'] = {
+                'Enabled': obj.data.ClientConnectOptions.Enabled,
+                'LambdaFunctionArn': obj.data.ClientConnectOptions.LambdaFunctionArn
+            };
+        }
 
         tracked_resources.push({
             'obj': obj,
