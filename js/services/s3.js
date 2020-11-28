@@ -122,6 +122,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Storage Lenses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'isenabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -130,6 +169,7 @@ async function updateDatatableStorageS3() {
     blockUI('#section-storage-s3-buckets-datatable');
     blockUI('#section-storage-s3-bucketpolicies-datatable');
     blockUI('#section-storage-s3-accesspoints-datatable');
+    blockUI('#section-storage-s3-storagelenses-datatable');
 
     await sdkcall("S3", "listBuckets", {
         // no params
@@ -254,6 +294,9 @@ async function updateDatatableStorageS3() {
     await sdkcall("STS", "getCallerIdentity", {
         // no params
     }, true).then(async (data) => {
+        $('#section-storage-s3-accesspoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('removeAll');
+
         var accountId = data.Account;
 
         await sdkcall("S3Control", "listAccessPoints", {
@@ -284,9 +327,32 @@ async function updateDatatableStorageS3() {
                 });
             }));
         }).catch(() => { });
+
+        await sdkcall("S3Control", "listStorageLensConfigurations", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('removeAll');
+    
+            await Promise.all(data.StorageLensConfigurationList.map(config => {
+                return sdkcall("S3Control", "getStorageLensConfiguration", {
+                    ConfigId: config.Id,
+                    AccountId: accountId
+                }, true).then((data) => {
+                    $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.StorageLensConfiguration.StorageLensArn,
+                        f2type: 's3.storagelens',
+                        f2data: data,
+                        f2region: region,
+                        id: data.StorageLensConfiguration.TemplateName,
+                        isenabled: data.StorageLensConfiguration.IsEnabled
+                    }]);
+                });
+            }));
+        }).catch(() => { });
     });
 
     unblockUI('#section-storage-s3-accesspoints-datatable');
+    unblockUI('#section-storage-s3-storagelenses-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -666,6 +732,35 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'Name': obj.data.Name
                 }
             }
+        });
+    } else if (obj.type == "s3.storagelens") {
+        var dataexport = null;
+        if (obj.data.StorageLensConfiguration.DataExport && obj.data.StorageLensConfiguration.DataExport.S3BucketDestination) {
+            dataexport = {
+                'S3BucketDestination': {
+                    'AccountId': obj.data.StorageLensConfiguration.DataExport.S3BucketDestination.AccountId,
+                    'Encryption': obj.data.StorageLensConfiguration.DataExport.S3BucketDestination.Encryption,
+                    'Format': obj.data.StorageLensConfiguration.DataExport.S3BucketDestination.Format,
+                    'OutputSchemaVersion': obj.data.StorageLensConfiguration.DataExport.S3BucketDestination.OutputSchemaVersion,
+                    'Prefix': obj.data.StorageLensConfiguration.DataExport.S3BucketDestination.Prefix
+                }
+            };
+        }
+        reqParams.cfn['StorageLensConfiguration'] = {
+            'AccountLevel': obj.data.StorageLensConfiguration.AccountLevel,
+            'DataExport': dataexport,
+            'Exclude': obj.data.StorageLensConfiguration.Exclude,
+            'Include': obj.data.StorageLensConfiguration.Include,
+            'IsEnabled': obj.data.StorageLensConfiguration.IsEnabled
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::StorageLens'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::StorageLens',
+            'options': reqParams
         });
     } else {
         return false;

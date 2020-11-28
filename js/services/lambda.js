@@ -355,6 +355,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Code Signing Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -368,6 +406,7 @@ async function updateDatatableComputeLambda() {
     blockUI('#section-compute-lambda-layerversionpermissions-datatable');
     blockUI('#section-compute-lambda-eventsourcemappings-datatable');
     blockUI('#section-compute-lambda-eventinvokeconfigs-datatable');
+    blockUI('#section-compute-lambda-codesigningconfigs-datatable');
 
     await sdkcall("Lambda", "listFunctions", {
         // no params
@@ -571,6 +610,29 @@ async function updateDatatableComputeLambda() {
 
         unblockUI('#section-compute-lambda-eventsourcemappings-datatable');
     });
+
+    await sdkcall("Lambda", "listCodeSigningConfigs", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lambda-codesigningconfigs-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.CodeSigningConfigs.map(codeSigningConfig => {
+            return sdkcall("Lambda", "getCodeSigningConfig", {
+                CodeSigningConfigArn: codeSigningConfig.CodeSigningConfigArn
+            }, true).then((data) => {
+                $('#section-compute-lambda-codesigningconfigs-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.CodeSigningConfig.CodeSigningConfigArn,
+                    f2type: 'lambda.codesigningconfig',
+                    f2data: data.CodeSigningConfig,
+                    f2region: region,
+                    id: data.CodeSigningConfig.CodeSigningConfigId,
+                    description: data.CodeSigningConfig.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-compute-lambda-codesigningconfigs-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -869,6 +931,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'lambda',
             'type': 'AWS::Lambda::EventInvokeConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "lambda.codesigningconfig") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['AllowedPublishers'] = obj.data.AllowedPublishers;
+        reqParams.cfn['CodeSigningPolicies'] = obj.data.CodeSigningPolicies;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::CodeSigningConfig'),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::CodeSigningConfig',
             'options': reqParams
         });
     } else {
