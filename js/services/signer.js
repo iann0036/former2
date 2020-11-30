@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Other',
+    'category': 'Security, Identity, &amp; Compliance',
     'service': 'Signer',
     'resourcetypes': {
         'Signing Profiles': {
@@ -93,18 +93,18 @@ sections.push({
     }
 });
 
-async function updateDatatableOtherSigner() {
-    blockUI('#section-other-signer-signingprofiles-datatable');
-    blockUI('#section-other-signer-profilepermissions-datatable');
+async function updateDatatableSecurityIdentityAndComplianceSigner() {
+    blockUI('#section-securityidentityandcompliance-signer-signingprofiles-datatable');
+    blockUI('#section-securityidentityandcompliance-signer-profilepermissions-datatable');
 
     await sdkcall("Signer", "listSigningProfiles", {
         // no params
     }, true).then(async (data) => {
-        $('#section-other-signer-signingprofiles-datatable').deferredBootstrapTable('removeAll');
-        $('#section-other-signer-profilepermissions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-signer-signingprofiles-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-signer-profilepermissions-datatable').deferredBootstrapTable('removeAll');
 
         data.profiles.forEach(async (profile) => {
-            $('#section-other-signer-signingprofiles-datatable').deferredBootstrapTable('append', [{
+            $('#section-securityidentityandcompliance-signer-signingprofiles-datatable').deferredBootstrapTable('append', [{
                 f2id: profile.profileVersionArn,
                 f2type: 'signer.signingprofile',
                 f2data: profile,
@@ -119,7 +119,7 @@ async function updateDatatableOtherSigner() {
                 data.permissions.forEach(permission => {
                     permission['profileName'] = profile.profileName;
 
-                    $('#section-other-signer-profilepermissions-datatable').deferredBootstrapTable('append', [{
+                    $('#section-securityidentityandcompliance-signer-profilepermissions-datatable').deferredBootstrapTable('append', [{
                         f2id: profile.profileName + " " + permission.profileVersion + " " + permission.statementId,
                         f2type: 'signer.profilepermission',
                         f2data: permission,
@@ -133,8 +133,8 @@ async function updateDatatableOtherSigner() {
         });
     }).catch(() => { });
 
-    unblockUI('#section-other-signer-signingprofiles-datatable');
-    unblockUI('#section-other-signer-profilepermissions-datatable');
+    unblockUI('#section-securityidentityandcompliance-signer-signingprofiles-datatable');
+    unblockUI('#section-securityidentityandcompliance-signer-profilepermissions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
