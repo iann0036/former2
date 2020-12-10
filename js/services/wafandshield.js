@@ -1971,7 +1971,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.ByteMatchTuples.forEach(bytematchtuples => {
                 reqParams.tf['byte_match_tuples'].push({
                     'text_transformation': bytematchtuples.TextTransformation,
-                    'target_string': bytematchtuples.TargetString,
+                    'target_string': bytematchtuples.TargetString.toString(),
                     'positional_constraint': bytematchtuples.PositionalConstraint,
                     'field_to_match': {
                         'type': bytematchtuples.FieldToMatch.Type,
@@ -2211,7 +2211,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.ByteMatchTuples.forEach(bytematchtuples => {
                 reqParams.tf['byte_match_tuples'].push({
                     'text_transformation': bytematchtuples.TextTransformation,
-                    'target_string': bytematchtuples.TargetString,
+                    'target_string': bytematchtuples.TargetString.toString(),
                     'positional_constraint': bytematchtuples.PositionalConstraint,
                     'field_to_match': {
                         'type': bytematchtuples.FieldToMatch.Type,
