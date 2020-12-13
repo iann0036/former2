@@ -4180,7 +4180,7 @@ app.synth();
     }
 
     if (!CLI) {
-        generateDiagram();
+        //generateDiagram();
     }
 
     return compiled;

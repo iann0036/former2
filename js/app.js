@@ -1308,6 +1308,8 @@ $(document).ready(function(){
     /* ========================================================================== */
     // Diagram
     /* ========================================================================== */
+    
+    /*
     var sectionHeader = $('.section-header');
     var sectionHeaderHeight = 0;
     if (sectionHeader.length) {
@@ -1354,6 +1356,7 @@ $(document).ready(function(){
             $('#diagramframe').toggleClass('fullscreen');
         }
     });
+    */
 
     /* ========================================================================== */
     // Misc
