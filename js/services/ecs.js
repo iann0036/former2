@@ -731,9 +731,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['TaskDefinition'] = obj.data.taskDefinition;
         reqParams.tf['task_definition'] = obj.data.taskDefinition;
         if (obj.data.deploymentConfiguration) {
+            var deploymentCircuitBreaker = null;
+            if (obj.data.deploymentConfiguration.deploymentCircuitBreaker) {
+                deploymentCircuitBreaker = {
+                    'Enable': obj.data.deploymentConfiguration.deploymentCircuitBreaker.enable,
+                    'Rollback': obj.data.deploymentConfiguration.deploymentCircuitBreaker.rollback
+                };
+            }
             reqParams.cfn['DeploymentConfiguration'] = {
                 'MaximumPercent': obj.data.deploymentConfiguration.maximumPercent,
-                'MinimumHealthyPercent': obj.data.deploymentConfiguration.minimumHealthyPercent
+                'MinimumHealthyPercent': obj.data.deploymentConfiguration.minimumHealthyPercent,
+                'DeploymentCircuitBreaker': deploymentCircuitBreaker
             };
             reqParams.tf['deployment_maximum_percent'] = obj.data.deploymentConfiguration.maximumPercent;
             reqParams.tf['deployment_minimum_healthy_percent'] = obj.data.deploymentConfiguration.minimumHealthyPercent;

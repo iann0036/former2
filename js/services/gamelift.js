@@ -708,6 +708,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['NotificationTarget'] = obj.data.NotificationTarget;
         reqParams.cfn['RequestTimeoutSeconds'] = obj.data.RequestTimeoutSeconds;
         reqParams.cfn['RuleSetName'] = obj.data.RuleSetName;
+        reqParams.cfn['FlexMatchMode'] = obj.data.FlexMatchMode;
 
         tracked_resources.push({
             'obj': obj,
