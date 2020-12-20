@@ -97,6 +97,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Instance Access Control Attribute Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Instance ARN',
+                        field: 'instancearn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -104,15 +130,17 @@ sections.push({
 async function updateDatatableSecurityIdentityAndComplianceSingleSignOn() {
     blockUI('#section-securityidentityandcompliance-singlesignon-permissionsets-datatable');
     blockUI('#section-securityidentityandcompliance-singlesignon-assignments-datatable');
+    blockUI('#section-securityidentityandcompliance-singlesignon-instanceaccesscontrolattributeconfigurations-datatable');
 
     await sdkcall("SSOAdmin", "listInstances", {
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-singlesignon-permissionsets-datatable').deferredBootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-singlesignon-assignments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-singlesignon-instanceaccesscontrolattributeconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Instances.map(async (instance) => {
-            return sdkcall("SSOAdmin", "listPermissionSets", {
+            await sdkcall("SSOAdmin", "listPermissionSets", {
                 InstanceArn: instance.InstanceArn
             }, true).then(async (data) => {
                 await Promise.all(data.PermissionSets.map(async (permissionSet) => {
@@ -176,11 +204,26 @@ async function updateDatatableSecurityIdentityAndComplianceSingleSignOn() {
                     }).catch(() => { });
                 }));
             });
+
+            return sdkcall("SSOAdmin", "describeInstanceAccessControlAttributeConfiguration", {
+                InstanceArn: instance.InstanceArn
+            }, false).then(async (iacac) => {
+                iacac['InstanceArn'] = instance.InstanceArn;
+
+                $('#section-securityidentityandcompliance-singlesignon-instanceaccesscontrolattributeconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: instance.InstanceArn + " IACAC",
+                    f2type: 'singlesignon.iacac',
+                    f2data: iacac,
+                    f2region: region,
+                    instancearn: instance.InstanceArn
+                }]);
+            }).catch(() => { });
         }));
     }).catch(() => { });
 
     unblockUI('#section-securityidentityandcompliance-singlesignon-permissionsets-datatable');
     unblockUI('#section-securityidentityandcompliance-singlesignon-assignments-datatable');
+    unblockUI('#section-securityidentityandcompliance-singlesignon-instanceaccesscontrolattributeconfigurations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -232,6 +275,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'singlesignon',
             'type': 'AWS::SSO::Assignment',
+            'options': reqParams
+        });
+    } else if (obj.type == "singlesignon.iacac") {
+        reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
+        reqParams.cfn['InstanceAccessControlAttributeConfiguration'] = obj.data.InstanceAccessControlAttributeConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('singlesignon', obj.id, 'AWS::SSO::InstanceAccessControlAttributeConfiguration'),
+            'region': obj.region,
+            'service': 'singlesignon',
+            'type': 'AWS::SSO::InstanceAccessControlAttributeConfiguration',
             'options': reqParams
         });
     } else {

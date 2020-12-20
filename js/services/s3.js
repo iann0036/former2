@@ -329,7 +329,7 @@ async function updateDatatableStorageS3() {
         }).catch(() => { });
 
         await sdkcall("S3Control", "listStorageLensConfigurations", {
-            // no params
+            AccountId: accountId
         }, true).then(async (data) => {
             $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('removeAll');
     

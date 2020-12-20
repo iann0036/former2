@@ -131,6 +131,171 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Access Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'permission',
+                        title: 'Permission',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Portals': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Projects': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Dashboards': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'projectid',
+                        title: 'Project ID',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -139,6 +304,10 @@ async function updateDatatableInternetofThingsSiteWise() {
     blockUI('#section-internetofthings-sitewise-gateways-datatable');
     blockUI('#section-internetofthings-sitewise-assets-datatable');
     blockUI('#section-internetofthings-sitewise-assetmodels-datatable');
+    blockUI('#section-internetofthings-sitewise-accesspolicies-datatable');
+    blockUI('#section-internetofthings-sitewise-dashboards-datatable');
+    blockUI('#section-internetofthings-sitewise-portals-datatable');
+    blockUI('#section-internetofthings-sitewise-projects-datatable');
 
     await sdkcall("IoTSiteWise", "listGateways", {
         // no params
@@ -211,9 +380,107 @@ async function updateDatatableInternetofThingsSiteWise() {
         }));
     }).catch(() => { });
 
+    await sdkcall("IoTSiteWise", "listPortals", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-sitewise-portals-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.portalSummaries.map(async (portal) => {
+            await sdkcall("IoTSiteWise", "describePortal", {
+                portalId: portal.id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.portalArn);
+
+                $('#section-internetofthings-sitewise-portals-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.portalArn,
+                    f2type: 'iotsitewise.portal',
+                    f2data: data,
+                    f2region: region,
+                    id: data.assetModelId,
+                    name: data.portalName,
+                    description: data.portalDescription
+                }]);
+            });
+
+            return sdkcall("IoTSiteWise", "listProjects", {
+                portalId: portal.id
+            }, false).then(async (data) => {
+                $('#section-internetofthings-sitewise-projects-datatable').deferredBootstrapTable('removeAll');
+        
+                await Promise.all(data.projectSummaries.map(async (project) => {
+                    await sdkcall("IoTSiteWise", "describeProject", {
+                        projectId: project.id
+                    }, true).then(async (data) => {
+                        data['Tags'] = await getResourceTags(data.projectArn);
+        
+                        $('#section-internetofthings-sitewise-projects-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.projectArn,
+                            f2type: 'iotsitewise.project',
+                            f2data: data,
+                            f2region: region,
+                            id: data.projectId,
+                            name: data.projectName,
+                            description: data.projectDescription
+                        }]);
+                    });
+
+                    return sdkcall("IoTSiteWise", "listDashboards", {
+                        projectId: project.id
+                    }, false).then(async (data) => {
+                        $('#section-internetofthings-sitewise-dashboards-datatable').deferredBootstrapTable('removeAll');
+                
+                        await Promise.all(data.dashboardSummaries.map(async (dashboard) => {
+                            return sdkcall("IoTSiteWise", "describeDashboard", {
+                                dashboardId: dashboard.id
+                            }, true).then(async (data) => {
+                                data['Tags'] = await getResourceTags(data.dashboardArn);
+                
+                                $('#section-internetofthings-sitewise-dashboards-datatable').deferredBootstrapTable('append', [{
+                                    f2id: data.dashboardArn,
+                                    f2type: 'iotsitewise.dashboard',
+                                    f2data: data,
+                                    f2region: region,
+                                    id: data.dashboardId,
+                                    name: data.dashboardName,
+                                    description: data.dashboardDescription,
+                                    projectid: data.projectId
+                                }]);
+                            });
+                        }));
+                    }).catch(() => { });
+                }));
+            }).catch(() => { });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("IoTSiteWise", "listAccessPolicies", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-sitewise-accesspolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.accessPolicySummaries.map(async (accesspolicy) => {
+            return sdkcall("IoTSiteWise", "describeAccessPolicy", {
+                accessPolicyId: accesspolicy.id
+            }, true).then(async (data) => {
+                $('#section-internetofthings-sitewise-accesspolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.accessPolicyArn,
+                    f2type: 'iotsitewise.accesspolicy',
+                    f2data: data,
+                    f2region: region,
+                    id: data.accessPolicyId,
+                    permission: data.accessPolicyPermission
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-internetofthings-sitewise-gateways-datatable');
     unblockUI('#section-internetofthings-sitewise-assets-datatable');
     unblockUI('#section-internetofthings-sitewise-assetmodels-datatable');
+    unblockUI('#section-internetofthings-sitewise-accesspolicies-datatable');
+    unblockUI('#section-internetofthings-sitewise-dashboards-datatable');
+    unblockUI('#section-internetofthings-sitewise-portals-datatable');
+    unblockUI('#section-internetofthings-sitewise-projects-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -394,6 +661,105 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'iotsitewise',
             'type': 'AWS::IoTSiteWise::AssetModel',
             'options': reqParams
+        });
+    } else if (obj.type == "iotsitewise.accesspolicy") {
+        if (obj.data.accessPolicyIdentity && obj.data.accessPolicyIdentity.user && obj.data.accessPolicyIdentity.user.id) {
+            reqParams.cfn['AccessPolicyIdentity'] = {
+                'User': {
+                    'id': obj.data.accessPolicyIdentity.user.id
+                }
+            }
+        }
+        reqParams.cfn['AccessPolicyPermission'] = obj.data.accessPolicyPermission;
+        reqParams.cfn['AccessPolicyResource'] = {};
+        if (obj.data.accessPolicyResource && obj.data.accessPolicyResource.portal && obj.data.accessPolicyResource.portal.id) {
+            reqParams.cfn['AccessPolicyResource']['Portal'] = {
+                'id': obj.data.accessPolicyResource.portal.id
+            };
+        }
+        if (obj.data.accessPolicyResource && obj.data.accessPolicyResource.project && obj.data.accessPolicyResource.project.id) {
+            reqParams.cfn['AccessPolicyResource']['Project'] = {
+                'id': obj.data.accessPolicyResource.project.id
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iotsitewise', obj.id, 'AWS::IoTSiteWise::AccessPolicy'),
+            'region': obj.region,
+            'service': 'iotsitewise',
+            'type': 'AWS::IoTSiteWise::AccessPolicy',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.accessPolicyId,
+                'GetAtt': {
+                    'AccessPolicyArn': obj.data.accessPolicyArn
+                }
+            }
+        });
+    } else if (obj.type == "iotsitewise.portal") {
+        reqParams.cfn['PortalContactEmail'] = obj.data.portalContactEmail;
+        reqParams.cfn['PortalDescription'] = obj.data.portalDescription;
+        reqParams.cfn['PortalName'] = obj.data.portalName;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iotsitewise', obj.id, 'AWS::IoTSiteWise::Portal'),
+            'region': obj.region,
+            'service': 'iotsitewise',
+            'type': 'AWS::IoTSiteWise::Portal',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.portalId,
+                'GetAtt': {
+                    'PortalArn': obj.data.portalArn,
+                    'PortalClientId': obj.data.portalClientId,
+                    'PortalStartUrl': obj.data.portalStartUrl
+                }
+            }
+        });
+    } else if (obj.type == "iotsitewise.project") {
+        reqParams.cfn['PortalId'] = obj.data.portalId;
+        reqParams.cfn['ProjectDescription'] = obj.data.projectDescription;
+        reqParams.cfn['ProjectName'] = obj.data.projectName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iotsitewise', obj.id, 'AWS::IoTSiteWise::Project'),
+            'region': obj.region,
+            'service': 'iotsitewise',
+            'type': 'AWS::IoTSiteWise::Project',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.projectId,
+                'GetAtt': {
+                    'ProjectArn': obj.data.projectArn
+                }
+            }
+        });
+    } else if (obj.type == "iotsitewise.dashboard") {
+        reqParams.cfn['DashboardDefinition'] = obj.data.dashboardDefinition;
+        reqParams.cfn['DashboardDescription'] = obj.data.dashboardDescription;
+        reqParams.cfn['DashboardName'] = obj.data.dashboardName;
+        reqParams.cfn['ProjectId'] = obj.data.projectId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iotsitewise', obj.id, 'AWS::IoTSiteWise::Dashboard'),
+            'region': obj.region,
+            'service': 'iotsitewise',
+            'type': 'AWS::IoTSiteWise::Dashboard',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.dashboardId,
+                'GetAtt': {
+                    'DashboardArn': obj.data.dashboardArn
+                }
+            }
         });
     } else {
         return false;

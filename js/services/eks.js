@@ -302,6 +302,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Version': obj.data.launchTemplate.version
             };
         }
+        reqParams.cfn['CapacityType'] = obj.data.capacityType;
 
         /*
         TODO:

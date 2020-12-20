@@ -900,6 +900,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
         reqParams.cfn['Topics'] = obj.data.Topics;
         reqParams.cfn['Queues'] = obj.data.Queues;
+        reqParams.cfn['TumblingWindowInSeconds'] = obj.data.TumblingWindowInSeconds;
+        reqParams.cfn['FunctionResponseTypes'] = obj.data.FunctionResponseTypes;
 
         /*
         TODO:

@@ -1102,8 +1102,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.topicruledestination") {
         reqParams.cfn['HttpUrlProperties'] = {
-            'ConfirmationUrl': obj.httpUrlSummary.confirmationUrl
+            'ConfirmationUrl': obj.data.httpUrlSummary.confirmationUrl
         };
+        if (obj.data.vpcProperties && obj.data.vpcProperties.vpcId) {
+            reqParams.cfn['VpcProperties'] = {
+                'SubnetIds': obj.data.vpcProperties.subnetIds,
+                'SecurityGroups': obj.data.vpcProperties.securityGroups,
+                'VpcId': obj.data.vpcProperties.vpcId,
+                'RoleArn': obj.data.vpcProperties.roleArn
+            };
+        }
 
         tracked_resources.push({
             'obj': obj,

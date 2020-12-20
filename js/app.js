@@ -1627,11 +1627,13 @@ async function getResourceTags(arn) {
     var type = arn.split(":")[5].split("/")[0];
 
     if (!resource_tag_cache[ service/*+ "." + type*/ ]) {
+        resource_tag_cache[service] = [];
+        
         await sdkcall("ResourceGroupsTaggingAPI", "getResources", {
             ResourceTypeFilters: [ service/* + "." + type*/ ]
-        }, true).then((data) => {
+        }, false).then((data) => {
             resource_tag_cache[ service/* + "." + type*/ ] = data.ResourceTagMappingList;
-        });
+        }).catch(() => { });
         setTimeout((k) => {
             delete resource_tag_cache[k];
         }, 20000, service/* + "." + type*/); // 20s cache
