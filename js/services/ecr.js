@@ -153,13 +153,13 @@ async function updateDatatableComputeECR() {
         await Promise.all(data.repositories.map(async (repository) => {
             await sdkcall("ECRPUBLIC", "getRepositoryPolicy", {
                 repositoryName: repository.repositoryName
-            }, true).then((data) => {
+            }, false).then((data) => {
                 repository['policy'] = data.policyText;
             }).catch(() => { });
 
             await sdkcall("ECRPUBLIC", "getRepositoryCatalogData", {
                 repositoryName: repository.repositoryName
-            }, true).then((data) => {
+            }, false).then((data) => {
                 repository['catalogData'] = data.catalogData;
             }).catch(() => { });
 
