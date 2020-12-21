@@ -741,6 +741,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'V2 Component Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -762,6 +800,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     blockUI('#section-internetofthings-greengrass-resourcedefinitionversions-datatable');
     blockUI('#section-internetofthings-greengrass-subscriptiondefinitions-datatable');
     blockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
+    blockUI('#section-internetofthings-greengrass-v2componentversions-datatable');
 
     await sdkcall("Greengrass", "listConnectorDefinitions", {
         // no params
@@ -1161,6 +1200,40 @@ async function updateDatatableInternetofThingsGreengrass() {
         unblockUI('#section-internetofthings-greengrass-subscriptiondefinitions-datatable');
         unblockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
     });
+
+    await sdkcall("GreengrassV2", "listComponents", {
+        scope: "PRIVATE"
+    }, true).then(async (data) => {
+        $('#section-internetofthings-greengrass-v2componentversions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.components.map(component => {
+            return sdkcall("GreengrassV2", "listComponentVersions", {
+                arn: component.arn
+            }, true).then(async (data) => {
+                await Promise.all(data.componentVersions.map(componentVersion => {
+                    return sdkcall("GreengrassV2", "getComponent", {
+                        arn: componentVersion.arn,
+                        recipeOutputFormat: "YAML"
+                    }, true).then((data) => {
+                        data['componentName'] = componentVersion.componentName;
+                        data['componentVersion'] = componentVersion.componentVersion;
+                        data['arn'] = componentVersion.arn;
+
+                        $('#section-internetofthings-greengrass-v2componentversions-datatable').deferredBootstrapTable('append', [{
+                            f2id: componentVersion.arn,
+                            f2type: 'greengrass.v2componentversion',
+                            f2data: data,
+                            f2region: region,
+                            name: componentVersion.componentName,
+                            version: componentVersion.componentVersion
+                        }]);
+                    });
+                }));
+            });
+        }));
+
+        unblockUI('#section-internetofthings-greengrass-v2componentversions-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1396,6 +1469,25 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'greengrass',
             'type': 'AWS::Greengrass::SubscriptionDefinitionVersion',
             'options': reqParams
+        });
+    } else if (obj.type == "greengrass.v2componentversion") {
+        reqParams.cfn['InlineRecipe'] = obj.data.recipe.toString();
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('greengrass', obj.id, 'AWS::GreengrassV2::ComponentVersion'),
+            'region': obj.region,
+            'service': 'greengrass',
+            'type': 'AWS::GreengrassV2::ComponentVersion',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn,
+                'GetAtt': {
+                    'ComponentName': obj.data.componentName,
+                    'ComponentVersion': obj.data.componentVersion
+                }
+            }
         });
     } else {
         return false;
