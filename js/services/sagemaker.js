@@ -471,6 +471,318 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Pipelines': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Device Fleets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Devices': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Model Package Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Data Quality Job Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Model Bias Job Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Model Explainability Job Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Model Quality Job Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -486,6 +798,14 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-coderepositories-datatable');
     blockUI('#section-machinelearning-sagemaker-workteams-datatable');
     blockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
+    blockUI('#section-machinelearning-sagemaker-pipelines-datatable');
+    blockUI('#section-machinelearning-sagemaker-devicefleets-datatable');
+    blockUI('#section-machinelearning-sagemaker-devices-datatable');
+    blockUI('#section-machinelearning-sagemaker-modelpackagegroups-datatable');
+    blockUI('#section-machinelearning-sagemaker-dataqualityjobdefinitions-datatable');
+    blockUI('#section-machinelearning-sagemaker-modelbiasjobdefinitions-datatable');
+    blockUI('#section-machinelearning-sagemaker-modelexplainabilityjobdefinitions-datatable');
+    blockUI('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable');
 
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
@@ -720,13 +1040,199 @@ async function updateDatatableMachineLearningSageMaker() {
                     f2type: 'sagemaker.monitoringschedule',
                     f2data: data,
                     f2region: region,
-                    name: data.Workteam.MonitoringScheduleName,
+                    name: data.MonitoringScheduleName,
                     arn: data.MonitoringScheduleArn
                 }]);
             });
         }));
 
         unblockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listPipelines", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-pipelines-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.PipelineSummaries.map(async (pipeline) => {
+            return sdkcall("SageMaker", "describePipeline", {
+                PipelineName: pipeline.PipelineName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-pipelines-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.PipelineArn,
+                    f2type: 'sagemaker.pipeline',
+                    f2data: data,
+                    f2region: region,
+                    name: data.PipelineName,
+                    displayname: data.PipelineDisplayName,
+                    description: data.PipelineDescription
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-pipelines-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listDeviceFleets", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-devicefleets-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DeviceFleetSummaries.map(async (devicefleet) => {
+            return sdkcall("SageMaker", "describeDeviceFleet", {
+                DeviceFleetName: devicefleet.DeviceFleetName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-devicefleets-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.DeviceFleetArn,
+                    f2type: 'sagemaker.devicefleet',
+                    f2data: data,
+                    f2region: region,
+                    name: data.DeviceFleetName,
+                    description: data.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-devicefleets-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listDevices", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-devices-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DeviceSummaries.map(async (device) => {
+            return sdkcall("SageMaker", "describeDevice", {
+                DeviceName: device.DeviceName,
+                DeviceFleetName: device.DeviceFleetName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-devices-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.DeviceArn,
+                    f2type: 'sagemaker.device',
+                    f2data: data,
+                    f2region: region,
+                    name: data.DeviceName,
+                    description: data.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-devices-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listModelPackageGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-modelpackagegroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ModelPackageGroupSummaryList.map(async (modelpackagegroup) => {
+            return sdkcall("SageMaker", "describeModelPackageGroup", {
+                ModelPackageGroupName: modelpackagegroup.ModelPackageGroupName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-modelpackagegroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ModelPackageGroupArn,
+                    f2type: 'sagemaker.modelpackagegroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ModelPackageGroupName,
+                    description: data.ModelPackageGroupDescription
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-modelpackagegroups-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listDataQualityJobDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-dataqualityjobdefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.JobDefinitionSummaries.map(async (jobdefinition) => {
+            return sdkcall("SageMaker", "describeDataQualityJobDefinition", {
+                JobDefinitionName: jobdefinition.MonitoringJobDefinitionName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-dataqualityjobdefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.JobDefinitionArn,
+                    f2type: 'sagemaker.dataqualityjobdefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.JobDefinitionName,
+                    rolearn: data.RoleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-dataqualityjobdefinitions-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listModelBiasJobDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-modelbiasjobdefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.JobDefinitionSummaries.map(async (jobdefinition) => {
+            return sdkcall("SageMaker", "describeModelBiasJobDefinition", {
+                JobDefinitionName: jobdefinition.MonitoringJobDefinitionName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-modelbiasjobdefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.JobDefinitionArn,
+                    f2type: 'sagemaker.modelbiasjobdefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.JobDefinitionName,
+                    rolearn: data.RoleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-modelbiasjobdefinitions-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listModelExplainabilityJobDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-modelexplainabilityjobdefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.JobDefinitionSummaries.map(async (jobdefinition) => {
+            return sdkcall("SageMaker", "describeModelExplainabilityJobDefinition", {
+                JobDefinitionName: jobdefinition.MonitoringJobDefinitionName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-modelexplainabilityjobdefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.JobDefinitionArn,
+                    f2type: 'sagemaker.modelexplainabilityjobdefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.JobDefinitionName,
+                    rolearn: data.RoleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-modelexplainabilityjobdefinitions-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listModelQualityJobDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.JobDefinitionSummaries.map(async (jobdefinition) => {
+            return sdkcall("SageMaker", "describeModelQualityJobDefinition", {
+                JobDefinitionName: jobdefinition.MonitoringJobDefinitionName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.JobDefinitionArn,
+                    f2type: 'sagemaker.modelqualityjobdefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.JobDefinitionName,
+                    rolearn: data.RoleArn
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable');
     }).catch(() => { });
 }
 
@@ -966,6 +1472,231 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::MonitoringSchedule',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.pipeline") {
+        reqParams.cfn['PipelineName'] = obj.data.PipelineName;
+        reqParams.cfn['PipelineDisplayName'] = obj.data.PipelineDisplayName;
+        reqParams.cfn['PipelineDescription'] = obj.data.PipelineDescription;
+        reqParams.cfn['PipelineDefinition'] = obj.data.PipelineDefinition;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Pipeline'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Pipeline',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PipelineName
+            }
+        });
+    } else if (obj.type == "sagemaker.devicefleet") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['OutputConfig'] = obj.data.OutputConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        /*
+        TODO
+        Tags: 
+            Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::DeviceFleet'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::DeviceFleet',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DeviceFleetName
+            }
+        });
+    } else if (obj.type == "sagemaker.device") {
+        reqParams.cfn['Device'] = {
+            'Description': obj.data.Description,
+            'DeviceName': obj.data.DeviceName,
+            'IotThingName': obj.data.IotThingName
+        };
+
+        /*
+        TODO
+        Tags: 
+            Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Device'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Device',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DeviceName
+            }
+        });
+    } else if (obj.type == "sagemaker.modelpackagegroup") {
+        reqParams.cfn['ModelPackageGroupName'] = obj.data.ModelPackageGroupName;
+        reqParams.cfn['ModelPackageGroupDescription'] = obj.data.ModelPackageGroupDescription;
+
+        /*
+        TODO
+        ModelPackageGroupPolicy: 
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::ModelPackageGroup'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::ModelPackageGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.dataqualityjobdefinition") {
+        reqParams.cfn['JobDefinitionName'] = obj.data.JobDefinitionName;
+        reqParams.cfn['DataQualityBaselineConfig'] = obj.data.DataQualityBaselineConfig;
+        reqParams.cfn['DataQualityAppSpecification'] = obj.data.DataQualityAppSpecification;
+        if (obj.data.DataQualityJobInput && obj.data.DataQualityJobInput.Environment) {
+            reqParams.cfn['DataQualityJobInput'] = {
+                'EndpointInput': {
+                    'EndpointName': obj.data.DataQualityJobInput.EndpointInput.EndpointName,
+                    'LocalPath': obj.data.DataQualityJobInput.EndpointInput.LocalPath,
+                    'S3InputMode': obj.data.DataQualityJobInput.EndpointInput.S3InputMode,
+                    'S3DataDistributionType': obj.data.DataQualityJobInput.EndpointInput.S3DataDistributionType
+                }
+            };
+        }
+        reqParams.cfn['DataQualityJobOutputConfig'] = obj.data.DataQualityJobOutputConfig;
+        reqParams.cfn['JobResources'] = obj.data.JobResources;
+        reqParams.cfn['NetworkConfig'] = obj.data.NetworkConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['StoppingCondition'] = obj.data.StoppingCondition;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::DataQualityJobDefinition'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::DataQualityJobDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.modelbiasjobdefinition") {
+        reqParams.cfn['JobDefinitionName'] = obj.data.JobDefinitionName;
+        reqParams.cfn['ModelBiasBaselineConfig'] = obj.data.ModelBiasBaselineConfig;
+        reqParams.cfn['ModelBiasAppSpecification'] = obj.data.ModelBiasAppSpecification;
+        reqParams.cfn['ModelBiasJobInput'] = obj.data.ModelBiasJobInput;
+        reqParams.cfn['ModelBiasJobOutputConfig'] = obj.data.ModelBiasJobOutputConfig;
+        reqParams.cfn['JobResources'] = obj.data.JobResources;
+        reqParams.cfn['NetworkConfig'] = obj.data.NetworkConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['StoppingCondition'] = obj.data.StoppingCondition;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::ModelBiasJobDefinition'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::ModelBiasJobDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.modelexplainabilityjobdefinition") {
+        reqParams.cfn['JobDefinitionName'] = obj.data.JobDefinitionName;
+        reqParams.cfn['ModelExplainabilityBaselineConfig'] = obj.data.ModelExplainabilityBaselineConfig;
+        reqParams.cfn['ModelExplainabilityAppSpecification'] = obj.data.ModelExplainabilityAppSpecification;
+        if (obj.data.ModelExplainabilityJobInput && obj.data.ModelExplainabilityJobInput.Environment) {
+            reqParams.cfn['ModelExplainabilityJobInput'] = {
+                'EndpointInput': {
+                    'EndpointName': obj.data.ModelExplainabilityJobInput.EndpointInput.EndpointName,
+                    'LocalPath': obj.data.ModelExplainabilityJobInput.EndpointInput.LocalPath,
+                    'S3InputMode': obj.data.ModelExplainabilityJobInput.EndpointInput.S3InputMode,
+                    'S3DataDistributionType': obj.data.ModelExplainabilityJobInput.EndpointInput.S3DataDistributionType,
+                    'FeaturesAttribute': obj.data.ModelExplainabilityJobInput.EndpointInput.FeaturesAttribute,
+                    'InferenceAttribute': obj.data.ModelExplainabilityJobInput.EndpointInput.InferenceAttribute,
+                    'ProbabilityAttribute': obj.data.ModelExplainabilityJobInput.EndpointInput.ProbabilityAttribute
+                }
+            };
+        }
+        reqParams.cfn['ModelExplainabilityJobOutputConfig'] = obj.data.ModelExplainabilityJobOutputConfig;
+        reqParams.cfn['JobResources'] = obj.data.JobResources;
+        reqParams.cfn['NetworkConfig'] = obj.data.NetworkConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['StoppingCondition'] = obj.data.StoppingCondition;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::ModelExplainabilityJobDefinition'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::ModelExplainabilityJobDefinition',
+            'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.modelqualityjobdefinition") {
+        reqParams.cfn['JobDefinitionName'] = obj.data.JobDefinitionName;
+        reqParams.cfn['ModelQualityBaselineConfig'] = obj.data.ModelQualityBaselineConfig;
+        reqParams.cfn['ModelQualityAppSpecification'] = obj.data.ModelQualityAppSpecification;
+        if (obj.data.ModelQualityJobInput && obj.data.ModelQualityJobInput.Environment) {
+            reqParams.cfn['ModelExplainabilityJobInput'] = {
+                'EndpointInput': {
+                    'EndpointName': obj.data.ModelQualityJobInput.EndpointInput.EndpointName,
+                    'LocalPath': obj.data.ModelQualityJobInput.EndpointInput.LocalPath,
+                    'S3InputMode': obj.data.ModelQualityJobInput.EndpointInput.S3InputMode,
+                    'S3DataDistributionType': obj.data.ModelQualityJobInput.EndpointInput.S3DataDistributionType,
+                    'InferenceAttribute': obj.data.ModelQualityJobInput.EndpointInput.InferenceAttribute,
+                    'ProbabilityAttribute': obj.data.ModelQualityJobInput.EndpointInput.ProbabilityAttribute,
+                    'ProbabilityThresholdAttribute': obj.data.ModelQualityJobInput.EndpointInput.ProbabilityThresholdAttribute,
+                    'StartTimeOffset': obj.data.ModelQualityJobInput.EndpointInput.StartTimeOffset,
+                    'EndTimeOffset': obj.data.ModelQualityJobInput.EndpointInput.EndTimeOffset
+                },
+                'GroundTruthS3Input': obj.data.ModelQualityJobInput.GroundTruthS3Input
+            };
+        }
+        reqParams.cfn['ModelQualityJobOutputConfig'] = obj.data.ModelQualityJobOutputConfig;
+        reqParams.cfn['JobResources'] = obj.data.JobResources;
+        reqParams.cfn['NetworkConfig'] = obj.data.NetworkConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['StoppingCondition'] = obj.data.StoppingCondition;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::ModelQualityJobDefinition'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::ModelQualityJobDefinition',
             'options': reqParams
         });
     } else {

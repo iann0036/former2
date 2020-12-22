@@ -281,6 +281,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Users': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'username',
+                        title: 'User Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -292,6 +368,8 @@ async function updateDatatableDatabaseElastiCache() {
     blockUI('#section-database-elasticache-parametergroups-datatable');
     blockUI('#section-database-elasticache-securitygroups-datatable');
     blockUI('#section-database-elasticache-globalreplicationgroups-datatable');
+    blockUI('#section-database-elasticache-users-datatable');
+    blockUI('#section-database-elasticache-usergroups-datatable');
 
     await sdkcall("ElastiCache", "describeCacheClusters", {
         // no params
@@ -415,8 +493,44 @@ async function updateDatatableDatabaseElastiCache() {
         });
     }).catch(() => { });
 
+    await sdkcall("ElastiCache", "describeUsers", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-elasticache-users-datatable').deferredBootstrapTable('removeAll');
+
+        data.Users.forEach(user => {
+            $('#section-database-elasticache-users-datatable').deferredBootstrapTable('append', [{
+                f2id: user.UserId,
+                f2type: 'elasticache.user',
+                f2data: user,
+                f2region: region,
+                id: user.UserId,
+                username: user.UserName
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("ElastiCache", "describeUserGroups", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-elasticache-usergroups-datatable').deferredBootstrapTable('removeAll');
+
+        data.UserGroups.forEach(usergroup => {
+            $('#section-database-elasticache-usergroups-datatable').deferredBootstrapTable('append', [{
+                f2id: usergroup.UserGroupId,
+                f2type: 'elasticache.usergroup',
+                f2data: usergroup,
+                f2region: region,
+                id: usergroup.UserGroupId,
+                engine: usergroup.Engine
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-database-elasticache-securitygroups-datatable');
     unblockUI('#section-database-elasticache-globalreplicationgroups-datatable');
+    unblockUI('#section-database-elasticache-users-datatable');
+    unblockUI('#section-database-elasticache-usergroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -648,6 +762,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::GlobalReplicationGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.user") {
+        reqParams.cfn['UserId'] = obj.data.UserId;
+        reqParams.cfn['UserName'] = obj.data.UserName;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.cfn['AccessString'] = obj.data.AccessString;
+        if (obj.data.Authentication) {
+            reqParams.cfn['NoPasswordRequired'] = (obj.data.Authentication.Type == "no-password");
+            if (obj.data.Authentication.Type != "no-password") {
+                reqParams.cfn['Passwords'] = [
+                    "REPLACEME"
+                ];
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::User'),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::User',
+            'options': reqParams
+        });
+    } else if (obj.type == "elasticache.usergroup") {
+        reqParams.cfn['UserGroupId'] = obj.data.UserGroupId;
+        reqParams.cfn['Engine'] = obj.data.Engine;
+        reqParams.cfn['UserIds'] = obj.data.UserIds;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('elasticache', obj.id, 'AWS::ElastiCache::UserGroup'),
+            'region': obj.region,
+            'service': 'elasticache',
+            'type': 'AWS::ElastiCache::UserGroup',
             'options': reqParams
         });
     } else {
