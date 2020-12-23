@@ -472,6 +472,44 @@ sections.push({
                 ]
             ]
         },
+        'Projects': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Pipelines': {
             'columns': [
                 [
@@ -798,6 +836,7 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-coderepositories-datatable');
     blockUI('#section-machinelearning-sagemaker-workteams-datatable');
     blockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
+    blockUI('#section-machinelearning-sagemaker-projects-datatable');
     blockUI('#section-machinelearning-sagemaker-pipelines-datatable');
     blockUI('#section-machinelearning-sagemaker-devicefleets-datatable');
     blockUI('#section-machinelearning-sagemaker-devices-datatable');
@@ -1047,6 +1086,29 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-monitoringschedules-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listProjects", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-projects-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ProjectSummaryList.map(async (project) => {
+            return sdkcall("SageMaker", "describeProject", {
+                ProjectName: project.ProjectName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-projects-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ProjectArn,
+                    f2type: 'sagemaker.project',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ProjectName,
+                    description: data.ProjectDescription
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-projects-datatable');
     }).catch(() => { });
 
     await sdkcall("SageMaker", "listPipelines", {
@@ -1473,6 +1535,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::MonitoringSchedule',
             'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.project") {
+        reqParams.cfn['ProjectName'] = obj.data.ProjectName;
+        reqParams.cfn['ProjectDescription'] = obj.data.ProjectDescription;
+        reqParams.cfn['ServiceCatalogProvisioningDetails'] = obj.data.ServiceCatalogProvisioningDetails;
+
+        /*
+        TODO
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Project'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Project',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'ProjectArn': obj.data.ProjectArn,
+                    'ProjectId': obj.data.ProjectId
+                }
+            }
         });
     } else if (obj.type == "sagemaker.pipeline") {
         reqParams.cfn['PipelineName'] = obj.data.PipelineName;
