@@ -103,8 +103,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'GetAtt': {
-                    'Name': obj.data.Name,
-                    ''
+                    'Name': obj.data.Name
                 }
             }
         });
