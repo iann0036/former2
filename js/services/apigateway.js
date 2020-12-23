@@ -1345,10 +1345,10 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then((data) => {
         if (
-            data.throttleSettings.burstLimit != 5000 ||
-            data.throttleSettings.rateLimit != 10000 ||
-            data.features.length != 1 ||
-            data.features[0] != "UsagePlans"
+            (data.throttleSettings && data.throttleSettings.burstLimit != 5000) ||
+            (data.throttleSettings && data.throttleSettings.rateLimit != 10000) ||
+            (data.features && data.features.length != 1) ||
+            (data.features && data.features[0] != "UsagePlans")
         ) {
             $('#section-networkingandcontentdelivery-apigateway-account-datatable').deferredBootstrapTable('append', [{
                 f2id: data.cloudwatchRoleArn || (region + "-account"),
