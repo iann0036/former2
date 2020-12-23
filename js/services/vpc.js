@@ -2649,6 +2649,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Network Insights Paths': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'source',
+                        title: 'Source',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'destination',
+                        title: 'Destination',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Insights Analyses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'pathid',
+                        title: 'Path ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2712,6 +2796,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable');
 
     var defaultVPC = "unset";
 
@@ -3909,6 +3995,41 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             });
         }));
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeNetworkInsightsPaths", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable').deferredBootstrapTable('removeAll');
+
+        data.NetworkInsightsPaths.forEach(networkinsightspath => {
+            $('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable').deferredBootstrapTable('append', [{
+                f2id: networkinsightspath.NetworkInsightsPathArn,
+                f2type: 'ec2.networkinsightspath',
+                f2data: networkinsightspath,
+                f2region: region,
+                id: networkinsightspath.NetworkInsightsPathId,
+                source: networkinsightspath.Source || networkinsightspath.SourceIp,
+                destination: networkinsightspath.Destination || networkinsightspath.DestinationIp
+            }]);
+        });
+    }).catch(() => { });
+            
+    await sdkcall("EC2", "describeNetworkInsightsAnalyses", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable').deferredBootstrapTable('removeAll');
+
+        data.NetworkInsightsAnalyses.forEach(networkinsightsanalysis => {
+            $('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable').deferredBootstrapTable('append', [{
+                f2id: networkinsightsanalysis.NetworkInsightsAnalysisArn,
+                f2type: 'ec2.networkinsightsanalysis',
+                f2data: networkinsightsanalysis,
+                f2region: region,
+                id: networkinsightsanalysis.NetworkInsightsAnalysisId,
+                pathid: networkinsightsanalysis.NetworkInsightsPathId
+            }]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -3928,6 +4049,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallpolicies-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallloggingconfigurations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -5438,6 +5561,48 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.RuleGroupResponse.RuleGroupArn,
                 'GetAtt': {
                     'RuleGroupId': obj.data.RuleGroupResponse.RuleGroupId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkinsightspath") {
+        reqParams.cfn['Destination'] = obj.data.Destination;
+        reqParams.cfn['DestinationIp'] = obj.data.DestinationIp;
+        reqParams.cfn['DestinationPort'] = obj.data.DestinationPort;
+        reqParams.cfn['Protocol'] = obj.data.Protocol;
+        reqParams.cfn['Source'] = obj.data.Source;
+        reqParams.cfn['SourceIp'] = obj.data.SourceIp;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInsightsPath'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInsightsPath',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.NetworkInsightsPathId,
+                'GetAtt': {
+                    'NetworkInsightsPathArn': obj.data.NetworkInsightsPathArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkinsightsanalysis") {
+        reqParams.cfn['NetworkInsightsPathId'] = obj.data.NetworkInsightsPathId;
+        reqParams.cfn['FilterInArns'] = obj.data.FilterInArns;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInsightsAnalysis'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInsightsAnalysis',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.NetworkInsightsAnalysisId,
+                'GetAtt': {
+                    'NetworkInsightsAnalysisArn': obj.data.NetworkInsightsAnalysisArn
                 }
             }
         });
