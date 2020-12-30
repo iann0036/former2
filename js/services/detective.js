@@ -159,9 +159,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'detective',
             'type': 'AWS::Detective::MemberInvitation',
             'options': reqParams,
-            'Import': {
-                'GraphArn': obj.data.GraphArn,
-                'MemberId': obj.data.MemberId
+            'returnValues': {
+                'Import': {
+                    'GraphArn': obj.data.GraphArn,
+                    'MemberId': obj.data.MemberId
+                }
             }
         });
     } else {

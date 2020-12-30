@@ -2398,6 +2398,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (!['t2', 'm4'].includes(obj.data.InstanceType.split(".")[0])) {
             reqParams.cfn['CpuOptions'] = obj.data.CpuOptions;
         }
+        reqParams.cfn['EnclaveOptions'] = obj.data.EnclaveOptions;
 
         /*
         TODO:

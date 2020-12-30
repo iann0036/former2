@@ -6,6 +6,93 @@ sections.push({
     'category': 'Management &amp; Governance',
     'service': 'License Manager',
     'resourcetypes': {
+        'Licenses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'productname',
+                        title: 'Product Name',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'beneficiary',
+                        title: 'Beneficiary',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Grants': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'grantee',
+                        title: 'Grantee',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'License Configurations': {
             'terraformonly': true,
             'columns': [
@@ -116,8 +203,53 @@ sections.push({
 });
 
 async function updateDatatableManagementAndGovernanceLicenseManager() {
+    blockUI('#section-managementandgovernance-licensemanager-licenses-datatable');
+    blockUI('#section-managementandgovernance-licensemanager-grants-datatable');
     blockUI('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable');
     blockUI('#section-managementandgovernance-licensemanager-associations-datatable');
+
+    await sdkcall("LicenseManager", "listLicenses", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-licensemanager-licenses-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Licenses.map(license => {
+            return sdkcall("LicenseManager", "getLicense", {
+                LicenseArn: license.LicenseArn
+            }, true).then((data) => {
+                $('#section-managementandgovernance-licensemanager-licenses-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.License.LicenseArn,
+                    f2type: 'licensemanager.license',
+                    f2data: data.License,
+                    f2region: region,
+                    name: data.License.LicenseName,
+                    productname: data.License.ProductName,
+                    beneficiary: data.License.Beneficiary
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("LicenseManager", "listDistributedGrants", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-licensemanager-grants-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Grants.map(grant => {
+            return sdkcall("LicenseManager", "getGrant", {
+                GrantArn: grant.GrantArn
+            }, true).then((data) => {
+                $('#section-managementandgovernance-licensemanager-grants-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Grant.GrantArn,
+                    f2type: 'licensemanager.grant',
+                    f2data: data.Grant,
+                    f2region: region,
+                    name: data.Grant.LicenseName,
+                    grantee: data.Grant.GranteePrincipalArn
+                }]);
+            });
+        }));
+    }).catch(() => { });
 
     await sdkcall("LicenseManager", "listLicenseConfigurations", {
         // no params
@@ -163,6 +295,9 @@ async function updateDatatableManagementAndGovernanceLicenseManager() {
         unblockUI('#section-managementandgovernance-licensemanager-licenseconfigurations-datatable');
         unblockUI('#section-managementandgovernance-licensemanager-associations-datatable');
     }).catch(() => { });
+
+    unblockUI('#section-managementandgovernance-licensemanager-licenses-datatable');
+    unblockUI('#section-managementandgovernance-licensemanager-grants-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -198,6 +333,47 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'licensemanager',
             'terraformType': 'aws_licensemanager_association',
+            'options': reqParams
+        });
+    } else if (obj.type == "licensemanager.license") {
+        reqParams.cfn['LicenseName'] = obj.data.LicenseName;
+        reqParams.cfn['ProductName'] = obj.data.ProductName;
+        reqParams.cfn['ProductSKU'] = obj.data.ProductSKU;
+        if (obj.data.Issuer) {
+            reqParams.cfn['Issuer'] = {
+                'Name': obj.data.Issuer.Name,
+                'SignKey': obj.data.Issuer.SignKey
+            };
+        }
+        reqParams.cfn['HomeRegion'] = obj.data.HomeRegion;
+        reqParams.cfn['Validity'] = obj.data.Validity;
+        reqParams.cfn['Beneficiary'] = obj.data.Beneficiary;
+        reqParams.cfn['Entitlements'] = obj.data.Entitlements;
+        reqParams.cfn['ConsumptionConfiguration'] = obj.data.ConsumptionConfiguration;
+        reqParams.cfn['LicenseMetadata'] = obj.data.LicenseMetadata;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('licensemanager', obj.id, 'AWS::LicenseManager::License'),
+            'region': obj.region,
+            'service': 'licensemanager',
+            'type': 'AWS::LicenseManager::License',
+            'options': reqParams
+        });
+    } else if (obj.type == "licensemanager.grant") {
+        reqParams.cfn['GrantName'] = obj.data.GrantName;
+        reqParams.cfn['ParentArn'] = obj.data.ParentArn;
+        reqParams.cfn['LicenseArn'] = obj.data.LicenseArn;
+        reqParams.cfn['GranteePrincipalArn'] = obj.data.GranteePrincipalArn;
+        reqParams.cfn['HomeRegion'] = obj.data.HomeRegion;
+        reqParams.cfn['GrantedOperations'] = obj.data.GrantedOperations;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('licensemanager', obj.id, 'AWS::LicenseManager::Grant'),
+            'region': obj.region,
+            'service': 'licensemanager',
+            'type': 'AWS::LicenseManager::Grant',
             'options': reqParams
         });
     } else {

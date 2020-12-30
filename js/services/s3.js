@@ -369,7 +369,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             var rules = [];
             obj.data.Encryption.ServerSideEncryptionConfiguration.Rules.forEach(rule => {
                 rules.push({
-                    'ServerSideEncryptionByDefault': rule.ApplyServerSideEncryptionByDefault
+                    'ServerSideEncryptionByDefault': rule.ApplyServerSideEncryptionByDefault,
+                    'BucketKeyEnabled': rule.BucketKeyEnabled
                 });
             });
             reqParams.cfn['BucketEncryption'] = {

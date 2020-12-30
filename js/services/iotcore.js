@@ -410,6 +410,172 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'Wireless Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Wireless Devices': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Wireless Gateways': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Wireless Device Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'Wireless Service Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -425,6 +591,11 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-authorizers-datatable');
     blockUI('#section-internetofthings-core-domainconfigurations-datatable');
     blockUI('#section-internetofthings-core-topicruledestinations-datatable');
+    blockUI('#section-internetofthings-core-wirelessdestinations-datatable');
+    blockUI('#section-internetofthings-core-wirelessdevices-datatable');
+    blockUI('#section-internetofthings-core-wirelessgateways-datatable');
+    blockUI('#section-internetofthings-core-wirelessdeviceprofiles-datatable');
+    blockUI('#section-internetofthings-core-wirelessserviceprofiles-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -655,8 +826,128 @@ async function updateDatatableInternetofThingsCore() {
         });
     }).catch(err => { });
 
+    await sdkcall("IoTWireless", "listDestinations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessdestinations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DestinationList.map(async (destination) => {
+            return sdkcall("IoTWireless", "getDestination", {
+                Name: destination.Name
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessdestinations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessdestination',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listWirelessDevices", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessdevices-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.WirelessDeviceList.map(async (device) => {
+            return sdkcall("IoTWireless", "getWirelessDevice", {
+                Identifier: device.Id,
+                IdentifierType: "WirelessDeviceId"
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessdevices-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessdevice',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listWirelessGateways", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessgateways-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.WirelessGatewayList.map(async (gateway) => {
+            return sdkcall("IoTWireless", "getWirelessGateway", {
+                Identifier: gateway.Id,
+                IdentifierType: "WirelessGatewayId"
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessgateways-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessgateway',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listDeviceProfiles", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessdeviceprofiles-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DeviceProfileList.map(async (profile) => {
+            return sdkcall("IoTWireless", "getDeviceProfile", {
+                Id: profile.Id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessdeviceprofiles-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessdeviceprofile',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listServiceProfiles", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessserviceprofiles-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ServiceProfileList.map(async (profile) => {
+            return sdkcall("IoTWireless", "getServiceProfile", {
+                Id: profile.Id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessserviceprofiles-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessserviceprofile',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
+    unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
+    unblockUI('#section-internetofthings-core-wirelessdevices-datatable');
+    unblockUI('#section-internetofthings-core-wirelessgateways-datatable');
+    unblockUI('#section-internetofthings-core-wirelessdeviceprofiles-datatable');
+    unblockUI('#section-internetofthings-core-wirelessserviceprofiles-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1119,6 +1410,110 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoT::TopicRuleDestination',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessdestination") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Expression'] = obj.data.Expression;
+        reqParams.cfn['ExpressionType'] = obj.data.ExpressionType;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::Destination'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::Destination',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessdevice") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DestinationName'] = obj.data.DestinationName;
+        reqParams.cfn['Type'] = obj.data.Type;
+        if (obj.data.LoRaWAN) {
+            reqParams.cfn['LoRaWANDevice'] = {
+                'DevEui': obj.data.LoRaWAN.DevEui,
+                'DeviceProfileId': obj.data.LoRaWAN.DeviceProfileId,
+                'ServiceProfileId': obj.data.LoRaWAN.ServiceProfileId,
+                'OtaaV11': obj.data.LoRaWAN.OtaaV1_1,
+                'OtaaV10X': obj.data.LoRaWAN.OtaaV1_0_x,
+                'AbpV11': obj.data.LoRaWAN.AbpV1_1,
+                'AbpV10X': obj.data.LoRaWAN.AbpV1_0_x
+            };
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::WirelessDevice'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::WirelessDevice',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessgateway") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['ThingName'] = obj.data.ThingName;
+        reqParams.cfn['LoRaWANGateway'] = obj.data.LoRaWAN;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::WirelessGateway'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::WirelessGateway',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessdeviceprofile") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.LoRaWAN) {
+            reqParams.cfn['LoRaWANDeviceProfile'] = {
+                'ClassBTimeout': obj.data.LoRaWAN.ClassBTimeout,
+                'ClassCTimeout': obj.data.LoRaWAN.ClassCTimeout,
+                'MacVersion': obj.data.LoRaWAN.MacVersion,
+                'MaxDutyCycle': obj.data.LoRaWAN.MaxDutyCycle,
+                'MaxEirp': obj.data.LoRaWAN.MaxEirp,
+                'PingSlotDr': obj.data.LoRaWAN.PingSlotDr,
+                'PingSlotFreq': obj.data.LoRaWAN.PingSlotFreq,
+                'PingSlotPeriod': obj.data.LoRaWAN.PingSlotPeriod,
+                'RegParamsRevision': obj.data.LoRaWAN.RegParamsRevision,
+                'RfRegion': obj.data.LoRaWAN.RfRegion,
+                'Supports32BitFCnt': obj.data.LoRaWAN.Supports32BitFCnt,
+                'SupportsClassB': obj.data.LoRaWAN.SupportsClassB,
+                'SupportsClassC': obj.data.LoRaWAN.SupportsClassC,
+                'SupportsJoin': obj.data.LoRaWAN.SupportsJoin
+            };
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::DeviceProfile'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::DeviceProfile',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessserviceprofile") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.LoRaWAN) {
+            reqParams.cfn['LoRaWANServiceProfile'] = {
+                'AddGwMetadata': obj.data.LoRaWAN.AddGwMetadata
+            };
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::ServiceProfile'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::ServiceProfile',
             'options': reqParams
         });
     } else {

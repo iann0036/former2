@@ -38,7 +38,9 @@ cfn_exceptions = {
     'AWS::CloudFormation::StackSet': 'N/A',
     'AWS::MediaPackage::Asset': 'N/A',
     'AWS::MediaPackage::PackagingConfiguration': 'N/A',
-    'AWS::MediaPackage::PackagingGroup': 'N/A'
+    'AWS::MediaPackage::PackagingGroup': 'N/A',
+    'AWS::CloudFormation::ModuleDefaultVersion': 'N/A',
+    'AWS::CloudFormation::ModuleVersion': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
