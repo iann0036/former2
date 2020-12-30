@@ -12,6 +12,7 @@ const cliprogress = require('cli-progress');
 const logplease = require('logplease');
 const _colors = require('colors');
 const pjson = require('./package.json');
+const { openStdin } = require("process");
 const CLI = true;
 
 logplease.setLogLevel('NONE');
@@ -74,6 +75,10 @@ async function main(opts) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: opts.profile});
     }
 
+    if (AWS.config.region) {
+        region = AWS.config.region;
+    }
+
     if (opts.region) {
         AWS.config.update({region: opts.region});
         region = opts.region;
@@ -81,6 +86,10 @@ async function main(opts) {
 
     if (opts.proxy) {
         AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
+    }
+
+    if (opts.services.toUpperCase() == "ALL") {
+        opts.services = null;
     }
 
     if (opts.excludeServices && opts.services) {
