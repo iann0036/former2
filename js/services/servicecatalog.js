@@ -977,7 +977,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "servicecatalog.acceptedportfolioshare") {
-        reqParams.cfn['PortfolioId'] = obj.data.portfolio.Id;
+        reqParams.cfn['PortfolioId'] = obj.data.Id;
 
         /*
         TODO:

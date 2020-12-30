@@ -24,7 +24,6 @@ cfn_exceptions = {
     'AWS::ElastiCache::SecurityGroupIngress': 'N/A',
     'AWS::Redshift::ClusterSecurityGroupIngress': 'N/A',
     'AWS::Route53::RecordSetGroup': 'N/A',
-    'AWS::SDB::Domain': 'N/A',
     'AWS::IAM::UserToGroupAddition': 'N/A',
     'Alexa::ASK::Skill': 'N/A',
     'AWS::ServiceCatalog::PortfolioShare': 'N/A',
