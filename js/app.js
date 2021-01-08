@@ -12,6 +12,7 @@ var defaultoutput = 'cloudformation';
 var iaclangselect = 'typescript';
 var check_objects = [];
 var CLI = false;
+var CONCURRENT_SDKCALLS = 0;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -1212,7 +1213,11 @@ $(document).ready(function(){
                                         'properties': service_params
                                     }, {
                                         get: function(service, service_action) {
-                                            return (params, callback) => {
+                                            return async (params, callback) => {
+                                                while (CONCURRENT_SDKCALLS > 500) {
+                                                    await new Promise(resolve => setTimeout(resolve, 100)); // sleep 100ms
+                                                }
+                                                CONCURRENT_SDKCALLS++;
                                                 extensionSendMessage(
                                                     {
                                                         action: 'serviceAction',
@@ -1222,6 +1227,7 @@ $(document).ready(function(){
                                                         params: params
                                                     },
                                                     function(response) {
+                                                        CONCURRENT_SDKCALLS--;
                                                         if (!response) {
                                                             callback("No response from extension", null);
                                                         } else if (!response.success) {
