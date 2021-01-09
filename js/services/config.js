@@ -425,6 +425,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Stored Queries': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -438,6 +476,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
     blockUI('#section-managementandgovernance-config-aggregationauthorizations-datatable');
     blockUI('#section-managementandgovernance-config-deliverychannels-datatable');
     blockUI('#section-managementandgovernance-config-conformancepacks-datatable');
+    blockUI('#section-managementandgovernance-config-storedqueries-datatable');
 
     await sdkcall("ConfigService", "describeConfigRules", {
         // no params
@@ -617,6 +656,29 @@ async function updateDatatableManagementAndGovernanceConfig() {
         });
 
         unblockUI('#section-managementandgovernance-config-organizationconformancepacks-datatable');
+    }).catch(() => { });
+
+    await sdkcall("ConfigService", "listStoredQueries", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-config-storedqueries-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.StoredQueryMetadata.map(storedquery => {
+            return sdkcall("ConfigService", "getStoredQuery", {
+                QueryName: storedquery.QueryName
+            }, true).then((data) => {
+                $('#section-managementandgovernance-config-storedqueries-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.StoredQuery.QueryArn,
+                    f2type: 'config.storedquery',
+                    f2data: data.StoredQuery,
+                    f2region: region,
+                    name: data.StoredQuery.QueryName,
+                    description: data.StoredQuery.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-managementandgovernance-config-storedqueries-datatable');
     }).catch(() => { });
 }
 
@@ -864,6 +926,26 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.OrganizationConformancePackName,
                 'Import': {
                     'OrganizationConformancePackName': obj.data.OrganizationConformancePackName
+                }
+            }
+        });
+    } else if (obj.type == "config.storedquery") {
+        reqParams.cfn['QueryName'] = obj.data.QueryName;
+        reqParams.cfn['QueryDescription'] = obj.data.Description;
+        reqParams.cfn['QueryExpression'] = obj.data.Expression;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('config', obj.id, 'AWS::Config::StoredQuery'),
+            'region': obj.region,
+            'service': 'config',
+            'type': 'AWS::Config::StoredQuery',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.QueryName,
+                'GetAtt': {
+                    'QueryArn': obj.data.QueryArn,
+                    'QueryId': obj.data.QueryId
                 }
             }
         });
