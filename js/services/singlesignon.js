@@ -279,7 +279,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "singlesignon.iacac") {
         reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
-        reqParams.cfn['InstanceAccessControlAttributeConfiguration'] = obj.data.InstanceAccessControlAttributeConfiguration;
+        reqParams.cfn['AccessControlAttributes'] = obj.data.InstanceAccessControlAttributeConfiguration.AccessControlAttributes;
 
         tracked_resources.push({
             'obj': obj,

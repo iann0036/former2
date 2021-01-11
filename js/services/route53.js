@@ -405,6 +405,96 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Key Signing Keys': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'hostedzoneid',
+                        title: 'Hosted Zone ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'DNSSEC': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Hosted Zone ID',
+                        field: 'hostedzoneid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Resolver DNSSEC Config': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -418,12 +508,17 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-resolverruleassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigs-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-dnssec-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable');
 
     await sdkcall("Route53", "listHostedZones", {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-hostedzones-datatable').deferredBootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-route53-records-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-dnssec-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.HostedZones.map(async (hostedZone) => {
             await sdkcall("Route53", "getHostedZone", {
@@ -442,7 +537,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 }]);
             });
 
-            return sdkcall("Route53", "listResourceRecordSets", {
+            await sdkcall("Route53", "listResourceRecordSets", {
                 HostedZoneId: hostedZone.Id.split("/").pop()
             }, true).then((data) => {
                 data.ResourceRecordSets.forEach(resourceRecordSet => {
@@ -459,10 +554,43 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     }]);
                 });
             });
+
+            return sdkcall("Route53", "getDNSSEC", {
+                HostedZoneId: hostedZone.Id.split("/").pop()
+            }, false).then(async (data) => {
+                data['HostedZoneId'] = hostedZone.Id.split("/").pop();
+
+                if (data.Status && data.Status.ServeSignature == "SIGNING") {
+                    $('#section-networkingandcontentdelivery-route53-dnssec-datatable').deferredBootstrapTable('append', [{
+                        f2id: hostedZone.Id.split("/").pop() + " DNSSEC",
+                        f2type: 'route53.dnssec',
+                        f2data: data,
+                        f2region: region,
+                        hostedzoneid: hostedZone.Id.split("/").pop()
+                    }]);
+                }
+
+                if (data.KeySigningKeys) {
+                    data.KeySigningKeys.forEach(keysigningkey => {
+                        keysigningkey['HostedZoneId'] = hostedZone.Id.split("/").pop();
+
+                        $('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable').deferredBootstrapTable('append', [{
+                            f2id: hostedZone.Id.split("/").pop() + " Key Signing Key " + keysigningkey.Name,
+                            f2type: 'route53.keysigningkey',
+                            f2data: keysigningkey,
+                            f2region: region,
+                            name: keysigningkey.Name,
+                            hostedzoneid: hostedZone.Id.split("/").pop()
+                        }]);
+                    });
+                }
+            }).catch(() => { });
         }));
 
         unblockUI('#section-networkingandcontentdelivery-route53-hostedzones-datatable');
         unblockUI('#section-networkingandcontentdelivery-route53-records-datatable');
+        unblockUI('#section-networkingandcontentdelivery-route53-dnssec-datatable');
+        unblockUI('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable');
     });
 
     await sdkcall("Route53", "listHealthChecks", {
@@ -490,8 +618,9 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         // no params
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.ResolverEndpoints.map(resolverEndpoint => {
+        await Promise.all(data.ResolverEndpoints.map(async (resolverEndpoint) => {
             return sdkcall("Route53Resolver", "getResolverEndpoint", {
                 ResolverEndpointId: resolverEndpoint.Id
             }, true).then(async (data) => {
@@ -512,10 +641,25 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                     ipaddresscount: data.ResolverEndpoint.IpAddressCount,
                     hostvpcid: data.ResolverEndpoint.HostVPCId
                 }]);
+
+                await sdkcall("Route53Resolver", "getResolverDnssecConfig", {
+                    ResourceId: data.ResolverEndpoint.HostVPCId
+                }, true).then((data) => {
+                    if (data.ResolverDNSSECConfig && data.ResolverDNSSECConfig.ValidationStatus == "ENABLED") {
+                        $('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.ResolverDNSSECConfig.Id,
+                            f2type: 'route53.resolverdnssecconfig',
+                            f2data: data.ResolverDNSSECConfig,
+                            f2region: region,
+                            resourceid: data.ResolverDNSSECConfig.ResourceId
+                        }]);
+                    }
+                });
             });
         }));
 
         unblockUI('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable');
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable');
     });
 
     await sdkcall("Route53Resolver", "listResolverRules", {
@@ -903,6 +1047,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.Id
             }
+        });
+    } else if (obj.type == "route53.dnssec") {
+        reqParams.cfn['HostedZoneId'] = obj.data.HostedZoneId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::DNSSEC'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::DNSSEC',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.keysigningkey") {
+        reqParams.cfn['HostedZoneId'] = obj.data.HostedZoneId;
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['KeyManagementServiceArn'] = obj.data.KmsArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::KeySigningKey'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::KeySigningKey',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverdnssecconfig") {
+        reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverDNSSECConfig'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverDNSSECConfig',
+            'options': reqParams
         });
     } else {
         return false;
