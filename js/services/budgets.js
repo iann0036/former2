@@ -129,7 +129,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['limit_amount'] = obj.data.BudgetLimit.Amount;
             reqParams.tf['limit_unit'] = obj.data.BudgetLimit.Unit;
         }
-        if (obj.data.TimePeriod) {
+        if (obj.data.TimePeriod && obj.data.TimePeriod.Start && obj.data.TimePeriod.Start.length) {
             reqParams.tf['time_period_end'] = obj.data.TimePeriod.End;
             reqParams.tf['time_period_start'] = obj.data.TimePeriod.Start;
         }

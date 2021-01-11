@@ -4098,9 +4098,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.VpcId,
                 'GetAtt': {
-                    'CidrBlock': obj.data.CidrBlock,
-                    'CidrBlockAssociations': attrCidrBlockAssociations,
-                    'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
+                    'CidrBlock': obj.data.CidrBlock
+                    //'CidrBlockAssociations': attrCidrBlockAssociations,
+                    //'Ipv6CidrBlocks': attrIpv6CidrBlockAssociations
                     /*
                     TODO:
                     DefaultNetworkAcl

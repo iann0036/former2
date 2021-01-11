@@ -750,6 +750,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['StorageLensConfiguration'] = {
             'AccountLevel': obj.data.StorageLensConfiguration.AccountLevel,
             'DataExport': dataexport,
+            'Id': obj.data.StorageLensConfiguration.Id,
             'Exclude': obj.data.StorageLensConfiguration.Exclude,
             'Include': obj.data.StorageLensConfiguration.Include,
             'IsEnabled': obj.data.StorageLensConfiguration.IsEnabled

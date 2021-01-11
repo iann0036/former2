@@ -1473,7 +1473,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "sagemaker.coderepository") {
         reqParams.cfn['CodeRepositoryName'] = obj.data.CodeRepositoryName;
-        reqParams.cfn['Definition'] = {
+        reqParams.cfn['GitConfig'] = {
             'RepositoryUrl': obj.data.GitConfig.RepositoryUrl,
             'Branch': obj.data.GitConfig.Branch,
             'SecretArn': obj.data.GitConfig.SecretArn
