@@ -1618,7 +1618,7 @@ function unblockUI(selector) {
 
 /* ========================================================================== */
 
-resource_tag_cache = {};
+var resource_tag_cache = {};
 
 async function getResourceTags(arn) {
     if (!arn) {

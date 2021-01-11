@@ -27,6 +27,47 @@ function unblockUI() { }
 function nav(str) {
     return str.replace(/\s/g, "").replace(/\,/g, "").replace(/\-/g, "").replace(/\&amp\;/g, "And");
 }
+async function getResourceTags(arn) {
+    if (!arn) {
+        return null;
+    }
+
+    if (arn.split(":").length < 7 && !arn.split(":")[5].includes("/")) {
+        return null;
+    }
+
+    var service = arn.split(":")[2];
+    var type = arn.split(":")[5].split("/")[0];
+
+    if (!resource_tag_cache[ service/*+ "." + type*/ ]) {
+        resource_tag_cache[service] = [];
+        
+        await sdkcall("ResourceGroupsTaggingAPI", "getResources", {
+            ResourceTypeFilters: [ service/* + "." + type*/ ]
+        }, false).then((data) => {
+            resource_tag_cache[ service/* + "." + type*/ ] = data.ResourceTagMappingList;
+        }).catch(() => { });
+        setTimeout((k) => {
+            delete resource_tag_cache[k];
+        }, 20000, service/* + "." + type*/); // 20s cache
+    }
+
+    for (var res of resource_tag_cache[ service/* + "." + type*/ ]) {
+        var resarnparts = res['ResourceARN'].split(":");
+        resarnparts[3] = "";
+        resarnparts[4] = "";
+        var arnparts = arn.split(":");
+        arnparts[3] = "";
+        arnparts[4] = "";
+
+        if (resarnparts.join(":") == arnparts.join(":")) {
+            return res['Tags'].filter(tag => !tag['Key'].startsWith("aws:"));
+        }
+    }
+
+    return null;
+}
+var resource_tag_cache = {};
 const iaclangselect = "typescript";
 
 function $(selector) { return new $obj(selector) }
@@ -88,7 +129,7 @@ async function main(opts) {
         AWS.config.update({httpOptions: {agent: proxy(opts.proxy)}});
     }
 
-    if (opts.services.toUpperCase() == "ALL") {
+    if (opts.services && opts.services.toUpperCase() == "ALL") {
         opts.services = null;
     }
 
