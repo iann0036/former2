@@ -86,17 +86,17 @@ async function updateDatatableSecurityIdentityAndComplianceAuditManager() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "auditmanager.assessment") {
         if (obj.data.metadata) {
-            reqParams.cfn['name'] = obj.data.metadata.name;
-            reqParams.cfn['description'] = obj.data.metadata.description;
-            reqParams.cfn['scope'] = obj.data.metadata.scope;
-            reqParams.cfn['roles'] = obj.data.metadata.roles;
-            reqParams.cfn['assessmentReportsDestination'] = obj.data.metadata.assessmentReportsDestination;
+            reqParams.cfn['Name'] = obj.data.metadata.name;
+            reqParams.cfn['Description'] = obj.data.metadata.description;
+            reqParams.cfn['Scope'] = obj.data.metadata.scope;
+            reqParams.cfn['Roles'] = obj.data.metadata.roles;
+            reqParams.cfn['AssessmentReportsDestination'] = obj.data.metadata.assessmentReportsDestination;
         }
         if (obj.data.framework) {
-            reqParams.cfn['frameworkId'] = obj.data.framework.id;
+            reqParams.cfn['FrameworkId'] = obj.data.framework.id;
         }
-        reqParams.cfn['awsAccount'] = obj.data.awsAccount;
-        reqParams.cfn['tags'] = obj.data.tags;
+        reqParams.cfn['AwsAccount'] = obj.data.awsAccount;
+        reqParams.cfn['Tags'] = obj.data.tags;
 
         tracked_resources.push({
             'obj': obj,
