@@ -557,6 +557,158 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'AppRegistry Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'AppRegistry Attribute Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'AppRegistry Attribute Group Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Application',
+                        field: 'application',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'attributegroup',
+                        title: 'Attribute Group',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'AppRegistry Resource Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Application',
+                        field: 'application',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'resource',
+                        title: 'Resource',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -574,6 +726,10 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     blockUI('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-appregistryapplications-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable');
 
     await sdkcall("ServiceCatalog", "listPortfolios", {
         // no params
@@ -823,8 +979,93 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         }));
     }).catch(() => { });
 
+    await sdkcall("ServiceCatalogAppRegistry", "listApplications", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-servicecatalog-appregistryapplications-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.applications.map(async (application) => {
+            await sdkcall("ServiceCatalog", "getApplication", {
+                application: application.id
+            }, true).then((data) => {
+                $('#section-managementandgovernance-servicecatalog-appregistryapplications-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.arn,
+                    f2type: 'servicecatalog.appregistryapplication',
+                    f2data: data,
+                    f2region: region,
+                    name: data.name,
+                    description: data.description
+                }]);
+            });
+
+            await sdkcall("ServiceCatalogAppRegistry", "listAssociatedAttributeGroups", {
+                application: application.id
+            }, false).then(async (data) => {
+                data.attributeGroups.forEach(attributeGroup => {
+                    $('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: attributeGroup + " " + application.id + " Association",
+                        f2type: 'servicecatalog.appregistryattributegroupassociation',
+                        f2data: {
+                            'AttributeGroup': attributeGroup,
+                            'Application': application.id
+                        },
+                        f2region: region,
+                        application: application.id,
+                        attributegroup: attributeGroup
+                    }]);
+                });
+            }).catch(() => { });
+
+            return sdkcall("ServiceCatalogAppRegistry", "listAssociatedResources", {
+                application: application.id
+            }, false).then(async (data) => {
+                data.resources.forEach(resource => {
+                    $('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: resource.arn + " " + application.id + " Association",
+                        f2type: 'servicecatalog.appregistryresourceassociation',
+                        f2data: {
+                            'Resource': resource.arn,
+                            'ResourceType': 'CFN_STACK',
+                            'Application': application.id
+                        },
+                        f2region: region,
+                        application: application.id,
+                        resource: resource.arn
+                    }]);
+                });
+            }).catch(() => { });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("ServiceCatalogAppRegistry", "listAttributeGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.attributeGroups.map(attributeGroup => {
+            return sdkcall("ServiceCatalog", "getAttributeGroup", {
+                attributeGroup: attributeGroup.id
+            }, true).then((data) => {
+                $('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.arn,
+                    f2type: 'servicecatalog.appregistryattributegroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.name,
+                    description: data.description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptions-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-tagoptionassociations-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-appregistryapplications-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1061,6 +1302,70 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::TagOptionAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.appregistryapplication") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalogAppRegistry::Application'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalogAppRegistry::Application',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.id,
+                    'Arn': obj.data.arn
+                }
+            }
+        });
+    } else if (obj.type == "servicecatalog.appregistryattributegroup") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Attributes'] = obj.data.attributes;
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalogAppRegistry::AttributeGroup'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalogAppRegistry::AttributeGroup',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.id,
+                    'Arn': obj.data.arn
+                }
+            }
+        });
+    } else if (obj.type == "servicecatalog.appregistryattributegroupassociation") {
+        reqParams.cfn['AttributeGroup'] = obj.data.AttributeGroup;
+        reqParams.cfn['Application'] = obj.data.Application;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.appregistryresourceassociation") {
+        reqParams.cfn['Resource'] = obj.data.Resource;
+        reqParams.cfn['ResourceType'] = obj.data.ResourceType;
+        reqParams.cfn['Application'] = obj.data.Application;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalogAppRegistry::ResourceAssociation'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalogAppRegistry::ResourceAssociation',
             'options': reqParams
         });
     } else {
