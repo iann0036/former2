@@ -1307,6 +1307,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'ContainerHostname': obj.data.PrimaryContainer.ContainerHostname,
                 'Environment': obj.data.PrimaryContainer.Environment,
                 'ModelDataUrl': obj.data.PrimaryContainer.ModelDataUrl,
+                'MultiModelConfig': obj.data.PrimaryContainer.MultiModelConfig,
                 'Image': obj.data.PrimaryContainer.Image
             };
             reqParams.tf['primary_container'] = {
@@ -1324,6 +1325,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ContainerHostname': container.ContainerHostname,
                     'Environment': container.Environment,
                     'ModelDataUrl': container.ModelDataUrl,
+                    'MultiModelConfig': container.MultiModelConfig,
                     'Image': container.Image
                 };
                 reqParams.tf['container'] = {
@@ -1589,6 +1591,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['OutputConfig'] = obj.data.OutputConfig;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['DeviceFleetName'] = obj.data.DeviceFleetName;
 
         /*
         TODO
@@ -1613,6 +1616,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'DeviceName': obj.data.DeviceName,
             'IotThingName': obj.data.IotThingName
         };
+        reqParams.cfn['DeviceFleetName'] = obj.data.DeviceFleetName;
 
         /*
         TODO
