@@ -699,10 +699,7 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBInstances", {
-        Filters: [{
-            Name: 'engine',
-            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
-        }]
+        // no params
     }, true).then(async (data) => {
         $('#section-database-rds-instances-datatable').deferredBootstrapTable('removeAll');
 
