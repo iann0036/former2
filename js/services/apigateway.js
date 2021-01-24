@@ -60,7 +60,7 @@ sections.push({
                 ]
             ]
         },
-        'WebSocket APIs': {
+        'V2 APIs': {
             'columns': [
                 [
                     {
@@ -1294,7 +1294,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     blockUI('#section-networkingandcontentdelivery-apigateway-methods-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-models-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-authorizers-datatable');
-    blockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+    blockUI('#section-networkingandcontentdelivery-apigateway-v2apis-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-routes-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable');
     blockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
@@ -1314,14 +1314,14 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     blockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
 
     $('#section-networkingandcontentdelivery-apigateway-restapis-datatable').deferredBootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-v2apis-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-stages-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-deployments-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-resources-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-methods-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-models-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-authorizers-datatable').deferredBootstrapTable('removeAll');
-    $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('removeAll');
+    $('#section-networkingandcontentdelivery-apigateway-v2apis-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-routes-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-routeresponses-datatable').deferredBootstrapTable('removeAll');
     $('#section-networkingandcontentdelivery-apigateway-integrations-datatable').deferredBootstrapTable('removeAll');
@@ -1748,7 +1748,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         // no params
     }, true).then(async (data) => {
         await Promise.all(data.Items.map(api => {
-            $('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable').deferredBootstrapTable('append', [{
+            $('#section-networkingandcontentdelivery-apigateway-v2apis-datatable').deferredBootstrapTable('append', [{
                 f2id: api.ApiId,
                 f2type: 'apigatewayv2.api',
                 f2data: api,
@@ -1952,7 +1952,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
 
     unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
-    unblockUI('#section-networkingandcontentdelivery-apigateway-websocketapis-datatable');
+    unblockUI('#section-networkingandcontentdelivery-apigateway-v2apis-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-integrations-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-integrationresponses-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-apimappings-datatable');

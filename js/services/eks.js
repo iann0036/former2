@@ -143,6 +143,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'EMR Virtual Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -151,11 +189,14 @@ async function updateDatatableComputeEKS() {
     blockUI('#section-compute-eks-clusters-datatable');
     blockUI('#section-compute-eks-nodegroups-datatable');
     blockUI('#section-compute-eks-fargateprofiles-datatable');
+    blockUI('#section-compute-eks-emrvirtualclusters-datatable');
 
     await sdkcall("EKS", "listClusters", {
         // no params
     }, true).then(async (data) => {
         $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-eks-nodegroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-eks-fargateprofiles-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([
@@ -219,6 +260,29 @@ async function updateDatatableComputeEKS() {
         unblockUI('#section-compute-eks-nodegroups-datatable');
         unblockUI('#section-compute-eks-fargateprofiles-datatable');
     });
+
+    await sdkcall("EMRcontainers", "listVirtualClusters", {
+        states: ["RUNNING"]
+    }, true).then(async (data) => {
+        $('#section-compute-eks-emrvirtualclusters-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.virtualClusters.map(async (virtualcluster) => {
+            return sdkcall("EMRcontainers", "describeVirtualCluster", {
+                id: virtualcluster.id
+            }, true).then((data) => {
+                $('#section-compute-eks-emrvirtualclusters-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.virtualCluster.arn,
+                    f2type: 'eks.emrvirtualcluster',
+                    f2data: data.virtualCluster,
+                    f2region: region,
+                    name: data.virtualCluster.name,
+                    id: data.virtualCluster.id
+                }]);
+            });
+        }));
+    });
+
+    unblockUI('#section-compute-eks-emrvirtualclusters-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -356,6 +420,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'eks',
             'type': 'AWS::EKS::FargateProfile',
+            'options': reqParams
+        });
+    } else if (obj.type == "eks.fargateprofile") {
+        reqParams.cfn['Name'] = obj.data.name;
+        if (obj.data.containerProvider) {
+            var info = null;
+            if (obj.data.containerProvider.info && obj.data.containerProvider.info.eksInfo) {
+                info = {
+                    'EksInfo': {
+                        'Namespace': obj.data.containerProvider.info.eksInfo.namespace
+                    }
+                };
+            }
+            reqParams.cfn['ContainerProvider'] = {
+                'Id': obj.data.containerProvider.id,
+                'Info': info,
+                'Type': obj.data.containerProvider.type
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('emrcontainers', obj.id, 'AWS::EMRContainers::VirtualCluster'),
+            'region': obj.region,
+            'service': 'emrcontainers',
+            'type': 'AWS::EMRContainers::VirtualCluster',
             'options': reqParams
         });
     } else {
