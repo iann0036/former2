@@ -118,7 +118,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'dedicated_master_count': obj.data.ElasticsearchClusterConfig.DedicatedMasterCount,
                 'dedicated_master_enabled': obj.data.ElasticsearchClusterConfig.DedicatedMasterEnabled,
                 'dedicated_master_type': obj.data.ElasticsearchClusterConfig.DedicatedMasterType,
-                'nstance_count': obj.data.ElasticsearchClusterConfig.InstanceCount,
+                'instance_count': obj.data.ElasticsearchClusterConfig.InstanceCount,
                 'instance_type': obj.data.ElasticsearchClusterConfig.InstanceType,
                 'zone_awareness_enabled': obj.data.ElasticsearchClusterConfig.ZoneAwarenessEnabled
             };
