@@ -84,7 +84,14 @@ $obj.prototype.deferredBootstrapTable = function (action, data) {
 }
 $.notify = function () { }
 
-var region = process.env.AWS_DEFAULT_REGION || process.env.AWS_REGION || 'us-east-1';
+var region = process.env.AWS_DEFAULT_REGION || process.env.AWS_REGION || null;
+try {
+    region = new AWS.IniLoader().loadFrom({isConfig: true})['default']['region'];
+} catch(err) {}
+if (!region) {
+    region = 'us-east-1';
+}
+
 var stack_parameters = [];
 eval(fs.readFileSync(path.join(__dirname, 'deepmerge.js'), 'utf8'));
 eval(fs.readFileSync(path.join(__dirname, 'mappings.js'), 'utf8'));
