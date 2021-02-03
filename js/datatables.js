@@ -182,6 +182,7 @@ function timeAgoFormatter(data) {
 
 function lambdaRuntimeFormatter(data) {
     var runtimeMappings = {
+        'nodejs14.x': 'Node.js 14',
         'nodejs12.x': 'Node.js 12',
         'nodejs10.x': 'Node.js 10',
         'nodejs8.10': 'Node.js 8.10',
