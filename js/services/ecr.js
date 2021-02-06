@@ -99,6 +99,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Replication Configuration': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Registry ID',
+                        field: 'registryid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -106,6 +132,7 @@ sections.push({
 async function updateDatatableComputeECR() {
     blockUI('#section-compute-ecr-repositories-datatable');
     blockUI('#section-compute-ecr-publicrepositories-datatable');
+    blockUI('#section-compute-ecr-replicationconfiguration-datatable');
 
     await sdkcall("ECR", "describeRepositories", {
         // no params
@@ -178,6 +205,24 @@ async function updateDatatableComputeECR() {
 
         unblockUI('#section-compute-ecr-publicrepositories-datatable');
     });
+
+    await sdkcall("ECR", "describeRegistry", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.replicationConfiguration) {
+            $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('append', [{
+                f2id: data.registryId + " Replication Configuration",
+                f2type: 'ecr.replicationconfiguration',
+                f2data: data.replicationConfiguration,
+                f2region: region,
+                registryid: data.registryId
+            }]);
+        }
+
+        unblockUI('#section-compute-ecr-replicationconfiguration-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -265,6 +310,36 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ecr',
             'type': 'AWS::ECR::PublicRepository',
+            'options': reqParams
+        });
+    } else if (obj.type == "ecr.replicationconfiguration") {
+        var rules = [];
+
+        obj.data.replicationConfiguration.rules.forEach(rule => {
+            var destinations = [];
+
+            rule.destinations.forEach(destination => {
+                destinations.push({
+                    'Region': destination.region,
+                    'RegistryId': destination.registryId
+                });
+            });
+
+            rules.push({
+                'Destinations': destinations
+            });
+        });
+
+        reqParams.cfn['ReplicationConfiguration'] = {
+            'Rules': rules
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ecr', obj.id, 'AWS::ECR::ReplicationConfiguration'),
+            'region': obj.region,
+            'service': 'ecr',
+            'type': 'AWS::ECR::ReplicationConfiguration',
             'options': reqParams
         });
     } else {

@@ -289,6 +289,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Container Recipes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -300,6 +338,7 @@ async function updateDatatableComputeEC2ImageBuilder() {
     blockUI('#section-compute-ec2imagebuilder-components-datatable');
     blockUI('#section-compute-ec2imagebuilder-distributionconfigurations-datatable');
     blockUI('#section-compute-ec2imagebuilder-infrastructureconfigurations-datatable');
+    blockUI('#section-compute-ec2imagebuilder-containerrecipes-datatable');
 
     await sdkcall("Imagebuilder", "listImagePipelines", {
         // no params
@@ -446,12 +485,34 @@ async function updateDatatableComputeEC2ImageBuilder() {
         }));
     }).catch(() => { });
 
+    await sdkcall("Imagebuilder", "listContainerRecipes", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-ec2imagebuilder-containerrecipes-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.containerRecipeSummaryList.map(async (containerRecipe) => {
+            return sdkcall("Imagebuilder", "getContainerRecipe", {
+                containerRecipeArn: containerRecipe.arn
+            }, true).then(async (data) => {
+                $('#section-compute-ec2imagebuilder-containerrecipes-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.containerRecipe.arn,
+                    f2type: 'ec2imagebuilder.containerrecipe',
+                    f2data: data.containerRecipe,
+                    f2region: region,
+                    name: data.containerRecipe.name,
+                    description: data.containerRecipe.description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-compute-ec2imagebuilder-imagepipelines-datatable');
     unblockUI('#section-compute-ec2imagebuilder-imagerecipes-datatable');
     unblockUI('#section-compute-ec2imagebuilder-images-datatable');
     unblockUI('#section-compute-ec2imagebuilder-components-datatable');
     unblockUI('#section-compute-ec2imagebuilder-distributionconfigurations-datatable');
     unblockUI('#section-compute-ec2imagebuilder-infrastructureconfigurations-datatable');
+    unblockUI('#section-compute-ec2imagebuilder-containerrecipes-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -659,6 +720,45 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'Import': {
+                    'Arn': obj.data.arn
+                }
+            }
+        });
+    } else if (obj.type == "ec2imagebuilder.containerrecipe") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['ContainerType'] = obj.data.containerType;
+        reqParams.cfn['PlatformOverride'] = obj.data.platform;
+        reqParams.cfn['Version'] = obj.data.version;
+        if (obj.data.components) {
+            reqParams.cfn['Components'] = [];
+            obj.data.components.forEach(component => {
+                reqParams.cfn['Components'].push({
+                    'ComponentArn': component.componentArn
+                });
+            });
+        }
+        reqParams.cfn['DockerfileTemplateData'] = obj.data.dockerfileTemplateData;
+        reqParams.cfn['KmsKeyId'] = obj.data.kmsKeyId;
+        reqParams.cfn['ParentImage'] = obj.data.parentImage;
+        reqParams.cfn['WorkingDirectory'] = obj.data.workingDirectory;
+        if (obj.data.targetRepository) {
+            reqParams.cfn['TargetRepository'] = {
+                'Service': obj.data.targetRepository.service,
+                'RepositoryName': obj.data.targetRepository.repositoryName
+            };
+        }
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2imagebuilder', obj.id, 'AWS::ImageBuilder::ContainerRecipe'),
+            'region': obj.region,
+            'service': 'ec2imagebuilder',
+            'type': 'AWS::ImageBuilder::ContainerRecipe',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
                     'Arn': obj.data.arn
                 }
             }
