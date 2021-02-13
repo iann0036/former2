@@ -1434,7 +1434,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['DestinationName'] = obj.data.DestinationName;
         reqParams.cfn['Type'] = obj.data.Type;
         if (obj.data.LoRaWAN) {
-            reqParams.cfn['LoRaWANDevice'] = {
+            reqParams.cfn['LoRaWAN'] = {
                 'DevEui': obj.data.LoRaWAN.DevEui,
                 'DeviceProfileId': obj.data.LoRaWAN.DeviceProfileId,
                 'ServiceProfileId': obj.data.LoRaWAN.ServiceProfileId,
@@ -1458,7 +1458,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['ThingName'] = obj.data.ThingName;
-        reqParams.cfn['LoRaWANGateway'] = obj.data.LoRaWAN;
+        reqParams.cfn['LoRaWAN'] = obj.data.LoRaWAN;
         reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
@@ -1472,7 +1472,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iot.wirelessdeviceprofile") {
         reqParams.cfn['Name'] = obj.data.Name;
         if (obj.data.LoRaWAN) {
-            reqParams.cfn['LoRaWANDeviceProfile'] = {
+            reqParams.cfn['LoRaWAN'] = {
                 'ClassBTimeout': obj.data.LoRaWAN.ClassBTimeout,
                 'ClassCTimeout': obj.data.LoRaWAN.ClassCTimeout,
                 'MacVersion': obj.data.LoRaWAN.MacVersion,
@@ -1502,7 +1502,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iot.wirelessserviceprofile") {
         reqParams.cfn['Name'] = obj.data.Name;
         if (obj.data.LoRaWAN) {
-            reqParams.cfn['LoRaWANServiceProfile'] = {
+            reqParams.cfn['LoRaWAN'] = {
                 'AddGwMetadata': obj.data.LoRaWAN.AddGwMetadata
             };
         }

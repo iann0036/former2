@@ -211,7 +211,7 @@ async function updateDatatableComputeECR() {
     }, true).then(async (data) => {
         $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('removeAll');
 
-        if (data.replicationConfiguration) {
+        if (data.replicationConfiguration && data.replicationConfiguration.rules && data.replicationConfiguration.rules.length > 0) {
             $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('append', [{
                 f2id: data.registryId + " Replication Configuration",
                 f2type: 'ecr.replicationconfiguration',
@@ -315,7 +315,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ecr.replicationconfiguration") {
         var rules = [];
 
-        obj.data.replicationConfiguration.rules.forEach(rule => {
+        obj.data.rules.forEach(rule => {
             var destinations = [];
 
             rule.destinations.forEach(destination => {

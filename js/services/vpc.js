@@ -2733,6 +2733,171 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Transit Gateway Multicast Domains': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Transit Gateway Multicast Domain Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    {
+                        field: 'domainid',
+                        title: 'Domain ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'subnetid',
+                        title: 'Subnet ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Multicast Group Members': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    {
+                        field: 'domainid',
+                        title: 'Domain ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'networkinterfaceid',
+                        title: 'Network Interface ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'groupipaddress',
+                        title: 'Group IP Address',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Transit Gateway Multicast Group Sources': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    {
+                        field: 'domainid',
+                        title: 'Domain ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'networkinterfaceid',
+                        title: 'Network Interface ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'groupipaddress',
+                        title: 'Group IP Address',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -2798,6 +2963,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomains-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
 
     var defaultVPC = "unset";
 
@@ -4030,6 +4199,81 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
         });
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeTransitGatewayMulticastDomains", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomains-datatable').deferredBootstrapTable('removeAll');
+
+        data.TransitGatewayMulticastDomainIds.forEach(async (id) => {
+            $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomains-datatable').deferredBootstrapTable('append', [{
+                f2id: id,
+                f2type: 'ec2.transitgatewaymulticastdomain',
+                f2data: {
+                    'TransitGatewayId': id
+                },
+                f2region: region,
+                id: id
+            }]);
+            
+            await sdkcall("EC2", "getTransitGatewayMulticastDomainAssociations", {
+                TransitGatewayMulticastDomainId: id
+            }, false).then(async (data) => {
+                $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable').deferredBootstrapTable('removeAll');
+        
+                data.MulticastDomainAssociations.forEach(association => {
+                    association['TransitGatewayMulticastDomainId'] = id;
+
+                    $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: association.TransitGatewayAttachmentId,
+                        f2type: 'ec2.transitgatewaymulticastdomainassociation',
+                        f2data: association,
+                        f2region: region,
+                        attachmentid: association.TransitGatewayAttachmentId,
+                        domainid: id,
+                        subnetid: (association.Subnet ? association.Subnet.SubnetId : null)
+                    }]);
+                });
+            }).catch(() => { });
+
+            await sdkcall("EC2", "searchTransitGatewayMulticastGroups", {
+                TransitGatewayMulticastDomainId: id
+            }, false).then(async (data) => {
+                $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable').deferredBootstrapTable('removeAll');
+                $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable').deferredBootstrapTable('removeAll');
+        
+                data.MulticastGroups.forEach(multicastgroup => {
+                    multicastgroup['TransitGatewayMulticastDomainId'] = id;
+
+                    if (multicastgroup.GroupSource) {
+                        $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable').deferredBootstrapTable('append', [{
+                            f2id: multicastgroup.TransitGatewayAttachmentId + " " + multicastgroup.ResourceId,
+                            f2type: 'ec2.transitgatewaymulticastgroupsource',
+                            f2data: multicastgroup,
+                            f2region: region,
+                            attachmentid: multicastgroup.TransitGatewayAttachmentId,
+                            domainid: id,
+                            networkinterfaceid: multicastgroup.NetworkInterfaceId,
+                            groupipaddress: multicastgroup.GroupIpAddress
+                        }]);
+                    }
+
+                    if (multicastgroup.GroupMember) {
+                        $('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable').deferredBootstrapTable('append', [{
+                            f2id: multicastgroup.TransitGatewayAttachmentId + " " + multicastgroup.ResourceId,
+                            f2type: 'ec2.transitgatewaymulticastgroupmember',
+                            f2data: multicastgroup,
+                            f2region: region,
+                            attachmentid: multicastgroup.TransitGatewayAttachmentId,
+                            domainid: id,
+                            networkinterfaceid: multicastgroup.NetworkInterfaceId,
+                            groupipaddress: multicastgroup.GroupIpAddress
+                        }]);
+                    }
+                });
+            }).catch(() => { });
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -4051,6 +4295,10 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightspaths-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightsanalyses-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomains-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -5603,6 +5851,83 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.NetworkInsightsAnalysisId,
                 'GetAtt': {
                     'NetworkInsightsAnalysisArn': obj.data.NetworkInsightsAnalysisArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewaymulticastdomain") {
+        reqParams.cfn['TransitGatewayId'] = obj.data.TransitGatewayId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayMulticastDomain'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayMulticastDomain',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TransitGatewayId
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewaymulticastdomainassociation") {
+        reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachmentId;
+        reqParams.cfn['TransitGatewayMulticastDomainId'] = obj.data.TransitGatewayMulticastDomainId;
+        if (obj.data.Subnet) {
+            reqParams.cfn['SubnetId'] = obj.data.Subnet.SubnetId;
+        }
+        reqParams.cfn['State'] = obj.data.State;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayMulticastDomainAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayMulticastDomainAssociation',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'ResourceId': obj.data.ResourceId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewaymulticastgroupsource") {
+        reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachmentId;
+        reqParams.cfn['TransitGatewayMulticastDomainId'] = obj.data.TransitGatewayMulticastDomainId;
+        reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+        reqParams.cfn['GroupIpAddress'] = obj.data.GroupIpAddress;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayMulticastGroupSource'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayMulticastGroupSource',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'ResourceId': obj.data.ResourceId,
+                    'ResourceType': obj.data.ResourceType,
+                    'SubnetId': obj.data.SubnetId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewaymulticastgroupmember") {
+        reqParams.cfn['TransitGatewayAttachmentId'] = obj.data.TransitGatewayAttachmentId;
+        reqParams.cfn['TransitGatewayMulticastDomainId'] = obj.data.TransitGatewayMulticastDomainId;
+        reqParams.cfn['NetworkInterfaceId'] = obj.data.NetworkInterfaceId;
+        reqParams.cfn['GroupIpAddress'] = obj.data.GroupIpAddress;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayMulticastGroupMember'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayMulticastGroupMember',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'ResourceId': obj.data.ResourceId,
+                    'ResourceType': obj.data.ResourceType,
+                    'SubnetId': obj.data.SubnetId
                 }
             }
         });
