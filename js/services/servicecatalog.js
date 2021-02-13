@@ -709,6 +709,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Service Actions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Service Action Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Service Action ID',
+                        field: 'serviceactionid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'productid',
+                        title: 'Product ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'provisioningartifactid',
+                        title: 'Provisioning Artifact ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -730,6 +814,8 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     blockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable');
     blockUI('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-serviceactions-datatable');
+    blockUI('#section-managementandgovernance-servicecatalog-serviceactionassociations-datatable');
 
     await sdkcall("ServiceCatalog", "listPortfolios", {
         // no params
@@ -744,7 +830,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                 }, true).then((data) => {
                     data.Principals.forEach(principal => {
                         $('#section-managementandgovernance-servicecatalog-portfolioprincipalassociations-datatable').deferredBootstrapTable('append', [{
-                            f2id: data.PortfolioDetail.ARN,
+                            f2id: principal.PrincipalARN + " " + portfolio.Id,
                             f2type: 'servicecatalog.portfolioprincipalassociation',
                             f2data: {
                                 'portfolio': portfolio,
@@ -826,6 +912,27 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         unblockUI('#section-managementandgovernance-servicecatalog-acceptedportfolioshares-datatable');
     });
 
+    await sdkcall("ServiceCatalog", "listServiceActions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-servicecatalog-serviceactions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ServiceActionSummaries.map(serviceAction => {
+            return sdkcall("ServiceCatalog", "describeServiceAction", {
+                Id: serviceAction.Id
+            }, true).then((data) => {
+                $('#section-managementandgovernance-servicecatalog-serviceactions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ServiceActionDetail.ServiceActionSummary.Id,
+                    f2type: 'servicecatalog.serviceaction',
+                    f2data: data.ServiceActionDetail,
+                    f2region: region,
+                    name: data.ServiceActionDetail.ServiceActionSummary.Name,
+                    description: data.ServiceActionDetail.ServiceActionSummary.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     await sdkcall("ServiceCatalog", "searchProvisionedProducts", {
         // no params
     }, true).then(async (data) => {
@@ -835,11 +942,12 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         $('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable').deferredBootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable').deferredBootstrapTable('removeAll');
         $('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-servicecatalog-serviceactionassociations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ProvisionedProducts.map(provisionedProduct => {
             return Promise.all([
                 sdkcall("ServiceCatalog", "listPortfoliosForProduct", {
-                    ProductId: provisionedProduct.Id
+                    ProductId: provisionedProduct.ProductId
                 }, true).then(async (data) => {
                     await Promise.all(data.PortfolioDetails.map(portfolio => {
                         $('#section-managementandgovernance-servicecatalog-portfolioproductassociations-datatable').deferredBootstrapTable('append', [{
@@ -924,6 +1032,27 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
                             provisioningartifactid: data.ProvisionedProductDetail.ProvisioningArtifactId
                         }]);
                     }
+                }),
+                sdkcall("ServiceCatalog", "listServiceActionsForProvisioningArtifact", {
+                    ProvisioningArtifactId: provisionedProduct.ProvisioningArtifactId,
+                    ProductId: provisionedProduct.ProductId
+                }, true).then((data) => {
+                    data.ServiceActionSummaries.forEach(serviceActionSummary => {
+                        $('#section-managementandgovernance-servicecatalog-serviceactionassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.ProvisionedProductDetail.Arn,
+                            f2type: 'servicecatalog.serviceactionassociation',
+                            f2data: {
+                                'ServiceActionId': serviceActionSummary.Id,
+                                'ProvisioningArtifactId': provisionedProduct.ProvisioningArtifactId,
+                                'ProductId': provisionedProduct.ProductId
+                            },
+                            f2region: region,
+                            name: data.ProvisionedProductDetail.Name,
+                            serviceactionid: serviceActionSummary.Id,
+                            productid: provisionedProduct.ProductId,
+                            provisioningartifactid: provisionedProduct.ProvisioningArtifactId
+                        }]);
+                    });
                 })
             ]);
         }));
@@ -934,6 +1063,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
         unblockUI('#section-managementandgovernance-servicecatalog-launchroleconstraints-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-launchtemplateconstraints-datatable');
         unblockUI('#section-managementandgovernance-servicecatalog-stacksetconstraints-datatable');
+        unblockUI('#section-managementandgovernance-servicecatalog-serviceactionassociations-datatable');
     });
 
     await sdkcall("ServiceCatalog", "listTagOptions", {
@@ -1066,6 +1196,7 @@ async function updateDatatableManagementAndGovernanceServiceCatalog() {
     unblockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroups-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-appregistryattributegroupassociations-datatable');
     unblockUI('#section-managementandgovernance-servicecatalog-appregistryresourceassociations-datatable');
+    unblockUI('#section-managementandgovernance-servicecatalog-serviceactions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1366,6 +1497,46 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalogAppRegistry::ResourceAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "servicecatalog.serviceaction") {
+        reqParams.cfn['Name'] = obj.data.ServiceActionSummary.Name;
+        reqParams.cfn['Description'] = obj.data.ServiceActionSummary.Description;
+        reqParams.cfn['DefinitionType'] = obj.data.ServiceActionSummary.DefinitionType;
+        if (obj.data.Definition) {
+            reqParams.cfn['Definition'] = [];
+            Object.keys(obj.data.Definition).forEach(defkey => {
+                reqParams.cfn['Definition'].push({
+                    'Key': defkey,
+                    'Value': obj.data.Definition[defkey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::ServiceAction'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::ServiceAction',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.ServiceActionSummary.Id
+                }
+            }
+        });
+    } else if (obj.type == "servicecatalog.serviceactionassociation") {
+        reqParams.cfn['ServiceActionId'] = obj.data.ServiceActionId;
+        reqParams.cfn['ProvisioningArtifactId'] = obj.data.ProvisioningArtifactId;
+        reqParams.cfn['ProductId'] = obj.data.ProductId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('servicecatalog', obj.id, 'AWS::ServiceCatalog::ServiceActionAssociation'),
+            'region': obj.region,
+            'service': 'servicecatalog',
+            'type': 'AWS::ServiceCatalog::ServiceActionAssociation',
             'options': reqParams
         });
     } else {

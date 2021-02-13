@@ -821,6 +821,162 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Domains': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'authmode',
+                        title: 'Auth Mode',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'User Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'domainid',
+                        title: 'Domain ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Apps': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'domainid',
+                        title: 'Domain ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'userprofilename',
+                        title: 'User Profile Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'App Image Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -845,6 +1001,10 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-modelbiasjobdefinitions-datatable');
     blockUI('#section-machinelearning-sagemaker-modelexplainabilityjobdefinitions-datatable');
     blockUI('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable');
+    blockUI('#section-machinelearning-sagemaker-domains-datatable');
+    blockUI('#section-machinelearning-sagemaker-userprofiles-datatable');
+    blockUI('#section-machinelearning-sagemaker-apps-datatable');
+    blockUI('#section-machinelearning-sagemaker-appimageconfigs-datatable');
 
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
@@ -1295,6 +1455,103 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-modelqualityjobdefinitions-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listDomains", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-domains-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Domains.map(async (domain) => {
+            return sdkcall("SageMaker", "describeDomain", {
+                DomainId: domain.DomainId
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-domains-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.DomainArn,
+                    f2type: 'sagemaker.domain',
+                    f2data: data,
+                    f2region: region,
+                    name: data.DomainName,
+                    authmode: data.AuthMode
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-domains-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listUserProfiles", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-userprofiles-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.UserProfiles.map(async (userProfile) => {
+            return sdkcall("SageMaker", "describeUserProfile", {
+                DomainId: userProfile.DomainId,
+                UserProfileName: userProfile.UserProfileName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-userprofiles-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.UserProfileArn,
+                    f2type: 'sagemaker.userprofile',
+                    f2data: data,
+                    f2region: region,
+                    name: data.UserProfileName,
+                    domainid: data.DomainId
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-userprofiles-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listApps", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-apps-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Apps.map(async (app) => {
+            return sdkcall("SageMaker", "describeApp", {
+                DomainId: app.DomainId,
+                AppName: app.AppName,
+                AppType: app.AppType,
+                UserProfileName: app.UserProfileName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-apps-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.AppArn,
+                    f2type: 'sagemaker.app',
+                    f2data: data,
+                    f2region: region,
+                    name: data.AppName,
+                    domainid: data.DomainId,
+                    type: data.AppType,
+                    userprofilename: data.UserProfileName
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-apps-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listAppImageConfigs", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-appimageconfigs-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.AppImageConfigs.map(async (appImageConfig) => {
+            return sdkcall("SageMaker", "describeAppImageConfig", {
+                AppImageConfigName: appImageConfig.AppImageConfigName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-appimageconfigs-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.AppImageConfigArn,
+                    f2type: 'sagemaker.appimageconfig',
+                    f2data: data,
+                    f2region: region,
+                    name: data.AppImageConfigName
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-appimageconfigs-datatable');
     }).catch(() => { });
 }
 
@@ -1789,6 +2046,115 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'sagemaker',
             'type': 'AWS::SageMaker::ModelQualityJobDefinition',
             'options': reqParams
+        });
+    } else if (obj.type == "sagemaker.domain") {
+        reqParams.cfn['DomainName'] = obj.data.DomainName;
+        reqParams.cfn['AuthMode'] = obj.data.AuthMode;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.cfn['AppNetworkAccessType'] = obj.data.AppNetworkAccessType;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        reqParams.cfn['DefaultUserSettings'] = obj.data.DefaultUserSettings;
+
+        /*
+        TODO
+            Tags: 
+                - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Domain'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Domain',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DomainId,
+                'GetAtt': {
+                    'DomainArn': obj.data.DomainArn,
+                    'HomeEfsFileSystemId': obj.data.HomeEfsFileSystemId,
+                    'SingleSignOnManagedApplicationInstanceId': obj.data.SingleSignOnManagedApplicationInstanceId,
+                    'Url': obj.data.Url
+                }
+            }
+        });
+    } else if (obj.type == "sagemaker.userprofile") {
+        reqParams.cfn['UserProfileName'] = obj.data.UserProfileName;
+        reqParams.cfn['DomainId'] = obj.data.DomainId;
+        reqParams.cfn['SingleSignOnUserIdentifier'] = obj.data.SingleSignOnUserIdentifier;
+        reqParams.cfn['SingleSignOnUserValue'] = obj.data.SingleSignOnUserValue;
+        reqParams.cfn['UserSettings'] = obj.data.UserSettings;
+
+        /*
+        TODO
+            Tags: 
+                - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::UserProfile'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::UserProfile',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.UserProfileName,
+                'GetAtt': {
+                    'UserProfileArn': obj.data.UserProfileArn
+                }
+            }
+        });
+    } else if (obj.type == "sagemaker.app") {
+        reqParams.cfn['AppName'] = obj.data.AppName;
+        reqParams.cfn['DomainId'] = obj.data.DomainId;
+        reqParams.cfn['AppType'] = obj.data.AppType;
+        reqParams.cfn['UserProfileName'] = obj.data.UserProfileName;
+        reqParams.cfn['ResourceSpec'] = obj.data.ResourceSpec;
+
+        /*
+        TODO
+            Tags: 
+                - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::App'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::App',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'AppArn': obj.data.AppArn
+                }
+            }
+        });
+    } else if (obj.type == "sagemaker.appimageconfig") {
+        reqParams.cfn['AppImageConfigName'] = obj.data.AppImageConfigName;
+        reqParams.cfn['KernelGatewayImageConfig'] = obj.data.KernelGatewayImageConfig;
+
+        /*
+        TODO
+            Tags: 
+                - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::AppImageConfig'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::AppImageConfig',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.AppImageConfigName,
+                'GetAtt': {
+                    'AppImageConfigArn': obj.data.AppImageConfigArn
+                }
+            }
         });
     } else {
         return false;
