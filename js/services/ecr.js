@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Compute',
+    'category': 'Containers',
     'service': 'ECR',
     'resourcetypes': {
         'Repositories': {
@@ -129,15 +129,15 @@ sections.push({
     }
 });
 
-async function updateDatatableComputeECR() {
-    blockUI('#section-compute-ecr-repositories-datatable');
-    blockUI('#section-compute-ecr-publicrepositories-datatable');
-    blockUI('#section-compute-ecr-replicationconfiguration-datatable');
+async function updateDatatableContainersECR() {
+    blockUI('#section-containers-ecr-repositories-datatable');
+    blockUI('#section-containers-ecr-publicrepositories-datatable');
+    blockUI('#section-containers-ecr-replicationconfiguration-datatable');
 
     await sdkcall("ECR", "describeRepositories", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecr-repositories-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecr-repositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.repositories.map(async (repository) => {
             await sdkcall("ECR", "getLifecyclePolicy", {
@@ -155,7 +155,7 @@ async function updateDatatableComputeECR() {
 
             repository['Tags'] = await getResourceTags(repository.repositoryArn);
 
-            $('#section-compute-ecr-repositories-datatable').deferredBootstrapTable('append', [{
+            $('#section-containers-ecr-repositories-datatable').deferredBootstrapTable('append', [{
                 f2id: repository.repositoryArn,
                 f2type: 'ecr.repository',
                 f2data: repository,
@@ -169,13 +169,13 @@ async function updateDatatableComputeECR() {
             return Promise.resolve();
         }));
 
-        unblockUI('#section-compute-ecr-repositories-datatable');
+        unblockUI('#section-containers-ecr-repositories-datatable');
     });
 
     await sdkcall("ECRPUBLIC", "describeRepositories", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecr-publicrepositories-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.repositories.map(async (repository) => {
             await sdkcall("ECRPUBLIC", "getRepositoryPolicy", {
@@ -190,7 +190,7 @@ async function updateDatatableComputeECR() {
                 repository['catalogData'] = data.catalogData;
             }).catch(() => { });
 
-            $('#section-compute-ecr-publicrepositories-datatable').deferredBootstrapTable('append', [{
+            $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('append', [{
                 f2id: repository.repositoryArn,
                 f2type: 'ecr.publicrepository',
                 f2data: repository,
@@ -203,16 +203,16 @@ async function updateDatatableComputeECR() {
             return Promise.resolve();
         }));
 
-        unblockUI('#section-compute-ecr-publicrepositories-datatable');
+        unblockUI('#section-containers-ecr-publicrepositories-datatable');
     });
 
     await sdkcall("ECR", "describeRegistry", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecr-replicationconfiguration-datatable').deferredBootstrapTable('removeAll');
 
         if (data.replicationConfiguration && data.replicationConfiguration.rules && data.replicationConfiguration.rules.length > 0) {
-            $('#section-compute-ecr-replicationconfiguration-datatable').deferredBootstrapTable('append', [{
+            $('#section-containers-ecr-replicationconfiguration-datatable').deferredBootstrapTable('append', [{
                 f2id: data.registryId + " Replication Configuration",
                 f2type: 'ecr.replicationconfiguration',
                 f2data: data.replicationConfiguration,
@@ -221,7 +221,7 @@ async function updateDatatableComputeECR() {
             }]);
         }
 
-        unblockUI('#section-compute-ecr-replicationconfiguration-datatable');
+        unblockUI('#section-containers-ecr-replicationconfiguration-datatable');
     }).catch(() => { });
 }
 

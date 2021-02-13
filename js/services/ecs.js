@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Compute',
+    'category': 'Containers',
     'service': 'ECS',
     'resourcetypes': {
         'Clusters': {
@@ -417,20 +417,20 @@ sections.push({
     }
 });
 
-async function updateDatatableComputeECS() {
-    blockUI('#section-compute-ecs-clusters-datatable');
-    blockUI('#section-compute-ecs-services-datatable');
-    blockUI('#section-compute-ecs-taskdefinitions-datatable');
-    blockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
-    blockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
-    blockUI('#section-compute-ecs-primarytasksets-datatable');
-    blockUI('#section-compute-ecs-tasksets-datatable');
-    blockUI('#section-compute-ecs-capacityproviders-datatable');
+async function updateDatatableContainersECS() {
+    blockUI('#section-containers-ecs-clusters-datatable');
+    blockUI('#section-containers-ecs-services-datatable');
+    blockUI('#section-containers-ecs-taskdefinitions-datatable');
+    blockUI('#section-containers-ecs-applicationautoscalingscalabletargets-datatable');
+    blockUI('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-containers-ecs-primarytasksets-datatable');
+    blockUI('#section-containers-ecs-tasksets-datatable');
+    blockUI('#section-containers-ecs-capacityproviders-datatable');
 
     await sdkcall("ECS", "listTaskDefinitions", {
         sort: "DESC"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-taskdefinitions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-taskdefinitions-datatable').deferredBootstrapTable('removeAll');
 
         var baseTaskDefinitions = [];
         var taskDefinitionArns = [];
@@ -448,7 +448,7 @@ async function updateDatatableComputeECS() {
             return sdkcall("ECS", "describeTaskDefinition", {
                 taskDefinition: taskDefinitionArn
             }, true).then((data) => {
-                $('#section-compute-ecs-taskdefinitions-datatable').deferredBootstrapTable('append', [{
+                $('#section-containers-ecs-taskdefinitions-datatable').deferredBootstrapTable('append', [{
                     f2id: data.taskDefinition.taskDefinitionArn,
                     f2type: 'ecs.taskdefinition',
                     f2data: data.taskDefinition,
@@ -461,21 +461,21 @@ async function updateDatatableComputeECS() {
             });
         }));
 
-        unblockUI('#section-compute-ecs-taskdefinitions-datatable');
+        unblockUI('#section-containers-ecs-taskdefinitions-datatable');
     });
 
     await sdkcall("ECS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-ecs-clusters-datatable').deferredBootstrapTable('removeAll');
-        $('#section-compute-ecs-services-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-services-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
             return Promise.all([
                 sdkcall("ECS", "describeClusters", {
                     clusters: [clusterArn]
                 }, true).then((data) => {
-                    $('#section-compute-ecs-clusters-datatable').deferredBootstrapTable('append', [{
+                    $('#section-containers-ecs-clusters-datatable').deferredBootstrapTable('append', [{
                         f2id: data.clusters[0].clusterArn,
                         f2type: 'ecs.cluster',
                         f2data: data.clusters[0],
@@ -496,7 +496,7 @@ async function updateDatatableComputeECS() {
                             include: ["TAGS"]
                         }, true).then(async (data) => {
                             if (data.services[0]) {
-                                $('#section-compute-ecs-services-datatable').deferredBootstrapTable('append', [{
+                                $('#section-containers-ecs-services-datatable').deferredBootstrapTable('append', [{
                                     f2id: data.services[0].serviceArn,
                                     f2type: 'ecs.service',
                                     f2data: data.services[0],
@@ -515,7 +515,7 @@ async function updateDatatableComputeECS() {
                                         taskSets: data.services[0].taskSets.map((taskset) => taskset.taskSetArn)
                                     }, true).then((data) => {
                                         data.taskSets.forEach(taskset => {
-                                            $('#section-compute-ecs-tasksets-datatable').deferredBootstrapTable('append', [{
+                                            $('#section-containers-ecs-tasksets-datatable').deferredBootstrapTable('append', [{
                                                 f2id: taskset.taskSetArn,
                                                 f2type: 'ecs.taskset',
                                                 f2data: taskset,
@@ -525,7 +525,7 @@ async function updateDatatableComputeECS() {
                                                 cluster: taskset.clusterArn
                                             }]);
                                             if (taskset.status == "PRIMARY") {
-                                                $('#section-compute-ecs-primarytasksets-datatable').deferredBootstrapTable('append', [{
+                                                $('#section-containers-ecs-primarytasksets-datatable').deferredBootstrapTable('append', [{
                                                     f2id: taskset.taskSetArn,
                                                     f2type: 'ecs.primarytaskset',
                                                     f2data: taskset,
@@ -545,16 +545,16 @@ async function updateDatatableComputeECS() {
             ]);
         }));
 
-        unblockUI('#section-compute-ecs-clusters-datatable');
-        unblockUI('#section-compute-ecs-services-datatable');
-        unblockUI('#section-compute-ecs-primarytasksets-datatable');
-        unblockUI('#section-compute-ecs-tasksets-datatable');
+        unblockUI('#section-containers-ecs-clusters-datatable');
+        unblockUI('#section-containers-ecs-services-datatable');
+        unblockUI('#section-containers-ecs-primarytasksets-datatable');
+        unblockUI('#section-containers-ecs-tasksets-datatable');
     });
 
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalableTargets) {
             await Promise.all(data.ScalableTargets.map(target => {
@@ -565,7 +565,7 @@ async function updateDatatableComputeECS() {
                 }, true).then((actions) => {
                     target['ScheduledActions'] = actions.ScheduledActions;
 
-                    $('#section-compute-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
+                    $('#section-containers-ecs-applicationautoscalingscalabletargets-datatable').deferredBootstrapTable('append', [{
                         f2id: target.ResourceId,
                         f2type: 'applicationautoscaling.scalabletarget',
                         f2data: target,
@@ -579,17 +579,17 @@ async function updateDatatableComputeECS() {
             }));
         }
 
-        unblockUI('#section-compute-ecs-applicationautoscalingscalabletargets-datatable');
+        unblockUI('#section-containers-ecs-applicationautoscalingscalabletargets-datatable');
     });
 
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ecs"
     }, true).then(async (data) => {
-        $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('removeAll');
 
         if (data.ScalingPolicies) {
             data.ScalingPolicies.forEach(policy => {
-                $('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
+                $('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable').deferredBootstrapTable('append', [{
                     f2id: policy.PolicyARN,
                     f2type: 'applicationautoscaling.scalingpolicy',
                     f2data: policy,
@@ -602,18 +602,18 @@ async function updateDatatableComputeECS() {
             });
         }
 
-        unblockUI('#section-compute-ecs-applicationautoscalingscalingpolicies-datatable');
+        unblockUI('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable');
     });
 
     await sdkcall("ECS", "describeCapacityProviders", {
         include: ["TAGS"]
     }, true).then(async (data) => {
-        $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-capacityproviders-datatable').deferredBootstrapTable('removeAll');
 
         if (data.capacityProviders) {
             data.capacityProviders.forEach(capacityProvider => {
                 if (!['FARGATE', 'FARGATE_SPOT'].includes(capacityProvider.name)) {
-                    $('#section-compute-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
+                    $('#section-containers-ecs-capacityproviders-datatable').deferredBootstrapTable('append', [{
                         f2id: capacityProvider.capacityProviderArn,
                         f2type: 'ecs.capacityprovider',
                         f2data: capacityProvider,
@@ -625,7 +625,7 @@ async function updateDatatableComputeECS() {
             });
         }
 
-        unblockUI('#section-compute-ecs-capacityproviders-datatable');
+        unblockUI('#section-containers-ecs-capacityproviders-datatable');
     }).catch(err => { });
 }
 

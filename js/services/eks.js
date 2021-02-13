@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Compute',
+    'category': 'Containers',
     'service': 'EKS',
     'resourcetypes': {
         'Clusters': {
@@ -185,25 +185,25 @@ sections.push({
     }
 });
 
-async function updateDatatableComputeEKS() {
-    blockUI('#section-compute-eks-clusters-datatable');
-    blockUI('#section-compute-eks-nodegroups-datatable');
-    blockUI('#section-compute-eks-fargateprofiles-datatable');
-    blockUI('#section-compute-eks-emrvirtualclusters-datatable');
+async function updateDatatableContainersEKS() {
+    blockUI('#section-containers-eks-clusters-datatable');
+    blockUI('#section-containers-eks-nodegroups-datatable');
+    blockUI('#section-containers-eks-fargateprofiles-datatable');
+    blockUI('#section-containers-eks-emrvirtualclusters-datatable');
 
     await sdkcall("EKS", "listClusters", {
         // no params
     }, true).then(async (data) => {
-        $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('removeAll');
-        $('#section-compute-eks-nodegroups-datatable').deferredBootstrapTable('removeAll');
-        $('#section-compute-eks-fargateprofiles-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-clusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-nodegroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-fargateprofiles-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([
                 sdkcall("EKS", "describeCluster", {
                     name: cluster
                 }, true).then((data) => {
-                    $('#section-compute-eks-clusters-datatable').deferredBootstrapTable('append', [{
+                    $('#section-containers-eks-clusters-datatable').deferredBootstrapTable('append', [{
                         f2id: data.cluster.arn,
                         f2type: 'eks.cluster',
                         f2data: data.cluster,
@@ -222,7 +222,7 @@ async function updateDatatableComputeEKS() {
                             clusterName: cluster,
                             nodegroupName: nodegroup
                         }, true).then((data) => {
-                            $('#section-compute-eks-nodegroups-datatable').deferredBootstrapTable('append', [{
+                            $('#section-containers-eks-nodegroups-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.nodegroup.nodegroupArn,
                                 f2type: 'eks.nodegroup',
                                 f2data: data.nodegroup,
@@ -242,7 +242,7 @@ async function updateDatatableComputeEKS() {
                             clusterName: cluster,
                             fargateProfileName: fargateProfileName
                         }, true).then((data) => {
-                            $('#section-compute-eks-fargateprofles-datatable').deferredBootstrapTable('append', [{
+                            $('#section-containers-eks-fargateprofles-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.fargateProfile.nodegroupArn,
                                 f2type: 'eks.fargateprofle',
                                 f2data: data.fargateProfile,
@@ -256,21 +256,21 @@ async function updateDatatableComputeEKS() {
             ]);
         }));
 
-        unblockUI('#section-compute-eks-clusters-datatable');
-        unblockUI('#section-compute-eks-nodegroups-datatable');
-        unblockUI('#section-compute-eks-fargateprofiles-datatable');
+        unblockUI('#section-containers-eks-clusters-datatable');
+        unblockUI('#section-containers-eks-nodegroups-datatable');
+        unblockUI('#section-containers-eks-fargateprofiles-datatable');
     });
 
     await sdkcall("EMRcontainers", "listVirtualClusters", {
         states: ["RUNNING"]
     }, true).then(async (data) => {
-        $('#section-compute-eks-emrvirtualclusters-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-emrvirtualclusters-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.virtualClusters.map(async (virtualcluster) => {
             return sdkcall("EMRcontainers", "describeVirtualCluster", {
                 id: virtualcluster.id
             }, true).then((data) => {
-                $('#section-compute-eks-emrvirtualclusters-datatable').deferredBootstrapTable('append', [{
+                $('#section-containers-eks-emrvirtualclusters-datatable').deferredBootstrapTable('append', [{
                     f2id: data.virtualCluster.arn,
                     f2type: 'eks.emrvirtualcluster',
                     f2data: data.virtualCluster,
@@ -282,7 +282,7 @@ async function updateDatatableComputeEKS() {
         }));
     });
 
-    unblockUI('#section-compute-eks-emrvirtualclusters-datatable');
+    unblockUI('#section-containers-eks-emrvirtualclusters-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
