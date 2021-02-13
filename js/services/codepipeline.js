@@ -479,7 +479,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         });
                     });
                 }
-                reqParams.cfn['Stages'].push({,
+                reqParams.cfn['Stages'].push({
                     'Name': stage.name,
                     'Actions': actions,
                     'Blockers': blockers
