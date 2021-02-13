@@ -435,26 +435,30 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         if (action.outputArtifacts) {
                             outputArtifacts = [];
                             tfOutputArtifacts = [];
-                            outputArtifacts.push({
-                                'Name': action.actionTypeId.name
+                            action.outputArtifacts.forEach(outputartifact => {
+                                outputArtifacts.push({
+                                    'Name': outputartifact.name
+                                });
+                                tfOutputArtifacts.push(outputartifact.name);
                             });
-                            tfOutputArtifacts.push(action.actionTypeId.name);
                         }
                         var inputArtifacts = null;
                         var tfInputArtifacts = null;
                         if (action.inputArtifacts) {
                             inputArtifacts = [];
                             tfInputArtifacts = [];
-                            inputArtifacts.push({
-                                'Name': action.actionTypeId.name
+                            action.inputArtifacts.forEach(inputartifact => {
+                                inputArtifacts.push({
+                                    'Name': inputartifact.name
+                                });
+                                tfInputArtifacts.push(inputartifact.name);
                             });
-                            tfInputArtifacts.push(action.actionTypeId.name);
                         }
                         actions.push({
+                            'Name': action.name,
                             'ActionTypeId': actionTypeId,
                             'Configuration': action.configuration,
                             'InputArtifacts': inputArtifacts,
-                            'Name': action.name,
                             'OutputArtifacts': outputArtifacts,
                             'Region': action.region,
                             'Namespace': action.namespace,
@@ -462,11 +466,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                             'RunOrder': action.runOrder
                         });
                         tfActions.push({
+                            'name': action.name,
                             'category': action.actionTypeId.category,
                             'owner': action.actionTypeId.owner,
                             'configuration': action.configuration,
                             'input_artifacts': tfInputArtifacts,
-                            'name': action.name,
                             'provider': action.actionTypeId.provider,
                             'version': action.actionTypeId.version,
                             'output_artifacts': tfOutputArtifacts,
@@ -475,14 +479,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         });
                     });
                 }
-                reqParams.cfn['Stages'].push({
+                reqParams.cfn['Stages'].push({,
+                    'Name': stage.name,
                     'Actions': actions,
-                    'Blockers': blockers,
-                    'Name': stage.name
+                    'Blockers': blockers
                 });
                 reqParams.tf['stages'].push({
-                    'action': tfActions,
-                    'name': stage.name
+                    'name': stage.name,
+                    'action': tfActions
                 });
             });
         }
