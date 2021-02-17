@@ -723,7 +723,11 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         var string_return = param;
 
         if (string_return.includes("\n")) {
-            string_return = "'''\n" + string_return + "\n'''";
+            if (iaclangselect == "python") {
+                string_return = "'''\n" + string_return + "\n'''";
+            } else {
+                string_return = "\`\`\`\n" + string_return + "\n\`\`\`";
+            }
             return string_return;
         }
 
