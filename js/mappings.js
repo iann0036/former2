@@ -726,7 +726,7 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             if (iaclangselect == "python") {
                 string_return = "'''\n" + string_return + "\n'''";
             } else {
-                string_return = "\`\`\`\n" + string_return + "\n\`\`\`";
+                string_return = "\`\n" + string_return + "\n\`";
             }
             return string_return;
         }
