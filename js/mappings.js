@@ -317,6 +317,7 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
                         }, {
                             type: 'danger'
                         });
+                        f2log(JSON.stringify(param));
                         f2trace(err);
                     }
                 }
