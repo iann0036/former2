@@ -306,7 +306,19 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
                     if (key.match(/^[0-9]+$/g)) {
                         key = "\"" + key + "\"";
                     }
-                    paramitems.push(tfToPulumiProp(key) + ": " + subvalue);
+
+                    try {
+                        paramitems.push(tfToPulumiProp(key) + ": " + subvalue);
+                    } catch(err) {
+                        $.notify({
+                            icon: 'font-icon font-icon-danger',
+                            title: '<strong>Key Parsing Error</strong>',
+                            message: JSON.stringify(param) + " " + err.toString()
+                        }, {
+                            type: 'danger'
+                        });
+                        f2trace(err);
+                    }
                 }
             }
         });
