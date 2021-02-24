@@ -760,6 +760,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.arn
+                },
+                'Import': {
+                    'Arn': obj.data.arn
                 }
             }
         });

@@ -2076,6 +2076,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'HomeEfsFileSystemId': obj.data.HomeEfsFileSystemId,
                     'SingleSignOnManagedApplicationInstanceId': obj.data.SingleSignOnManagedApplicationInstanceId,
                     'Url': obj.data.Url
+                },
+                'Import': {
+                    'DomainId': obj.data.DomainId
                 }
             }
         });
@@ -2103,6 +2106,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.UserProfileName,
                 'GetAtt': {
                     'UserProfileArn': obj.data.UserProfileArn
+                },
+                'Import': {
+                    'UserProfileName': obj.data.UserProfileName,
+                    'DomainId': obj.data.DomainId
                 }
             }
         });
@@ -2129,6 +2136,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'AppArn': obj.data.AppArn
+                },
+                'Import': {
+                    'AppName': obj.data.AppName,
+                    'AppType': obj.data.AppType,
+                    'DomainId': obj.data.DomainId,
+                    'UserProfileName': obj.data.UserProfileName,
                 }
             }
         });
@@ -2153,6 +2166,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.AppImageConfigName,
                 'GetAtt': {
                     'AppImageConfigArn': obj.data.AppImageConfigArn
+                },
+                'Import': {
+                    'AppImageConfigName': obj.data.AppImageConfigName
                 }
             }
         });

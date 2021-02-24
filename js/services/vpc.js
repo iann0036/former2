@@ -5865,7 +5865,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::EC2::TransitGatewayMulticastDomain',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.TransitGatewayId
+                'Import': {
+                    'TransitGatewayMulticastDomainId': obj.data.TransitGatewayMulticastDomainId
+                }
             }
         });
     } else if (obj.type == "ec2.transitgatewaymulticastdomainassociation") {
@@ -5886,6 +5888,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'ResourceId': obj.data.ResourceId
+                },
+                'Import': {
+                    'TransitGatewayMulticastDomainId': obj.data.TransitGatewayMulticastDomainId,
+                    'TransitGatewayAttachmentId': obj.data.TransitGatewayAttachmentId,
+                    'SubnetId': obj.data.Subnet.SubnetId
                 }
             }
         });
@@ -5907,6 +5914,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ResourceId': obj.data.ResourceId,
                     'ResourceType': obj.data.ResourceType,
                     'SubnetId': obj.data.SubnetId
+                },
+                'Import': {
+                    'TransitGatewayMulticastDomainId': TransitGatewayMulticastDomainId,
+                    'GroupIpAddress': obj.data.GroupIpAddress,
+                    'NetworkInterfaceId': obj.data.NetworkInterfaceId
                 }
             }
         });
@@ -5928,6 +5940,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ResourceId': obj.data.ResourceId,
                     'ResourceType': obj.data.ResourceType,
                     'SubnetId': obj.data.SubnetId
+                },
+                'Import': {
+                    'TransitGatewayMulticastDomainId': TransitGatewayMulticastDomainId,
+                    'GroupIpAddress': obj.data.GroupIpAddress,
+                    'NetworkInterfaceId': obj.data.NetworkInterfaceId
                 }
             }
         });

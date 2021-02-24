@@ -212,6 +212,8 @@ async function updateDatatableContainersECR() {
         $('#section-containers-ecr-replicationconfiguration-datatable').deferredBootstrapTable('removeAll');
 
         if (data.replicationConfiguration && data.replicationConfiguration.rules && data.replicationConfiguration.rules.length > 0) {
+            data.replicationConfiguration['registryId'] = data.registryId;
+
             $('#section-containers-ecr-replicationconfiguration-datatable').deferredBootstrapTable('append', [{
                 f2id: data.registryId + " Replication Configuration",
                 f2type: 'ecr.replicationconfiguration',
@@ -340,7 +342,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ecr',
             'type': 'AWS::ECR::ReplicationConfiguration',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'RegistryId': obj.data.registryId
+                }
+            }
         });
     } else {
         return false;

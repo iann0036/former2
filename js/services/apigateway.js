@@ -2453,7 +2453,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'apigateway',
             'type': 'AWS::ApiGateway::ApiKey',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'APIKeyId': obj.data.id
+                },
+                'Import': {
+                    'APIKeyId': obj.data.id
+                }
+            }
         });
     } else if (obj.type == "apigateway.clientcertificate") {
         reqParams.cfn['Description'] = obj.data.description;

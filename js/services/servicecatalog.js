@@ -1451,6 +1451,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Id': obj.data.id,
                     'Arn': obj.data.arn
+                },
+                'Import': {
+                    'Id': obj.data.id
                 }
             }
         });
@@ -1471,6 +1474,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Id': obj.data.id,
                     'Arn': obj.data.arn
+                },
+                'Import': {
+                    'Id': obj.data.id
                 }
             }
         });
@@ -1523,6 +1529,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Id': obj.data.ServiceActionSummary.Id
+                },
+                'Import': {
+                    'Id': obj.data.ServiceActionSummary.Id
                 }
             }
         });
@@ -1537,7 +1546,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'servicecatalog',
             'type': 'AWS::ServiceCatalog::ServiceActionAssociation',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'ProductId': obj.data.ProductId,
+                    'ProvisioningArtifactId': obj.data.ProvisioningArtifactId,
+                    'ServiceActionId': obj.data.ServiceActionId
+                }
+            }
         });
     } else {
         return false;

@@ -762,7 +762,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'elasticache',
             'type': 'AWS::ElastiCache::GlobalReplicationGroup',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'GlobalReplicationGroupId': obj.data.GlobalReplicationGroupId
+                }
+            }
         });
     } else if (obj.type == "elasticache.user") {
         reqParams.cfn['UserId'] = obj.data.UserId;

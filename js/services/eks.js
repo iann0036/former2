@@ -422,7 +422,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::EKS::FargateProfile',
             'options': reqParams
         });
-    } else if (obj.type == "eks.fargateprofile") {
+    } else if (obj.type == "eks.emrvirtualcluster") {
         reqParams.cfn['Name'] = obj.data.name;
         if (obj.data.containerProvider) {
             var info = null;
@@ -455,7 +455,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'emrcontainers',
             'type': 'AWS::EMRContainers::VirtualCluster',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Id': obj.data.id
+                }
+            }
         });
     } else {
         return false;
