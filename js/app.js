@@ -3365,7 +3365,17 @@ async function downloadImportTemplate(stack_name, deletion_policy) {
         stack_name = "template";
     }
 
-    var mapped_cfn_output = compileOutputs(importable_resources, deletion_policy)['cfn'];
+    var mapped_cfn_output = "";
+
+    resources_to_import.forEach(res => {
+        mapped_cfn_output += "# Import properties for " + res['LogicalResourceId'] + " (" + res['ResourceType'] + ")\n# \n";
+        Object.keys(res['ResourceIdentifier']).forEach(k => {
+            mapped_cfn_output += "#     " + k + ": " + res['ResourceIdentifier'][k] + "\n";
+        });
+        mapped_cfn_output += "# \n";
+    });
+
+    mapped_cfn_output += compileOutputs(importable_resources, deletion_policy)['cfn'];
     
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(mapped_cfn_output));
