@@ -380,6 +380,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Arn': obj.data.Arn
                 }
+            },
+            'Import': {
+                'AwsAccountId': obj.data.AccountId,
+                'AnalysisId': obj.data.AnalysisId
             }
         });
     } else if (obj.type == "quicksight.dashboard") {
@@ -414,6 +418,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.Arn
+                },
+                'Import': {
+                    'AwsAccountId': obj.data.AccountId,
+                    'DashboardId': obj.data.DashboardId
                 }
             }
         });
@@ -444,6 +452,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.Arn
+                },
+                'Import': {
+                    'AwsAccountId': obj.data.AccountId,
+                    'TemplateId': obj.data.TemplateId
                 }
             }
         });
@@ -474,6 +486,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.Arn
+                },
+                'Import': {
+                    'AwsAccountId': obj.data.AccountId,
+                    'ThemeId': obj.data.ThemeId
                 }
             }
         });

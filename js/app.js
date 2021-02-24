@@ -1912,7 +1912,7 @@ async function getResourceStackAssociation() {
     console.log(templates);
 }
 
-// Import
+// Import (util/findImportAttributes.py)
 
 eligibleImportResources = {
     "AWS::ACMPCA::Certificate": {
@@ -1934,6 +1934,11 @@ eligibleImportResources = {
     "AWS::AccessAnalyzer::Analyzer": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::ApiGateway::ApiKey": {
+        "importProperties": [
+            "APIKeyId"
         ]
     },
     "AWS::ApiGateway::Authorizer": {
@@ -2088,6 +2093,16 @@ eligibleImportResources = {
         ]
     },
     "AWS::CloudFormation::ModuleVersion": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::ResourceDefaultVersion": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::ResourceVersion": {
         "importProperties": [
             "Arn"
         ]
@@ -2359,6 +2374,32 @@ eligibleImportResources = {
             "SubnetId"
         ]
     },
+    "AWS::EC2::TransitGatewayMulticastDomain": {
+        "importProperties": [
+            "TransitGatewayMulticastDomainId"
+        ]
+    },
+    "AWS::EC2::TransitGatewayMulticastDomainAssociation": {
+        "importProperties": [
+            "TransitGatewayMulticastDomainId",
+            "TransitGatewayAttachmentId",
+            "SubnetId"
+        ]
+    },
+    "AWS::EC2::TransitGatewayMulticastGroupMember": {
+        "importProperties": [
+            "TransitGatewayMulticastDomainId",
+            "GroupIpAddress",
+            "NetworkInterfaceId"
+        ]
+    },
+    "AWS::EC2::TransitGatewayMulticastGroupSource": {
+        "importProperties": [
+            "TransitGatewayMulticastDomainId",
+            "GroupIpAddress",
+            "NetworkInterfaceId"
+        ]
+    },
     "AWS::EC2::VPC": {
         "importProperties": [
             "VpcId"
@@ -2372,6 +2413,16 @@ eligibleImportResources = {
     "AWS::ECR::PublicRepository": {
         "importProperties": [
             "RepositoryName"
+        ]
+    },
+    "AWS::ECR::RegistryPolicy": {
+        "importProperties": [
+            "RegistryId"
+        ]
+    },
+    "AWS::ECR::ReplicationConfiguration": {
+        "importProperties": [
+            "RegistryId"
         ]
     },
     "AWS::ECR::Repository": {
@@ -2427,6 +2478,16 @@ eligibleImportResources = {
         "importProperties": [
             "ClusterName",
             "FargateProfileName"
+        ]
+    },
+    "AWS::EMRContainers::VirtualCluster": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::ElastiCache::GlobalReplicationGroup": {
+        "importProperties": [
+            "GlobalReplicationGroupId"
         ]
     },
     "AWS::ElastiCache::User": {
@@ -2552,6 +2613,11 @@ eligibleImportResources = {
         ]
     },
     "AWS::ImageBuilder::Component": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::ImageBuilder::ContainerRecipe": {
         "importProperties": [
             "Arn"
         ]
@@ -2759,6 +2825,11 @@ eligibleImportResources = {
             "FilterName"
         ]
     },
+    "AWS::LookoutVision::Project": {
+        "importProperties": [
+            "ProjectName"
+        ]
+    },
     "AWS::MWAA::Environment": {
         "importProperties": [
             "Name"
@@ -2903,6 +2974,30 @@ eligibleImportResources = {
             "Id"
         ]
     },
+    "AWS::QuickSight::Analysis": {
+        "importProperties": [
+            "AnalysisId",
+            "AwsAccountId"
+        ]
+    },
+    "AWS::QuickSight::Dashboard": {
+        "importProperties": [
+            "AwsAccountId",
+            "DashboardId"
+        ]
+    },
+    "AWS::QuickSight::Template": {
+        "importProperties": [
+            "AwsAccountId",
+            "TemplateId"
+        ]
+    },
+    "AWS::QuickSight::Theme": {
+        "importProperties": [
+            "ThemeId",
+            "AwsAccountId"
+        ]
+    },
     "AWS::RDS::DBCluster": {
         "importProperties": [
             "DBClusterIdentifier"
@@ -3010,6 +3105,19 @@ eligibleImportResources = {
             "PermissionSetArn"
         ]
     },
+    "AWS::SageMaker::App": {
+        "importProperties": [
+            "AppName",
+            "AppType",
+            "DomainId",
+            "UserProfileName"
+        ]
+    },
+    "AWS::SageMaker::AppImageConfig": {
+        "importProperties": [
+            "AppImageConfigName"
+        ]
+    },
     "AWS::SageMaker::DataQualityJobDefinition": {
         "importProperties": [
             "JobDefinitionArn"
@@ -3023,6 +3131,16 @@ eligibleImportResources = {
     "AWS::SageMaker::DeviceFleet": {
         "importProperties": [
             "DeviceFleetName"
+        ]
+    },
+    "AWS::SageMaker::Domain": {
+        "importProperties": [
+            "DomainId"
+        ]
+    },
+    "AWS::SageMaker::FeatureGroup": {
+        "importProperties": [
+            "FeatureGroupName"
         ]
     },
     "AWS::SageMaker::ModelBiasJobDefinition": {
@@ -3060,9 +3178,47 @@ eligibleImportResources = {
             "ProjectArn"
         ]
     },
+    "AWS::SageMaker::UserProfile": {
+        "importProperties": [
+            "UserProfileName",
+            "DomainId"
+        ]
+    },
     "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
         "importProperties": [
             "ProvisionedProductId"
+        ]
+    },
+    "AWS::ServiceCatalog::ServiceAction": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::ServiceCatalog::ServiceActionAssociation": {
+        "importProperties": [
+            "ProductId",
+            "ProvisioningArtifactId",
+            "ServiceActionId"
+        ]
+    },
+    "AWS::ServiceCatalogAppRegistry::Application": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::ServiceCatalogAppRegistry::AttributeGroup": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::ServiceCatalogAppRegistry::ResourceAssociation": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::Signer::ProfilePermission": {
