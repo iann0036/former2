@@ -2,7 +2,7 @@
 
 In some cases, you may wish to host a copy of the Former2 website locally or externally for security reasons. You can do that by performing the following steps:
 
-* Clone this repository to the root of your web server OR run a web server with the [Dockerfile](DOCKERFILE)
+* Clone this repository to the root of your web server OR run a web server with the [Dockerfile](Dockerfile)
 
 If you are hosting on 127.0.0.1, extension support will be provided by default and there are no more steps.
 

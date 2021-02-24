@@ -22,4 +22,4 @@ jobs:
 
     - name: Copy files to origin S3 bucket
       run: |
-        aws s3 cp --cache-control max-age=300 --recursive . s3://former2.com/ --exclude ".git/*" --exclude "cli/*" --exclude ".*" --exclude "notes.txt" --exclude "*.md" --exclude "DOCKERFILE" --exclude "LICENSE" --exclude "*.yml" --exclude ".gitignore" --exclude "util/*" --exclude "lib/*"
+        aws s3 cp --cache-control max-age=300 --recursive . s3://former2.com/ --exclude ".git/*" --exclude "cli/*" --exclude ".*" --exclude "notes.txt" --exclude "*.md" --exclude "Dockerfile" --exclude "LICENSE" --exclude "*.yml" --exclude ".gitignore" --exclude "util/*" --exclude "lib/*"
