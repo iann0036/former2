@@ -398,6 +398,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Studios': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Studio Session Mappings': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Studio ID',
+                        field: 'studioid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'identityname',
+                        title: 'Identity Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'identitytype',
+                        title: 'Identity Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -411,6 +495,8 @@ async function updateDatatableAnalyticsEMR() {
     blockUI('#section-analytics-emr-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-analytics-emr-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-analytics-emr-containersvirtualclusters-datatable');
+    blockUI('#section-analytics-emr-studios-datatable');
+    blockUI('#section-analytics-emr-studiosessionmappings-datatable');
 
     await sdkcall("EMR", "listClusters", {
         // no params
@@ -591,6 +677,47 @@ async function updateDatatableAnalyticsEMR() {
         }));
 
         unblockUI('#section-analytics-emr-containersvirtualclusters-datatable');
+    }).catch(() => { });
+
+    await sdkcall("EMR", "listStudios", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-emr-studios-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-emr-studiosessionmappings-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Studios.map(async (studio) => {
+            await sdkcall("EMR", "describeStudio", {
+                StudioId: studio.StudioId
+            }, true).then((data) => {
+                $('#section-analytics-emr-studios-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Studio.StudioArn,
+                    f2type: 'emr.studio',
+                    f2data: data.Studio,
+                    f2region: region,
+                    name: data.Studio.Name,
+                    description: data.Studio.Description
+                }]);
+            });
+
+            return sdkcall("EMR", "listStudioSessionMappings", {
+                StudioId: studio.StudioId
+            }, true).then((data) => {
+                data.SessionMappings.forEach(mapping => {
+                    $('#section-analytics-emr-studiosessionmappings-datatable').deferredBootstrapTable('append', [{
+                        f2id: mapping.StudioId + " Session Mapping " + mapping.IdentityId,
+                        f2type: 'emr.studiosessionmapping',
+                        f2data: mapping,
+                        f2region: region,
+                        studioid: mapping.StudioId,
+                        identityname: mapping.IdentityName,
+                        identitytype: mapping.IdentityType
+                    }]);
+                });
+            });
+        }));
+
+        unblockUI('#section-analytics-emr-studios-datatable');
+        unblockUI('#section-analytics-emr-studiosessionmappings-datatable');
     }).catch(() => { });
 }
 
@@ -809,6 +936,48 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'emr',
             'type': 'AWS::EMRContainers::VirtualCluster',
+            'options': reqParams
+        });
+    } else if (obj.type == "emr.studio") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['AuthMode'] = obj.data.AuthMode;
+        reqParams.cfn['EngineSecurityGroupId'] = obj.data.EngineSecurityGroupId;
+        reqParams.cfn['DefaultS3Location'] = obj.data.DefaultS3Location;
+        reqParams.cfn['WorkspaceSecurityGroupId'] = obj.data.WorkspaceSecurityGroupId;
+        reqParams.cfn['ServiceRole'] = obj.data.ServiceRole;
+        reqParams.cfn['UserRole'] = obj.data.UserRole;
+        reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::Studio'),
+            'region': obj.region,
+            'service': 'emr',
+            'type': 'AWS::EMR::Studio',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.StudioId,
+                'GetAtt': {
+                    'Arn': obj.data.StudioArn,
+                    'Url': obj.data.Url
+                }
+            }
+        });
+    } else if (obj.type == "emr.studiosessionmapping") {
+        reqParams.cfn['StudioId'] = obj.data.StudioId;
+        reqParams.cfn['IdentityName'] = obj.data.IdentityName;
+        reqParams.cfn['IdentityType'] = obj.data.IdentityType;
+        reqParams.cfn['SessionPolicyArn'] = obj.data.SessionPolicyArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMR::StudioSessionMapping'),
+            'region': obj.region,
+            'service': 'emr',
+            'type': 'AWS::EMR::StudioSessionMapping',
             'options': reqParams
         });
     } else {

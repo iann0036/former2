@@ -2779,6 +2779,11 @@ sections.push({
                         sortable: true,
                         formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
                     }
                 ],
                 [
@@ -2820,6 +2825,11 @@ sections.push({
                         sortable: true,
                         formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
                     }
                 ],
                 [
@@ -2869,6 +2879,11 @@ sections.push({
                         sortable: true,
                         formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
                     }
                 ],
                 [
@@ -2896,6 +2911,32 @@ sections.push({
                         footerFormatter: textFormatter,
                         align: 'center'
                     }
+                ]
+            ]
+        },
+        'Transit Gateway Connects': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
                 ]
             ]
         }
@@ -2967,6 +3008,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
 
     var defaultVPC = "unset";
 
@@ -4274,6 +4316,22 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }).catch(() => { });
         });
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeTransitGatewayConnects", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable').deferredBootstrapTable('removeAll');
+
+        data.TransitGatewayConnects.forEach(connect => {
+            $('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable').deferredBootstrapTable('append', [{
+                f2id: connect.TransitGatewayAttachmentId + " Connect " + connect.TransportTransitGatewayAttachmentId,
+                f2type: 'ec2.transitgatewayconnect',
+                f2data: connect,
+                f2region: region,
+                attachmentid: connect.TransitGatewayAttachmentId
+            }]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -4299,6 +4357,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastdomainassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -5945,6 +6004,25 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'TransitGatewayMulticastDomainId': TransitGatewayMulticastDomainId,
                     'GroupIpAddress': obj.data.GroupIpAddress,
                     'NetworkInterfaceId': obj.data.NetworkInterfaceId
+                }
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewayconnect") {
+        reqParams.cfn['TransportTransitGatewayAttachmentId'] = obj.data.TransportTransitGatewayAttachmentId;
+        reqParams.cfn['Options'] = obj.data.Options;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayConnect'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayConnect',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TransitGatewayAttachmentId,
+                'GetAtt': {
+                    'TransitGatewayId': obj.data.TransitGatewayId
                 }
             }
         });

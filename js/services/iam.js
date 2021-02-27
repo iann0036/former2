@@ -427,6 +427,110 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Virtual MFA Devices': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Serial Number',
+                        field: 'serialnumber',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'Server Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'SAML Providers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'OIDC Providers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ARN',
+                        field: 'arn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -441,6 +545,10 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     blockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
     blockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     blockUI('#section-securityidentityandcompliance-iam-accessanalyzer-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-virtualmfadevices-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-servercertificates-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-samlproviders-datatable');
+    blockUI('#section-securityidentityandcompliance-iam-oidcproviders-datatable');
 
     $('#section-securityidentityandcompliance-iam-policies-datatable').deferredBootstrapTable('removeAll');
 
@@ -734,6 +842,95 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
         });
     }).catch(() => { });
 
+    await sdkcall("IAM", "listVirtualMFADevices", {
+        // no params
+    }, true).then((data) => {
+        $('#section-securityidentityandcompliance-iam-virtualmfadevices-datatable').deferredBootstrapTable('removeAll');
+
+        data.VirtualMFADevices.forEach(virtualMFADevice => {
+            if (virtualMFADevice.User) {
+                $('#section-securityidentityandcompliance-iam-virtualmfadevices-datatable').deferredBootstrapTable('append', [{
+                    f2id: virtualMFADevice.Arn,
+                    f2type: 'iam.virtualmfadevice',
+                    f2data: virtualMFADevice,
+                    f2region: region,
+                    serialnumber: virtualMFADevice.SerialNumber
+                }]);
+            }
+        });
+    }).catch(() => { });
+
+    await sdkcall("IAM", "listVirtualMFADevices", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-servercertificates-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ServerCertificateMetadataList.map(serverCertificate => {
+            return sdkcall("IAM", "getServerCertificate", {
+                ServerCertificateName: serverCertificate.ServerCertificateName
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-iam-servercertificates-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ServerCertificate.ServerCertificateMetadata.Arn,
+                    f2type: 'iam.servercertificate',
+                    f2data: data.ServerCertificate,
+                    f2region: region,
+                    name: data.ServerCertificate.ServerCertificateMetadata.ServerCertificateName
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("IAM", "listSAMLProviders", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-samlproviders-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.SAMLProviderList.map(SAMLProvider => {
+            return sdkcall("IAM", "getSAMLProvider", {
+                SAMLProviderArn: SAMLProvider.Arn
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-iam-samlproviders-datatable').deferredBootstrapTable('append', [{
+                    f2id: SAMLProvider.Arn,
+                    f2type: 'iam.samlprovider',
+                    f2data: {
+                        'Arn': SAMLProvider.Arn,
+                        'Name': SAMLProvider.Arn.split("/").pop(),
+                        'SamlMetadataDocument': data.SAMLMetadataDocument,
+                        'Tags': data.Tags
+                    },
+                    f2region: region,
+                    name: SAMLProvider.Arn.split("/").pop()
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("IAM", "listOpenIDConnectProviders", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-iam-oidcproviders-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.OpenIDConnectProviderList.map(provider => {
+            return sdkcall("IAM", "getOpenIDConnectProvider", {
+                OpenIDConnectProviderArn: provider.Arn
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-iam-oidcproviders-datatable').deferredBootstrapTable('append', [{
+                    f2id: provider.Arn,
+                    f2type: 'iam.oidcprovider',
+                    f2data: {
+                        'Arn': provider.Arn,
+                        'Url': data.Url,
+                        'ClientIdList': data.ClientIDList,
+                        'ThumbprintList': data.ThumbprintList,
+                        'Tags': data.Tags
+                    },
+                    f2region: region,
+                    arn: provider.Arn
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-securityidentityandcompliance-iam-instanceprofiles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-roles-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-servicelinkedroles-datatable');
@@ -745,6 +942,10 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
     unblockUI('#section-securityidentityandcompliance-iam-accesskeys-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-policies-datatable');
     unblockUI('#section-securityidentityandcompliance-iam-accessanalyzer-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-virtualmfadevices-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-servercertificates-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-samlproviders-datatable');
+    unblockUI('#section-securityidentityandcompliance-iam-oidcproviders-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1066,6 +1267,77 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'Arn': obj.data.arn
                 }
+            }
+        });
+    } else if (obj.type == "iam.virtualmfadevice") {
+        reqParams.cfn['SerialNumber'] = obj.data.SerialNumber;
+        reqParams.cfn['Users'] = [obj.data.User.Arn];
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::AccessKey'),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::AccessKey',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SerialNumber
+            }
+        });
+    } else if (obj.type == "iam.servercertificate") {
+        reqParams.cfn['CertificateBody'] = obj.data.CertificateBody;
+        reqParams.cfn['CertificateChain'] = obj.data.CertificateChain;
+        reqParams.cfn['Path'] = obj.data.ServerCertificateMetadata.Path;
+        reqParams.cfn['PrivateKey'] = obj.data.ServerCertificateMetadata.PrivateKey;
+        reqParams.cfn['ServerCertificateName'] = obj.data.ServerCertificateMetadata.ServerCertificateName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::ServerCertificate'),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::ServerCertificate',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ServerCertificateMetadata.ServerCertificateName,
+                'GetAtt': {
+                    'Arn': obj.data.ServerCertificateMetadata.Arn
+                }
+            }
+        });
+    } else if (obj.type == "iam.samlprovider") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['SamlMetadataDocument'] = obj.data.SamlMetadataDocument;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::SAMLProvider'),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::SAMLProvider',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "iam.oidcprovider") {
+        reqParams.cfn['Url'] = obj.data.Url;
+        reqParams.cfn['ClientIdList'] = obj.data.ClientIdList;
+        reqParams.cfn['ThumbprintList'] = obj.data.ThumbprintList;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::OIDCProvider'),
+            'region': obj.region,
+            'service': 'iam',
+            'type': 'AWS::IAM::OIDCProvider',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn
             }
         });
     } else {

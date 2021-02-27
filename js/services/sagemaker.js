@@ -977,6 +977,90 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Images': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Image Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1005,6 +1089,8 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-userprofiles-datatable');
     blockUI('#section-machinelearning-sagemaker-apps-datatable');
     blockUI('#section-machinelearning-sagemaker-appimageconfigs-datatable');
+    blockUI('#section-machinelearning-sagemaker-images-datatable');
+    blockUI('#section-machinelearning-sagemaker-imageversions-datatable');
 
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
@@ -1552,6 +1638,54 @@ async function updateDatatableMachineLearningSageMaker() {
         }));
 
         unblockUI('#section-machinelearning-sagemaker-appimageconfigs-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listImages", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-images-datatable').deferredBootstrapTable('removeAll');
+        $('#section-machinelearning-sagemaker-imageversions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Images.map(async (image) => {
+            await sdkcall("SageMaker", "describeImage", {
+                ImageName: image.ImageName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-images-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ImageArn,
+                    f2type: 'sagemaker.image',
+                    f2data: data,
+                    f2region: region,
+                    name: data.ImageName,
+                    description: data.Description,
+                    displayname: data.DisplayName
+                }]);
+            });
+
+            return sdkcall("SageMaker", "listImageVersions", {
+                ImageName: image.ImageName
+            }, false).then(async (data) => {
+                await Promise.all(data.ImageVersions.map(async (imageversion) => {
+                    return sdkcall("SageMaker", "describeImageVersion", {
+                        ImageName: image.ImageName,
+                        Version: imageversion.Version
+                    }, true).then((data) => {
+                        data['ImageName'] = image.ImageName;
+
+                        $('#section-machinelearning-sagemaker-imageversions-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.ImageVersionArn,
+                            f2type: 'sagemaker.imageversion',
+                            f2data: data,
+                            f2region: region,
+                            name: image.ImageName,
+                            version: data.Version
+                        }]);
+                    });
+                }));
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-images-datatable');
+        unblockUI('#section-machinelearning-sagemaker-imageversions-datatable');
     }).catch(() => { });
 }
 
@@ -2169,6 +2303,43 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'AppImageConfigName': obj.data.AppImageConfigName
+                }
+            }
+        });
+    } else if (obj.type == "sagemaker.image") {
+        reqParams.cfn['ImageName'] = obj.data.ImageName;
+        reqParams.cfn['ImageDisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['ImageDescription'] = obj.data.Description;
+        reqParams.cfn['ImageRoleArn'] = obj.data.RoleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Image'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Image',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ImageArn
+            }
+        });
+    } else if (obj.type == "sagemaker.imageversion") {
+        reqParams.cfn['ImageName'] = obj.data.ImageName;
+        reqParams.cfn['BaseImage'] = obj.data.BaseImage;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Image'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::Image',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ImageVersionArn,
+                'GetAtt': {
+                    'ContainerImage': obj.data.ContainerImage,
+                    'ImageArn': obj.data.ImageArn,
+                    'Version': obj.data.Version
                 }
             }
         });

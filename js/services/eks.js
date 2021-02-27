@@ -181,6 +181,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Addons': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clustername',
+                        title: 'Cluster Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -190,6 +236,7 @@ async function updateDatatableContainersEKS() {
     blockUI('#section-containers-eks-nodegroups-datatable');
     blockUI('#section-containers-eks-fargateprofiles-datatable');
     blockUI('#section-containers-eks-emrvirtualclusters-datatable');
+    blockUI('#section-containers-eks-addons-datatable');
 
     await sdkcall("EKS", "listClusters", {
         // no params
@@ -197,6 +244,7 @@ async function updateDatatableContainersEKS() {
         $('#section-containers-eks-clusters-datatable').deferredBootstrapTable('removeAll');
         $('#section-containers-eks-nodegroups-datatable').deferredBootstrapTable('removeAll');
         $('#section-containers-eks-fargateprofiles-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-addons-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([
@@ -252,6 +300,26 @@ async function updateDatatableContainersEKS() {
                             }]);
                         });
                     }));
+                }),
+                sdkcall("EKS", "listAddons", {
+                    clusterName: cluster
+                }, true).then(async (data) => {
+                    await Promise.all(data.addons.map(async (addon) => {
+                        return sdkcall("EKS", "describeAddon", {
+                            clusterName: cluster,
+                            addonName: addon
+                        }, true).then((data) => {
+                            $('#section-containers-eks-addons-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.addon.clusterName + " Addon " + data.addon.addonName,
+                                f2type: 'eks.addon',
+                                f2data: data.addon,
+                                f2region: region,
+                                name: data.addon.addonName,
+                                version: data.addon.addonVersion,
+                                clustername: data.addon.clusterName
+                            }]);
+                        });
+                    }));
                 })
             ]);
         }));
@@ -259,6 +327,7 @@ async function updateDatatableContainersEKS() {
         unblockUI('#section-containers-eks-clusters-datatable');
         unblockUI('#section-containers-eks-nodegroups-datatable');
         unblockUI('#section-containers-eks-fargateprofiles-datatable');
+        unblockUI('#section-containers-eks-addons-datatable');
     });
 
     await sdkcall("EMRcontainers", "listVirtualClusters", {
@@ -459,6 +528,34 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Import': {
                     'Id': obj.data.id
+                }
+            }
+        });
+    } else if (obj.type == "eks.addon") {
+        reqParams.cfn['AddonName'] = obj.data.addonName;
+        reqParams.cfn['AddonVersion'] = obj.data.addonVersion;
+        reqParams.cfn['ClusterName'] = obj.data.clusterName;
+        reqParams.cfn['ServiceAccountRoleArn'] = obj.data.serviceAccountRoleArn;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eks', obj.id, 'AWS::EKS::Addon'),
+            'region': obj.region,
+            'service': 'eks',
+            'type': 'AWS::EKS::Addon',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Arn': obj.data.addonArn
                 }
             }
         });
