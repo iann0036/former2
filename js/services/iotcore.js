@@ -576,6 +576,242 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'Audit Account Configuration': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Account ID',
+                        field: 'accountid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Custom Metrics': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Dimensions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Mitigation Actions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Scheduled Audits': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'frequency',
+                        title: 'Frequency',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Security Profiles': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -596,6 +832,12 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-wirelessgateways-datatable');
     blockUI('#section-internetofthings-core-wirelessdeviceprofiles-datatable');
     blockUI('#section-internetofthings-core-wirelessserviceprofiles-datatable');
+    blockUI('#section-internetofthings-core-accountauditconfiguration-datatable');
+    blockUI('#section-internetofthings-core-custommetrics-datatable');
+    blockUI('#section-internetofthings-core-dimensions-datatable');
+    blockUI('#section-internetofthings-core-mitigationactions-datatable');
+    blockUI('#section-internetofthings-core-scheduledaudits-datatable');
+    blockUI('#section-internetofthings-core-securityprofiles-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -941,6 +1183,151 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("Iot", "describeAccountAuditConfiguration", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-accountauditconfiguration-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.roleArn) {
+            await sdkcall("STS", "getCallerIdentity", {
+                // no params
+            }, true).then(async (data) => {
+                data['accountId'] = data.Account;
+
+                $('#section-internetofthings-core-accountauditconfiguration-datatable').deferredBootstrapTable('append', [{
+                    f2id: "IoT Account Audit Configuration",
+                    f2type: 'iot.accountauditconfiguration',
+                    f2data: data,
+                    f2region: region,
+                    accountid: data.accountId,
+                    rolearn: data.roleArn
+                }]);
+            });
+        }
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listCustomMetrics", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-custommetrics-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.metricNames.map(async (metricname) => {
+            return sdkcall("Iot", "describeCustomMetric", {
+                metricName: metricname
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.metricArn);
+
+                $('#section-internetofthings-core-custommetrics-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.metricArn,
+                    f2type: 'iot.custommetric',
+                    f2data: data,
+                    f2region: region,
+                    name: data.metricName,
+                    type: data.metricType,
+                    displayname: data.displayName
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listDimensions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-dimensions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.dimensionNames.map(async (dimensionname) => {
+            return sdkcall("Iot", "describeDimension", {
+                name: dimensionname
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.arn);
+
+                $('#section-internetofthings-core-dimensions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.arn,
+                    f2type: 'iot.dimension',
+                    f2data: data,
+                    f2region: region,
+                    name: data.name,
+                    type: data.type
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listMitigationActions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-mitigationactions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.actionIdentifiers.map(async (action) => {
+            return sdkcall("Iot", "describeMitigationAction", {
+                actionName: action.actionName
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.actionArn);
+
+                $('#section-internetofthings-core-mitigationactions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.actionArn,
+                    f2type: 'iot.mitigationaction',
+                    f2data: data,
+                    f2region: region,
+                    name: data.actionName,
+                    rolearn: data.roleArn
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listScheduledAudits", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-scheduledaudits-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.scheduledAudits.map(async (scheduledaudit) => {
+            return sdkcall("Iot", "describeScheduledAudit", {
+                scheduledAuditName: scheduledaudit.scheduledAuditName
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.scheduledAuditArn);
+
+                $('#section-internetofthings-core-scheduledaudits-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.scheduledAuditArn,
+                    f2type: 'iot.scheduledaudit',
+                    f2data: data,
+                    f2region: region,
+                    name: data.scheduledAuditName,
+                    frequency: data.frequency
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listSecurityProfiles", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-securityprofiles-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.securityProfileIdentifiers.map(async (securityprofile) => {
+            return sdkcall("Iot", "describeSecurityProfile", {
+                securityProfileName: securityprofile.name
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.securityProfileArn);
+
+                await sdkcall("Iot", "listTargetsForSecurityProfile", {
+                    securityProfileName: securityprofile.name
+                }, false).then(async (targets) => {
+                    data['securityProfileTargets'] = targets.securityProfileTargets;
+                }).catch(() => { });
+
+                $('#section-internetofthings-core-securityprofiles-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.securityProfileArn,
+                    f2type: 'iot.securityprofile',
+                    f2data: data,
+                    f2region: region,
+                    name: data.securityProfileName,
+                    description: data.securityProfileDescription
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -948,6 +1335,12 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-wirelessgateways-datatable');
     unblockUI('#section-internetofthings-core-wirelessdeviceprofiles-datatable');
     unblockUI('#section-internetofthings-core-wirelessserviceprofiles-datatable');
+    unblockUI('#section-internetofthings-core-accountauditconfiguration-datatable');
+    unblockUI('#section-internetofthings-core-custommetrics-datatable');
+    unblockUI('#section-internetofthings-core-dimensions-datatable');
+    unblockUI('#section-internetofthings-core-mitigationactions-datatable');
+    unblockUI('#section-internetofthings-core-scheduledaudits-datatable');
+    unblockUI('#section-internetofthings-core-securityprofiles-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1514,6 +1907,211 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoTWireless::ServiceProfile',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.accountauditconfiguration") {
+        reqParams.cfn['AccountId'] = obj.data.accountId;
+        if (obj.data.auditCheckConfigurations) {
+            reqParams.cfn['AuditCheckConfigurations'] = {};
+            for (var k of Object.keys(obj.data.auditCheckConfigurations)) {
+                reqParams.cfn['AuditCheckConfigurations'][k.substr(0,1).toUpperCase() + k.substr(1)] = {
+                    'Enabled': obj.data.auditCheckConfigurations[k]['enabled']
+                };
+            }
+        }
+        if (obj.data.auditNotificationTargetConfigurations) {
+            for (var audit of Object.values(obj.data.auditNotificationTargetConfigurations)) {
+                reqParams.cfn['AuditNotificationTargetConfigurations'] = {
+                    'Sns': {
+                        'Enabled': audit.enabled,
+                        'RoleArn': audit.roleArn,
+                        'TargetArn': audit.targetArn
+                    }
+                };
+            }
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::AccountAuditConfiguration'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::AccountAuditConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.custommetric") {
+        reqParams.cfn['MetricName'] = obj.data.metricName;
+        reqParams.cfn['DisplayName'] = obj.data.displayName;
+        reqParams.cfn['MetricType'] = obj.data.metricType;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::CustomMetric'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::CustomMetric',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.dimension") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Type'] = obj.data.type;
+        reqParams.cfn['StringValues'] = obj.data.stringValues;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Dimension'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Dimension',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.mitigationaction") {
+        reqParams.cfn['ActionName'] = obj.data.actionName;
+        if (obj.data.actionParams) {
+            reqParams.cfn['ActionParams'] = {};
+            if (obj.data.actionParams.updateDeviceCertificateParams) {
+                reqParams.cfn['ActionParams']['UpdateDeviceCertificateParams'] = {
+                    'Action': obj.data.actionParams.updateDeviceCertificateParams.action
+                };
+            }
+            if (obj.data.actionParams.updateCACertificateParams) {
+                reqParams.cfn['ActionParams']['UpdateCACertificateParams'] = {
+                    'Action': obj.data.actionParams.updateCACertificateParams.action
+                };
+            }
+            if (obj.data.actionParams.addThingsToThingGroupParams) {
+                reqParams.cfn['ActionParams']['AddThingsToThingGroupParams'] = {
+                    'ThingGroupNames': obj.data.actionParams.addThingsToThingGroupParams.thingGroupNames,
+                    'OverrideDynamicGroups': obj.data.actionParams.addThingsToThingGroupParams.overrideDynamicGroups
+                };
+            }
+            if (obj.data.actionParams.replaceDefaultPolicyVersionParams) {
+                reqParams.cfn['ActionParams']['ReplaceDefaultPolicyVersionParams'] = {
+                    'TemplateName': obj.data.actionParams.replaceDefaultPolicyVersionParams.templateName
+                };
+            }
+            if (obj.data.actionParams.enableIoTLoggingParams) {
+                reqParams.cfn['ActionParams']['EnableIoTLoggingParams'] = {
+                    'RoleArnForLogging': obj.data.actionParams.enableIoTLoggingParams.roleArnForLogging,
+                    'LogLevel': obj.data.actionParams.enableIoTLoggingParams.logLevel
+                };
+            }
+            if (obj.data.actionParams.publishFindingToSnsParams) {
+                reqParams.cfn['ActionParams']['PublishFindingToSnsParams'] = {
+                    'TopicArn': obj.data.actionParams.publishFindingToSnsParams.topicArn
+                };
+            }
+        }
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::MitigationAction'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::MitigationAction',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.scheduledaudit") {
+        reqParams.cfn['ScheduledAuditName'] = obj.data.scheduledAuditName;
+        reqParams.cfn['Frequency'] = obj.data.frequency;
+        reqParams.cfn['DayOfWeek'] = obj.data.dayOfWeek;
+        reqParams.cfn['DayOfMonth'] = obj.data.dayOfMonth;
+        reqParams.cfn['TargetCheckNames'] = obj.data.targetCheckNames;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::ScheduledAudit'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::ScheduledAudit',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.securityprofile") {
+        reqParams.cfn['SecurityProfileName'] = obj.data.securityProfileName;
+        reqParams.cfn['SecurityProfileDescription'] = obj.data.securityProfileDescription;
+        if (obj.data.securityProfileTargets) {
+            reqParams.cfn['TargetArns'] = [];
+            obj.data.securityProfileTargets.forEach(target => {
+                reqParams.cfn['TargetArns'].push(target.arn);
+            });
+        }
+        if (obj.data.behaviors) {
+            reqParams.cfn['Behaviors'] = [];
+            obj.data.behaviors.forEach(behaviour => {
+                var metricDimension = null;
+                if (behaviour.metricDimension) {
+                    metricDimension = {
+                        'DimensionName': behaviour.metricDimension.dimensionName,
+                        'Operator': behaviour.metricDimension.operator
+                    };
+                }
+                var criteria = null;
+                if (behaviour.criteria) {
+                    var value = null;
+                    if (behaviour.criteria.value) {
+                        value = {
+                            'Count': behaviour.criteria.value.count,
+                            'Cidrs': behaviour.criteria.value.cidrs,
+                            'Ports': behaviour.criteria.value.ports,
+                            'Number': behaviour.criteria.value.number,
+                            'Numbers': behaviour.criteria.value.numbers,
+                            'Strings': behaviour.criteria.value.strings
+                        };
+                    }
+                    var statisticalThreshold = null;
+                    if (behaviour.criteria.statisticalThreshold) {
+                        statisticalThreshold = {
+                            'Statistic': behaviour.criteria.statisticalThreshold.statistic
+                        };
+                    }
+                    criteria = {
+                        'ComparisonOperator': behaviour.criteria.comparisonOperator,
+                        'ConsecutiveDatapointsToAlarm': behaviour.criteria.consecutiveDatapointsToAlarm,
+                        'ConsecutiveDatapointsToClear': behaviour.criteria.consecutiveDatapointsToClear,
+                        'DurationSeconds': behaviour.criteria.durationSeconds,
+                        'StatisticalThreshold': statisticalThreshold,
+                        'Value': value
+                    };
+                }
+                reqParams.cfn['Behaviors'].push({
+                    'Name': behaviour.name,
+                    'Metric': behaviour.metric,
+                    'MetricDimension': metricDimension,
+                    'Criteria': criteria
+                });
+            });
+        }
+        reqParams.cfn['AlertTargets'] = obj.data.alertTargets;
+        if (obj.data.additionalMetricsToRetainV2) {
+            reqParams.cfn['AdditionalMetricsToRetainV2'] = [];
+            obj.data.additionalMetricsToRetainV2.forEach(metric => {
+                var metricDimension = null;
+                if (metric.metricDimension) {
+                    metricDimension = {
+                        'DimensionName': metric.metricDimension.dimensionName,
+                        'Operator': metric.metricDimension.operator,
+                    };
+                }
+                reqParams.cfn['AdditionalMetricsToRetainV2'].push({
+                    'Metric': metric.metric,
+                    'MetricDimension': metricDimension,
+                });
+            });
+        }
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::SecurityProfile'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::SecurityProfile',
             'options': reqParams
         });
     } else {

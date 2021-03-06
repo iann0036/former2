@@ -161,6 +161,149 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Outpost Buckets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'outpostid',
+                        title: 'Outpost ID',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Outpost Bucket Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'Outpost Access Points': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'bucketname',
+                        title: 'Bucket Name',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Outpost Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'outpostid',
+                        title: 'Outpost ID',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -170,6 +313,10 @@ async function updateDatatableStorageS3() {
     blockUI('#section-storage-s3-bucketpolicies-datatable');
     blockUI('#section-storage-s3-accesspoints-datatable');
     blockUI('#section-storage-s3-storagelenses-datatable');
+    blockUI('#section-storage-s3-outpostbuckets-datatable');
+    blockUI('#section-storage-s3-outpostbucketpolicies-datatable');
+    blockUI('#section-storage-s3-outpostaccesspoints-datatable');
+    blockUI('#section-storage-s3-outpostendpoints-datatable');
 
     await sdkcall("S3", "listBuckets", {
         // no params
@@ -296,6 +443,10 @@ async function updateDatatableStorageS3() {
     }, true).then(async (data) => {
         $('#section-storage-s3-accesspoints-datatable').deferredBootstrapTable('removeAll');
         $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-outpostbuckets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-outpostbucketpolicies-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-outpostaccesspoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-outpostendpoints-datatable').deferredBootstrapTable('removeAll');
 
         var accountId = data.Account;
 
@@ -349,10 +500,122 @@ async function updateDatatableStorageS3() {
                 });
             }));
         }).catch(() => { });
+
+        await sdkcall("S3Control", "listRegionalBuckets", {
+            AccountId: accountId
+        }, false).then(async (data) => {
+            $('#section-storage-s3-outpostbuckets-datatable').deferredBootstrapTable('removeAll');
+            $('#section-storage-s3-outpostbucketpolicies-datatable').deferredBootstrapTable('removeAll');
+    
+            await Promise.all(data.RegionalBucketList.map(async (bucket) => {
+                await sdkcall("S3Control", "getBucket", {
+                    Bucket: bucket.Bucket,
+                    AccountId: accountId
+                }, true).then(async (data) => {
+                    data['OutpostId'] = bucket.OutpostId;
+
+                    await sdkcall("S3Control", "getBucketLifecycleConfiguration", {
+                        Bucket: bucket.Bucket,
+                        AccountId: accountId
+                    }, true).then((lifecycledata) => {
+                        data['LifecycleConfiguration'] = lifecycledata;
+                    });
+
+                    $('#section-storage-s3-outpostbuckets-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Bucket,
+                        f2type: 's3.outpostbucket',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Bucket,
+                        outpostid: bucket.OutpostId
+                    }]);
+                });
+
+                return sdkcall("S3Control", "getBucketPolicy", {
+                    Bucket: bucket.Bucket,
+                    AccountId: accountId
+                }, true).then((data) => {
+                    data['Bucket'] = bucket.Bucket;
+
+                    $('#section-storage-s3-outpostbucketpolicies-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Bucket + " Policy",
+                        f2type: 's3.outpostbucketpolicy',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Bucket
+                    }]);
+                });
+            }));
+        }).catch(() => { });
+
+        await sdkcall("S3Control", "listAccessPoints", {
+            AccountId: accountId
+        }, false).then(async (data) => {
+            $('#section-storage-s3-outpostaccesspoints-datatable').deferredBootstrapTable('removeAll');
+    
+            await Promise.all(data.AccessPointList.map(async (accesspoint) => {
+                return sdkcall("S3Control", "getAccessPoint", {
+                    Name: accesspoint.Name,
+                    AccountId: accountId
+                }, true).then(async (data) => {
+                    await sdkcall("S3Control", "getAccessPointPolicy", {
+                        Name: accesspoint.Name,
+                        AccountId: accountId
+                    }, false).then((policydata) => {
+                        data['Policy'] = policydata.Policy;
+                    }).catch(() => { });
+
+                    data['AccessPointArn'] = accesspoint.AccessPointArn;
+
+                    $('#section-storage-s3-outpostaccesspoints-datatable').deferredBootstrapTable('append', [{
+                        f2id: accesspoint.AccessPointArn,
+                        f2type: 's3.outpostaccesspoint',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name,
+                        bucketname: data.Bucket
+                    }]);
+                });
+            }));
+        }).catch(() => { });
     });
+
+    await sdkcall("S3Outposts", "listEndpoints", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-storage-s3-outpostendpoints-datatable').deferredBootstrapTable('removeAll');
+
+        data.Endpoints.forEach(async (endpoint) => {
+            var endpointid = endpoint.EndpointArn.split("/").pop();
+
+            if (endpoint.NetworkInterfaces && endpoint.NetworkInterfaces[0] && endpoint.NetworkInterfaces[0].NetworkInterfaceId) {
+                await sdkcall("EC2", "describeNetworkInterfaces", {
+                    NetworkInterfaceIds: [endpoint.NetworkInterfaces[0].NetworkInterfaceId]
+                }, true).then(async (nicdata) => {
+                    if (nicdata.NetworkInterfaces && nicdata.NetworkInterfaces[0] && nicdata.NetworkInterfaces[0].Groups && nicdata.NetworkInterfaces[0].Groups[0]) {
+                        endpoint['SecurityGroupId'] = nicdata.NetworkInterfaces[0].Groups[0].GroupId;
+                        endpoint['SubnetId'] = nicdata.NetworkInterfaces[0].SubnetId;
+
+                        $('#section-storage-s3-outpostendpoints-datatable').deferredBootstrapTable('append', [{
+                            f2id: endpoint.EndpointArn,
+                            f2type: 's3.outpostendpoint',
+                            f2data: endpoint,
+                            f2region: region,
+                            id: endpointid,
+                            outpostid: data.OutpostsId
+                        }]);
+                    }
+                });
+            }
+        });
+    }).catch(() => { });
 
     unblockUI('#section-storage-s3-accesspoints-datatable');
     unblockUI('#section-storage-s3-storagelenses-datatable');
+    unblockUI('#section-storage-s3-outpostbuckets-datatable');
+    unblockUI('#section-storage-s3-outpostbucketpolicies-datatable');
+    unblockUI('#section-storage-s3-outpostaccesspoints-datatable');
+    unblockUI('#section-storage-s3-outpostendpoints-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -762,6 +1025,58 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3::StorageLens',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.outpostbucket") {
+        reqParams.cfn['BucketName'] = obj.data.Bucket;
+        reqParams.cfn['OutpostId'] = obj.data.OutpostId;
+        reqParams.cfn['LifecycleConfiguration'] = obj.data.LifecycleConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3Outposts::Bucket'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3Outposts::Bucket',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.outpostbucketpolicy") {
+        reqParams.cfn['Bucket'] = obj.data.Bucket;
+        reqParams.cfn['PolicyDocument'] = JSON.parse(obj.data.Policy);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3Outposts::BucketPolicy'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3Outposts::BucketPolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.outpostaccesspoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Bucket'] = obj.data.Bucket;
+        reqParams.cfn['Policy'] = JSON.parse(obj.data.Policy);
+        reqParams.cfn['VpcConfiguration'] = obj.data.VpcConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3Outposts::AccessPoint'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3Outposts::AccessPoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.outpostendpoint") {
+        reqParams.cfn['OutpostId'] = obj.data.OutpostsId;
+        reqParams.cfn['SecurityGroupId'] = obj.data.SecurityGroupId;
+        reqParams.cfn['SubnetId'] = obj.data.SubnetId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3Outposts::Endpoint'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3Outposts::Endpoint',
             'options': reqParams
         });
     } else {

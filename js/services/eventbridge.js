@@ -330,6 +330,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'API Destinations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Connections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -343,6 +419,8 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
     blockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
     blockUI('#section-applicationintegration-eventbridge-archives-datatable');
+    blockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
+    blockUI('#section-applicationintegration-eventbridge-connections-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -525,6 +603,48 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     }).catch(() => { });
 
+    await sdkcall("EventBridge", "listApiDestinations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-apidestinations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ApiDestinations.map(async (apidestination) => {
+            return sdkcall("EventBridge", "describeApiDestination", {
+                Name: apidestination.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-apidestinations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ApiDestinationArn,
+                    f2type: 'eventbridge.apidestination',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("EventBridge", "listConnections", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-connections-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Connections.map(async (connection) => {
+            return sdkcall("EventBridge", "describeConnection", {
+                Name: connection.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-connections-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ConnectionArn,
+                    f2type: 'eventbridge.connection',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
@@ -533,6 +653,8 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-schemadiscoverers-datatable');
     unblockUI('#section-applicationintegration-eventbridge-registrypolicies-datatable');
     unblockUI('#section-applicationintegration-eventbridge-archives-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-connections-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -836,6 +958,36 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'eventbridge',
             'type': 'AWS::Events::Archive',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.apidestination") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['ConnectionArn'] = obj.data.ConnectionArn;
+        reqParams.cfn['InvocationEndpoint'] = obj.data.InvocationEndpoint;
+        reqParams.cfn['HttpMethod'] = obj.data.HttpMethod;
+        reqParams.cfn['InvocationRateLimitPerSecond'] = obj.data.InvocationRateLimitPerSecond;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::ApiDestination'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::ApiDestination',
+            'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.connection") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['AuthorizationType'] = obj.data.AuthorizationType;
+        reqParams.cfn['AuthParameters'] = obj.data.AuthParameters;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::Connection'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::Connection',
             'options': reqParams
         });
     } else {
