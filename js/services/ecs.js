@@ -460,15 +460,15 @@ async function updateDatatableContainersECS() {
                 }]);
             });
         }));
-
-        unblockUI('#section-containers-ecs-taskdefinitions-datatable');
-    });
+    }).catch(err => { });
 
     await sdkcall("ECS", "listClusters", {
         // no params
     }, true).then(async (data) => {
         $('#section-containers-ecs-clusters-datatable').deferredBootstrapTable('removeAll');
         $('#section-containers-ecs-services-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-tasksets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-ecs-primarytasksets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusterArns.map(clusterArn => {
             return Promise.all([
@@ -544,12 +544,7 @@ async function updateDatatableContainersECS() {
                 })
             ]);
         }));
-
-        unblockUI('#section-containers-ecs-clusters-datatable');
-        unblockUI('#section-containers-ecs-services-datatable');
-        unblockUI('#section-containers-ecs-primarytasksets-datatable');
-        unblockUI('#section-containers-ecs-tasksets-datatable');
-    });
+    }).catch(err => { });
 
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ecs"
@@ -578,9 +573,7 @@ async function updateDatatableContainersECS() {
                 });
             }));
         }
-
-        unblockUI('#section-containers-ecs-applicationautoscalingscalabletargets-datatable');
-    });
+    }).catch(err => { });
 
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ecs"
@@ -601,9 +594,7 @@ async function updateDatatableContainersECS() {
                 }]);
             });
         }
-
-        unblockUI('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable');
-    });
+    }).catch(err => { });
 
     await sdkcall("ECS", "describeCapacityProviders", {
         include: ["TAGS"]
@@ -624,9 +615,16 @@ async function updateDatatableContainersECS() {
                 }
             });
         }
-
-        unblockUI('#section-containers-ecs-capacityproviders-datatable');
     }).catch(err => { });
+
+    unblockUI('#section-containers-ecs-taskdefinitions-datatable');
+    unblockUI('#section-containers-ecs-clusters-datatable');
+    unblockUI('#section-containers-ecs-services-datatable');
+    unblockUI('#section-containers-ecs-primarytasksets-datatable');
+    unblockUI('#section-containers-ecs-tasksets-datatable');
+    unblockUI('#section-containers-ecs-applicationautoscalingscalabletargets-datatable');
+    unblockUI('#section-containers-ecs-applicationautoscalingscalingpolicies-datatable');
+    unblockUI('#section-containers-ecs-capacityproviders-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
