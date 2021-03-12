@@ -652,6 +652,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Proxy Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Endpoint Name',
+                        field: 'endpointname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'proxyname',
+                        title: 'Proxy Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -670,6 +708,7 @@ async function updateDatatableDatabaseRDS() {
     blockUI('#section-database-rds-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-database-rds-proxies-datatable');
     blockUI('#section-database-rds-proxytargetgroups-datatable');
+    blockUI('#section-database-rds-proxyendpoints-datatable');
 
     await sdkcall("RDS", "describeDBClusters", {
         Filters: [{
@@ -989,7 +1028,25 @@ async function updateDatatableDatabaseRDS() {
         unblockUI('#section-database-rds-proxytargetgroups-datatable');
     }).catch(err => { });
 
+    await sdkcall("RDS", "describeDBProxyEndpoints", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-database-rds-proxyendpoints-datatable').deferredBootstrapTable('removeAll');
+
+        data.DBProxyEndpoints.forEach(endpoint => {
+            $('#section-database-rds-proxyendpoints-datatable').deferredBootstrapTable('append', [{
+                f2id: endpoint.DBProxyEndpointArn,
+                f2type: 'rds.proxyendpoint',
+                f2data: endpoint,
+                f2region: region,
+                endpointname: endpoint.DBProxyEndpointName,
+                proxyname: endpoint.DBProxyName
+            }]);
+        });
+    }).catch(err => { });
+
     unblockUI('#section-database-rds-globalclusters-datatable');
+    unblockUI('#section-database-rds-proxyendpoints-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1571,6 +1628,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'TargetGroupArn': obj.data.TargetGroupArn
+                }
+            }
+        });
+    } else if (obj.type == "rds.proxyendpoint") {
+        reqParams.cfn['DBProxyEndpointName'] = obj.data.DBProxyEndpointName;
+        reqParams.cfn['DBProxyName'] = obj.data.DBProxyName;
+        reqParams.cfn['TargetRole'] = obj.data.TargetRole;
+        reqParams.cfn['VpcSecurityGroupIds'] = obj.data.VpcSecurityGroupIds;
+        reqParams.cfn['VpcSubnetIds'] = obj.data.VpcSubnetIds;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('rds', obj.id, 'AWS::RDS::DBProxyEndpoint'),
+            'region': obj.region,
+            'service': 'rds',
+            'type': 'AWS::RDS::DBProxyEndpoint',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DBProxyEndpointName,
+                'GetAtt': {
+                    'Endpoint': obj.data.Endpoint,
+                    'DBProxyEndpointArn': obj.data.DBProxyEndpointArn
                 }
             }
         });

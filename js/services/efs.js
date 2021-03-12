@@ -272,6 +272,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['FileSystemPolicy'] = obj.data.FileSystemPolicy;
         reqParams.cfn['BackupPolicy'] = obj.data.BackupPolicy;
+        reqParams.cfn['AvailabilityZoneName'] = obj.data.AvailabilityZoneName;
 
         tracked_resources.push({
             'obj': obj,

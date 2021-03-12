@@ -43,12 +43,98 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Anomaly Monitors': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Anomaly Subscriptions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'threshold',
+                        title: 'Threshold',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'frequency',
+                        title: 'Frequency',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableAWSCostManagementCostExplorer() {
     blockUI('#section-awscostmanagement-costexplorer-costcategories-datatable');
+    blockUI('#section-awscostmanagement-costexplorer-anomalymonitors-datatable');
+    blockUI('#section-awscostmanagement-costexplorer-anomalysubscriptions-datatable');
 
     await sdkcall("CostExplorer", "listCostCategoryDefinitions", {
         // no params
@@ -71,7 +157,44 @@ async function updateDatatableAWSCostManagementCostExplorer() {
         }));
     }).catch(() => { });
 
+    await sdkcall("CostExplorer", "getAnomalyMonitors", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-awscostmanagement-costexplorer-anomalymonitors-datatable').deferredBootstrapTable('removeAll');
+
+        data.AnomalyMonitors.forEach(anomalymonitor => {
+            $('#section-awscostmanagement-costexplorer-anomalymonitors-datatable').deferredBootstrapTable('append', [{
+                f2id: anomalymonitor.MonitorArn,
+                f2type: 'costexplorer.anomalymonitor',
+                f2data: anomalymonitor,
+                f2region: region,
+                name: anomalymonitor.MonitorName,
+                type: anomalymonitor.MonitorType
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("CostExplorer", "getAnomalySubscriptions", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-awscostmanagement-costexplorer-anomalysubscriptions-datatable').deferredBootstrapTable('removeAll');
+
+        data.AnomalySubscriptions.forEach(anomalysubscription => {
+            $('#section-awscostmanagement-costexplorer-anomalysubscriptions-datatable').deferredBootstrapTable('append', [{
+                f2id: anomalysubscription.SubscriptionArn,
+                f2type: 'costexplorer.anomalysubscription',
+                f2data: anomalysubscription,
+                f2region: region,
+                name: anomalysubscription.SubscriptionName,
+                threshold: anomalysubscription.Threshold,
+                frequency: anomalysubscription.Frequency
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-awscostmanagement-costexplorer-costcategories-datatable');
+    unblockUI('#section-awscostmanagement-costexplorer-anomalymonitors-datatable');
+    unblockUI('#section-awscostmanagement-costexplorer-anomalysubscriptions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -92,6 +215,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'Arn': obj.data.CostCategoryArn
                 }
+            }
+        });
+    } else if (obj.type == "costexplorer.anomalymonitor") {
+        reqParams.cfn['MonitorName'] = obj.data.MonitorName;
+        reqParams.cfn['MonitorType'] = obj.data.MonitorType;
+        reqParams.cfn['MonitorDimension'] = obj.data.MonitorDimension;
+        reqParams.cfn['MonitorSpecification'] = JSON.stringify(obj.data.MonitorSpecification);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('costexplorer', obj.id, 'AWS::CE::AnomalyMonitor'),
+            'region': obj.region,
+            'service': 'costexplorer',
+            'type': 'AWS::CE::AnomalyMonitor',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.MonitorArn
+            }
+        });
+    } else if (obj.type == "costexplorer.anomalysubscription") {
+        reqParams.cfn['SubscriptionName'] = obj.data.SubscriptionName;
+        reqParams.cfn['Threshold'] = obj.data.Threshold;
+        reqParams.cfn['Frequency'] = obj.data.Frequency;
+        reqParams.cfn['MonitorArnList'] = obj.data.MonitorArnList;
+        reqParams.cfn['Subscribers'] = obj.data.Subscribers;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('costexplorer', obj.id, 'AWS::CE::AnomalySubscription'),
+            'region': obj.region,
+            'service': 'costexplorer',
+            'type': 'AWS::CE::AnomalySubscription',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.SubscriptionArn
             }
         });
     } else {
