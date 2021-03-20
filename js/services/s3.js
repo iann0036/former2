@@ -304,6 +304,58 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Object Lambda Access Points': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'Object Lambda Access Point Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Access Point',
+                        field: 'accesspoint',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -317,6 +369,8 @@ async function updateDatatableStorageS3() {
     blockUI('#section-storage-s3-outpostbucketpolicies-datatable');
     blockUI('#section-storage-s3-outpostaccesspoints-datatable');
     blockUI('#section-storage-s3-outpostendpoints-datatable');
+    blockUI('#section-storage-s3-objectlambdaaccesspoints-datatable');
+    blockUI('#section-storage-s3-objectlambdaaccesspointpolicies-datatable');
 
     await sdkcall("S3", "listBuckets", {
         // no params
@@ -578,6 +632,46 @@ async function updateDatatableStorageS3() {
                 });
             }));
         }).catch(() => { });
+
+        await sdkcall("S3Control", "listAccessPointsForObjectLambda", {
+            AccountId: accountId
+        }, true).then(async (data) => {
+            $('#section-storage-s3-objectlambdaaccesspoints-datatable').deferredBootstrapTable('removeAll');
+            $('#section-storage-s3-objectlambdaaccesspointpolicies-datatable').deferredBootstrapTable('removeAll');
+    
+            await Promise.all(data.ObjectLambdaAccessPointList.map(async (accesspoint) => {
+                await sdkcall("S3Control", "getAccessPointConfigurationForObjectLambda", {
+                    Name: accesspoint.Name,
+                    AccountId: accountId
+                }, true).then((data) => {
+                    data['Name'] = accesspoint.Name;
+                    data['Arn'] = accesspoint.ObjectLambdaAccessPointArn;
+
+                    $('#section-storage-s3-objectlambdaaccesspoints-datatable').deferredBootstrapTable('append', [{
+                        f2id: accesspoint.ObjectLambdaAccessPointArn,
+                        f2type: 's3.objectlambdaaccesspoint',
+                        f2data: data,
+                        f2region: region,
+                        name: accesspoint.Name
+                    }]);
+                });
+
+                return sdkcall("S3Control", "getAccessPointPolicyForObjectLambda", {
+                    Name: accesspoint.Name,
+                    AccountId: accountId
+                }, true).then((data) => {
+                    data['ObjectLambdaAccessPoint'] = accesspoint.Name;
+
+                    $('#section-storage-s3-objectlambdaaccesspointpolicies-datatable').deferredBootstrapTable('append', [{
+                        f2id: accesspoint.ObjectLambdaAccessPointArn + " Policy",
+                        f2type: 's3.objectlambdaaccesspointpolicy',
+                        f2data: data,
+                        f2region: region,
+                        accesspoint: accesspoint.Name
+                    }]);
+                });
+            }));
+        }).catch(() => { });
     });
 
     await sdkcall("S3Outposts", "listEndpoints", {
@@ -616,6 +710,8 @@ async function updateDatatableStorageS3() {
     unblockUI('#section-storage-s3-outpostbucketpolicies-datatable');
     unblockUI('#section-storage-s3-outpostaccesspoints-datatable');
     unblockUI('#section-storage-s3-outpostendpoints-datatable');
+    unblockUI('#section-storage-s3-objectlambdaaccesspoints-datatable');
+    unblockUI('#section-storage-s3-objectlambdaaccesspointpolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1077,6 +1173,35 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3Outposts::Endpoint',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.objectlambdaaccesspoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['ObjectLambdaConfiguration'] = obj.data.Configuration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3ObjectLambda::AccessPoint'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3ObjectLambda::AccessPoint',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "s3.objectlambdaaccesspointpolicy") {
+        reqParams.cfn['ObjectLambdaAccessPoint'] = obj.data.ObjectLambdaAccessPoint;
+        reqParams.cfn['PolicyDocument'] = obj.data.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3ObjectLambda::AccessPointPolicy'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3ObjectLambda::AccessPointPolicy',
             'options': reqParams
         });
     } else {
