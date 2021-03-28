@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Customer Engagement',
+    'category': 'Business Applications',
     'service': 'SES',
     'resourcetypes': {
         'Configuration Sets': {
@@ -309,19 +309,19 @@ sections.push({
     }
 });
 
-async function updateDatatableCustomerEngagementSES() {
+async function updateDatatableBusinessApplicationsSES() {
     if (["us-east-1", "us-west-2", "eu-west-1"].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
-        blockUI('#section-customerengagement-ses-receiptfilters-datatable');
-        blockUI('#section-customerengagement-ses-receiptrules-datatable');
-        blockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+        blockUI('#section-businessapplications-ses-receiptfilters-datatable');
+        blockUI('#section-businessapplications-ses-receiptrules-datatable');
+        blockUI('#section-businessapplications-ses-receiptrulesets-datatable');
 
         await sdkcall("SES", "listReceiptFilters", {
             // no params
         }, true).then((data) => {
-            $('#section-customerengagement-ses-receiptfilters-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-receiptfilters-datatable').deferredBootstrapTable('removeAll');
 
             data.Filters.forEach(filter => {
-                $('#section-customerengagement-ses-receiptfilters-datatable').deferredBootstrapTable('append', [{
+                $('#section-businessapplications-ses-receiptfilters-datatable').deferredBootstrapTable('append', [{
                     f2id: filter.Name,
                     f2type: 'ses.receiptfilter',
                     f2data: filter,
@@ -332,16 +332,16 @@ async function updateDatatableCustomerEngagementSES() {
                 }]);
             });
 
-            unblockUI('#section-customerengagement-ses-receiptfilters-datatable');
+            unblockUI('#section-businessapplications-ses-receiptfilters-datatable');
         });
 
         await sdkcall("SES", "listReceiptRuleSets", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-receiptrulesets-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-receiptrulesets-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.RuleSets.map(ruleSet => {
-                $('#section-customerengagement-ses-receiptrulesets-datatable').deferredBootstrapTable('append', [{
+                $('#section-businessapplications-ses-receiptrulesets-datatable').deferredBootstrapTable('append', [{
                     f2id: ruleSet.Name,
                     f2type: 'ses.receiptruleset',
                     f2data: ruleSet,
@@ -358,7 +358,7 @@ async function updateDatatableCustomerEngagementSES() {
                         rule['After'] = previousRuleName;
                         previousRuleName = rule.Name;
                         rule['RuleSetName'] = ruleSet.Name;
-                        $('#section-customerengagement-ses-receiptrules-datatable').deferredBootstrapTable('append', [{
+                        $('#section-businessapplications-ses-receiptrules-datatable').deferredBootstrapTable('append', [{
                             f2id: rule.Name,
                             f2type: 'ses.receiptrule',
                             f2data: rule,
@@ -373,8 +373,8 @@ async function updateDatatableCustomerEngagementSES() {
                 });
             }));
 
-            unblockUI('#section-customerengagement-ses-receiptrules-datatable');
-            unblockUI('#section-customerengagement-ses-receiptrulesets-datatable');
+            unblockUI('#section-businessapplications-ses-receiptrules-datatable');
+            unblockUI('#section-businessapplications-ses-receiptrulesets-datatable');
         });
     }
 
@@ -398,16 +398,16 @@ async function updateDatatableCustomerEngagementSES() {
         "us-gov-west-1"
     ].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
 
-        blockUI('#section-customerengagement-ses-configurationsets-datatable');
-        blockUI('#section-customerengagement-ses-eventdestinations-datatable');
-        blockUI('#section-customerengagement-ses-templates-datatable');
-        blockUI('#section-customerengagement-ses-contactlists-datatable');
+        blockUI('#section-businessapplications-ses-configurationsets-datatable');
+        blockUI('#section-businessapplications-ses-eventdestinations-datatable');
+        blockUI('#section-businessapplications-ses-templates-datatable');
+        blockUI('#section-businessapplications-ses-contactlists-datatable');
 
         await sdkcall("SES", "listConfigurationSets", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('removeAll');
-            $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-configurationsets-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-eventdestinations-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.ConfigurationSets.map(configurationSet => {
                 return sdkcall("SES", "describeConfigurationSet", {
@@ -415,7 +415,7 @@ async function updateDatatableCustomerEngagementSES() {
                 }, true).then((data) => {
                     data.EventDestinations.forEach(eventDestination => {
                         eventDestination['ConfigurationSetName'] = configurationSet.Name;
-                        $('#section-customerengagement-ses-eventdestinations-datatable').deferredBootstrapTable('append', [{
+                        $('#section-businessapplications-ses-eventdestinations-datatable').deferredBootstrapTable('append', [{
                             f2id: eventDestination.Name,
                             f2type: 'ses.eventdestination',
                             f2data: eventDestination,
@@ -426,7 +426,7 @@ async function updateDatatableCustomerEngagementSES() {
                         }]);
                     });
 
-                    $('#section-customerengagement-ses-configurationsets-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-ses-configurationsets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ConfigurationSet.Name,
                         f2type: 'ses.configurationset',
                         f2data: data,
@@ -436,20 +436,20 @@ async function updateDatatableCustomerEngagementSES() {
                 });
             }));
 
-            unblockUI('#section-customerengagement-ses-configurationsets-datatable');
-            unblockUI('#section-customerengagement-ses-eventdestinations-datatable');
+            unblockUI('#section-businessapplications-ses-configurationsets-datatable');
+            unblockUI('#section-businessapplications-ses-eventdestinations-datatable');
         }).catch(() => { });
 
         await sdkcall("SES", "listTemplates", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-templates-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-templates-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.TemplatesMetadata.map(template => {
                 return sdkcall("SES", "getTemplate", {
                     TemplateName: template.Name
                 }, true).then((data) => {
-                    $('#section-customerengagement-ses-templates-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-ses-templates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Template.TemplateName,
                         f2type: 'ses.template',
                         f2data: data,
@@ -460,19 +460,19 @@ async function updateDatatableCustomerEngagementSES() {
                 });
             }));
 
-            unblockUI('#section-customerengagement-ses-templates-datatable');
+            unblockUI('#section-businessapplications-ses-templates-datatable');
         }).catch(() => { });
 
         await sdkcall("SESV2", "listContactLists", {
             // no params
         }, true).then(async (data) => {
-            $('#section-customerengagement-ses-contactlists-datatable').deferredBootstrapTable('removeAll');
+            $('#section-businessapplications-ses-contactlists-datatable').deferredBootstrapTable('removeAll');
 
             await Promise.all(data.ContactLists.map(contactlist => {
                 return sdkcall("SESV2", "getContactList", {
                     ContactListName: contactlist.ContactListName
                 }, true).then((data) => {
-                    $('#section-customerengagement-ses-contactlists-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-ses-contactlists-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ContactListName + " Contact List",
                         f2type: 'ses.contactlist',
                         f2data: data,
@@ -483,7 +483,7 @@ async function updateDatatableCustomerEngagementSES() {
                 });
             }));
 
-            unblockUI('#section-customerengagement-ses-contactlists-datatable');
+            unblockUI('#section-businessapplications-ses-contactlists-datatable');
         }).catch(() => { });
     }
 }

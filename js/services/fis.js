@@ -52,10 +52,10 @@ async function updateDatatableDeveloperToolsFIS() {
 
     await sdkcall("Fis", "listExperimentTemplates", {
         // no params
-    }, true).then((data) => {
+    }, true).then(async (data) => {
         $('#section-developertools-fis-experimenttemplates-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.experimentTemplates.map(experimenttemplate => {
+        await Promise.all(data.experimentTemplates.map(async (experimenttemplate) => {
             return sdkcall("Fis", "getExperimentTemplate", {
                 id: experimenttemplate.id
             }, true).then(async (data) => {

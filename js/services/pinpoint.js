@@ -3,7 +3,7 @@
 /* ========================================================================== */
 
 sections.push({
-    'category': 'Customer Engagement',
+    'category': 'Business Applications',
     'service': 'Pinpoint',
     'resourcetypes': {
         'Apps': {
@@ -1061,51 +1061,51 @@ sections.push({
     }
 });
 
-async function updateDatatableCustomerEngagementPinpoint() {
-    blockUI('#section-customerengagement-pinpoint-apps-datatable');
-    blockUI('#section-customerengagement-pinpoint-applicationsettings-datatable');
-    blockUI('#section-customerengagement-pinpoint-campaigns-datatable');
-    blockUI('#section-customerengagement-pinpoint-segments-datatable');
-    blockUI('#section-customerengagement-pinpoint-eventstreams-datatable');
-    blockUI('#section-customerengagement-pinpoint-admchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-apnschannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-apnssandboxchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-apnsvoipchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-baiduchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-emailchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-gcmchannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-smschannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-voicechannels-datatable');
-    blockUI('#section-customerengagement-pinpoint-emailconfigurationsets-datatable');
-    blockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
-    blockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
-    blockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
-    blockUI('#section-customerengagement-pinpoint-emailtemplates-datatable');
-    blockUI('#section-customerengagement-pinpoint-smstemplates-datatable');
-    blockUI('#section-customerengagement-pinpoint-pushtemplates-datatable');
+async function updateDatatableBusinessApplicationsPinpoint() {
+    blockUI('#section-businessapplications-pinpoint-apps-datatable');
+    blockUI('#section-businessapplications-pinpoint-applicationsettings-datatable');
+    blockUI('#section-businessapplications-pinpoint-campaigns-datatable');
+    blockUI('#section-businessapplications-pinpoint-segments-datatable');
+    blockUI('#section-businessapplications-pinpoint-eventstreams-datatable');
+    blockUI('#section-businessapplications-pinpoint-admchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-apnschannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-apnssandboxchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-apnsvoipchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-apnsvoipsandboxchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-baiduchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-emailchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-gcmchannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-smschannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-voicechannels-datatable');
+    blockUI('#section-businessapplications-pinpoint-emailconfigurationsets-datatable');
+    blockUI('#section-businessapplications-pinpoint-emailconfigurationseteventdestinations-datatable');
+    blockUI('#section-businessapplications-pinpoint-emaildedicatedippools-datatable');
+    blockUI('#section-businessapplications-pinpoint-emailidentities-datatable');
+    blockUI('#section-businessapplications-pinpoint-emailtemplates-datatable');
+    blockUI('#section-businessapplications-pinpoint-smstemplates-datatable');
+    blockUI('#section-businessapplications-pinpoint-pushtemplates-datatable');
 
     await sdkcall("Pinpoint", "getApps", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-apps-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-applicationsettings-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-campaigns-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-segments-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-eventstreams-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-admchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnschannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-baiduchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-emailchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-gcmchannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-smschannels-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-voicechannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-apps-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-applicationsettings-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-campaigns-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-segments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-eventstreams-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-admchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-apnschannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-apnssandboxchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-apnsvoipchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-apnsvoipsandboxchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-baiduchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emailchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-gcmchannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-smschannels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-voicechannels-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ApplicationsResponse.Item.map(app => {
-            $('#section-customerengagement-pinpoint-apps-datatable').deferredBootstrapTable('append', [{
+            $('#section-businessapplications-pinpoint-apps-datatable').deferredBootstrapTable('append', [{
                 f2id: app.Arn,
                 f2type: 'pinpoint.app',
                 f2data: app,
@@ -1118,7 +1118,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getConfigurationSet", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-applicationsettings-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-applicationsettings-datatable').deferredBootstrapTable('append', [{
                         f2id: app.Arn + " Settings",
                         f2type: 'pinpoint.applicationsettings',
                         f2data: data.ApplicationSettingsResource,
@@ -1132,7 +1132,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 }, false).then(async (data) => {
                     if (data.CampaignsResponse && data.CampaignsResponse.Item) {
                         data.CampaignsResponse.Item.forEach(campaign => {
-                            $('#section-customerengagement-pinpoint-campaigns-datatable').deferredBootstrapTable('append', [{
+                            $('#section-businessapplications-pinpoint-campaigns-datatable').deferredBootstrapTable('append', [{
                                 f2id: campaign.Arn,
                                 f2type: 'pinpoint.campaign',
                                 f2data: campaign,
@@ -1151,7 +1151,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 }, false).then(async (data) => {
                     if (data.SegmentsResponse && data.SegmentsResponse.Item) {
                         data.SegmentsResponse.Item.forEach(segment => {
-                            $('#section-customerengagement-pinpoint-segments-datatable').deferredBootstrapTable('append', [{
+                            $('#section-businessapplications-pinpoint-segments-datatable').deferredBootstrapTable('append', [{
                                 f2id: segment.Arn,
                                 f2type: 'pinpoint.segment',
                                 f2data: segment,
@@ -1168,7 +1168,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getEventStream", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-eventstreams-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-eventstreams-datatable').deferredBootstrapTable('append', [{
                         f2id: data.EventStream.ApplicationId + " Event Stream",
                         f2type: 'pinpoint.eventstream',
                         f2data: data.EventStream,
@@ -1180,7 +1180,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getAdmChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-admchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-admchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.ADMChannelResponse.ApplicationId + " ADM Channel",
                         f2type: 'pinpoint.admchannel',
                         f2data: data.ADMChannelResponse,
@@ -1194,7 +1194,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getApnsChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-apnschannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-apnschannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.APNSChannelResponse.ApplicationId + " APNs Channel",
                         f2type: 'pinpoint.apnschannel',
                         f2data: data.APNSChannelResponse,
@@ -1208,7 +1208,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getApnsSandboxChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-apnssandboxchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-apnssandboxchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.APNSSandboxChannelResponse.ApplicationId + " APNs Sandbox Channel",
                         f2type: 'pinpoint.apnssandboxchannel',
                         f2data: data.APNSSandboxChannelResponse,
@@ -1222,7 +1222,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getApnsVoipChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-apnsvoipchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-apnsvoipchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.APNSVoipChannelResponse.ApplicationId + " APNs VoIP Channel",
                         f2type: 'pinpoint.apnsvoipchannel',
                         f2data: data.APNSVoipChannelResponse,
@@ -1236,7 +1236,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getApnsVoipSandboxChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-apnsvoipsandboxchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.APNSVoipSandboxChannelResponse.ApplicationId + " APNs VoIP Sandbox Channel",
                         f2type: 'pinpoint.apnsvoipsandboxchannel',
                         f2data: data.APNSVoipSandboxChannelResponse,
@@ -1250,7 +1250,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getBaiduChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-baiduchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-baiduchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.BaiduChannelResponse.ApplicationId + " Baidu Channel",
                         f2type: 'pinpoint.baiduchannel',
                         f2data: data.BaiduChannelResponse,
@@ -1264,7 +1264,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getEmailChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-emailchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-emailchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.EmailChannelResponse.ApplicationId + " Email Channel",
                         f2type: 'pinpoint.emailchannel',
                         f2data: data.EmailChannelResponse,
@@ -1278,7 +1278,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getGcmChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-gcmchannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-gcmchannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.GCMChannelResponse.ApplicationId + " GCM Channel",
                         f2type: 'pinpoint.gcmchannel',
                         f2data: data.GCMChannelResponse,
@@ -1292,7 +1292,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getSmsChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-smschannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-smschannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.SMSChannelResponse.ApplicationId + " SMS Channel",
                         f2type: 'pinpoint.smschannel',
                         f2data: data.SMSChannelResponse,
@@ -1306,7 +1306,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 sdkcall("Pinpoint", "getVoiceChannel", {
                     ApplicationId: app.Id
                 }, false).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-voicechannels-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-voicechannels-datatable').deferredBootstrapTable('append', [{
                         f2id: data.VoiceChannelResponse.ApplicationId + " Voice Channel",
                         f2type: 'pinpoint.voicechannel',
                         f2data: data.VoiceChannelResponse,
@@ -1320,34 +1320,34 @@ async function updateDatatableCustomerEngagementPinpoint() {
             ]);
         }));
 
-        unblockUI('#section-customerengagement-pinpoint-apps-datatable');
-        unblockUI('#section-customerengagement-pinpoint-applicationsettings-datatable');
-        unblockUI('#section-customerengagement-pinpoint-campaigns-datatable');
-        unblockUI('#section-customerengagement-pinpoint-segments-datatable');
-        unblockUI('#section-customerengagement-pinpoint-eventstreams-datatable');
-        unblockUI('#section-customerengagement-pinpoint-admchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-apnschannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-apnssandboxchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-apnsvoipchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-apnsvoipsandboxchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-baiduchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-emailchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-gcmchannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-smschannels-datatable');
-        unblockUI('#section-customerengagement-pinpoint-voicechannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-apps-datatable');
+        unblockUI('#section-businessapplications-pinpoint-applicationsettings-datatable');
+        unblockUI('#section-businessapplications-pinpoint-campaigns-datatable');
+        unblockUI('#section-businessapplications-pinpoint-segments-datatable');
+        unblockUI('#section-businessapplications-pinpoint-eventstreams-datatable');
+        unblockUI('#section-businessapplications-pinpoint-admchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-apnschannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-apnssandboxchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-apnsvoipchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-apnsvoipsandboxchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-baiduchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emailchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-gcmchannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-smschannels-datatable');
+        unblockUI('#section-businessapplications-pinpoint-voicechannels-datatable');
     });
 
     await sdkcall("PinpointEmail", "listConfigurationSets", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emailconfigurationsets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emailconfigurationseteventdestinations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ConfigurationSets.map(configurationset => {
             return sdkcall("PinpointEmail", "getConfigurationSet", {
                 ConfigurationSetName: configurationset
             }, true).then(async (data) => {
-                $('#section-customerengagement-pinpoint-emailconfigurationsets-datatable').deferredBootstrapTable('append', [{
+                $('#section-businessapplications-pinpoint-emailconfigurationsets-datatable').deferredBootstrapTable('append', [{
                     f2id: data.ConfigurationSetName,
                     f2type: 'pinpoint.emailconfigurationset',
                     f2data: data,
@@ -1361,7 +1361,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                     data.EventDestinations.forEach(eventdestination => {
                         eventdestination['ConfigurationSetName'] = configurationset;
 
-                        $('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable').deferredBootstrapTable('append', [{
+                        $('#section-businessapplications-pinpoint-emailconfigurationseteventdestinations-datatable').deferredBootstrapTable('append', [{
                             f2id: eventdestination.Name,
                             f2type: 'pinpoint.emailconfigurationseteventdestination',
                             f2data: eventdestination,
@@ -1375,17 +1375,17 @@ async function updateDatatableCustomerEngagementPinpoint() {
             });
         }));
 
-        unblockUI('#section-customerengagement-pinpoint-emailconfigurationsets-datatable');
-        unblockUI('#section-customerengagement-pinpoint-emailconfigurationseteventdestinations-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emailconfigurationsets-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emailconfigurationseteventdestinations-datatable');
     });
 
     await sdkcall("PinpointEmail", "listDedicatedIpPools", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('removeAll');
 
         data.DedicatedIpPools.forEach(dedicatedippool => {
-            $('#section-customerengagement-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('append', [{
+            $('#section-businessapplications-pinpoint-emaildedicatedippools-datatable').deferredBootstrapTable('append', [{
                 f2id: dedicatedippool,
                 f2type: 'pinpoint.emaildedicatedippool',
                 f2data: {
@@ -1396,13 +1396,13 @@ async function updateDatatableCustomerEngagementPinpoint() {
             }]);
         });
 
-        unblockUI('#section-customerengagement-pinpoint-emaildedicatedippools-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emaildedicatedippools-datatable');
     });
 
     await sdkcall("PinpointEmail", "listEmailIdentities", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailidentities-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emailidentities-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EmailIdentities.map(emailidentity => {
             return sdkcall("PinpointEmail", "getEmailIdentity", {
@@ -1410,7 +1410,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
             }, true).then(async (data) => {
                 data['Name'] = emailidentity.IdentityName;
 
-                $('#section-customerengagement-pinpoint-emailidentities-datatable').deferredBootstrapTable('append', [{
+                $('#section-businessapplications-pinpoint-emailidentities-datatable').deferredBootstrapTable('append', [{
                     f2id: emailidentity.IdentityName,
                     f2type: 'pinpoint.emailidentity',
                     f2data: data,
@@ -1421,22 +1421,22 @@ async function updateDatatableCustomerEngagementPinpoint() {
             });
         }));
 
-        unblockUI('#section-customerengagement-pinpoint-emailidentities-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emailidentities-datatable');
     });
 
     await sdkcall("Pinpoint", "listTemplates", {
         // no params
     }, true).then(async (data) => {
-        $('#section-customerengagement-pinpoint-emailtemplates-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-smstemplates-datatable').deferredBootstrapTable('removeAll');
-        $('#section-customerengagement-pinpoint-pushtemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-emailtemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-smstemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-pushtemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TemplatesResponse.Item.map(template => {
             if (template.TemplateType == "EMAIL") {
                 return sdkcall("Pinpoint", "getEmailTemplate", {
                     TemplateName: template.TemplateName
                 }, true).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-emailtemplates-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-emailtemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.EmailTemplateResponse.Arn,
                         f2type: 'pinpoint.emailtemplate',
                         f2data: data.EmailTemplateResponse,
@@ -1449,7 +1449,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 return sdkcall("Pinpoint", "getSmsTemplate", {
                     TemplateName: template.TemplateName
                 }, true).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-smstemplates-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-smstemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.SMSTemplateResponse.Arn,
                         f2type: 'pinpoint.smstemplate',
                         f2data: data.SMSTemplateResponse,
@@ -1462,7 +1462,7 @@ async function updateDatatableCustomerEngagementPinpoint() {
                 return sdkcall("Pinpoint", "getPushTemplate", {
                     TemplateName: template.TemplateName
                 }, true).then(async (data) => {
-                    $('#section-customerengagement-pinpoint-pushtemplates-datatable').deferredBootstrapTable('append', [{
+                    $('#section-businessapplications-pinpoint-pushtemplates-datatable').deferredBootstrapTable('append', [{
                         f2id: data.PushNotificationTemplateResponse.Arn,
                         f2type: 'pinpoint.pushtemplate',
                         f2data: data.PushNotificationTemplateResponse,
@@ -1474,9 +1474,9 @@ async function updateDatatableCustomerEngagementPinpoint() {
             }
         }));
 
-        unblockUI('#section-customerengagement-pinpoint-emailtemplates-datatable');
-        unblockUI('#section-customerengagement-pinpoint-smstemplates-datatable');
-        unblockUI('#section-customerengagement-pinpoint-pushtemplates-datatable');
+        unblockUI('#section-businessapplications-pinpoint-emailtemplates-datatable');
+        unblockUI('#section-businessapplications-pinpoint-smstemplates-datatable');
+        unblockUI('#section-businessapplications-pinpoint-pushtemplates-datatable');
     });
 }
 

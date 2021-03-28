@@ -87,9 +87,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'GetAtt': {
-                    'Arn': obj.data.ProjectArn
-                },
-                'GetAtt': {
+                    'Arn': obj.data.ProjectArn,
                     'ProjectName': obj.data.ProjectName
                 }
             }
