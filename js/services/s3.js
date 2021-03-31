@@ -1151,7 +1151,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "s3.outpostaccesspoint") {
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['Bucket'] = obj.data.Bucket;
-        reqParams.cfn['Policy'] = JSON.parse(obj.data.Policy);
+        if (obj.data.Policy) {
+            reqParams.cfn['Policy'] = JSON.parse(obj.data.Policy);
+        }
         reqParams.cfn['VpcConfiguration'] = obj.data.VpcConfiguration;
 
         tracked_resources.push({
