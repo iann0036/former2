@@ -495,6 +495,84 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Resolver Firewall Domain Lists': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Resolver Firewall Rule Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Resolver Firewall Rule Group Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -511,6 +589,9 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-dnssec-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable');
 
     await sdkcall("Route53", "listHostedZones", {
         // no params
@@ -762,6 +843,81 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
         unblockUI('#section-networkingandcontentdelivery-route53-resolverqueryloggingconfigassociations-datatable');
     }).catch(() => { });
+
+    await sdkcall("Route53Resolver", "listFirewallDomainLists", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FirewallDomainLists.map(async (firewalldomainlist) => {
+            return sdkcall("Route53Resolver", "getFirewallDomainList", {
+                FirewallDomainListId: firewalldomainlist.Id
+            }, true).then(async (data) => {
+                await sdkcall("Route53Resolver", "listFirewallDomains", {
+                    FirewallDomainListId: firewalldomainlist.Id
+                }, true).then(async (domainsdata) => {
+                    data.FirewallDomainList['Domains'] = domainsdata.Domains;
+                });
+
+                $('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FirewallDomainList.Id,
+                    f2type: 'route53.resolverfirewalldomainlist',
+                    f2data: data.FirewallDomainList,
+                    f2region: region,
+                    name: data.FirewallDomainList.Name
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("Route53Resolver", "listFirewallRuleGroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FirewallRuleGroups.map(async (firewallrulegroup) => {
+            await sdkcall("Route53Resolver", "getFirewallRuleGroup", {
+                FirewallRuleGroupId: firewallrulegroup.Id
+            }, true).then(async (data) => {
+                await sdkcall("Route53Resolver", "listFirewallRules", {
+                    FirewallRuleGroupId: firewallrulegroup.Id
+                }, true).then(async (rulesdata) => {
+                    data.FirewallRuleGroup['FirewallRules'] = rulesdata.FirewallRules;
+                });
+
+                $('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FirewallRuleGroup.Id,
+                    f2type: 'route53.resolverfirewallrulegroup',
+                    f2data: data.FirewallRuleGroup,
+                    f2region: region,
+                    name: data.FirewallRuleGroup.Name
+                }]);
+            });
+
+            return sdkcall("Route53Resolver", "listFirewallRuleGroupAssociations", {
+                FirewallRuleGroupId: firewallrulegroup.Id
+            }, true).then(async (data) => {
+                await Promise.all(data.FirewallRuleGroupAssociations.map(async (firewallrulegroupassociation) => {
+                    return sdkcall("Route53Resolver", "getFirewallRuleGroupAssociation", {
+                        FirewallRuleGroupAssociationId: firewallrulegroupassociation.Id
+                    }, true).then(async (data) => {
+                        $('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.FirewallRuleGroupAssociation.Id,
+                            f2type: 'route53.resolverfirewallrulegroupassociation',
+                            f2data: data.FirewallRuleGroupAssociation,
+                            f2region: region,
+                            name: data.FirewallRuleGroupAssociation.Name
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+        }));
+    }).catch(() => { });
+
+    unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable');
+    unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable');
+    unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1081,6 +1237,58 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53Resolver::ResolverDNSSECConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverfirewalldomainlist") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Domains'] = obj.data.Domains;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::FirewallDomainList'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::FirewallDomainList',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverfirewallrulegroup") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.FirewallRules) {
+            reqParams.cfn['FirewallRules'] = [];
+            obj.data.FirewallRules.forEach(rule => {
+                reqParams.cfn['FirewallRules'].push({
+                    'Action': rule.Action,
+                    'BlockOverrideDnsType': rule.BlockOverrideDnsType,
+                    'BlockOverrideDomain': rule.BlockOverrideDomain,
+                    'BlockOverrideTtl': rule.BlockOverrideTtl,
+                    'BlockResponse': rule.BlockResponse,
+                    'FirewallDomainListId': rule.FirewallDomainListId,
+                    'Priority': rule.Priority
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::FirewallRuleGroup'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::FirewallRuleGroup',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverfirewallrulegroupassociation") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Priority'] = obj.data.Priority;
+        reqParams.cfn['MutationProtection'] = obj.data.MutationProtection;
+        reqParams.cfn['FirewallRuleGroupId'] = obj.data.FirewallRuleGroupId;
+        reqParams.cfn['VpcId'] = obj.data.VpcId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::FirewallRuleGroupAssociation'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::FirewallRuleGroupAssociation',
             'options': reqParams
         });
     } else {

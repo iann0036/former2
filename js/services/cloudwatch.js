@@ -512,6 +512,82 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'Metric Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'outputformat',
+                        title: 'Output Format',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Query Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'querystring',
+                        title: 'Query String',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -529,6 +605,8 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -766,6 +844,45 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         }));
     }).catch(() => { });
 
+    await sdkcall("CloudWatch", "listMetricStreams", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-metricstreams-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Entries.map(async (entry) => {
+            return sdkcall("CloudWatch", "getMetricStream", {
+                Name: entry.Name
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-metricstreams-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'cloudwatch.metricstream',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    outputformat: data.OutputFormat
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("CloudWatchLogs", "describeQueryDefinitions", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-querydefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        data.queryDefinitions.forEach(querydefinition => {
+            $('#section-managementandgovernance-cloudwatch-querydefinitions-datatable').deferredBootstrapTable('append', [{
+                f2id: querydefinition.name + " Query Definition",
+                f2type: 'cloudwatch.querydefinition',
+                f2data: querydefinition,
+                f2region: region,
+                name: querydefinition.name,
+                querystring: querydefinition.queryString
+            }]);
+            
+        });
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
@@ -773,6 +890,8 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1116,6 +1235,44 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'applicationinsights',
             'type': 'AWS::ApplicationInsights::Application',
             'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.metricstream") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['OutputFormat'] = obj.data.OutputFormat;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['FirehoseArn'] = obj.data.FirehoseArn;
+        reqParams.cfn['IncludeFilters'] = obj.data.IncludeFilters;
+        reqParams.cfn['ExcludeFilters'] = obj.data.ExcludeFilters;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::CloudWatch::MetricStream'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::CloudWatch::MetricStream',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "cloudwatch.querydefinition") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['QueryString'] = obj.data.queryString;
+        reqParams.cfn['LogGroupNames'] = obj.data.logGroupNames;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('logs', obj.id, 'AWS::Logs::QueryDefinition'),
+            'region': obj.region,
+            'service': 'logs',
+            'type': 'AWS::Logs::QueryDefinition',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.queryDefinitionId
+            }
         });
     } else {
         return false;
