@@ -216,8 +216,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         });
     } else if (obj.type == "kms.alias") {
-        reqParams.cfn['AliasName'] = obj.data.AliasArn;
-        reqParams.tf['name'] = obj.data.AliasArn;
+        reqParams.cfn['AliasName'] = obj.data.AliasName;
+        reqParams.tf['name'] = obj.data.AliasName;
         reqParams.cfn['TargetKeyId'] = obj.data.TargetKeyId;
         reqParams.tf['target_key_id'] = obj.data.TargetKeyId;
 
