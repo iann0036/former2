@@ -5,9 +5,7 @@ const AWS = require('aws-sdk')
 let app = express()
 app.use(express.json())
 
-app.post('/', (req, res) => { 
-    res.send(JSON.stringify(req.body));
-
+app.post('/', (req, res) => {
     if (request.action == "configUpdate") {
         AWS.config.update(request.obj);
 
