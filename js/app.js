@@ -1574,7 +1574,10 @@ function extensionSendMessage(data, callback) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        }).then(callback);
+        }).then(async (resp) => {
+            var respJson = await resp.json();
+            callback(respJson);
+        });
     } else {
         if (navigator.userAgent.search("Firefox") > -1) { // Firefox
             var uid = Math.random().toString(36);
