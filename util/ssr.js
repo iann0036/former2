@@ -2,6 +2,8 @@ const express = require('express')
 const request = require('request')
 const AWS = require('aws-sdk')
 
+const creds = new AWS.EC2MetadataCredentials({});
+
 let app = express()
 app.use(express.json())
 
@@ -12,6 +14,8 @@ app.post('/', (req, res) => {
             'data': {}
         }));
     } else if (req.body.action == "configUpdate") {
+        req.body.obj.credentials = creds;
+
         AWS.config.update(req.body.obj);
 
         res.send(JSON.stringify({
