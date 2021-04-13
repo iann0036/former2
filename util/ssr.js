@@ -3,7 +3,46 @@ const request = require('request')
 const AWS = require('aws-sdk')
 
 let app = express()
-app.get('/', (req, res) => { 
-    res.send(JSON.stringify(res))
+app.use(express.json())
+
+app.post('/', (req, res) => { 
+    res.send(JSON.stringify(req.body));
+
+    if (request.action == "configUpdate") {
+        AWS.config.update(request.obj);
+
+        res.send(JSON.stringify({
+            'success': true,
+            'data': {}
+        }));
+    } else if (request.action == "serviceAction") {
+        try {
+            var svc = new AWS[request.service.name](request.service.properties);
+
+            svc[request.service_action](request.params, function(err, data) {
+                if (err) {
+                    res.send(JSON.stringify({
+                        'success': false,
+                        'error': err,
+                        'data': data
+                    }));
+                } else {
+                    res.send(JSON.stringify({
+                        'success': true,
+                        'data': data
+                    }));
+                }
+            });
+        } catch(err) {
+            res.send(JSON.stringify({
+                'success': false,
+                'error': `The call to the SDK failed (${request.service.name}.${request.service_action}).`,
+                'data': null
+            }));
+        }
+    } else {
+        console.log("Got unknown request");
+        console.dir(request);
+    }
 })
 app.listen(3001);

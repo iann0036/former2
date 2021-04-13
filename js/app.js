@@ -1,5 +1,6 @@
 var CHROME_HELPER_EXTENSION_ID = "fhejmeojlbhfhjndnkkleooeejklmigi"; // Chrome
 var EDGE_HELPER_EXTENSION_ID = "okkjnfohglnomdbpimkcdkiojbeiedof"; // Edge
+var SSR_MODE = false; // sends calls to deployed server instead (must be manually overridden)
 var extension_available = false;
 var region = 'us-east-1';
 var output_objects = [];
@@ -1252,7 +1253,7 @@ $(document).ready(function(){
             );
         });
     };
-
+    
     pingExtension().catch(() => {
         ping_extension_interval = setInterval(function(){ // continuously check for extension being present after 
             pingExtension().then(() => {
@@ -1559,32 +1560,44 @@ document.addEventListener('f2response', msg => {
 });
 
 function extensionSendMessage(data, callback) {
-    if (navigator.userAgent.search("Firefox") > -1) { // Firefox
-        var uid = Math.random().toString(36);
-        var event = new CustomEvent('f2request', {
-            detail: JSON.stringify({
-                id: uid,
-                data: data
-            })
-        });
-        active_firefoxaddon_requests[uid] = callback;
-        document.dispatchEvent(event);
-        if (data.action == "ping") { // quick timeout for ping
-            setTimeout(function(callback){
+    if (SSR_MODE) {
+        fetch('/ssr/', {
+            method: 'POST',
+            mode: 'same-origin',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(callback);
+    } else {
+        if (navigator.userAgent.search("Firefox") > -1) { // Firefox
+            var uid = Math.random().toString(36);
+            var event = new CustomEvent('f2request', {
+                detail: JSON.stringify({
+                    id: uid,
+                    data: data
+                })
+            });
+            active_firefoxaddon_requests[uid] = callback;
+            document.dispatchEvent(event);
+            if (data.action == "ping") { // quick timeout for ping
+                setTimeout(function(callback){
+                    callback(null);
+                }, 200, callback);
+            }
+        } else if (navigator.userAgent.search("Edg/") > -1) { // Edge (Chromium)
+            if (window.chrome && window.chrome.runtime) {
+                chrome.runtime.sendMessage(EDGE_HELPER_EXTENSION_ID, data, callback);
+            } else {
                 callback(null);
-            }, 200, callback);
-        }
-    } else if (navigator.userAgent.search("Edg/") > -1) { // Edge (Chromium)
-        if (window.chrome && window.chrome.runtime) {
-            chrome.runtime.sendMessage(EDGE_HELPER_EXTENSION_ID, data, callback);
-        } else {
-            callback(null);
-        }
-    } else { // Chrome
-        if (window.chrome && window.chrome.runtime) {
-            chrome.runtime.sendMessage(CHROME_HELPER_EXTENSION_ID, data, callback);
-        } else {
-            callback(null);
+            }
+        } else { // Chrome
+            if (window.chrome && window.chrome.runtime) {
+                chrome.runtime.sendMessage(CHROME_HELPER_EXTENSION_ID, data, callback);
+            } else {
+                callback(null);
+            }
         }
     }
 }
