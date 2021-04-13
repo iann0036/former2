@@ -619,6 +619,10 @@ $(document).ready(function(){
     if (assumerole) {
         $('#credentials-assumerole').val(assumerole);
     }
+    var sourceidentity = window.localStorage.getItem('credentials-sourceidentity');
+    if (sourceidentity) {
+        $('#credentials-sourceidentity').val(sourceidentity);
+    }
 
     $('#credentials-accesskey').on('change', () => {
         var val = $('#credentials-accesskey').val().trim();
@@ -655,6 +659,15 @@ $(document).ready(function(){
             window.localStorage.removeItem('credentials-assumerole');
         } else {
             window.localStorage.setItem('credentials-assumerole', val);
+        }
+        updateIdentity();
+    });
+    $('#credentials-sourceidentity').on('change', () => {
+        var val = $('#credentials-sourceidentity').val().trim();
+        if (val == "") {
+            window.localStorage.removeItem('credentials-sourceidentity');
+        } else {
+            window.localStorage.setItem('credentials-sourceidentity', val);
         }
         updateIdentity();
     });
@@ -1810,7 +1823,8 @@ function updateIdentity() {
         if (window.localStorage.getItem('credentials-assumerole')) {
             sdkcall("STS", "assumeRole", {
                 RoleArn: window.localStorage.getItem('credentials-assumerole'),
-                RoleSessionName: "former2-session-" + window.localStorage.getItem('credentials-assumerole').split("/").pop()
+                RoleSessionName: "former2-session-" + window.localStorage.getItem('credentials-assumerole').split("/").pop(),
+                SourceIdentity: window.localStorage.getItem('credentials-sourceidentity')
             }, false).then((data) => {
                 AWS.config.update({
                     credentials: new AWS.Credentials(
