@@ -6,7 +6,12 @@ let app = express()
 app.use(express.json())
 
 app.post('/', (req, res) => {
-    if (request.action == "configUpdate") {
+    if (request.action == "ping") { 
+        res.send(JSON.stringify({
+            'success': true,
+            'data': {}
+        }));
+    } else if (request.action == "configUpdate") {
         AWS.config.update(request.obj);
 
         res.send(JSON.stringify({
