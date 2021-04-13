@@ -827,7 +827,7 @@ $(document).ready(function(){
         } else {
             $('li.opened').removeClass('opened');
 
-            if (window.localStorage.getItem('credentials-accesskey')) { // load dashboard
+            if (window.localStorage.getItem('credentials-accesskey') || SSR_MODE) { // load dashboard
                 $('li[data-category=\'dashboard\']').addClass('opened');
 
                 $('.former2-section').attr('style', 'display: none;');
@@ -1366,6 +1366,11 @@ $(document).ready(function(){
     /* ========================================================================== */
     // Misc
     /* ========================================================================== */
+
+    if (SSR_MODE) {
+        $(".nossr").attr("style", "display: none;");
+        $(".ssr").attr("style", "");
+    }
 
     tippy('[data-tippy-content]', {
         theme: 'material'
