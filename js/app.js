@@ -1573,7 +1573,7 @@ function extensionSendMessage(data, callback) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: data
+            body: JSON.stringify(data)
         }).then(callback);
     } else {
         if (navigator.userAgent.search("Firefox") > -1) { // Firefox
