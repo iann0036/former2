@@ -11,6 +11,10 @@
             return data;
         },
         removeAll : function() {
+            if (all_regions_scanning_state && (all_regions_scanning_state == "middleregions" || all_regions_scanning_state == "lastregion")) {
+                return;
+            }
+
             var existing_timer = this.data('f2dttimer');
             if (existing_timer) {
                 clearTimeout(existing_timer);

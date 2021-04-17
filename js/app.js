@@ -14,6 +14,34 @@ var iaclangselect = 'typescript';
 var check_objects = [];
 var CLI = false;
 var CONCURRENT_SDKCALLS = 0;
+var all_regions_scanning_state = "";
+
+var region_map = {
+    "us-east-1": "US East (N. Virginia)",
+    "us-east-2": "US East (Ohio)",
+    "us-west-1": "US West (N. California)",
+    "us-west-2": "US West (Oregon)",
+    "af-south-1": "Africa (Cape Town)",
+    "ap-east-1": "Asia Pacific (Hong Kong)",
+    "ap-south-1": "Asia Pacific (Mumbai)",
+    "ap-northeast-3": "Asia Pacific (Osaka)",
+    "ap-northeast-2": "Asia Pacific (Seoul)",
+    "ap-southeast-1": "Asia Pacific (Singapore)",
+    "ap-southeast-2": "Asia Pacific (Sydney)",
+    "ap-northeast-1": "Asia Pacific (Tokyo)",
+    "ca-central-1": "Canada (Central)",
+    "eu-central-1": "EU (Frankfurt)",
+    "eu-west-1": "EU (Ireland)",
+    "eu-west-2": "EU (London)",
+    "eu-west-3": "EU (Paris)",
+    "eu-north-1": "EU (Stockholm)",
+    "eu-south-1": "EU (Milan)",
+    "me-south-1": "Middle East (Bahrain)",
+    "sa-east-1": "South America (S&#227;o Paulo)",
+    "us-gov-east-1": "AWS GovCloud (US-Gov-East)",
+    "us-gov-west-1": "AWS GovCloud (US-Gov-West)",
+    "allregions": "All Regions"
+};
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -85,7 +113,9 @@ $(document).ready(function(){
         $('#templated-section-container').append(html);
         
         Object.keys(section.resourcetypes).forEach(resourcetype => {
-            $(`#section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable`).on('refresh.bs.table', window[`updateDatatable${nav(section.category)}${nav(section.service)}`]);
+            $(`#section-${navlower(section.category)}-${navlower(section.service)}-${navlower(resourcetype)}-datatable`).on('refresh.bs.table', () => {
+                executeDatatableRefresh(`updateDatatable${nav(section.category)}${nav(section.service)}`);
+            });
         });
     });
 
@@ -687,7 +717,7 @@ $(document).ready(function(){
                         }
                     });
                     if (!visited_sections.includes("all")) {
-                        window[`updateDatatable${nav(section.category)}${nav(section.service)}`]();
+                        executeDatatableRefresh(`updateDatatable${nav(section.category)}${nav(section.service)}`);
                     }
                 }
             }
@@ -939,32 +969,6 @@ $(document).ready(function(){
     // Region Selector
     /* ========================================================================== */
 
-    var region_map = {
-        "us-east-1": "US East (N. Virginia)",
-        "us-east-2": "US East (Ohio)",
-        "us-west-1": "US West (N. California)",
-        "us-west-2": "US West (Oregon)",
-        "af-south-1": "Africa (Cape Town)",
-        "ap-east-1": "Asia Pacific (Hong Kong)",
-        "ap-south-1": "Asia Pacific (Mumbai)",
-        "ap-northeast-3": "Asia Pacific (Osaka)",
-        "ap-northeast-2": "Asia Pacific (Seoul)",
-        "ap-southeast-1": "Asia Pacific (Singapore)",
-        "ap-southeast-2": "Asia Pacific (Sydney)",
-        "ap-northeast-1": "Asia Pacific (Tokyo)",
-        "ca-central-1": "Canada (Central)",
-        "eu-central-1": "EU (Frankfurt)",
-        "eu-west-1": "EU (Ireland)",
-        "eu-west-2": "EU (London)",
-        "eu-west-3": "EU (Paris)",
-        "eu-north-1": "EU (Stockholm)",
-        "eu-south-1": "EU (Milan)",
-        "me-south-1": "Middle East (Bahrain)",
-        "sa-east-1": "South America (S&#227;o Paulo)",
-        "us-gov-east-1": "AWS GovCloud (US-Gov-East)",
-        "us-gov-west-1": "AWS GovCloud (US-Gov-West)"
-    };
-
     $('.region-item').on('click', el => {
         region = $(el.target).attr('data-region');
 
@@ -1152,7 +1156,7 @@ $(document).ready(function(){
         function processDatatable(dt) {
             // var starttime = new Date();
 
-            window[dt]().catch(err => {}).finally(() => {
+            executeDatatableRefresh(dt).catch(err => {}).finally(() => {
                 completeddatatablecalls += 1;
                 $('.scan-account').html('Scanning... (' + completeddatatablecalls + '/' + totaldatatables + ')');
                 if (completeddatatablecalls == totaldatatables) {
@@ -1560,6 +1564,35 @@ $(document).ready(function(){
 
 }); // <-- End of documentReady
 
+async function executeDatatableRefresh(datatable) {
+    if (region == "allregions") {
+        var commercial_regions = Object.keys(region_map).filter(x => !["us-east-1", "us-west-2", "us-gov-east-1", "us-gov-west-1"].includes(x));
+
+        all_regions_scanning_state = "firstregion";
+        region = "us-east-1";
+        try {
+            await window[datatable]();
+        } catch(err) {};
+        all_regions_scanning_state = "middleregions";
+
+        for (var commercial_region of commercial_regions) {
+            region = commercial_region;
+            try {
+                await window[datatable]();
+            } catch(err) {};
+        }
+
+        all_regions_scanning_state = "lastregion";
+        region = "us-west-2";
+        try {
+            await window[datatable]();
+        } catch(err) {};
+        all_regions_scanning_state = "";
+    } else {
+        await window[datatable]();
+    }
+}
+
 /* ========================================================================== */
 // Extension Request/Response
 /* ========================================================================== */
@@ -1628,6 +1661,10 @@ function extensionSendMessage(data, callback) {
 /* ========================================================================== */
 
 function blockUI(selector) {
+    if (all_regions_scanning_state == "middleregions" || all_regions_scanning_state == "lastregion") {
+        return;
+    }
+
     if (selector.startsWith(window.location.hash)) {
         $(selector).block({
             message: '<div class="blockui-default-message"><i class="fa fa-circle-o-notch fa-spin"></i><h6>Loading...</h6></div>',
@@ -1645,6 +1682,10 @@ function blockUI(selector) {
 }
 
 function unblockUI(selector) {
+    if (all_regions_scanning_state == "firstregion" || all_regions_scanning_state == "middleregions") {
+        return;
+    }
+
     setTimeout(function(selector){
         $(selector).unblock();
     }, 200, selector);
