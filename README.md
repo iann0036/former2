@@ -61,7 +61,7 @@ If you prefer not to use a publicly hosted site to use Former2, you can [host yo
 
 As an alternative to the standard Former2 usage via [former2.com](https://former2.com), you can alternatively deploy Former2 on an instance using the provided AMI. When using the AMI, calls to retrieve resources are performed via the instance profile of the deployed server and there is no requirement for the Former2 Helper browser extension to be installed, or to provide credentials.
 
-You should ensure that the security group rules of the deployed server are appropriately locked down so that no unauthorized access to the web server occurs.
+You should ensure that the security group rules of the deployed server are appropriately locked down so that no unauthorized access to the web server occurs. At this time, the AMI is not yet ready.
 
 ## Pricing
 

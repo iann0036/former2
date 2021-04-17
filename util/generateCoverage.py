@@ -40,7 +40,9 @@ cfn_exceptions = {
     'AWS::MediaPackage::PackagingGroup': 'N/A',
     'AWS::CloudFormation::ModuleDefaultVersion': 'N/A',
     'AWS::CloudFormation::ModuleVersion': 'N/A',
-    'AWS::ECS::ClusterCapacityProviderAssociations': 'N/A'
+    'AWS::ECS::ClusterCapacityProviderAssociations': 'N/A',
+    'AWS::CloudFormation::ResourceDefaultVersion': 'N/A',
+    'AWS::CloudFormation::ResourceVersion': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',

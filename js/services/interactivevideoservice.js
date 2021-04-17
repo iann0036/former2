@@ -119,6 +119,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Recording Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'bucketname',
+                        title: 'Bucket Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -127,6 +165,7 @@ async function updateDatatableMediaServicesInteractiveVideoService() {
     blockUI('#section-mediaservices-interactivevideoservice-channels-datatable');
     blockUI('#section-mediaservices-interactivevideoservice-streamkeys-datatable');
     blockUI('#section-mediaservices-interactivevideoservice-playbackkeypairs-datatable');
+    blockUI('#section-mediaservices-interactivevideoservice-recordingconfigurations-datatable');
 
     await sdkcall("IVS", "listChannels", {
         // no params
@@ -191,9 +230,31 @@ async function updateDatatableMediaServicesInteractiveVideoService() {
         }));
     }).catch(() => { });
 
+    await sdkcall("IVS", "listRecordingConfigurations", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mediaservices-interactivevideoservice-recordingconfigurations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.recordingConfigurations.map(async (recordingConfiguration) => {
+            return sdkcall("IVS", "getRecordingConfiguration", {
+                arn: recordingConfiguration.arn
+            }, true).then((data) => {
+                $('#section-mediaservices-interactivevideoservice-recordingconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.recordingConfiguration.arn,
+                    f2type: 'interactivevideoservice.recordingconfiguration',
+                    f2data: data.recordingConfiguration,
+                    f2region: region,
+                    name: data.recordingConfiguration.name,
+                    bucketname: (data.recordingConfiguration.destinationConfiguration.s3 ? data.recordingConfiguration.destinationConfiguration.s3.bucketName : null)
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-mediaservices-interactivevideoservice-channels-datatable');
     unblockUI('#section-mediaservices-interactivevideoservice-streamkeys-datatable');
     unblockUI('#section-mediaservices-interactivevideoservice-playbackkeypairs-datatable');
+    unblockUI('#section-mediaservices-interactivevideoservice-recordingconfigurations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -259,6 +320,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'interactivevideoservice',
             'type': 'AWS::IVS::PlaybackKeyPair',
+            'options': reqParams
+        });
+    } else if (obj.type == "interactivevideoservice.recordingconfiguration") {
+        reqParams.cfn['Name'] = obj.data.name;
+        if (obj.data.destinationConfiguration.s3) {
+            reqParams.cfn['DestinationConfiguration'] = {
+                "S3": {
+                    "BucketName": obj.data.destinationConfiguration.s3.bucketName
+                }
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.tags[tagKey]
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('interactivevideoservice', obj.id, 'AWS::IVS::RecordingConfiguration'),
+            'region': obj.region,
+            'service': 'interactivevideoservice',
+            'type': 'AWS::IVS::RecordingConfiguration',
             'options': reqParams
         });
     } else {

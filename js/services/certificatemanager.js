@@ -144,6 +144,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Account': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Days Before Expiry',
+                        field: 'daysbeforeexpiry',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -152,6 +178,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     blockUI('#section-securityidentityandcompliance-certificatemanager-certificates-datatable');
     blockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable');
     blockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable');
+    blockUI('#section-securityidentityandcompliance-certificatemanager-account-datatable');
 
     await sdkcall("ACM", "listCertificates", {
         // no params
@@ -224,6 +251,24 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
         unblockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable');
         unblockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable');
     });
+
+    await sdkcall("ACM", "getAccountConfiguration", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-securityidentityandcompliance-certificatemanager-account-datatable').deferredBootstrapTable('removeAll');
+
+        if (data && data.ExpiryEvents && data.ExpiryEvents.DaysBeforeExpiry && data.ExpiryEvents.DaysBeforeExpiry != 45) {
+            $('#section-securityidentityandcompliance-certificatemanager-account-datatable').deferredBootstrapTable('append', [{
+                f2id: "ACM Account",
+                f2type: 'acm.account',
+                f2data: data,
+                f2region: region,
+                daysbeforeexpiry: data.ExpiryEvents.DaysBeforeExpiry
+            }]);
+        }
+
+        unblockUI('#section-securityidentityandcompliance-certificatemanager-account-datatable');
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -316,6 +361,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'CertificateAuthorityArn': obj.data.CertificateAuthorityArn
                 }
             }
+        });
+    } else if (obj.type == "acm.account") {
+        reqParams.cfn['ExpiryEventsConfiguration'] = obj.data.ExpiryEvents;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('acm', obj.id, 'AWS::CertificateManager::Account'),
+            'region': obj.region,
+            'service': 'acm',
+            'type': 'AWS::CertificateManager::Account',
+            'options': reqParams
         });
     } else {
         return false;

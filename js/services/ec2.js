@@ -1551,6 +1551,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Enclave Certificate IAM Role Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Certificate ARN',
+                        field: 'certificatearn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1586,6 +1624,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-compute-ec2-keypairs-datatable');
+    blockUI('#section-compute-ec2-enclavecertificateiamroleassociations-datatable');
 
     await sdkcall("EC2", "describeInstances", {
         // no params
@@ -2289,6 +2328,34 @@ async function updateDatatableComputeEC2() {
 
         unblockUI('#section-compute-ec2-keypairs-datatable');
     });
+
+    await sdkcall("ACM", "listCertificates", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-ec2-enclavecertificateiamroleassociations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.CertificateSummaryList.map(async (cert) => {
+            return sdkcall("EC2", "getAssociatedEnclaveCertificateIamRoles", {
+                CertificateArn: cert.CertificateArn
+            }, true).then(async (data) => {
+                data.AssociatedRoles.forEach(associatedrole => {
+                    $('#section-compute-ec2-enclavecertificateiamroleassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: associatedrole.cert + " " + associatedrole.AssociatedRoleArn + " Enclave Association",
+                        f2type: 'ec2.enclavecertificateiamroleassociation',
+                        f2data: {
+                            'CertificateArn': associatedrole.cert,
+                            'RoleArn': associatedrole.AssociatedRoleArn
+                        },
+                        f2region: region,
+                        certificatearn: associatedrole.cert,
+                        rolearn: associatedrole.AssociatedRoleArn
+                    }]);
+                });
+            });
+        }));
+
+        unblockUI('#section-compute-ec2-enclavecertificateiamroleassociations-datatable');
+    }).catch(() => { });;
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -3738,6 +3805,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ec2',
             'type': 'AWS::EC2::FlowLog',
             'terraformType': 'aws_flow_log',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.enclavecertificateiamroleassociation") {
+        reqParams.cfn['CertificateArn'] = obj.data.CertificateArn;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::EnclaveCertificateIamRoleAssociation'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::EnclaveCertificateIamRoleAssociation',
             'options': reqParams
         });
     } else {
