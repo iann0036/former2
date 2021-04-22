@@ -49,19 +49,11 @@ A command-line version of Former2 with limited functionality is available for in
 
 ## Security
 
-Former2 does not create any resources within your AWS account. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
+Former2 does not create any resources within your AWS account.
 
-### former2.com and locally hosted versions
-
-Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data and your credentials are kept entirely in memory and is never sent over the internet or anywhere else. The credentials are only used to sign requests to AWS endpoints.
+Calls to the AWS service API endpoints are made either directly with the JavaScript SDK or via the browser extension (which also hits endpoints directly). Recording data and your credentials are kept entirely in memory and is never sent over the internet or anywhere else. The credentials are only used to sign requests to AWS endpoints. You should take care to remove any sensitive data (passwords etc.) when sharing your generated code/templates with others.
 
 If you prefer not to use a publicly hosted site to use Former2, you can [host your own version](HOSTING.md) by running a HTTP server from the root of the repository. Extension support will also be available if you host on 127.0.0.1 or localhost, otherwise you can [modify the extension](HOSTING.md) as needed.
-
-### Former2 AMI
-
-As an alternative to the standard Former2 usage via [former2.com](https://former2.com), you can alternatively deploy Former2 on an instance using the provided AMI. When using the AMI, calls to retrieve resources are performed via the instance profile of the deployed server and there is no requirement for the Former2 Helper browser extension to be installed, or to provide credentials.
-
-You should ensure that the security group rules of the deployed server are appropriately locked down so that no unauthorized access to the web server occurs. At this time, the AMI is not yet ready.
 
 ## Pricing
 
