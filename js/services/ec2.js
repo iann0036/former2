@@ -1589,6 +1589,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Warm Pools': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Auto Scaling Group Name',
+                        field: 'autoscalinggroupname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'minsize',
+                        title: 'Min Size',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1625,6 +1663,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
     blockUI('#section-compute-ec2-keypairs-datatable');
     blockUI('#section-compute-ec2-enclavecertificateiamroleassociations-datatable');
+    blockUI('#section-compute-ec2-warmpools-datatable');
 
     await sdkcall("EC2", "describeInstances", {
         // no params
@@ -1870,8 +1909,9 @@ async function updateDatatableComputeEC2() {
     }, true).then(async (data) => {
         $('#section-compute-ec2-autoscalinggroups-datatable').deferredBootstrapTable('removeAll');
         $('#section-compute-ec2-autoscalinglifecyclehooks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-ec2-warmpools-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.AutoScalingGroups.map(autoScalingGroup => {
+        await Promise.all(data.AutoScalingGroups.map(async (autoScalingGroup) => {
             $('#section-compute-ec2-autoscalinggroups-datatable').deferredBootstrapTable('append', [{
                 f2id: autoScalingGroup.AutoScalingGroupName,
                 f2type: 'autoscaling.autoscalinggroup',
@@ -1884,7 +1924,7 @@ async function updateDatatableComputeEC2() {
                 hctype: autoScalingGroup.HealthCheckType
             }]);
 
-            return sdkcall("AutoScaling", "describeLifecycleHooks", {
+            await sdkcall("AutoScaling", "describeLifecycleHooks", {
                 AutoScalingGroupName: autoScalingGroup.AutoScalingGroupName
             }, true).then((data) => {
                 data.LifecycleHooks.forEach(lifecycleHook => {
@@ -1900,10 +1940,26 @@ async function updateDatatableComputeEC2() {
                     }]);
                 });
             });
+
+            return sdkcall("AutoScaling", "describeWarmPool", {
+                AutoScalingGroupName: autoScalingGroup.AutoScalingGroupName
+            }, true).then(async (data) => {
+                data.WarmPoolConfiguration['AutoScalingGroupName'] = autoScalingGroup.AutoScalingGroupName
+
+                $('#section-compute-ec2-warmpools-datatable').deferredBootstrapTable('append', [{
+                    f2id: autoScalingGroup.AutoScalingGroupName + " Warm Pool",
+                    f2type: 'ec2.warmpool',
+                    f2data: data.WarmPoolConfiguration,
+                    f2region: region,
+                    autoscalinggroupname: autoScalingGroup.AutoScalingGroupName,
+                    minsize: data.WarmPoolConfiguration.MinSize
+                }]);
+            }).catch(() => { });
         }));
 
         unblockUI('#section-compute-ec2-autoscalinggroups-datatable');
         unblockUI('#section-compute-ec2-autoscalinglifecyclehooks-datatable');
+        unblockUI('#section-compute-ec2-warmpools-datatable');
     });
 
     await sdkcall("AutoScaling", "describeLaunchConfigurations", {
@@ -2355,7 +2411,7 @@ async function updateDatatableComputeEC2() {
         }));
 
         unblockUI('#section-compute-ec2-enclavecertificateiamroleassociations-datatable');
-    }).catch(() => { });;
+    }).catch(() => { });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -3817,6 +3873,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::EnclaveCertificateIamRoleAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.warmpool") {
+        reqParams.cfn['AutoScalingGroupName'] = obj.data.AutoScalingGroupName;
+        reqParams.cfn['MaxGroupPreparedCapacity'] = obj.data.MaxGroupPreparedCapacity;
+        reqParams.cfn['MinSize'] = obj.data.MinSize;
+        reqParams.cfn['PoolState'] = obj.data.PoolState;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('autoscaling', obj.id, 'AWS::AutoScaling::WarmPool'),
+            'region': obj.region,
+            'service': 'autoscaling',
+            'type': 'AWS::AutoScaling::WarmPool',
             'options': reqParams
         });
     } else {
