@@ -961,7 +961,9 @@ $(document).ready(function(){
         "me-south-1": "Middle East (Bahrain)",
         "sa-east-1": "South America (S&#227;o Paulo)",
         "us-gov-east-1": "AWS GovCloud (US-Gov-East)",
-        "us-gov-west-1": "AWS GovCloud (US-Gov-West)"
+        "us-gov-west-1": "AWS GovCloud (US-Gov-West)",
+        "cn-north-1": "China (Beijing)",
+        "cn-northwest-1": "China (Ningxia)"
     };
 
     $('.region-item').on('click', el => {
