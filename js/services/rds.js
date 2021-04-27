@@ -1311,7 +1311,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'rds',
             'type': 'AWS::RDS::DBInstance',
-            'terraformType': (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") ? 'aws_db_instance' : 'aws_rds_cluster_instance',
+            'terraformType': (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") ? 'aws_rds_cluster_instance' : 'aws_db_instance',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.DBInstanceIdentifier,
