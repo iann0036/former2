@@ -343,7 +343,17 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }, data => {
                         reject(data);
                     });
-                } else if (data.Marker) {
+                } else if (data.Marker && ![
+                    "WAF",
+                    "WAFRegional",
+                    "WAFV2",
+                    "Route53",
+                    "EFS",
+                    "ELB",
+                    "ELBv2",
+                    "KMS",
+                    "Lambda"
+                ].includes(svc)) {
                     if (svc == "Glacier") {
                         params['marker'] = data.Marker;
                     } else {
