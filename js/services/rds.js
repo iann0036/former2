@@ -1074,7 +1074,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
         reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
         reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
-        reqParams.tf['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
+        reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
         reqParams.cfn['ReplicationSourceIdentifier'] = obj.data.ReplicationSourceIdentifier;
         reqParams.tf['replication_source_identifier'] = obj.data.ReplicationSourceIdentifier;
         if (obj.data.VpcSecurityGroups) {
