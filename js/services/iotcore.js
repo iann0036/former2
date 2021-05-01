@@ -812,6 +812,70 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Wireless Partner Accounts': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Partner Account ID',
+                        field: 'partneraccountid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
+        },
+        'Wireless Task Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -838,6 +902,8 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-mitigationactions-datatable');
     blockUI('#section-internetofthings-core-scheduledaudits-datatable');
     blockUI('#section-internetofthings-core-securityprofiles-datatable');
+    blockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
+    blockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1328,6 +1394,52 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("IoTWireless", "listPartnerAccounts", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelesspartneraccounts-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Sidewalk.map(async (sidewalk) => {
+            return sdkcall("IoTWireless", "getPartnerAccount", {
+                PartnerAccountId: sidewalk.AmazonId,
+                PartnerType: 'Sidewalk'
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Sidewalk.Arn);
+
+                $('#section-internetofthings-core-wirelesspartneraccounts-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Sidewalk.Arn,
+                    f2type: 'iot.wirelesspartneraccount',
+                    f2data: data.Sidewalk,
+                    f2region: region,
+                    partneraccountid: data.Sidewalk.AmazonId
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listWirelessGatewayTaskDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelesstaskdefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.TaskDefinitions.map(async (taskdefinition) => {
+            return sdkcall("IoTWireless", "getWirelessGatewayTaskDefinition", {
+                Id: taskdefinition.Id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelesstaskdefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelesstaskdefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    id: data.Arn
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1341,6 +1453,8 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-mitigationactions-datatable');
     unblockUI('#section-internetofthings-core-scheduledaudits-datatable');
     unblockUI('#section-internetofthings-core-securityprofiles-datatable');
+    unblockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
+    unblockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2113,6 +2227,53 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'iot',
             'type': 'AWS::IoT::SecurityProfile',
             'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelesspartneraccount") {
+        reqParams.cfn['PartnerAccountId'] = obj.data.AmazonId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::PartnerAccount'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::PartnerAccount',
+            'options': reqParams,
+            'returnValues': {
+                'Arn': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "iot.wirelesspartneraccount") {
+        reqParams.cfn['PartnerAccountId'] = obj.data.AmazonId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::PartnerAccount'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::PartnerAccount',
+            'options': reqParams,
+            'returnValues': {
+                'Arn': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "iot.wirelesstaskdefinition") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['AutoCreateTasks'] = obj.data.AutoCreateTasks;
+        reqParams.cfn['Update'] = obj.data.Update;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::TaskDefinition'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::TaskDefinition',
+            'options': reqParams,
+            'returnValues': {
+                'Arn': obj.data.Arn
+            }
         });
     } else {
         return false;
