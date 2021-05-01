@@ -1186,7 +1186,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['DBName'] = obj.data.DBName;
         reqParams.tf['name'] = obj.data.DBName;
         reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
-        reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
+        if (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") {
+            reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
+        } else {
+            reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
+        }
         if (!obj.data.Engine.startsWith("aurora")) {
             reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
             reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
@@ -1194,15 +1198,23 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
         reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
         reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.PreferredMaintenanceWindow;
-        reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        if (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") {
+            reqParams.tf['preferred_maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        } else {
+            reqParams.tf['maintenance_window'] = obj.data.PreferredMaintenanceWindow;
+        }
         reqParams.cfn['MultiAZ'] = obj.data.MultiAZ;
-        reqParams.tf['multi_az'] = obj.data.MultiAZ;
+        if (!obj.data.DBClusterIdentifier || obj.data.DBClusterIdentifier == "") {
+            reqParams.tf['multi_az'] = obj.data.MultiAZ;
+        }
         reqParams.cfn['EngineVersion'] = obj.data.EngineVersion;
         reqParams.tf['engine_version'] = obj.data.EngineVersion;
         reqParams.cfn['AutoMinorVersionUpgrade'] = obj.data.AutoMinorVersionUpgrade;
         reqParams.tf['auto_minor_version_upgrade'] = obj.data.AutoMinorVersionUpgrade;
         reqParams.cfn['LicenseModel'] = obj.data.LicenseModel;
-        reqParams.tf['license_model'] = obj.data.LicenseModel;
+        if (!obj.data.DBClusterIdentifier || obj.data.DBClusterIdentifier == "") {
+            reqParams.tf['license_model'] = obj.data.LicenseModel;
+        }
         reqParams.cfn['Iops'] = obj.data.Iops;
         reqParams.tf['iops'] = obj.data.Iops;
         reqParams.cfn['CharacterSetName'] = obj.data.CharacterSetName;
@@ -1210,7 +1222,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['PubliclyAccessible'] = obj.data.PubliclyAccessible;
         reqParams.tf['publicly_accessible'] = obj.data.PubliclyAccessible;
         reqParams.cfn['StorageType'] = obj.data.StorageType;
-        reqParams.tf['storage_type'] = obj.data.StorageType;
+        if (!obj.data.DBClusterIdentifier || obj.data.DBClusterIdentifier == "") {
+            reqParams.tf['storage_type'] = obj.data.StorageType;
+        }
         reqParams.cfn['Port'] = obj.data.Endpoint.Port;
         reqParams.tf['port'] = obj.data.Endpoint.Port;
         reqParams.cfn['DBClusterIdentifier'] = obj.data.DBClusterIdentifier;
@@ -1254,10 +1268,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.VpcSecurityGroups) {
             reqParams.cfn['VPCSecurityGroups'] = [];
-            reqParams.tf['vpc_security_group_ids'] = [];
+            if (!obj.data.DBClusterIdentifier || obj.data.DBClusterIdentifier == "") {
+                reqParams.tf['vpc_security_group_ids'] = [];
+            }
             obj.data.VpcSecurityGroups.forEach(vpcSecurityGroup => {
                 reqParams.cfn['VPCSecurityGroups'].push(vpcSecurityGroup.VpcSecurityGroupId);
-                reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                if (!obj.data.DBClusterIdentifier || obj.data.DBClusterIdentifier == "") {
+                    reqParams.tf['vpc_security_group_ids'].push(vpcSecurityGroup.VpcSecurityGroupId);
+                }
             });
         }
         reqParams.cfn['MaxAllocatedStorage'] = obj.data.MaxAllocatedStorage;
