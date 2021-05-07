@@ -3977,9 +3977,7 @@ ${cfnspacing}Generator: "former2"
 Description: ""
 `}`,
 
-        'tf': `${!has_tf ? '# No resources generated' : `# https://www.terraform.io/downloads.html
-
-terraform {
+        'tf': `${!has_tf ? '# No resources generated' : `terraform {
     required_providers {
         aws = {
             source = "hashicorp/aws"
@@ -4012,9 +4010,7 @@ class MyStack extends TerraformStack {
         'cli': null,
         'js': null,
 
-        'cdk': `${(iaclangselect == "typescript") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language typescript
-
-import * as cdk from '@aws-cdk/core';
+        'cdk': `${(iaclangselect == "typescript") ? `${!has_cfn ? '// No resources generated' : `import * as cdk from '@aws-cdk/core';
 ${services.cdk.map(service => `import * as ${service} from '@aws-cdk/aws-${service}';`).join(`
 `)}
 
@@ -4022,9 +4018,7 @@ export class MyStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-`}` : `${(iaclangselect == "python") ? `${!has_cfn ? '# No resources generated' : `# cdk init app --language python
-  
-from aws_cdk import (
+`}` : `${(iaclangselect == "python") ? `${!has_cfn ? '# No resources generated' : `from aws_cdk import (
 ${services.cdk.map(service => `    aws_${service} as ${(service == "lambda") ? "_lambda" : service},`).join(`
 `)}
     core as cdk
@@ -4034,9 +4028,7 @@ class MyStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
-`}` : `${(iaclangselect == "java") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language java
-  
-package com.myorg;
+`}` : `${(iaclangselect == "java") ? `${!has_cfn ? '// No resources generated' : `package com.myorg;
 
 import software.amazon.awscdk.core.Construct;
 import software.amazon.awscdk.core.Stack;
@@ -4054,9 +4046,7 @@ public class MyStack extends Stack {
     public MyStack(final Construct scope, final String id, final StackProps props) {
         super(scope, id, props);
         
-`}` : `${(iaclangselect == "dotnet") ? `${!has_cfn ? '// No resources generated' : `// cdk init app --language csharp
-  
-using Amazon.CDK;
+`}` : `${(iaclangselect == "dotnet") ? `${!has_cfn ? '// No resources generated' : `using Amazon.CDK;
 using System.Collections.Generic;
 
 namespace My
@@ -4069,9 +4059,7 @@ namespace My
 
         'iam': null,
 
-        'troposphere': `${!has_cfn ? '# No resources generated' : `# pip install troposphere
-
-from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
+        'troposphere': `${!has_cfn ? '# No resources generated' : `from troposphere import ${services.troposphere.map(service => `${service}`).join(', ')}
 from troposphere import Ref, GetAtt, Template
 
 template = Template()
