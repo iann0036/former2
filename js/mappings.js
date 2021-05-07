@@ -3979,6 +3979,15 @@ Description: ""
 
         'tf': `${!has_tf ? '# No resources generated' : `# https://www.terraform.io/downloads.html
 
+terraform {
+    required_providers {
+        aws = {
+            source = "hashicorp/aws"
+            version = "~> 3.0"
+        }
+    }
+}
+
 provider "aws" {
     region = "${tracked_resources[0].region}"
 }
