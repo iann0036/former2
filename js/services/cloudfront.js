@@ -389,6 +389,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Functions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'stage',
+                        title: 'Stage',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -402,6 +440,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-functions-datatable');
 
     await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
         // no params
@@ -591,8 +630,36 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         }));
     });
 
+    await sdkcall("CloudFront", "listFunctions", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-functions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FunctionList.Items.map(async (func) => {
+            return sdkcall("CloudFront", "describeFunction", {
+                Name: func.Name
+            }, true).then(async (data) => {
+                await sdkcall("CloudFront", "getFunction", {
+                    Name: func.Name
+                }, true).then(codedata => {
+                    data.FunctionSummary['FunctionCode'] = codedata.FunctionCode;
+                });
+
+                $('#section-networkingandcontentdelivery-cloudfront-functions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FunctionSummary.Id,
+                    f2type: 'cloudfront.function',
+                    f2data: data.FunctionSummary,
+                    f2region: region,
+                    name: data.FunctionSummary.Name,
+                    stage: data.FunctionSummary.FunctionMetadata.Stage
+                }]);
+            });
+        }));
+    });
+
     unblockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
+    unblockUI('#section-networkingandcontentdelivery-cloudfront-functions-datatable');
 }
 
 service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
@@ -1121,6 +1188,23 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::PublicKey',
             'options': reqParams
+        });
+    } else if (obj.type == "cloudfront.function") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['AutoPublish'] = (obj.data.FunctionMetadata.Stage == "LIVE");
+        reqParams.cfn['FunctionCode'] = obj.data.FunctionCode;
+        reqParams.cfn['FunctionConfig'] = obj.data.FunctionConfig;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::Function'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::Function',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.FunctionMetadata.FunctionARN
+            }
         });
     } else {
         return false;

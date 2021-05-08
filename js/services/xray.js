@@ -7,7 +7,6 @@ sections.push({
     'service': 'X-Ray',
     'resourcetypes': {
         'Sampling Rules': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -68,12 +67,51 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'filterexpression',
+                        title: 'Filter Expression',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableDeveloperToolsXRay() {
     blockUI('#section-developertools-xray-samplingrules-datatable');
+    blockUI('#section-developertools-xray-groups-datatable');
 
     await sdkcall("XRay", "getSamplingRules", {
         // no params
@@ -108,7 +146,25 @@ async function updateDatatableDeveloperToolsXRay() {
         });
     }).catch(() => { });
 
+    await sdkcall("XRay", "getGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-developertools-xray-groups-datatable').deferredBootstrapTable('removeAll');
+
+        data.Groups.forEach(group => {
+            $('#section-developertools-xray-groups-datatable').deferredBootstrapTable('append', [{
+                f2id: group.GroupARN,
+                f2type: 'xray.group',
+                f2data: group,
+                f2region: region,
+                name: group.GroupName,
+                filterexpression: group.FilterExpression
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-developertools-xray-samplingrules-datatable');
+    unblockUI('#section-developertools-xray-groups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -128,13 +184,47 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['attributes'] = obj.data.Attributes;
         }
 
+        reqParams.cfn['RuleName'] = obj.data.RuleName;
+        reqParams.cfn['SamplingRule'] = {
+            'ResourceARN': obj.data.ResourceARN,
+            'Priority': obj.data.Priority,
+            'FixedRate': obj.data.FixedRate,
+            'ReservoirSize': obj.data.ReservoirSize,
+            'ServiceName': obj.data.ServiceName,
+            'ServiceType': obj.data.ServiceType,
+            'Host': obj.data.Host,
+            'HTTPMethod': obj.data.HTTPMethod,
+            'URLPath': obj.data.URLPath,
+            'Version': obj.data.Version,
+            'Attributes': obj.data.Attributes
+        };
+
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('xray', obj.id, 'AWS::Xray::SamplingRule'), // not real resource type
+            'logicalId': getResourceName('xray', obj.id, 'AWS::XRay::SamplingRule'),
             'region': obj.region,
             'service': 'xray',
+            'type': 'AWS::XRay::SamplingRule',
             'terraformType': 'aws_xray_sampling_rule',
             'options': reqParams
+        });
+    } else if (obj.type == "xray.group") {
+        reqParams.cfn['GroupName'] = obj.data.GroupName;
+        reqParams.cfn['FilterExpression'] = obj.data.FilterExpression;
+        reqParams.cfn['InsightsConfiguration'] = obj.data.InsightsConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('xray', obj.id, 'AWS::XRay::Group'),
+            'region': obj.region,
+            'service': 'xray',
+            'type': 'AWS::XRay::Group',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'GroupARN': obj.data.GroupARN
+                }
+            }
         });
     } else {
         return false;
