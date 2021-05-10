@@ -419,9 +419,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Input'] = obj.data.Input;
         reqParams.cfn['FormatOptions'] = obj.data.FormatOptions;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 
@@ -443,9 +446,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['Sample'] = obj.data.Sample;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 
@@ -467,9 +473,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Version'] = obj.data.RecipeVersion;
         reqParams.cfn['Steps'] = obj.data.Steps;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 
@@ -499,9 +508,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['Outputs'] = obj.data.Outputs;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 
@@ -526,9 +538,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['JobNames'] = obj.data.JobNames;
         reqParams.cfn['CronExpression'] = obj.data.CronExpression;
         if (obj.data.Tags) {
-            reqParams.cfn['Tags'] = {};
-            obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'][tag['Key']] = tag['Value'];
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tagKey,
+                    'Value': obj.data.Tags[tagKey]
+                });
             });
         }
 
