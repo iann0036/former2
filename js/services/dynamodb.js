@@ -62,6 +62,62 @@ sections.push({
                 ]
             ]
         },
+        'Global Tables': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'itemcount',
+                        title: 'Item Count',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Accelerator Clusters': {
             'columns': [
                 [
@@ -321,6 +377,7 @@ sections.push({
 
 async function updateDatatableDatabaseDynamoDB() {
     blockUI('#section-database-dynamodb-tables-datatable');
+    blockUI('#section-database-dynamodb-globaltables-datatable');
     blockUI('#section-database-dynamodb-acceleratorclusters-datatable');
     blockUI('#section-database-dynamodb-acceleratorparametergroups-datatable');
     blockUI('#section-database-dynamodb-acceleratorsubnetgroups-datatable');
@@ -331,6 +388,7 @@ async function updateDatatableDatabaseDynamoDB() {
         // no params
     }, true).then(async (data) => {
         $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('removeAll');
+        $('#section-database-dynamodb-globaltables-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TableNames.map(tableName => {
             return sdkcall("DynamoDB", "describeTable", {
@@ -340,26 +398,40 @@ async function updateDatatableDatabaseDynamoDB() {
                     ResourceArn: data.Table.TableArn
                 }, false).then(tagdata => {
                     if (tagdata.Tags && tagdata.Tags.length) {
-                        data.Table.Tags = tagdata.Tags;
+                        data.Table['Tags'] = tagdata.Tags;
                     }
-                    $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.Table.TableArn,
-                        f2type: 'dynamodb.table',
-                        f2data: data.Table,
-                        f2region: region,
-                        f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
-                        name: data.Table.TableName,
-                        creationtime: data.Table.CreationDateTime,
-                        size: data.Table.TableSizeBytes,
-                        itemcount: data.Table.ItemCount
-                    }]);
+
+                    if (data.Table.Replicas && data.Table.Replicas.length > 0) {
+                        $('#section-database-dynamodb-globaltables-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Table.TableArn,
+                            f2type: 'dynamodb.globaltable',
+                            f2data: data.Table,
+                            f2region: region,
+                            f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
+                            name: data.Table.TableName,
+                            creationtime: data.Table.CreationDateTime,
+                            size: data.Table.TableSizeBytes,
+                            itemcount: data.Table.ItemCount
+                        }]);
+                    } else {
+                        $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Table.TableArn,
+                            f2type: 'dynamodb.table',
+                            f2data: data.Table,
+                            f2region: region,
+                            f2link: 'https://console.aws.amazon.com/dynamodb/home?region=' + region + '#tables:selected=' + data.Table.TableName,
+                            name: data.Table.TableName,
+                            creationtime: data.Table.CreationDateTime,
+                            size: data.Table.TableSizeBytes,
+                            itemcount: data.Table.ItemCount
+                        }]);
+                    }
                 }).catch((error) => { });
             });
         }));
 
         unblockUI('#section-database-dynamodb-tables-datatable');
-
-
+        unblockUI('#section-database-dynamodb-globaltables-datatable');
     });
 
     await sdkcall("DAX", "describeClusters", {
@@ -620,6 +692,164 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'TableName': obj.data.TableName
+                }
+            }
+        });
+    } else if (obj.type == "dynamodb.globaltable") {
+        reqParams.cfn['AttributeDefinitions'] = obj.data.AttributeDefinitions;
+        if (obj.data.AttributeDefinitions) {
+            reqParams.tf['attribute'] = [];
+            obj.data.AttributeDefinitions.forEach(attributedefinition => {
+                reqParams.tf['attribute'].push({
+                    'name': attributedefinition.AttributeName,
+                    'type': attributedefinition.AttributeType
+                });
+            });
+        }
+        if (obj.data.BillingModeSummary) {
+            reqParams.cfn['BillingMode'] = obj.data.BillingModeSummary.BillingMode;
+            reqParams.tf['billing_mode'] = obj.data.BillingModeSummary.BillingMode;
+        }
+        reqParams.cfn['TableName'] = obj.data.TableName;
+        reqParams.tf['name'] = obj.data.TableName;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['KeySchema'] = obj.data.KeySchema;
+        if (obj.data.KeySchema) {
+            obj.data.KeySchema.forEach(keyschema => {
+                if (keyschema.KeyType == "HASH") {
+                    reqParams.tf['hash_key'] = keyschema.AttributeName;
+                } else if (keyschema.KeyType == "RANGE") {
+                    reqParams.tf['range_key'] = keyschema.AttributeName;
+                }
+            });
+        }
+        if (obj.data.ProvisionedThroughput && obj.data.ProvisionedThroughput.ReadCapacityUnits > 0) {
+            reqParams.cfn['ProvisionedThroughput'] = {
+                'ReadCapacityUnits': obj.data.ProvisionedThroughput.ReadCapacityUnits,
+                'WriteCapacityUnits': obj.data.ProvisionedThroughput.WriteCapacityUnits
+            };
+            reqParams.tf['read_capacity'] = obj.data.ProvisionedThroughput.ReadCapacityUnits;
+            reqParams.tf['write_capacity'] = obj.data.ProvisionedThroughput.WriteCapacityUnits;
+        }
+        if (obj.data.LocalSecondaryIndexes) {
+            reqParams.cfn['LocalSecondaryIndexes'] = [];
+            reqParams.tf['local_secondary_index'] = [];
+            obj.data.LocalSecondaryIndexes.forEach(index => {
+                reqParams.cfn['LocalSecondaryIndexes'].push({
+                    'IndexName': index.IndexName,
+                    'KeySchema': index.KeySchema,
+                    'Projection': index.Projection
+                });
+                var rangekey = null;
+                index.KeySchema.forEach(keyschema => {
+                    if (keyschema.KeyType == "RANGE") {
+                        rangekey = keyschema.AttributeName;
+                    }
+                });
+                reqParams.tf['local_secondary_index'].push({
+                    'name': index.IndexName,
+                    'range_key': rangekey,
+                    'projection_type': index.Projection.ProjectionType,
+                    'non_key_attributes': index.Projection.NonKeyAttributes
+                });
+            });
+        }
+        if (obj.data.GlobalSecondaryIndexes) {
+            reqParams.cfn['GlobalSecondaryIndexes'] = [];
+            reqParams.tf['global_secondary_index'] = [];
+            obj.data.GlobalSecondaryIndexes.forEach(index => {
+                reqParams.cfn['GlobalSecondaryIndexes'].push({
+                    'IndexName': index.IndexName,
+                    'KeySchema': index.KeySchema,
+                    'Projection': index.Projection,
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': index.ProvisionedThroughput.ReadCapacityUnits,
+                        'WriteCapacityUnits': index.ProvisionedThroughput.WriteCapacityUnits
+                    }
+                });
+                var hashkey = null;
+                var rangekey = null;
+                index.KeySchema.forEach(keyschema => {
+                    if (keyschema.KeyType == "HASH") {
+                        hashkey = keyschema.AttributeName;
+                    } else if (keyschema.KeyType == "RANGE") {
+                        rangekey = keyschema.AttributeName;
+                    }
+                });
+                reqParams.tf['global_secondary_index'].push({
+                    'name': index.IndexName,
+                    'hash_key': hashkey,
+                    'range_key': rangekey,
+                    'projection_type': index.Projection.ProjectionType,
+                    'non_key_attributes': index.Projection.NonKeyAttributes,
+                    'read_capacity': index.ProvisionedThroughput.ReadCapacityUnits,
+                    'write_capacity': index.ProvisionedThroughput.WriteCapacityUnits
+                });
+            });
+        }
+        if (obj.data.StreamSpecification) {
+            reqParams.cfn['StreamSpecification'] = {
+                'StreamViewType': obj.data.StreamSpecification.StreamViewType
+            };
+            reqParams.tf['stream_enabled'] = true;
+            reqParams.tf['stream_view_type'] = obj.data.StreamSpecification.StreamViewType;
+        }
+        if (obj.data.SSEDescription) {
+            reqParams.cfn['SSESpecification'] = {
+                'SSEEnabled': (obj.data.SSEDescription.Status[0] == "E"),
+                'SSEType': obj.data.SSEDescription.SSEType,
+                'KMSMasterKeyId': obj.data.SSEDescription.KMSMasterKeyArn
+            };
+            reqParams.tf['server_side_encryption'] = {
+                'enabled': (obj.data.SSEDescription.Status[0] == "E")
+            };
+        }
+        if (obj.data.Replicas) {
+            reqParams.cfn['Replicas'] = [];
+            reqParams.tf['replicas'] = [];
+            obj.data.Replicas.forEach(replica => {
+                reqParams.tf['replicas'].push({
+                    'region_name': replica.RegionName,
+                    'kms_key_arn': replica.KMSMasterKeyId
+                });
+                var ssespecification = null;
+                if (replica.KMSMasterKeyId) {
+                    ssespecification = {
+                        'KMSMasterKeyId': replica.KMSMasterKeyId
+                    }
+                }
+                var gsis = null;
+                if (replica.GlobalSecondaryIndexes) {
+                    gsis = [];
+                    replica.GlobalSecondaryIndexes.forEach(gsi => {
+                        gsis.push({
+                            'IndexName': gsi.IndexName,
+                            'ReadProvisionedThroughputSettings': gsi.ProvisionedThroughputOverride
+                        });
+                    });
+                }
+                reqParams.cfn['Replicas'].push({
+                    'Region': replica.RegionName,
+                    'SSESpecification': ssespecification,
+                    'ReadProvisionedThroughputSettings': replica.ProvisionedThroughputOverride,
+                    'GlobalSecondaryIndexes': gsis
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('dynamodb', obj.id, 'AWS::DynamoDB::GlobalTable'),
+            'region': obj.region,
+            'service': 'dynamodb',
+            'type': 'AWS::DynamoDB::GlobalTable',
+            'terraformType': 'aws_dynamodb_table',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TableName,
+                'GetAtt': {
+                    'Arn': obj.data.TableArn,
+                    'StreamArn': obj.data.LatestStreamArn
                 }
             }
         });
