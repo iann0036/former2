@@ -2939,6 +2939,52 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'Transit Gateway Peering Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'requesteraccount',
+                        title: 'Requester Account',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'accepteraccount',
+                        title: 'Accepter Account',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -3009,6 +3055,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable');
 
     var defaultVPC = "unset";
 
@@ -4332,6 +4379,24 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
         });
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeTransitGatewayPeeringAttachments", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable').deferredBootstrapTable('removeAll');
+
+        data.TransitGatewayPeeringAttachments.forEach(peeringattachment => {
+            $('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable').deferredBootstrapTable('append', [{
+                f2id: peeringattachment.TransitGatewayAttachmentId + " Peering Attachment " + peeringattachment.RequesterTgwInfo.OwnerId + " to " + peeringattachment.AccepterTgwInfo.OwnerId,
+                f2type: 'ec2.transitgatewaypeeringattachment',
+                f2data: peeringattachment,
+                f2region: region,
+                attachmentid: peeringattachment.TransitGatewayAttachmentId,
+                requesteraccount: peeringattachment.RequesterTgwInfo.OwnerId,
+                accepteraccount: peeringattachment.AccepterTgwInfo.OwnerId
+            }]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -4358,6 +4423,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupmembers-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -6024,6 +6090,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'TransitGatewayId': obj.data.TransitGatewayId
                 }
+            }
+        });
+    } else if (obj.type == "ec2.transitgatewaypeeringattachment") {
+        reqParams.cfn['PeerAccountId'] = obj.data.AccepterTgwInfo.OwnerId;
+        reqParams.cfn['PeerRegion'] = obj.data.AccepterTgwInfo.Region;
+        reqParams.cfn['PeerTransitGatewayId'] = obj.data.AccepterTgwInfo.TransitGatewayId;
+        reqParams.cfn['TransitGatewayId'] = obj.data.RequesterTgwInfo.TransitGatewayId;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::TransitGatewayPeeringAttachment'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::TransitGatewayPeeringAttachment',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TransitGatewayAttachmentId
             }
         });
     } else {
