@@ -604,18 +604,6 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
 
         await Promise.all(data.UserPools.map(userPool => {
             return Promise.all([
-                userPool.Domain ? sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
-                    Domain: userPool.Domain
-                }, true).then(async (data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.DomainDescription.Domain,
-                        f2type: 'cognito.userpooldomain',
-                        f2data: data.DomainDescription,
-                        f2region: region,
-                        domain: data.DomainDescription.Domain,
-                        userpoolid: data.DomainDescription.UserPoolId
-                    }]);
-                }) : Promise.resolve(),
                 sdkcall("CognitoIdentityServiceProvider", "listResourceServers", {
                     UserPoolId: userPool.Id,
                     MaxResults: 50 // WTF? required!
@@ -767,7 +755,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                 }),
                 sdkcall("CognitoIdentityServiceProvider", "describeUserPool", {
                     UserPoolId: userPool.Id
-                }, true).then((data) => {
+                }, true).then(async (data) => {
                     $('#section-securityidentityandcompliance-cognito-userpools-datatable').deferredBootstrapTable('append', [{
                         f2id: data.UserPool.Arn,
                         f2type: 'cognito.userpool',
@@ -776,6 +764,19 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         name: data.UserPool.Name,
                         id: data.UserPool.Id
                     }]);
+
+                    await sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
+                        Domain: data.UserPool.CustomDomain || data.UserPool.Domain
+                    }, false).then(async (data) => {
+                        $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.UserPool.CustomDomain || data.UserPool.Domain,
+                            f2type: 'cognito.userpooldomain',
+                            f2data: data.DomainDescription,
+                            f2region: region,
+                            domain: data.UserPool.CustomDomain || data.UserPool.Domain,
+                            userpoolid: data.DomainDescription.UserPoolId
+                        }]);
+                    }).catch(() => { });
                 })
             ]);
         }));
@@ -1101,6 +1102,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['PreventUserExistenceErrors'] = obj.data.PreventUserExistenceErrors;
         reqParams.cfn['AnalyticsConfiguration'] = obj.data.AnalyticsConfiguration;
+        reqParams.cfn['SupportedIdentityProviders'] = obj.data.SupportedIdentityProviders;
+        reqParams.cfn['CallbackURLs'] = obj.data.CallbackURLs;
+        reqParams.cfn['LogoutURLs'] = obj.data.LogoutURLs;
+        reqParams.cfn['DefaultRedirectURI'] = obj.data.DefaultRedirectURI;
+        reqParams.cfn['AllowedOAuthFlows'] = obj.data.AllowedOAuthFlows;
+        reqParams.cfn['AllowedOAuthScopes'] = obj.data.AllowedOAuthScopes;
+        reqParams.cfn['AllowedOAuthFlowsUserPoolClient'] = obj.data.AllowedOAuthFlowsUserPoolClient;
+        reqParams.cfn['AnalyticsConfiguration'] = obj.data.AnalyticsConfiguration;
+        if (obj.data.ClientSecret) {
+            reqParams.cfn['GenerateSecret'] = true;
+        }
+        reqParams.cfn['IdTokenValidity'] = obj.data.IdTokenValidity;
+        reqParams.cfn['AccessTokenValidity'] = obj.data.AccessTokenValidity;
+        reqParams.cfn['TokenValidityUnits'] = obj.data.TokenValidityUnits;
 
         tracked_resources.push({
             'obj': obj,
