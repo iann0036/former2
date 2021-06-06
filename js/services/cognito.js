@@ -767,14 +767,14 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
 
                     await sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
                         Domain: data.UserPool.CustomDomain || data.UserPool.Domain
-                    }, false).then(async (data) => {
+                    }, false).then(async (domaindata) => {
                         $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
-                            f2id: data.UserPool.CustomDomain || data.UserPool.Domain,
+                            f2id: domaindata.DomainDescription.Domain + " UserPoolDomain",
                             f2type: 'cognito.userpooldomain',
-                            f2data: data.DomainDescription,
+                            f2data: domaindata.DomainDescription,
                             f2region: region,
-                            domain: data.UserPool.CustomDomain || data.UserPool.Domain,
-                            userpoolid: data.DomainDescription.UserPoolId
+                            domain: domaindata.DomainDescription.Domain,
+                            userpoolid: domaindata.DomainDescription.UserPoolId
                         }]);
                     }).catch(() => { });
                 })
