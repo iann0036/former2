@@ -882,7 +882,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['UserPoolName'] = obj.data.Name;
         reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['Policies'] = obj.data.Policies;
+        var temporary_password_validity = false;
         if (obj.data.Policies && obj.data.Policies.PasswordPolicy) {
+            if (obj.data.Policies.PasswordPolicy.TemporaryPasswordValidityDays) {
+                temporary_password_validity = true;
+            }
             reqParams.tf['password_policy'] = {
                 'minimum_length': obj.data.Policies.PasswordPolicy.MinimumLength,
                 'require_lowercase': obj.data.Policies.PasswordPolicy.RequireLowercase,
@@ -979,7 +983,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'sns_caller_arn': obj.data.SmsConfiguration.SnsCallerArn
             };
         }
-        reqParams.cfn['AdminCreateUserConfig'] = obj.data.AdminCreateUserConfig;
+        if (obj.data.AdminCreateUserConfig) {
+            reqParams.cfn['AdminCreateUserConfig'] = {
+                'AllowAdminCreateUserOnly': obj.data.AdminCreateUserConfig.AllowAdminCreateUserOnly,
+                'InviteMessageTemplate': obj.data.AdminCreateUserConfig.InviteMessageTemplate
+            };
+            if (!temporary_password_validity) {
+                reqParams.cfn['AdminCreateUserConfig']['UnusedAccountValidityDays'] = obj.data.AdminCreateUserConfig.UnusedAccountValidityDays;
+            }
+        }
         if (obj.data.AdminCreateUserConfig) {
             var invitemessagetemplate = null;
             if (obj.data.AdminCreateUserConfig.InviteMessageTemplate) {
@@ -1128,7 +1140,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "cognito.userpooldomain") {
         reqParams.cfn['Domain'] = obj.data.Domain;
-        reqParams.cfn['CustomDomainConfig'] = obj.data.CustomDomainConfig;
+        if (obj.data.CustomDomainConfig && obj.data.CustomDomainConfig.CertificateArn) {
+            reqParams.cfn['CustomDomainConfig'] = obj.data.CustomDomainConfig;
+        }
         reqParams.cfn['UserPoolId'] = obj.data.UserPoolId;
 
         tracked_resources.push({
