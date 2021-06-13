@@ -160,6 +160,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Accesses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'External ID',
+                        field: 'externalid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'serverid',
+                        title: 'Server ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'homedirectory',
+                        title: 'Home Directory',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -168,6 +214,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
     blockUI('#section-migrationandtransfer-transfer-servers-datatable');
     blockUI('#section-migrationandtransfer-transfer-users-datatable');
     blockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
+    blockUI('#section-migrationandtransfer-transfer-accesses-datatable');
 
     await sdkcall("Transfer", "listServers", {
         // no params
@@ -175,6 +222,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
         $('#section-migrationandtransfer-transfer-servers-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-transfer-users-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-transfer-sshkeys-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-transfer-accesses-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Servers.map(async (server) => {
             await sdkcall("Transfer", "listUsers", {
@@ -217,6 +265,27 @@ async function updateDatatableMigrationAndTransferTransfer() {
                 }));
             });
 
+            await sdkcall("Transfer", "listAccesses", {
+                ServerId: server.ServerId
+            }, true).then(async (data) => {
+                await Promise.all(data.Accesses.map(access => {
+                    return sdkcall("Transfer", "describeAccess", {
+                        ServerId: server.ServerId,
+                        ExternalId: access.ExternalId
+                    }, true).then(async (data) => {
+                        $('#section-migrationandtransfer-transfer-accesses-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.ServerId + " " + data.Access.ExternalId,
+                            f2type: 'transfer.access',
+                            f2data: data,
+                            f2region: region,
+                            externalid: data.Access.ExternalId,
+                            serverid: data.ServerId,
+                            homedirectory: data.Access.HomeDirectory
+                        }]);
+                    });
+                }));
+            });
+
             return sdkcall("Transfer", "describeServer", {
                 ServerId: server.ServerId
             }, true).then(async (data) => {
@@ -236,6 +305,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
         unblockUI('#section-migrationandtransfer-transfer-servers-datatable');
         unblockUI('#section-migrationandtransfer-transfer-users-datatable');
         unblockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
+        unblockUI('#section-migrationandtransfer-transfer-accesses-datatable');
     });
 }
 
@@ -348,6 +418,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'transfer',
             'terraformType': 'aws_transfer_ssh_key',
+            'options': reqParams
+        });
+    } else if (obj.type == "transfer.access") {
+        reqParams.cfn['ServerId'] = obj.data.ServerId;
+        reqParams.cfn['HomeDirectory'] = obj.data.Access.HomeDirectory;
+        reqParams.cfn['HomeDirectoryMappings'] = obj.data.Access.HomeDirectoryMappings;
+        reqParams.cfn['HomeDirectoryType'] = obj.data.Access.HomeDirectoryType;
+        reqParams.cfn['Policy'] = obj.data.Access.Policy;
+        reqParams.cfn['PosixProfile'] = obj.data.Access.PosixProfile;
+        reqParams.cfn['Role'] = obj.data.Access.Role;
+        reqParams.cfn['ExternalId'] = obj.data.Access.ExternalId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('transfer', obj.id, 'AWS::Transfer::Access'),
+            'region': obj.region,
+            'service': 'transfer',
+            'type': 'AWS::Transfer::Access',
             'options': reqParams
         });
     } else {
