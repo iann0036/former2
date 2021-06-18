@@ -498,6 +498,34 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EventBuses.map(async (eventBus) => {
+            await sdkcall("EventBridge", "listRules", {
+                EventBusName: eventBus.Name
+            }, true).then(async (data) => {
+                await Promise.all(data.Rules.map(rule => {
+                    return sdkcall("EventBridge", "describeRule", {
+                        Name: rule.Name
+                    }, true).then(async (data) => {
+                        await sdkcall("EventBridge", "listTargetsByRule", {
+                            Rule: data.Name
+                        }, true).then((targets) => {
+                            data['Targets'] = targets.Targets;
+                            $('#section-applicationintegration-eventbridge-rules-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.Arn,
+                                f2type: 'eventbridge.rule',
+                                f2data: data,
+                                f2region: region,
+                                f2link: 'https://console.aws.amazon.com/events/home?region=' + region + '#/rules/' + data.Name,
+                                name: data.Name,
+                                description: data.Description,
+                                eventpattern: data.EventPattern,
+                                scheduleexpression: data.ScheduleExpression,
+                                enabled: (data.State == "ENABLED")
+                            }]);
+                        });
+                    });
+                }));
+            });
+
             return sdkcall("EventBridge", "describeEventBus", {
                 Name: eventBus.Name
             }, true).then(async (data) => {
