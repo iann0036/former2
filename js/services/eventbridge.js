@@ -498,14 +498,20 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         $('#section-applicationintegration-eventbridge-eventbuspolicies-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.EventBuses.map(async (eventBus) => {
+            if (eventBus.Name == "default") {
+                return Promise.resolve();
+            }
+
             await sdkcall("EventBridge", "listRules", {
                 EventBusName: eventBus.Name
             }, true).then(async (data) => {
                 await Promise.all(data.Rules.map(rule => {
                     return sdkcall("EventBridge", "describeRule", {
+                        EventBusName: eventBus.Name,
                         Name: rule.Name
                     }, true).then(async (data) => {
                         await sdkcall("EventBridge", "listTargetsByRule", {
+                            EventBusName: eventBus.Name,
                             Rule: data.Name
                         }, true).then((targets) => {
                             data['Targets'] = targets.Targets;
