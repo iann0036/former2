@@ -173,12 +173,11 @@ async function updateDatatableSecurityIdentityAndComplianceSingleSignOn() {
                             description: data.PermissionSet.Description
                         }]);
                     });
-
+                    
                     return sdkcall("SSOAdmin", "listAccountsForProvisionedPermissionSet", {
                         InstanceArn: instance.InstanceArn,
                         PermissionSetArn: permissionSet
                     }, true).then(async (accountids) => {
-                        
                         await Promise.all(accountids.AccountIds.map(async (accountid) => {
                             return sdkcall("SSOAdmin", "listAccountAssignments", {
                                 InstanceArn: instance.InstanceArn,
@@ -186,16 +185,16 @@ async function updateDatatableSecurityIdentityAndComplianceSingleSignOn() {
                                 AccountId: accountid
                             }, true).then(async (assignments) => {
                                 assignments.AccountAssignments.forEach(assignment => {
-                                    assignmment['InstanceArn'] = instance.InstanceArn;
+                                    assignment['InstanceArn'] = instance.InstanceArn;
 
                                     $('#section-securityidentityandcompliance-singlesignon-assignments-datatable').deferredBootstrapTable('append', [{
-                                        f2id: assignmment.AccountId + " " + assignmment.PermissionSetArn + " " + assignmment.PrincipalId + " assignment for " + instance.InstanceArn,
+                                        f2id: assignment.AccountId + " " + assignment.PermissionSetArn + " " + assignment.PrincipalId + " assignment for " + instance.InstanceArn,
                                         f2type: 'singlesignon.assignment',
-                                        f2data: assignmment,
+                                        f2data: assignment,
                                         f2region: region,
-                                        principalid: assignmment.PrincipalId,
-                                        targetid: assignmment.AccountId,
-                                        permissionsetarn: assignmment.PermissionSetArn,
+                                        principalid: assignment.PrincipalId,
+                                        targetid: assignment.AccountId,
+                                        permissionsetarn: assignment.PermissionSetArn,
                                         instancearn: instance.InstanceArn
                                     }]);
                                 });
