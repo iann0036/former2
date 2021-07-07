@@ -173,7 +173,7 @@ async function updateDatatableApplicationIntegrationSNS() {
                                 subscriptionarn: topic.SubscriptionArn,
                                 topicarn: topic.TopicArn
                             }]);
-                        });
+                        }).catch((error) => { });
                     });
                 })
             ]);
