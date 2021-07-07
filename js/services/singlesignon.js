@@ -262,11 +262,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "singlesignon.assignment") {
         reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
+        reqParams.tf['instance_arn'] = obj.data.InstanceArn;
         reqParams.cfn['PermissionSetArn'] = obj.data.PermissionSetArn;
+        reqParams.tf['permission_set_arn'] = obj.data.PermissionSetArn;
         reqParams.cfn['PrincipalId'] = obj.data.PrincipalId;
+        reqParams.tf['principal_id'] = obj.data.PrincipalId;
         reqParams.cfn['PrincipalType'] = obj.data.PrincipalType;
+        reqParams.tf['principal_type'] = obj.data.PrincipalType;
         reqParams.cfn['TargetId'] = obj.data.AccountId;
+        reqParams.tf['target_id'] = obj.data.AccountId;
         reqParams.cfn['TargetType'] = "AWS_ACCOUNT";
+        reqParams.tf['target_type'] = "AWS_ACCOUNT";
 
         tracked_resources.push({
             'obj': obj,
@@ -274,6 +280,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'singlesignon',
             'type': 'AWS::SSO::Assignment',
+            'terraformType': 'aws_ssoadmin_account_assignment',
             'options': reqParams
         });
     } else if (obj.type == "singlesignon.iacac") {
