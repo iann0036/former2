@@ -876,6 +876,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Device Advisor Suite Definitions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -904,6 +942,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-securityprofiles-datatable');
     blockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
     blockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
+    blockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1440,6 +1479,29 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("IotDeviceAdvisor", "listSuiteDefinitions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.suiteDefinitionInformationList.map(async (suitedefinition) => {
+            return sdkcall("IotDeviceAdvisor", "getSuiteDefinition", {
+                suiteDefinitionId: suitedefinition.suiteDefinitionId
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+                
+                $('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.suiteDefinitionArn,
+                    f2type: 'iot.deviceadvisorsuitedefinition',
+                    f2data: data,
+                    f2region: region,
+                    name: data.suiteDefinitionConfiguration.suiteDefinitionName,
+                    id: data.suiteDefinitionId
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1455,6 +1517,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-securityprofiles-datatable');
     unblockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
     unblockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
+    unblockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2273,6 +2336,26 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'Arn': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "iot.deviceadvisorsuitedefinition") {
+        reqParams.cfn['SuiteDefinitionConfiguration'] = obj.data.suiteDefinitionConfiguration;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTCoreDeviceAdvisor::SuiteDefinition'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTCoreDeviceAdvisor::SuiteDefinition',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.suiteDefinitionConfiguration.suiteDefinitionName,
+                'GetAtt': {
+                    'SuiteDefinitionArn': obj.data.suiteDefinitionArn,
+                    'SuiteDefinitionId': obj.data.suiteDefinitionId,
+                    'SuiteDefinitionVersion': obj.data.suiteDefinitionVersion
+                }
             }
         });
     } else {

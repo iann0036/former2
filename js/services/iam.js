@@ -1276,10 +1276,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::AccessKey'),
+            'logicalId': getResourceName('iam', obj.id, 'AWS::IAM::VirtualMFADevice'),
             'region': obj.region,
             'service': 'iam',
-            'type': 'AWS::IAM::AccessKey',
+            'type': 'AWS::IAM::VirtualMFADevice',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.SerialNumber

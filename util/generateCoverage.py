@@ -42,7 +42,10 @@ cfn_exceptions = {
     'AWS::CloudFormation::ModuleVersion': 'N/A',
     'AWS::ECS::ClusterCapacityProviderAssociations': 'N/A',
     'AWS::CloudFormation::ResourceDefaultVersion': 'N/A',
-    'AWS::CloudFormation::ResourceVersion': 'N/A'
+    'AWS::CloudFormation::ResourceVersion': 'N/A',
+    'AWS::CloudFormation::TypeActivation': 'N/A',
+    'AWS::CloudFormation::Publisher': 'N/A',
+    'AWS::CloudFormation::PublicTypeVersion': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',

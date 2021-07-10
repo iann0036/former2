@@ -162,10 +162,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('apprunner', obj.id, 'AWS::ImageBuilder::ImagePipeline'),
+            'logicalId': getResourceName('apprunner', obj.id, 'AWS::AppRunner::Service'),
             'region': obj.region,
             'service': 'apprunner',
-            'type': 'AWS::ImageBuilder::ImagePipeline',
+            'type': 'AWS::AppRunner::Service',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.ServiceName,

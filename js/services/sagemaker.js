@@ -1061,6 +1061,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Feature Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1091,6 +1129,7 @@ async function updateDatatableMachineLearningSageMaker() {
     blockUI('#section-machinelearning-sagemaker-appimageconfigs-datatable');
     blockUI('#section-machinelearning-sagemaker-images-datatable');
     blockUI('#section-machinelearning-sagemaker-imageversions-datatable');
+    blockUI('#section-machinelearning-sagemaker-featuregroups-datatable');
 
     await sdkcall("SageMaker", "listCodeRepositories", {
         // no params
@@ -1686,6 +1725,29 @@ async function updateDatatableMachineLearningSageMaker() {
 
         unblockUI('#section-machinelearning-sagemaker-images-datatable');
         unblockUI('#section-machinelearning-sagemaker-imageversions-datatable');
+    }).catch(() => { });
+
+    await sdkcall("SageMaker", "listFeatureGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-machinelearning-sagemaker-featuregroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FeatureGroupSummaries.map(async (featuregroup) => {
+            return sdkcall("SageMaker", "describeFeatureGroup", {
+                FeatureGroupName: featuregroup.FeatureGroupName
+            }, true).then((data) => {
+                $('#section-machinelearning-sagemaker-featuregroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.FeatureGroupArn,
+                    f2type: 'sagemaker.featuregroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.FeatureGroupName,
+                    description: data.Description
+                }]);
+            });
+        }));
+
+        unblockUI('#section-machinelearning-sagemaker-featuregroups-datatable');
     }).catch(() => { });
 }
 
@@ -2329,10 +2391,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::Image'),
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::ImageVersion'),
             'region': obj.region,
             'service': 'sagemaker',
-            'type': 'AWS::SageMaker::Image',
+            'type': 'AWS::SageMaker::ImageVersion',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.ImageVersionArn,
@@ -2341,6 +2403,27 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ImageArn': obj.data.ImageArn,
                     'Version': obj.data.Version
                 }
+            }
+        });
+    } else if (obj.type == "sagemaker.featuregroup") {
+        reqParams.cfn['FeatureGroupName'] = obj.data.FeatureGroupName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['RecordIdentifierFeatureName'] = obj.data.RecordIdentifierFeatureName;
+        reqParams.cfn['EventTimeFeatureName'] = obj.data.EventTimeFeatureName;
+        reqParams.cfn['FeatureDefinitions'] = obj.data.FeatureDefinitions;
+        reqParams.cfn['OnlineStoreConfig'] = obj.data.OnlineStoreConfig;
+        reqParams.cfn['OfflineStoreConfig'] = obj.data.OfflineStoreConfig;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('sagemaker', obj.id, 'AWS::SageMaker::FeatureGroup'),
+            'region': obj.region,
+            'service': 'sagemaker',
+            'type': 'AWS::SageMaker::FeatureGroup',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.FeatureGroupName
             }
         });
     } else {

@@ -125,6 +125,32 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Registry Policy': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Registry',
+                        field: 'registry',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -133,6 +159,7 @@ async function updateDatatableContainersECR() {
     blockUI('#section-containers-ecr-repositories-datatable');
     blockUI('#section-containers-ecr-publicrepositories-datatable');
     blockUI('#section-containers-ecr-replicationconfiguration-datatable');
+    blockUI('#section-containers-ecr-registrypolicy-datatable');
 
     await sdkcall("ECR", "describeRepositories", {
         // no params
@@ -170,7 +197,7 @@ async function updateDatatableContainersECR() {
         }));
 
         unblockUI('#section-containers-ecr-repositories-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ECRPUBLIC", "describeRepositories", {
         // no params
@@ -204,7 +231,7 @@ async function updateDatatableContainersECR() {
         }));
 
         unblockUI('#section-containers-ecr-publicrepositories-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ECR", "describeRegistry", {
         // no params
@@ -225,6 +252,24 @@ async function updateDatatableContainersECR() {
 
         unblockUI('#section-containers-ecr-replicationconfiguration-datatable');
     }).catch(() => { });
+
+    await sdkcall("ECR", "getRegistryPolicy", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-containers-ecr-registrypolicy-datatable').deferredBootstrapTable('removeAll');
+
+        if (data.policyText) {
+            $('#section-containers-ecr-registrypolicy-datatable').deferredBootstrapTable('append', [{
+                f2id: "Registry Policy",
+                f2type: 'ecr.registrypolicy',
+                f2data: data,
+                f2region: region,
+                registry: "(current account)"
+            }]);
+        }
+    }).catch(() => { });
+
+    unblockUI('#section-containers-ecr-registrypolicy-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -348,6 +393,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'RegistryId': obj.data.registryId
                 }
             }
+        });
+    } else if (obj.type == "ecr.registrypolicy") {
+        reqParams.cfn['PolicyText'] = obj.data.policyText;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ecr', obj.id, 'AWS::ECR::RegistryPolicy'),
+            'region': obj.region,
+            'service': 'ecr',
+            'type': 'AWS::ECR::RegistryPolicy',
+            'options': reqParams
         });
     } else {
         return false;
