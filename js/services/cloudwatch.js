@@ -588,6 +588,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Logs Resource Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -607,6 +633,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -883,6 +910,23 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     }).catch(() => { });
 
+    await sdkcall("CloudWatchLogs", "describeResourcePolicies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable').deferredBootstrapTable('removeAll');
+
+        data.resourcePolicies.forEach(resourcepolicy => {
+            $('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable').deferredBootstrapTable('append', [{
+                f2id: resourcepolicy.policyName + " Logs Resource Policy",
+                f2type: 'cloudwatch.logsresourcepolicy',
+                f2data: resourcepolicy,
+                f2region: region,
+                name: resourcepolicy.policyName
+            }]);
+            
+        });
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
@@ -892,6 +936,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1273,6 +1318,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.queryDefinitionId
             }
+        });
+    } else if (obj.type == "cloudwatch.logsresourcepolicy") {
+        reqParams.cfn['PolicyName'] = obj.data.policyName;
+        reqParams.cfn['PolicyDocument'] = obj.data.policyDocument;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('logs', obj.id, 'AWS::Logs::ResourcePolicy'),
+            'region': obj.region,
+            'service': 'logs',
+            'type': 'AWS::Logs::ResourcePolicy',
+            'options': reqParams
         });
     } else {
         return false;
