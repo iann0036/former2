@@ -751,6 +751,28 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             queryStringCacheKeys = obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items;
         }
         if (obj.data.DefaultCacheBehavior) {
+            var forwardedValues = null;
+            var tfforwardedValues = null;
+            if (obj.data.DefaultCacheBehavior.ForwardedValues) {
+                forwardedValues = {
+                    'Cookies': {
+                        'Forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
+                        'WhitelistedNames': cookiesWhitelistedNames
+                    },
+                    'Headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
+                    'QueryString': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
+                    'QueryStringCacheKeys': queryStringCacheKeys
+                };
+                tfforwardedValues = {
+                    'cookies': {
+                        'forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
+                        'whitelisted_names': cookiesWhitelistedNames
+                    },
+                    'headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
+                    'query_string': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
+                    'query_string_cache_keys': queryStringCacheKeys
+                };
+            }
             reqParams.cfn.DistributionConfig['DefaultCacheBehavior'] = {
                 'AllowedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.Items : null),
                 'CachedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods && obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items : null),
@@ -759,15 +781,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'CachePolicyId': obj.data.DefaultCacheBehavior.CachePolicyId,
                 'OriginRequestPolicyId': obj.data.DefaultCacheBehavior.OriginRequestPolicyId,
                 'FieldLevelEncryptionId': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
-                'ForwardedValues': {
-                    'Cookies': {
-                        'Forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
-                        'WhitelistedNames': cookiesWhitelistedNames
-                    },
-                    'Headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
-                    'QueryString': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
-                    'QueryStringCacheKeys': queryStringCacheKeys
-                },
+                'ForwardedValues': forwardedValues,
                 'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
                 'MaxTTL': obj.data.DefaultCacheBehavior.MaxTTL,
                 'MinTTL': obj.data.DefaultCacheBehavior.MinTTL,
@@ -784,15 +798,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'compress': obj.data.DefaultCacheBehavior.Compress,
                 'default_ttl': obj.data.DefaultCacheBehavior.DefaultTTL,
                 'field_level_encryption_id': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
-                'forwarded_values': {
-                    'cookies': {
-                        'forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
-                        'whitelisted_names': cookiesWhitelistedNames
-                    },
-                    'headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
-                    'query_string': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
-                    'query_string_cache_keys': queryStringCacheKeys
-                },
+                'forwarded_values': tfforwardedValues,
                 'lambda_function_association': defaultCacheLambdaFunctionAssociations,
                 'max_ttl': obj.data.DefaultCacheBehavior.MaxTTL,
                 'min_ttl': obj.data.DefaultCacheBehavior.MinTTL,
@@ -828,6 +834,28 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.QueryStringCacheKeys) {
                     queryStringCacheKeys = cacheBehaviour.ForwardedValues.QueryStringCacheKeys.Items;
                 }
+                var forwardedValues = null;
+                var tfforwardedValues = null;
+                if (cacheBehaviour.ForwardedValues) {
+                    forwardedValues = {
+                        'Cookies': {
+                            'Forward': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies ? cacheBehaviour.ForwardedValues.Cookies.Forward : null),
+                            'WhitelistedNames': cookiesWhitelistedNames
+                        },
+                        'Headers': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Headers ? cacheBehaviour.ForwardedValues.Headers.Items : null),
+                        'QueryString': (cacheBehaviour.ForwardedValues ? cacheBehaviour.ForwardedValues.QueryString : null),
+                        'QueryStringCacheKeys': queryStringCacheKeys
+                    };
+                    tfforwardedValues = {
+                        'cookies': {
+                            'forward': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies ? cacheBehaviour.ForwardedValues.Cookies.Forward : null),
+                            'whitelisted_names': cookiesWhitelistedNames
+                        },
+                        'headers': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Headers ? cacheBehaviour.ForwardedValues.Headers.Items : null),
+                        'query_string': (cacheBehaviour.ForwardedValues ? cacheBehaviour.ForwardedValues.QueryString : null),
+                        'query_string_cache_keys': queryStringCacheKeys
+                    };
+                }
                 reqParams.cfn.DistributionConfig['CacheBehaviors'].push({
                     'AllowedMethods': (cacheBehaviour.AllowedMethods ? cacheBehaviour.AllowedMethods.Items : null),
                     'CachedMethods': (cacheBehaviour.CachedMethods ? cacheBehaviour.CachedMethods.Items : null),
@@ -836,15 +864,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'CachePolicyId': cacheBehaviour.CachePolicyId,
                     'OriginRequestPolicyId': cacheBehaviour.OriginRequestPolicyId,
                     'FieldLevelEncryptionId': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
-                    'ForwardedValues': {
-                        'Cookies': {
-                            'Forward': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies ? cacheBehaviour.ForwardedValues.Cookies.Forward : null),
-                            'WhitelistedNames': cookiesWhitelistedNames
-                        },
-                        'Headers': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Headers ? cacheBehaviour.ForwardedValues.Headers.Items : null),
-                        'QueryString': (cacheBehaviour.ForwardedValues ? cacheBehaviour.ForwardedValues.QueryString : null),
-                        'QueryStringCacheKeys': queryStringCacheKeys
-                    },
+                    'ForwardedValues': forwardedValues,
                     'LambdaFunctionAssociations': cacheLambdaFunctionAssociations,
                     'MaxTTL': cacheBehaviour.MaxTTL,
                     'MinTTL': cacheBehaviour.MinTTL,
@@ -862,15 +882,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'compress': cacheBehaviour.Compress,
                     'default_ttl': cacheBehaviour.DefaultTTL,
                     'field_level_encryption_id': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
-                    'forwarded_values': {
-                        'cookies': {
-                            'forward': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies ? cacheBehaviour.ForwardedValues.Cookies.Forward : null),
-                            'whitelisted_names': cookiesWhitelistedNames
-                        },
-                        'headers': (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Headers ? cacheBehaviour.ForwardedValues.Headers.Items : null),
-                        'query_string': (cacheBehaviour.ForwardedValues ? cacheBehaviour.ForwardedValues.QueryString : null),
-                        'query_string_cache_keys': queryStringCacheKeys
-                    },
+                    'forwarded_values': tfforwardedValues,
                     'lambda_function_association': cacheLambdaFunctionAssociations,
                     'max_ttl': cacheBehaviour.MaxTTL,
                     'min_ttl': cacheBehaviour.MinTTL,
