@@ -435,7 +435,7 @@ async function updateDatatableAnalyticsQuickSight() {
         }, false).then(async (data) => {
             $('#section-analytics-quicksight-datasets-datatable').deferredBootstrapTable('removeAll');
 
-            await Promise.all(data.DataSets.map(dataset => {
+            await Promise.all(data.DataSetSummaries.map(dataset => {
                 return sdkcall("QuickSight", "describeDataSet", {
                     DataSetId: dataset.DataSetId,
                     AwsAccountId: accountId
