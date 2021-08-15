@@ -151,6 +151,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Prepared Statements': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'workgroup',
+                        title: 'Workgroup',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -159,6 +205,7 @@ async function updateDatatableAnalyticsAthena() {
     blockUI('#section-analytics-athena-namedqueries-datatable');
     blockUI('#section-analytics-athena-workgroups-datatable');
     blockUI('#section-analytics-athena-datacatalogs-datatable');
+    blockUI('#section-analytics-athena-preparedstatements-datatable');
 
     await sdkcall("Athena", "listNamedQueries", {
         // no params
@@ -190,9 +237,10 @@ async function updateDatatableAnalyticsAthena() {
         // no params
     }, true).then(async (data) => {
         $('#section-analytics-athena-workgroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-athena-preparedstatements-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.WorkGroups.map(async (workgroup) => {
-            return sdkcall("Athena", "getWorkGroup", {
+            await sdkcall("Athena", "getWorkGroup", {
                 WorkGroup: workgroup.Name
             }, true).then(async (data) => {
                 if (
@@ -210,9 +258,31 @@ async function updateDatatableAnalyticsAthena() {
                     }]);
                 }
             });
+
+            return sdkcall("Athena", "listPreparedStatements", {
+                WorkGroup: workgroup.Name
+            }, true).then(async (data) => {
+                await Promise.all(data.PreparedStatements.map(async (preparedstatement) => {
+                    return sdkcall("Athena", "getPreparedStatement", {
+                        WorkGroup: workgroup.Name,
+                        StatementName: preparedstatement.StatementName
+                    }, false).then(async (data) => {
+                        $('#section-analytics-athena-preparedstatements-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.PreparedStatement.StatementName + " Prepared Statement",
+                            f2type: 'athena.preparedstatement',
+                            f2data: data.PreparedStatement,
+                            f2region: region,
+                            name: data.PreparedStatement.StatementName,
+                            workgroup: data.PreparedStatement.WorkGroupName,
+                            description: data.PreparedStatement.Description
+                        }]);
+                    }).catch(() => { });
+                }));
+            }).catch(() => { });
         }));
 
         unblockUI('#section-analytics-athena-workgroups-datatable');
+        unblockUI('#section-analytics-athena-preparedstatements-datatable');
     }).catch(() => { });
 
     await sdkcall("Athena", "listDataCatalogs", {
@@ -323,6 +393,23 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'Name': obj.data.Name
                 }
+            }
+        });
+    } else if (obj.type == "athena.preparedstatement") {
+        reqParams.cfn['StatementName'] = obj.data.StatementName;
+        reqParams.cfn['WorkGroup'] = obj.data.WorkGroupName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['QueryStatement'] = obj.data.QueryStatement;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('athena', obj.id, 'AWS::Athena::PreparedStatement'),
+            'region': obj.region,
+            'service': 'athena',
+            'type': 'AWS::Athena::PreparedStatement',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.StatementName
             }
         });
     } else {
