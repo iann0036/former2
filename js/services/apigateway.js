@@ -2086,10 +2086,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Tags'] = [];
             reqParams.tf['Tags'] = {};
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
         reqParams.cfn['ClientCertificateId'] = obj.data.clientCertificateId;

@@ -576,7 +576,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                     });
                     for (var j = 0; j < 10; j++) { // replace many
                         pre_return_str = "!Sub ";
-                        param = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
+                        var replacement_proposed = param.replace(tracked_resources[i].returnValues.Ref, "${" + tracked_resources[i].logicalId + "}");
+                        if (replacement_proposed.match(/\${[^}]*\${/g)) {
+                            break
+                        }
+                        param = replacement_proposed;
                     }
                 }
                 if (tracked_resources[i].returnValues.GetAtt) {
@@ -596,7 +600,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                             });
                             for (var j = 0; j < 10; j++) { // replace many
                                 pre_return_str = "!Sub ";
-                                param = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
+                                var replacement_proposed = param.replace(tracked_resources[i].returnValues.GetAtt[attr_name], "${" + tracked_resources[i].logicalId + "." + attr_name + "}");
+                                if (replacement_proposed.match(/\${[^}]*\${/g)) {
+                                    break
+                                }
+                                param = replacement_proposed;
                             }
                         }
                     }
@@ -613,7 +621,11 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
                 ) {
                     for (var j = 0; j < 10; j++) { // replace many
                         pre_return_str = "!Sub ";
-                        param = param.replace(stack_parameter.default_value.toString(), "${" + stack_parameter.name + "}");
+                        var replacement_proposed = param.replace(stack_parameter.default_value.toString(), "${" + stack_parameter.name + "}");
+                        if (replacement_proposed.match(/\${[^}]*\${/g)) {
+                            break
+                        }
+                        param = replacement_proposed;
                     }
                 }
             }
