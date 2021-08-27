@@ -8,12 +8,16 @@ var f2trace = function (msg) { console.trace(msg); }
 
 var outputs = [];
 var tracked_resources = [];
-var global_used_refs = [];
+var global_used_refs = {};
 var cfnspacing = "    ";
 var logicalidstrategy = "longtypeprefixoptionalindexsuffix";
 var service_mapping_functions = [];
 var tracked_relationships = {};
 var include_default_resources = false;
+
+function getLogicalToPhysicalIdMap() {
+    return global_used_refs
+}
 
 function MD5(e) {
     function h(a, b) {
@@ -1859,7 +1863,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = shorttype + MD5(requestId).substring(0, 7);
 
-        while (global_used_refs.includes(proposed) && i < 999 && check_objects.length == 0) {
+        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
             proposed = shorttype + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
@@ -1868,7 +1872,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = longtype + MD5(requestId).substring(0, 7);
 
-        while (global_used_refs.includes(proposed) && i < 999 && check_objects.length == 0) {
+        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
             proposed = longtype + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
@@ -1877,7 +1881,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = shorttype;
 
-        while (global_used_refs.includes(proposed) && i < 999 && check_objects.length == 0) {
+        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
             proposed = shorttype + i;
             i += 1;
         }
@@ -1886,20 +1890,20 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = longtype;
 
-        while (global_used_refs.includes(proposed) && i < 999 && check_objects.length == 0) {
+        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
             proposed = longtype + i;
             i += 1;
         }
     } else if (logicalidstrategy == "serviceprefixhashsuffix") {
         proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
 
-        while (global_used_refs.includes(proposed) && i < 999 && check_objects.length == 0) {
+        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
             proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
     }
 
-    global_used_refs.push(proposed);
+    global_used_refs[proposed] = requestId
 
     return proposed;
 }
@@ -4434,7 +4438,7 @@ function addToParamsFromXml(params, xml) {
 
 function performF2Mappings(objects) {
     var tracked_resources = [];
-    global_used_refs = [];
+    global_used_refs = {};
 
     objects.forEach(obj => {
         try {
