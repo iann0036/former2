@@ -177,7 +177,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `"${string_return}"`;
     }
@@ -274,7 +274,7 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `"${string_return}"`;
     }
@@ -384,7 +384,7 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `"${string_return}"`;
     }
@@ -638,7 +638,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
             return pre_return_str + string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return pre_return_str + `"${string_return}"`;
     }
@@ -756,7 +756,7 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `"${string_return}"`;
     }
@@ -910,7 +910,7 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             return string_return;
         }
 
-        string_return = param.replace(/'/g, `\\'`);
+        string_return = param.replace(/'/g, `\\'`).replace(/\\/g, `\\\\`);
 
         return `'${string_return}'`;
     }
@@ -1583,7 +1583,7 @@ function processJsParameter(param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `"${string_return}"`;
     }
@@ -1641,7 +1641,7 @@ function processBoto3Parameter(param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/'/g, `\\'`);
+        string_return = param.replace(/'/g, `\\'`).replace(/\\/g, `\\\\`);
 
         return `'${string_return}'`;
     }
@@ -1717,7 +1717,7 @@ function processGoParameter(service, paramkey, param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`);
+        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
 
         return `aws.String("${string_return}")`;
     }
