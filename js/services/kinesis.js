@@ -993,6 +993,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'CloudWatchLoggingOptions': destination.ExtendedS3DestinationDescription.CloudWatchLoggingOptions,
                     'CompressionFormat': destination.ExtendedS3DestinationDescription.CompressionFormat,
                     'DataFormatConversionConfiguration': destination.ExtendedS3DestinationDescription.DataFormatConversionConfiguration,
+                    'DynamicPartitioningConfiguration': destination.ExtendedS3DestinationDescription.DynamicPartitioningConfiguration,
                     'EncryptionConfiguration': destination.ExtendedS3DestinationDescription.EncryptionConfiguration,
                     'Prefix': destination.ExtendedS3DestinationDescription.Prefix,
                     'RoleARN': destination.ExtendedS3DestinationDescription.RoleARN,

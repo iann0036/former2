@@ -768,6 +768,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['XrayEnabled'] = obj.data.xrayEnabled;
+        if (obj.data.lambdaAuthorizerConfig) {
+            reqParams.cfn['LambdaAuthorizerConfig'] = {
+                'AuthorizerResultTtlInSeconds': obj.data.lambdaAuthorizerConfig.authorizerResultTtlInSeconds,
+                'AuthorizerUri': obj.data.lambdaAuthorizerConfig.authorizerUri,
+                'IdentityValidationExpression': obj.data.lambdaAuthorizerConfig.identityValidationExpression
+            };
+        }
         reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
