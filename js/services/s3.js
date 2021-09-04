@@ -356,6 +356,71 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'Multi-Region Access Points': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'alias',
+                        title: 'Alias',
+                        sortable: true,
+                        editable: true,
+                        formatter: byteSizeFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Multi-Region Access Point Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -371,6 +436,8 @@ async function updateDatatableStorageS3() {
     blockUI('#section-storage-s3-outpostendpoints-datatable');
     blockUI('#section-storage-s3-objectlambdaaccesspoints-datatable');
     blockUI('#section-storage-s3-objectlambdaaccesspointpolicies-datatable');
+    blockUI('#section-storage-s3-multiregionaccesspoints-datatable');
+    blockUI('#section-storage-s3-multiregionaccesspointpolicies-datatable');
 
     await sdkcall("S3", "listBuckets", {
         // no params
@@ -501,13 +568,15 @@ async function updateDatatableStorageS3() {
         $('#section-storage-s3-outpostbucketpolicies-datatable').deferredBootstrapTable('removeAll');
         $('#section-storage-s3-outpostaccesspoints-datatable').deferredBootstrapTable('removeAll');
         $('#section-storage-s3-outpostendpoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-multiregionaccesspoints-datatable').deferredBootstrapTable('removeAll');
+        $('#section-storage-s3-multiregionaccesspointpolicies-datatable').deferredBootstrapTable('removeAll');
 
         var accountId = data.Account;
 
         await sdkcall("S3Control", "listAccessPoints", {
             AccountId: accountId
         }, false).then(async (data) => {
-            await Promise.all(data.AccessPointList.map(accessPoint => {
+            await Promise.all(data.AccessPointList.map(async (accessPoint) => {
                 return sdkcall("S3Control", "getAccessPoint", {
                     AccountId: accountId,
                     Name: accessPoint.Name
@@ -529,6 +598,43 @@ async function updateDatatableStorageS3() {
                         name: data.Name,
                         bucketname: data.Bucket
                     }]);
+                });
+            }));
+        }).catch(() => { });
+
+        await sdkcall("S3Control", "listMultiRegionAccessPoints", {
+            AccountId: accountId
+        }, false).then(async (data) => {
+            await Promise.all(data.AccessPoints.map(async (accessPoint) => {
+                return sdkcall("S3Control", "getMultiRegionAccessPoint", {
+                    AccountId: accountId,
+                    Name: accessPoint.Name
+                }, false).then(async (data) => {
+                    data.AccessPoint['AccountId'] = accountId;
+
+                    $('#section-storage-s3-multiregionaccesspoints-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.AccessPoint.Name + " MRAP",
+                        f2type: 's3.multiregionaccesspoint',
+                        f2data: data.AccessPoint,
+                        f2region: region,
+                        name: data.AccessPoint.Name,
+                        alias: data.AccessPoint.Alias
+                    }]);
+
+                    await sdkcall("S3Control", "getMultiRegionAccessPointPolicy", {
+                        AccountId: accountId,
+                        Name: accessPoint.Name
+                    }, false).then(async (policydata) => {
+                        data.AccessPoint['Policy'] = policydata.Policy;
+
+                        $('#section-storage-s3-multiregionaccesspointpolicies-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.AccessPoint.Name + " MRAP Policy",
+                            f2type: 's3.multiregionaccesspointpolicy',
+                            f2data: data.AccessPoint,
+                            f2region: region,
+                            name: data.AccessPoint.Name
+                        }]);
+                    });
                 });
             }));
         }).catch(() => { });
@@ -712,6 +818,8 @@ async function updateDatatableStorageS3() {
     unblockUI('#section-storage-s3-outpostendpoints-datatable');
     unblockUI('#section-storage-s3-objectlambdaaccesspoints-datatable');
     unblockUI('#section-storage-s3-objectlambdaaccesspointpolicies-datatable');
+    unblockUI('#section-storage-s3-multiregionaccesspoints-datatable');
+    unblockUI('#section-storage-s3-multiregionaccesspointpolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1204,6 +1312,44 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 's3',
             'type': 'AWS::S3ObjectLambda::AccessPointPolicy',
+            'options': reqParams
+        });
+    } else if (obj.type == "s3.multiregionaccesspoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        if (obj.data.Regions) {
+            reqParams.cfn['Regions'] = [];
+            obj.data.Regions.forEach(region => {
+                reqParams.cfn['Regions'].push({
+                    'Bucket': region.Bucket
+                });
+            });
+        }
+        reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::MultiRegionAccessPoint'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::MultiRegionAccessPoint',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Alias': obj.data.Alias
+                }
+            }
+        });
+    } else if (obj.type == "s3.multiregionaccesspointpolicy") {
+        reqParams.cfn['MrapName'] = obj.data.Name;
+        reqParams.cfn['Policy'] = obj.data.Policy.Established.Policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('s3', obj.id, 'AWS::S3::MultiRegionAccessPointPolicy'),
+            'region': obj.region,
+            'service': 's3',
+            'type': 'AWS::S3::MultiRegionAccessPointPolicy',
             'options': reqParams
         });
     } else {
