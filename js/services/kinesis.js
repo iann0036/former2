@@ -992,11 +992,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'BufferingHints': destination.ExtendedS3DestinationDescription.BufferingHints,
                     'CloudWatchLoggingOptions': destination.ExtendedS3DestinationDescription.CloudWatchLoggingOptions,
                     'CompressionFormat': destination.ExtendedS3DestinationDescription.CompressionFormat,
+                    'DataFormatConversionConfiguration': destination.ExtendedS3DestinationDescription.DataFormatConversionConfiguration,
                     'EncryptionConfiguration': destination.ExtendedS3DestinationDescription.EncryptionConfiguration,
                     'Prefix': destination.ExtendedS3DestinationDescription.Prefix,
                     'RoleARN': destination.ExtendedS3DestinationDescription.RoleARN,
                     'ProcessingConfiguration': destination.ExtendedS3DestinationDescription.ProcessingConfiguration,
-                    'S3BackupConfiguration': destination.ExtendedS3DestinationDescription.S3BackupConfiguration,
+                    'S3BackupConfiguration': destination.ExtendedS3DestinationDescription.S3BackupDescription,
                     'S3BackupMode': destination.ExtendedS3DestinationDescription.S3BackupMode
                 };
             }
