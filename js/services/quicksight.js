@@ -442,6 +442,13 @@ async function updateDatatableAnalyticsQuickSight() {
                 }, false).then(async (data) => {
                     data.DataSet['AccountId'] = accountId;
 
+                    await sdkcall("QuickSight", "describeDataSetPermissions", {
+                        DataSetId: dataset.DataSetId,
+                        AwsAccountId: accountId
+                    }, false).then(async (permissionsdata) => {
+                        data.DataSet['Permissions'] = permissionsdata['Permissions'];
+                    });
+
                     $('#section-analytics-quicksight-datasets-datatable').deferredBootstrapTable('append', [{
                         f2id: data.DataSet.Arn,
                         f2type: 'quicksight.dataset',
@@ -672,12 +679,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['RowLevelPermissionDataSet'] = obj.data.RowLevelPermissionDataSet;
         reqParams.cfn['ColumnLevelPermissionRules'] = obj.data.ColumnLevelPermissionRules;
+        reqParams.cfn['Permissions'] = obj.data.Permissions;
 
         /*
         IngestionWaitPolicy: 
             IngestionWaitPolicy
-        Permissions: 
-            - ResourcePermission
         Tags: 
             - Tag
         */
