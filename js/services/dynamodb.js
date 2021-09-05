@@ -678,6 +678,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'AttributeName': obj.data.TimeToLiveDescription.AttributeName,
                 'Enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
             };
+            reqParams.tf['ttl'] = {
+                'attribute_name': obj.data.TimeToLiveDescription.AttributeName,
+                'enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+            };
         }
 
         /*
@@ -818,6 +822,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['TimeToLiveSpecification'] = {
                 'AttributeName': obj.data.TimeToLiveDescription.AttributeName,
                 'Enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+            };
+            reqParams.tf['ttl'] = {
+                'attribute_name': obj.data.TimeToLiveDescription.AttributeName,
+                'enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
             };
         }
         if (obj.data.Replicas) {
