@@ -1418,7 +1418,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     });
 
     // V2
-    await sdkcall("APIGatewayV2", "getVpcLinks", {
+    await sdkcall("ApiGatewayV2", "getVpcLinks", {
         // no params
     }, false).then((data) => {
         data.Items.forEach(vpcLink => {
