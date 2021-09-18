@@ -170,6 +170,44 @@ sections.push({
                     // none
                 ]
             ]
+        },
+        'PCA Permissions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Principal',
+                        field: 'principal',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'certificateauthority',
+                        title: 'Certificate Authority',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -179,6 +217,7 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
     blockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable');
     blockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable');
     blockUI('#section-securityidentityandcompliance-certificatemanager-account-datatable');
+    blockUI('#section-securityidentityandcompliance-certificatemanager-pcapermissions-datatable');
 
     await sdkcall("ACM", "listCertificates", {
         // no params
@@ -211,9 +250,11 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
         // no params
     }, true).then(async (data) => {
         $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-securityidentityandcompliance-certificatemanager-pcapermissions-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.CertificateAuthorities.map(certificateAuthority => {
-            return sdkcall("ACMPCA", "describeCertificateAuthority", {
+        await Promise.all(data.CertificateAuthorities.map(async (certificateAuthority) => {
+            await sdkcall("ACMPCA", "describeCertificateAuthority", {
                 CertificateAuthorityArn: certificateAuthority.Arn
             }, true).then(async (data) => {
                 $('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable').deferredBootstrapTable('append', [{
@@ -246,10 +287,26 @@ async function updateDatatableSecurityIdentityAndComplianceCertificateManager() 
                     });
                 }
             });
+
+            return sdkcall("ACMPCA", "listPermissions", {
+                CertificateAuthorityArn: certificateAuthority.Arn
+            }, true).then(async (data) => {
+                for (var permission of data.Permissions) {
+                    $('#section-securityidentityandcompliance-certificatemanager-pcapermissions-datatable').deferredBootstrapTable('append', [{
+                        f2id: permission.CertificateAuthorityArn + " Permission " + String(permission.CreatedAt),
+                        f2type: 'acm.pcapermission',
+                        f2data: permission,
+                        f2region: region,
+                        principal: permission.Principal,
+                        certificateauthority: permission.CertificateAuthorityArn
+                    }]);
+                }
+            });
         }));
 
         unblockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorities-datatable');
         unblockUI('#section-securityidentityandcompliance-certificatemanager-pcacertificateauthorityactivations-datatable');
+        unblockUI('#section-securityidentityandcompliance-certificatemanager-pcapermissions-datatable');
     });
 
     await sdkcall("ACM", "getAccountConfiguration", {
@@ -371,6 +428,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'acm',
             'type': 'AWS::CertificateManager::Account',
+            'options': reqParams
+        });
+    } else if (obj.type == "acm.pcapermission") {
+        reqParams.cfn['CertificateAuthorityArn'] = obj.data.CertificateAuthorityArn;
+        reqParams.cfn['Principal'] = obj.data.Principal;
+        reqParams.cfn['SourceAccount'] = obj.data.SourceAccount;
+        reqParams.cfn['Actions'] = obj.data.Actions;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('acm', obj.id, 'AWS::ACMPCA::Permission'),
+            'region': obj.region,
+            'service': 'acm',
+            'type': 'AWS::ACMPCA::Permission',
             'options': reqParams
         });
     } else {
