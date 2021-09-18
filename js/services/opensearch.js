@@ -1,10 +1,10 @@
 /* ========================================================================== */
-// Elasticsearch
+// OpenSearch
 /* ========================================================================== */
 
 sections.push({
     'category': 'Analytics',
-    'service': 'Elasticsearch',
+    'service': 'OpenSearch',
     'resourcetypes': {
         'Domains': {
             'columns': [
@@ -63,13 +63,13 @@ sections.push({
     }
 });
 
-async function updateDatatableAnalyticsElasticsearch() {
-    blockUI('#section-analytics-elasticsearch-domains-datatable');
+async function updateDatatableAnalyticsOpenSearch() {
+    blockUI('#section-analytics-opensearch-domains-datatable');
 
     await sdkcall("ES", "listDomainNames", {
         // no params
     }, true).then(async (data) => {
-        $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-opensearch-domains-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.DomainNames.map(async (domainName) => {
             return sdkcall("ES", "describeElasticsearchDomains", {
@@ -77,9 +77,9 @@ async function updateDatatableAnalyticsElasticsearch() {
             }, true).then(async (data) => {
                 data.DomainStatusList[0]['Tags'] = await getResourceTags(data.DomainStatusList[0].ARN);
 
-                $('#section-analytics-elasticsearch-domains-datatable').deferredBootstrapTable('append', [{
+                $('#section-analytics-opensearch-domains-datatable').deferredBootstrapTable('append', [{
                     f2id: data.DomainStatusList[0].ARN,
-                    f2type: 'elasticsearch.domain',
+                    f2type: 'opensearch.domain',
                     f2data: data.DomainStatusList[0],
                     f2region: region,
                     f2link: 'https://console.aws.amazon.com/es/home#domain:resource=' + data.DomainStatusList[0].DomainId,
@@ -91,15 +91,15 @@ async function updateDatatableAnalyticsElasticsearch() {
             });
         }));
 
-        unblockUI('#section-analytics-elasticsearch-domains-datatable');
+        unblockUI('#section-analytics-opensearch-domains-datatable');
     });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    if (obj.type == "elasticsearch.domain") {
+    if (obj.type == "opensearch.domain") {
         reqParams.cfn['DomainName'] = obj.data.DomainName;
         reqParams.tf['domain_name'] = obj.data.DomainName;
-        reqParams.cfn['ElasticsearchVersion'] = obj.data.ElasticsearchVersion;
+        reqParams.cfn['EngineVersion'] = obj.data.ElasticsearchVersion;
         reqParams.tf['elasticsearch_version'] = obj.data.ElasticsearchVersion;
         if (obj.data.ElasticsearchClusterConfig) {
             reqParams.cfn['ElasticsearchClusterConfig'] = {
@@ -174,10 +174,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('elasticsearch', obj.id, 'AWS::Elasticsearch::Domain'),
+            'logicalId': getResourceName('opensearch', obj.id, 'AWS::OpenSearchService::Domain'),
             'region': obj.region,
-            'service': 'elasticsearch',
-            'type': 'AWS::Elasticsearch::Domain',
+            'service': 'opensearch',
+            'type': 'AWS::OpenSearchService::Domain',
             'terraformType': 'aws_elasticsearch_domain',
             'options': reqParams,
             'returnValues': {
