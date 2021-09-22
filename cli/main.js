@@ -247,6 +247,10 @@ async function main(opts) {
         var tracked_resources = performF2Mappings(output_objects);
         var mapped_outputs = compileOutputs(tracked_resources, opts.cfnDeletionPolicy);
 
+        if(opts.outputLogicalIdMapping) {
+            fs.writeFileSync(opts.outputLogicalIdMapping, JSON.stringify(getLogicalToPhysicalIdMap()))
+        }
+
         if (opts.outputCloudformation) {
             fs.writeFileSync(opts.outputCloudformation, mapped_outputs['cfn']);
         }
@@ -265,6 +269,7 @@ cliargs
     .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-raw-data <filename>', 'filename for debug output (full)')
+    .option('--output-logical-id-mapping <filename>', 'filename for logical to physical id mapping')
     .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
     .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
