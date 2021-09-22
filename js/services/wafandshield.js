@@ -1019,6 +1019,32 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Logging Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Web ACL',
+                        field: 'webacl',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // none
+                ]
+            ]
         }
     }
 });
@@ -1048,8 +1074,10 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     blockUI('#section-securityidentityandcompliance-wafandshield-regionalregexpatternsets-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagerpolicies-datatable');
     blockUI('#section-securityidentityandcompliance-wafandshield-firewallmanagernotificationchannel-datatable');
+    blockUI('#section-securityidentityandcompliance-wafandshield-loggingconfigurations-datatable');
 
     $('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable').deferredBootstrapTable('removeAll');
+    $('#section-securityidentityandcompliance-wafandshield-loggingconfigurations-datatable').deferredBootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable').deferredBootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable').deferredBootstrapTable('removeAll');
     $('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable').deferredBootstrapTable('removeAll');
@@ -1125,7 +1153,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                 });
             }).catch(() => { });
 
-            return sdkcall("WAFV2", "getWebACL", {
+            await sdkcall("WAFV2", "getWebACL", {
                 Scope: "REGIONAL",
                 Id: webAcl.Id,
                 Name: webAcl.Name
@@ -1140,6 +1168,18 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     name: data.WebACL.Name,
                     id: data.WebACL.Id,
                     description: data.WebACL.Description
+                }]);
+            });
+
+            return sdkcall("WAFV2", "getLoggingConfiguration", {
+                ResourceArn: webAcl.ARN
+            }, true).then((data) => {
+                $('#section-securityidentityandcompliance-wafandshield-loggingconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.LoggingConfiguration.ResourceArn + " Logging Configuration",
+                    f2type: 'waf.loggingconfiguration',
+                    f2data: data.LoggingConfiguration,
+                    f2region: region,
+                    webacl: data.LoggingConfiguration.ResourceArn
                 }]);
             });
         }));
@@ -1763,6 +1803,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
     }).catch(() => { });
 
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2webacls-datatable');
+    unblockUI('#section-securityidentityandcompliance-wafandshield-loggingconfigurations-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2rulegroups-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2ipsets-datatable');
     unblockUI('#section-securityidentityandcompliance-wafandshield-v2regexpatternsets-datatable');
@@ -2591,6 +2632,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'SnsTopicArn': obj.data.SnsTopicArn
                 }
             }
+        });
+    } else if (obj.type == "waf.loggingconfiguration") {
+        reqParams.cfn['ResourceArn'] = obj.data.ResourceArn;
+        reqParams.cfn['LogDestinationConfigs'] = obj.data.LogDestinationConfigs;
+        reqParams.cfn['RedactedFields'] = obj.data.RedactedFields;
+        reqParams.cfn['LoggingFilter'] = obj.data.LoggingFilter;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('waf', obj.id, 'AWS::WAFv2::LoggingConfiguration'),
+            'region': obj.region,
+            'service': 'waf',
+            'type': 'AWS::WAFv2::LoggingConfiguration',
+            'options': reqParams
         });
     } else {
         return false;

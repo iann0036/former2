@@ -145,6 +145,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'target_value': obj.data.TargetTrackingConfiguration.TargetValue
             };
         }
+        reqParams.cfn['PredictiveScalingConfiguration'] = obj.data.PredictiveScalingConfiguration;
 
         tracked_resources.push({
             'obj': obj,

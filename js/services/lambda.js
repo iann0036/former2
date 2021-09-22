@@ -923,9 +923,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MaximumEventAgeInSeconds'] = obj.data.MaximumEventAgeInSeconds;
         reqParams.cfn['MaximumRetryAttempts'] = obj.data.MaximumRetryAttempts;
         var qualifier = obj.data.FunctionArn.split(":")[7];
-        if (Number.isInteger(qualifier)) {
-            reqParams.cfn['Qualifier'] = qualifier;
-        }
+        reqParams.cfn['Qualifier'] = qualifier;
+
 
         tracked_resources.push({
             'obj': obj,

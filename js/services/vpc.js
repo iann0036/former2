@@ -3084,20 +3084,37 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
                     }]);
                 }
 
-                vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
-                    if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
-                        cidrBlock['VpcId'] = vpc.VpcId;
+                if (vpc.CidrBlockAssociationSet) {
+                    vpc.CidrBlockAssociationSet.forEach(cidrBlock => {
+                        if (cidrBlock.CidrBlock != vpc.CidrBlock) { // exclude primary block
+                            cidrBlock['VpcId'] = vpc.VpcId;
+                            $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('append', [{
+                                f2id: cidrBlock.AssociationId,
+                                f2type: 'ec2.vpccidrblock',
+                                f2data: cidrBlock,
+                                f2region: region,
+                                vpcid: vpc.VpcId,
+                                cidrblock: cidrBlock.CidrBlock,
+                                associationid: cidrBlock.AssociationId
+                            }]);
+                        }
+                    });
+                }
+
+                if (vpc.Ipv6CidrBlockAssociationSet) {
+                    vpc.Ipv6CidrBlockAssociationSet.forEach(ipv6cidrBlock => {
+                        ipv6cidrBlock['VpcId'] = vpc.VpcId;
                         $('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable').deferredBootstrapTable('append', [{
-                            f2id: cidrBlock.AssociationId,
+                            f2id: ipv6cidrBlock.AssociationId,
                             f2type: 'ec2.vpccidrblock',
-                            f2data: cidrBlock,
+                            f2data: ipv6cidrBlock,
                             f2region: region,
                             vpcid: vpc.VpcId,
-                            cidrblock: cidrBlock.CidrBlock,
-                            associationid: cidrBlock.AssociationId
+                            cidrblock: ipv6cidrBlock.Ipv6CidrBlock,
+                            associationid: ipv6cidrBlock.AssociationId
                         }]);
-                    }
-                });
+                    });
+                }
 
                 return sdkcall("EC2", "describeVpcAttribute", {
                     Attribute: "enableDnsSupport",
@@ -4494,6 +4511,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['cidr_block'] = obj.data.CidrBlock;
         reqParams.cfn['VpcId'] = obj.data.VpcId;
         reqParams.tf['vpc_id'] = obj.data.VpcId;
+        reqParams.cfn['Ipv6CidrBlock'] = obj.data.Ipv6CidrBlock;
+        reqParams.cfn['Ipv6Pool'] = obj.data.Ipv6Pool;
 
         /*
         TODO:

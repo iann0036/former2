@@ -165,6 +165,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['DeletionProtection'] = obj.data.DeletionProtection;
         reqParams.cfn['PermissionsMode'] = 'ALLOW_ALL';
+        if (obj.data.EncryptionDescription) {
+            reqParams.cfn['KmsKey'] = obj.data.EncryptionDescription.KmsKeyArn;
+        }
         reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({

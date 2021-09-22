@@ -994,6 +994,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        reqParams.cfn['CrossAccount'] = obj.data.CrossAccount;
 
         tracked_resources.push({
             'obj': obj,

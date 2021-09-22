@@ -180,7 +180,7 @@ async function updateDatatableStorageBackup() {
                         BackupPlanId: backupplan.BackupPlanId,
                         SelectionId: backupselection.SelectionId
                     }, true).then(async (data) => {
-                        $('#section-storage-backup-backupplans-datatable').deferredBootstrapTable('append', [{
+                        $('#section-storage-backup-backupselections-datatable').deferredBootstrapTable('append', [{
                             f2id: backupselection.SelectionId,
                             f2type: 'backup.backupselection',
                             f2data: data,

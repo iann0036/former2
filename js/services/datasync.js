@@ -568,6 +568,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['Excludes'] = obj.data.Excludes;
+        reqParams.cfn['Includes'] = obj.data.Includes;
         reqParams.cfn['Schedule'] = obj.data.Schedule;
 
         /*

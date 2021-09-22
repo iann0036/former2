@@ -914,6 +914,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Fleet Metrics': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Metric Name',
+                        field: 'metricname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'indexname',
+                        title: 'Index Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -943,6 +989,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
     blockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
     blockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
+    blockUI('#section-internetofthings-core-fleetmetrics-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1502,6 +1549,30 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("Iot", "listFleetMetrics", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-fleetmetrics-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.fleetMetrics.map(async (fleetmetric) => {
+            return sdkcall("Iot", "describeFleetMetric", {
+                metricName: fleetmetric.metricName
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+                
+                $('#section-internetofthings-core-fleetmetrics-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.metricArn,
+                    f2type: 'iot.fleetmetric',
+                    f2data: data,
+                    f2region: region,
+                    metricname: data.metricName,
+                    indexname: data.indexName,
+                    description: data.description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1518,6 +1589,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-wirelesspartneraccounts-datatable');
     unblockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
     unblockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
+    unblockUI('#section-internetofthings-core-fleetmetrics-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2355,6 +2427,37 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'SuiteDefinitionArn': obj.data.suiteDefinitionArn,
                     'SuiteDefinitionId': obj.data.suiteDefinitionId,
                     'SuiteDefinitionVersion': obj.data.suiteDefinitionVersion
+                }
+            }
+        });
+    } else if (obj.type == "iot.fleetmetric") {
+        reqParams.cfn['MetricName'] = obj.data.metricName;
+        reqParams.cfn['IndexName'] = obj.data.indexName;
+        reqParams.cfn['QueryString'] = obj.data.queryString;
+        if (obj.data.aggregationType) {
+            reqParams.cfn['AggregationType'] = {
+                'Name': obj.data.aggregationType.name,
+                'Values': obj.data.aggregationType.values
+            };
+        }
+        reqParams.cfn['Period'] = obj.data.period;
+        reqParams.cfn['AggregationField'] = obj.data.aggregationField;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['QueryVersion'] = obj.data.queryVersion;
+        reqParams.cfn['Unit'] = obj.data.unit;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::FleetMetric'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::FleetMetric',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.metricName,
+                'GetAtt': {
+                    'MetricArn': obj.data.metricArn
                 }
             }
         });

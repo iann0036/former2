@@ -1418,7 +1418,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
     });
 
     // V2
-    await sdkcall("APIGatewayV2", "getVpcLinks", {
+    await sdkcall("ApiGatewayV2", "getVpcLinks", {
         // no params
     }, false).then((data) => {
         data.Items.forEach(vpcLink => {
@@ -2507,6 +2507,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'TruststoreVersion': obj.data.mutualTlsAuthentication.truststoreVersion
             };
         }
+        reqParams.cfn['OwnershipVerificationCertificateArn'] = obj.data.ownershipVerificationCertificateArn;
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             reqParams.tf['Tags'] = {};
@@ -3005,7 +3006,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.cfn['DomainNameConfigurations'].push({
                     'CertificateArn': domainnameconfiguration.CertificateArn,
                     'CertificateName': domainnameconfiguration.CertificateName,
-                    'EndpointType': domainnameconfiguration.EndpointType
+                    'EndpointType': domainnameconfiguration.EndpointType,
+                    'OwnershipVerificationCertificateArn': domainnameconfiguration.OwnershipVerificationCertificateArn
                 });
                 reqParams.tf['domain_name_configuration'].push({
                     'certificate_arn': domainnameconfiguration.CertificateArn,

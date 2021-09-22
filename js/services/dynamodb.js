@@ -390,16 +390,22 @@ async function updateDatatableDatabaseDynamoDB() {
         $('#section-database-dynamodb-tables-datatable').deferredBootstrapTable('removeAll');
         $('#section-database-dynamodb-globaltables-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.TableNames.map(tableName => {
+        await Promise.all(data.TableNames.map(async (tableName) => {
             return sdkcall("DynamoDB", "describeTable", {
                 TableName: tableName
-            }, true).then((data) => {
-                sdkcall("DynamoDB", "listTagsOfResource", {
+            }, true).then(async (data) => {
+                await sdkcall("DynamoDB", "listTagsOfResource", {
                     ResourceArn: data.Table.TableArn
-                }, false).then(tagdata => {
+                }, false).then(async (tagdata) => {
                     if (tagdata.Tags && tagdata.Tags.length) {
                         data.Table['Tags'] = tagdata.Tags;
                     }
+
+                    await sdkcall("DynamoDB", "describeTimeToLive", {
+                        TableName: data.Table.TableName
+                    }, false).then(async (ttldata) => {
+                        data.Table['TimeToLiveDescription'] = ttldata['TimeToLiveDescription'];
+                    }).catch(() => { });
 
                     if (data.Table.Replicas && data.Table.Replicas.length > 0) {
                         $('#section-database-dynamodb-globaltables-datatable').deferredBootstrapTable('append', [{
@@ -426,7 +432,7 @@ async function updateDatatableDatabaseDynamoDB() {
                             itemcount: data.Table.ItemCount
                         }]);
                     }
-                }).catch((error) => { });
+                }).catch(() => { });
             });
         }));
 
@@ -667,13 +673,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'enabled': (obj.data.SSEDescription.Status[0] == "E")
             };
         }
+        if (obj.data.TimeToLiveDescription) {
+            reqParams.cfn['TimeToLiveSpecification'] = {
+                'AttributeName': obj.data.TimeToLiveDescription.AttributeName,
+                'Enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+            };
+            reqParams.tf['ttl'] = {
+                'attribute_name': obj.data.TimeToLiveDescription.AttributeName,
+                'enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+            };
+        }
 
         /*
         TODO:
         PointInTimeRecoverySpecification: 
             PointInTimeRecoverySpecification
-        TimeToLiveSpecification: 
-            TimeToLiveSpecification
         */
 
         tracked_resources.push({
@@ -802,6 +816,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
             reqParams.tf['server_side_encryption'] = {
                 'enabled': (obj.data.SSEDescription.Status[0] == "E")
+            };
+        }
+        if (obj.data.TimeToLiveDescription) {
+            reqParams.cfn['TimeToLiveSpecification'] = {
+                'AttributeName': obj.data.TimeToLiveDescription.AttributeName,
+                'Enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+            };
+            reqParams.tf['ttl'] = {
+                'attribute_name': obj.data.TimeToLiveDescription.AttributeName,
+                'enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
             };
         }
         if (obj.data.Replicas) {

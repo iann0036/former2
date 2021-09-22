@@ -7,7 +7,6 @@ sections.push({
     'service': 'Prometheus',
     'resourcetypes': {
         'Workspaces': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -78,13 +77,15 @@ async function updateDatatableManagementAndGovernancePrometheus() {
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "prometheus.workspace") {
+        reqParams.cfn['Alias'] = obj.data.alias;
         reqParams.tf['alias'] = obj.data.alias;
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('prometheus', obj.id, 'AWS::Prometheus::Workspace'), // not real resource type
+            'logicalId': getResourceName('prometheus', obj.id, 'AWS::APS::Workspace'),
             'region': obj.region,
             'service': 'prometheus',
+            'type': 'AWS::APS::Workspace',
             'terraformType': 'aws_prometheus_workspace',
             'options': reqParams
         });

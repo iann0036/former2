@@ -472,6 +472,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 };
             }
         }
+        reqParams.cfn['ResourceAccessRole'] = obj.data.resourceAccessRole;
+        reqParams.cfn['Visibility'] = obj.data.projectVisibility;
 
         /*
         TODO:

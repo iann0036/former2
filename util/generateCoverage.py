@@ -45,7 +45,8 @@ cfn_exceptions = {
     'AWS::CloudFormation::ResourceVersion': 'N/A',
     'AWS::CloudFormation::TypeActivation': 'N/A',
     'AWS::CloudFormation::Publisher': 'N/A',
-    'AWS::CloudFormation::PublicTypeVersion': 'N/A'
+    'AWS::CloudFormation::PublicTypeVersion': 'N/A',
+    'AWS::Elasticsearch::Domain': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
