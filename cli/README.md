@@ -57,6 +57,7 @@ Options:
   --output-cloudformation <filename>     filename for CloudFormation output
   --output-terraform <filename>          filename for Terraform output
   --output-raw-data <filename>           filename for debug output (full)
+  --output-logical-id-mapping <filename> filename for logical to physical id mapping
   --cfn-deletion-policy <Delete|Retain>  add DeletionPolicy in CloudFormation output
   --search-filter <value>                search filter for discovered resources (can be comma separated)
   --services <value>                     list of services to include (can be comma separated (default: ALL))
