@@ -181,9 +181,7 @@ function processTfParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `"${string_return}"`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -278,9 +276,7 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `"${string_return}"`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -388,9 +384,7 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `"${string_return}"`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -642,9 +636,7 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
             return pre_return_str + string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return pre_return_str + `"${string_return}"`;
+        return pre_return_str + doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -760,9 +752,7 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `"${string_return}"`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -914,9 +904,7 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
             return string_return;
         }
 
-        string_return = param.replace(/'/g, `\\'`).replace(/\\/g, `\\\\`);
-
-        return `'${string_return}'`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1587,9 +1575,7 @@ function processJsParameter(param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `"${string_return}"`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1645,9 +1631,7 @@ function processBoto3Parameter(param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/'/g, `\\'`).replace(/\\/g, `\\\\`);
-
-        return `'${string_return}'`;
+        return doubleQuotedString(string_return);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1721,9 +1705,7 @@ function processGoParameter(service, paramkey, param, spacing) {
             return string_return;
         }
 
-        string_return = param.replace(/\"/g, `\\"`).replace(/\\/g, `\\\\`);
-
-        return `aws.String("${string_return}")`;
+        return `aws.String(${doubleQuotedString(string_return)})`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -4494,4 +4476,114 @@ function performF2Mappings(objects) {
     });
 
     return tracked_resources;
+}
+
+/**
+ * Takes a string and returns a properly escaped yaml string.
+ *
+ * <p><p>
+ *     This code is copied from <a href="https://github.com/eemeli/yaml">https://github.com/eemeli/yaml</a>
+ *     and was originally developed by Eemeli Aro under the following copyright:
+ * <p><p><p>
+ *
+ * Copyright Eemeli Aro <eemeli@gmail.com>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any purpose
+ * with or without fee is hereby granted, provided that the above copyright notice
+ * and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
+ * OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+ * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
+ * THIS SOFTWARE.
+ *
+ * <p><p>
+ * @see <a href="https://github.com/eemeli/yaml/blob/master/LICENSE">https://github.com/eemeli/yaml/blob/master/LICENSE</a>
+ * @param value
+ * @returns {string|string}
+ */
+function doubleQuotedString(value) {
+    const json = JSON.stringify(value)
+
+    let str = ''
+    let start = 0
+    for (let i = 0, ch = json[i]; ch; ch = json[++i]) {
+        if (ch === ' ' && json[i + 1] === '\\' && json[i + 2] === 'n') {
+            // space before newline needs to be escaped to not be folded
+            str += json.slice(start, i) + '\\ '
+            i += 1
+            start = i
+            ch = '\\'
+        }
+        if (ch === '\\')
+            switch (json[i + 1]) {
+                case 'u':
+                {
+                    str += json.slice(start, i)
+                    const code = json.substr(i + 2, 4)
+                    switch (code) {
+                        case '0000':
+                            str += '\\0'
+                            break
+                        case '0007':
+                            str += '\\a'
+                            break
+                        case '000b':
+                            str += '\\v'
+                            break
+                        case '001b':
+                            str += '\\e'
+                            break
+                        case '0085':
+                            str += '\\N'
+                            break
+                        case '00a0':
+                            str += '\\_'
+                            break
+                        case '2028':
+                            str += '\\L'
+                            break
+                        case '2029':
+                            str += '\\P'
+                            break
+                        default:
+                            if (code.substr(0, 2) === '00') str += '\\x' + code.substr(2)
+                            else str += json.substr(i, 6)
+                    }
+                    i += 5
+                    start = i + 1
+                }
+                    break
+                case 'n':
+                    if (
+                        json[i + 2] === '"'
+                    ) {
+                        i += 1
+                    } else {
+                        // folding will eat first newline
+                        str += json.slice(start, i) + '\n\n'
+                        while (
+                            json[i + 2] === '\\' &&
+                            json[i + 3] === 'n' &&
+                            json[i + 4] !== '"'
+                            ) {
+                            str += '\n'
+                            i += 2
+                        }
+                        str += indent
+                        // space after newline needs to be escaped to not be folded
+                        if (json[i + 2] === ' ') str += '\\'
+                        i += 1
+                        start = i + 1
+                    }
+                    break
+                default:
+                    i += 1
+            }
+    }
+    str = start ? str + json.slice(start) : json
+    return str
 }
