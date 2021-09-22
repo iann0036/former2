@@ -1845,7 +1845,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = shorttype + MD5(requestId).substring(0, 7);
 
-        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
+        while (global_used_refs.includes(proposed) && check_objects.length == 0) {
             proposed = shorttype + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
@@ -1854,7 +1854,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = longtype + MD5(requestId).substring(0, 7);
 
-        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
+        while (global_used_refs.includes(proposed) && check_objects.length == 0) {
             proposed = longtype + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
@@ -1863,7 +1863,7 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = shorttype;
 
-        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
+        while (global_used_refs.includes(proposed) && check_objects.length == 0) {
             proposed = shorttype + i;
             i += 1;
         }
@@ -1872,14 +1872,14 @@ function getResourceName(service, requestId, cfntype) {
 
         proposed = longtype;
 
-        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
+        while (global_used_refs.includes(proposed) && check_objects.length == 0) {
             proposed = longtype + i;
             i += 1;
         }
     } else if (logicalidstrategy == "serviceprefixhashsuffix") {
         proposed = service.replace(/\-/g, "") + MD5(requestId).substring(0, 7);
 
-        while (proposed in global_used_refs && i < 999 && check_objects.length == 0) {
+        while (global_used_refs.includes(proposed) && check_objects.length == 0) {
             proposed = service.replace(/\-/g, "") + MD5(requestId + i).substring(0, 7);
             i += 1;
         }
