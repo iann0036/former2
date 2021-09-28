@@ -470,7 +470,7 @@ sections.push({
 async function updateDatatableManagementAndGovernanceConfig() {
     blockUI('#section-managementandgovernance-config-configrules-datatable');
     blockUI('#section-managementandgovernance-config-organizationconfigrules-datatable');
-    blockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
+    blockUI('#section-managementandgovernance-config-remediationconfigurations-datatable');
     blockUI('#section-managementandgovernance-config-configurationaggregators-datatable');
     blockUI('#section-managementandgovernance-config-configurationrecorder-datatable');
     blockUI('#section-managementandgovernance-config-aggregationauthorizations-datatable');
@@ -498,10 +498,10 @@ async function updateDatatableManagementAndGovernanceConfig() {
             return sdkcall("ConfigService", "describeRemediationConfigurations", {
                 ConfigRuleNames: [configRule.ConfigRuleName]
             }, true).then((data) => {
-                $('#section-managementandgovernance-config-remediationconfiguraions-datatable').deferredBootstrapTable('removeAll');
+                $('#section-managementandgovernance-config-remediationconfigurations-datatable').deferredBootstrapTable('removeAll');
 
                 data.RemediationConfigurations.forEach(remediationConfiguration => {
-                    $('#section-managementandgovernance-config-remediationconfiguraions-datatable').deferredBootstrapTable('append', [{
+                    $('#section-managementandgovernance-config-remediationconfigurations-datatable').deferredBootstrapTable('append', [{
                         f2id: remediationConfiguration.ConfigRuleName + " " + remediationConfiguration.TargetId + " Remediation Configuration",
                         f2type: 'config.remediationconfiguration',
                         f2data: remediationConfiguration,
@@ -513,7 +513,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
                     }]);
                 });
 
-                unblockUI('#section-managementandgovernance-config-remediationconfiguraions-datatable');
+                unblockUI('#section-managementandgovernance-config-remediationconfigurations-datatable');
             });
         }));
 
