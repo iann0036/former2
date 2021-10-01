@@ -482,6 +482,7 @@ async function updateDatatableManagementAndGovernanceConfig() {
         // no params
     }, true).then(async (data) => {
         $('#section-managementandgovernance-config-configrules-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-config-remediationconfigurations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ConfigRules.map(configRule => {
             $('#section-managementandgovernance-config-configrules-datatable').deferredBootstrapTable('append', [{
@@ -498,8 +499,6 @@ async function updateDatatableManagementAndGovernanceConfig() {
             return sdkcall("ConfigService", "describeRemediationConfigurations", {
                 ConfigRuleNames: [configRule.ConfigRuleName]
             }, true).then((data) => {
-                $('#section-managementandgovernance-config-remediationconfigurations-datatable').deferredBootstrapTable('removeAll');
-
                 data.RemediationConfigurations.forEach(remediationConfiguration => {
                     $('#section-managementandgovernance-config-remediationconfigurations-datatable').deferredBootstrapTable('append', [{
                         f2id: remediationConfiguration.ConfigRuleName + " " + remediationConfiguration.TargetId + " Remediation Configuration",
