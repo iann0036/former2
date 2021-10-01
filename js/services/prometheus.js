@@ -97,7 +97,7 @@ async function updateDatatableManagementAndGovernancePrometheus() {
         $('#section-managementandgovernance-prometheus-workspaces-datatable').deferredBootstrapTable('removeAll');
         $('#section-managementandgovernance-prometheus-rulegroupsnamespaces-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.workspaces.map(workspace => {
+        await Promise.all(data.workspaces.map(async (workspace) => {
             await sdkcall("Amp", "describeWorkspace", {
                 workspaceId: workspace.workspaceId
             }, true).then((data) => {
