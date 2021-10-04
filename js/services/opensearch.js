@@ -102,7 +102,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['EngineVersion'] = obj.data.ElasticsearchVersion;
         reqParams.tf['elasticsearch_version'] = obj.data.ElasticsearchVersion;
         if (obj.data.ElasticsearchClusterConfig) {
-            reqParams.cfn['ElasticsearchClusterConfig'] = {
+            reqParams.cfn['ClusterConfig'] = {
                 'ColdStorageOptions': obj.data.ElasticsearchClusterConfig.ColdStorageOptions,
                 'DedicatedMasterCount': obj.data.ElasticsearchClusterConfig.DedicatedMasterCount,
                 'DedicatedMasterEnabled': obj.data.ElasticsearchClusterConfig.DedicatedMasterEnabled,
