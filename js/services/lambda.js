@@ -665,6 +665,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['s3_bucket'] = url.host.split(".")[0];
             reqParams.tf['s3_key'] = url.pathname;
             reqParams.tf['s3_object_version'] = url.searchParams.get('versionId');
+        } else if (obj.data.Code && obj.data.Code.RepositoryType == "ECR") {
+            reqParams.cfn['Code'] = {
+                'ImageUri': obj.data.Code.ImageUri
+            };
+            reqParams.tf['image_uri'] = obj.data.Code.ImageUri;
         }
 
         reqParams.cfn['KmsKeyArn'] = obj.data.Configuration.KMSKeyArn;
