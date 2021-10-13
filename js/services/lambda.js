@@ -651,6 +651,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['function_name'] = obj.data.Configuration.FunctionName;
         reqParams.cfn['Handler'] = obj.data.Configuration.Handler;
         reqParams.tf['handler'] = obj.data.Configuration.Handler;
+        reqParams.cfn['Architectures'] = obj.data.Configuration.Architectures;
+        reqParams.tf['architectures'] = obj.data.Configuration.Architectures;
 
         if (obj.data.Code && obj.data.Code.RepositoryType == "S3") {
             var url = new URL(obj.data.Code.Location);
