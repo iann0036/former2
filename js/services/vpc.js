@@ -4860,7 +4860,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 reqParams.tf['tags'][tag['Key']] = tag['Value'];
             });
         }
-        if (obj.data.VpcAttachments) {
+        if (obj.data.VpcAttachments && obj.data.VpcAttachments[0]) {
             reqParams.tf['vpc_id'] = obj.data.VpcAttachments[0].VpcId
         }
         reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
