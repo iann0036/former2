@@ -4256,7 +4256,7 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
 
         await Promise.all(data.RuleGroups.map(rulegroup => {
             return sdkcall("NetworkFirewall", "describeRuleGroup", {
-                RuleGroupName: rulegroup.Name
+                RuleGroupArn: rulegroup.Arn
             }, false).then((data) => {
                 $('#section-networkingandcontentdelivery-vpc-networkfirewallrulegroups-datatable').deferredBootstrapTable('append', [{
                     f2id: data.RuleGroupResponse.RuleGroupArn,
