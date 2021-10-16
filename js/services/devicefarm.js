@@ -7,7 +7,6 @@ sections.push({
     'service': 'Device Farm',
     'resourcetypes': {
         'Projects': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -78,13 +77,16 @@ async function updateDatatableMobileDeviceFarm() {
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "devicefarm.project") {
+        reqParams.cfn['Name'] = obj.data.name;
         reqParams.tf['name'] = obj.data.name;
+        reqParams.cfn['DefaultJobTimeoutMinutes'] = obj.data.defaultJobTimeoutMinutes;
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('devicefarm', obj.id, 'AWS::DeviceFarm::Project'), // not real resource type
+            'logicalId': getResourceName('devicefarm', obj.id, 'AWS::DeviceFarm::Project'),
             'region': obj.region,
             'service': 'devicefarm',
+            'type': 'AWS::DeviceFarm::Project',
             'terraformType': 'aws_devicefarm_project',
             'options': reqParams
         });

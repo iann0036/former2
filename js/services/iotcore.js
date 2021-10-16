@@ -960,6 +960,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Job Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -990,6 +1028,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
     blockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
     blockUI('#section-internetofthings-core-fleetmetrics-datatable');
+    blockUI('#section-internetofthings-core-jobtemplates-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1535,7 +1574,7 @@ async function updateDatatableInternetofThingsCore() {
             return sdkcall("IotDeviceAdvisor", "getSuiteDefinition", {
                 suiteDefinitionId: suitedefinition.suiteDefinitionId
             }, true).then(async (data) => {
-                data['Tags'] = await getResourceTags(data.Arn);
+                data['Tags'] = await getResourceTags(data.suiteDefinitionArn);
                 
                 $('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable').deferredBootstrapTable('append', [{
                     f2id: data.suiteDefinitionArn,
@@ -1558,7 +1597,7 @@ async function updateDatatableInternetofThingsCore() {
             return sdkcall("Iot", "describeFleetMetric", {
                 metricName: fleetmetric.metricName
             }, true).then(async (data) => {
-                data['Tags'] = await getResourceTags(data.Arn);
+                data['Tags'] = await getResourceTags(data.metricArn);
                 
                 $('#section-internetofthings-core-fleetmetrics-datatable').deferredBootstrapTable('append', [{
                     f2id: data.metricArn,
@@ -1567,6 +1606,29 @@ async function updateDatatableInternetofThingsCore() {
                     f2region: region,
                     metricname: data.metricName,
                     indexname: data.indexName,
+                    description: data.description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("Iot", "listJobTemplates", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-jobtemplates-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.jobTemplates.map(async (jobtemplate) => {
+            return sdkcall("Iot", "describeJobTemplate", {
+                jobTemplateId: jobtemplate.jobTemplateId
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.jobTemplateArn);
+                
+                $('#section-internetofthings-core-jobtemplates-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.jobTemplateArn,
+                    f2type: 'iot.jobtemplate',
+                    f2data: data,
+                    f2region: region,
+                    id: data.jobTemplateId,
                     description: data.description
                 }]);
             });
@@ -1590,6 +1652,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-wirelesstaskdefinitions-datatable');
     unblockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
     unblockUI('#section-internetofthings-core-fleetmetrics-datatable');
+    unblockUI('#section-internetofthings-core-jobtemplates-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2459,6 +2522,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'MetricArn': obj.data.metricArn
                 }
+            }
+        });
+    } else if (obj.type == "iot.jobtemplate") {
+        reqParams.cfn['JobTemplateId'] = obj.data.jobTemplateId;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Document'] = obj.data.document;
+        reqParams.cfn['DocumentSource'] = obj.data.documentSource;
+        reqParams.cfn['PresignedUrlConfig'] = obj.data.presignedUrlConfig;
+        reqParams.cfn['JobExecutionsRolloutConfig'] = obj.data.jobExecutionsRolloutConfig;
+        reqParams.cfn['AbortConfig'] = obj.data.abortConfig;
+        reqParams.cfn['TimeoutConfig'] = obj.data.timeoutConfig;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::JobTemplate'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::JobTemplate',
+            'options': reqParams,
+            'returnValues': {
+                'Arn': obj.data.jobTemplateArn
             }
         });
     } else {

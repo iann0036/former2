@@ -7,7 +7,6 @@ sections.push({
     'service': 'Lightsail',
     'resourcetypes': {
         'Instances': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -196,6 +195,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Disks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'size',
+                        title: 'Size',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -206,6 +243,7 @@ async function updateDatatableComputeLightsail() {
     blockUI('#section-compute-lightsail-keypairs-datatable');
     blockUI('#section-compute-lightsail-staticips-datatable');
     blockUI('#section-compute-lightsail-staticipattachments-datatable');
+    blockUI('#section-compute-lightsail-disks-datatable');
 
     await sdkcall("Lightsail", "getInstances", {
         // no params
@@ -286,25 +324,63 @@ async function updateDatatableComputeLightsail() {
         });
     }).catch(() => { });
 
+    await sdkcall("Lightsail", "getDisks", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lightsail-disks-datatable').deferredBootstrapTable('removeAll');
+
+        data.disks.forEach(disk => {
+            $('#section-compute-lightsail-disks-datatable').deferredBootstrapTable('append', [{
+                f2id: disk.arn,
+                f2type: 'lightsail.disk',
+                f2data: disk,
+                f2region: region,
+                name: disk.name,
+                size: disk.sizeInGb + " GB"
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-compute-lightsail-instances-datatable');
     unblockUI('#section-compute-lightsail-domains-datatable');
     unblockUI('#section-compute-lightsail-keypairs-datatable');
     unblockUI('#section-compute-lightsail-staticips-datatable');
     unblockUI('#section-compute-lightsail-staticipattachments-datatable');
+    unblockUI('#section-compute-lightsail-disks-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "lightsail.instance") {
+        reqParams.cfn['InstanceName'] = obj.data.name;
         reqParams.tf['name'] = obj.data.name;
         if (obj.data.location) {
+            reqParams.cfn['AvailabilityZone'] = obj.data.location.availabilityZone;
             reqParams.tf['availability_zone'] = obj.data.location.availabilityZone;
         }
+        reqParams.cfn['BlueprintId'] = obj.data.blueprintId;
         reqParams.tf['blueprint_id'] = obj.data.blueprintId;
+        reqParams.cfn['BundleId'] = obj.data.bundleId;
         reqParams.tf['bundle_id'] = obj.data.bundleId;
         reqParams.tf['key_pair_name'] = obj.data.sshKeyName;
+        if (obj.data.addOns) {
+            reqParams.cfn['AddOns'] = [];
+            obj.data.addOns.forEach(addon => {
+                reqParams.cfn['AddOns'].push({
+                    'AddOnType': 'AutoSnapshot',
+                    'AutoSnapshotAddOnRequest': {
+                        'SnapshotTimeOfDay': addon.snapshotTimeOfDay
+                    }
+                });
+            });
+        }
         if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
             reqParams.tf['tags'] = {};
             obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag['key'],
+                    'Value': tag['value']
+                });
                 reqParams.tf['tags'][tag['key']] = tag['value'];
             });
         }
@@ -316,9 +392,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Instance'), // not real resource type
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Instance'),
             'region': obj.region,
             'service': 'lightsail',
+            'type': 'AWS::Lightsail::Instance',
             'terraformType': 'aws_lightsail_instance',
             'options': reqParams
         });
@@ -371,6 +448,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'lightsail',
             'terraformType': 'aws_lightsail_static_ip_attachment',
+            'options': reqParams
+        });
+    } else if (obj.type == "lightsail.disk") {
+        reqParams.cfn['DiskName'] = obj.data.name;
+        if (obj.data.location) {
+            reqParams.cfn['AvailabilityZone'] = obj.data.location.availabilityZone;
+        }
+        reqParams.cfn['SizeInGb'] = obj.data.sizeInGb;
+        if (obj.data.addOns) {
+            reqParams.cfn['AddOns'] = [];
+            obj.data.addOns.forEach(addon => {
+                reqParams.cfn['AddOns'].push({
+                    'AddOnType': 'AutoSnapshot',
+                    'AutoSnapshotAddOnRequest': {
+                        'SnapshotTimeOfDay': addon.snapshotTimeOfDay
+                    }
+                });
+            });
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag['key'],
+                    'Value': tag['value']
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Disk'),
+            'region': obj.region,
+            'service': 'lightsail',
+            'type': 'AWS::Lightsail::Disk',
             'options': reqParams
         });
     } else {
