@@ -2042,7 +2042,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             Object.keys(obj.data.methodSettings).forEach(fullpath => {
                 var methodSetting = obj.data.methodSettings[fullpath];
                 var httpMethod = fullpath.split("/").pop();
-                var resourcePath = fullpath.split("/").slice(0, -1).join("/");
+                var resourcePath = "/" + fullpath.split("/").slice(0, -1).join("/");
 
                 reqParams.cfn['MethodSettings'].push({
                     'CacheDataEncrypted': methodSetting.cacheDataEncrypted,
