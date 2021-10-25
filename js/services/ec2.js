@@ -3268,7 +3268,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     if (!reqParams.tf['access_logs']) {
                         reqParams.tf['access_logs'] = {};
                     }
-                    reqParams.tf['access_logs']['enabled'] = attribute.Value;
+                    reqParams.tf['access_logs']['enabled'] = (attribute.Value == "true");
                 } else if (attribute.Key == "access_logs.s3.bucket") {
                     if (!reqParams.tf['access_logs']) {
                         reqParams.tf['access_logs'] = {};
