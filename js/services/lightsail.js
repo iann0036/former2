@@ -119,7 +119,6 @@ sections.push({
             ]
         },
         'Static IPs': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -233,6 +232,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Databases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'engine',
+                        title: 'Engine',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -244,6 +281,7 @@ async function updateDatatableComputeLightsail() {
     blockUI('#section-compute-lightsail-staticips-datatable');
     blockUI('#section-compute-lightsail-staticipattachments-datatable');
     blockUI('#section-compute-lightsail-disks-datatable');
+    blockUI('#section-compute-lightsail-databases-datatable');
 
     await sdkcall("Lightsail", "getInstances", {
         // no params
@@ -341,12 +379,30 @@ async function updateDatatableComputeLightsail() {
         });
     }).catch(() => { });
 
+    await sdkcall("Lightsail", "getRelationalDatabases", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lightsail-databases-datatable').deferredBootstrapTable('removeAll');
+
+        data.relationalDatabases.forEach(database => {
+            $('#section-compute-lightsail-databases-datatable').deferredBootstrapTable('append', [{
+                f2id: database.arn,
+                f2type: 'lightsail.database',
+                f2data: database,
+                f2region: region,
+                name: database.name,
+                engine: database.engine
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-compute-lightsail-instances-datatable');
     unblockUI('#section-compute-lightsail-domains-datatable');
     unblockUI('#section-compute-lightsail-keypairs-datatable');
     unblockUI('#section-compute-lightsail-staticips-datatable');
     unblockUI('#section-compute-lightsail-staticipattachments-datatable');
     unblockUI('#section-compute-lightsail-disks-datatable');
+    unblockUI('#section-compute-lightsail-databases-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -428,13 +484,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "lightsail.staticip") {
+        reqParams.cfn['StaticIpName'] = obj.data.name;
         reqParams.tf['name'] = obj.data.name;
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::StaticIp'), // not real resource type
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::StaticIp'),
             'region': obj.region,
             'service': 'lightsail',
+            'type': 'AWS::Lightsail::StaticIp',
             'terraformType': 'aws_lightsail_static_ip',
             'options': reqParams
         });
@@ -484,6 +542,49 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'lightsail',
             'type': 'AWS::Lightsail::Disk',
             'options': reqParams
+        });
+    } else if (obj.type == "lightsail.database") {
+        reqParams.cfn['RelationalDatabaseName'] = obj.data.name;
+        if (obj.data.location) {
+            reqParams.cfn['AvailabilityZone'] = obj.data.location.availabilityZone;
+        }
+        reqParams.cfn['RelationalDatabaseBlueprintId'] = obj.data.relationalDatabaseBlueprintId;
+        reqParams.cfn['RelationalDatabaseBundleId'] = obj.data.relationalDatabaseBundleId;
+        reqParams.cfn['MasterDatabaseName'] = obj.data.masterDatabaseName;
+        reqParams.cfn['BackupRetention'] = obj.data.backupRetentionEnabled;
+        reqParams.cfn['MasterUsername'] = obj.data.masterUsername;
+        reqParams.cfn['PreferredBackupWindow'] = obj.data.preferredBackupWindow;
+        reqParams.cfn['PreferredMaintenanceWindow'] = obj.data.preferredMaintenanceWindow;
+        reqParams.cfn['PubliclyAccessible'] = obj.data.publiclyAccessible;
+        reqParams.cfn['CaCertificateIdentifier'] = obj.data.caCertificateIdentifier;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                reqParams.cfn['Tags'].push({
+                    'Key': tag['key'],
+                    'Value': tag['value']
+                });
+            });
+        }
+
+        /*
+        TODO:
+        RelationalDatabaseParameters: 
+            - RelationalDatabaseParameter
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Database'),
+            'region': obj.region,
+            'service': 'lightsail',
+            'type': 'AWS::Lightsail::Database',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'DatabaseArn': obj.data.arn
+                }
+            }
         });
     } else {
         return false;
