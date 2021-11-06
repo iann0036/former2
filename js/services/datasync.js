@@ -331,6 +331,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'HDFS Locations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'URI',
+                        field: 'uri',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -344,6 +383,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     blockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
+    blockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
 
     await sdkcall("DataSync", "listAgents", {
         // no params
@@ -398,6 +438,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
         $('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-smblocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-objectstoragelocations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-hdfslocations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Locations.map(location => {
             if (!location.LocationUri) {
@@ -481,6 +522,19 @@ async function updateDatatableMigrationAndTransferDataSync() {
                         creationtime: data.CreationTime
                     }]);
                 });
+            } else if (location.LocationUri.split(":")[0].toUpperCase() == "HDFS") {
+                return sdkcall("DataSync", "describeLocationHdfs", {
+                    LocationArn: location.LocationArn
+                }, true).then((data) => {
+                    $('#section-migrationandtransfer-datasync-hdfslocations-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.LocationArn,
+                        f2type: 'datasync.locationhdfs',
+                        f2data: data,
+                        f2region: region,
+                        uri: data.LocationUri,
+                        creationtime: data.CreationTime
+                    }]);
+                });
             } else {
                 return Promise.resolve();
             }
@@ -495,6 +549,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     unblockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
+    unblockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -764,6 +819,39 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'datasync',
             'type': 'AWS::DataSync::LocationObjectStorage',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locationhdfs") {
+        if (obj.data.LocationUri) {
+            var uri = new URL(obj.data.LocationUri);
+            reqParams.cfn['Subdirectory'] = uri.pathname;
+        }
+        reqParams.cfn['AgentArns'] = obj.data.AgentArns;
+        reqParams.cfn['NameNodes'] = obj.data.NameNodes;
+        reqParams.cfn['BlockSize'] = obj.data.BlockSize;
+        reqParams.cfn['ReplicationFactor'] = obj.data.ReplicationFactor;
+        reqParams.cfn['KmsKeyProviderUri'] = obj.data.KmsKeyProviderUri;
+        reqParams.cfn['QopConfiguration'] = obj.data.QopConfiguration;
+        reqParams.cfn['AuthType'] = obj.data.AuthenticationType;
+        reqParams.cfn['SimpleUser'] = obj.data.SimpleUser;
+        reqParams.cfn['KerberosPrincipal'] = obj.data.KerberosPrincipal;
+        if (obj.data.AuthenticationType == "KERBEROS") {
+            reqParams.cfn['KerberosKeytab'] = "REPLACEME";
+            reqParams.cfn['KerberosKrb5Conf'] = "REPLACEME";
+        }
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationHDFS'),
+            'region': obj.region,
+            'service': 'datasync',
+            'type': 'AWS::DataSync::LocationHDFS',
             'options': reqParams
         });
     } else {

@@ -427,6 +427,52 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Response Headers Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'comment',
+                        title: 'Comment',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -441,6 +487,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-functions-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-responseheaderspolicies-datatable');
 
     await sdkcall("CloudFront", "listCloudFrontOriginAccessIdentities", {
         // no params
@@ -657,9 +704,37 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         }));
     });
 
+    await sdkcall("CloudFront", "listResponseHeadersPolicies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-responseheaderspolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ResponseHeadersPolicyList.Items.map(responseheaderpolicy => {
+            if (responseheaderpolicy.Type == "custom") {
+                return sdkcall("CloudFront", "getResponseHeadersPolicyConfig", {
+                    Id: responseheaderpolicy.ResponseHeadersPolicy.Id
+                }, true).then((data) => {
+                    data.ResponseHeadersPolicyConfig['Id'] = responseheaderpolicy.ResponseHeadersPolicy.Id;
+
+                    $('#section-networkingandcontentdelivery-cloudfront-responseheaderspolicies-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.ResponseHeadersPolicyConfig.Id,
+                        f2type: 'cloudfront.responseheaderspolicy',
+                        f2data: data.ResponseHeadersPolicyConfig,
+                        f2region: region,
+                        name: data.ResponseHeadersPolicyConfig.Name,
+                        comment: data.ResponseHeadersPolicyConfig.Comment
+                    }]);
+                });
+            } else {
+                return Promise.resolve();
+            }
+        }));
+    });
+
     unblockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-functions-datatable');
+    unblockUI('#section-networkingandcontentdelivery-cloudfront-responseheaderspolicies-datatable');
 }
 
 service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
@@ -1216,6 +1291,57 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.FunctionMetadata.FunctionARN
+            }
+        });
+    } else if (obj.type == "cloudfront.responseheaderspolicy") {
+        var corsconfig = null;
+        if (obj.data.CorsConfig) {
+            var exposeheaders = null;
+            if (obj.data.CorsConfig.AccessControlExposeHeaders) {
+                exposeheaders = {
+                    'Items': obj.data.CorsConfig.AccessControlExposeHeaders.Items
+                };
+            }
+            corsconfig = {
+                'AccessControlAllowCredentials': obj.data.CorsConfig.AccessControlAllowCredentials,
+                'AccessControlAllowHeaders': {
+                    'Items': obj.data.CorsConfig.AccessControlAllowHeaders.Items
+                },
+                'AccessControlAllowMethods': {
+                    'Items': obj.data.CorsConfig.AccessControlAllowMethods.Items
+                },
+                'AccessControlAllowOrigins': {
+                    'Items': obj.data.CorsConfig.AccessControlAllowOrigins.Items
+                },
+                'AccessControlExposeHeaders': exposeheaders,
+                'AccessControlMaxAgeSec': obj.data.CorsConfig.AccessControlMaxAgeSec,
+                'OriginOverride': obj.data.CorsConfig.OriginOverride
+            };
+        }
+        var customheadersconfig = null;
+        if (obj.data.CustomHeadersConfig) {
+            customheadersconfig = {
+                'Items': obj.data.CustomHeadersConfig.Items
+            };
+        }
+
+        reqParams.cfn['ResponseHeadersPolicyConfig'] = {
+            'Comment': obj.data.Comment,
+            'CorsConfig': corsconfig,
+            'CustomHeadersConfig': customheadersconfig,
+            'Name': obj.data.Name,
+            'SecurityHeadersConfig': obj.data.SecurityHeadersConfig
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::ResponseHeadersPolicy'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::ResponseHeadersPolicy',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
             }
         });
     } else {

@@ -998,6 +998,90 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Logging': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Default Log Level',
+                        field: 'defaultloglevel',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'rolearn',
+                        title: 'Role ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resource Specific Logging': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Target Name',
+                        field: 'targetname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'targettype',
+                        title: 'Target Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'loglevel',
+                        title: 'Log Level',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1029,6 +1113,8 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
     blockUI('#section-internetofthings-core-fleetmetrics-datatable');
     blockUI('#section-internetofthings-core-jobtemplates-datatable');
+    blockUI('#section-internetofthings-core-logging-datatable');
+    blockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1634,6 +1720,47 @@ async function updateDatatableInternetofThingsCore() {
             });
         }));
     }).catch(err => { });
+    
+    await sdkcall("STS", "getCallerIdentity", {
+        // no params
+    }, true).then(async (data) => {
+        var accountId = data.Account;
+
+        await sdkcall("Iot", "getV2LoggingOptions", {
+            // no params
+        }, false).then(async (data) => {
+            $('#section-internetofthings-core-logging-datatable').deferredBootstrapTable('removeAll');
+
+            data['accountId'] = accountId;
+                    
+            $('#section-internetofthings-core-logging-datatable').deferredBootstrapTable('append', [{
+                f2id: "IoT Logging Options",
+                f2type: 'iot.logging',
+                f2data: data,
+                f2region: region,
+                defaultloglevel: data.defaultLogLevel,
+                rolearn: data.roleArn
+            }]);
+        }).catch(err => { });
+    });
+
+    await sdkcall("Iot", "listV2LoggingLevels", {
+        targetType: "THING_GROUP"
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-resourcespecificlogging-datatable').deferredBootstrapTable('removeAll');
+        
+        data.logTargetConfigurations.forEach(logTargetConfiguration => {
+            $('#section-internetofthings-core-resourcespecificlogging-datatable').deferredBootstrapTable('append', [{
+                f2id: logTargetConfiguration.logTarget.targetType + " " + logTargetConfiguration.logTarget.targetName,
+                f2type: 'iot.resourcespecificlogging',
+                f2data: logTargetConfiguration,
+                f2region: region,
+                targetname: logTargetConfiguration.logTarget.targetName,
+                targettype: logTargetConfiguration.logTarget.targetType,
+                loglevel: logTargetConfiguration.logLevel
+            }]);
+        });
+    }).catch(err => { });
 
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
@@ -1653,6 +1780,8 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-deviceadvisorsuitedefinitions-datatable');
     unblockUI('#section-internetofthings-core-fleetmetrics-datatable');
     unblockUI('#section-internetofthings-core-jobtemplates-datatable');
+    unblockUI('#section-internetofthings-core-logging-datatable');
+    unblockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2545,6 +2674,32 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Arn': obj.data.jobTemplateArn
             }
+        });
+    } else if (obj.type == "iot.logging") {
+        reqParams.cfn['AccountId'] = obj.data.accountId;
+        reqParams.cfn['DefaultLogLevel'] = obj.data.defaultLogLevel;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::Logging'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::Logging',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.resourcespecificlogging") {
+        reqParams.cfn['TargetName'] = obj.data.logTarget.targetName;
+        reqParams.cfn['TargetType'] = obj.data.logTarget.targetType;
+        reqParams.cfn['LogLevel'] = obj.data.logLevel;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::ResourceSpecificLogging'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::ResourceSpecificLogging',
+            'options': reqParams
         });
     } else {
         return false;

@@ -1057,6 +1057,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'In App Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1084,6 +1123,7 @@ async function updateDatatableBusinessApplicationsPinpoint() {
     blockUI('#section-businessapplications-pinpoint-emailtemplates-datatable');
     blockUI('#section-businessapplications-pinpoint-smstemplates-datatable');
     blockUI('#section-businessapplications-pinpoint-pushtemplates-datatable');
+    blockUI('#section-businessapplications-pinpoint-inapptemplates-datatable');
 
     await sdkcall("Pinpoint", "getApps", {
         // no params
@@ -1430,6 +1470,7 @@ async function updateDatatableBusinessApplicationsPinpoint() {
         $('#section-businessapplications-pinpoint-emailtemplates-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-pinpoint-smstemplates-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-pinpoint-pushtemplates-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-pinpoint-inapptemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.TemplatesResponse.Item.map(template => {
             if (template.TemplateType == "EMAIL") {
@@ -1471,12 +1512,26 @@ async function updateDatatableBusinessApplicationsPinpoint() {
                         creationtime: data.PushNotificationTemplateResponse.CreationDate
                     }]);
                 });
+            } else if (template.TemplateType == "INAPP") {
+                return sdkcall("Pinpoint", "getInAppTemplate", {
+                    TemplateName: template.TemplateName
+                }, true).then(async (data) => {
+                    $('#section-businessapplications-pinpoint-inapptemplates-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.InAppTemplateResponse.Arn,
+                        f2type: 'pinpoint.inapptemplate',
+                        f2data: data.InAppTemplateResponse,
+                        f2region: region,
+                        name: data.InAppTemplateResponse.TemplateName,
+                        creationtime: data.InAppTemplateResponse.CreationDate
+                    }]);
+                });
             }
         }));
 
         unblockUI('#section-businessapplications-pinpoint-emailtemplates-datatable');
         unblockUI('#section-businessapplications-pinpoint-smstemplates-datatable');
         unblockUI('#section-businessapplications-pinpoint-pushtemplates-datatable');
+        unblockUI('#section-businessapplications-pinpoint-inapptemplates-datatable');
     });
 }
 
@@ -1974,6 +2029,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'pinpoint',
             'type': 'AWS::Pinpoint::PushTemplate',
+            'options': reqParams
+        });
+    } else if (obj.type == "pinpoint.inapptemplate") {
+        reqParams.cfn['Tags'] = obj.data.tags; // wtf?
+        reqParams.cfn['TemplateName'] = obj.data.TemplateName;
+        reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
+        reqParams.cfn['Content'] = obj.data.Content;
+        reqParams.cfn['CustomConfig'] = obj.data.CustomConfig;
+        reqParams.cfn['Layout'] = obj.data.Layout;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('pinpoint', obj.id, 'AWS::Pinpoint::InAppTemplate'),
+            'region': obj.region,
+            'service': 'pinpoint',
+            'type': 'AWS::Pinpoint::InAppTemplate',
             'options': reqParams
         });
     } else {

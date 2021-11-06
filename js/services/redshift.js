@@ -197,6 +197,174 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Endpoint Accesses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Endpoint Name',
+                        field: 'endpointname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clusteridentifier',
+                        title: 'Cluster Identifier',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Endpoint Authorizations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Cluster Identifier',
+                        field: 'clusteridentifier',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'grantor',
+                        title: 'Grantor',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'grantee',
+                        title: 'Grantee',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Event Subscriptions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'account',
+                        title: 'Account',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'topic',
+                        title: 'Topic',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Scheduled Actions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'schedule',
+                        title: 'Schedule',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -206,6 +374,10 @@ async function updateDatatableDatabaseRedshift() {
     blockUI('#section-database-redshift-subnetgroups-datatable');
     blockUI('#section-database-redshift-parametergroups-datatable');
     blockUI('#section-database-redshift-securitygroups-datatable');
+    blockUI('#section-database-redshift-endpointaccesses-datatable');
+    blockUI('#section-database-redshift-endpointauthorizations-datatable');
+    blockUI('#section-database-redshift-eventsubscriptions-datatable');
+    blockUI('#section-database-redshift-scheduledactions-datatable');
 
     await sdkcall("Redshift", "describeClusters", {
         // no params
@@ -287,7 +459,81 @@ async function updateDatatableDatabaseRedshift() {
         });
     }).catch(() => { });
 
+    await sdkcall("Redshift", "describeEndpointAccess", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-redshift-endpointaccesses-datatable').deferredBootstrapTable('removeAll');
+
+        data.EndpointAccessList.forEach(endpointAccess => {
+            $('#section-database-redshift-endpointaccesses-datatable').deferredBootstrapTable('append', [{
+                f2id: endpointAccess.ClusterIdentifier + " " + endpointAccess.EndpointName + " Endpoint Access",
+                f2type: 'redshift.endpointaccess',
+                f2data: endpointAccess,
+                f2region: region,
+                endpointname: endpointAccess.EndpointName,
+                clusteridentifier: endpointAccess.ClusterIdentifier
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("Redshift", "describeEndpointAuthorization", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-redshift-endpointauthorizations-datatable').deferredBootstrapTable('removeAll');
+
+        data.EndpointAuthorizationList.forEach(endpointauthorization => {
+            $('#section-database-redshift-endpointauthorizations-datatable').deferredBootstrapTable('append', [{
+                f2id: endpointauthorization.ClusterIdentifier + " Endpoint Authorization " + endpointauthorization.Grantor + " " + endpointauthorization.Grantee,
+                f2type: 'redshift.endpointauthorization',
+                f2data: endpointauthorization,
+                f2region: region,
+                grantor: endpointauthorization.Grantor,
+                grantee: endpointauthorization.Grantee,
+                clusteridentifier: endpointauthorization.ClusterIdentifier
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("Redshift", "describeEventSubscriptions", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-redshift-eventsubscriptions-datatable').deferredBootstrapTable('removeAll');
+
+        data.EventSubscriptionsList.forEach(eventsubscription => {
+            $('#section-database-redshift-eventsubscriptions-datatable').deferredBootstrapTable('append', [{
+                f2id: eventsubscription.CustSubscriptionId + " Event Subscription",
+                f2type: 'redshift.eventsubscription',
+                f2data: eventsubscription,
+                f2region: region,
+                name: eventsubscription.CustSubscriptionId,
+                account: eventsubscription.CustomerAwsId,
+                topic: eventsubscription.SnsTopicArn
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("Redshift", "describeScheduledActions", {
+        // no params
+    }, false).then((data) => {
+        $('#section-database-redshift-scheduledactions-datatable').deferredBootstrapTable('removeAll');
+
+        data.ScheduledActions.forEach(scheduledaction => {
+            $('#section-database-redshift-scheduledactions-datatable').deferredBootstrapTable('append', [{
+                f2id: scheduledaction.ScheduledActionName + " Scheduled Action",
+                f2type: 'redshift.scheduledaction',
+                f2data: scheduledaction,
+                f2region: region,
+                name: scheduledaction.ScheduledActionName,
+                schedule: scheduledaction.Schedule
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-database-redshift-securitygroups-datatable');
+    unblockUI('#section-database-redshift-endpointaccesses-datatable');
+    unblockUI('#section-database-redshift-endpointauthorizations-datatable');
+    unblockUI('#section-database-redshift-eventsubscriptions-datatable');
+    unblockUI('#section-database-redshift-scheduledactions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -450,6 +696,75 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'redshift',
             'type': 'AWS::Redshift::ClusterSecurityGroup',
             'terraformType': 'aws_redshift_security_group',
+            'options': reqParams
+        });
+    } else if (obj.type == "redshift.endpointaccess") {
+        reqParams.cfn['EndpointName'] = obj.data.EndpointName;
+        reqParams.cfn['ClusterIdentifier'] = obj.data.ClusterIdentifier;
+        reqParams.cfn['SubnetGroupName'] = obj.data.SubnetGroupName;
+        reqParams.cfn['ResourceOwner'] = obj.data.ResourceOwner;
+        if (obj.data.VpcSecurityGroups) {
+            reqParams.cfn['VpcSecurityGroupIds'] = [];
+            obj.data.VpcSecurityGroups.forEach(vpcsecuritygroup => {
+                reqParams.cfn['VpcSecurityGroupIds'].push(vpcsecuritygroup['VpcSecurityGroupId']);
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::EndpointAccess'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::Redshift::EndpointAccess',
+            'options': reqParams
+        });
+    } else if (obj.type == "redshift.endpointauthorization") {
+        reqParams.cfn['Account'] = obj.data.Grantor || obj.data.Grantee;
+        reqParams.cfn['ClusterIdentifier'] = obj.data.ClusterIdentifier;
+        reqParams.cfn['VpcIds'] = obj.data.AllowedVPCs;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::EndpointAuthorization'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::Redshift::EndpointAuthorization',
+            'options': reqParams
+        });
+    } else if (obj.type == "redshift.eventsubscription") {
+        reqParams.cfn['SubscriptionName'] = obj.data.CustSubscriptionId;
+        reqParams.cfn['SourceType'] = obj.data.SourceType;
+        reqParams.cfn['Enabled'] = obj.data.Enabled;
+        reqParams.cfn['Severity'] = obj.data.Severity;
+        reqParams.cfn['SourceIds'] = obj.data.SourceIdsList;
+        reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
+        reqParams.cfn['EventCategories'] = obj.data.EventCategoriesList;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::EventSubscription'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::Redshift::EventSubscription',
+            'options': reqParams
+        });
+    } else if (obj.type == "redshift.scheduledaction") {
+        reqParams.cfn['ScheduledActionName'] = obj.data.ScheduledActionName;
+        reqParams.cfn['ScheduledActionDescription'] = obj.data.ScheduledActionDescription;
+        reqParams.cfn['Enabled'] = (obj.data.State == "ACTIVE");
+        reqParams.cfn['Schedule'] = obj.data.Schedule;
+        reqParams.cfn['StartTime'] = obj.data.StartTime;
+        reqParams.cfn['EndTime'] = obj.data.EndTime;
+        reqParams.cfn['IamRole'] = obj.data.IamRole;
+        reqParams.cfn['TargetAction'] = obj.data.TargetAction;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::Redshift::ScheduledAction'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::Redshift::ScheduledAction',
             'options': reqParams
         });
     } else {
