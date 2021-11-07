@@ -543,7 +543,7 @@ async function updateDatatableStorageS3() {
                 }, false).then((data) => {
                     data['Bucket'] = bucket.Name;
                     $('#section-storage-s3-bucketpolicies-datatable').deferredBootstrapTable('append', [{
-                        f2id: bucket.Name,
+                        f2id: bucket.Name + " BucketPolicy",
                         f2type: 's3.bucketpolicy',
                         f2data: data,
                         f2region: region,
