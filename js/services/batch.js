@@ -144,6 +144,53 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Scheduling Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'arn',
+                        title: 'ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'enabled',
+                        title: 'Enabled',
+                        sortable: true,
+                        editable: true,
+                        formatter: tickFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -152,6 +199,7 @@ async function updateDatatableComputeBatch() {
     blockUI('#section-compute-batch-computeenvironments-datatable');
     blockUI('#section-compute-batch-jobdefinitions-datatable');
     blockUI('#section-compute-batch-jobqueues-datatable');
+    blockUI('#section-compute-batch-schedulingpolicies-datatable');
 
     await sdkcall("Batch", "describeComputeEnvironments", {
         // no params
@@ -212,6 +260,29 @@ async function updateDatatableComputeBatch() {
 
         unblockUI('#section-compute-batch-jobqueues-datatable');
     });
+
+    await sdkcall("Batch", "listSchedulingPolicies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-compute-batch-schedulingpolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.schedulingPolicies.map(async (schedulingPolicy) => {
+            await sdkcall("Batch", "describeSchedulingPolicies", {
+                arns: [schedulingPolicy.arn]
+            }, true).then(async (data) => {
+                $('#section-compute-batch-schedulingpolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.schedulingPolicies[0].arn,
+                    f2type: 'batch.schedulingpolicy',
+                    f2data: data.schedulingPolicies[0],
+                    f2region: region,
+                    name: data.schedulingPolicies[0].name,
+                    arn: data.schedulingPolicies[0].arn
+                }]);
+            });
+        }));
+    });
+
+    unblockUI('#section-compute-batch-schedulingpolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -582,6 +653,43 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'batch',
             'type': 'AWS::Batch::JobDefinition',
             'terraformType': 'aws_batch_job_definition',
+            'options': reqParams
+        });
+    } else if (obj.type == "batch.schedulingpolicy") {
+        reqParams.cfn['Name'] = obj.data.name;
+        if (obj.data.fairsharePolicy) {
+            var sharedistribution = null;
+            if (obj.data.fairsharePolicy.shareDistribution) {
+                sharedistribution = [];
+                obj.data.fairsharePolicy.shareDistribution.forEach(sharedistributionitem => {
+                    sharedistribution.push({
+                        'ShareIdentifier': sharedistributionitem.shareIdentifier,
+                        'WeightFactor': sharedistributionitem.weightFactor
+                    });
+                });
+            }
+            reqParams.cfn['FairsharePolicy'] = {
+                'ComputeReservation': obj.data.fairsharePolicy.computeReservation,
+                'ShareDecaySeconds': obj.data.fairsharePolicy.shareDecaySeconds,
+                'ShareDistribution': sharedistribution
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                reqParams.cfn['Tags'].push({
+                    'Key': k,
+                    'Value': obj.data.tags[k]
+                });
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('batch', obj.id, 'AWS::Batch::SchedulingPolicy'),
+            'region': obj.region,
+            'service': 'batch',
+            'type': 'AWS::Batch::SchedulingPolicy',
             'options': reqParams
         });
     } else {

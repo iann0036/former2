@@ -496,6 +496,44 @@ sections.push({
                 ]
             ]
         },
+        'Resolver Config': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ID',
+                        field: 'resourceid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'autodefinedreverse',
+                        title: 'Autodefined Reverse DNS Lookup',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: tickFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Resolver Firewall Domain Lists': {
             'columns': [
                 [
@@ -593,11 +631,6 @@ sections.push({
                         sortable: true,
                         formatter: primaryFieldFormatter,
                         footerFormatter: textFormatter
-                    },
-                    {
-                        title: 'Properties',
-                        colspan: 4,
-                        align: 'center'
                     }
                 ],
                 [
@@ -837,6 +870,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-keysigningkeys-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-dnssec-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-resolverconfig-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable');
@@ -956,6 +990,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     }, true).then(async (data) => {
         $('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable').deferredBootstrapTable('removeAll');
         $('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-route53-resolverconfig-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResolverEndpoints.map(async (resolverEndpoint) => {
             return sdkcall("Route53Resolver", "getResolverEndpoint", {
@@ -992,11 +1027,25 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                         }]);
                     }
                 });
+
+                await sdkcall("Route53Resolver", "getResolverConfig", {
+                    ResourceId: data.ResolverEndpoint.HostVPCId
+                }, true).then((data) => {
+                    $('#section-networkingandcontentdelivery-route53-resolverconfig-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.ResolverConfig.Id,
+                        f2type: 'route53.resolverconfig',
+                        f2data: data.ResolverConfig,
+                        f2region: region,
+                        resourceid: data.ResolverConfig.ResourceId,
+                        autodefinedreverse: (data.ResolverConfig.AutodefinedReverse == "ENABLED")
+                    }]);
+                });
             });
         }));
 
         unblockUI('#section-networkingandcontentdelivery-route53-resolverendpoints-datatable');
         unblockUI('#section-networkingandcontentdelivery-route53-resolverdnssecconfig-datatable');
+        unblockUI('#section-networkingandcontentdelivery-route53-resolverconfig-datatable');
     });
 
     await sdkcall("Route53Resolver", "listResolverRules", {
@@ -1658,6 +1707,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'route53',
             'type': 'AWS::Route53Resolver::ResolverDNSSECConfig',
+            'options': reqParams
+        });
+    } else if (obj.type == "route53.resolverconfig") {
+        reqParams.cfn['ResourceId'] = obj.data.ResourceId;
+        if (obj.data.AutodefinedReverse == "DISABLED") {
+            reqParams.cfn['AutodefinedReverseFlag'] = "DISABLE";
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53Resolver::ResolverConfig'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53Resolver::ResolverConfig',
             'options': reqParams
         });
     } else if (obj.type == "route53.resolverfirewalldomainlist") {
