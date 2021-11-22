@@ -461,6 +461,136 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'App Blocks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'displayname',
+                        title: 'Display Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Fleet Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Application',
+                        field: 'application',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'fleet',
+                        title: 'Fleet',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -475,13 +605,18 @@ async function updateDatatableEndUserComputingAppStream() {
     blockUI('#section-endusercomputing-appstream-directoryconfigs-datatable');
     blockUI('#section-endusercomputing-appstream-applicationautoscalingscalabletargets-datatable');
     blockUI('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable');
+    blockUI('#section-endusercomputing-appstream-applications-datatable');
+    blockUI('#section-endusercomputing-appstream-appblocks-datatable');
+    blockUI('#section-endusercomputing-appstream-applicationfleetassociations-datatable');
 
     await sdkcall("AppStream", "describeFleets", {
         // no params
     }, true).then(async (data) => {
         $('#section-endusercomputing-appstream-fleets-datatable').deferredBootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-stackfleetassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-applicationfleetassociations-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.Fleets.map(fleet => {
+        await Promise.all(data.Fleets.map(async (fleet) => {
             $('#section-endusercomputing-appstream-fleets-datatable').deferredBootstrapTable('append', [{
                 f2id: fleet.Arn,
                 f2type: 'appstream.fleet',
@@ -494,12 +629,30 @@ async function updateDatatableEndUserComputingAppStream() {
                 fleettype: fleet.FleetType
             }]);
 
+            await sdkcall("AppStream", "describeApplicationFleetAssociations", {
+                FleetName: fleet.Name
+            }, true).then((data) => {
+                data.ApplicationFleetAssociations.forEach(association => {
+                    $('#section-endusercomputing-appstream-applicationfleetassociations-datatable').deferredBootstrapTable('append', [{
+                        f2id: association.FleetName + " " + association.ApplicationArn + " Application Fleet Association",
+                        f2type: 'appstream.applicationfleetassociation',
+                        f2data: {
+                            'FleetName': association.FleetName,
+                            'ApplicationArn': association.ApplicationArn
+                        },
+                        f2region: region,
+                        fleet: fleet.FleetName,
+                        application: association.ApplicationArn
+                    }]);
+                });
+            });
+
             return sdkcall("AppStream", "listAssociatedStacks", {
                 FleetName: fleet.Name
             }, true).then((data) => {
                 data.Names.forEach(stackName => {
                     $('#section-endusercomputing-appstream-stackfleetassociations-datatable').deferredBootstrapTable('append', [{
-                        f2id: fleet.Name + stackName,
+                        f2id: fleet.Name + " " + stackName + " Stack Fleet Association",
                         f2type: 'appstream.stackfleetassociation',
                         f2data: {
                             'fleetname': fleet.Name,
@@ -669,6 +822,46 @@ async function updateDatatableEndUserComputingAppStream() {
 
         unblockUI('#section-endusercomputing-appstream-applicationautoscalingscalingpolicies-datatable');
     });
+
+    await sdkcall("AppStream", "describeApplications", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-endusercomputing-appstream-applications-datatable').deferredBootstrapTable('removeAll');
+
+        data.Applications.forEach(application => {
+            $('#section-endusercomputing-appstream-applications-datatable').deferredBootstrapTable('append', [{
+                f2id: application.Arn,
+                f2type: 'appstream.application',
+                f2data: application,
+                f2region: region,
+                name: application.Name,
+                displayname: application.DisplayName,
+                description: application.Description
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-applications-datatable');
+    });
+
+    await sdkcall("AppStream", "describeAppBlocks", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-endusercomputing-appstream-appblocks-datatable').deferredBootstrapTable('removeAll');
+
+        data.AppBlocks.forEach(appblock => {
+            $('#section-endusercomputing-appstream-appblocks-datatable').deferredBootstrapTable('append', [{
+                f2id: appblock.Arn,
+                f2type: 'appstream.appblock',
+                f2data: appblock,
+                f2region: region,
+                name: appblock.Name,
+                displayname: appblock.DisplayName,
+                description: appblock.Description
+            }]);
+        });
+
+        unblockUI('#section-endusercomputing-appstream-appblocks-datatable');
+    });
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -820,6 +1013,73 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::StackUserAssociation',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.application") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['LaunchPath'] = obj.data.LaunchPath;
+        reqParams.cfn['LaunchParameters'] = obj.data.LaunchParameters;
+        reqParams.cfn['WorkingDirectory'] = obj.data.WorkingDirectory;
+        reqParams.cfn['AppBlockArn'] = obj.data.AppBlockArn;
+        reqParams.cfn['IconS3Location'] = obj.data.IconS3Location;
+        reqParams.cfn['Platforms'] = obj.data.Platforms;
+        reqParams.cfn['InstanceFamilies'] = obj.data.InstanceFamilies;
+
+        /*
+        TODO:
+        AttributesToDelete: 
+            - String
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::Application'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Application',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "appstream.application") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['SourceS3Location'] = obj.data.SourceS3Location;
+        reqParams.cfn['SetupScriptDetails'] = obj.data.SetupScriptDetails;
+
+        /*
+        TODO:
+        Tags: 
+            - Tag
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::Application'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Application',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Arn
+            }
+        });
+    } else if (obj.type == "appstream.applicationfleetassociation") {
+        reqParams.cfn['ApplicationArn'] = obj.data.ApplicationArn;
+        reqParams.cfn['FleetName'] = obj.data.FleetName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::ApplicationFleetAssociation'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::ApplicationFleetAssociation',
             'options': reqParams
         });
     } else {
