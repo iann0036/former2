@@ -547,6 +547,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['ThemeArn'] = obj.data.Version.ThemeArn;
         }
         reqParams.cfn['Permissions'] = obj.data.Permissions;
+        reqParams.cfn['SourceEntity'] = "REPLACEME";
 
         /*
         DashboardPublishOptions: 
