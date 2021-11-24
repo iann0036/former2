@@ -315,12 +315,19 @@ async function updateDatatableAnalyticsQuickSight() {
         }, false).then(async (data) => {
             $('#section-analytics-quicksight-analyses-datatable').deferredBootstrapTable('removeAll');
 
-            await Promise.all(data.AnalysisSummaryList.map(analysis => {
+            await Promise.all(data.AnalysisSummaryList.map(async (analysis) => {
                 return sdkcall("QuickSight", "describeAnalysis", {
                     AnalysisId: analysis.AnalysisId,
                     AwsAccountId: accountId
                 }, false).then(async (data) => {
                     data.Analysis['AccountId'] = accountId;
+
+                    await sdkcall("QuickSight", "describeAnalysisPermissions", {
+                        AnalysisId: analysis.AnalysisId,
+                        AwsAccountId: accountId
+                    }, false).then(permissionsdata => {
+                        data.Analysis['Permissions'] = permissionsdata.Permissions;
+                    });
 
                     $('#section-analytics-quicksight-analyses-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Analysis.Arn,
@@ -339,12 +346,19 @@ async function updateDatatableAnalyticsQuickSight() {
         }, false).then(async (data) => {
             $('#section-analytics-quicksight-dashboards-datatable').deferredBootstrapTable('removeAll');
 
-            await Promise.all(data.DashboardSummaryList.map(dashboard => {
+            await Promise.all(data.DashboardSummaryList.map(async (dashboard) => {
                 return sdkcall("QuickSight", "describeDashboard", {
                     DashboardId: dashboard.DashboardId,
                     AwsAccountId: accountId
                 }, false).then(async (data) => {
                     data.Dashboard['AccountId'] = accountId;
+
+                    await sdkcall("QuickSight", "describeDashboardPermissions", {
+                        AnalysisId: analysis.AnalysisId,
+                        AwsAccountId: accountId
+                    }, false).then(permissionsdata => {
+                        data.Dashboard['Permissions'] = permissionsdata.Permissions;
+                    });
 
                     $('#section-analytics-quicksight-dashboards-datatable').deferredBootstrapTable('append', [{
                         f2id: data.Dashboard.Arn,
@@ -492,6 +506,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['AwsAccountId'] = obj.data.AccountId;
         reqParams.cfn['ThemeArn'] = obj.data.ThemeArn;
+        reqParams.cfn['SourceEntity'] = "REPLACEME";
+        reqParams.cfn['Permissions'] = obj.data.Permissions;
+
 
         /*
         Parameters: 
@@ -529,14 +546,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['VersionDescription'] = obj.data.Version.Description;
             reqParams.cfn['ThemeArn'] = obj.data.Version.ThemeArn;
         }
+        reqParams.cfn['Permissions'] = obj.data.Permissions;
 
         /*
         DashboardPublishOptions: 
             DashboardPublishOptions
         Parameters: 
             Parameters
-        Permissions: 
-            - ResourcePermission
         SourceEntity: 
             DashboardSourceEntity
         Tags: 
