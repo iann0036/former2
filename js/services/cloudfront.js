@@ -1279,7 +1279,11 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
     } else if (obj.type == "cloudfront.function") {
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['AutoPublish'] = (obj.data.FunctionMetadata.Stage == "LIVE");
-        reqParams.cfn['FunctionCode'] = obj.data.FunctionCode;
+        try {
+            reqParams.cfn['FunctionCode'] = String.fromCharCode.apply(null, obj.data.FunctionCode.data);
+        } catch(err) {
+            reqParams.cfn['FunctionCode'] = obj.data.FunctionCode.toString();
+        }
         reqParams.cfn['FunctionConfig'] = obj.data.FunctionConfig;
 
         tracked_resources.push({
