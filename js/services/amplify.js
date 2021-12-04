@@ -260,10 +260,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             for (var k in obj.data.tags) {
-                reqParams.cfn['Tags'].push({
-                    'Key': k,
-                    'Value': obj.data.tags[k]
-                });
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
             }
         }
         reqParams.cfn['Description'] = obj.data.description;
@@ -332,10 +334,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             for (var k in obj.data.tags) {
-                reqParams.cfn['Tags'].push({
-                    'Key': k,
-                    'Value': obj.data.tags[k]
-                });
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
             }
         }
         reqParams.cfn['Stage'] = obj.data.stage;

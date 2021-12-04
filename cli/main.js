@@ -67,6 +67,27 @@ async function getResourceTags(arn) {
 
     return null;
 }
+
+function stripAWSTags(tags) {
+    if (tags) {
+        if (Array.isArray(tags)) {
+            tags = tags.filter(function (value, index, array) {
+                return (!value['Key'].startsWith("aws:"));
+            });
+        } else {
+            var i = Object.keys(tags).length;
+            while (i--) {
+                var k = Object.keys(tags)[i];
+                if (k.startsWith("aws:")) {
+                    delete tags[k];
+                }
+            }
+        }
+    }
+
+    return tags;
+}
+
 var resource_tag_cache = {};
 const iaclangselect = "typescript";
 

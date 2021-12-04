@@ -336,11 +336,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['invocation_role'] = obj.data.IdentityProviderDetails.InvocationRole;
             reqParams.tf['url'] = obj.data.IdentityProviderDetails.Url;
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         reqParams.cfn['Certificate'] = obj.data.Certificate;

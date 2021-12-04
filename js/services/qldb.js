@@ -168,7 +168,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.EncryptionDescription) {
             reqParams.cfn['KmsKey'] = obj.data.EncryptionDescription.KmsKeyArn;
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -185,7 +185,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
         reqParams.cfn['StreamName'] = obj.data.StreamName;
         reqParams.cfn['KinesisConfiguration'] = obj.data.KinesisConfiguration;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

@@ -2502,11 +2502,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Monitoring'] = true;
             reqParams.tf['monitoring'] = true;
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         if (obj.data.ElasticGpus) {
@@ -2670,11 +2672,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['snapshot_id'] = (obj.data.SnapshotId == "") ? null : obj.data.SnapshotId;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         reqParams.cfn['MultiAttachEnabled'] = obj.data.MultiAttachEnabled;
@@ -2722,11 +2726,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['GroupName'] = obj.data.GroupName;
         reqParams.tf['name'] = obj.data.GroupName;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         reqParams.cfn['VpcId'] = obj.data.VpcId;
@@ -2943,7 +2949,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['security_groups'] = obj.data.SecurityGroups;
         reqParams.cfn['Scheme'] = obj.data.Scheme;
         reqParams.tf['internal'] = (obj.data.Scheme == "internal");
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:
@@ -3616,7 +3622,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Tags) {
             reqParams.cfn['TagSpecifications'] = [{
                 'ResourceType': 'capacity-reservation',
-                'Tags': obj.data.Tags
+                'Tags': stripAWSTags(obj.data.Tags)
             }];
         }
 
@@ -3689,7 +3695,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Tags) {
             reqParams.cfn['TagSpecifications'] = [{
                 'ResourceType': 'fleet',
-                'Tags': obj.data.Tags
+                'Tags': stripAWSTags(obj.data.Tags)
             }];
         }
 
@@ -3852,7 +3858,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['LogFormat'] = obj.data.LogFormat;
         reqParams.cfn['MaxAggregationInterval'] = obj.data.MaxAggregationInterval;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

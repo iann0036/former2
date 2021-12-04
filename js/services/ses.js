@@ -706,7 +706,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ContactListName'] = obj.data.ContactListName;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['Topics'] = obj.data.Topics;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

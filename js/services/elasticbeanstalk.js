@@ -403,7 +403,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             f2log("Could not determine CNAME prefix for Elastic Beanstalk");
         }
 
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:

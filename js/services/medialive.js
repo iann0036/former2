@@ -232,7 +232,7 @@ async function updateDatatableMediaServicesMediaLive() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "medialive.inputsecuritygroup") {
         reqParams.cfn['WhitelistRules'] = obj.data.WhitelistRules;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -251,7 +251,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['LogLevel'] = obj.data.LogLevel;
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -265,7 +265,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MediaConnectFlows'] = obj.data.MediaConnectFlows;
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         reqParams.cfn['Type'] = obj.data.Type;
         reqParams.cfn['Sources'] = obj.data.Sources;
         reqParams.cfn['InputSecurityGroups'] = obj.data.SecurityGroups;

@@ -103,7 +103,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['StorageCapacity'] = obj.data.StorageCapacity;
         reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.WindowsConfiguration) {
             var adconfig = obj.data.WindowsConfiguration.SelfManagedActiveDirectoryConfiguration;
             adconfig['Password'] = "REPLACEME";

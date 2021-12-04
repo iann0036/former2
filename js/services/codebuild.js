@@ -439,10 +439,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             obj.data.tags.forEach(tag => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tag.key,
-                    'Value': tag.value
-                });
+                if (!tag.key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tag.key,
+                        'Value': tag.value
+                    });
+                }
             });
         }
         if (obj.data.vpcConfig) {
@@ -532,7 +534,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -560,7 +562,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         };
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Type'] = obj.data.type;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

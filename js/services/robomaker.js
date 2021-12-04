@@ -306,7 +306,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['GreengrassGroupId'] = obj.data.greengrassGroupId;
         reqParams.cfn['Architecture'] = obj.data.architecture;
         reqParams.cfn['Fleet'] = obj.data.fleetArn;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -318,7 +318,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "robomaker.fleet") {
         reqParams.cfn['Name'] = obj.data.name;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -348,7 +348,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     });
                 });
             }
-            reqParams.cfn['Tags'] = obj.data.tags;
+            reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
             tracked_resources.push({
                 'obj': obj,
@@ -403,7 +403,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             }
             reqParams.cfn['CurrentRevisionId'] = obj.data.revisionId;
-            reqParams.cfn['Tags'] = obj.data.tags;
+            reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
             tracked_resources.push({
                 'obj': obj,

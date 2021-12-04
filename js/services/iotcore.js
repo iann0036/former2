@@ -2215,7 +2215,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['DomainConfigurationStatus'] = obj.data.domainConfigurationStatus;
         reqParams.cfn['ServiceType'] = obj.data.serviceType;
         reqParams.cfn['DomainConfigurationName'] = obj.data.domainConfigurationName;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2252,7 +2252,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Expression'] = obj.data.Expression;
         reqParams.cfn['ExpressionType'] = obj.data.ExpressionType;
         reqParams.cfn['RoleArn'] = obj.data.RoleArn;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2278,7 +2278,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'AbpV10X': obj.data.LoRaWAN.AbpV1_0_x
             };
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2293,7 +2293,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['ThingName'] = obj.data.ThingName;
         reqParams.cfn['LoRaWAN'] = obj.data.LoRaWAN;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2323,7 +2323,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'SupportsJoin': obj.data.LoRaWAN.SupportsJoin
             };
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2340,7 +2340,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'AddGwMetadata': obj.data.LoRaWAN.AddGwMetadata
             };
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2371,7 +2371,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 };
             }
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2385,7 +2385,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['MetricName'] = obj.data.metricName;
         reqParams.cfn['DisplayName'] = obj.data.displayName;
         reqParams.cfn['MetricType'] = obj.data.metricType;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2399,7 +2399,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Type'] = obj.data.type;
         reqParams.cfn['StringValues'] = obj.data.stringValues;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2447,7 +2447,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         }
         reqParams.cfn['RoleArn'] = obj.data.roleArn;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2463,7 +2463,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['DayOfWeek'] = obj.data.dayOfWeek;
         reqParams.cfn['DayOfMonth'] = obj.data.dayOfMonth;
         reqParams.cfn['TargetCheckNames'] = obj.data.targetCheckNames;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2545,7 +2545,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2557,7 +2557,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.wirelesspartneraccount") {
         reqParams.cfn['PartnerAccountId'] = obj.data.AmazonId;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2572,7 +2572,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.wirelesspartneraccount") {
         reqParams.cfn['PartnerAccountId'] = obj.data.AmazonId;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2589,7 +2589,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['AutoCreateTasks'] = obj.data.AutoCreateTasks;
         reqParams.cfn['Update'] = obj.data.Update;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2604,7 +2604,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "iot.deviceadvisorsuitedefinition") {
         reqParams.cfn['SuiteDefinitionConfiguration'] = obj.data.suiteDefinitionConfiguration;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2637,7 +2637,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.description;
         reqParams.cfn['QueryVersion'] = obj.data.queryVersion;
         reqParams.cfn['Unit'] = obj.data.unit;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -2662,7 +2662,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['JobExecutionsRolloutConfig'] = obj.data.jobExecutionsRolloutConfig;
         reqParams.cfn['AbortConfig'] = obj.data.abortConfig;
         reqParams.cfn['TimeoutConfig'] = obj.data.timeoutConfig;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

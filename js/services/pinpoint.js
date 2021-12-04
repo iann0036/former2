@@ -1983,7 +1983,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "pinpoint.emailtemplate") {
         reqParams.cfn['HtmlPart'] = obj.data.HtmlPart;
         reqParams.cfn['Subject'] = obj.data.Subject;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
         reqParams.cfn['TemplateName'] = obj.data.TemplateName;
         reqParams.cfn['TextPart'] = obj.data.TextPart;
         reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
@@ -1999,7 +1999,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "pinpoint.smstemplate") {
         reqParams.cfn['Body'] = obj.data.Body;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
         reqParams.cfn['TemplateName'] = obj.data.TemplateName;
         reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
         reqParams.cfn['DefaultSubstitutions'] = obj.data.DefaultSubstitutions;
@@ -2013,7 +2013,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "pinpoint.pushtemplate") {
-        reqParams.cfn['Tags'] = obj.data.tags; // wtf?
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags); // wtf?
         reqParams.cfn['ADM'] = obj.data.ADM;
         reqParams.cfn['APNS'] = obj.data.APNS;
         reqParams.cfn['Baidu'] = obj.data.Baidu;
@@ -2032,7 +2032,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "pinpoint.inapptemplate") {
-        reqParams.cfn['Tags'] = obj.data.tags; // wtf?
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags); // wtf?
         reqParams.cfn['TemplateName'] = obj.data.TemplateName;
         reqParams.cfn['TemplateDescription'] = obj.data.TemplateDescription;
         reqParams.cfn['Content'] = obj.data.Content;

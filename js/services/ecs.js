@@ -634,10 +634,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             obj.data.tags.forEach(tag => {
-                reqParams.cfn['Tags'].push({
-                    'Name': tag.name,
-                    'Value': tag.value
-                });
+                if (!tag.name.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Name': tag.name,
+                        'Value': tag.value
+                    });
+                }
             });
         }
         if (obj.data.settings) {

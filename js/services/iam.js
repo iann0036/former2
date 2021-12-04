@@ -955,11 +955,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['UserName'] = obj.data.UserName;
         reqParams.tf['name'] = obj.data.UserName;
         reqParams.cfn['Groups'] = obj.data.Groups;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         if (obj.data.PermissionsBoundary) {
@@ -1050,11 +1052,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['Description'] = obj.data.Description;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
 
@@ -1228,10 +1232,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
         if (obj.data.archiveRules) {
@@ -1272,7 +1278,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iam.virtualmfadevice") {
         reqParams.cfn['SerialNumber'] = obj.data.SerialNumber;
         reqParams.cfn['Users'] = [obj.data.User.Arn];
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -1291,7 +1297,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Path'] = obj.data.ServerCertificateMetadata.Path;
         reqParams.cfn['PrivateKey'] = obj.data.ServerCertificateMetadata.PrivateKey;
         reqParams.cfn['ServerCertificateName'] = obj.data.ServerCertificateMetadata.ServerCertificateName;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -1310,7 +1316,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "iam.samlprovider") {
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['SamlMetadataDocument'] = obj.data.SamlMetadataDocument;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -1327,7 +1333,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Url'] = obj.data.Url;
         reqParams.cfn['ClientIdList'] = obj.data.ClientIdList;
         reqParams.cfn['ThumbprintList'] = obj.data.ThumbprintList;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

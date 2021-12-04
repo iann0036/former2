@@ -693,7 +693,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
                 });
 
                 $('#section-networkingandcontentdelivery-cloudfront-functions-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.FunctionSummary.Id,
+                    f2id: data.FunctionSummary.FunctionMetadata.FunctionARN,
                     f2type: 'cloudfront.function',
                     f2data: data.FunctionSummary,
                     f2region: region,
@@ -1031,7 +1031,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
         reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DefaultRootObject;
         reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
         reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:
@@ -1098,7 +1098,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'S3Origin': obj.data.S3Origin,
             'TrustedSigners': trustedSigners
         };
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:

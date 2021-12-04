@@ -591,11 +591,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['ElasticIp'] = obj.data.ElasticIpStatus.ElasticIp;
         reqParams.tf['elastic_ip'] = obj.data.ElasticIpStatus.ElasticIp;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
@@ -645,11 +647,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['SubnetIds'].push(subnet.SubnetIdentifier);
             reqParams.tf['subnet_ids'].push(subnet.SubnetIdentifier);
         });
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
 
@@ -667,7 +671,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['ParameterGroupFamily'] = obj.data.ParameterGroupFamily;
         reqParams.tf['family'] = obj.data.ParameterGroupFamily;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:
@@ -687,7 +691,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "redshift.securitygroup") {
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -739,7 +743,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['SourceIds'] = obj.data.SourceIdsList;
         reqParams.cfn['SnsTopicArn'] = obj.data.SnsTopicArn;
         reqParams.cfn['EventCategories'] = obj.data.EventCategoriesList;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

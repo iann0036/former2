@@ -246,7 +246,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['KeyPolicy'] = obj.data.Policy;
         reqParams.tf['policy'] = obj.data.Policy;
         reqParams.cfn['KeySpec'] = obj.data.KeySpec;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         reqParams.cfn['MultiRegion'] = obj.data.MultiRegion;
 
         /*
@@ -290,7 +290,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['KeyPolicy'] = obj.data.Policy;
         reqParams.cfn['PendingWindowInDays'] = obj.data.PendingDeletionWindowInDays;
         reqParams.cfn['PrimaryKeyArn'] = obj.data.MultiRegionConfiguration.PrimaryKey.Arn;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

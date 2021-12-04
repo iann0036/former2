@@ -145,10 +145,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Tags'] = [];
             reqParams.tf['tags'] = obj.data.Tags;
             for (var key of Object.keys(obj.data.Tags)) {
-                reqParams.cfn['Tags'].push({
-                    'Key': key,
-                    'Value': obj.data.Tags[key]
-                });
+                if (!key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': key,
+                        'Value': obj.data.Tags[key]
+                    });
+                }
             }
         }
 
@@ -194,10 +196,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
             for (var key of Object.keys(obj.data.Tags)) {
-                reqParams.cfn['Tags'].push({
-                    'Key': key,
-                    'Value': obj.data.Tags[key]
-                });
+                if (!key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': key,
+                        'Value': obj.data.Tags[key]
+                    });
+                }
             }
         }
 

@@ -90,10 +90,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['PipelineTags'] = [];
             obj.data.tags.forEach(tag => {
-                reqParams.cfn['PipelineTags'].push({
-                    'Key': tag.key,
-                    'Value': tag.value
-                });
+                if (!tag.key.startsWith("aws:")) {
+                    reqParams.cfn['PipelineTags'].push({
+                        'Key': tag.key,
+                        'Value': tag.value
+                    });
+                }
             });
         }
 

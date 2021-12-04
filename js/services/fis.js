@@ -76,11 +76,11 @@ async function updateDatatableDeveloperToolsFIS() {
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "fis.experimenttemplate") {
-        reqParams.cfn['description'] = obj.data.description;
-        reqParams.cfn['targets'] = obj.data.targets;
-        reqParams.cfn['actions'] = obj.data.actions;
-        reqParams.cfn['stopConditions'] = obj.data.stopConditions;
-        reqParams.cfn['roleArn'] = obj.data.roleArn;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Targets'] = obj.data.targets;
+        reqParams.cfn['Actions'] = obj.data.actions;
+        reqParams.cfn['StopConditions'] = obj.data.stopConditions;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
 
         tracked_resources.push({
             'obj': obj,

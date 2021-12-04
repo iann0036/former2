@@ -967,10 +967,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
 
@@ -988,10 +990,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
         reqParams.cfn['CrossAccount'] = obj.data.CrossAccount;
@@ -1013,10 +1017,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
 
@@ -1094,10 +1100,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
             for (var k in obj.data.Tags) {
-                reqParams.cfn['Tags'].push({
-                    'Key': k,
-                    'Value': obj.data.Tags[k]
-                });
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
             }
         }
 

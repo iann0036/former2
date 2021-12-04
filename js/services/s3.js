@@ -826,7 +826,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "s3.bucket") {
         reqParams.cfn['BucketName'] = obj.data.Name;
         reqParams.tf['bucket'] = obj.data.Name;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.AccelerateConfiguration && obj.data.AccelerateConfiguration.Status) {
             reqParams.cfn['AccelerateConfiguration'] = {
                 'AccelerationStatus': obj.data.AccelerateConfiguration.Status

@@ -132,7 +132,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
         reqParams.cfn['IsLogging'] = obj.data.IsLogging;
         reqParams.tf['enable_logging'] = obj.data.IsLogging;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         
         /*
         TODO:

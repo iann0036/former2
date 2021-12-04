@@ -267,7 +267,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.Tags) {
             reqParams.tf['tags'] = {};
             obj.data.Tags.forEach(tag => {
-                reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
             });
         }
         reqParams.cfn['FileSystemPolicy'] = obj.data.FileSystemPolicy;

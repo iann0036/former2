@@ -1676,6 +1676,26 @@ async function getResourceTags(arn) {
     return null;
 }
 
+function stripAWSTags(tags) {
+    if (tags) {
+        if (Array.isArray(tags)) {
+            tags = tags.filter(function (value, index, array) {
+                return (!value['Key'].startsWith("aws:"));
+            });
+        } else {
+            var i = Object.keys(tags).length;
+            while (i--) {
+                var k = Object.keys(tags)[i];
+                if (k.startsWith("aws:")) {
+                    delete tags[k];
+                }
+            }
+        }
+    }
+
+    return tags;
+}
+
 function saveSettings() {
     var jsondoc = {
         'parameters': stack_parameters.filter(function(p){ return !p.name.startsWith("AWS::"); }),

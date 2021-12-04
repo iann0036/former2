@@ -317,7 +317,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['UserRoleArn'] = obj.data.userRoleArn;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -403,7 +403,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['Subtype'] = obj.data.subtype;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
         reqParams.cfn['Type'] = obj.data.type;
 
         tracked_resources.push({
@@ -419,7 +419,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.description;
         reqParams.cfn['Ec2ImageId'] = obj.data.ec2ImageId;
         reqParams.cfn['StudioId'] = obj.data.studioId;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -444,7 +444,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['StudioComponentIds'] = obj.data.studioComponentIds;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,

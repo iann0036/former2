@@ -728,7 +728,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ReleaseLabel'] = obj.data.ReleaseLabel;
         reqParams.cfn['VisibleToAllUsers'] = obj.data.VisibleToAllUsers;
         reqParams.cfn['Applications'] = obj.data.Applications;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         reqParams.cfn['ServiceRole'] = obj.data.ServiceRole;
         if (obj.data.Configurations) {
             reqParams.cfn['Configurations'] = [];
@@ -923,10 +923,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.tags).forEach(tagKey => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tagKey,
-                    'Value': obj.data.tags[tagKey]
-                });
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
             });
         }
 
@@ -949,7 +951,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['UserRole'] = obj.data.UserRole;
         reqParams.cfn['SubnetIds'] = obj.data.SubnetIds;
         reqParams.cfn['VpcId'] = obj.data.VpcId;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

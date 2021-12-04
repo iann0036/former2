@@ -535,7 +535,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         reqParams.cfn['Status'] = obj.data.status;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -586,7 +586,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -608,7 +608,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ChangeDescription'] = obj.data.changeDescription;
         reqParams.cfn['Platform'] = obj.data.platform;
         reqParams.cfn['KmsKeyId'] = obj.data.kmsKeyId;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         /*
         TODO:
@@ -641,7 +641,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -678,7 +678,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['KeyPair'] = obj.data.keyPair;
         reqParams.cfn['TerminateInstanceOnFailure'] = obj.data.terminateInstanceOnFailure;
         reqParams.cfn['SnsTopicArn'] = obj.data.snsTopicArn;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -709,7 +709,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'TimeoutMinutes': obj.data.imageTestsConfiguration.timeoutMinutes
             };
         }
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -748,7 +748,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'RepositoryName': obj.data.targetRepository.repositoryName
             };
         }
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,

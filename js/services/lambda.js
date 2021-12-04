@@ -721,7 +721,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         
         reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         SKIPPED: ZipFile

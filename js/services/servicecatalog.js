@@ -1209,7 +1209,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['SupportEmail'] = obj.data.ProductViewDetail.ProductViewSummary.SupportEmail;
         reqParams.cfn['SupportUrl'] = obj.data.ProductViewDetail.ProductViewSummary.SupportUrl;
         reqParams.cfn['AcceptLanguage'] = 'en'; // TODO: Check for others
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:
@@ -1230,7 +1230,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Description'] = obj.data.PortfolioDetail.Description;
         reqParams.cfn['DisplayName'] = obj.data.PortfolioDetail.DisplayName;
         reqParams.cfn['ProviderName'] = obj.data.PortfolioDetail.ProviderName;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
         TODO:
@@ -1438,7 +1438,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "servicecatalog.appregistryapplication") {
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Description'] = obj.data.description;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,
@@ -1461,7 +1461,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Name'] = obj.data.name;
         reqParams.cfn['Description'] = obj.data.description;
         reqParams.cfn['Attributes'] = obj.data.attributes;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,

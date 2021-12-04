@@ -281,7 +281,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'RegistryId': obj.data.registryId
         };
         reqParams.cfn['RepositoryPolicyText'] = obj.data.policy;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

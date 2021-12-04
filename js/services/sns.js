@@ -191,7 +191,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['display_name'] = obj.data.Attributes.DisplayName;
         reqParams.cfn['TopicName'] = obj.data.Attributes.TopicArn.split(':').pop();
         reqParams.tf['name'] = obj.data.Attributes.TopicArn.split(':').pop();
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         reqParams.cfn['KmsMasterKeyId'] = obj.data.Attributes.KmsMasterKeyId;
         if (obj.data.Attributes.TopicArn.endsWith(".fifo")) {
             reqParams.cfn['FifoTopic'] = true;

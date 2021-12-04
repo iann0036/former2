@@ -88,7 +88,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "msk.cluster") {
         reqParams.cfn['ClusterName'] = obj.data.ClusterName;
         reqParams.cfn['NumberOfBrokerNodes'] = obj.data.NumberOfBrokerNodes;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         reqParams.cfn['EnhancedMonitoring'] = obj.data.EnhancedMonitoring;
         reqParams.cfn['EncryptionInfo'] = obj.data.EncryptionInfo;
         if (obj.data.CurrentBrokerSoftwareInfo) {

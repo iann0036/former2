@@ -96,7 +96,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['FrameworkId'] = obj.data.framework.id;
         }
         reqParams.cfn['AwsAccount'] = obj.data.awsAccount;
-        reqParams.cfn['Tags'] = obj.data.tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
 
         tracked_resources.push({
             'obj': obj,

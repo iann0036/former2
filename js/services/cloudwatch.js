@@ -1238,7 +1238,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['RuntimeVersion'] = obj.data.RuntimeVersion;
         reqParams.cfn['VPCConfig'] = obj.data.VpcConfig;
         reqParams.cfn['StartCanaryAfterCreation'] = true;
-        reqParams.cfn['Tags'] = obj.data.Tags;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
             'obj': obj,

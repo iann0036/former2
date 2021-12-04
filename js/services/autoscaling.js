@@ -279,16 +279,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['Tags'] = [];
             reqParams.tf['tag'] = [];
             obj.data.Tags.forEach(tag => {
-                reqParams.cfn['Tags'].push({
-                    'Key': tag.Key,
-                    'Value': tag.Value,
-                    'PropagateAtLaunch': tag.PropagateAtLaunch
-                });
-                reqParams.tf['tag'].push({
-                    'key': tag.Key,
-                    'value': tag.Value,
-                    'propagate_at_launch': tag.PropagateAtLaunch
-                });
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tag.Key,
+                        'Value': tag.Value,
+                        'PropagateAtLaunch': tag.PropagateAtLaunch
+                    });
+                    reqParams.tf['tag'].push({
+                        'key': tag.Key,
+                        'value': tag.Value,
+                        'propagate_at_launch': tag.PropagateAtLaunch
+                    });
+                }
             });
         }
         reqParams.cfn['MaxInstanceLifetime'] = obj.data.MaxInstanceLifetime;
