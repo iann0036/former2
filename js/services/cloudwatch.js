@@ -614,6 +614,182 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Evidently Projects': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Evidently Experiments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'project',
+                        title: 'Project',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Evidently Features': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'project',
+                        title: 'Project',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Evidently Launches': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'project',
+                        title: 'Project',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -634,6 +810,10 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-evidentlyprojects-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -927,6 +1107,93 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     }).catch(() => { });
 
+    await sdkcall("Evidently", "listProjects", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-evidentlyprojects-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable').deferredBootstrapTable('removeAll');
+        $('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.projects.map(async (project) => {
+            await sdkcall("Evidently", "getProject", {
+                project: project.arn
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-evidentlyprojects-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.project.arn,
+                    f2type: 'cloudwatch.evidentlyproject',
+                    f2data: data.project,
+                    f2region: region,
+                    name: data.project.name,
+                    description: data.project.description
+                }]);
+            });
+
+            await sdkcall("Evidently", "listExperiments", {
+                project: project.arn
+            }, true).then(async (data) => {
+                await Promise.all(data.experiments.map(async (experiment) => {
+                    return sdkcall("Evidently", "getExperiment", {
+                        project: project.arn,
+                        experiment: experiment.arn
+                    }, true).then((data) => {
+                        $('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.experiment.arn,
+                            f2type: 'cloudwatch.evidentlyexperiment',
+                            f2data: data.experiment,
+                            f2region: region,
+                            name: data.experiment.name,
+                            project: data.experiment.project,
+                            description: data.experiment.description
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+
+            await sdkcall("Evidently", "listFeatures", {
+                project: project.arn
+            }, true).then(async (data) => {
+                await Promise.all(data.features.map(async (feature) => {
+                    return sdkcall("Evidently", "getFeature", {
+                        project: project.arn,
+                        feature: feature.arn
+                    }, true).then((data) => {
+                        $('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.feature.arn,
+                            f2type: 'cloudwatch.evidentlyfeature',
+                            f2data: data.feature,
+                            f2region: region,
+                            name: data.feature.name,
+                            project: data.feature.project,
+                            description: data.feature.description
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+
+            return sdkcall("Evidently", "listLaunches", {
+                project: project.arn
+            }, true).then(async (data) => {
+                await Promise.all(data.launches.map(async (launch) => {
+                    return sdkcall("Evidently", "getExperiment", {
+                        project: project.arn,
+                        launch: launch.arn
+                    }, true).then((data) => {
+                        $('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.launch.arn,
+                            f2type: 'cloudwatch.evidentlylaunch',
+                            f2data: data.launch,
+                            f2region: region,
+                            name: data.launch.name,
+                            project: data.launch.project,
+                            description: data.launch.description
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
@@ -937,6 +1204,10 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logsresourcepolicies-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-evidentlyprojects-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1330,6 +1601,227 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'logs',
             'type': 'AWS::Logs::ResourcePolicy',
             'options': reqParams
+        });
+    } else if (obj.type == "cloudwatch.evidentlyproject") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.dataDelivery) {
+            var cloudWatchLogs = null;
+            if (obj.data.dataDelivery.cloudWatchLogs) {
+                cloudWatchLogs = obj.data.dataDelivery.cloudWatchLogs.logGroup;
+            }
+            var s3Destination = null;
+            if (obj.data.dataDelivery.s3Destination) {
+                s3Destination = {
+                    'BucketName': obj.data.dataDelivery.s3Destination.bucket,
+                    'Prefix': obj.data.dataDelivery.s3Destination.prefix
+                };
+            }
+            reqParams.cfn['DataDelivery'] = {
+                'LogGroup': cloudWatchLogs,
+                'S3': s3Destination
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Evidently::Project'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Evidently::Project',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn
+            }
+        });
+    } else if (obj.type == "cloudwatch.evidentlyexperiment") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.metricGoals) {
+            reqParams.cfn['MetricGoals'] = [];
+            obj.data.metricGoals.forEach(metricgoal => {
+                reqParams.cfn['MetricGoals'].push({
+                    'DesiredChange': metricgoal.desiredChange,
+                    'EntityIdKey': metricgoal.metricDefinition.entityIdKey,
+                    'EventPattern': metricgoal.metricDefinition.eventPattern,
+                    'MetricName': metricgoal.metricDefinition.name,
+                    'UnitLabel': metricgoal.metricDefinition.unitLabel,
+                    'ValueKey': metricgoal.metricDefinition.valueKey
+                });
+            });
+        }
+        reqParams.cfn['Project'] = obj.data.project;
+        reqParams.cfn['RandomizationSalt'] = obj.data.randomizationSalt;
+        reqParams.cfn['SamplingRate'] = obj.data.samplingRate;
+        if (obj.data.treatments) {
+            reqParams.cfn['Treatments'] = [];
+            obj.data.treatments.forEach(treatment => {
+                var feature = null;
+                var variation = null;
+                if (Object.keys(treatment.featureVariations).length > 0) {
+                    feature = Object.keys(treatment.featureVariations)[0];
+                    variation = Object.values(treatment.featureVariations)[0];
+                }
+                reqParams.cfn['Treatments'].push({
+                    'Description': treatment.description,
+                    'Feature': feature,
+                    'TreatmentName': treatment.name,
+                    'Variation': variation
+                });
+            });
+        }
+        if (obj.data.onlineAbDefinition) {
+            var weights = [];
+            for (var k of obj.data.onlineAbDefinition.treatmentWeights) {
+                weights.push({
+                    'Treatment': k,
+                    'SplitWeight': obj.data.onlineAbDefinition.treatmentWeights[k]
+                });
+            }
+            reqParams.cfn['OnlineAbConfig'] = {
+                'ControlTreatmentName': obj.data.onlineAbDefinition.controlTreatmentName,
+                'TreatmentWeights': weights
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Evidently::Experiment'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Evidently::Experiment',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn
+            }
+        });
+    } else if (obj.type == "cloudwatch.evidentlyfeature") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Project'] = obj.data.project;
+        reqParams.cfn['DefaultVariation'] = obj.data.defaultVariation;
+        if (obj.data.entityOverrides) {
+            reqParams.cfn['EntityOverrides'] = [];
+            for (var k of obj.data.entityOverrides) {
+                reqParams.cfn['EntityOverrides'].push({
+                    'EntityId': k,
+                    'Variation': obj.data.entityOverrides[k]
+                });
+            }
+        }
+        reqParams.cfn['EvaluationStrategy'] = obj.data.evaluationStrategy;
+        if (obj.data.variations) {
+            reqParams.cfn['Variations'] = [];
+            obj.data.variations.forEach(variation => {
+                reqParams.cfn['Variations'].push({
+                    'BooleanValue': variation.value.boolValue,
+                    'DoubleValue': variation.value.doubleValue,
+                    'LongValue': variation.value.longValue,
+                    'StringValue': variation.value.stringValue,
+                    'VariationName': variation.name
+                });
+            });
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Evidently::Feature'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Evidently::Feature',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn
+            }
+        });
+    } else if (obj.type == "cloudwatch.evidentlylaunch") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.metricMonitors) {
+            reqParams.cfn['MetricMonitors'] = [];
+            obj.data.metricMonitors.forEach(metricmonitor => {
+                reqParams.cfn['MetricMonitors'].push({
+                    'EntityIdKey': metricmonitor.metricDefinition.entityIdKey,
+                    'EventPattern': metricmonitor.metricDefinition.eventPattern,
+                    'MetricName': metricmonitor.metricDefinition.name,
+                    'UnitLabel': metricmonitor.metricDefinition.unitLabel,
+                    'ValueKey': metricmonitor.metricDefinition.valueKey
+                });
+            });
+        }
+        reqParams.cfn['Project'] = obj.data.project;
+        reqParams.cfn['RandomizationSalt'] = obj.data.randomizationSalt;
+        if (obj.data.scheduledSplitsDefinition && obj.data.scheduledSplitsDefinition.steps) {
+            reqParams.cfn['ScheduledSplitsConfig'] = [];
+            obj.data.scheduledSplitsDefinition.steps.forEach(step => {
+                var groupWeights = [];
+                Object.keys(step.groupWeights).forEach(k => {
+                    groupWeights.push({
+                        'GroupName': k,
+                        'SplitWeight': step.groupWeights[k],
+                    });
+                });
+                reqParams.cfn['ScheduledSplitsConfig'].push({
+                    'GroupWeights': groupWeights,
+                    'StartTime': step.startTime
+                });
+            });
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Evidently::Launch'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Evidently::Launch',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn
+            }
         });
     } else {
         return false;
