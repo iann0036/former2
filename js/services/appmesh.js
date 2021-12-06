@@ -483,7 +483,7 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
                     await Promise.all(data.virtualServices.map(virtualservice => {
                         return sdkcall("AppMesh", "describeVirtualService", {
                             meshName: mesh.meshName,
-                            virtualService: virtualservice.virtualServiceName
+                            virtualServiceName: virtualservice.virtualServiceName
                         }, true).then((data) => {
                             $('#section-networkingandcontentdelivery-appmesh-virtualservices-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.virtualService.virtualServiceName,
@@ -504,7 +504,7 @@ async function updateDatatableNetworkingAndContentDeliveryAppMesh() {
                     await Promise.all(data.virtualNodes.map(virtualnode => {
                         return sdkcall("AppMesh", "describeVirtualNode", {
                             meshName: mesh.meshName,
-                            virtualNode: virtualnode.virtualNodeName
+                            virtualNodeName: virtualnode.virtualNodeName
                         }, true).then((data) => {
                             $('#section-networkingandcontentdelivery-appmesh-virtualnodes-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.virtualNode.virtualNodeName,
