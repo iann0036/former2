@@ -176,6 +176,8 @@ function processTfParameter(param, spacing, index, tracked_resources) {
 
         var string_return = param;
 
+        string_return = string_return.replace(/\$\{/g, `$$$$\{`); // no questions
+
         if (string_return.includes("\n")) {
             string_return = "<<EOF\n" + string_return + "\nEOF";
             return string_return;
