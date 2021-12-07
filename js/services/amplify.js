@@ -168,6 +168,70 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'UI Builder Components': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'componenttype',
+                        title: 'Component Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'UI Builder Themes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -176,11 +240,17 @@ async function updateDatatableMobileAmplify() {
     blockUI('#section-mobile-amplify-apps-datatable');
     blockUI('#section-mobile-amplify-branches-datatable');
     blockUI('#section-mobile-amplify-domains-datatable');
+    blockUI('#section-mobile-amplify-uibuildercomponents-datatable');
+    blockUI('#section-mobile-amplify-uibuilderthemes-datatable');
 
     await sdkcall("Amplify", "listApps", {
         // no params
     }, false).then(async (data) => {
         $('#section-mobile-amplify-apps-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-amplify-branches-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-amplify-domains-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-amplify-uibuildercomponents-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-amplify-uibuilderthemes-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.apps.map(app => {
             return Promise.all([
@@ -244,6 +314,56 @@ async function updateDatatableMobileAmplify() {
                             }]);
                         });
                     }));
+                }),
+                sdkcall("Amplify", "listBackendEnvironments", {
+                    appId: app.appId
+                }, true).then(async (data) => {
+                    await Promise.all(data.backendEnvironments.map(async (backendEnvironment) => {
+                        return sdkcall("AmplifyUIBuilder", "listComponents", {
+                            appId: app.appId,
+                            environmentName: backendEnvironment.environmentName
+                        }, true).then(async (data) => {
+                            return Promise.all(data.entities.map(entity => {
+                                return sdkcall("AmplifyUIBuilder", "getComponent", {
+                                    appId: app.appId,
+                                    environmentName: backendEnvironment.environmentName,
+                                    id: entity.id
+                                }, true).then(async (data) => {
+                                    $('#section-mobile-amplify-uibuildercomponents-datatable').deferredBootstrapTable('append', [{
+                                        f2id: data.component.id,
+                                        f2type: 'amplify.uibuildercomponent',
+                                        f2data: data.component,
+                                        f2region: region,
+                                        name: data.component.name,
+                                        componenttype: data.component.componentType
+                                    }]);
+                                });
+                            }));
+                        }).catch(() => { });
+                    }));
+
+                    await Promise.all(data.backendEnvironments.map(async (backendEnvironment) => {
+                        return sdkcall("AmplifyUIBuilder", "listThemes", {
+                            appId: app.appId,
+                            environmentName: backendEnvironment.environmentName
+                        }, true).then(async (data) => {
+                            return Promise.all(data.entities.map(entity => {
+                                return sdkcall("AmplifyUIBuilder", "getTheme", {
+                                    appId: app.appId,
+                                    environmentName: backendEnvironment.environmentName,
+                                    id: entity.id
+                                }, true).then(async (data) => {
+                                    $('#section-mobile-amplify-uibuilderthemes-datatable').deferredBootstrapTable('append', [{
+                                        f2id: data.theme.id,
+                                        f2type: 'amplify.uibuildertheme',
+                                        f2data: data.theme,
+                                        f2region: region,
+                                        name: data.theme.name
+                                    }]);
+                                });
+                            }));
+                        }).catch(() => { });
+                    }));
                 })
             ]);
         }));
@@ -252,6 +372,8 @@ async function updateDatatableMobileAmplify() {
     unblockUI('#section-mobile-amplify-apps-datatable');
     unblockUI('#section-mobile-amplify-branches-datatable');
     unblockUI('#section-mobile-amplify-domains-datatable');
+    unblockUI('#section-mobile-amplify-uibuildercomponents-datatable');
+    unblockUI('#section-mobile-amplify-uibuilderthemes-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -397,6 +519,69 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'amplify',
             'type': 'AWS::Amplify::Domain',
             'options': reqParams
+        });
+    } else if (obj.type == "amplify.uibuildercomponent") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['ComponentType'] = obj.data.componentType;
+        reqParams.cfn['Overrides'] = obj.data.overrides;
+        reqParams.cfn['Properties'] = obj.data.properties;
+        reqParams.cfn['BindingProperties'] = obj.data.bindingProperties;
+        reqParams.cfn['Children'] = obj.data.children;
+        reqParams.cfn['CollectionProperties'] = obj.data.collectionProperties;
+        reqParams.cfn['BindingProperties'] = obj.data.bindingProperties;
+        reqParams.cfn['SourceId'] = obj.data.sourceId;
+        reqParams.cfn['Variants'] = obj.data.variants;
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::AmplifyUIBuilder::Component'),
+            'region': obj.region,
+            'service': 'amplify',
+            'type': 'AWS::AmplifyUIBuilder::Component',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.id
+                }
+            }
+        });
+    } else if (obj.type == "amplify.uibuildertheme") {
+        reqParams.cfn['Name'] = obj.data.name;
+        if (obj.data.overrides) {
+            reqParams.cfn['Overrides'] = [];
+            obj.data.overrides.forEach(override => {
+                reqParams.cfn['Overrides'].push({
+                    'Key': override.key,
+                    'Value': override.value
+                });
+            });
+        }
+        if (obj.data.values) {
+            reqParams.cfn['Values'] = [];
+            obj.data.values.forEach(value => {
+                reqParams.cfn['Values'].push({
+                    'Key': value.key,
+                    'Value': {
+                        'Value': value.value.value
+                    }
+                });
+            });
+        }
+        reqParams.cfn['Tags'] = obj.data.tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::AmplifyUIBuilder::Component'),
+            'region': obj.region,
+            'service': 'amplify',
+            'type': 'AWS::AmplifyUIBuilder::Component',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.id
+                }
+            }
         });
     } else {
         return false;
