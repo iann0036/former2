@@ -417,6 +417,98 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Contact Flows': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancearn',
+                        title: 'Instance ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Contact Flow Modules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'instancearn',
+                        title: 'Instance ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -432,6 +524,8 @@ async function updateDatatableBusinessApplicationsConnect() {
     blockUI('#section-businessapplications-connect-wisdomassistants-datatable');
     blockUI('#section-businessapplications-connect-wisdomassistantassociations-datatable');
     blockUI('#section-businessapplications-connect-wisdomknowledgebases-datatable');
+    blockUI('#section-businessapplications-connect-contactflows-datatable');
+    blockUI('#section-businessapplications-connect-contactflowmodules-datatable');
 
     await sdkcall("CustomerProfiles", "listDomains", {
         // no params
@@ -493,18 +587,23 @@ async function updateDatatableBusinessApplicationsConnect() {
                 });
             });
         }));
-    });
+    }).catch(() => { });
 
     await sdkcall("Connect", "listInstances", {
         // no params
     }, false).then(async (data) => {
+        $('#section-businessapplications-connect-quickconnects-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-hoursofoperation-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-users-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-userhierarchygroups-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-contactflows-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-contactflowmodules-datatable').deferredBootstrapTable('removeAll');
+
         await Promise.all(data.InstanceSummaryList.map(async (instance) => {
             return Promise.all([
                 sdkcall("Connect", "listQuickConnects", {
                     InstanceId: instance.Id
                 }, true).then(async (data) => {
-                    $('#section-businessapplications-connect-quickconnects-datatable').deferredBootstrapTable('removeAll');
-    
                     await Promise.all(data.QuickConnectSummaryList.map(quickconnect => {
                         return sdkcall("Connect", "describeQuickConnect", {
                             InstanceId: instance.Id,
@@ -527,8 +626,6 @@ async function updateDatatableBusinessApplicationsConnect() {
                 sdkcall("Connect", "listHoursOfOperations", {
                     InstanceId: instance.Id
                 }, true).then(async (data) => {
-                    $('#section-businessapplications-connect-hoursofoperation-datatable').deferredBootstrapTable('removeAll');
-    
                     await Promise.all(data.HoursOfOperationSummaryList.map(hoursofoperation => {
                         return sdkcall("Connect", "describeHoursOfOperation", {
                             InstanceId: instance.Id,
@@ -551,8 +648,6 @@ async function updateDatatableBusinessApplicationsConnect() {
                 sdkcall("Connect", "listUsers", {
                     InstanceId: instance.Id
                 }, true).then(async (data) => {
-                    $('#section-businessapplications-connect-users-datatable').deferredBootstrapTable('removeAll');
-    
                     await Promise.all(data.UserSummaryList.map(user => {
                         return sdkcall("Connect", "describeUser", {
                             InstanceId: instance.Id,
@@ -574,14 +669,12 @@ async function updateDatatableBusinessApplicationsConnect() {
                 sdkcall("Connect", "listUserHierarchyGroups", {
                     InstanceId: instance.Id
                 }, true).then(async (data) => {
-                    $('#section-businessapplications-connect-userhierarchygroups-datatable').deferredBootstrapTable('removeAll');
-    
                     await Promise.all(data.UserHierarchyGroupSummaryList.map(userhierarchygroup => {
                         return sdkcall("Connect", "describeUserHierarchyGroup", {
                             InstanceId: instance.Id,
                             HierarchyGroupId: userhierarchygroup.Id
                         }, true).then(async (data) => {
-                            data.User['InstanceArn'] = instance.Arn;
+                            data.HierarchyGroup['InstanceArn'] = instance.Arn;
     
                             $('#section-businessapplications-connect-userhierarchygroups-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.HierarchyGroup.Arn,
@@ -589,6 +682,50 @@ async function updateDatatableBusinessApplicationsConnect() {
                                 f2data: data.HierarchyGroup,
                                 f2region: region,
                                 name: data.HierarchyGroup.Name,
+                                instancearn: instance.Id
+                            }]);
+                        });
+                    }));
+                }).catch(() => { }),
+                sdkcall("Connect", "listContactFlows", {
+                    InstanceId: instance.Id
+                }, true).then(async (data) => {
+                    await Promise.all(data.ContactFlowSummaryList.map(contactflow => {
+                        return sdkcall("Connect", "describeContactFlow", {
+                            InstanceId: instance.Id,
+                            ContactFlowId: contactflow.Id
+                        }, true).then(async (data) => {
+                            data.ContactFlow['InstanceArn'] = instance.Arn;
+    
+                            $('#section-businessapplications-connect-contactflows-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ContactFlow.Arn,
+                                f2type: 'connect.contactflow',
+                                f2data: data.ContactFlow,
+                                f2region: region,
+                                name: data.ContactFlow.Name,
+                                description: data.ContactFlow.Description,
+                                instancearn: instance.Id
+                            }]);
+                        });
+                    }));
+                }).catch(() => { }),
+                sdkcall("Connect", "listContactFlowModules", {
+                    InstanceId: instance.Id
+                }, true).then(async (data) => {
+                    await Promise.all(data.ContactFlowModulesSummaryList.map(contactflowmodule => {
+                        return sdkcall("Connect", "describeContactFlowModule", {
+                            InstanceId: instance.Id,
+                            ContactFlowModuleId: contactflowmodule.Id
+                        }, true).then(async (data) => {
+                            data.ContactFlowModule['InstanceArn'] = instance.Arn;
+    
+                            $('#section-businessapplications-connect-contactflowmodules-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ContactFlowModule.Arn,
+                                f2type: 'connect.contactflowmodule',
+                                f2data: data.ContactFlowModule,
+                                f2region: region,
+                                name: data.ContactFlowModule.Name,
+                                description: data.ContactFlowModule.Description,
                                 instancearn: instance.Id
                             }]);
                         });
@@ -633,7 +770,7 @@ async function updateDatatableBusinessApplicationsConnect() {
                 });
             });
         }));
-    });
+    }).catch(() => { });
 
     await sdkcall("Wisdom", "listKnowledgeBases", {
         // no params
@@ -654,7 +791,7 @@ async function updateDatatableBusinessApplicationsConnect() {
                 }]);
             });
         }));
-    });
+    }).catch(() => { });
     
     unblockUI('#section-businessapplications-connect-customerprofilesdomains-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesobjecttypes-datatable');
@@ -666,6 +803,8 @@ async function updateDatatableBusinessApplicationsConnect() {
     unblockUI('#section-businessapplications-connect-wisdomassistants-datatable');
     unblockUI('#section-businessapplications-connect-wisdomassistantassociations-datatable');
     unblockUI('#section-businessapplications-connect-wisdomknowledgebases-datatable');
+    unblockUI('#section-businessapplications-connect-contactflows-datatable');
+    unblockUI('#section-businessapplications-connect-contactflowmodules-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1026,6 +1165,71 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.knowledgeBaseId,
                 'GetAtt': {
                     'KnowledgeBaseArn': obj.data.knowledgeBaseArn
+                }
+            }
+        });
+    } else if (obj.type == "connect.contactflow") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
+        reqParams.cfn['State'] = obj.data.State;
+        reqParams.cfn['Type'] = obj.data.Type;
+        reqParams.cfn['Content'] = JSON.stringify(JSON.parse(obj.data.Content), null, 2);
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::Connect::ContactFlow'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::Connect::ContactFlow',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'ContactFlowArn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "connect.contactflowmodule") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
+        reqParams.cfn['State'] = obj.data.State;
+        reqParams.cfn['Content'] = JSON.stringify(JSON.parse(obj.data.Content), null, 2);
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::Connect::ContactFlowModule'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::Connect::ContactFlowModule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'ContactFlowModuleArn': obj.data.Arn
                 }
             }
         });
