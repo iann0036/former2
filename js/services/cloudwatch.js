@@ -790,6 +790,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'RUM App Monitors': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'domain',
+                        title: 'Domain',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -814,6 +852,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
         AlarmTypes: ["MetricAlarm"]
@@ -1194,6 +1233,27 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         }));
     }).catch(() => { });
 
+    await sdkcall("RUM", "listAppMonitors", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.AppMonitorSummaries.map(async (appmonitor) => {
+            return sdkcall("RUM", "getAppMonitor", {
+                Name: appmonitor.Name
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.AppMonitor.Id,
+                    f2type: 'cloudwatch.rumappmonitor',
+                    f2data: data.AppMonitor,
+                    f2region: region,
+                    name: data.AppMonitor.Name,
+                    domain: data.AppMonitor.Domain
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-managementandgovernance-cloudwatch-loggroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-logstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-subscriptionfilters-datatable');
@@ -1208,6 +1268,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1822,6 +1883,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.arn
             }
+        });
+    } else if (obj.type == "cloudwatch.rumappmonitor") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Domain'] = obj.data.Domain;
+        if (obj.data.DataStorage && obj.data.DataStorage.CwLog) {
+            reqParams.cfn['CwLogEnabled'] = obj.data.DataStorage.CwLog.CwLogEnabled;
+        }
+        reqParams.cfn['AppMonitorConfiguration'] = obj.data.AppMonitorConfiguration;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::RUM::AppMonitor'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::RUM::AppMonitor',
+            'options': reqParams
         });
     } else {
         return false;

@@ -339,18 +339,96 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Domain Names': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain Name',
+                        field: 'domainname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Domain Name API Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Domain Name',
+                        field: 'domainname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'apiid',
+                        title: 'API ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableMobileAppSync() {
     blockUI('#section-mobile-appsync-graphqlapis-datatable');
-    blockUI('#section-mobile-appsync-graphqlschemas-datatable'); // TODO
+    blockUI('#section-mobile-appsync-graphqlschemas-datatable');
     blockUI('#section-mobile-appsync-resolvers-datatable');
     blockUI('#section-mobile-appsync-datasources-datatable');
     blockUI('#section-mobile-appsync-functionconfigurations-datatable');
     blockUI('#section-mobile-appsync-apikeys-datatable');
     blockUI('#section-mobile-appsync-apicaches-datatable');
+    blockUI('#section-mobile-appsync-domainnames-datatable');
+    blockUI('#section-mobile-appsync-domainnameapiassociations-datatable');
 
     await sdkcall("AppSync", "listGraphqlApis", {
         // no params
@@ -505,6 +583,44 @@ async function updateDatatableMobileAppSync() {
         unblockUI('#section-mobile-appsync-functionconfigurations-datatable');
         unblockUI('#section-mobile-appsync-apicaches-datatable');
     });
+
+    await sdkcall("AppSync", "listDomainNames", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-mobile-appsync-domainnames-datatable').deferredBootstrapTable('removeAll');
+        $('#section-mobile-appsync-domainnameapiassociations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.domainNameConfigs.map(async (domainname) => {
+            await sdkcall("AppSync", "getDomainName", {
+                domainName: domainname.domainName
+            }, true).then((data) => {
+                $('#section-mobile-appsync-domainnames-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.domainNameConfig.domainName + " Domain Name",
+                    f2type: 'appsync.domainname',
+                    f2data: data.domainNameConfig,
+                    f2region: region,
+                    domainname: data.domainNameConfig.domainName,
+                    description: data.domainNameConfig.description
+                }]);
+            });
+
+            return sdkcall("AppSync", "getApiAssociation", {
+                domainName: domainname.domainName
+            }, true).then((data) => {
+                $('#section-mobile-appsync-domainnameapiassociations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.apiAssociation.domainName + " Domain Name API Association " + data.apiAssociation.apiId,
+                    f2type: 'appsync.domainnameapiassociation',
+                    f2data: data.apiAssociation,
+                    f2region: region,
+                    domainname: data.apiAssociation.domainName,
+                    apiid: data.apiAssociation.apiId
+                }]);
+            }).catch(() => { });
+        }));
+    });
+
+    unblockUI('#section-mobile-appsync-domainnames-datatable');
+    unblockUI('#section-mobile-appsync-domainnameapiassociations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -800,6 +916,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'appsync',
             'type': 'AWS::AppSync::ApiCache',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.domainname") {
+        reqParams.cfn['DomainName'] = obj.data.domainName;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['CertificateArn'] = obj.data.certificateArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::DomainName'),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::DomainName',
+            'options': reqParams
+        });
+    } else if (obj.type == "appsync.domainnameapiassociation") {
+        reqParams.cfn['DomainName'] = obj.data.domainName;
+        reqParams.cfn['ApiId'] = obj.data.apiId;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appsync', obj.id, 'AWS::AppSync::DomainNameApiAssociation'),
+            'region': obj.region,
+            'service': 'appsync',
+            'type': 'AWS::AppSync::DomainNameApiAssociation',
             'options': reqParams
         });
     } else {
