@@ -53,6 +53,44 @@ sections.push({
                 ]
             ]
         },
+        'V2 Bots': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Intents': {
             'terraformonly': true,
             'columns': [
@@ -130,6 +168,108 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Bot Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Bot Versions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Bot ID',
+                        field: 'botid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'version',
+                        title: 'Version',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Resource Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Resource ARN',
+                        field: 'resourcearn',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -138,6 +278,10 @@ async function updateDatatableMachineLearningLex() {
     blockUI('#section-machinelearning-lex-bots-datatable');
     blockUI('#section-machinelearning-lex-intents-datatable');
     blockUI('#section-machinelearning-lex-slottypes-datatable');
+    blockUI('#section-machinelearning-lex-v2bots-datatable');
+    blockUI('#section-machinelearning-lex-botaliases-datatable');
+    blockUI('#section-machinelearning-lex-botversions-datatable');
+    blockUI('#section-machinelearning-lex-resourcepolicies-datatable');
 
     await sdkcall("LexModelBuildingService", "getBots", {
         // no params
@@ -206,9 +350,103 @@ async function updateDatatableMachineLearningLex() {
         }));
     }).catch(() => { });
 
+    await sdkcall("LexModelsV2", "listBots", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-machinelearning-lex-v2bots-datatable').deferredBootstrapTable('removeAll');
+        $('#section-machinelearning-lex-botaliases-datatable').deferredBootstrapTable('removeAll');
+        $('#section-machinelearning-lex-botversions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-machinelearning-lex-resourcepolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.botSummaries.map(async (bot) => {
+            await sdkcall("LexModelsV2", "describeBot", {
+                botId: bot.botId
+            }, true).then((data) => {
+                $('#section-machinelearning-lex-v2bots-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.botId,
+                    f2type: 'lex.v2bot',
+                    f2data: data,
+                    f2region: region,
+                    name: data.botName,
+                    description: data.description
+                }]);
+            });
+
+            await sdkcall("LexModelsV2", "listBotAliases", {
+                botId: bot.botId
+            }, true).then(async (data) => {
+                await Promise.all(data.botAliasSummaries.map(async (botalias) => {
+                    return sdkcall("LexModelsV2", "describeBotAlias", {
+                        botId: data.botId,
+                        botAliasId: botalias.botAliasId
+                    }, true).then((data) => {
+                        $('#section-machinelearning-lex-botaliases-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.botAliasId,
+                            f2type: 'lex.botalias',
+                            f2data: data,
+                            f2region: region,
+                            name: data.botAliasName,
+                            description: data.description
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+
+            await sdkcall("LexModelsV2", "listBotVersions", {
+                botId: bot.botId
+            }, true).then(async (data) => {
+                await Promise.all(data.botVersionSummaries.map(async (botversion) => {
+                    return sdkcall("LexModelsV2", "describeBotVersion", {
+                        botId: data.botId,
+                        botVersion: botversion.botVersion
+                    }, true).then(async (data) => {
+                        await sdkcall("LexModelsV2", "listBotLocales", {
+                            botId: data.botId,
+                            botVersion: botversion.botVersion
+                        }, true).then((localedata) => {
+                            data['locales'] = localedata.botLocaleSummaries
+                        });
+
+                        $('#section-machinelearning-lex-botversions-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.botId + " Version " + data.botVersion,
+                            f2type: 'lex.botversion',
+                            f2data: data,
+                            f2region: region,
+                            botid: data.botId,
+                            version: data.botVersion
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
+
+            return sdkcall("STS", "getCallerIdentity", {
+                // no params
+            }, true).then(async (accountdata) => {
+                var accountId = accountdata.Account;
+                var arn = "arn:aws:lex:" + region + ":" + accountId + ":bot:" + data.botId
+
+                return sdkcall("LexModelsV2", "describeResourcePolicy", {
+                    resourceArn: arn
+                }, true).then((data) => {
+                    $('#section-machinelearning-lex-botversions-datatable').deferredBootstrapTable('append', [{
+                        f2id: arn + " Lex Resource Policy",
+                        f2type: 'lex.resourcepolicy',
+                        f2data: data,
+                        f2region: region,
+                        resourceArn: arn
+                    }]);
+                }).catch(() => { });
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-machinelearning-lex-bots-datatable');
     unblockUI('#section-machinelearning-lex-intents-datatable');
     unblockUI('#section-machinelearning-lex-slottypes-datatable');
+    unblockUI('#section-machinelearning-lex-v2bots-datatable');
+    unblockUI('#section-machinelearning-lex-botaliases-datatable');
+    unblockUI('#section-machinelearning-lex-botversions-datatable');
+    unblockUI('#section-machinelearning-lex-resourcepolicies-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -420,6 +658,125 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'lex',
             'terraformType': 'aws_lex_slot_type',
+            'options': reqParams
+        });
+    } else if (obj.type == "lex.v2bot") {
+        reqParams.cfn['Name'] = obj.data.botName;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.cfn['DataPrivacy'] = obj.data.dataPrivacy;
+        reqParams.cfn['IdleSessionTTLInSeconds'] = obj.data.idleSessionTTLInSeconds;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::Bot'),
+            'region': obj.region,
+            'service': 'lex',
+            'type': 'AWS::Lex::Bot',
+            'options': reqParams
+        });
+    } else if (obj.type == "lex.botalias") {
+        reqParams.cfn['BotAliasName'] = obj.data.botAliasName;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['BotId'] = obj.data.botId;
+        reqParams.cfn['BotVersion'] = obj.data.botVersion;
+        if (obj.data.botAliasLocaleSettings) {
+            reqParams.cfn['BotAliasLocaleSettings'] = [];
+            for (var k of Object.keys(obj.data.botAliasLocaleSettings)) {
+                reqParams.cfn['BotAliasLocaleSettings'].push({
+                    'LocaleId': k,
+                    'BotAliasLocaleSetting': {
+                        'Enabled': obj.data.botAliasLocaleSettings[k].enabled,
+                        'CodeHookSpecification': {
+                            'LambdaCodeHook': {
+                                'LambdaArn': obj.data.botAliasLocaleSettings[k].codeHookSpecification.lambdaCodeHook.lambdaARN,
+                                'CodeHookInterfaceVersion': obj.data.botAliasLocaleSettings[k].codeHookSpecification.lambdaCodeHook.codeHookInterfaceVersion
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        if (obj.data.conversationLogSettings) {
+            var audiologsettings = null;
+            if (obj.data.conversationLogSettings.audioLogSettings) {
+                audiologsettings = [];
+                obj.data.conversationLogSettings.audioLogSettings.forEach(audiologsetting => {
+                    audiologsettings.push({
+                        'Enabled': audiologsetting.enabled,
+                        'Destination': {
+                            'S3Bucket': {
+                                'KmsKeyArn': audiologsetting.destination.s3Bucket.kmsKeyArn,
+                                'S3BucketArn': audiologsetting.destination.s3Bucket.s3BucketArn,
+                                'LogPrefix': audiologsetting.destination.s3Bucket.logPrefix
+                            }
+                        }
+                    });
+                });
+            }
+            var textlogsettings = null;
+            if (obj.data.conversationLogSettings.textLogSettings) {
+                textlogsettings = [];
+                obj.data.conversationLogSettings.textLogSettings.forEach(textlogsetting => {
+                    textlogsettings.push({
+                        'Enabled': textlogsetting.enabled,
+                        'Destination': {
+                            'CloudWatch': {
+                                'CloudWatchLogGroupArn': textlogsetting.destination.cloudWatch.cloudWatchLogGroupArn,
+                                'LogPrefix': textlogsetting.destination.cloudWatch.logPrefix
+                            }
+                        }
+                    });
+                });
+            }
+            reqParams.cfn['ConversationLogSettings'] = {
+                'AudioLogSettings': audiologsettings,
+                'TextLogSettings': textlogsettings
+            };
+        }
+        reqParams.cfn['SentimentAnalysisSettings'] = obj.data.sentimentAnalysisSettings;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::BotAlias'),
+            'region': obj.region,
+            'service': 'lex',
+            'type': 'AWS::Lex::BotAlias',
+            'options': reqParams
+        });
+    } else if (obj.type == "lex.botversion") {
+        reqParams.cfn['BotId'] = obj.data.botId;
+        reqParams.cfn['Description'] = obj.data.description;
+        if (obj.data.locales) {
+            reqParams.cfn['BotVersionLocaleSpecification'] = [];
+            obj.data.locales.forEach(locale => {
+                reqParams.cfn['BotVersionLocaleSpecification'].push({
+                    'LocaleId': locale.localeId,
+                    'BotVersionLocaleDetails': {
+                        'SourceBotVersion': '1'
+                    }
+                })
+            });
+        }
+        
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::BotVersion'),
+            'region': obj.region,
+            'service': 'lex',
+            'type': 'AWS::Lex::BotVersion',
+            'options': reqParams
+        });
+    } else if (obj.type == "lex.resourcepolicy") {
+        reqParams.cfn['ResourceArn'] = obj.data.resourceArn;
+        reqParams.cfn['Policy'] = obj.data.policy;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lex', obj.id, 'AWS::Lex::ResourcePolicy'),
+            'region': obj.region,
+            'service': 'lex',
+            'type': 'AWS::Lex::ResourcePolicy',
             'options': reqParams
         });
     } else {
