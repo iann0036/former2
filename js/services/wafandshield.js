@@ -1173,7 +1173,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
 
             return sdkcall("WAFV2", "getLoggingConfiguration", {
                 ResourceArn: webAcl.ARN
-            }, true).then((data) => {
+            }, false).then((data) => {
                 $('#section-securityidentityandcompliance-wafandshield-loggingconfigurations-datatable').deferredBootstrapTable('append', [{
                     f2id: data.LoggingConfiguration.ResourceArn + " Logging Configuration",
                     f2type: 'waf.loggingconfiguration',
@@ -1181,7 +1181,7 @@ async function updateDatatableSecurityIdentityAndComplianceWAFAndShield() {
                     f2region: region,
                     webacl: data.LoggingConfiguration.ResourceArn
                 }]);
-            });
+            }).catch(() => { });
         }));
     }).catch(() => { });
 
