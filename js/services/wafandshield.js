@@ -2481,7 +2481,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.ARN,
-                    'Capacity': obj.data.Capacity,
                     'Id': obj.data.Id
                 },
                 'Import': {
