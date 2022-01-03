@@ -1082,6 +1082,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'type': 'AWS::AppStream::ApplicationFleetAssociation',
             'options': reqParams
         });
+    } else if (obj.type == "appstream.appblock") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['DisplayName'] = obj.data.DisplayName;
+        reqParams.cfn['SetupScriptDetails'] = obj.data.SetupScriptDetails;
+        reqParams.cfn['SourceS3Location'] = obj.data.SourceS3Location;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::AppBlock'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::AppBlock',
+            'options': reqParams
+        });
     } else {
         return false;
     }

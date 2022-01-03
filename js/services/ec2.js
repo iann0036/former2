@@ -856,6 +856,44 @@ sections.push({
                 ]
             ]
         },
+        'Capacity Reservation Fleets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'totaltargetcapacity',
+                        title: 'Total Target Capacity',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Fleets': {
             'columns': [
                 [
@@ -1649,6 +1687,7 @@ async function updateDatatableComputeEC2() {
     blockUI('#section-compute-ec2-targetgroups-datatable');
     blockUI('#section-compute-ec2-v2targetgroups-datatable');
     blockUI('#section-compute-ec2-capacityreservations-datatable');
+    blockUI('#section-compute-ec2-capacityreservationfleets-datatable');
     blockUI('#section-compute-ec2-fleets-datatable');
     blockUI('#section-compute-ec2-volumes-datatable');
     blockUI('#section-compute-ec2-volumeattachments-datatable');
@@ -1776,6 +1815,25 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-capacityreservations-datatable');
+    });
+
+    await sdkcall("EC2", "describeCapacityReservationFleets", {
+        // no params
+    }, true).then((data) => {
+        $('#section-compute-ec2-capacityreservationfleets-datatable').deferredBootstrapTable('removeAll');
+
+        data.CapacityReservationFleets.forEach(capacityreservationfleet => {
+            $('#section-compute-ec2-capacityreservationfleets-datatable').deferredBootstrapTable('append', [{
+                f2id: capacityreservationfleet.CapacityReservationFleetArn,
+                f2type: 'ec2.capacityreservationfleet',
+                f2data: capacityreservationfleet,
+                f2region: region,
+                id: capacityreservationfleet.CapacityReservationFleetId,
+                totaltargetcapacity: capacityreservationfleet.TotalTargetCapacity
+            }]);
+        });
+
+        unblockUI('#section-compute-ec2-capacityreservationfleets-datatable');
     });
 
     await sdkcall("EC2", "describeFleets", {
@@ -3632,6 +3690,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::CapacityReservation',
+            'options': reqParams
+        });
+    } else if (obj.type == "ec2.capacityreservationfleet") {
+        reqParams.cfn['TotalTargetCapacity'] = obj.data.TotalTargetCapacity;
+        reqParams.cfn['Tenancy'] = obj.data.Tenancy;
+        reqParams.cfn['EndDate'] = obj.data.EndDate.toString();
+        reqParams.cfn['InstanceMatchCriteria'] = obj.data.InstanceMatchCriteria;
+        reqParams.cfn['AllocationStrategy'] = obj.data.AllocationStrategy;
+        reqParams.cfn['InstanceTypeSpecifications'] = [];
+        obj.data.InstanceTypeSpecifications.forEach(spec => {
+            reqParams.cfn['InstanceTypeSpecifications'].push({
+                'AvailabilityZoneId': spec.AvailabilityZoneId,
+                'EbsOptimized': spec.EbsOptimized,
+                'InstancePlatform': spec.InstancePlatform,
+                'InstanceType': spec.InstanceType,
+                'Priority': spec.Priority,
+                'Weight': spec.Weight
+            });
+        });
+        if (obj.data.Tags) {
+            reqParams.cfn['TagSpecifications'] = [{
+                'ResourceType': 'capacity-reservation-fleet',
+                'Tags': stripAWSTags(obj.data.Tags)
+            }];
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::CapacityReservationFleet'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::CapacityReservationFleet',
             'options': reqParams
         });
     } else if (obj.type == "ec2.fleet") {

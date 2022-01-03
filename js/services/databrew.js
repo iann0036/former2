@@ -280,6 +280,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Rulesets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -290,6 +328,7 @@ async function updateDatatableAnalyticsDataBrew() {
     blockUI('#section-analytics-databrew-recipes-datatable');
     blockUI('#section-analytics-databrew-jobs-datatable');
     blockUI('#section-analytics-databrew-schedules-datatable');
+    blockUI('#section-analytics-databrew-rulesets-datatable');
 
     await sdkcall("DataBrew", "listDatasets", {
         // no params
@@ -406,11 +445,33 @@ async function updateDatatableAnalyticsDataBrew() {
         }));
     }).catch(() => { });
 
+    await sdkcall("DataBrew", "listRulesets", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-databrew-rulesets-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Rulesets.map(ruleset => {
+            return sdkcall("DataBrew", "describeRuleset", {
+                Name: ruleset.Name
+            }, true).then(async (data) => {
+                $('#section-analytics-databrew-rulesets-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Name + " Ruleset",
+                    f2type: 'databrew.ruleset',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-analytics-databrew-datasets-datatable');
     unblockUI('#section-analytics-databrew-projects-datatable');
     unblockUI('#section-analytics-databrew-recipes-datatable');
     unblockUI('#section-analytics-databrew-jobs-datatable');
     unblockUI('#section-analytics-databrew-schedules-datatable');
+    unblockUI('#section-analytics-databrew-rulesets-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -563,6 +624,53 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'databrew',
             'type': 'AWS::DataBrew::Schedule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name
+            }
+        });
+    } else if (obj.type == "databrew.ruleset") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['TargetArn'] = obj.data.TargetArn;
+        if (obj.data.Rules) {
+            reqParams.cfn['Rules'] = [];
+            obj.data.Rules.forEach(rule => {
+                var substitutionmap = [];
+                Object.keys(rule.SubstitutionMap).forEach(k => {
+                    substitutionmap.push({
+                        'ValueReference': k,
+                        'Value': rule.SubstitutionMap[k]
+                    });
+                });
+                reqParams.cfn['Rules'].push({
+                    'Name': rule.Name,
+                    'Disabled': rule.Disabled,
+                    'CheckExpression': rule.CheckExpression,
+                    'ColumnSelectors': rule.ColumnSelectors,
+                    'SubstitutionMap': substitutionmap,
+                    'Threshold': rule.Threshold
+                });
+            });
+        }
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.Tags[tagKey]
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('databrew', obj.id, 'AWS::DataBrew::Ruleset'),
+            'region': obj.region,
+            'service': 'databrew',
+            'type': 'AWS::DataBrew::Ruleset',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.Name

@@ -206,6 +206,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Workflows': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -215,6 +253,7 @@ async function updateDatatableMigrationAndTransferTransfer() {
     blockUI('#section-migrationandtransfer-transfer-users-datatable');
     blockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
     blockUI('#section-migrationandtransfer-transfer-accesses-datatable');
+    blockUI('#section-migrationandtransfer-transfer-workflows-datatable');
 
     await sdkcall("Transfer", "listServers", {
         // no params
@@ -302,10 +341,32 @@ async function updateDatatableMigrationAndTransferTransfer() {
             });
         }));
 
+        await sdkcall("Transfer", "listWorkflows", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-migrationandtransfer-transfer-workflows-datatable').deferredBootstrapTable('removeAll');
+    
+            await Promise.all(data.Workflows.map(async (workflow) => {
+                return sdkcall("Transfer", "describeWorkflow", {
+                    WorkflowId: workflow.WorkflowId
+                }, true).then(async (data) => {
+                    $('#section-migrationandtransfer-transfer-workflows-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Workflow.Arn,
+                        f2type: 'transfer.workflow',
+                        f2data: data.Workflow,
+                        f2region: region,
+                        id: data.Workflow.WorkflowId,
+                        description: data.Workflow.Description
+                    }]);
+                });
+            }));
+        });
+
         unblockUI('#section-migrationandtransfer-transfer-servers-datatable');
         unblockUI('#section-migrationandtransfer-transfer-users-datatable');
         unblockUI('#section-migrationandtransfer-transfer-sshkeys-datatable');
         unblockUI('#section-migrationandtransfer-transfer-accesses-datatable');
+        unblockUI('#section-migrationandtransfer-transfer-workflows-datatable');
     });
 }
 
@@ -439,6 +500,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'transfer',
             'type': 'AWS::Transfer::Access',
+            'options': reqParams
+        });
+    } else if (obj.type == "transfer.workflow") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['Steps'] = obj.data.Steps;
+        reqParams.cfn['OnExceptionSteps'] = obj.data.OnExceptionSteps;
+        reqParams.cfn['Tags'] = obj.data.Tags;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('transfer', obj.id, 'AWS::Transfer::Workflow'),
+            'region': obj.region,
+            'service': 'transfer',
+            'type': 'AWS::Transfer::Workflow',
             'options': reqParams
         });
     } else {

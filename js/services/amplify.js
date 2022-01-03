@@ -572,10 +572,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('amplify', obj.id, 'AWS::AmplifyUIBuilder::Component'),
+            'logicalId': getResourceName('amplify', obj.id, 'AWS::AmplifyUIBuilder::Theme'),
             'region': obj.region,
             'service': 'amplify',
-            'type': 'AWS::AmplifyUIBuilder::Component',
+            'type': 'AWS::AmplifyUIBuilder::Theme',
             'options': reqParams,
             'returnValues': {
                 'GetAtt': {

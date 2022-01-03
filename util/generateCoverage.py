@@ -46,7 +46,8 @@ cfn_exceptions = {
     'AWS::CloudFormation::TypeActivation': 'N/A',
     'AWS::CloudFormation::Publisher': 'N/A',
     'AWS::CloudFormation::PublicTypeVersion': 'N/A',
-    'AWS::Elasticsearch::Domain': 'N/A'
+    'AWS::Elasticsearch::Domain': 'N/A',
+    'AWS::EC2::TransitGatewayVpcAttachment': 'N/A (duplicate of AWS::EC2::TransitGatewayAttachment)'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
