@@ -99,7 +99,7 @@ async function updateDatatableApplicationIntegrationAppFlow() {
 
     await sdkcall("Appflow", "listFlows", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-applicationintegration-appflow-flows-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.flows.map(flow => {
@@ -120,7 +120,7 @@ async function updateDatatableApplicationIntegrationAppFlow() {
 
     await sdkcall("Appflow", "describeConnectorProfiles", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-applicationintegration-appflow-connectorprofiles-datatable').deferredBootstrapTable('removeAll');
 
         data.connectorProfileDetails.forEach(connectorProfile => {
