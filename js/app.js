@@ -13,6 +13,7 @@ var iaclangselect = 'typescript';
 var check_objects = [];
 var CLI = false;
 var CONCURRENT_SDKCALLS = 0;
+var latestConfig = null;
 
 $(document).ready(function(){
     /* ========================================================================== */
@@ -1239,7 +1240,8 @@ $(document).ready(function(){
                                                         args: this.serviceArgs,
                                                         service: service,
                                                         service_action: service_action,
-                                                        params: params
+                                                        params: params,
+                                                        config: latestConfig
                                                     },
                                                     function(response) {
                                                         CONCURRENT_SDKCALLS--;
@@ -1809,7 +1811,7 @@ function updateIdentity() {
     return new Promise(function(resolve, reject) {
         $('#user-id').html("...");
 
-        AWS.config.update({
+        latestConfig = {
             credentials: new AWS.Credentials(
                 window.localStorage.getItem('credentials-accesskey'),
                 window.localStorage.getItem('credentials-secretkey'),
@@ -1819,7 +1821,8 @@ function updateIdentity() {
             httpOptions: {
                 timeout: 60000
             }
-        });
+        };
+        AWS.config.update(latestConfig);
 
         if (window.localStorage.getItem('credentials-assumerole')) {
             sdkcall("STS", "assumeRole", {
@@ -1827,7 +1830,7 @@ function updateIdentity() {
                 RoleSessionName: "former2-session-" + window.localStorage.getItem('credentials-assumerole').split("/").pop(),
                 SourceIdentity: window.localStorage.getItem('credentials-sourceidentity')
             }, false).then((data) => {
-                AWS.config.update({
+                latestConfig = {
                     credentials: new AWS.Credentials(
                         data.Credentials.AccessKeyId,
                         data.Credentials.SecretAccessKey,
@@ -1837,7 +1840,8 @@ function updateIdentity() {
                     httpOptions: {
                         timeout: 60000
                     }
-                });
+                };
+                AWS.config.update(latestConfig);
 
                 account = data.AssumedRoleUser.Arn.split(":")[4];
 
