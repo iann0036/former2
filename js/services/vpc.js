@@ -2985,6 +2985,84 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Network Insights Access Scopes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Insights Access Scope Analyses': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'scopeid',
+                        title: 'Scope ID',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -3056,6 +3134,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopes-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopeanalyses-datatable');
 
     var defaultVPC = "unset";
 
@@ -4414,6 +4494,40 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
             }]);
         });
     }).catch(() => { });
+            
+    await sdkcall("EC2", "describeNetworkInsightsAccessScopes", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopes-datatable').deferredBootstrapTable('removeAll');
+
+        data.NetworkInsightsAccessScopes.forEach(networkinsightsaccessscope => {
+            $('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopes-datatable').deferredBootstrapTable('append', [{
+                f2id: networkinsightsaccessscope.NetworkInsightsAccessScopeArn,
+                f2type: 'ec2.networkinsightsaccessscope',
+                f2data: networkinsightsaccessscope,
+                f2region: region,
+                id: networkinsightsaccessscope.NetworkInsightsAccessScopeId,
+                creationtime: networkinsightsaccessscope.CreatedDate
+            }]);
+        });
+    }).catch(() => { });
+            
+    await sdkcall("EC2", "describeNetworkInsightsAccessScopes", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopeanalyses-datatable').deferredBootstrapTable('removeAll');
+
+        data.NetworkInsightsAccessScopeAnalyses.forEach(networkinsightsaccessscopeanalysis => {
+            $('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopeanalyses-datatable').deferredBootstrapTable('append', [{
+                f2id: networkinsightsaccessscopeanalysis.NetworkInsightsAccessScopeAnalysisArn,
+                f2type: 'ec2.networkinsightsaccessscopeanalysis',
+                f2data: networkinsightsaccessscopeanalysis,
+                f2region: region,
+                id: networkinsightsaccessscopeanalysis.NetworkInsightsAccessScopeAnalysisId,
+                scopeid: networkinsightsaccessscopeanalysis.NetworkInsightsAccessScopeId
+            }]);
+        });
+    }).catch(() => { });
 
     unblockUI('#section-networkingandcontentdelivery-vpc-vpcs-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-vpccidrblocks-datatable');
@@ -4441,6 +4555,8 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaymulticastgroupsources-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewayconnects-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-transitgatewaypeeringattachments-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopes-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkinsightsaccessscopeanalyses-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -6155,6 +6271,41 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.TransitGatewayAttachmentId
+            }
+        });
+    } else if (obj.type == "ec2.networkinsightsaccessscope") {
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInsightsAccessScope'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInsightsAccessScope',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'NetworkInsightsAccessScopeId': obj.data.NetworkInsightsAccessScopeId,
+                    'NetworkInsightsAccessScopeArn': obj.data.NetworkInsightsAccessScopeArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkinsightsaccessscopeanalysis") {
+        reqParams.cfn['NetworkInsightsAccessScopeId'] = obj.data.NetworkInsightsAccessScopeId;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::NetworkInsightsAccessScopeAnalysis'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::EC2::NetworkInsightsAccessScopeAnalysis',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'NetworkInsightsAccessScopeAnalysisId': obj.data.NetworkInsightsAccessScopeAnalysisId,
+                    'NetworkInsightsAccessScopeAnalysisArn': obj.data.NetworkInsightsAccessScopeAnalysisArn
+                }
             }
         });
     } else {

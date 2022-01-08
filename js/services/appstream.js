@@ -591,6 +591,98 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Entitlements': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'stackname',
+                        title: 'Stack Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Application Entitlement Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Entitlement Name',
+                        field: 'entitlementname',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'applicationidentifier',
+                        title: 'Application Identifier',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'stackname',
+                        title: 'Stack Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -608,6 +700,8 @@ async function updateDatatableEndUserComputingAppStream() {
     blockUI('#section-endusercomputing-appstream-applications-datatable');
     blockUI('#section-endusercomputing-appstream-appblocks-datatable');
     blockUI('#section-endusercomputing-appstream-applicationfleetassociations-datatable');
+    blockUI('#section-endusercomputing-appstream-entitlements-datatable');
+    blockUI('#section-endusercomputing-appstream-applicationentitlementassociations-datatable');
 
     await sdkcall("AppStream", "describeFleets", {
         // no params
@@ -696,6 +790,8 @@ async function updateDatatableEndUserComputingAppStream() {
     }, true).then((data) => {
         $('#section-endusercomputing-appstream-stacks-datatable').deferredBootstrapTable('removeAll');
         $('#section-endusercomputing-appstream-stackuserassociations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-entitlements-datatable').deferredBootstrapTable('removeAll');
+        $('#section-endusercomputing-appstream-applicationentitlementassociations-datatable').deferredBootstrapTable('removeAll');
 
         data.Stacks.forEach(async (stack) => {
             $('#section-endusercomputing-appstream-stacks-datatable').deferredBootstrapTable('append', [{
@@ -723,10 +819,49 @@ async function updateDatatableEndUserComputingAppStream() {
                     }]);
                 });
             });
+
+            await sdkcall("AppStream", "describeEntitlements", {
+                StackName: stack.Name
+            }, true).then(async (data) => {
+                data.Entitlements.forEach(async (entitlement) => {
+                    $('#section-endusercomputing-appstream-entitlements-datatable').deferredBootstrapTable('append', [{
+                        f2id: entitlement.Name + " " + entitlement.StackName + " Entitlement",
+                        f2type: 'appstream.entitlement',
+                        f2data: entitlement,
+                        f2region: region,
+                        name: entitlement.Name,
+                        description: entitlement.Description,
+                        stackname: entitlement.StackName
+                    }]);
+
+                    await sdkcall("AppStream", "listEntitledApplications", {
+                        EntitlementName: entitlement.Name,
+                        StackName: entitlement.StackName
+                    }, true).then(async (data) => {
+                        data.EntitledApplications.forEach(application => {
+                            $('#section-endusercomputing-appstream-applicationentitlementassociations-datatable').deferredBootstrapTable('append', [{
+                                f2id: entitlement.Name + " " + entitlement.StackName + " " + application.ApplicationIdentifier + " Association",
+                                f2type: 'appstream.applicationentitlementassociation',
+                                f2data: {
+                                    'EntitlementName': entitlement.Name,
+                                    'ApplicationIdentifier': application.ApplicationIdentifier,
+                                    'StackName': entitlement.StackName
+                                },
+                                f2region: region,
+                                entitlementname: entitlement.Name,
+                                applicationidentifier: application.ApplicationIdentifier,
+                                stackname: entitlement.StackName
+                            }]);
+                        });
+                    });
+                });
+            });
         });
 
         unblockUI('#section-endusercomputing-appstream-stacks-datatable');
         unblockUI('#section-endusercomputing-appstream-stackuserassociations-datatable');
+        unblockUI('#section-endusercomputing-appstream-entitlements-datatable');
+        unblockUI('#section-endusercomputing-appstream-applicationentitlementassociations-datatable');
     });
 
     await sdkcall("AppStream", "describeImageBuilders", {
@@ -1095,6 +1230,34 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'appstream',
             'type': 'AWS::AppStream::AppBlock',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.entitlement") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['StackName'] = obj.data.StackName;
+        reqParams.cfn['AppVisibility'] = obj.data.AppVisibility;
+        reqParams.cfn['Attributes'] = obj.data.Attributes;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::Entitlement'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::Entitlement',
+            'options': reqParams
+        });
+    } else if (obj.type == "appstream.applicationentitlementassociation") {
+        reqParams.cfn['ApplicationIdentifier'] = obj.data.ApplicationIdentifier;
+        reqParams.cfn['EntitlementName'] = obj.data.EntitlementName;
+        reqParams.cfn['StackName'] = obj.data.StackName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('appstream', obj.id, 'AWS::AppStream::ApplicationEntitlementAssociation'),
+            'region': obj.region,
+            'service': 'appstream',
+            'type': 'AWS::AppStream::ApplicationEntitlementAssociation',
             'options': reqParams
         });
     } else {
