@@ -1082,6 +1082,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Wireless Fuota Tasks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Wireless Multicast Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1115,6 +1191,8 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-jobtemplates-datatable');
     blockUI('#section-internetofthings-core-logging-datatable');
     blockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
+    blockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
+    blockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1762,6 +1840,52 @@ async function updateDatatableInternetofThingsCore() {
         });
     }).catch(err => { });
 
+    await sdkcall("IoTWireless", "listFuotaTasks", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessfuotatasks-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.FuotaTaskList.map(async (fuotatask) => {
+            return sdkcall("IoTWireless", "getFuotaTask", {
+                Id: fuotatask.Id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessfuotatasks-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessfuotatask',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
+    await sdkcall("IoTWireless", "listMulticastGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessmultitaskgroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.MulticastGroupList.map(async (multicastgroup) => {
+            return sdkcall("IoTWireless", "getMulticastGroup", {
+                Id: multicastgroup.Id
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessmultitaskgroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessmultitaskgroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1782,6 +1906,8 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-jobtemplates-datatable');
     unblockUI('#section-internetofthings-core-logging-datatable');
     unblockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
+    unblockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
+    unblockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2700,6 +2826,48 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'iot',
             'type': 'AWS::IoT::ResourceSpecificLogging',
             'options': reqParams
+        });
+    } else if (obj.type == "iot.wirelessfuotatask") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['TargetDescriptionType'] = obj.data.Description;
+        reqParams.cfn['LoRaWAN'] = obj.data.LoRaWAN;
+        reqParams.cfn['FirmwareUpdateImage'] = obj.data.FirmwareUpdateImage;
+        reqParams.cfn['FirmwareUpdateRole'] = obj.data.FirmwareUpdateRole;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::FuotaTask'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::FuotaTask',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.Id,
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "iot.wirelessmulticastgroup") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['LoRaWAN'] = obj.data.LoRaWAN;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::MulticastGroup'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::MulticastGroup',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'Id': obj.data.Id,
+                    'Arn': obj.data.Arn
+                }
+            }
         });
     } else {
         return false;
