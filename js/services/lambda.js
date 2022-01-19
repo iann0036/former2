@@ -415,6 +415,7 @@ async function updateDatatableComputeLambda() {
         $('#section-compute-lambda-aliases-datatable').deferredBootstrapTable('removeAll');
         $('#section-compute-lambda-versions-datatable').deferredBootstrapTable('removeAll');
         $('#section-compute-lambda-permissions-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Functions.map(async (lambdaFunction) => {
             return Promise.all([
@@ -506,8 +507,6 @@ async function updateDatatableComputeLambda() {
                 sdkcall("Lambda", "listFunctionEventInvokeConfigs", {
                     FunctionName: lambdaFunction.FunctionArn
                 }, false).then(async (data) => {
-                    $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('removeAll');
-
                     var eventConfigIterator = 1;
                     data.FunctionEventInvokeConfigs.forEach(config => {
                         $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('append', [{
