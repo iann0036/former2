@@ -422,6 +422,120 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'domainname',
+                        title: 'Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Containers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Service Name',
+                        field: 'servicename',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'url',
+                        title: 'URL',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Distributions': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'domainname',
+                        title: 'Domain Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -438,6 +552,9 @@ async function updateDatatableComputeLightsail() {
     blockUI('#section-compute-lightsail-buckets-datatable');
     blockUI('#section-compute-lightsail-loadbalancers-datatable');
     blockUI('#section-compute-lightsail-loadbalancertlscertificates-datatable');
+    blockUI('#section-compute-lightsail-certificates-datatable');
+    blockUI('#section-compute-lightsail-containers-datatable');
+    blockUI('#section-compute-lightsail-distributions-datatable');
 
     await sdkcall("Lightsail", "getInstances", {
         // no params
@@ -619,6 +736,57 @@ async function updateDatatableComputeLightsail() {
         });
     }).catch(() => { });
 
+    await sdkcall("Lightsail", "getCertificates", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lightsail-certificates-datatable').deferredBootstrapTable('removeAll');
+
+        data.certificates.forEach(certificate => {
+            $('#section-compute-lightsail-certificates-datatable').deferredBootstrapTable('append', [{
+                f2id: certificate.certificateArn,
+                f2type: 'lightsail.certificate',
+                f2data: certificate,
+                f2region: region,
+                name: certificate.certificateName,
+                domainname: certificate.domainName
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("Lightsail", "getContainerServices", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lightsail-containers-datatable').deferredBootstrapTable('removeAll');
+
+        data.containerServices.forEach(containerservice => {
+            $('#section-compute-lightsail-containers-datatable').deferredBootstrapTable('append', [{
+                f2id: containerservice.arn,
+                f2type: 'lightsail.container',
+                f2data: containerservice,
+                f2region: region,
+                servicename: containerservice.containerServiceName,
+                url: containerservice.url
+            }]);
+        });
+    }).catch(() => { });
+
+    await sdkcall("Lightsail", "getDistributions", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-compute-lightsail-distributions-datatable').deferredBootstrapTable('removeAll');
+
+        data.distributions.forEach(distribution => {
+            $('#section-compute-lightsail-distributions-datatable').deferredBootstrapTable('append', [{
+                f2id: distribution.arn,
+                f2type: 'lightsail.distribution',
+                f2data: distribution,
+                f2region: region,
+                name: distribution.name,
+                domainname: distribution.domainName
+            }]);
+        });
+    }).catch(() => { });
+
     unblockUI('#section-compute-lightsail-instances-datatable');
     unblockUI('#section-compute-lightsail-domains-datatable');
     unblockUI('#section-compute-lightsail-keypairs-datatable');
@@ -630,6 +798,9 @@ async function updateDatatableComputeLightsail() {
     unblockUI('#section-compute-lightsail-buckets-datatable');
     unblockUI('#section-compute-lightsail-loadbalancers-datatable');
     unblockUI('#section-compute-lightsail-loadbalancertlscertificates-datatable');
+    unblockUI('#section-compute-lightsail-certificates-datatable');
+    unblockUI('#section-compute-lightsail-containers-datatable');
+    unblockUI('#section-compute-lightsail-distributions-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -947,6 +1118,194 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'LoadBalancerTlsCertificateArn': obj.data.arn
+                }
+            }
+        });
+    } else if (obj.type == "lightsail.certificate") {
+        reqParams.cfn['CertificateName'] = obj.data.certificateName;
+        reqParams.cfn['DomainName'] = obj.data.domainName;
+        reqParams.cfn['SubjectAlternativeNames'] = obj.data.certificateDetail.subjectAlternativeNames;
+        if (obj.data.certificateDetail.tags) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.certificateDetail.tags.forEach(tag => {
+                if (!tag.key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tag['key'],
+                        'Value': tag['value']
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Certificate'),
+            'region': obj.region,
+            'service': 'lightsail',
+            'type': 'AWS::Lightsail::Certificate',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'CertificateArn': obj.data.certificateArn
+                }
+            }
+        });
+    } else if (obj.type == "lightsail.container") {
+        reqParams.cfn['ServiceName'] = obj.data.containerServiceName;
+        reqParams.cfn['Power'] = obj.data.power;
+        reqParams.cfn['Scale'] = obj.data.scale;
+        reqParams.cfn['IsDisabled'] = (obj.data.state == "DISABLED");
+        if (obj.data.publicDomainNames) {
+            reqParams.cfn['PublicDomainNames'] = [];
+            Object.keys(obj.data.publicDomainNames).forEach(k => {
+                reqParams.cfn['PublicDomainNames'].push({
+                    'CertificateName': k,
+                    'DomainNames': obj.data.publicDomainNames[k]
+                });
+            });
+        }
+        if (obj.data.currentDeployment && obj.data.currentDeployment.containers) {
+            reqParams.cfn['ContainerServiceDeployment'] = {
+                'Containers': []
+            };
+            Object.keys(obj.data.currentDeployment.containers).forEach(k => {
+                var environment = null;
+                if (obj.data.currentDeployment.containers[k].environment) {
+                    environment = [];
+                    Object.keys(obj.data.currentDeployment.containers[k].environment).forEach(k => {
+                        environment.push({
+                            'Variable': k,
+                            'Value': obj.data.currentDeployment.containers[k].environment[k]
+                        });
+                    });
+                }
+                var ports = null;
+                if (obj.data.currentDeployment.containers[k].ports) {
+                    ports = [];
+                    Object.keys(obj.data.currentDeployment.containers[k].ports).forEach(k => {
+                        ports.push({
+                            'Port': k,
+                            'Protocol': obj.data.currentDeployment.containers[k].ports[k]
+                        });
+                    });
+                }
+                reqParams.cfn['ContainerServiceDeployment']['Containers'].push({
+                    'ContainerName': k,
+                    'Image': obj.data.currentDeployment.containers[k].image,
+                    'Command': obj.data.currentDeployment.containers[k].command,
+                    'Environment': environment,
+                    'Ports': ports
+                });
+            });
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                if (!tag.key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tag['key'],
+                        'Value': tag['value']
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Container'),
+            'region': obj.region,
+            'service': 'lightsail',
+            'type': 'AWS::Lightsail::Container',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'ContainerArn': obj.data.arn,
+                    'Url': obj.data.url
+                }
+            }
+        });
+    } else if (obj.type == "lightsail.distribution") {
+        reqParams.cfn['DistributionName'] = obj.data.name;
+        reqParams.cfn['IsEnabled'] = obj.data.isEnabled;
+        reqParams.cfn['BundleId'] = obj.data.bundleId;
+        reqParams.cfn['CertificateName'] = obj.data.certificateName;
+        if (obj.data.origin) {
+            reqParams.cfn['Origin'] = {
+                'Name': obj.data.origin.name,
+                'RegionName': obj.data.origin.regionName,
+                'ProtocolPolicy': obj.data.origin.protocolPolicy
+            };
+        }
+        if (obj.data.defaultCacheBehavior) {
+            reqParams.cfn['DefaultCacheBehavior'] = {
+                'Behavior': obj.data.defaultCacheBehavior.behavior
+            };
+        }
+        if (obj.data.cacheBehaviorSettings) {
+            var forwardedcookies = null;
+            if (obj.data.cacheBehaviorSettings.forwardedCookies) {
+                forwardedcookies = {
+                    'Option': obj.data.cacheBehaviorSettings.forwardedCookies.option,
+                    'CookiesAllowList': obj.data.cacheBehaviorSettings.forwardedCookies.cookiesAllowList
+                };
+            }
+            var forwardedheaders = null;
+            if (obj.data.cacheBehaviorSettings.forwardedHeaders) {
+                forwardedheaders = {
+                    'Option': obj.data.cacheBehaviorSettings.forwardedHeaders.option,
+                    'HeadersAllowList': obj.data.cacheBehaviorSettings.forwardedHeaders.headersAllowList
+                };
+            }
+            var forwardedquerystrings = null;
+            if (obj.data.cacheBehaviorSettings.forwardedQueryStrings) {
+                forwardedquerystrings = {
+                    'Option': obj.data.cacheBehaviorSettings.forwardedQueryStrings.option,
+                    'QueryStringsAllowList': obj.data.cacheBehaviorSettings.forwardedQueryStrings.queryStringsAllowList
+                };
+            }
+            reqParams.cfn['CacheBehaviorSettings'] = {
+                'DefaultTTL': obj.data.cacheBehaviorSettings.defaultTTL,
+                'MinimumTTL': obj.data.cacheBehaviorSettings.minimumTTL,
+                'MaximumTTL': obj.data.cacheBehaviorSettings.maximumTTL,
+                'AllowedHTTPMethods': obj.data.cacheBehaviorSettings.allowedHTTPMethods,
+                'CachedHTTPMethods': obj.data.cacheBehaviorSettings.cachedHTTPMethods,
+                'ForwardedCookies': forwardedcookies,
+                'ForwardedHeaders': forwardedheaders,
+                'ForwardedQueryStrings': forwardedquerystrings
+            };
+        }
+        if (obj.data.cacheBehaviors) {
+            reqParams.cfn['CacheBehaviors'] = [];
+            obj.data.cacheBehaviors.forEach(cachebehavior => {
+                reqParams.cfn['CacheBehaviors'].push({
+                    'Path': cachebehavior.path,
+                    'Behavior': cachebehavior.behavior
+                });
+            });
+        }
+        reqParams.cfn['IpAddressType'] = obj.data.ipAddressType;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            obj.data.tags.forEach(tag => {
+                if (!tag.key.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tag['key'],
+                        'Value': tag['value']
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lightsail', obj.id, 'AWS::Lightsail::Distribution'),
+            'region': obj.region,
+            'service': 'lightsail',
+            'type': 'AWS::Lightsail::Distribution',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'DistributionArn': obj.data.arn
                 }
             }
         });
