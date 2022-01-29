@@ -509,6 +509,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Event Integrations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Data Integrations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -526,6 +602,8 @@ async function updateDatatableBusinessApplicationsConnect() {
     blockUI('#section-businessapplications-connect-wisdomknowledgebases-datatable');
     blockUI('#section-businessapplications-connect-contactflows-datatable');
     blockUI('#section-businessapplications-connect-contactflowmodules-datatable');
+    blockUI('#section-businessapplications-connect-eventintegrations-datatable');
+    blockUI('#section-businessapplications-connect-dataintegrations-datatable');
 
     await sdkcall("CustomerProfiles", "listDomains", {
         // no params
@@ -792,6 +870,48 @@ async function updateDatatableBusinessApplicationsConnect() {
             });
         }));
     }).catch(() => { });
+
+    await sdkcall("AppIntegrations", "listEventIntegrations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-businessapplications-connect-eventintegrations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.EventIntegrations.map(async (eventintegration) => {
+            return sdkcall("AppIntegrations", "getEventIntegration", {
+                Name: eventintegration.Name
+            }, true).then(async (data) => {
+                $('#section-businessapplications-connect-eventintegrations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.EventIntegrationArn,
+                    f2type: 'connect.eventintegration',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("AppIntegrations", "listDataIntegrations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-businessapplications-connect-dataintegrations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DataIntegrations.map(async (dataintegration) => {
+            return sdkcall("AppIntegrations", "getDataIntegration", {
+                Identifier: dataintegration.Name
+            }, true).then(async (data) => {
+                $('#section-businessapplications-connect-dataintegrations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'connect.dataintegration',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
     
     unblockUI('#section-businessapplications-connect-customerprofilesdomains-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesobjecttypes-datatable');
@@ -805,6 +925,8 @@ async function updateDatatableBusinessApplicationsConnect() {
     unblockUI('#section-businessapplications-connect-wisdomknowledgebases-datatable');
     unblockUI('#section-businessapplications-connect-contactflows-datatable');
     unblockUI('#section-businessapplications-connect-contactflowmodules-datatable');
+    unblockUI('#section-businessapplications-connect-eventintegrations-datatable');
+    unblockUI('#section-businessapplications-connect-dataintegrations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1230,6 +1352,69 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.Name,
                 'GetAtt': {
                     'ContactFlowModuleArn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "connect.eventintegration") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['EventBridgeBus'] = obj.data.EventBridgeBus;
+        reqParams.cfn['EventFilter'] = obj.data.EventFilter;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::AppIntegrations::EventIntegration'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::AppIntegrations::EventIntegration',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'EventIntegrationArn': obj.data.EventIntegrationArn
+                }
+            }
+        });
+    } else if (obj.type == "connect.dataintegration") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['KmsKey'] = obj.data.KmsKey;
+        reqParams.cfn['SourceURI'] = obj.data.SourceURI;
+        reqParams.cfn['ScheduleConfig'] = obj.data.ScheduleConfig;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::AppIntegrations::DataIntegration'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::AppIntegrations::DataIntegration',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'DataIntegrationArn': obj.data.Arn
                 }
             }
         });
