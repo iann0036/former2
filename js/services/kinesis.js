@@ -465,6 +465,82 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Video Streams': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'devicename',
+                        title: 'Device Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Video Signaling Channels': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -480,6 +556,8 @@ async function updateDatatableAnalyticsKinesis() {
     blockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
     blockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
     blockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
+    blockUI('#section-analytics-kinesis-videostreams-datatable');
+    blockUI('#section-analytics-kinesis-videosignalingchannels-datatable');
 
     await sdkcall("Kinesis", "listStreams", {
         // no params
@@ -686,10 +764,54 @@ async function updateDatatableAnalyticsKinesis() {
         }));
     }).catch(() => { });
 
+    await sdkcall("KinesisVideo", "listStreams", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-analytics-kinesis-videostreams-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.StreamInfoList.map(stream => {
+            return sdkcall("KinesisVideo", "describeStream", {
+                StreamARN: stream.StreamARN
+            }, true).then((data) => {
+                $('#section-analytics-kinesis-videostreams-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.StreamInfo.StreamARN,
+                    f2type: 'kinesis.videostream',
+                    f2data: data.StreamInfo,
+                    f2region: region,
+                    name: data.StreamInfo.StreamName,
+                    devicename: data.StreamInfo.DeviceName
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("KinesisVideo", "listSignalingChannels", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-analytics-kinesis-videosignalingchannels-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ChannelInfoList.map(channel => {
+            return sdkcall("KinesisVideo", "describeSignalingChannel", {
+                ChannelARN: channel.ChannelARN
+            }, true).then((data) => {
+                $('#section-analytics-kinesis-videosignalingchannels-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ChannelInfo.ChannelARN,
+                    f2type: 'kinesis.videosignalingchannel',
+                    f2data: data.ChannelInfo,
+                    f2region: region,
+                    name: data.ChannelInfo.ChannelName,
+                    type: data.ChannelInfo.ChannelType
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-analytics-kinesis-analyticsv2applications-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationoutputs-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationreferencedatasources-datatable');
     unblockUI('#section-analytics-kinesis-analyticsv2applicationcloudwatchloggingoptions-datatable');
+    unblockUI('#section-analytics-kinesis-videostreams-datatable');
+    unblockUI('#section-analytics-kinesis-videosignalingchannels-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1087,6 +1209,36 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'kinesis',
             'type': 'AWS::KinesisFirehose::DeliveryStream',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.videostream") {
+        reqParams.cfn['Name'] = obj.data.StreamName;
+        reqParams.cfn['DeviceName'] = obj.data.DeviceName;
+        reqParams.cfn['KmsKeyId'] = obj.data.KmsKeyId;
+        reqParams.cfn['MediaType'] = obj.data.MediaType;
+        reqParams.cfn['DataRetentionInHours'] = obj.data.DataRetentionInHours;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisVideo::Stream'),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisVideo::Stream',
+            'options': reqParams
+        });
+    } else if (obj.type == "kinesis.videosignalingchannel") {
+        reqParams.cfn['Name'] = obj.data.ChannelName;
+        reqParams.cfn['Type'] = obj.data.ChannelType;
+        if (obj.data.SingleMasterConfiguration) {
+            reqParams.cfn['MessageTtlSeconds'] = obj.data.SingleMasterConfiguration.MessageTtlSeconds;
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('kinesis', obj.id, 'AWS::KinesisVideo::SignalingChannel'),
+            'region': obj.region,
+            'service': 'kinesis',
+            'type': 'AWS::KinesisVideo::SignalingChannel',
             'options': reqParams
         });
     } else {
