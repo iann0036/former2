@@ -47,7 +47,10 @@ cfn_exceptions = {
     'AWS::CloudFormation::Publisher': 'N/A',
     'AWS::CloudFormation::PublicTypeVersion': 'N/A',
     'AWS::Elasticsearch::Domain': 'N/A',
-    'AWS::EC2::TransitGatewayVpcAttachment': 'N/A (duplicate of AWS::EC2::TransitGatewayAttachment)'
+    'AWS::EC2::TransitGatewayVpcAttachment': 'N/A (duplicate of AWS::EC2::TransitGatewayAttachment)',
+    'AWS::CloudFormation::HookDefaultVersion': 'N/A',
+    'AWS::CloudFormation::HookTypeConfig': 'N/A',
+    'AWS::CloudFormation::HookVersion': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
