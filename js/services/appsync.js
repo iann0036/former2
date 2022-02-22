@@ -681,7 +681,11 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "appsync.graphqlschema") {
         var definition = '';
         try {
-            definition = String.fromCharCode.apply(null, obj.data.schema.data);
+            if (typeof process === 'object') {
+                definition = obj.data.schema.toString();
+            } else {
+                definition = String.fromCharCode.apply(null, obj.data.schema.data);
+            }
         } catch(err) {
             definition = obj.data.schema.toString();
         }

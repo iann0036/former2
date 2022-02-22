@@ -1282,7 +1282,11 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['AutoPublish'] = (obj.data.FunctionMetadata.Stage == "LIVE");
         try {
-            reqParams.cfn['FunctionCode'] = String.fromCharCode.apply(null, obj.data.FunctionCode.data);
+            if (typeof process === 'object') {
+                reqParams.cfn['FunctionCode'] = obj.data.FunctionCode.toString();
+            } else {
+                reqParams.cfn['FunctionCode'] = String.fromCharCode.apply(null, obj.data.FunctionCode.data);
+            }
         } catch(err) {
             reqParams.cfn['FunctionCode'] = obj.data.FunctionCode.toString();
         }
