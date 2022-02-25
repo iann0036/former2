@@ -1,6 +1,6 @@
 {
   "name": "former2",
-  "version": "0.2.62",
+  "version": "0.2.63",
   "description": "Command-line interface for the Former2.com tool",
   "keywords": [
     "aws",
@@ -21,6 +21,7 @@
     "colors": "^1.4.0",
     "commander": "^4.1.0",
     "deepmerge": "^4.2.2",
+    "former2": "^0.2.63",
     "logplease": "^1.2.15",
     "proxy-agent": "^3.1.1"
   },

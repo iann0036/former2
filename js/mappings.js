@@ -1835,7 +1835,7 @@ ${service}.${method}(${params});${was_blocked ? ' // blocked' : ''}`;
 
 function getResourceName(service, requestId, cfntype) {
     if (!requestId) {
-        console.trace("No request ID found for " + service);
+        f2trace("No request ID found for " + service);
         requestId = "";
     }
 
