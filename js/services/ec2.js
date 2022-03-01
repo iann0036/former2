@@ -1732,7 +1732,7 @@ async function updateDatatableComputeEC2() {
                                 instance.BlockDeviceMappings[i].Ebs["SnapshotId"] = data.Volumes[0].SnapshotId;
                                 instance.BlockDeviceMappings[i].Ebs["Iops"] = data.Volumes[0].Iops;
                                 instance.BlockDeviceMappings[i].Ebs["VolumeType"] = data.Volumes[0].VolumeType;
-                            });
+                            }).catch(() => { });
                         }
                     }
                 }
@@ -2143,7 +2143,7 @@ async function updateDatatableComputeEC2() {
 
         unblockUI('#section-compute-ec2-volumes-datatable');
         unblockUI('#section-compute-ec2-volumeattachments-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeNetworkInterfaces", {
         // no params
