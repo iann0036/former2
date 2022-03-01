@@ -2276,7 +2276,10 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
                 } else {
                     var optionvalue = processTfParameter(options[option], 4, index, tracked_resources);
                     if (typeof optionvalue !== "undefined") {
-                        if (optionvalue[0] == '{') {
+                        if (options[option].constructor === Set) {
+                            params += `
+    ${option} = ${optionvalue}`;
+                        } else if (optionvalue[0] == '{') {
                             params += `
     ${option} ${optionvalue}`;
                         } else {
