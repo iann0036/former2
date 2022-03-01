@@ -829,7 +829,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = {};
+            reqParams.tf['tags'] = new Set();
             obj.data.tags.forEach(tag => {
                 if (!tag.key.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({

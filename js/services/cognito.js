@@ -1009,7 +1009,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['UserPoolTags'] = obj.data.UserPoolTags;
         if (obj.data.UserPoolTags) {
-            reqParams.tf['tags'] = {};
+            reqParams.tf['tags'] = new Set();
             Object.keys(obj.data.UserPoolTags).forEach(tag => {
                 reqParams.tf['tags'][tag] = obj.data.UserPoolTags[tag];
             });

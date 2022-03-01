@@ -265,7 +265,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['provisioned_throughput_in_mibps'] = obj.data.ProvisionedThroughputInMibps;
         reqParams.cfn['FileSystemTags'] = obj.data.Tags;
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = {};
+            reqParams.tf['tags'] = new Set();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
                     reqParams.tf['tags'][tag['Key']] = tag['Value'];

@@ -309,7 +309,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['license_count'] = obj.data.LicenseCount;
         reqParams.tf['license_count_hard_limit'] = obj.data.LicenseCountHardLimit;
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = {};
+            reqParams.tf['tags'] = new Set();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
                     reqParams.tf['tags'][tag['Key']] = tag['Value'];
