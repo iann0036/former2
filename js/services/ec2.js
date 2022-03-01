@@ -2811,9 +2811,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['ingress'].push({
                             'cidr_blocks': [ipRange.CidrIp],
                             'description': ipRange.Description,
-                            'from_port': ipPermission.FromPort,
+                            'from_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.FromPort),
                             'protocol': ipPermission.IpProtocol,
-                            'to_port': ipPermission.ToPort
+                            'to_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.ToPort)
                         });
                     });
                 }
@@ -2829,9 +2829,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['ingress'].push({
                             'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
                             'description': ipv6Range.Description,
-                            'from_port': ipPermission.FromPort,
+                            'from_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.FromPort),
                             'protocol': ipPermission.IpProtocol,
-                            'to_port': ipPermission.ToPort
+                            'to_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.ToPort)
                         });
                     });
                 }
@@ -2849,9 +2849,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['ingress'].push({
                             'security_groups': [userIdGroupPair.GroupId || userIdGroupPair.GroupName],
                             'description': userIdGroupPair.Description,
-                            'from_port': ipPermission.FromPort,
+                            'from_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.FromPort),
                             'protocol': ipPermission.IpProtocol,
-                            'to_port': ipPermission.ToPort
+                            'to_port': (ipPermission.IpProtocol == "-1" ? 0 : ipPermission.ToPort)
                         });
                     });
                 }
@@ -2873,9 +2873,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['egress'].push({
                             'cidr_blocks': [ipRange.CidrIp],
                             'description': ipRange.Description,
-                            'from_port': ipPermissionsEgress.FromPort,
+                            'from_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.FromPort),
                             'protocol': ipPermissionsEgress.IpProtocol,
-                            'to_port': ipPermissionsEgress.ToPort
+                            'to_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.ToPort)
                         });
                     });
                 }
@@ -2891,9 +2891,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['egress'].push({
                             'ipv6_cidr_blocks': [ipv6Range.CidrIpv6],
                             'description': ipv6Range.Description,
-                            'from_port': ipPermissionsEgress.FromPort,
+                            'from_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.FromPort),
                             'protocol': ipPermissionsEgress.IpProtocol,
-                            'to_port': ipPermissionsEgress.ToPort
+                            'to_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.ToPort)
                         });
                     });
                 }
@@ -2909,9 +2909,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['egress'].push({
                             'security_groups': [userIdGroupPair.GroupId],
                             'description': userIdGroupPair.Description,
-                            'from_port': ipPermissionsEgress.FromPort,
+                            'from_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.FromPort),
                             'protocol': ipPermissionsEgress.IpProtocol,
-                            'to_port': ipPermissionsEgress.ToPort
+                            'to_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.ToPort)
                         });
                     });
                 }
@@ -2927,9 +2927,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         reqParams.tf['egress'].push({
                             'prefix_list_ids': [prefixListId.PrefixListId],
                             'description': prefixListId.Description,
-                            'from_port': ipPermissionsEgress.FromPort,
+                            'from_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.FromPort),
                             'protocol': ipPermissionsEgress.IpProtocol,
-                            'to_port': ipPermissionsEgress.ToPort
+                            'to_port': (ipPermissionsEgress.IpProtocol == "-1" ? 0 : ipPermissionsEgress.ToPort)
                         });
                     });
                 }
