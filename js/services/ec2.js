@@ -1863,16 +1863,23 @@ async function updateDatatableComputeEC2() {
         data.LoadBalancerDescriptions.forEach(async (loadBalancer) => {
             loadBalancer['Tags'] = await getResourceTags("arn:aws:elasticloadbalancing:region:account:loadbalancer/" + loadBalancer.LoadBalancerName);
 
-            $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('append', [{
-                f2id: loadBalancer.LoadBalancerName,
-                f2type: 'elb.loadbalancer',
-                f2data: loadBalancer,
-                f2region: region,
-                f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#LoadBalancers:search=' + loadBalancer.LoadBalancerName,
-                name: loadBalancer.LoadBalancerName,
-                vpcid: loadBalancer.VPCId,
-                scheme: loadBalancer.Scheme
-            }]);
+            await sdkcall("ELB", "describeLoadBalancerAttributes", {
+                LoadBalancerName: loadBalancer.LoadBalancerName
+            }, true).then(async (loadbalancerattributes) => {
+
+                loadBalancer['LoadBalancerAttributes'] = loadbalancerattributes['LoadBalancerAttributes'];
+
+                $('#section-compute-ec2-loadbalancers-datatable').deferredBootstrapTable('append', [{
+                    f2id: loadBalancer.LoadBalancerName,
+                    f2type: 'elb.loadbalancer',
+                    f2data: loadBalancer,
+                    f2region: region,
+                    f2link: 'https://console.aws.amazon.com/ec2/home?region=' + region + '#LoadBalancers:search=' + loadBalancer.LoadBalancerName,
+                    name: loadBalancer.LoadBalancerName,
+                    vpcid: loadBalancer.VPCId,
+                    scheme: loadBalancer.Scheme
+                }]);
+            });
         });
 
         unblockUI('#section-compute-ec2-loadbalancers-datatable');
@@ -3007,6 +3014,30 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['security_groups'] = obj.data.SecurityGroups;
         reqParams.cfn['Scheme'] = obj.data.Scheme;
         reqParams.tf['internal'] = (obj.data.Scheme == "internal");
+        if (obj.data.LoadBalancerAttributes) {
+            if (obj.data.LoadBalancerAttributes.CrossZoneLoadBalancing) {
+                reqParams.cfn['CrossZone'] = obj.data.LoadBalancerAttributes.CrossZoneLoadBalancing.Enabled;
+            }
+            if (obj.data.LoadBalancerAttributes.AccessLog) {
+                reqParams.cfn['AccessLoggingPolicy'] = {
+                    'EmitInterval': obj.data.LoadBalancerAttributes.AccessLog.EmitInterval,
+                    'Enabled': obj.data.LoadBalancerAttributes.AccessLog.Enabled,
+                    'S3BucketName': obj.data.LoadBalancerAttributes.AccessLog.S3BucketName,
+                    'S3BucketPrefix': obj.data.LoadBalancerAttributes.AccessLog.S3BucketPrefix
+                };
+            }
+            if (obj.data.LoadBalancerAttributes.ConnectionDraining) {
+                reqParams.cfn['ConnectionDrainingPolicy'] = {
+                    'Enabled': obj.data.LoadBalancerAttributes.ConnectionDraining.Enabled,
+                    'Timeout': obj.data.LoadBalancerAttributes.ConnectionDraining.Timeout
+                };
+            }
+            if (obj.data.LoadBalancerAttributes.ConnectionSettings) {
+                reqParams.cfn['ConnectionSettings'] = {
+                    'IdleTimeout': obj.data.LoadBalancerAttributes.ConnectionSettings.IdleTimeout
+                };
+            }
+        }
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
