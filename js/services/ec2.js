@@ -1744,7 +1744,7 @@ async function updateDatatableComputeEC2() {
                     if (data.UserData && data.UserData.Value && data.UserData.Value.length) {
                         instance["UserData"] = data.UserData.Value;
                     }
-                });
+                }).catch(() => { });
 
                 if (instance.ElasticGpuAssociations && instance.ElasticGpuAssociations.length) {
                     instance['ElasticGpus'] = [];
@@ -1753,7 +1753,7 @@ async function updateDatatableComputeEC2() {
                             ElasticGpuIds: [elasticGpuAssociation.ElasticGpuId]
                         }, true).then((data) => {
                             instance['ElasticGpus'].push(data.ElasticGpuSet[0]);
-                        });
+                        }).catch(() => { });
                     });
                 }
 
@@ -1773,7 +1773,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-instances-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeHosts", {
         // no params
@@ -1793,7 +1793,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-hosts-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeCapacityReservations", {
         // no params
@@ -1815,7 +1815,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-capacityreservations-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeCapacityReservationFleets", {
         // no params
@@ -1834,7 +1834,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-capacityreservationfleets-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeFleets", {
         // no params
@@ -1853,7 +1853,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-fleets-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ELB", "describeLoadBalancers", {
         // no params
@@ -1879,11 +1879,11 @@ async function updateDatatableComputeEC2() {
                     vpcid: loadBalancer.VPCId,
                     scheme: loadBalancer.Scheme
                 }]);
-            });
+            }).catch(() => { });
         });
 
         unblockUI('#section-compute-ec2-loadbalancers-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ELBv2", "describeLoadBalancers", {
         // no params
@@ -1908,7 +1908,7 @@ async function updateDatatableComputeEC2() {
                     scheme: loadBalancer.Scheme,
                     lbtype: loadBalancer.Type
                 }]);
-            });
+            }).catch(() => { });
 
             await sdkcall("ELBv2", "describeListeners", {
                 LoadBalancerArn: loadBalancer.LoadBalancerArn
@@ -1941,7 +1941,7 @@ async function updateDatatableComputeEC2() {
                                     isdefault: certificate.IsDefault
                                 }]);
                             });
-                        }) : Promise.resolve(),
+                        }).catch(() => { }) : Promise.resolve(),
                         sdkcall("ELBv2", "describeRules", {
                             ListenerArn: listener.ListenerArn
                         }, true).then((data) => {
@@ -1957,17 +1957,17 @@ async function updateDatatableComputeEC2() {
                                     isdefault: rule.IsDefault
                                 }]);
                             });
-                        })
+                        }).catch(() => { })
                     ]);
                 }));
-            });
+            }).catch(() => { });
         });
 
         unblockUI('#section-compute-ec2-v2loadbalancers-datatable');
         unblockUI('#section-compute-ec2-v2loadbalancerlisteners-datatable');
         unblockUI('#section-compute-ec2-v2loadbalancerlistenercertificates-datatable');
         unblockUI('#section-compute-ec2-v2loadbalancerlistenerrules-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("AutoScaling", "describeAutoScalingGroups", {
         // no params
@@ -2004,7 +2004,7 @@ async function updateDatatableComputeEC2() {
                         notificationtargetarn: lifecycleHook.NotificationTargetARN
                     }]);
                 });
-            });
+            }).catch(() => { });
 
             return sdkcall("AutoScaling", "describeWarmPool", {
                 AutoScalingGroupName: autoScalingGroup.AutoScalingGroupName
@@ -2025,7 +2025,7 @@ async function updateDatatableComputeEC2() {
         unblockUI('#section-compute-ec2-autoscalinggroups-datatable');
         unblockUI('#section-compute-ec2-autoscalinglifecyclehooks-datatable');
         unblockUI('#section-compute-ec2-warmpools-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("AutoScaling", "describeLaunchConfigurations", {
         // no params
@@ -2047,7 +2047,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-launchconfigurations-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeLaunchTemplates", {
         // no params
@@ -2071,12 +2071,12 @@ async function updateDatatableComputeEC2() {
                         latestversion: launchTemplate.LatestVersionNumber,
                         ltid: launchTemplate.LaunchTemplateId
                     }]);
-                });
+                }).catch(() => { });
             }));
         }
 
         unblockUI('#section-compute-ec2-launchtemplates-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ELBv2", "describeTargetGroups", {
         // no params
@@ -2088,7 +2088,7 @@ async function updateDatatableComputeEC2() {
                 TargetGroupArn: targetGroup.TargetGroupArn
             }, true).then((data) => {
                 targetGroup["Targets"] = data.TargetHealthDescriptions;
-            });
+            }).catch(() => { });
 
             return sdkcall("ELBv2", "describeTargetGroupAttributes", {
                 TargetGroupArn: targetGroup.TargetGroupArn
@@ -2106,11 +2106,11 @@ async function updateDatatableComputeEC2() {
                     vpcid: targetGroup.VpcId,
                     targettype: targetGroup.targettype
                 }]);
-            });
+            }).catch(() => { });
         }));
 
         unblockUI('#section-compute-ec2-v2targetgroups-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeVolumes", {
         // no params
@@ -2190,7 +2190,7 @@ async function updateDatatableComputeEC2() {
 
         unblockUI('#section-compute-ec2-networkinterfaces-datatable');
         unblockUI('#section-compute-ec2-networkinterfaceattachments-datatable');
-    });
+    }).catch(() => { });
 
     sdkcall("EC2", "describeNetworkInterfacePermissions", {
         // no params
@@ -2212,7 +2212,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-networkinterfacepermissions-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeSpotFleetRequests", {
         // no params
@@ -2234,7 +2234,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-spotrequests-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describePlacementGroups", {
         // no params
@@ -2255,7 +2255,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-placementgroups-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("AutoScaling", "describePolicies", {
         // no params
@@ -2277,7 +2277,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-autoscalingpolicies-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("AutoScaling", "describeScheduledActions", {
         // no params
@@ -2298,7 +2298,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-autoscalingscheduledactions-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeSecurityGroups", {
         // no params
@@ -2325,7 +2325,7 @@ async function updateDatatableComputeEC2() {
         });
 
         unblockUI('#section-compute-ec2-securitygroups-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeFlowLogs", {
         // no params
@@ -2348,7 +2348,7 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-flowlogs-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("DLM", "getLifecyclePolicies", {
         // no params
@@ -2370,12 +2370,12 @@ async function updateDatatableComputeEC2() {
                         description: data.Policy.Description,
                         datecreated: data.Policy.DateCreated
                     }]);
-                });
+                }).catch(() => { });
             }));
         }
 
         unblockUI('#section-compute-ec2-snapshotlifecyclepolicies-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ApplicationAutoScaling", "describeScalableTargets", {
         ServiceNamespace: "ec2"
@@ -2400,11 +2400,11 @@ async function updateDatatableComputeEC2() {
                     mincapacity: target.MinCapacity,
                     maxcapacity: target.MaxCapacity
                 }]);
-            });
+            }).catch(() => { });
         }));
 
         unblockUI('#section-compute-ec2-applicationautoscalingscalabletargets-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ApplicationAutoScaling", "describeScalingPolicies", {
         ServiceNamespace: "ec2"
@@ -2427,7 +2427,7 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-applicationautoscalingscalingpolicies-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("EC2", "describeKeyPairs", {
         // no params
@@ -2448,7 +2448,7 @@ async function updateDatatableComputeEC2() {
         }
 
         unblockUI('#section-compute-ec2-keypairs-datatable');
-    });
+    }).catch(() => { });
 
     await sdkcall("ACM", "listCertificates", {
         // no params
@@ -2472,7 +2472,7 @@ async function updateDatatableComputeEC2() {
                         rolearn: associatedrole.AssociatedRoleArn
                     }]);
                 });
-            });
+            }).catch(() => { });
         }));
 
         unblockUI('#section-compute-ec2-enclavecertificateiamroleassociations-datatable');
