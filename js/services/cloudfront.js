@@ -1154,11 +1154,17 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             }
             parametersInCacheKeyAndForwardedToOrigin = {
                 'EnableAcceptEncodingGzip': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingGzip,
-                'EnableAcceptEncodingBrotli': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingBrotli,
-                'CookiesConfig': cookiesConfig,
-                'HeadersConfig': headersConfig,
-                'QueryStringsConfig': queryStringsConfig
+                'EnableAcceptEncodingBrotli': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingBrotli
             };
+            if (cookiesConfig) {
+                parametersInCacheKeyAndForwardedToOrigin['CookiesConfig'] = cookiesConfig;
+            }
+            if (headersConfig) {
+                parametersInCacheKeyAndForwardedToOrigin['HeadersConfig'] = headersConfig;
+            }
+            if (queryStringsConfig) {
+                parametersInCacheKeyAndForwardedToOrigin['QueryStringsConfig'] = queryStringsConfig;
+            }
         }
         reqParams.cfn['CachePolicyConfig'] = {
             'Name': obj.data.CachePolicyConfig.Name,
@@ -1290,6 +1296,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
         } catch(err) {
             reqParams.cfn['FunctionCode'] = obj.data.FunctionCode.toString();
         }
+        reqParams.cfn['FunctionConfig'] = obj.data.FunctionConfig;
 
         tracked_resources.push({
             'obj': obj,
