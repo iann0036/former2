@@ -90,6 +90,70 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Batch Scram Secrets': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Cluster',
+                        field: 'cluster',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -97,14 +161,16 @@ sections.push({
 async function updateDatatableAnalyticsMSK() {
     blockUI('#section-analytics-msk-clusters-datatable');
     blockUI('#section-analytics-msk-connectors-datatable');
+    blockUI('#section-analytics-msk-configurations-datatable');
+    blockUI('#section-analytics-msk-batchscramsecrets-datatable');
 
     await sdkcall("Kafka", "listClusters", {
         // no params
     }, false).then(async (data) => {
         $('#section-analytics-msk-clusters-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.ClusterInfoList.map(cluster => {
-            return sdkcall("Kafka", "describeCluster", {
+        await Promise.all(data.ClusterInfoList.map(async (cluster) => {
+            await sdkcall("Kafka", "describeCluster", {
                 ClusterArn: cluster.ClusterArn
             }, true).then(async (data) => {
                 $('#section-analytics-msk-clusters-datatable').deferredBootstrapTable('append', [{
@@ -115,6 +181,21 @@ async function updateDatatableAnalyticsMSK() {
                     name: data.ClusterInfo.ClusterName,
                     numberofbrokernodes: data.ClusterInfo.NumberOfBrokerNodes,
                     creationtime: data.ClusterInfo.CreationTime
+                }]);
+            });
+
+            return sdkcall("Kafka", "listScramSecrets", {
+                ClusterArn: cluster.ClusterArn
+            }, true).then(async (data) => {
+                $('#section-analytics-msk-batchscramsecrets-datatable').deferredBootstrapTable('append', [{
+                    f2id: cluster.ClusterArn + " Batch Scram Secret",
+                    f2type: 'msk.batchscramsecret',
+                    f2data: {
+                        'ClusterArn': cluster.ClusterArn,
+                        'SecretArnList': data.SecretArnList
+                    },
+                    f2region: region,
+                    cluster: cluster.ClusterArn
                 }]);
             });
         }));
@@ -141,8 +222,38 @@ async function updateDatatableAnalyticsMSK() {
         }));
     }).catch(() => { });
 
+    await sdkcall("KafkaConnect", "listConfigurations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-msk-connectors-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Configurations.map(configuration => {
+            return sdkcall("KafkaConnect", "describeConfiguration", {
+                Arn: configuration.Arn
+            }, true).then(async (data) => {
+                await sdkcall("KafkaConnect", "describeConfigurationRevision", {
+                    Arn: configuration.Arn,
+                    Revision: data.LatestRevision.Revision
+                }, true).then(async (revisiondata) => {
+                    data['ServerProperties'] = revisiondata.ServerProperties;
+                });
+
+                $('#section-analytics-msk-configurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'msk.configuration',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-analytics-msk-clusters-datatable');
     unblockUI('#section-analytics-msk-connectors-datatable');
+    unblockUI('#section-analytics-msk-configurations-datatable');
+    unblockUI('#section-analytics-msk-batchscramsecrets-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -318,6 +429,40 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ConnectorArn': obj.data.connectorArn
                 }
             }
+        });
+    } else if (obj.type == "msk.batchscramsecret") {
+        reqParams.cfn['ClusterArn'] = obj.data.ClusterArn;
+        reqParams.cfn['SecretArnList'] = obj.data.SecretArnList;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('msk', obj.id, 'AWS::MSK::BatchScramSecret'),
+            'region': obj.region,
+            'service': 'msk',
+            'type': 'AWS::MSK::BatchScramSecret',
+            'options': reqParams
+        });
+    } else if (obj.type == "msk.configuration") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['KafkaVersionsList'] = obj.data.KafkaVersions;
+        try {
+            if (typeof process === 'object') {
+                reqParams.cfn['ServerProperties'] = obj.data.ServerProperties.toString();
+            } else {
+                reqParams.cfn['ServerProperties'] = String.fromCharCode.apply(null, obj.data.ServerProperties.data);
+            }
+        } catch(err) {
+            reqParams.cfn['ServerProperties'] = obj.data.ServerProperties.toString();
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('msk', obj.id, 'AWS::MSK::Configuration'),
+            'region': obj.region,
+            'service': 'msk',
+            'type': 'AWS::MSK::Configuration',
+            'options': reqParams
         });
     } else {
         return false;

@@ -254,6 +254,45 @@ sections.push({
                 ]
             ]
         },
+        'FSx Lustre Locations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'URI',
+                        field: 'uri',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'SMB Locations': {
             'columns': [
                 [
@@ -381,6 +420,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     blockUI('#section-migrationandtransfer-datasync-nfslocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-s3locations-datatable');
     blockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
+    blockUI('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
@@ -436,6 +476,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
         $('#section-migrationandtransfer-datasync-nfslocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-s3locations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable').deferredBootstrapTable('removeAll');
+        $('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-smblocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-objectstoragelocations-datatable').deferredBootstrapTable('removeAll');
         $('#section-migrationandtransfer-datasync-hdfslocations-datatable').deferredBootstrapTable('removeAll');
@@ -496,6 +537,19 @@ async function updateDatatableMigrationAndTransferDataSync() {
                         creationtime: data.CreationTime
                     }]);
                 });
+            } else if (location.LocationUri.split(":")[0].toUpperCase() == "FSXL") {
+                return sdkcall("DataSync", "describeLocationFsxLustre", {
+                    LocationArn: location.LocationArn
+                }, true).then((data) => {
+                    $('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.LocationArn,
+                        f2type: 'datasync.locationfsxlustre',
+                        f2data: data,
+                        f2region: region,
+                        uri: data.LocationUri,
+                        creationtime: data.CreationTime
+                    }]);
+                });
             } else if (location.LocationUri.split(":")[0].toUpperCase() == "SMB") {
                 return sdkcall("DataSync", "describeLocationSmb", {
                     LocationArn: location.LocationArn
@@ -547,6 +601,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     unblockUI('#section-migrationandtransfer-datasync-nfslocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-s3locations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
+    unblockUI('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
@@ -765,6 +820,27 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'datasync',
             'type': 'AWS::DataSync::LocationFSxWindows',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locationfsxlustre") {
+        reqParams.cfn['FsxFilesystemArn'] = obj.data.LocationArn;
+        if (obj.data.LocationUri) {
+            var uri = new URL(obj.data.LocationUri);
+            reqParams.cfn['Subdirectory'] = uri.pathname;
+        }
+        reqParams.cfn['SecurityGroupArns'] = obj.data.SecurityGroupArns;
+
+        /*
+        TODO:
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationFSxLustre'),
+            'region': obj.region,
+            'service': 'datasync',
+            'type': 'AWS::DataSync::LocationFSxLustre',
             'options': reqParams
         });
     } else if (obj.type == "datasync.locationsmb") {
