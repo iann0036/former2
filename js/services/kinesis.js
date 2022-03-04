@@ -1176,7 +1176,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'VpcConfiguration': destination.ElasticsearchDestinationDescription.VpcConfigurationDescription
                 };
             }
-            if (destination.ElasticsearchDestinationDescription) {
+            if (destination.SplunkDestinationDescription) {
                 var s3Configuration = null;
                 if (destination.SplunkDestinationDescription.S3DestinationDescription) {
                     s3Configuration = {
