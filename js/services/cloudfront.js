@@ -1125,10 +1125,12 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers) {
                     headers = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.Headers.Items;
                 }
-                headersConfig = {
-                    'HeaderBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.HeaderBehavior,
-                    'Headers': headers
-                };
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.HeaderBehavior || headers) {
+                    headersConfig = {
+                        'HeaderBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.HeadersConfig.HeaderBehavior,
+                        'Headers': headers
+                    };
+                }
             }
             var cookiesConfig = null;
             if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig) {
@@ -1136,10 +1138,12 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies) {
                     cookies = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies.Items;
                 }
-                cookiesConfig = {
-                    'CookieBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior,
-                    'Cookies': cookies
-                };
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior || cookies) {
+                    cookiesConfig = {
+                        'CookieBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior,
+                        'Cookies': cookies
+                    };
+                }
             }
             var queryStringsConfig = null;
             if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig) {
@@ -1147,10 +1151,12 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings) {
                     queryStrings = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings.Items;
                 }
-                queryStringsConfig = {
-                    'QueryStringBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior,
-                    'QueryStrings': queryStrings
-                };
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior || queryStrings) {
+                    queryStringsConfig = {
+                        'QueryStringBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior,
+                        'QueryStrings': queryStrings
+                    };
+                }
             }
             parametersInCacheKeyAndForwardedToOrigin = {
                 'EnableAcceptEncodingGzip': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.EnableAcceptEncodingGzip,
