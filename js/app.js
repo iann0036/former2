@@ -1875,7 +1875,7 @@ function updateIdentity() {
                 resolve();
             }).catch(err => {
                 $('#user-id').html("");
-                reject();
+                resolve();
             });
         } else if (window.localStorage.getItem('credentials-accesskey')) {
             var account = "unknown-account";
