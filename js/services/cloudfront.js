@@ -1138,9 +1138,9 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies) {
                     cookies = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.Cookies.Items;
                 }
-                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior || cookies) {
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookieBehavior || cookies) {
                     cookiesConfig = {
-                        'CookieBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookiesBehavior,
+                        'CookieBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.CookiesConfig.CookieBehavior,
                         'Cookies': cookies
                     };
                 }
@@ -1151,9 +1151,9 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings) {
                     queryStrings = obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStrings.Items;
                 }
-                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior || queryStrings) {
+                if (obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringBehavior || queryStrings) {
                     queryStringsConfig = {
-                        'QueryStringBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringsBehavior,
+                        'QueryStringBehavior': obj.data.CachePolicyConfig.ParametersInCacheKeyAndForwardedToOrigin.QueryStringsConfig.QueryStringBehavior,
                         'QueryStrings': queryStrings
                     };
                 }
@@ -1208,7 +1208,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 cookies = obj.data.OriginRequestPolicyConfig.CookiesConfig.Cookies.Items;
             }
             cookiesConfig = {
-                'CookieBehavior': obj.data.OriginRequestPolicyConfig.CookiesConfig.CookiesBehavior,
+                'CookieBehavior': obj.data.OriginRequestPolicyConfig.CookiesConfig.CookieBehavior,
                 'Cookies': cookies
             };
         }
@@ -1219,7 +1219,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 queryStrings = obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStrings.Items;
             }
             queryStringsConfig = {
-                'QueryStringBehavior': obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStringsBehavior,
+                'QueryStringBehavior': obj.data.OriginRequestPolicyConfig.QueryStringsConfig.QueryStringBehavior,
                 'QueryStrings': queryStrings
             };
         }
