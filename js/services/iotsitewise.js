@@ -332,37 +332,14 @@ async function updateDatatableInternetofThingsSiteWise() {
         }));
     }).catch(() => { });
 
-    await sdkcall("IoTSiteWise", "listAssets", {
-        // no params
-    }, false).then(async (data) => {
-        $('#section-internetofthings-sitewise-assets-datatable').deferredBootstrapTable('removeAll');
-
-        await Promise.all(data.assetSummaries.map(async (asset) => {
-            return sdkcall("IoTSiteWise", "describeAsset", {
-                assetId: asset.id
-            }, true).then(async (data) => {
-                data['Tags'] = await getResourceTags(data.assetArn);
-
-                $('#section-internetofthings-sitewise-assets-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.assetArn,
-                    f2type: 'iotsitewise.asset',
-                    f2data: data,
-                    f2region: region,
-                    id: data.assetId,
-                    name: data.assetName,
-                    modelid: data.assetModelId
-                }]);
-            });
-        }));
-    }).catch(() => { });
-
     await sdkcall("IoTSiteWise", "listAssetModels", {
         // no params
     }, false).then(async (data) => {
         $('#section-internetofthings-sitewise-assetmodels-datatable').deferredBootstrapTable('removeAll');
+        $('#section-internetofthings-sitewise-assets-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.assetModelSummaries.map(async (assetmodel) => {
-            return sdkcall("IoTSiteWise", "describeAssetModel", {
+            await sdkcall("IoTSiteWise", "describeAssetModel", {
                 assetModelId: assetmodel.id
             }, true).then(async (data) => {
                 data['Tags'] = await getResourceTags(data.assetModelArn);
@@ -377,6 +354,29 @@ async function updateDatatableInternetofThingsSiteWise() {
                     description: data.assetModelDescription
                 }]);
             });
+
+            return sdkcall("IoTSiteWise", "listAssets", {
+                assetModelId: assetmodel.id
+            }, false).then(async (data) => {
+
+                await Promise.all(data.assetSummaries.map(async (asset) => {
+                    return sdkcall("IoTSiteWise", "describeAsset", {
+                        assetId: asset.id
+                    }, true).then(async (data) => {
+                        data['Tags'] = await getResourceTags(data.assetArn);
+
+                        $('#section-internetofthings-sitewise-assets-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.assetArn,
+                            f2type: 'iotsitewise.asset',
+                            f2data: data,
+                            f2region: region,
+                            id: data.assetId,
+                            name: data.assetName,
+                            modelid: data.assetModelId
+                        }]);
+                    });
+                }));
+            }).catch(() => { });
         }));
     }).catch(() => { });
 
