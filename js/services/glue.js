@@ -1325,21 +1325,51 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "glue.job") {
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['LogUri'] = obj.data.LogUri;
         reqParams.cfn['Role'] = obj.data.Role;
+        reqParams.tf['role_arn'] = obj.data.Role;
         reqParams.cfn['ExecutionProperty'] = obj.data.ExecutionProperty;
+        if (obj.data.ExecutionProperty) {
+            reqParams.tf['execution_property'] = {
+                'max_concurrent_runs': obj.data.ExecutionProperty.MaxConcurrentRuns
+            };
+        }
         reqParams.cfn['Command'] = obj.data.Command;
+        if (obj.data.Command) {
+            reqParams.tf['command'] = {
+                'name': obj.data.Command.Name,
+                'python_version': obj.data.Command.PythonVersion,
+                'script_location': obj.data.Command.ScriptLocation
+            };
+        }
         reqParams.cfn['DefaultArguments'] = obj.data.DefaultArguments;
+        reqParams.tf['default_arguments'] = obj.data.DefaultArguments;
         reqParams.cfn['Connections'] = obj.data.Connections;
+        if (obj.data.Connections) {
+            reqParams.tf['connections'] = obj.data.Connections.Connections;
+        }
         reqParams.cfn['MaxRetries'] = obj.data.MaxRetries;
+        reqParams.tf['max_retries'] = obj.data.MaxRetries;
         reqParams.cfn['AllocatedCapacity'] = obj.data.AllocatedCapacity;
         reqParams.cfn['Timeout'] = obj.data.Timeout;
+        reqParams.tf['timeout'] = obj.data.Timeout;
         reqParams.cfn['NotificationProperty'] = obj.data.NotificationProperty;
+        if (obj.data.NotificationProperty) {
+            reqParams.tf['notification_property'] = {
+                'notify_delay_after': obj.data.NotificationProperty.NotifyDelayAfter
+            };
+        }
         reqParams.cfn['GlueVersion'] = obj.data.GlueVersion;
+        reqParams.tf['glue_version'] = obj.data.GlueVersion;
         reqParams.cfn['MaxCapacity'] = obj.data.MaxCapacity;
+        reqParams.tf['max_capacity'] = obj.data.MaxCapacity;
         reqParams.cfn['NumberOfWorkers'] = obj.data.NumberOfWorkers;
+        reqParams.tf['number_of_workers'] = obj.data.NumberOfWorkers;
         reqParams.cfn['WorkerType'] = obj.data.WorkerType;
+        reqParams.tf['worker_type'] = obj.data.WorkerType;
 
         tracked_resources.push({
             'obj': obj,
@@ -1347,7 +1377,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'glue',
             'type': 'AWS::Glue::Job',
-            'options': reqParams
+            'terraformType': 'aws_glue_job',
+            'options': reqParams,
+            'returnValues': {
+                'Terraform': {
+                    'id': obj.data.Name
+                }
+            }
         });
     } else if (obj.type == "glue.trigger") {
         reqParams.cfn['Name'] = obj.data.Name;
