@@ -683,17 +683,25 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         $('#section-networkingandcontentdelivery-cloudfront-functions-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.FunctionList.Items.map(async (func) => {
+            for (let item of data.FunctionList.Items) { // 2 items in DEVELOPMENT and LIVE map to one CFN output, if we find both, throw away DEVELOPMENT
+                if (func.FunctionMetadata.Stage == "DEVELOPMENT" && item.FunctionMetadata.Stage == "LIVE") {
+                    return Promise.resolve();
+                }
+            }
+
             return sdkcall("CloudFront", "describeFunction", {
-                Name: func.Name
+                Name: func.Name,
+                Stage: func.FunctionMetadata.Stage
             }, true).then(async (data) => {
                 await sdkcall("CloudFront", "getFunction", {
-                    Name: func.Name
+                    Name: func.Name,
+                    Stage: func.FunctionMetadata.Stage
                 }, true).then(codedata => {
                     data.FunctionSummary['FunctionCode'] = codedata.FunctionCode;
                 });
 
                 $('#section-networkingandcontentdelivery-cloudfront-functions-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.FunctionSummary.FunctionMetadata.FunctionARN,
+                    f2id: data.FunctionSummary.FunctionMetadata.FunctionARN + " " + data.FunctionSummary.FunctionMetadata.Stage,
                     f2type: 'cloudfront.function',
                     f2data: data.FunctionSummary,
                     f2region: region,
