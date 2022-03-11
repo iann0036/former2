@@ -227,6 +227,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Identity Provider Configs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'clustername',
+                        title: 'Cluster Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -237,6 +275,7 @@ async function updateDatatableContainersEKS() {
     blockUI('#section-containers-eks-fargateprofiles-datatable');
     blockUI('#section-containers-eks-emrvirtualclusters-datatable');
     blockUI('#section-containers-eks-addons-datatable');
+    blockUI('#section-containers-eks-identityproviderconfigs-datatable');
 
     await sdkcall("EKS", "listClusters", {
         // no params
@@ -245,6 +284,7 @@ async function updateDatatableContainersEKS() {
         $('#section-containers-eks-nodegroups-datatable').deferredBootstrapTable('removeAll');
         $('#section-containers-eks-fargateprofiles-datatable').deferredBootstrapTable('removeAll');
         $('#section-containers-eks-addons-datatable').deferredBootstrapTable('removeAll');
+        $('#section-containers-eks-identityproviderconfigs-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.clusters.map(async (cluster) => {
             return Promise.all([
@@ -320,6 +360,27 @@ async function updateDatatableContainersEKS() {
                             }]);
                         });
                     }));
+                }),
+                sdkcall("EKS", "listIdentityProviderConfigs", {
+                    clusterName: cluster
+                }, true).then(async (data) => {
+                    await Promise.all(data.identityProviderConfigs.map(async (identityProviderConfig) => {
+                        return sdkcall("EKS", "describeIdentityProviderConfig", {
+                            clusterName: cluster,
+                            identityProviderConfig: identityProviderConfig
+                        }, true).then((data) => {
+                            data.oidc['cluster'] = cluster
+
+                            $('#section-containers-eks-identityproviderconfigs-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.oidc.identityProviderConfigArn,
+                                f2type: 'eks.identityproviderconfig',
+                                f2data: data.oidc,
+                                f2region: region,
+                                name: data.oidc.identityProviderConfigName,
+                                clustername: cluster
+                            }]);
+                        });
+                    }));
                 })
             ]);
         }));
@@ -328,6 +389,7 @@ async function updateDatatableContainersEKS() {
         unblockUI('#section-containers-eks-nodegroups-datatable');
         unblockUI('#section-containers-eks-fargateprofiles-datatable');
         unblockUI('#section-containers-eks-addons-datatable');
+        unblockUI('#section-containers-eks-identityproviderconfigs-datatable');
     });
 
     await sdkcall("EMRcontainers", "listVirtualClusters", {
@@ -562,6 +624,52 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'GetAtt': {
                     'Arn': obj.data.addonArn
+                }
+            }
+        });
+    } else if (obj.type == "eks.identityproviderconfig") {
+        reqParams.cfn['ClusterName'] = obj.data.cluster;
+        reqParams.cfn['IdentityProviderConfigName'] = obj.data.identityProviderConfigName;
+        reqParams.cfn['Type'] = 'oidc';
+        let requiredclaims = [];
+        for (let requiredclaimname of Object.keys(obj.data.requiredClaims)) {
+            requiredclaims.push({
+                'Key': requiredclaimname,
+                'Value': obj.data.requiredClaims[requiredclaimname]
+            });
+        }
+        reqParams.cfn['Oidc'] = {
+            'ClientId': obj.data.clientId,
+            'GroupsClaim': obj.data.groupsClaim,
+            'GroupsPrefix': obj.data.groupsPrefix,
+            'IssuerUrl': obj.data.issuerUrl,
+            'RequiredClaims': requiredclaims,
+            'UsernameClaim': obj.data.usernameClaim,
+            'UsernamePrefix': obj.data.usernamePrefix
+        };
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.tags).forEach(tagKey => {
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.tags[tagKey]
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eks', obj.id, 'AWS::EKS::IdentityProviderConfig'),
+            'region': obj.region,
+            'service': 'eks',
+            'type': 'AWS::EKS::IdentityProviderConfig',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.identityProviderConfigName,
+                'GetAtt': {
+                    'IdentityProviderConfigArn': obj.data.identityProviderConfigArn
                 }
             }
         });
