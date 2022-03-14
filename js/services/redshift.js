@@ -589,8 +589,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.cfn['HsmClientCertificateIdentifier'] = obj.data.HsmStatus.HsmClientCertificateIdentifier;
             reqParams.cfn['HsmConfigurationIdentifier'] = obj.data.HsmStatus.HsmConfigurationIdentifier;
         }
-        reqParams.cfn['ElasticIp'] = obj.data.ElasticIpStatus.ElasticIp;
-        reqParams.tf['elastic_ip'] = obj.data.ElasticIpStatus.ElasticIp;
+        if (obj.data.ElasticIpStatus) {
+            reqParams.cfn['ElasticIp'] = obj.data.ElasticIpStatus.ElasticIp;
+            reqParams.tf['elastic_ip'] = obj.data.ElasticIpStatus.ElasticIp;
+        }
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
             reqParams.tf['tags'] = new Set();
