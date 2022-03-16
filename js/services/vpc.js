@@ -5198,6 +5198,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['route_table_id'] = obj.data.RouteTableId;
         reqParams.cfn['CarrierGatewayId'] = obj.data.CarrierGatewayId;
         reqParams.cfn['VpcEndpointId'] = obj.data.VpcEndpointId;
+        reqParams.cfn['TransitGatewayId'] = obj.data.TransitGatewayId;
 
         tracked_resources.push({
             'obj': obj,
@@ -5242,7 +5243,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'ec2',
             'type': 'AWS::EC2::TransitGateway',
             'terraformType': 'aws_ec2_transit_gateway',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.TransitGatewayId
+            }
         });
     } else if (obj.type == "ec2.transitgatewayroute") {
         reqParams.cfn['DestinationCidrBlock'] = obj.data.DestinationCidrBlock;
