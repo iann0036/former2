@@ -652,6 +652,101 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.assetModelCompositeModels) {
+            reqParams.cfn['AssetModelCompositeModels'] = [];
+            obj.data.assetModelCompositeModels.forEach(assetmodelcompositemodel => {
+                var compositemodelproperties = null;
+                if (assetmodelcompositemodel.properties) {
+                    compositemodelproperties = [];
+                    assetmodelcompositemodel.properties.forEach(prop => {
+                        var proptype = null;
+                        if (prop.type) {
+                            var typename = null;
+                            var attribute = null;
+                            if (prop.type.attribute) {
+                                typename = "Attribute";
+                                attribute = {
+                                    'DefaultValue': prop.type.attribute.defaultValue
+                                };
+                            }
+                            var metric = null;
+                            if (prop.type.metric) {
+                                typename = "Metric";
+                                var variables = null;
+                                if (prop.type.metric.variables) {
+                                    variables = [];
+                                    prop.type.metric.variables.forEach(variable => {
+                                        variables.push({
+                                            'Name': variable.name,
+                                            'Value': {
+                                                'PropertyLogicalId': variable.value.propertyId,
+                                                'HierarchyLogicalId': variable.value.hierarchyId
+                                            }
+                                        });
+                                    });
+                                }
+                                var window = null;
+                                if (prop.type.metric.window) {
+                                    var tumbling = null;
+                                    if (prop.type.metric.window.tumbling) {
+                                        tumbling = {
+                                            'Interval': prop.type.metric.window.tumbling.interval,
+                                            'Offset': prop.type.metric.window.tumbling.offset
+                                        };
+                                    }
+                                    window = {
+                                        'Tumbling': tumbling
+                                    };
+                                }
+                                metric = {
+                                    'Expression': prop.type.metric.expression,
+                                    'Variables': variables,
+                                    'Window': window
+                                };
+                            }
+                            var transform = null;
+                            if (prop.type.transform) {
+                                typename = "Transform";
+                                let variables = [];
+                                prop.type.transform.variables.forEach(variable => {
+                                    variables.push({
+                                        'Name': variable.name,
+                                        'Value': {
+                                            'PropertyLogicalId': variable.value.propertyId,
+                                            'HierarchyLogicalId': variable.value.hierarchyId
+                                        }
+                                    });
+                                });
+                                transform = {
+                                    'Expression': prop.type.transform.expression,
+                                    'Variables': variables
+                                };
+                            }
+                            proptype = {
+                                'Attribute': attribute,
+                                'Metric': metric,
+                                'Transform': transform,
+                                'TypeName': typename
+                            };
+                        }
+                        compositemodelproperties.push({
+                            'DataType': prop.dataType,
+                            'DataTypeSpec': prop.dataTypeSpec,
+                            'LogicalId': prop.id,
+                            'Name': prop.name,
+                            'Type': proptype,
+                            'Unit': prop.unit
+                        });
+                    });
+                }
+                reqParams.cfn['AssetModelCompositeModels'].push({
+                    'Name': assetmodelcompositemodel.name,
+                    'Description': assetmodelcompositemodel.description,
+                    'Type': assetmodelcompositemodel.type,
+                    'CompositeModelProperties': compositemodelproperties
+                });
+            });
+        }
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         tracked_resources.push({
