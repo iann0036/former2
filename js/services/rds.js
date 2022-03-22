@@ -798,10 +798,7 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBParameterGroups", {
-        Filters: [{
-            Name: 'engine',
-            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
-        }]
+        // no params
     }, true).then(async (data) => {
         $('#section-database-rds-parametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -830,10 +827,7 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeDBClusterParameterGroups", {
-        Filters: [{
-            Name: 'engine',
-            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
-        }]
+        // no params
     }, true).then(async (data) => {
         $('#section-database-rds-clusterparametergroups-datatable').deferredBootstrapTable('removeAll');
 
@@ -862,10 +856,7 @@ async function updateDatatableDatabaseRDS() {
     });
 
     await sdkcall("RDS", "describeOptionGroups", {
-        Filters: [{
-            Name: 'engine',
-            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
-        }]
+        // no params
     }, true).then((data) => {
         $('#section-database-rds-optiongroups-datatable').deferredBootstrapTable('removeAll');
 
