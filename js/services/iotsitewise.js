@@ -673,9 +673,13 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                             if (prop.type.metric) {
                                 typename = "Metric";
                                 var variables = null;
+                                console.warn("#225 - Hit 1");
                                 if (prop.type.metric.variables) {
+                                    console.warn("#225 - Hit 2");
                                     variables = [];
                                     prop.type.metric.variables.forEach(variable => {
+                                        console.warn("#225 - Hit 3");
+                                        console.log(variable);
                                         variables.push({
                                             'Name': variable.name,
                                             'Value': {
@@ -683,6 +687,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                                                 'HierarchyLogicalId': variable.value.hierarchyId
                                             }
                                         });
+                                        console.log("#225 - Hit 4");
+                                        console.log(variables);
                                     });
                                 }
                                 var window = null;
@@ -703,6 +709,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                                     'Variables': variables,
                                     'Window': window
                                 };
+                                console.log("#225 - Hit 5");
+                                console.log(metric);
                             }
                             var transform = null;
                             if (prop.type.transform) {
