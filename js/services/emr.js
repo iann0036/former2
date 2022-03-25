@@ -499,7 +499,12 @@ async function updateDatatableAnalyticsEMR() {
     blockUI('#section-analytics-emr-studiosessionmappings-datatable');
 
     await sdkcall("EMR", "listClusters", {
-        // no params
+        ClusterStates: [
+            "RUNNING",
+            "STARTING",
+            "BOOTSTRAPPING",
+            "WAITING"
+        ],
     }, true).then(async (data) => {
         $('#section-analytics-emr-clusters-datatable').deferredBootstrapTable('removeAll');
         $('#section-analytics-emr-instancefleetconfigs-datatable').deferredBootstrapTable('removeAll');
