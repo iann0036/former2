@@ -199,39 +199,41 @@ async function updateDatatableContainersECR() {
         unblockUI('#section-containers-ecr-repositories-datatable');
     }).catch(() => { });
 
-    await sdkcall("ECRPUBLIC", "describeRepositories", {
-        // no params
-    }, true).then(async (data) => {
-        $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('removeAll');
+    if (region == "us-east-1") {
+        await sdkcall("ECRPUBLIC", "describeRepositories", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.repositories.map(async (repository) => {
-            await sdkcall("ECRPUBLIC", "getRepositoryPolicy", {
-                repositoryName: repository.repositoryName
-            }, false).then((data) => {
-                repository['policy'] = data.policyText;
-            }).catch(() => { });
+            await Promise.all(data.repositories.map(async (repository) => {
+                await sdkcall("ECRPUBLIC", "getRepositoryPolicy", {
+                    repositoryName: repository.repositoryName
+                }, false).then((data) => {
+                    repository['policy'] = data.policyText;
+                }).catch(() => { });
 
-            await sdkcall("ECRPUBLIC", "getRepositoryCatalogData", {
-                repositoryName: repository.repositoryName
-            }, false).then((data) => {
-                repository['catalogData'] = data.catalogData;
-            }).catch(() => { });
+                await sdkcall("ECRPUBLIC", "getRepositoryCatalogData", {
+                    repositoryName: repository.repositoryName
+                }, false).then((data) => {
+                    repository['catalogData'] = data.catalogData;
+                }).catch(() => { });
 
-            $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('append', [{
-                f2id: repository.repositoryArn,
-                f2type: 'ecr.publicrepository',
-                f2data: repository,
-                f2region: region,
-                name: repository.repositoryName,
-                uri: repository.repositoryUri,
-                createdat: repository.createdAt
-            }]);
+                $('#section-containers-ecr-publicrepositories-datatable').deferredBootstrapTable('append', [{
+                    f2id: repository.repositoryArn,
+                    f2type: 'ecr.publicrepository',
+                    f2data: repository,
+                    f2region: region,
+                    name: repository.repositoryName,
+                    uri: repository.repositoryUri,
+                    createdat: repository.createdAt
+                }]);
 
-            return Promise.resolve();
-        }));
+                return Promise.resolve();
+            }));
 
-        unblockUI('#section-containers-ecr-publicrepositories-datatable');
-    }).catch(() => { });
+            unblockUI('#section-containers-ecr-publicrepositories-datatable');
+        }).catch(() => { });
+    }
 
     await sdkcall("ECR", "describeRegistry", {
         // no params
