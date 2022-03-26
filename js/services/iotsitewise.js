@@ -557,31 +557,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 var type = null;
                 var typename = null;
                 var attribute = null;
-                if (assetmodelproperty.type.attribute) {
+                if (assetmodelproperty.type.hasOwnProperty('attribute')) {
                     typename = 'Attribute';
                     attribute = {
                         'DefaultValue': assetmodelproperty.type.attribute.defaultValue,
                     };
                 }
-                if (assetmodelproperty.type.measurement) {
+                if (assetmodelproperty.type.hasOwnProperty('measurement')) {
                     typename = 'Measurement';
                 }
                 var metric = null;
-                if (assetmodelproperty.type.metric) {
+                if (assetmodelproperty.type.hasOwnProperty('metric')) {
                     typename = 'Metric';
                     var variables = null;
                     if (assetmodelproperty.type.metric.variables) {
                         variables = [];
                         assetmodelproperty.type.metric.variables.forEach(variable => {
                             var value = null;
-                            if (variables.value) {
+                            if (variable.value) {
                                 value = {
-                                    'PropertyLogicalId': variables.value.propertyId,
-                                    'HierarchyLogicalId': variables.value.hierarchyId
+                                    'PropertyLogicalId': variable.value.propertyId,
+                                    'HierarchyLogicalId': variable.value.hierarchyId
                                 };
                             }
                             variables.push({
-                                'Name': variables.name,
+                                'Name': variable.name,
                                 'Value': value
                             });
                         });
@@ -608,14 +608,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         variables = [];
                         assetmodelproperty.type.transform.variables.forEach(variable => {
                             var value = null;
-                            if (variables.value) {
+                            if (variable.value) {
                                 value = {
-                                    'PropertyLogicalId': variables.value.propertyId,
-                                    'HierarchyLogicalId': variables.value.hierarchyId
+                                    'PropertyLogicalId': variable.value.propertyId,
+                                    'HierarchyLogicalId': variable.value.hierarchyId
                                 };
                             }
                             variables.push({
-                                'Name': variables.name,
+                                'Name': variable.name,
                                 'Value': value
                             });
                         });
@@ -663,23 +663,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         if (prop.type) {
                             var typename = null;
                             var attribute = null;
-                            if (prop.type.attribute) {
+                            if (prop.type.hasOwnProperty('attribute')) {
                                 typename = "Attribute";
                                 attribute = {
                                     'DefaultValue': prop.type.attribute.defaultValue
                                 };
                             }
                             var metric = null;
-                            if (prop.type.metric) {
+                            if (prop.type.hasOwnProperty('metric')) {
                                 typename = "Metric";
                                 var variables = null;
-                                console.warn("#225 - Hit 1");
                                 if (prop.type.metric.variables) {
-                                    console.warn("#225 - Hit 2");
                                     variables = [];
                                     prop.type.metric.variables.forEach(variable => {
-                                        console.warn("#225 - Hit 3");
-                                        console.log(variable);
                                         variables.push({
                                             'Name': variable.name,
                                             'Value': {
@@ -687,8 +683,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                                                 'HierarchyLogicalId': variable.value.hierarchyId
                                             }
                                         });
-                                        console.log("#225 - Hit 4");
-                                        console.log(variables);
                                     });
                                 }
                                 var window = null;
@@ -709,11 +703,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                                     'Variables': variables,
                                     'Window': window
                                 };
-                                console.log("#225 - Hit 5");
-                                console.log(metric);
                             }
                             var transform = null;
-                            if (prop.type.transform) {
+                            if (prop.type.hasOwnProperty('transform')) {
                                 typename = "Transform";
                                 let variables = [];
                                 prop.type.transform.variables.forEach(variable => {
