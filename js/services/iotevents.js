@@ -89,6 +89,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Alarm Models': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -96,6 +134,7 @@ sections.push({
 async function updateDatatableInternetofThingsEvents() {
     blockUI('#section-internetofthings-events-detectormodels-datatable');
     blockUI('#section-internetofthings-events-inputs-datatable');
+    blockUI('#section-internetofthings-events-alarmmodels-datatable');
 
     await sdkcall("IoTEvents", "listDetectorModels", {
         // no params
@@ -140,8 +179,30 @@ async function updateDatatableInternetofThingsEvents() {
         }));
     }).catch(() => { });
 
+    await sdkcall("IoTEvents", "listAlarmModels", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-internetofthings-events-alarmmodels-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.alarmModelSummaries.map(alarmmodel => {
+            return sdkcall("IoTEvents", "describeAlarmModel", {
+                alarmModelName: alarmmodel.alarmModelName
+            }, true).then(data => {
+                $('#section-internetofthings-events-alarmmodels-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.alarmModelArn,
+                    f2type: 'iotevents.alarmmodel',
+                    f2data: data,
+                    f2region: region,
+                    name: data.alarmModelName,
+                    description: data.alarmModelDescription
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-internetofthings-events-detectormodels-datatable');
     unblockUI('#section-internetofthings-events-inputs-datatable');
+    unblockUI('#section-internetofthings-events-alarmmodels-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -603,6 +664,230 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iotevents',
             'type': 'AWS::IoTEvents::Input',
+            'options': reqParams
+        });
+    } else if (obj.type == "iotevents.alarmmodel") {
+        reqParams.cfn['AlarmModelName'] = obj.data.alarmModelName;
+        reqParams.cfn['AlarmModelDescription'] = obj.data.alarmModelDescription;
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.cfn['Key'] = obj.data.key;
+        reqParams.cfn['Severity'] = obj.data.severity;
+        if (obj.data.alarmRule) {
+            var simplerule = null;
+            if (obj.data.alarmRule.simpleRule) {
+                simplerule = {
+                    'ComparisonOperator': obj.data.alarmRule.simpleRule.comparisonOperator,
+                    'InputProperty': obj.data.alarmRule.simpleRule.inputProperty,
+                    'Threshold': obj.data.alarmRule.simpleRule.threshold
+                };
+            }
+            reqParams.cfn['AlarmRule'] = {
+                'SimpleRule': simplerule
+            }
+        }
+        if (obj.data.alarmEventActions) {
+            var alarmactions = null;
+            if (obj.data.alarmEventActions.alarmActions) {
+                alarmactions = [];
+                obj.data.alarmEventActions.alarmActions.forEach(alarmaction => {
+                    var dynamodb = null;
+                    if (alarmaction.dynamoDB) {
+                        var payload = null;
+                        if (alarmaction.dynamoDB.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.dynamoDB.payload.contentExpression,
+                                'Type': alarmaction.dynamoDB.payload.type
+                            };
+                        }
+                        dynamodb = {
+                            'HashKeyField': alarmaction.dynamoDB.hashKeyField,
+                            'HashKeyType': alarmaction.dynamoDB.hashKeyType,
+                            'HashKeyValue': alarmaction.dynamoDB.hashKeyValue,
+                            'Operation': alarmaction.dynamoDB.operation,
+                            'Payload': payload,
+                            'PayloadField': alarmaction.dynamoDB.payloadField,
+                            'RangeKeyField': alarmaction.dynamoDB.rangeKeyField,
+                            'RangeKeyType': alarmaction.dynamoDB.rangeKeyType,
+                            'RangeKeyValue': alarmaction.dynamoDB.rangeKeyValue,
+                            'TableName': alarmaction.dynamoDB.tableName
+                        };
+                    }
+                    var dynamodbv2 = null;
+                    if (alarmaction.dynamoDBv2) {
+                        var payload = null;
+                        if (alarmaction.dynamoDBv2.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.dynamoDBv2.payload.contentExpression,
+                                'Type': alarmaction.dynamoDBv2.payload.type
+                            };
+                        }
+                        dynamodbv2 = {
+                            'Payload': payload,
+                            'TableName': alarmaction.dynamoDBv2.tableName
+                        };
+                    }
+                    var firehose = null;
+                    if (alarmaction.firehose) {
+                        var payload = null;
+                        if (alarmaction.firehose.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.firehose.payload.contentExpression,
+                                'Type': alarmaction.firehose.payload.type
+                            };
+                        }
+                        firehose = {
+                            'Payload': payload,
+                            'DeliveryStreamName': alarmaction.firehose.deliveryStreamName,
+                            'Separator': alarmaction.firehose.separator
+                        };
+                    }
+                    var iotevents = null;
+                    if (alarmaction.iotEvents) {
+                        var payload = null;
+                        if (alarmaction.iotEvents.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.iotEvents.payload.contentExpression,
+                                'Type': alarmaction.iotEvents.payload.type
+                            };
+                        }
+                        iotevents = {
+                            'Payload': payload,
+                            'InputName': alarmaction.iotEvents.inputName
+                        };
+                    }
+                    var iotsitewise = null;
+                    if (alarmaction.iotEvents) {
+                        var propertyvalue = null;
+                        if (alarmaction.iotSiteWise.propertyValue) {
+                            var value = null;
+                            if (alarmaction.iotSiteWise.propertyValue.value) {
+                                value = {
+                                    'StringValue': alarmaction.iotSiteWise.propertyValue.value.stringValue,
+                                    'IntegerValue': alarmaction.iotSiteWise.propertyValue.value.integerValue,
+                                    'DoubleValue': alarmaction.iotSiteWise.propertyValue.value.doubleValue,
+                                    'BooleanValue': alarmaction.iotSiteWise.propertyValue.value.booleanValue
+                                };
+                            }
+                            var timestamp = null;
+                            if (alarmaction.iotSiteWise.propertyValue.timestamp) {
+                                timestamp = {
+                                    'TimeInSeconds': alarmaction.iotSiteWise.propertyValue.timestamp.timeInSeconds,
+                                    'OffsetInNanos': alarmaction.iotSiteWise.propertyValue.timestamp.offsetInNanos
+                                };
+                            }
+                            propertyvalue = {
+                                'Value': value,
+                                'Timestamp': timestamp,
+                                'Quality': alarmaction.iotSiteWise.propertyValue.quality
+                            };
+                        }
+                        iotsitewise = {
+                            'EntryId': alarmaction.iotSiteWise.entryId,
+                            'AssetId': alarmaction.iotSiteWise.assetId,
+                            'PropertyId': alarmaction.iotSiteWise.propertyId,
+                            'PropertyAlias': alarmaction.iotSiteWise.propertyAlias,
+                            'PropertyValue': propertyvalue
+                        };
+                    }
+                    var iottopicpublish = null;
+                    if (alarmaction.iotTopicPublish) {
+                        var payload = null;
+                        if (alarmaction.iotTopicPublish.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.iotTopicPublish.payload.contentExpression,
+                                'Type': alarmaction.iotTopicPublish.payload.type
+                            };
+                        }
+                        iottopicpublish = {
+                            'Payload': payload,
+                            'MqttTopic': alarmaction.iotTopicPublish.mqttTopic
+                        };
+                    }
+                    var lambda = null;
+                    if (alarmaction.lambda) {
+                        var payload = null;
+                        if (alarmaction.lambda.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.lambda.payload.contentExpression,
+                                'Type': alarmaction.lambda.payload.type
+                            };
+                        }
+                        lambda = {
+                            'Payload': payload,
+                            'FunctionArn': alarmaction.lambda.functionArn
+                        };
+                    }
+                    var sns = null;
+                    if (alarmaction.sns) {
+                        var payload = null;
+                        if (alarmaction.sns.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.sns.payload.contentExpression,
+                                'Type': alarmaction.sns.payload.type
+                            };
+                        }
+                        sns = {
+                            'Payload': payload,
+                            'TargetArn': alarmaction.sns.targetArn
+                        };
+                    }
+                    var sqs = null;
+                    if (alarmaction.sqs) {
+                        var payload = null;
+                        if (alarmaction.sqs.payload) {
+                            payload = {
+                                'ContentExpression': alarmaction.sqs.payload.contentExpression,
+                                'Type': alarmaction.sqs.payload.type
+                            };
+                        }
+                        sqs = {
+                            'Payload': payload,
+                            'UseBase64': alarmaction.sqs.useBase64,
+                            'QueueUrl': alarmaction.sqs.queueUrl
+                        };
+                    }
+                    alarmactions.push({
+                        'DynamoDB': dynamodb,
+                        'DynamoDBv2': dynamodbv2,
+                        'Firehose': firehose,
+                        'IotEvents': iotevents,
+                        'IotSiteWise': iotsitewise,
+                        'IotTopicPublish': iottopicpublish,
+                        'Lambda': lambda,
+                        'Sns': sns,
+                        'Sqs': sqs
+                    });
+                });
+            }
+            reqParams.cfn['AlarmEventActions'] = {
+                'AlarmActions': alarmactions
+            }
+        }
+        if (obj.data.alarmCapabilities) {
+            var acknowledgeflow = null;
+            if (obj.data.alarmCapabilities.acknowledgeFlow) {
+                acknowledgeflow = {
+                    'Enabled': obj.data.alarmCapabilities.acknowledgeFlow.enabled
+                };
+            }
+            var initializationconfiguration = null;
+            if (obj.data.alarmCapabilities.initializationConfiguration) {
+                initializationconfiguration = {
+                    'DisabledOnInitialization': obj.data.alarmCapabilities.initializationConfiguration.disabledOnInitialization
+                };
+            }
+            reqParams.cfn['AlarmCapabilities'] = {
+                'AcknowledgeFlow': acknowledgeflow,
+                'InitializationConfiguration': initializationconfiguration
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iotevents', obj.id, 'AWS::IoTEvents::AlarmModel'),
+            'region': obj.region,
+            'service': 'iotevents',
+            'type': 'AWS::IoTEvents::AlarmModel',
             'options': reqParams
         });
     } else {
