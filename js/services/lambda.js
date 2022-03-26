@@ -720,6 +720,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         
         reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
+        reqParams.cfn['EphemeralStorage'] = obj.data.Configuration.EphemeralStorage;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
 
         /*
