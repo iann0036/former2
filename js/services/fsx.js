@@ -128,11 +128,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         if (obj.data.LustreConfiguration) {
+            var autoimportpolicytype = null;
+            var exportpath = null;
+            var importedfilechunksize = null;
+            var importpath = null;
+            if (obj.data.LustreConfiguration.DataRepositoryConfiguration) {
+                autoimportpolicytype = obj.data.LustreConfiguration.DataRepositoryConfiguration.AutoImportPolicy;
+                exportpath = obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath;
+                importedfilechunksize = obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize;
+                importpath = obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath;
+            }
+
             reqParams.cfn['LustreConfiguration'] = {
-                'AutoImportPolicyType': obj.data.LustreConfiguration.DataRepositoryConfiguration.AutoImportPolicy,
-                'ExportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ExportPath,
-                'ImportedFileChunkSize': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportedFileChunkSize,
-                'ImportPath': obj.data.LustreConfiguration.DataRepositoryConfiguration.ImportPath,
+                'AutoImportPolicyType': autoimportpolicytype,
+                'ExportPath': exportpath,
+                'ImportedFileChunkSize': importedfilechunksize,
+                'ImportPath': importpath,
                 'WeeklyMaintenanceStartTime': obj.data.LustreConfiguration.WeeklyMaintenanceStartTime,
                 'DeploymentType': obj.data.LustreConfiguration.DeploymentType,
                 'PerUnitStorageThroughput': obj.data.LustreConfiguration.PerUnitStorageThroughput,
