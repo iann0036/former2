@@ -2037,6 +2037,12 @@ eligibleImportResources = {
             "AuthorizerId"
         ]
     },
+    "AWS::ApiGateway::BasePathMapping": {
+        "importProperties": [
+            "DomainName",
+            "BasePath"
+        ]
+    },
     "AWS::ApiGateway::ClientCertificate": {
         "importProperties": [
             "ClientCertificateId"
@@ -2115,6 +2121,11 @@ eligibleImportResources = {
             "FlowName"
         ]
     },
+    "AWS::AppIntegrations::DataIntegration": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::AppIntegrations::EventIntegration": {
         "importProperties": [
             "Name"
@@ -2123,6 +2134,11 @@ eligibleImportResources = {
     "AWS::AppRunner::Service": {
         "importProperties": [
             "ServiceArn"
+        ]
+    },
+    "AWS::AppRunner::VpcConnector": {
+        "importProperties": [
+            "VpcConnectorArn"
         ]
     },
     "AWS::AppStream::AppBlock": {
@@ -2135,10 +2151,23 @@ eligibleImportResources = {
             "Arn"
         ]
     },
+    "AWS::AppStream::ApplicationEntitlementAssociation": {
+        "importProperties": [
+            "StackName",
+            "EntitlementName",
+            "ApplicationIdentifier"
+        ]
+    },
     "AWS::AppStream::ApplicationFleetAssociation": {
         "importProperties": [
             "FleetName",
             "ApplicationArn"
+        ]
+    },
+    "AWS::AppStream::Entitlement": {
+        "importProperties": [
+            "StackName",
+            "Name"
         ]
     },
     "AWS::AppSync::DomainName": {
@@ -2238,6 +2267,16 @@ eligibleImportResources = {
             "ReportPlanArn"
         ]
     },
+    "AWS::Batch::ComputeEnvironment": {
+        "importProperties": [
+            "ComputeEnvironmentArn"
+        ]
+    },
+    "AWS::Batch::JobQueue": {
+        "importProperties": [
+            "JobQueueArn"
+        ]
+    },
     "AWS::Batch::SchedulingPolicy": {
         "importProperties": [
             "Arn"
@@ -2286,6 +2325,21 @@ eligibleImportResources = {
         ]
     },
     "AWS::Chatbot::SlackChannelConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::HookDefaultVersion": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::HookTypeConfig": {
+        "importProperties": [
+            "TypeArn"
+        ]
+    },
+    "AWS::CloudFormation::HookVersion": {
         "importProperties": [
             "Arn"
         ]
@@ -2702,6 +2756,16 @@ eligibleImportResources = {
             "Id"
         ]
     },
+    "AWS::EC2::NetworkInsightsAccessScope": {
+        "importProperties": [
+            "NetworkInsightsAccessScopeId"
+        ]
+    },
+    "AWS::EC2::NetworkInsightsAccessScopeAnalysis": {
+        "importProperties": [
+            "NetworkInsightsAccessScopeAnalysisId"
+        ]
+    },
     "AWS::EC2::NetworkInsightsAnalysis": {
         "importProperties": [
             "NetworkInsightsAnalysisId"
@@ -2900,6 +2964,11 @@ eligibleImportResources = {
             "FargateProfileName"
         ]
     },
+    "AWS::EKS::Nodegroup": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::EMR::Studio": {
         "importProperties": [
             "StudioId"
@@ -2974,7 +3043,7 @@ eligibleImportResources = {
     },
     "AWS::Events::Rule": {
         "importProperties": [
-            "Name"
+            "Arn"
         ]
     },
     "AWS::Evidently::Experiment": {
@@ -3015,6 +3084,16 @@ eligibleImportResources = {
     "AWS::FinSpace::Environment": {
         "importProperties": [
             "EnvironmentId"
+        ]
+    },
+    "AWS::Forecast::Dataset": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Forecast::DatasetGroup": {
+        "importProperties": [
+            "DatasetGroupArn"
         ]
     },
     "AWS::FraudDetector::Detector": {
@@ -3196,6 +3275,26 @@ eligibleImportResources = {
         ]
     },
     "AWS::ImageBuilder::InfrastructureConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::AssessmentTarget": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::AssessmentTemplate": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::ResourceGroup": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::InspectorV2::Filter": {
         "importProperties": [
             "Arn"
         ]
@@ -3420,6 +3519,11 @@ eligibleImportResources = {
             "KeyId"
         ]
     },
+    "AWS::KafkaConnect::Connector": {
+        "importProperties": [
+            "ConnectorArn"
+        ]
+    },
     "AWS::Kendra::DataSource": {
         "importProperties": [
             "Id",
@@ -3445,6 +3549,16 @@ eligibleImportResources = {
     "AWS::KinesisFirehose::DeliveryStream": {
         "importProperties": [
             "DeliveryStreamName"
+        ]
+    },
+    "AWS::KinesisVideo::SignalingChannel": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::KinesisVideo::Stream": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::Lambda::Alias": {
@@ -3504,6 +3618,26 @@ eligibleImportResources = {
             "LicenseArn"
         ]
     },
+    "AWS::Lightsail::Alarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    },
+    "AWS::Lightsail::Bucket": {
+        "importProperties": [
+            "BucketName"
+        ]
+    },
+    "AWS::Lightsail::Certificate": {
+        "importProperties": [
+            "CertificateName"
+        ]
+    },
+    "AWS::Lightsail::Container": {
+        "importProperties": [
+            "ServiceName"
+        ]
+    },
     "AWS::Lightsail::Database": {
         "importProperties": [
             "RelationalDatabaseName"
@@ -3514,9 +3648,25 @@ eligibleImportResources = {
             "DiskName"
         ]
     },
+    "AWS::Lightsail::Distribution": {
+        "importProperties": [
+            "DistributionName"
+        ]
+    },
     "AWS::Lightsail::Instance": {
         "importProperties": [
             "InstanceName"
+        ]
+    },
+    "AWS::Lightsail::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerName"
+        ]
+    },
+    "AWS::Lightsail::LoadBalancerTlsCertificate": {
+        "importProperties": [
+            "CertificateName",
+            "LoadBalancerName"
         ]
     },
     "AWS::Lightsail::StaticIp": {
@@ -3599,6 +3749,11 @@ eligibleImportResources = {
     "AWS::LookoutVision::Project": {
         "importProperties": [
             "ProjectName"
+        ]
+    },
+    "AWS::MSK::Cluster": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::MWAA::Environment": {
@@ -3942,6 +4097,11 @@ eligibleImportResources = {
             "ServiceIdentifier"
         ]
     },
+    "AWS::Rekognition::Collection": {
+        "importProperties": [
+            "CollectionId"
+        ]
+    },
     "AWS::Rekognition::Project": {
         "importProperties": [
             "ProjectName"
@@ -3968,6 +4128,11 @@ eligibleImportResources = {
         ]
     },
     "AWS::RoboMaker::Robot": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::RoboMaker::RobotApplication": {
         "importProperties": [
             "Arn"
         ]
@@ -4088,6 +4253,11 @@ eligibleImportResources = {
             "ResolverRuleId"
         ]
     },
+    "AWS::Route53Resolver::ResolverRuleAssociation": {
+        "importProperties": [
+            "ResolverRuleAssociationId"
+        ]
+    },
     "AWS::S3::AccessPoint": {
         "importProperties": [
             "Name"
@@ -4143,9 +4313,19 @@ eligibleImportResources = {
             "Name"
         ]
     },
+    "AWS::SES::ConfigurationSetEventDestination": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::SES::ContactList": {
         "importProperties": [
             "ContactListName"
+        ]
+    },
+    "AWS::SES::Template": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::SNS::Topic": {

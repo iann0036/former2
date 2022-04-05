@@ -13,6 +13,7 @@ AWS::AmplifyUIBuilder::Theme ('AppId', 'EnvironmentName', 'Id', '')
 AWS::ApiGateway::Account ('Id', '', '', '')
 AWS::ApiGateway::ApiKey ('APIKeyId', '', '', '')
 AWS::ApiGateway::Authorizer ('RestApiId', 'AuthorizerId', '', '')
+AWS::ApiGateway::BasePathMapping ('DomainName', 'BasePath', '', '')
 AWS::ApiGateway::ClientCertificate ('ClientCertificateId', '', '', '')
 AWS::ApiGateway::Deployment ('DeploymentId', 'RestApiId', '', '')
 AWS::ApiGateway::DocumentationVersion ('DocumentationVersion', 'RestApiId', '', '')
@@ -27,11 +28,15 @@ AWS::ApiGateway::UsagePlan ('Id', '', '', '')
 AWS::ApiGateway::UsagePlanKey ('Id', '', '', '')
 AWS::AppFlow::ConnectorProfile ('ConnectorProfileName', '', '', '')
 AWS::AppFlow::Flow ('FlowName', '', '', '')
+AWS::AppIntegrations::DataIntegration ('Id', '', '', '')
 AWS::AppIntegrations::EventIntegration ('Name', '', '', '')
 AWS::AppRunner::Service ('ServiceArn', '', '', '')
+AWS::AppRunner::VpcConnector ('VpcConnectorArn', '', '', '')
 AWS::AppStream::AppBlock ('Arn', '', '', '')
 AWS::AppStream::Application ('Arn', '', '', '')
+AWS::AppStream::ApplicationEntitlementAssociation ('StackName', 'EntitlementName', 'ApplicationIdentifier', '')
 AWS::AppStream::ApplicationFleetAssociation ('FleetName', 'ApplicationArn', '', '')
+AWS::AppStream::Entitlement ('StackName', 'Name', '', '')
 AWS::AppSync::DomainName ('DomainName', '', '', '')
 AWS::AppSync::DomainNameApiAssociation ('ApiAssociationIdentifier', '', '', '')
 AWS::ApplicationInsights::Application ('ApplicationARN', '', '', '')
@@ -51,6 +56,8 @@ AWS::Backup::BackupSelection ('Id', '', '', '')
 AWS::Backup::BackupVault ('BackupVaultName', '', '', '')
 AWS::Backup::Framework ('FrameworkArn', '', '', '')
 AWS::Backup::ReportPlan ('ReportPlanArn', '', '', '')
+AWS::Batch::ComputeEnvironment ('ComputeEnvironmentArn', '', '', '')
+AWS::Batch::JobQueue ('JobQueueArn', '', '', '')
 AWS::Batch::SchedulingPolicy ('Arn', '', '', '')
 AWS::Budgets::BudgetsAction ('ActionId', 'BudgetName', '', '')
 AWS::CE::AnomalyMonitor ('MonitorArn', '', '', '')
@@ -61,6 +68,9 @@ AWS::Cassandra::Keyspace ('KeyspaceName', '', '', '')
 AWS::Cassandra::Table ('KeyspaceName', 'TableName', '', '')
 AWS::CertificateManager::Account ('AccountId', '', '', '')
 AWS::Chatbot::SlackChannelConfiguration ('Arn', '', '', '')
+AWS::CloudFormation::HookDefaultVersion ('Arn', '', '', '')
+AWS::CloudFormation::HookTypeConfig ('TypeArn', '', '', '')
+AWS::CloudFormation::HookVersion ('Arn', '', '', '')
 AWS::CloudFormation::ModuleDefaultVersion ('Arn', '', '', '')
 AWS::CloudFormation::ModuleVersion ('Arn', '', '', '')
 AWS::CloudFormation::PublicTypeVersion ('PublicTypeArn', '', '', '')
@@ -144,6 +154,8 @@ AWS::EC2::LocalGatewayRoute ('DestinationCidrBlock', 'LocalGatewayRouteTableId',
 AWS::EC2::LocalGatewayRouteTableVPCAssociation ('LocalGatewayRouteTableVpcAssociationId', '', '', '')
 AWS::EC2::NatGateway ('NatGatewayId', '', '', '')
 AWS::EC2::NetworkAcl ('Id', '', '', '')
+AWS::EC2::NetworkInsightsAccessScope ('NetworkInsightsAccessScopeId', '', '', '')
+AWS::EC2::NetworkInsightsAccessScopeAnalysis ('NetworkInsightsAccessScopeAnalysisId', '', '', '')
 AWS::EC2::NetworkInsightsAnalysis ('NetworkInsightsAnalysisId', '', '', '')
 AWS::EC2::NetworkInsightsPath ('NetworkInsightsPathId', '', '', '')
 AWS::EC2::NetworkInterface ('Id', '', '', '')
@@ -181,6 +193,7 @@ AWS::EFS::MountTarget ('Id', '', '', '')
 AWS::EKS::Addon ('ClusterName', 'AddonName', '', '')
 AWS::EKS::Cluster ('Name', '', '', '')
 AWS::EKS::FargateProfile ('ClusterName', 'FargateProfileName', '', '')
+AWS::EKS::Nodegroup ('Id', '', '', '')
 AWS::EMR::Studio ('StudioId', '', '', '')
 AWS::EMR::StudioSessionMapping ('StudioId', 'IdentityType', 'IdentityName', '')
 AWS::EMRContainers::VirtualCluster ('Id', '', '', '')
@@ -195,7 +208,7 @@ AWS::EventSchemas::RegistryPolicy ('Id', '', '', '')
 AWS::Events::ApiDestination ('Name', '', '', '')
 AWS::Events::Archive ('ArchiveName', '', '', '')
 AWS::Events::Connection ('Name', '', '', '')
-AWS::Events::Rule ('Name', '', '', '')
+AWS::Events::Rule ('Arn', '', '', '')
 AWS::Evidently::Experiment ('Arn', '', '', '')
 AWS::Evidently::Feature ('Arn', '', '', '')
 AWS::Evidently::Launch ('Arn', '', '', '')
@@ -204,6 +217,8 @@ AWS::FIS::ExperimentTemplate ('Id', '', '', '')
 AWS::FMS::NotificationChannel ('SnsTopicArn', '', '', '')
 AWS::FMS::Policy ('Id', '', '', '')
 AWS::FinSpace::Environment ('EnvironmentId', '', '', '')
+AWS::Forecast::Dataset ('Arn', '', '', '')
+AWS::Forecast::DatasetGroup ('DatasetGroupArn', '', '', '')
 AWS::FraudDetector::Detector ('Arn', '', '', '')
 AWS::FraudDetector::EntityType ('Arn', '', '', '')
 AWS::FraudDetector::EventType ('Arn', '', '', '')
@@ -240,6 +255,10 @@ AWS::ImageBuilder::Image ('Arn', '', '', '')
 AWS::ImageBuilder::ImagePipeline ('Arn', '', '', '')
 AWS::ImageBuilder::ImageRecipe ('Arn', '', '', '')
 AWS::ImageBuilder::InfrastructureConfiguration ('Arn', '', '', '')
+AWS::Inspector::AssessmentTarget ('Arn', '', '', '')
+AWS::Inspector::AssessmentTemplate ('Arn', '', '', '')
+AWS::Inspector::ResourceGroup ('Arn', '', '', '')
+AWS::InspectorV2::Filter ('Arn', '', '', '')
 AWS::IoT::AccountAuditConfiguration ('AccountId', '', '', '')
 AWS::IoT::Authorizer ('AuthorizerName', '', '', '')
 AWS::IoT::Certificate ('Id', '', '', '')
@@ -284,11 +303,14 @@ AWS::IoTWireless::WirelessGateway ('Id', '', '', '')
 AWS::KMS::Alias ('AliasName', '', '', '')
 AWS::KMS::Key ('KeyId', '', '', '')
 AWS::KMS::ReplicaKey ('KeyId', '', '', '')
+AWS::KafkaConnect::Connector ('ConnectorArn', '', '', '')
 AWS::Kendra::DataSource ('Id', 'IndexId', '', '')
 AWS::Kendra::Faq ('Id', 'IndexId', '', '')
 AWS::Kendra::Index ('Id', '', '', '')
 AWS::Kinesis::Stream ('Name', '', '', '')
 AWS::KinesisFirehose::DeliveryStream ('DeliveryStreamName', '', '', '')
+AWS::KinesisVideo::SignalingChannel ('Name', '', '', '')
+AWS::KinesisVideo::Stream ('Name', '', '', '')
 AWS::Lambda::Alias ('AliasArn', '', '', '')
 AWS::Lambda::CodeSigningConfig ('CodeSigningConfigArn', '', '', '')
 AWS::Lambda::EventSourceMapping ('Id', '', '', '')
@@ -300,9 +322,16 @@ AWS::Lex::BotVersion ('BotId', 'BotVersion', '', '')
 AWS::Lex::ResourcePolicy ('Id', '', '', '')
 AWS::LicenseManager::Grant ('GrantArn', '', '', '')
 AWS::LicenseManager::License ('LicenseArn', '', '', '')
+AWS::Lightsail::Alarm ('AlarmName', '', '', '')
+AWS::Lightsail::Bucket ('BucketName', '', '', '')
+AWS::Lightsail::Certificate ('CertificateName', '', '', '')
+AWS::Lightsail::Container ('ServiceName', '', '', '')
 AWS::Lightsail::Database ('RelationalDatabaseName', '', '', '')
 AWS::Lightsail::Disk ('DiskName', '', '', '')
+AWS::Lightsail::Distribution ('DistributionName', '', '', '')
 AWS::Lightsail::Instance ('InstanceName', '', '', '')
+AWS::Lightsail::LoadBalancer ('LoadBalancerName', '', '', '')
+AWS::Lightsail::LoadBalancerTlsCertificate ('CertificateName', 'LoadBalancerName', '', '')
 AWS::Lightsail::StaticIp ('StaticIpName', '', '', '')
 AWS::Location::GeofenceCollection ('CollectionName', '', '', '')
 AWS::Location::Map ('MapName', '', '', '')
@@ -319,6 +348,7 @@ AWS::LookoutEquipment::InferenceScheduler ('InferenceSchedulerName', '', '', '')
 AWS::LookoutMetrics::Alert ('Arn', '', '', '')
 AWS::LookoutMetrics::AnomalyDetector ('Arn', '', '', '')
 AWS::LookoutVision::Project ('ProjectName', '', '', '')
+AWS::MSK::Cluster ('Arn', '', '', '')
 AWS::MWAA::Environment ('Name', '', '', '')
 AWS::Macie::CustomDataIdentifier ('Id', '', '', '')
 AWS::Macie::FindingsFilter ('Id', '', '', '')
@@ -382,12 +412,14 @@ AWS::RefactorSpaces::Application ('EnvironmentIdentifier', 'ApplicationIdentifie
 AWS::RefactorSpaces::Environment ('EnvironmentIdentifier', '', '', '')
 AWS::RefactorSpaces::Route ('EnvironmentIdentifier', 'ApplicationIdentifier', 'RouteIdentifier', '')
 AWS::RefactorSpaces::Service ('EnvironmentIdentifier', 'ApplicationIdentifier', 'ServiceIdentifier', '')
+AWS::Rekognition::Collection ('CollectionId', '', '', '')
 AWS::Rekognition::Project ('ProjectName', '', '', '')
 AWS::ResilienceHub::App ('AppArn', '', '', '')
 AWS::ResilienceHub::ResiliencyPolicy ('PolicyArn', '', '', '')
 AWS::ResourceGroups::Group ('Name', '', '', '')
 AWS::RoboMaker::Fleet ('Arn', '', '', '')
 AWS::RoboMaker::Robot ('Arn', '', '', '')
+AWS::RoboMaker::RobotApplication ('Arn', '', '', '')
 AWS::RoboMaker::RobotApplicationVersion ('Arn', '', '', '')
 AWS::RoboMaker::SimulationApplication ('Arn', '', '', '')
 AWS::RoboMaker::SimulationApplicationVersion ('Arn', '', '', '')
@@ -411,6 +443,7 @@ AWS::Route53Resolver::ResolverDNSSECConfig ('Id', '', '', '')
 AWS::Route53Resolver::ResolverQueryLoggingConfig ('Id', '', '', '')
 AWS::Route53Resolver::ResolverQueryLoggingConfigAssociation ('Id', '', '', '')
 AWS::Route53Resolver::ResolverRule ('ResolverRuleId', '', '', '')
+AWS::Route53Resolver::ResolverRuleAssociation ('ResolverRuleAssociationId', '', '', '')
 AWS::S3::AccessPoint ('Name', '', '', '')
 AWS::S3::Bucket ('BucketName', '', '', '')
 AWS::S3::MultiRegionAccessPoint ('Name', '', '', '')
@@ -422,7 +455,9 @@ AWS::S3Outposts::Bucket ('Arn', '', '', '')
 AWS::S3Outposts::BucketPolicy ('Bucket', '', '', '')
 AWS::S3Outposts::Endpoint ('Arn', '', '', '')
 AWS::SES::ConfigurationSet ('Name', '', '', '')
+AWS::SES::ConfigurationSetEventDestination ('Id', '', '', '')
 AWS::SES::ContactList ('ContactListName', '', '', '')
+AWS::SES::Template ('Id', '', '', '')
 AWS::SNS::Topic ('TopicArn', '', '', '')
 AWS::SQS::Queue ('QueueUrl', '', '', '')
 AWS::SSM::Association ('AssociationId', '', '', '')
@@ -563,6 +598,12 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "AuthorizerId"
         ]
     },
+    "AWS::ApiGateway::BasePathMapping": {
+        "importProperties": [
+            "DomainName",
+            "BasePath"
+        ]
+    },
     "AWS::ApiGateway::ClientCertificate": {
         "importProperties": [
             "ClientCertificateId"
@@ -641,6 +682,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "FlowName"
         ]
     },
+    "AWS::AppIntegrations::DataIntegration": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::AppIntegrations::EventIntegration": {
         "importProperties": [
             "Name"
@@ -649,6 +695,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::AppRunner::Service": {
         "importProperties": [
             "ServiceArn"
+        ]
+    },
+    "AWS::AppRunner::VpcConnector": {
+        "importProperties": [
+            "VpcConnectorArn"
         ]
     },
     "AWS::AppStream::AppBlock": {
@@ -661,10 +712,23 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::AppStream::ApplicationEntitlementAssociation": {
+        "importProperties": [
+            "StackName",
+            "EntitlementName",
+            "ApplicationIdentifier"
+        ]
+    },
     "AWS::AppStream::ApplicationFleetAssociation": {
         "importProperties": [
             "FleetName",
             "ApplicationArn"
+        ]
+    },
+    "AWS::AppStream::Entitlement": {
+        "importProperties": [
+            "StackName",
+            "Name"
         ]
     },
     "AWS::AppSync::DomainName": {
@@ -764,6 +828,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ReportPlanArn"
         ]
     },
+    "AWS::Batch::ComputeEnvironment": {
+        "importProperties": [
+            "ComputeEnvironmentArn"
+        ]
+    },
+    "AWS::Batch::JobQueue": {
+        "importProperties": [
+            "JobQueueArn"
+        ]
+    },
     "AWS::Batch::SchedulingPolicy": {
         "importProperties": [
             "Arn"
@@ -812,6 +886,21 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::Chatbot::SlackChannelConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::HookDefaultVersion": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::CloudFormation::HookTypeConfig": {
+        "importProperties": [
+            "TypeArn"
+        ]
+    },
+    "AWS::CloudFormation::HookVersion": {
         "importProperties": [
             "Arn"
         ]
@@ -1238,6 +1327,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::EC2::NetworkInsightsAccessScope": {
+        "importProperties": [
+            "NetworkInsightsAccessScopeId"
+        ]
+    },
+    "AWS::EC2::NetworkInsightsAccessScopeAnalysis": {
+        "importProperties": [
+            "NetworkInsightsAccessScopeAnalysisId"
+        ]
+    },
     "AWS::EC2::NetworkInsightsAnalysis": {
         "importProperties": [
             "NetworkInsightsAnalysisId"
@@ -1436,6 +1535,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "FargateProfileName"
         ]
     },
+    "AWS::EKS::Nodegroup": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::EMR::Studio": {
         "importProperties": [
             "StudioId"
@@ -1510,7 +1614,7 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::Events::Rule": {
         "importProperties": [
-            "Name"
+            "Arn"
         ]
     },
     "AWS::Evidently::Experiment": {
@@ -1551,6 +1655,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::FinSpace::Environment": {
         "importProperties": [
             "EnvironmentId"
+        ]
+    },
+    "AWS::Forecast::Dataset": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Forecast::DatasetGroup": {
+        "importProperties": [
+            "DatasetGroupArn"
         ]
     },
     "AWS::FraudDetector::Detector": {
@@ -1732,6 +1846,26 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::ImageBuilder::InfrastructureConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::AssessmentTarget": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::AssessmentTemplate": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Inspector::ResourceGroup": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::InspectorV2::Filter": {
         "importProperties": [
             "Arn"
         ]
@@ -1956,6 +2090,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "KeyId"
         ]
     },
+    "AWS::KafkaConnect::Connector": {
+        "importProperties": [
+            "ConnectorArn"
+        ]
+    },
     "AWS::Kendra::DataSource": {
         "importProperties": [
             "Id",
@@ -1981,6 +2120,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::KinesisFirehose::DeliveryStream": {
         "importProperties": [
             "DeliveryStreamName"
+        ]
+    },
+    "AWS::KinesisVideo::SignalingChannel": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::KinesisVideo::Stream": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::Lambda::Alias": {
@@ -2040,6 +2189,26 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "LicenseArn"
         ]
     },
+    "AWS::Lightsail::Alarm": {
+        "importProperties": [
+            "AlarmName"
+        ]
+    },
+    "AWS::Lightsail::Bucket": {
+        "importProperties": [
+            "BucketName"
+        ]
+    },
+    "AWS::Lightsail::Certificate": {
+        "importProperties": [
+            "CertificateName"
+        ]
+    },
+    "AWS::Lightsail::Container": {
+        "importProperties": [
+            "ServiceName"
+        ]
+    },
     "AWS::Lightsail::Database": {
         "importProperties": [
             "RelationalDatabaseName"
@@ -2050,9 +2219,25 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "DiskName"
         ]
     },
+    "AWS::Lightsail::Distribution": {
+        "importProperties": [
+            "DistributionName"
+        ]
+    },
     "AWS::Lightsail::Instance": {
         "importProperties": [
             "InstanceName"
+        ]
+    },
+    "AWS::Lightsail::LoadBalancer": {
+        "importProperties": [
+            "LoadBalancerName"
+        ]
+    },
+    "AWS::Lightsail::LoadBalancerTlsCertificate": {
+        "importProperties": [
+            "CertificateName",
+            "LoadBalancerName"
         ]
     },
     "AWS::Lightsail::StaticIp": {
@@ -2135,6 +2320,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::LookoutVision::Project": {
         "importProperties": [
             "ProjectName"
+        ]
+    },
+    "AWS::MSK::Cluster": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::MWAA::Environment": {
@@ -2478,6 +2668,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ServiceIdentifier"
         ]
     },
+    "AWS::Rekognition::Collection": {
+        "importProperties": [
+            "CollectionId"
+        ]
+    },
     "AWS::Rekognition::Project": {
         "importProperties": [
             "ProjectName"
@@ -2504,6 +2699,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::RoboMaker::Robot": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::RoboMaker::RobotApplication": {
         "importProperties": [
             "Arn"
         ]
@@ -2624,6 +2824,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ResolverRuleId"
         ]
     },
+    "AWS::Route53Resolver::ResolverRuleAssociation": {
+        "importProperties": [
+            "ResolverRuleAssociationId"
+        ]
+    },
     "AWS::S3::AccessPoint": {
         "importProperties": [
             "Name"
@@ -2679,9 +2884,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Name"
         ]
     },
+    "AWS::SES::ConfigurationSetEventDestination": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::SES::ContactList": {
         "importProperties": [
             "ContactListName"
+        ]
+    },
+    "AWS::SES::Template": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::SNS::Topic": {
