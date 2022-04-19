@@ -51,12 +51,39 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Observability Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableComputeAppRunner() {
     blockUI('#section-compute-apprunner-services-datatable');
+    blockUI('#section-compute-apprunner-observabilityconfigurations-datatable');
 
     await sdkcall("AppRunner", "listServices", {
         // no params
@@ -80,7 +107,28 @@ async function updateDatatableComputeAppRunner() {
         }));
     }).catch(() => { });
 
+    await sdkcall("AppRunner", "listObservabilityConfigurations", {
+        LatestOnly: true
+    }, true).then(async (data) => {
+        $('#section-compute-apprunner-observabilityconfigurations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ObservabilityConfigurationSummaryList.map(async (observabilityconfiguration) => {
+            return sdkcall("AppRunner", "describeObservabilityConfiguration", {
+                ObservabilityConfigurationArn: observabilityconfiguration.ObservabilityConfigurationArn
+            }, true).then(async (data) => {
+                $('#section-compute-apprunner-observabilityconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ObservabilityConfiguration.ObservabilityConfigurationArn,
+                    f2type: 'apprunner.observabilityconfiguration',
+                    f2data: data.ObservabilityConfiguration,
+                    f2region: region,
+                    name: data.ObservabilityConfiguration.ObservabilityConfigurationName
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-compute-apprunner-services-datatable');
+    unblockUI('#section-compute-apprunner-observabilityconfigurations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -173,6 +221,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'ServiceUrl': obj.data.ServiceUrl,
                     'ServiceId': obj.data.ServiceId,
                     'ServiceArn': obj.data.ServiceArn
+                }
+            }
+        });
+    } else if (obj.type == "apprunner.observabilityconfiguration") {
+        reqParams.cfn['ObservabilityConfigurationName'] = obj.data.ObservabilityConfigurationName;
+        reqParams.cfn['TraceConfiguration'] = obj.data.TraceConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('apprunner', obj.id, 'AWS::AppRunner::ObservabilityConfiguration'),
+            'region': obj.region,
+            'service': 'apprunner',
+            'type': 'AWS::AppRunner::ObservabilityConfiguration',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ObservabilityConfigurationName,
+                'GetAtt': {
+                    'ObservabilityConfigurationArn': obj.data.ObservabilityConfigurationArn
                 }
             }
         });

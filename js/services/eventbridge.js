@@ -406,6 +406,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Endpoints': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -421,6 +459,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-archives-datatable');
     blockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
     blockUI('#section-applicationintegration-eventbridge-connections-datatable');
+    blockUI('#section-applicationintegration-eventbridge-endpoints-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -679,6 +718,27 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     }).catch(() => { });
 
+    await sdkcall("EventBridge", "listEndpoints", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-endpoints-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Endpoints.map(async (endpoint) => {
+            return sdkcall("EventBridge", "describeEndpoint", {
+                Name: endpoint.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-endpoints-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'eventbridge.endpoint',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
@@ -689,6 +749,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-archives-datatable');
     unblockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
     unblockUI('#section-applicationintegration-eventbridge-connections-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-endpoints-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1030,6 +1091,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'eventbridge',
             'type': 'AWS::Events::Connection',
             'options': reqParams
+        });
+    } else if (obj.type == "eventbridge.endpoint") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['RoutingConfig'] = obj.data.RoutingConfig;
+        reqParams.cfn['ReplicationConfig'] = obj.data.ReplicationConfig;
+        reqParams.cfn['EventBuses'] = obj.data.EventBuses;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Events::Endpoint'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Events::Endpoint',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.EndpointId,
+                'GetAtt': {
+                    'EndpointUrl': obj.data.EndpointUrl
+                }
+            }
         });
     } else {
         return false;

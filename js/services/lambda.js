@@ -393,6 +393,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'URLs': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'URL',
+                        field: 'url',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'functionarn',
+                        title: 'Function ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -407,6 +445,7 @@ async function updateDatatableComputeLambda() {
     blockUI('#section-compute-lambda-eventsourcemappings-datatable');
     blockUI('#section-compute-lambda-eventinvokeconfigs-datatable');
     blockUI('#section-compute-lambda-codesigningconfigs-datatable');
+    blockUI('#section-compute-lambda-urls-datatable');
 
     await sdkcall("Lambda", "listFunctions", {
         // no params
@@ -416,6 +455,7 @@ async function updateDatatableComputeLambda() {
         $('#section-compute-lambda-versions-datatable').deferredBootstrapTable('removeAll');
         $('#section-compute-lambda-permissions-datatable').deferredBootstrapTable('removeAll');
         $('#section-compute-lambda-eventinvokeconfigs-datatable').deferredBootstrapTable('removeAll');
+        $('#section-compute-lambda-urls-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.Functions.map(async (lambdaFunction) => {
             return Promise.all([
@@ -521,6 +561,23 @@ async function updateDatatableComputeLambda() {
 
                         eventConfigIterator += 1;
                     });
+                }).catch(() => { }),
+                sdkcall("Lambda", "listFunctionUrlConfigs", {
+                    FunctionName: lambdaFunction.FunctionArn
+                }, false).then(async (data) => {
+                    var urlIterator = 1;
+                    data.FunctionUrlConfigs.forEach(url => {
+                        $('#section-compute-lambda-urls-datatable').deferredBootstrapTable('append', [{
+                            f2id: url.FunctionArn + " URL " + urlIterator,
+                            f2type: 'lambda.url',
+                            f2data: url,
+                            f2region: region,
+                            url: url.FunctionUrl,
+                            functionarn: url.FunctionArn
+                        }]);
+
+                        urlIterator += 1;
+                    });
                 }).catch(() => { })
             ]);
         }));
@@ -530,6 +587,7 @@ async function updateDatatableComputeLambda() {
         unblockUI('#section-compute-lambda-versions-datatable');
         unblockUI('#section-compute-lambda-permissions-datatable');
         unblockUI('#section-compute-lambda-eventinvokeconfigs-datatable');
+        unblockUI('#section-compute-lambda-urls-datatable');
     });
 
     await sdkcall("Lambda", "listLayers", {
@@ -953,6 +1011,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'lambda',
             'type': 'AWS::Lambda::CodeSigningConfig',
             'options': reqParams
+        });
+    } else if (obj.type == "lambda.url") {
+        reqParams.cfn['TargetFunctionArn'] = obj.data.FunctionArn;
+        reqParams.cfn['AuthType'] = obj.data.AuthType;
+        reqParams.cfn['Cors'] = obj.data.Cors;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lambda', obj.id, 'AWS::Lambda::Url'),
+            'region': obj.region,
+            'service': 'lambda',
+            'type': 'AWS::Lambda::Url',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'FunctionUrl': obj.data.FunctionUrl
+                }
+            }
         });
     } else {
         return false;
