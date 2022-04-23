@@ -585,6 +585,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Phone Numbers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Phone Number',
+                        field: 'phonenumber',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -604,6 +642,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     blockUI('#section-businessapplications-connect-contactflowmodules-datatable');
     blockUI('#section-businessapplications-connect-eventintegrations-datatable');
     blockUI('#section-businessapplications-connect-dataintegrations-datatable');
+    blockUI('#section-businessapplications-connect-phonenumbers-datatable');
 
     await sdkcall("CustomerProfiles", "listDomains", {
         // no params
@@ -676,6 +715,7 @@ async function updateDatatableBusinessApplicationsConnect() {
         $('#section-businessapplications-connect-userhierarchygroups-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-contactflows-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-contactflowmodules-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-phonenumbers-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.InstanceSummaryList.map(async (instance) => {
             return Promise.all([
@@ -808,6 +848,26 @@ async function updateDatatableBusinessApplicationsConnect() {
                             }]);
                         });
                     }));
+                }).catch(() => { }),
+                sdkcall("Connect", "listPhoneNumbersV2", {
+                    TargetArn: instance.Arn
+                }, true).then(async (data) => {
+                    await Promise.all(data.ListPhoneNumbersSummaryList.map(phonenumber => {
+                        return sdkcall("Connect", "describePhoneNumber", {
+                            PhoneNumberId: phonenumber.PhoneNumberId
+                        }, true).then(async (data) => {
+                            data.ClaimedPhoneNumberSummary['InstanceArn'] = instance.Arn;
+    
+                            $('#section-businessapplications-connect-phonenumbers-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ClaimedPhoneNumberSummary.PhoneNumberArn,
+                                f2type: 'connect.phonenumber',
+                                f2data: data.ClaimedPhoneNumberSummary,
+                                f2region: region,
+                                phonenumber: data.ClaimedPhoneNumberSummary.PhoneNumber,
+                                description: data.ClaimedPhoneNumberSummary.PhoneNumberDescription
+                            }]);
+                        });
+                    }));
                 }).catch(() => { })
             ]);
         }));
@@ -927,6 +987,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     unblockUI('#section-businessapplications-connect-contactflowmodules-datatable');
     unblockUI('#section-businessapplications-connect-eventintegrations-datatable');
     unblockUI('#section-businessapplications-connect-dataintegrations-datatable');
+    unblockUI('#section-businessapplications-connect-phonenumbers-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1415,6 +1476,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.Name,
                 'GetAtt': {
                     'DataIntegrationArn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "connect.phonenumber") {
+        reqParams.cfn['CountryCode'] = obj.data.PhoneNumberCountryCode;
+        reqParams.cfn['Type'] = obj.data.PhoneNumberType;
+        reqParams.cfn['Description'] = obj.data.PhoneNumberDescription;
+        reqParams.cfn['TargetArn'] = obj.data.TargetArn;
+        reqParams.cfn['Prefix'] = obj.data.PhoneNumber.substr(4);
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.Tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.Tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::Connect::PhoneNumber'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::Connect::PhoneNumber',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.PhoneNumber,
+                'GetAtt': {
+                    'PhoneNumberArn': obj.data.PhoneNumberArn
                 }
             }
         });
