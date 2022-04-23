@@ -673,14 +673,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'enabled': (obj.data.SSEDescription.Status[0] == "E")
             };
         }
-        if (obj.data.TimeToLiveDescription) {
+        if (obj.data.TimeToLiveDescription && obj.data.TimeToLiveDescription.TimeToLiveStatus && obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED") {
             reqParams.cfn['TimeToLiveSpecification'] = {
                 'AttributeName': obj.data.TimeToLiveDescription.AttributeName,
-                'Enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+                'Enabled': true
             };
             reqParams.tf['ttl'] = {
                 'attribute_name': obj.data.TimeToLiveDescription.AttributeName,
-                'enabled': (obj.data.TimeToLiveDescription.TimeToLiveStatus == "ENABLED")
+                'enabled': true
             };
         }
 
