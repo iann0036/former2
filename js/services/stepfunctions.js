@@ -157,8 +157,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "stepfunctions.statemachine") {
         reqParams.cfn['StateMachineName'] = obj.data.name;
         reqParams.tf['name'] = obj.data.name;
-        reqParams.cfn['DefinitionString'] = obj.data.definition;
-        reqParams.tf['definition'] = obj.data.definition;
+        reqParams.cfn['DefinitionString'] = JSON.stringify(JSON.parse(obj.data.definition), null, 2);
+        reqParams.tf['definition'] = JSON.stringify(JSON.parse(obj.data.definition), null, 2);
         reqParams.cfn['RoleArn'] = obj.data.roleArn;
         reqParams.tf['role_arn'] = obj.data.roleArn;
         reqParams.cfn['StateMachineType'] = obj.data.type;
