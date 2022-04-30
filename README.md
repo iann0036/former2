@@ -38,7 +38,8 @@ The following outputs are currently supported:
 * CloudFormation
 * Terraform
 * Troposphere
-* CDK (Cfn Primitives) - TypeScript, Python, Java, C#
+* CDK V1 (Cfn Primitives) - TypeScript, Python, Java, C#
+* CDK V2 (Cfn Primitives) - TypeScript, Python, Java, C#
 * CDK for Terraform - TypeScript
 * Pulumi - TypeScript
 * Diagram - embedded version of [draw.io](https://github.com/jgraph/drawio)

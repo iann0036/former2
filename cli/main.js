@@ -182,6 +182,7 @@ async function main(opts) {
     }
 
     outputMapCdk = function(){};
+    outputMapCdkv2 = function(){};
     outputMapTroposphere = function(){};
     outputMapPulumi = function(){};
     outputMapCdktf = function(){};
