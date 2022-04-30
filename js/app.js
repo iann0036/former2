@@ -1862,7 +1862,7 @@ function updateIdentity() {
                 RoleArn: window.localStorage.getItem('credentials-assumerole'),
                 RoleSessionName: "former2-session-" + window.localStorage.getItem('credentials-assumerole').split("/").pop(),
                 SourceIdentity: window.localStorage.getItem('credentials-sourceidentity')
-            }, false).then((data) => {
+            }, true).then((data) => {
                 latestConfig = {
                     credentials: new AWS.Credentials(
                         data.Credentials.AccessKeyId,
