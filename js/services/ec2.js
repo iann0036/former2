@@ -3941,6 +3941,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ec2.keypair") {
         reqParams.tf['public_key'] = 'REPLACEME';
         reqParams.tf['key_name'] = obj.data.KeyName;
+        reqParams.cfn['KeyName'] = obj.data.KeyName;
+        reqParams.cfn['KeyType'] = obj.data.KeyType;
+        reqParams.cfn['PublicKeyMaterial'] = obj.data.PublicKey;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         /*
         SKIPPED:
@@ -3950,9 +3954,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::KeyPair'), // not real resource type
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::EC2::KeyPair'),
             'region': obj.region,
             'service': 'ec2',
+            'type': 'AWS::EC2::KeyPair',
             'terraformType': 'aws_key_pair',
             'options': reqParams
         });
