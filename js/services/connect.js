@@ -623,6 +623,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Voice ID Domains': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -643,6 +681,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     blockUI('#section-businessapplications-connect-eventintegrations-datatable');
     blockUI('#section-businessapplications-connect-dataintegrations-datatable');
     blockUI('#section-businessapplications-connect-phonenumbers-datatable');
+    blockUI('#section-businessapplications-connect-voiceiddomains-datatable');
 
     await sdkcall("CustomerProfiles", "listDomains", {
         // no params
@@ -972,6 +1011,27 @@ async function updateDatatableBusinessApplicationsConnect() {
             });
         }));
     }).catch(() => { });
+
+    await sdkcall("VoiceID", "listDomains", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-businessapplications-connect-voiceiddomains-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.DomainSummaries.map(async (domainsummary) => {
+            return sdkcall("VoiceID", "describeDomain", {
+                DomainId: domainsummary.DomainId
+            }, true).then(async (data) => {
+                $('#section-businessapplications-connect-voiceiddomains-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Domain.Arn,
+                    f2type: 'connect.voiceiddomain',
+                    f2data: data.Domain,
+                    f2region: region,
+                    name: data.Domain.Name,
+                    description: data.Domain.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
     
     unblockUI('#section-businessapplications-connect-customerprofilesdomains-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesobjecttypes-datatable');
@@ -988,6 +1048,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     unblockUI('#section-businessapplications-connect-eventintegrations-datatable');
     unblockUI('#section-businessapplications-connect-dataintegrations-datatable');
     unblockUI('#section-businessapplications-connect-phonenumbers-datatable');
+    unblockUI('#section-businessapplications-connect-voiceiddomains-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1509,6 +1570,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'PhoneNumberArn': obj.data.PhoneNumberArn
                 }
+            }
+        });
+    } else if (obj.type == "connect.voiceiddomain") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['ServerSideEncryptionConfiguration'] = obj.data.ServerSideEncryptionConfiguration;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::VoiceID::Domain'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::VoiceID::Domain',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DomainId
             }
         });
     } else {
