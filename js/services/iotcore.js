@@ -1158,6 +1158,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Role Aliases': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Alias',
+                        field: 'alias',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'arn',
+                        title: 'ARN',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1193,6 +1231,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
     blockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
     blockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
+    blockUI('#section-internetofthings-core-rolealiases-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1886,6 +1925,29 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("Iot", "listRoleAliases", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-rolealiases-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.roleAliases.map(async (rolealias) => {
+            return sdkcall("Iot", "describeRoleAlias", {
+                roleAlias: rolealias
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.roleAliasDescription.roleAliasArn);
+
+                $('#section-internetofthings-core-rolealiases-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.roleAliasDescription.roleAliasArn,
+                    f2type: 'iot.rolealias',
+                    f2data: data.roleAliasDescription,
+                    f2region: region,
+                    alias: data.roleAliasDescription.roleAlias,
+                    arn: data.roleAliasDescription.roleArn
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1908,6 +1970,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-resourcespecificlogging-datatable');
     unblockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
     unblockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
+    unblockUI('#section-internetofthings-core-rolealiases-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2866,6 +2929,25 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Id': obj.data.Id,
                     'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "iot.rolealias") {
+        reqParams.cfn['RoleArn'] = obj.data.roleArn;
+        reqParams.cfn['RoleAlias'] = obj.data.roleAlias;
+        reqParams.cfn['CredentialDurationSeconds'] = obj.data.credentialDurationSeconds;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::RoleAlias'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::RoleAlias',
+            'options': reqParams,
+            'returnValues': {
+                'GetAtt': {
+                    'RoleAliasArn': obj.data.roleAliasArn
                 }
             }
         });

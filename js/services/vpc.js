@@ -2405,6 +2405,196 @@ sections.push({
                 ]
             ]
         },
+        'Network Manager Core Networks': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Connect Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'corenetworkid',
+                        title: 'Core Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Connect Peers': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Peer ID',
+                        field: 'peerid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'corenetworkid',
+                        title: 'Core Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager Site-to-Site VPN Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'corenetworkid',
+                        title: 'Core Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Network Manager VPC Attachments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Attachment ID',
+                        field: 'attachmentid',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'corenetworkid',
+                        title: 'Core Network ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Prefix Lists': {
             'columns': [
                 [
@@ -3120,6 +3310,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagercorenetworks-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerconnectattachments-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagerconnectpeers-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagersitetositevpnattachments-datatable');
+    blockUI('#section-networkingandcontentdelivery-vpc-networkmanagervpcattachments-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
     blockUI('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable');
@@ -4228,6 +4423,112 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
         });
     }).catch(() => { });
             
+    await sdkcall("NetworkManager", "listCoreNetworks", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-vpc-networkmanagercorenetworks-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerconnectattachments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagerconnectpeers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagersitetositevpnattachments-datatable').deferredBootstrapTable('removeAll');
+        $('#section-networkingandcontentdelivery-vpc-networkmanagervpcattachments-datatable').deferredBootstrapTable('removeAll');
+
+        data.CoreNetworks.forEach(async (corenetwork) => {
+            await Promise.all([
+                sdkcall("NetworkManager", "getCoreNetworkPolicy", {
+                    CoreNetworkId: corenetwork.CoreNetworkId
+                }, false).then((data) => {
+                    corenetwork['PolicyDocument'] = data.CoreNetworkPolicy.PolicyDocument;
+
+                    $('#section-networkingandcontentdelivery-vpc-networkmanagercorenetworks-datatable').deferredBootstrapTable('append', [{
+                        f2id: corenetwork.CoreNetworkArn,
+                        f2type: 'ec2.networkmanagercorenetwork',
+                        f2data: corenetwork,
+                        f2region: region,
+                        id: corenetwork.CoreNetworkId,
+                        description: corenetwork.Description
+                    }]);
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "listAttachments", {
+                    CoreNetworkId: corenetwork.CoreNetworkId,
+                    AttachmentType: 'CONNECT'
+                }, false).then(async (data) => {
+                    await Promise.all(data.Attachments.map(async (attachment) => {
+                        await sdkcall("NetworkManager", "getConnectAttachment", {
+                            AttachmentId: attachment.AttachmentId
+                        }, false).then(async (data) => {
+                            $('#section-networkingandcontentdelivery-vpc-networkmanagerconnectattachments-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ConnectAttachment.Attachment.ResourceArn,
+                                f2type: 'ec2.networkmanagerconnectattachment',
+                                f2data: data.ConnectAttachment,
+                                f2region: region,
+                                attachmentid: data.ConnectAttachment.Attachment.AttachmentId,
+                                corenetworkid: data.ConnectAttachment.Attachment.CoreNetworkId
+                            }]);
+                        });
+
+                        return sdkcall("NetworkManager", "listConnectPeers", {
+                            CoreNetworkId: attachment.CoreNetworkId,
+                            ConnectAttachmentId: attachment.AttachmentId
+                        }, false).then(async (data) => {
+                            await Promise.all(data.ConnectPeers.map(connectpeer => {
+                                return sdkcall("NetworkManager", "getConnectPeer", {
+                                    ConnectPeerId: connectpeer.ConnectPeerId
+                                }, false).then(async (data) => {
+                                    $('#section-networkingandcontentdelivery-vpc-networkmanagerconnectpeers-datatable').deferredBootstrapTable('append', [{
+                                        f2id: data.ConnectPeer.ConnectPeerId,
+                                        f2type: 'ec2.networkmanagerconnectpeer',
+                                        f2data: data.ConnectPeer,
+                                        f2region: region,
+                                        peerid: data.ConnectPeer.ConnectPeerId,
+                                        corenetworkid: data.ConnectPeer.CoreNetworkId
+                                    }]);
+                                });
+                            }));
+                        }).catch(() => { })
+                    }));
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "listAttachments", {
+                    CoreNetworkId: corenetwork.CoreNetworkId,
+                    AttachmentType: 'SITE_TO_SITE_VPN'
+                }, false).then(async (data) => {
+                    await Promise.all(data.Attachments.forEach(attachment => {
+                        return sdkcall("NetworkManager", "getSiteToSiteVpnAttachment", {
+                            AttachmentId: attachment.AttachmentId
+                        }, false).then(async (data) => {
+                            $('#section-networkingandcontentdelivery-vpc-networkmanagersitetositevpnattachments-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.SiteToSiteVpnAttachment.Attachment.ResourceArn,
+                                f2type: 'ec2.networkmanagersitetositevpnattachment',
+                                f2data: data.SiteToSiteVpnAttachment,
+                                f2region: region,
+                                attachmentid: data.SiteToSiteVpnAttachment.Attachment.AttachmentId,
+                                corenetworkid: data.SiteToSiteVpnAttachment.Attachment.CoreNetworkId
+                            }]);
+                        });
+                    }));
+                }).catch(() => { }),
+                sdkcall("NetworkManager", "listAttachments", {
+                    CoreNetworkId: corenetwork.CoreNetworkId,
+                    AttachmentType: 'VPC'
+                }, false).then(async (data) => {
+                    await Promise.all(data.Attachments.forEach(attachment => {
+                        return sdkcall("NetworkManager", "getVpcAttachment", {
+                            AttachmentId: attachment.AttachmentId
+                        }, false).then(async (data) => {
+                            $('#section-networkingandcontentdelivery-vpc-networkmanagervpcattachments-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.VpcAttachment.Attachment.ResourceArn,
+                                f2type: 'ec2.networkmanagervpcattachment',
+                                f2data: data.VpcAttachment,
+                                f2region: region,
+                                attachmentid: data.VpcAttachment.Attachment.AttachmentId,
+                                corenetworkid: data.VpcAttachment.Attachment.CoreNetworkId
+                            }]);
+                        });
+                    }));
+                }).catch(() => { })
+            ]);
+        });
+    }).catch(() => { });
+            
     await sdkcall("EC2", "describeManagedPrefixLists", {
         // no params
     }, false).then(async (data) => {
@@ -4541,6 +4842,11 @@ async function updateDatatableNetworkingAndContentDeliveryVPC() {
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerlinkassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercustomergatewayassociations-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagertransitgatewayregistrations-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagercorenetworks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerconnectattachments-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagerconnectpeers-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagersitetositevpnattachments-datatable');
+    unblockUI('#section-networkingandcontentdelivery-vpc-networkmanagervpcattachments-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-prefixlists-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-carriergateways-datatable');
     unblockUI('#section-networkingandcontentdelivery-vpc-networkfirewalls-datatable');
@@ -6310,6 +6616,104 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'NetworkInsightsAccessScopeAnalysisId': obj.data.NetworkInsightsAccessScopeAnalysisId,
                     'NetworkInsightsAccessScopeAnalysisArn': obj.data.NetworkInsightsAccessScopeAnalysisArn
                 }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagercorenetwork") {
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['GlobalNetworkId'] = obj.data.GlobalNetworkId;
+        reqParams.cfn['PolicyDocument'] = obj.data.PolicyDocument;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::CoreNetwork'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::CoreNetwork',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.CoreNetworkId,
+                'GetAtt': {
+                    'CoreNetworkArn': obj.data.CoreNetworkArn
+                }
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerconnectattachment") {
+        reqParams.cfn['CoreNetworkId'] = obj.data.Attachment.CoreNetworkId;
+        reqParams.cfn['EdgeLocation'] = obj.data.Attachment.EdgeLocation;
+        reqParams.cfn['Options'] = obj.data.Options;
+        reqParams.cfn['TransportAttachmentId'] = obj.data.TransportAttachmentId;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Attachment.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::ConnectAttachment'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::ConnectAttachment',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Attachment.AttachmentId
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagersitetositevpnattachment") {
+        reqParams.cfn['CoreNetworkId'] = obj.data.Attachment.CoreNetworkId;
+        reqParams.cfn['VpnConnectionArn'] = obj.data.VpnConnectionArn;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Attachment.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::SiteToSiteVpnAttachment'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::SiteToSiteVpnAttachment',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Attachment.AttachmentId
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagervpcattachment") {
+        reqParams.cfn['CoreNetworkId'] = obj.data.Attachment.CoreNetworkId;
+        reqParams.cfn['Options'] = obj.data.Options;
+        reqParams.cfn['SubnetArns'] = obj.data.SubnetArns;
+        reqParams.cfn['VpcArn'] = 'REPLACEME';
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Attachment.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::VpcAttachment'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::VpcAttachment',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Attachment.AttachmentId
+            }
+        });
+    } else if (obj.type == "ec2.networkmanagerconnectpeer") {
+        reqParams.cfn['ConnectAttachmentId'] = obj.data.ConnectAttachmentId;
+        reqParams.cfn['CoreNetworkAddress'] = obj.data.Configuration.CoreNetworkAddress;
+        reqParams.cfn['PeerAddress'] = obj.data.Configuration.PeerAddress;
+        reqParams.cfn['InsideCidrBlocks'] = obj.data.Configuration.InsideCidrBlocks;
+        if (obj.data.Configuration.BgpConfigurations) {
+            reqParams.cfn['BgpOptions'] = [];
+            obj.data.Configuration.BgpConfigurations.forEach(bgpconfiguration => {
+                reqParams.cfn['BgpOptions'].push({
+                    'PeerAsn': bgpconfiguration.PeerAsn
+                });
+            });
+        }
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Attachment.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ec2', obj.id, 'AWS::NetworkManager::ConnectPeer'),
+            'region': obj.region,
+            'service': 'ec2',
+            'type': 'AWS::NetworkManager::ConnectPeer',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Attachment.AttachmentId
             }
         });
     } else {
