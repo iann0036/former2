@@ -467,7 +467,7 @@ async function updateDatatableStorageS3() {
                 }, false).then((data) => {
                     bucket['Cors'] = data;
                 }).catch(() => { }),
-                sdkcall("S3", "getBucketLifecycle", {
+                sdkcall("S3", "getBucketLifecycleConfiguration", {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['Lifecycle'] = data;
