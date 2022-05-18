@@ -603,7 +603,9 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.UserPools.map(userPool => {
-            return Promise.all([
+            var enabledMfas = [];
+
+            await Promise.all([
                 sdkcall("CognitoIdentityServiceProvider", "listResourceServers", {
                     UserPoolId: userPool.Id,
                     MaxResults: 50 // WTF? required!
@@ -721,6 +723,10 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         }, true).then((data) => {
                             data["UserPoolId"] = userPool.Id;
 
+                            if (data.UserMFASettingList) {
+                                enabledMfas = enabledMfas.concat(data.UserMFASettingList);
+                            }
+
                             $('#section-securityidentityandcompliance-cognito-userpoolusers-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.Username,
                                 f2type: 'cognito.userpooluser',
@@ -752,33 +758,36 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             }]);
                         });
                     }));
-                }),
-                sdkcall("CognitoIdentityServiceProvider", "describeUserPool", {
-                    UserPoolId: userPool.Id
-                }, true).then(async (data) => {
-                    $('#section-securityidentityandcompliance-cognito-userpools-datatable').deferredBootstrapTable('append', [{
-                        f2id: data.UserPool.Arn,
-                        f2type: 'cognito.userpool',
-                        f2data: data.UserPool,
-                        f2region: region,
-                        name: data.UserPool.Name,
-                        id: data.UserPool.Id
-                    }]);
-
-                    await sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
-                        Domain: data.UserPool.CustomDomain || data.UserPool.Domain
-                    }, false).then(async (domaindata) => {
-                        $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
-                            f2id: domaindata.DomainDescription.Domain + " UserPoolDomain",
-                            f2type: 'cognito.userpooldomain',
-                            f2data: domaindata.DomainDescription,
-                            f2region: region,
-                            domain: domaindata.DomainDescription.Domain,
-                            userpoolid: domaindata.DomainDescription.UserPoolId
-                        }]);
-                    }).catch(() => { });
                 })
             ]);
+
+            return sdkcall("CognitoIdentityServiceProvider", "describeUserPool", {
+                UserPoolId: userPool.Id
+            }, true).then(async (data) => {
+                data.UserPool['EnabledMfas'] = [...new Set(enabledMfas)]; // dedup
+
+                $('#section-securityidentityandcompliance-cognito-userpools-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.UserPool.Arn,
+                    f2type: 'cognito.userpool',
+                    f2data: data.UserPool,
+                    f2region: region,
+                    name: data.UserPool.Name,
+                    id: data.UserPool.Id
+                }]);
+
+                await sdkcall("CognitoIdentityServiceProvider", "describeUserPoolDomain", {
+                    Domain: data.UserPool.CustomDomain || data.UserPool.Domain
+                }, false).then(async (domaindata) => {
+                    $('#section-securityidentityandcompliance-cognito-userpooldomains-datatable').deferredBootstrapTable('append', [{
+                        f2id: domaindata.DomainDescription.Domain + " UserPoolDomain",
+                        f2type: 'cognito.userpooldomain',
+                        f2data: domaindata.DomainDescription,
+                        f2region: region,
+                        domain: domaindata.DomainDescription.Domain,
+                        userpoolid: domaindata.DomainDescription.UserPoolId
+                    }]);
+                }).catch(() => { });
+            })
         }));
 
         unblockUI('#section-securityidentityandcompliance-cognito-userpools-datatable');
@@ -1018,11 +1027,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['UsernameConfiguration'] = obj.data.UsernameConfiguration;
         reqParams.cfn['UserPoolAddOns'] = obj.data.UserPoolAddOns;
         reqParams.cfn['VerificationMessageTemplate'] = obj.data.VerificationMessageTemplate;
-
-        /*
-        TODO:
-        EnabledMfas
-        */
+        reqParams.cfn['EnabledMfas'] = obj.data.EnabledMfas;
 
         tracked_resources.push({
             'obj': obj,
