@@ -5050,7 +5050,24 @@ RELATIONSHIP_TYPE_MAP_OVERRIDES = {
             "EmbeddedPropertyName": "SubnetIds"
           }
         ]
-      },
+      }
+    }
+  },
+  "AWS::EC2::SecurityGroup": {
+    "Relationships": {
+      "References": {
+        "AWS::EC2::SecurityGroup": [
+          {
+            "PropertyName": "SecurityGroupIngress",
+            "Arity": "Many",
+            "EmbeddedPropertyName": "SourceSecurityGroupId"
+          }, {
+            "PropertyName": "SecurityGroupEgress",
+            "Arity": "Many",
+            "EmbeddedPropertyName": "DestinationSecurityGroupId"
+          }
+        ]
+      }
     }
   }
 }
