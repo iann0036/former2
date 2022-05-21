@@ -602,7 +602,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
         $('#section-securityidentityandcompliance-cognito-userpoolgroups-datatable').deferredBootstrapTable('removeAll');
         $('#section-securityidentityandcompliance-cognito-userpoolusertogroupattachments-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.UserPools.map(userPool => {
+        await Promise.all(data.UserPools.map(async (userPool) => {
             var enabledMfas = [];
 
             await Promise.all([
