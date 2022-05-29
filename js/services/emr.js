@@ -482,6 +482,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Serverless Applications': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -497,6 +535,7 @@ async function updateDatatableAnalyticsEMR() {
     blockUI('#section-analytics-emr-containersvirtualclusters-datatable');
     blockUI('#section-analytics-emr-studios-datatable');
     blockUI('#section-analytics-emr-studiosessionmappings-datatable');
+    blockUI('#section-analytics-emr-serverlessapplications-datatable');
 
     await sdkcall("EMR", "listClusters", {
         ClusterStates: [
@@ -724,6 +763,29 @@ async function updateDatatableAnalyticsEMR() {
         unblockUI('#section-analytics-emr-studios-datatable');
         unblockUI('#section-analytics-emr-studiosessionmappings-datatable');
     }).catch(() => { });
+
+    await sdkcall("EMRServerless", "listApplications", {
+        states: ["STARTED", "CREATED"]
+    }, false).then(async (data) => {
+        $('#section-analytics-emr-serverlessapplications-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.applications.map(async (application) => {
+            return sdkcall("EMRServerless", "getApplication", {
+                applicationId: application.id
+            }, true).then((data) => {
+                $('#section-analytics-emr-serverlessapplications-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.application.arn,
+                    f2type: 'emr.serverlessapplication',
+                    f2data: data.application,
+                    f2region: region,
+                    name: data.application.name,
+                    type: data.application.type
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    unblockUI('#section-analytics-emr-serverlessapplications-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -986,6 +1048,80 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'emr',
             'type': 'AWS::EMR::StudioSessionMapping',
             'options': reqParams
+        });
+    } else if (obj.type == "emr.serverlessapplication") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['ReleaseLabel'] = obj.data.releaseLabel;
+        reqParams.cfn['Type'] = obj.data.type;
+        if (obj.data.initialCapacity) {
+            reqParams.cfn['InitialCapacity'] = [];
+            Object.keys(obj.data.initialCapacity).forEach(k => {
+                let workerconfiguration = null;
+                if (obj.data.initialCapacity[k].workerConfiguration) {
+                    workerconfiguration = {
+                        'Cpu': obj.data.initialCapacity[k].workerConfiguration.cpu,
+                        'Memory': obj.data.initialCapacity[k].workerConfiguration.memory,
+                        'Disk': obj.data.initialCapacity[k].workerConfiguration.disk
+                    };
+                }
+                reqParams.cfn['InitialCapacity'].push({
+                    'Key': k,
+                    'Value': {
+                        'WorkerConfiguration': workerconfiguration,
+                        'WorkerCount': obj.data.initialCapacity[k].workerCount
+                    }
+                });
+            });
+        }
+        if (obj.data.maximumCapacity) {
+            reqParams.cfn['MaximumCapacity'] = {
+                'Cpu': obj.data.maximumCapacity.cpu,
+                'Memory': obj.data.maximumCapacity.memory,
+                'Disk': obj.data.maximumCapacity.disk
+            };
+        }
+        if (obj.data.autoStartConfiguration) {
+            reqParams.cfn['AutoStartConfiguration'] = {
+                'Enabled': obj.data.autoStartConfiguration.enabled
+            };
+        }
+        if (obj.data.autoStopConfiguration) {
+            reqParams.cfn['AutoStopConfiguration'] = {
+                'Enabled': obj.data.autoStopConfiguration.enabled,
+                'IdleTimeoutMinutes': obj.data.autoStopConfiguration.idleTimeoutMinutes
+            };
+        }
+        if (obj.data.networkConfiguration) {
+            reqParams.cfn['NetworkConfiguration'] = {
+                'SubnetIds': obj.data.networkConfiguration.subnetIds,
+                'SecurityGroupIds': obj.data.networkConfiguration.securityGroupIds
+            };
+        }
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('emr', obj.id, 'AWS::EMRServerless::Application'),
+            'region': obj.region,
+            'service': 'emr',
+            'type': 'AWS::EMRServerless::Application',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.applicationId,
+                'GetAtt': {
+                    'Arn': obj.data.arn
+                }
+            }
         });
     } else {
         return false;

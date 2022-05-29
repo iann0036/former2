@@ -1196,6 +1196,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Wireless Network Analyzer Configurations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1232,6 +1270,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
     blockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
     blockUI('#section-internetofthings-core-rolealiases-datatable');
+    blockUI('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -1948,6 +1987,29 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("IoTWireless", "listNetworkAnalyzerConfigurations", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.NetworkAnalyzerConfigurationList.map(async (nac) => {
+            return sdkcall("IoTWireless", "getNetworkAnalyzerConfiguration", {
+                ConfigurationName: nac.Name
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'iot.wirelessnetworkanalyzerconfiguration',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -1971,6 +2033,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-wirelessfuotatasks-datatable');
     unblockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
     unblockUI('#section-internetofthings-core-rolealiases-datatable');
+    unblockUI('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -2950,6 +3013,22 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     'RoleAliasArn': obj.data.roleAliasArn
                 }
             }
+        });
+    } else if (obj.type == "iot.wirelessnetworkanalyzerconfiguration") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['TraceContent'] = obj.data.TraceContent;
+        reqParams.cfn['WirelessDevices'] = obj.data.WirelessDevices;
+        reqParams.cfn['WirelessGateways'] = obj.data.WirelessGateways;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoTWireless::NetworkAnalyzerConfiguration'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoTWireless::NetworkAnalyzerConfiguration',
+            'options': reqParams
         });
     } else {
         return false;
