@@ -304,26 +304,28 @@ async function updateDatatableMigrationAndTransferTransfer() {
                 }));
             });
 
-            await sdkcall("Transfer", "listAccesses", {
-                ServerId: server.ServerId
-            }, true).then(async (data) => {
-                await Promise.all(data.Accesses.map(access => {
-                    return sdkcall("Transfer", "describeAccess", {
-                        ServerId: server.ServerId,
-                        ExternalId: access.ExternalId
-                    }, true).then(async (data) => {
-                        $('#section-migrationandtransfer-transfer-accesses-datatable').deferredBootstrapTable('append', [{
-                            f2id: data.ServerId + " " + data.Access.ExternalId,
-                            f2type: 'transfer.access',
-                            f2data: data,
-                            f2region: region,
-                            externalid: data.Access.ExternalId,
-                            serverid: data.ServerId,
-                            homedirectory: data.Access.HomeDirectory
-                        }]);
-                    });
-                }));
-            });
+            if (server.IdentityProviderType != "SERVICE_MANAGED") {
+                await sdkcall("Transfer", "listAccesses", {
+                    ServerId: server.ServerId
+                }, true).then(async (data) => {
+                    await Promise.all(data.Accesses.map(access => {
+                        return sdkcall("Transfer", "describeAccess", {
+                            ServerId: server.ServerId,
+                            ExternalId: access.ExternalId
+                        }, true).then(async (data) => {
+                            $('#section-migrationandtransfer-transfer-accesses-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.ServerId + " " + data.Access.ExternalId,
+                                f2type: 'transfer.access',
+                                f2data: data,
+                                f2region: region,
+                                externalid: data.Access.ExternalId,
+                                serverid: data.ServerId,
+                                homedirectory: data.Access.HomeDirectory
+                            }]);
+                        });
+                    }));
+                }).catch(err => { });
+            }
 
             return sdkcall("Transfer", "describeServer", {
                 ServerId: server.ServerId
