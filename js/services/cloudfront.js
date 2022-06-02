@@ -518,20 +518,18 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
             return sdkcall("CloudFront", "getDistribution", {
                 Id: distribution.Id
             }, true).then(async (data) => {
-                distribution['DefaultRootObject'] = data.Distribution.DistributionConfig.DefaultRootObject;
-
-                distribution['Tags'] = await getResourceTags(distribution.ARN);
+                data.Distribution['Tags'] = await getResourceTags(data.Distribution.ARN);
                 
                 $('#section-networkingandcontentdelivery-cloudfront-distributions-datatable').deferredBootstrapTable('append', [{
-                    f2id: distribution.ARN,
+                    f2id: data.Distribution.ARN,
                     f2type: 'cloudfront.distribution',
-                    f2data: distribution,
+                    f2data: data.Distribution,
                     f2region: region,
-                    domainname: distribution.DomainName,
-                    id: distribution.Id,
-                    httpversion: distribution.HttpVersion,
-                    comment: distribution.Comment,
-                    priceclass: distribution.PriceClass // TODO: Make readable
+                    domainname: data.Distribution.DomainName,
+                    id: data.Distribution.Id,
+                    httpversion: data.Distribution.DistributionConfig.HttpVersion,
+                    comment: data.Distribution.DistributionConfig.Comment,
+                    priceclass: data.Distribution.DistributionConfig.PriceClass
                 }]);
             });
         }));
@@ -748,12 +746,14 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
 service_mapping_functions.push(async function(reqParams, obj, tracked_resources){
     if (obj.type == "cloudfront.distribution") {
         reqParams.cfn['DistributionConfig'] = {};
-        reqParams.cfn.DistributionConfig['Aliases'] = obj.data.Aliases.Items;
-        reqParams.tf['aliases'] = obj.data.Aliases.Items;
+        reqParams.cfn.DistributionConfig['Aliases'] = obj.data.DistributionConfig.Aliases.Items;
+        reqParams.tf['aliases'] = obj.data.DistributionConfig.Aliases.Items;
         reqParams.cfn.DistributionConfig['Origins'] = [];
-        reqParams.cfn.DistributionConfig['OriginGroups'] = obj.data.OriginGroups;
+        if (obj.data.DistributionConfig.OriginGroups && obj.data.DistributionConfig.OriginGroups.Quantity) {
+            reqParams.cfn.DistributionConfig['OriginGroups'] = obj.data.DistributionConfig.OriginGroups;
+        }
         reqParams.tf['origin'] = [];
-        obj.data.Origins.Items.forEach(origin => {
+        obj.data.DistributionConfig.Origins.Items.forEach(origin => {
             var customOriginConfig = null;
             var tfCustomOriginConfig = null;
             var customHeaders = null;
@@ -813,8 +813,8 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
         });
         var defaultCacheLambdaFunctionAssociations = [];
         var tfDefaultCacheLambdaFunctionAssociations = [];
-        if (obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items && obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.length) {
-            obj.data.DefaultCacheBehavior.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
+        if (obj.data.DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations.Items && obj.data.DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations.Items.length) {
+            obj.data.DistributionConfig.DefaultCacheBehavior.LambdaFunctionAssociations.Items.forEach(lambdaFunctionAssociation => {
                 defaultCacheLambdaFunctionAssociations.push({
                     'EventType': lambdaFunctionAssociation.EventType,
                     'LambdaFunctionARN': lambdaFunctionAssociation.LambdaFunctionARN
@@ -826,76 +826,76 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             });
         }
         var cookiesWhitelistedNames = null;
-        if (obj.data.DefaultCacheBehavior && obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames) {
-            cookiesWhitelistedNames = obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items;
+        if (obj.data.DistributionConfig.DefaultCacheBehavior && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames) {
+            cookiesWhitelistedNames = obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items;
         }
         var queryStringCacheKeys = null;
-        if (obj.data.DefaultCacheBehavior && obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys) {
-            queryStringCacheKeys = obj.data.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items;
+        if (obj.data.DistributionConfig.DefaultCacheBehavior && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys) {
+            queryStringCacheKeys = obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys.Items;
         }
-        if (obj.data.DefaultCacheBehavior) {
+        if (obj.data.DistributionConfig.DefaultCacheBehavior) {
             var forwardedValues = null;
             var tfforwardedValues = null;
-            if (obj.data.DefaultCacheBehavior.ForwardedValues) {
+            if (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues) {
                 forwardedValues = {
                     'Cookies': {
-                        'Forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
+                        'Forward': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
                         'WhitelistedNames': cookiesWhitelistedNames
                     },
-                    'Headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
-                    'QueryString': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
+                    'Headers': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
+                    'QueryString': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString : null),
                     'QueryStringCacheKeys': queryStringCacheKeys
                 };
                 tfforwardedValues = {
                     'cookies': {
-                        'forward': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
+                        'forward': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward : null),
                         'whitelisted_names': cookiesWhitelistedNames
                     },
-                    'headers': (obj.data.DefaultCacheBehavior.ForwardedValues && obj.data.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
-                    'query_string': (obj.data.DefaultCacheBehavior.ForwardedValues ? obj.data.DefaultCacheBehavior.ForwardedValues.QueryString : null),
+                    'headers': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Headers ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Headers.Items : null),
+                    'query_string': (obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues ? obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString : null),
                     'query_string_cache_keys': queryStringCacheKeys
                 };
             }
             reqParams.cfn.DistributionConfig['DefaultCacheBehavior'] = {
-                'AllowedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.Items : null),
-                'CachedMethods': (obj.data.DefaultCacheBehavior.AllowedMethods && obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items : null),
-                'Compress': obj.data.DefaultCacheBehavior.Compress,
-                'DefaultTTL': obj.data.DefaultCacheBehavior.DefaultTTL,
-                'CachePolicyId': obj.data.DefaultCacheBehavior.CachePolicyId,
-                'OriginRequestPolicyId': obj.data.DefaultCacheBehavior.OriginRequestPolicyId,
-                'FieldLevelEncryptionId': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
+                'AllowedMethods': (obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods ? obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods.Items : null),
+                'CachedMethods': (obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods && obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods.CachedMethods ? obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods.CachedMethods.Items : null),
+                'Compress': obj.data.DistributionConfig.DefaultCacheBehavior.Compress,
+                'DefaultTTL': obj.data.DistributionConfig.DefaultCacheBehavior.DefaultTTL,
+                'CachePolicyId': obj.data.DistributionConfig.DefaultCacheBehavior.CachePolicyId,
+                'OriginRequestPolicyId': obj.data.DistributionConfig.DefaultCacheBehavior.OriginRequestPolicyId,
+                'FieldLevelEncryptionId': (obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId),
                 'ForwardedValues': forwardedValues,
                 'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
-                'MaxTTL': obj.data.DefaultCacheBehavior.MaxTTL,
-                'MinTTL': obj.data.DefaultCacheBehavior.MinTTL,
-                'RealtimeLogConfigArn': obj.data.DefaultCacheBehavior.RealtimeLogConfigArn,
-                'ResponseHeadersPolicyId': obj.data.DefaultCacheBehavior.ResponseHeadersPolicyId,
-                'SmoothStreaming': obj.data.DefaultCacheBehavior.SmoothStreaming,
-                'TargetOriginId': obj.data.DefaultCacheBehavior.TargetOriginId,
-                'TrustedSigners': (obj.data.DefaultCacheBehavior.TrustedSigners ? obj.data.DefaultCacheBehavior.TrustedSigners.Items : null),
-                'TrustedKeyGroups': (obj.data.DefaultCacheBehavior.TrustedKeyGroups ? obj.data.DefaultCacheBehavior.TrustedKeyGroups.Items : null),
-                'ViewerProtocolPolicy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
+                'MaxTTL': obj.data.DistributionConfig.DefaultCacheBehavior.MaxTTL,
+                'MinTTL': obj.data.DistributionConfig.DefaultCacheBehavior.MinTTL,
+                'RealtimeLogConfigArn': obj.data.DistributionConfig.DefaultCacheBehavior.RealtimeLogConfigArn,
+                'ResponseHeadersPolicyId': obj.data.DistributionConfig.DefaultCacheBehavior.ResponseHeadersPolicyId,
+                'SmoothStreaming': obj.data.DistributionConfig.DefaultCacheBehavior.SmoothStreaming,
+                'TargetOriginId': obj.data.DistributionConfig.DefaultCacheBehavior.TargetOriginId,
+                'TrustedSigners': (obj.data.DistributionConfig.DefaultCacheBehavior.TrustedSigners ? obj.data.DistributionConfig.DefaultCacheBehavior.TrustedSigners.Items : null),
+                'TrustedKeyGroups': (obj.data.DistributionConfig.DefaultCacheBehavior.TrustedKeyGroups ? obj.data.DistributionConfig.DefaultCacheBehavior.TrustedKeyGroups.Items : null),
+                'ViewerProtocolPolicy': obj.data.DistributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy
             };
             reqParams.tf['default_cache_behavior'] = {
-                'allowed_methods': (obj.data.DefaultCacheBehavior.AllowedMethods ? obj.data.DefaultCacheBehavior.AllowedMethods.Items : null),
-                'cached_methods': (obj.data.DefaultCacheBehavior.CachedMethods ? obj.data.DefaultCacheBehavior.CachedMethods.Items : null),
-                'compress': obj.data.DefaultCacheBehavior.Compress,
-                'default_ttl': obj.data.DefaultCacheBehavior.DefaultTTL,
-                'field_level_encryption_id': (obj.data.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DefaultCacheBehavior.FieldLevelEncryptionId),
+                'allowed_methods': (obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods ? obj.data.DistributionConfig.DefaultCacheBehavior.AllowedMethods.Items : null),
+                'cached_methods': (obj.data.DistributionConfig.DefaultCacheBehavior.CachedMethods ? obj.data.DistributionConfig.DefaultCacheBehavior.CachedMethods.Items : null),
+                'compress': obj.data.DistributionConfig.DefaultCacheBehavior.Compress,
+                'default_ttl': obj.data.DistributionConfig.DefaultCacheBehavior.DefaultTTL,
+                'field_level_encryption_id': (obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId),
                 'forwarded_values': tfforwardedValues,
                 'lambda_function_association': defaultCacheLambdaFunctionAssociations,
-                'max_ttl': obj.data.DefaultCacheBehavior.MaxTTL,
-                'min_ttl': obj.data.DefaultCacheBehavior.MinTTL,
-                'smooth_streaming ': obj.data.DefaultCacheBehavior.SmoothStreaming,
-                'target_origin_id': obj.data.DefaultCacheBehavior.TargetOriginId,
-                'trusted_signers': obj.data.DefaultCacheBehavior.TrustedSigners.Items,
-                'viewer_protocol_policy': obj.data.DefaultCacheBehavior.ViewerProtocolPolicy
+                'max_ttl': obj.data.DistributionConfig.DefaultCacheBehavior.MaxTTL,
+                'min_ttl': obj.data.DistributionConfig.DefaultCacheBehavior.MinTTL,
+                'smooth_streaming ': obj.data.DistributionConfig.DefaultCacheBehavior.SmoothStreaming,
+                'target_origin_id': obj.data.DistributionConfig.DefaultCacheBehavior.TargetOriginId,
+                'trusted_signers': obj.data.DistributionConfig.DefaultCacheBehavior.TrustedSigners.Items,
+                'viewer_protocol_policy': obj.data.DistributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy
             };
         }
-        if (obj.data.CacheBehaviors.Items && obj.data.CacheBehaviors.Items.length) {
+        if (obj.data.DistributionConfig.CacheBehaviors.Items && obj.data.DistributionConfig.CacheBehaviors.Items.length) {
             reqParams.cfn.DistributionConfig['CacheBehaviors'] = [];
             reqParams.tf['ordered_cache_behavior'] = [];
-            obj.data.CacheBehaviors.Items.forEach(cacheBehaviour => {
+            obj.data.DistributionConfig.CacheBehaviors.Items.forEach(cacheBehaviour => {
                 var cacheLambdaFunctionAssociations = [];
                 var tfCacheLambdaFunctionAssociations = [];
                 if (cacheBehaviour.LambdaFunctionAssociations.Items && cacheBehaviour.LambdaFunctionAssociations.Items.length) {
@@ -979,10 +979,10 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 });
             });
         }
-        if (obj.data.CustomErrorResponses) {
+        if (obj.data.DistributionConfig.CustomErrorResponses) {
             reqParams.cfn.DistributionConfig['CustomErrorResponses'] = [];
             reqParams.tf['custom_error_response'] = [];
-            obj.data.CustomErrorResponses.Items.forEach(customerrorresponse => {
+            obj.data.DistributionConfig.CustomErrorResponses.Items.forEach(customerrorresponse => {
                 if (customerrorresponse.ResponseCode != "" && customerrorresponse.ResponsePagePath != "") {
                     reqParams.cfn.DistributionConfig['CustomErrorResponses'].push(customerrorresponse);
                     reqParams.tf['custom_error_response'].push({
@@ -994,62 +994,62 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 }
             });
         }
-        reqParams.cfn.DistributionConfig['Comment'] = obj.data.Comment;
-        reqParams.tf['comment'] = obj.data.Comment;
-        reqParams.cfn.DistributionConfig['PriceClass'] = obj.data.PriceClass;
-        reqParams.tf['price_class'] = obj.data.PriceClass;
-        reqParams.cfn.DistributionConfig['Enabled'] = obj.data.Enabled;
-        reqParams.tf['enabled'] = obj.data.Enabled;
-        if (obj.data.ViewerCertificate) {
+        reqParams.cfn.DistributionConfig['Comment'] = obj.data.DistributionConfig.Comment;
+        reqParams.tf['comment'] = obj.data.DistributionConfig.Comment;
+        reqParams.cfn.DistributionConfig['PriceClass'] = obj.data.DistributionConfig.PriceClass;
+        reqParams.tf['price_class'] = obj.data.DistributionConfig.PriceClass;
+        reqParams.cfn.DistributionConfig['Enabled'] = obj.data.DistributionConfig.Enabled;
+        reqParams.tf['enabled'] = obj.data.DistributionConfig.Enabled;
+        if (obj.data.DistributionConfig.ViewerCertificate) {
             reqParams.cfn.DistributionConfig['ViewerCertificate'] = {
-                'AcmCertificateArn': obj.data.ViewerCertificate.ACMCertificateArn,
-                'CloudFrontDefaultCertificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
-                'IamCertificateId': obj.data.ViewerCertificate.IAMCertificateId,
-                'MinimumProtocolVersion': obj.data.ViewerCertificate.MinimumProtocolVersion,
-                'SslSupportMethod': obj.data.ViewerCertificate.SSLSupportMethod
+                'AcmCertificateArn': obj.data.DistributionConfig.ViewerCertificate.ACMCertificateArn,
+                'CloudFrontDefaultCertificate': obj.data.DistributionConfig.ViewerCertificate.CloudFrontDefaultCertificate,
+                'IamCertificateId': obj.data.DistributionConfig.ViewerCertificate.IAMCertificateId,
+                'MinimumProtocolVersion': obj.data.DistributionConfig.ViewerCertificate.MinimumProtocolVersion,
+                'SslSupportMethod': obj.data.DistributionConfig.ViewerCertificate.SSLSupportMethod
             };
             reqParams.tf['viewer_certificate'] = {
-                'acm_certificate_arn': obj.data.ViewerCertificate.ACMCertificateArn,
-                'cloudfront_default_certificate': obj.data.ViewerCertificate.CloudFrontDefaultCertificate,
-                'iam_certificate_id': obj.data.ViewerCertificate.IAMCertificateId,
-                'minimum_protocol_version': obj.data.ViewerCertificate.MinimumProtocolVersion,
-                'ssl_support_method': obj.data.ViewerCertificate.SSLSupportMethod
+                'acm_certificate_arn': obj.data.DistributionConfig.ViewerCertificate.ACMCertificateArn,
+                'cloudfront_default_certificate': obj.data.DistributionConfig.ViewerCertificate.CloudFrontDefaultCertificate,
+                'iam_certificate_id': obj.data.DistributionConfig.ViewerCertificate.IAMCertificateId,
+                'minimum_protocol_version': obj.data.DistributionConfig.ViewerCertificate.MinimumProtocolVersion,
+                'ssl_support_method': obj.data.DistributionConfig.ViewerCertificate.SSLSupportMethod
             };
         }
-        if (obj.data.Restrictions && obj.data.Restrictions.GeoRestriction) {
+        if (obj.data.DistributionConfig.Restrictions && obj.data.DistributionConfig.Restrictions.GeoRestriction) {
             reqParams.cfn.DistributionConfig['Restrictions'] = {
                 'GeoRestriction': {
-                    'RestrictionType': obj.data.Restrictions.GeoRestriction.RestrictionType,
-                    'Locations': obj.data.Restrictions.GeoRestriction.Items
+                    'RestrictionType': obj.data.DistributionConfig.Restrictions.GeoRestriction.RestrictionType,
+                    'Locations': obj.data.DistributionConfig.Restrictions.GeoRestriction.Items
                 }
             };
             reqParams.tf['restrictions'] = {
                 'geo_restriction': {
-                    'restriction_type': obj.data.Restrictions.GeoRestriction.RestrictionType,
-                    'locations': obj.data.Restrictions.GeoRestriction.Items
+                    'restriction_type': obj.data.DistributionConfig.Restrictions.GeoRestriction.RestrictionType,
+                    'locations': obj.data.DistributionConfig.Restrictions.GeoRestriction.Items
                 }
             };
         }
-        if (obj.data.WebACLId && obj.data.WebACLId != "") {
-            reqParams.cfn.DistributionConfig['WebACLId'] = obj.data.WebACLId;
-            reqParams.tf['web_acl_id'] = obj.data.WebACLId;
+        if (obj.data.DistributionConfig.WebACLId && obj.data.DistributionConfig.WebACLId != "") {
+            reqParams.cfn.DistributionConfig['WebACLId'] = obj.data.DistributionConfig.WebACLId;
+            reqParams.tf['web_acl_id'] = obj.data.DistributionConfig.WebACLId;
         }
-        if (obj.data.HttpVersion) {
-            reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.HttpVersion.toLowerCase();
-            reqParams.tf['http_version'] = obj.data.HttpVersion;
+        if (obj.data.DistributionConfig.HttpVersion) {
+            reqParams.cfn.DistributionConfig['HttpVersion'] = obj.data.DistributionConfig.HttpVersion.toLowerCase();
+            reqParams.tf['http_version'] = obj.data.DistributionConfig.HttpVersion;
         }
-        reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DefaultRootObject;
-        reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.IsIPV6Enabled;
-        reqParams.tf['is_ipv6_enabled'] = obj.data.IsIPV6Enabled;
-        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
-
-        /*
-        TODO:
-        DistributionConfig:
-            Logging:
-                Logging
-        */
-
+        reqParams.cfn.DistributionConfig['DefaultRootObject'] = obj.data.DistributionConfig.DefaultRootObject;
+        reqParams.cfn.DistributionConfig['IPV6Enabled'] = obj.data.DistributionConfig.IsIPV6Enabled;
+        reqParams.tf['is_ipv6_enabled'] = obj.data.DistributionConfig.IsIPV6Enabled;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.DistributionConfig.Tags);
+        if (obj.data.DistributionConfig.Logging && obj.data.DistributionConfig.Logging.Enabled) {
+            reqParams.cfn.DistributionConfig['Logging'] = {
+                'Bucket': obj.data.DistributionConfig.Logging.Bucket,
+                'IncludeCookies': obj.data.DistributionConfig.Logging.IncludeCookies,
+                'Prefix': obj.data.DistributionConfig.Logging.Prefix
+            };
+        }
+        
         tracked_resources.push({
             'obj': obj,
             'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::Distribution'),
