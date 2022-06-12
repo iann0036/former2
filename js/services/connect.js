@@ -661,6 +661,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Task Templates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -682,6 +720,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     blockUI('#section-businessapplications-connect-dataintegrations-datatable');
     blockUI('#section-businessapplications-connect-phonenumbers-datatable');
     blockUI('#section-businessapplications-connect-voiceiddomains-datatable');
+    blockUI('#section-businessapplications-connect-tasktemplates-datatable');
 
     await sdkcall("CustomerProfiles", "listDomains", {
         // no params
@@ -755,6 +794,7 @@ async function updateDatatableBusinessApplicationsConnect() {
         $('#section-businessapplications-connect-contactflows-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-contactflowmodules-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-phonenumbers-datatable').deferredBootstrapTable('removeAll');
+        $('#section-businessapplications-connect-tasktemplates-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.InstanceSummaryList.map(async (instance) => {
             return Promise.all([
@@ -907,6 +947,25 @@ async function updateDatatableBusinessApplicationsConnect() {
                             }]);
                         });
                     }));
+                }).catch(() => { }),
+                sdkcall("Connect", "listTaskTemplates", {
+                    InstanceId: instance.Id
+                }, false).then(async (data) => {
+                    await Promise.all(data.TaskTemplates.map(async (tasktemplate) => {
+                        return sdkcall("Connect", "getTaskTemplate", {
+                            InstanceId: instance.Id,
+                            TaskTemplateId: tasktemplate.Id
+                        }, true).then(async (data) => {
+                            $('#section-businessapplications-connect-tasktemplates-datatable').deferredBootstrapTable('append', [{
+                                f2id: data.Arn,
+                                f2type: 'connect.tasktemplate',
+                                f2data: data,
+                                f2region: region,
+                                name: data.Name,
+                                description: data.Description
+                            }]);
+                        });
+                    }));
                 }).catch(() => { })
             ]);
         }));
@@ -1049,6 +1108,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     unblockUI('#section-businessapplications-connect-dataintegrations-datatable');
     unblockUI('#section-businessapplications-connect-phonenumbers-datatable');
     unblockUI('#section-businessapplications-connect-voiceiddomains-datatable');
+    unblockUI('#section-businessapplications-connect-tasktemplates-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1587,6 +1647,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'returnValues': {
                 'Ref': obj.data.DomainId
             }
+        });
+    } else if (obj.type == "connect.tasktemplate") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['ContactFlowArn'] = obj.data.Arn.split("/task-template/")[0] + "/contact-flow/" + obj.data.ContactFlowId;
+        reqParams.cfn['Constraints'] = obj.data.Constraints;
+        if (obj.data.Defaults) {
+            reqParams.cfn['Defaults'] = obj.data.Defaults.DefaultFieldValues;
+        }
+        reqParams.cfn['Fields'] = obj.data.Fields;
+        reqParams.cfn['InstanceArn'] = obj.data.Arn.split("/task-template/")[0];
+        reqParams.cfn['Status'] = obj.data.Status;
+        reqParams.cfn['Fields'] = obj.data.Fields;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.Tags[tagKey]
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::Connect::TaskTemplate'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::Connect::TaskTemplate',
+            'options': reqParams
         });
     } else {
         return false;
