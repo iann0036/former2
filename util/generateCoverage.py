@@ -50,7 +50,8 @@ cfn_exceptions = {
     'AWS::EC2::TransitGatewayVpcAttachment': 'N/A (duplicate of AWS::EC2::TransitGatewayAttachment)',
     'AWS::CloudFormation::HookDefaultVersion': 'N/A',
     'AWS::CloudFormation::HookTypeConfig': 'N/A',
-    'AWS::CloudFormation::HookVersion': 'N/A'
+    'AWS::CloudFormation::HookVersion': 'N/A',
+    'AWS::Route53::CidrCollection': 'N/A'
 }
 tf_exceptions = {
     'aws_cloudformation_stack': 'N/A',
