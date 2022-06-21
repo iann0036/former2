@@ -478,7 +478,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "databrew.dataset") {
         reqParams.cfn['Name'] = obj.data.Name;
         reqParams.cfn['Input'] = obj.data.Input;
+        reqParams.cfn['Format'] = obj.data.Format;
         reqParams.cfn['FormatOptions'] = obj.data.FormatOptions;
+        if (obj.data.PathOptions) {
+            var parameters = null;
+            if (obj.data.PathOptions.Parameters) {
+                parameters = [];
+                for (var k of Object.keys(obj.data.PathOptions.Parameters)) {
+                    parameters.push({
+                        'DatasetParameter': {
+                            'Name': obj.data.PathOptions.Parameters[k].Name,
+                            'Type': obj.data.PathOptions.Parameters[k].Type,
+                            'CreateColumn': obj.data.PathOptions.Parameters[k].CreateColumn,
+                            'Filter': obj.data.PathOptions.Parameters[k].Filter,
+                            'DatetimeOptions': obj.data.PathOptions.Parameters[k].DatetimeOptions
+                        },
+                        'PathParameterName': k
+                    });
+                }
+            }
+            reqParams.cfn['PathOptions'] = {
+                'FilesLimit': obj.data.PathOptions.FilesLimit,
+                'LastModifiedDateCondition': obj.data.PathOptions.LastModifiedDateCondition,
+                'Parameters': parameters
+            };
+        }
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
             Object.keys(obj.data.Tags).forEach(tagKey => {
