@@ -66,7 +66,7 @@ async function updateDatatableApplicationIntegrationSQS() {
     blockUI('#section-applicationintegration-sqs-queuepolicies-datatable');
 
     await sdkcall("SQS", "listQueues", {
-        // no params
+        MaxResults: 1000
     }, true).then(async (data) => {
         $('#section-applicationintegration-sqs-queues-datatable').deferredBootstrapTable('removeAll');
         $('#section-applicationintegration-sqs-queuepolicies-datatable').deferredBootstrapTable('removeAll');
