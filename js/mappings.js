@@ -120,7 +120,7 @@ function ensureInitDeclaredGo(service, region) {
     return '';
 }
 
-function processTfParameter(param, spacing, index, tracked_resources) {
+function processTfParameter(param, spacing, keyname, index, tracked_resources) {
     var paramitems = [];
 
     if (param === undefined || param === null || (Array.isArray(param) && param.length == 0))
@@ -185,13 +185,27 @@ function processTfParameter(param, spacing, index, tracked_resources) {
 
         return doubleQuotedString(string_return);
     }
+    if (param instanceof Set) {
+        if (param.size == 0) {
+            return '';
+        }
+
+        for (let paramitem of param) {
+            paramitems.push(processTfParameter(paramitem, spacing, keyname, index, tracked_resources));
+        };
+
+        return `
+` + ' '.repeat(spacing) + keyname + " " + paramitems.join(`
+` + ' '.repeat(spacing) + keyname + " ") + `
+` + ' '.repeat(spacing);
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
         }
 
         param.forEach(paramitem => {
-            paramitems.push(processTfParameter(paramitem, spacing + 4, index, tracked_resources));
+            paramitems.push(processTfParameter(paramitem, spacing + 4, keyname, index, tracked_resources));
         });
 
         return `[
@@ -205,9 +219,11 @@ function processTfParameter(param, spacing, index, tracked_resources) {
         }
 
         Object.keys(param).forEach(function (key) {
-            var subvalue = processTfParameter(param[key], spacing + 4, index, tracked_resources);
+            var subvalue = processTfParameter(param[key], spacing + 4, key, index, tracked_resources);
             if (typeof subvalue !== "undefined") {
-                if (subvalue[0] == '{') {
+                if (param[key] instanceof Set) {
+                    paramitems.push(subvalue);
+                } else if (subvalue[0] == '{') {
                     paramitems.push(key + " " + subvalue);
                 } else {
                     if (key.match(/^[0-9]+$/g)) {
@@ -279,6 +295,9 @@ function processPulumiParameter(param, spacing, index, tracked_resources) {
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -387,6 +406,9 @@ function processCdktfParameter(param, spacing, index, tracked_resources) {
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -640,6 +662,9 @@ function processCfnParameter(param, spacing, index, tracked_resources) {
 
         return pre_return_str + doubleQuotedString(string_return);
     }
+    if (param instanceof Set) {
+        param = Array.from(param);
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
@@ -755,6 +780,9 @@ function processCdkParameter(param, spacing, index, tracked_resources) {
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -905,6 +933,9 @@ function processCdkv2Parameter(param, spacing, index, tracked_resources) {
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1057,6 +1088,9 @@ function processTroposphereParameter(param, spacing, keyname, index, tracked_res
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1729,6 +1763,9 @@ function processJsParameter(param, spacing) {
 
         return doubleQuotedString(string_return);
     }
+    if (param instanceof Set) {
+        param = Array.from(param);
+    }
     if (Array.isArray(param)) {
         if (param.length == 0) {
             return '[]';
@@ -1784,6 +1821,9 @@ function processBoto3Parameter(param, spacing) {
         }
 
         return doubleQuotedString(string_return);
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -1858,6 +1898,9 @@ function processGoParameter(service, paramkey, param, spacing) {
         }
 
         return `aws.String(${doubleQuotedString(string_return)})`;
+    }
+    if (param instanceof Set) {
+        param = Array.from(param);
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -2486,7 +2529,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
             if (typeof options[option] !== "undefined" && options[option] !== null) {
                 if (Array.isArray(options[option]) && typeof options[option][0] === 'object') {
                     for (var i = 0; i < options[option].length; i++) {
-                        var optionvalue = processTfParameter(options[option][i], 4, index, tracked_resources);
+                        var optionvalue = processTfParameter(options[option][i], 4, option, index, tracked_resources);
                         if (typeof optionvalue !== "undefined") {
                             if (optionvalue[0] == '{') {
                                 params += `
@@ -2502,7 +2545,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
 
                     }
                 } else {
-                    var optionvalue = processTfParameter(options[option], 4, index, tracked_resources);
+                    var optionvalue = processTfParameter(options[option], 4, option, index, tracked_resources);
                     if (typeof optionvalue !== "undefined") {
                         if (options[option].constructor === Set) {
                             params += `

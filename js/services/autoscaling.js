@@ -115,9 +115,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             if (obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification) {
                 var dimensions = null;
                 if (obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Dimensions) {
-                    dimensions = [];
+                    dimensions = new Set();
                     obj.data.TargetTrackingConfiguration.CustomizedMetricSpecification.Dimensions.forEach(dimension => {
-                        dimensions.push({
+                        dimensions.add({
                             'name': dimension.Name,
                             'value': dimension.Value
                         });

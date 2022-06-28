@@ -784,11 +784,11 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             }
             if (origin.CustomHeaders) {
                 customHeaders = origin.CustomHeaders.Items;
-                tfCustomHeaders = [];
+                tfCustomHeaders = new Set();
                 origin.CustomHeaders.Items.forEach(customheader => {
-                    tfCustomHeaders.push({
-                        'name': customheader.Name,
-                        'value': customheader.Value
+                    tfCustomHeaders.add({
+                        'name': customheader.HeaderName,
+                        'value': customheader.HeaderValue
                     })
                 });
             }
@@ -798,7 +798,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'CustomOriginConfig': customOriginConfig,
                 'DomainName': origin.DomainName,
                 'Id': origin.Id,
-                'OriginCustomHeaders': tfCustomHeaders,
+                'OriginCustomHeaders': customHeaders,
                 'OriginPath': origin.OriginPath,
                 'S3OriginConfig': origin.S3OriginConfig
             });
@@ -806,7 +806,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'custom_origin_config': tfCustomOriginConfig,
                 'domain_name': origin.DomainName,
                 'origin_id': origin.Id,
-                'custom_header': customHeaders,
+                'custom_header': tfCustomHeaders,
                 'origin_path': origin.OriginPath,
                 's3_origin_config': tfS3OriginConfig
             });
