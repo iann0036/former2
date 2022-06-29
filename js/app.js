@@ -1683,7 +1683,7 @@ async function getResourceTags(arn) {
     var type = arn.split(":")[5].split("/")[0];
 
     if (!resource_tag_cache[ service/*+ "." + type*/ ]) {
-        resource_tag_cache[service] = [];
+        resource_tag_cache[service] = "PENDING";
         
         await sdkcall("ResourceGroupsTaggingAPI", "getResources", {
             ResourceTypeFilters: [ service/* + "." + type*/ ]
@@ -1693,6 +1693,10 @@ async function getResourceTags(arn) {
         setTimeout((k) => {
             delete resource_tag_cache[k];
         }, 20000, service/* + "." + type*/); // 20s cache
+    }
+
+    while (resource_tag_cache[service] == "PENDING") {
+        await new Promise(r => setTimeout(r, 2000));
     }
 
     for (var res of resource_tag_cache[ service/* + "." + type*/ ]) {
