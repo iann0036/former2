@@ -1234,6 +1234,44 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'CA Certificates': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'status',
+                        title: 'Status',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -1271,6 +1309,7 @@ async function updateDatatableInternetofThingsCore() {
     blockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
     blockUI('#section-internetofthings-core-rolealiases-datatable');
     blockUI('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable');
+    blockUI('#section-internetofthings-core-cacertificates-datatable');
 
     await sdkcall("Iot", "listThings", {
         // no params
@@ -2010,6 +2049,29 @@ async function updateDatatableInternetofThingsCore() {
         }));
     }).catch(err => { });
 
+    await sdkcall("Iot", "listCACertificates", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-internetofthings-core-cacertificates-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.certificates.map(async (certificate) => {
+            return sdkcall("Iot", "describeCACertificate", {
+                certificateId: certificate.certificateId
+            }, true).then(async (data) => {
+                data['Tags'] = await getResourceTags(data.Arn);
+
+                $('#section-internetofthings-core-cacertificates-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.certificateDescription.certificateArn,
+                    f2type: 'iot.cacertificate',
+                    f2data: data,
+                    f2region: region,
+                    id: data.certificateDescription.certificateId,
+                    status: data.certificateDescription.status
+                }]);
+            });
+        }));
+    }).catch(err => { });
+
     unblockUI('#section-internetofthings-core-domainconfigurations-datatable');
     unblockUI('#section-internetofthings-core-topicruledestinations-datatable');
     unblockUI('#section-internetofthings-core-wirelessdestinations-datatable');
@@ -2034,6 +2096,7 @@ async function updateDatatableInternetofThingsCore() {
     unblockUI('#section-internetofthings-core-wirelessmultitaskgroups-datatable');
     unblockUI('#section-internetofthings-core-rolealiases-datatable');
     unblockUI('#section-internetofthings-core-wirelessnetworkanalyzerconfigurations-datatable');
+    unblockUI('#section-internetofthings-core-cacertificates-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -3028,6 +3091,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'iot',
             'type': 'AWS::IoTWireless::NetworkAnalyzerConfiguration',
+            'options': reqParams
+        });
+    } else if (obj.type == "iot.cacertificate") {
+        reqParams.cfn['Status'] = obj.data.certificateDescription.status;
+        reqParams.cfn['CACertificatePem'] = obj.data.certificateDescription.certificatePem;
+        reqParams.cfn['AutoRegistrationStatus'] = obj.data.certificateDescription.autoRegistrationStatus;
+        reqParams.cfn['RegistrationConfig'] = obj.data.registrationConfig;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('iot', obj.id, 'AWS::IoT::CACertificate'),
+            'region': obj.region,
+            'service': 'iot',
+            'type': 'AWS::IoT::CACertificate',
             'options': reqParams
         });
     } else {

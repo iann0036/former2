@@ -69,12 +69,39 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Event Data Stores': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // no params
+                ]
+            ]
         }
     }
 });
 
 async function updateDatatableManagementAndGovernanceCloudTrail() {
     blockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
+    blockUI('#section-managementandgovernance-cloudtrail-eventdatastores-datatable');
 
     await sdkcall("CloudTrail", "describeTrails", {
         // no params
@@ -101,9 +128,32 @@ async function updateDatatableManagementAndGovernanceCloudTrail() {
                 }]);
             });
         }));
-
-        unblockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
     });
+
+    await sdkcall("CloudTrail", "listEventDataStores", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudtrail-eventdatastores-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.EventDataStores.map(async (eventdatastore) => {
+            return sdkcall("CloudTrail", "getEventDataStore", {
+                EventDataStore: eventdatastore.EventDataStoreArn
+            }, true).then(async (data) => {
+                trail['Tags'] = await getResourceTags(data.EventDataStoreArn);
+
+                $('#section-managementandgovernance-cloudtrail-eventdatastores-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.EventDataStoreArn,
+                    f2type: 'cloudtrail.eventdatastore',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name
+                }]);
+            });
+        }));
+    }).catch(() => {});
+
+    unblockUI('#section-managementandgovernance-cloudtrail-trails-datatable');
+    unblockUI('#section-managementandgovernance-cloudtrail-eventdatastores-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -157,6 +207,26 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'TrailName': obj.data.Name
                 }
+            }
+        });
+    } else if (obj.type == "cloudtrail.eventdatastore") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['AdvancedEventSelectors'] = obj.data.AdvancedEventSelectors;
+        reqParams.cfn['MultiRegionEnabled'] = obj.data.MultiRegionEnabled;
+        reqParams.cfn['OrganizationEnabled'] = obj.data.OrganizationEnabled;
+        reqParams.cfn['RetentionPeriod'] = obj.data.RetentionPeriod;
+        reqParams.cfn['TerminationProtectionEnabled'] = obj.data.TerminationProtectionEnabled;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudtrail', obj.id, 'AWS::CloudTrail::EventDataStore'),
+            'region': obj.region,
+            'service': 'cloudtrail',
+            'type': 'AWS::CloudTrail::EventDataStore',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name
             }
         });
     } else {

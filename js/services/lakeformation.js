@@ -115,6 +115,104 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'Data Cells Filters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'tablename',
+                        title: 'Table Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'databasename',
+                        title: 'Database Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Tags': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Tag Key',
+                        field: 'tagkey',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
+        },
+        'Tag Associations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -123,14 +221,18 @@ async function updateDatatableAnalyticsLakeFormation() {
     blockUI('#section-analytics-lakeformation-resources-datatable');
     blockUI('#section-analytics-lakeformation-permissions-datatable');
     blockUI('#section-analytics-lakeformation-datalakesettings-datatable');
+    blockUI('#section-analytics-lakeformation-datacellsfilters-datatable');
+    blockUI('#section-analytics-lakeformation-tags-datatable');
+    blockUI('#section-analytics-lakeformation-tagassocations-datatable');
 
     await sdkcall("LakeFormation", "listResources", {
         // no params
     }, false).then(async (data) => {
         $('#section-analytics-lakeformation-resources-datatable').deferredBootstrapTable('removeAll');
+        $('#section-analytics-lakeformation-tagassocations-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ResourceInfoList.map(async (resource) => {
-            return sdkcall("LakeFormation", "describeResource", {
+            await sdkcall("LakeFormation", "describeResource", {
                 ResourceArn: resource.ResourceArn
             }, false).then(async (data) => {
                 $('#section-analytics-lakeformation-resources-datatable').deferredBootstrapTable('append', [{
@@ -142,6 +244,22 @@ async function updateDatatableAnalyticsLakeFormation() {
                     rolearn: data.ResourceInfo.RoleArn
                 }]);
             });
+
+            var resource = {};
+
+            // TODO
+
+            return sdkcall("LakeFormation", "getResourceLFTags", {
+                Resource: resource
+            }, false).then(async (data) => {
+                $('#section-analytics-lakeformation-tagassocations-datatable').deferredBootstrapTable('append', [{
+                    f2id: resource.ResourceArn + " Tag Association",
+                    f2type: 'lakeformation.tagassocation',
+                    f2data: data,
+                    f2region: region,
+                    id: resource.ResourceArn + " Tag Associations"
+                }]);
+            }).catch(() => { });
         }));
 
     }).catch(() => { });
@@ -188,9 +306,48 @@ async function updateDatatableAnalyticsLakeFormation() {
         }
     }).catch(() => { });
 
+    await sdkcall("LakeFormation", "listDataCellsFilter", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-lakeformation-datacellsfilters-datatable').deferredBootstrapTable('removeAll');
+
+        data.DataCellsFilters.forEach(datacellsfilter => {
+            $('#section-analytics-lakeformation-datacellsfilters-datatable').deferredBootstrapTable('append', [{
+                f2id: datacellsfilter.TableCatalogId + " " + datacellsfilter.DatabaseName + " " + datacellsfilter.TableName + " " + datacellsfilter.Name,
+                f2type: 'lakeformation.datacellsfilter',
+                f2data: datacellsfilter,
+                f2region: region,
+                name: datacellsfilter.Name,
+                tablename: datacellsfilter.TableName,
+                databasename: datacellsfilter.DatabaseName
+            }]);
+        });
+
+    }).catch(() => { });
+
+    await sdkcall("LakeFormation", "listLFTags", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-analytics-lakeformation-tags-datatable').deferredBootstrapTable('removeAll');
+
+        data.LFTags.forEach(tag => {
+            $('#section-analytics-lakeformation-tags-datatable').deferredBootstrapTable('append', [{
+                f2id: tag.CatalogId + " " + tag.TagKey,
+                f2type: 'lakeformation.tag',
+                f2data: datacellsfilter,
+                f2region: region,
+                tagkey: datacellsfilter.TagKey
+            }]);
+        });
+
+    }).catch(() => { });
+
     unblockUI('#section-analytics-lakeformation-resources-datatable');
     unblockUI('#section-analytics-lakeformation-permissions-datatable');
     unblockUI('#section-analytics-lakeformation-datalakesettings-datatable');
+    unblockUI('#section-analytics-lakeformation-datacellsfilters-datatable');
+    unblockUI('#section-analytics-lakeformation-tags-datatable');
+    unblockUI('#section-analytics-lakeformation-tagassocations-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -254,6 +411,48 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'lakeformation',
             'type': 'AWS::LakeFormation::DataLakeSettings',
+            'options': reqParams
+        });
+    } else if (obj.type == "lakeformation.datacellsfilter") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['DatabaseName'] = obj.data.DatabaseName;
+        reqParams.cfn['TableName'] = obj.data.TableName;
+        reqParams.cfn['TableCatalogId'] = obj.data.TableCatalogId;
+        reqParams.cfn['RowFilter'] = obj.data.RowFilter;
+        reqParams.cfn['ColumnNames'] = obj.data.ColumnNames;
+        reqParams.cfn['ColumnWildcard'] = obj.data.ColumnWildcard;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::DataCellsFilter'),
+            'region': obj.region,
+            'service': 'lakeformation',
+            'type': 'AWS::LakeFormation::DataCellsFilter',
+            'options': reqParams
+        });
+    } else if (obj.type == "lakeformation.tag") {
+        reqParams.cfn['CatalogId'] = obj.data.CatalogId;
+        reqParams.cfn['TagKey'] = obj.data.TagKey;
+        reqParams.cfn['TagValues'] = obj.data.TagValues;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::Tag'),
+            'region': obj.region,
+            'service': 'lakeformation',
+            'type': 'AWS::LakeFormation::Tag',
+            'options': reqParams
+        });
+    } else if (obj.type == "lakeformation.tagassociation") {
+        reqParams.cfn['LFTags'] = obj.data.LFTags;
+        reqParams.cfn['Resource'] = obj.data.Resource;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('lakeformation', obj.id, 'AWS::LakeFormation::TagAssociation'),
+            'region': obj.region,
+            'service': 'lakeformation',
+            'type': 'AWS::LakeFormation::TagAssociation',
             'options': reqParams
         });
     } else {

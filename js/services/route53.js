@@ -854,6 +854,37 @@ sections.push({
                     // nothing
                 ]
             ]
+        },
+        'CIDR Collections': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    // nothing
+                ]
+            ]
         }
     }
 });
@@ -882,6 +913,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     blockUI('#section-networkingandcontentdelivery-route53-recoveryreadinesscells-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-recoveryreadinessresourcesets-datatable');
     blockUI('#section-networkingandcontentdelivery-route53-recoveryreadinesschecks-datatable');
+    blockUI('#section-networkingandcontentdelivery-route53-cidrcollections-datatable');
 
     await sdkcall("Route53", "listHostedZones", {
         // no params
@@ -1377,6 +1409,29 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
         }));
     }).catch(() => { });
 
+    await sdkcall("Route53RecoveryReadiness", "listCidrCollections", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-networkingandcontentdelivery-route53-cidrcollections-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.CidrCollections.map(async (cidrcollection) => {
+            return sdkcall("Route53RecoveryReadiness", "listCidrBlocks", {
+                CollectionId: cidrcollection.Id
+            }, true).then(async (data) => {
+                data['CollectionId'] = cidrcollection.Id;
+                data['Name'] = cidrcollection.Name;
+
+                $('#section-networkingandcontentdelivery-route53-cidrcollections-datatable').deferredBootstrapTable('append', [{
+                    f2id: cidrcollection.Id,
+                    f2type: 'route53.cidrcollection',
+                    f2data: data,
+                    f2region: region,
+                    name: cidrcollection.Name
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewalldomainlists-datatable');
     unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroups-datatable');
     unblockUI('#section-networkingandcontentdelivery-route53-resolverfirewallrulegroupassociations-datatable');
@@ -1388,6 +1443,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
     unblockUI('#section-networkingandcontentdelivery-route53-recoveryreadinesscells-datatable');
     unblockUI('#section-networkingandcontentdelivery-route53-recoveryreadinessresourcesets-datatable');
     unblockUI('#section-networkingandcontentdelivery-route53-recoveryreadinesschecks-datatable');
+    unblockUI('#section-networkingandcontentdelivery-route53-cidrcollections-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1966,6 +2022,21 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Arn': obj.data.ReadinessCheckArn
                 }
+            }
+        });
+    } else if (obj.type == "route53.cidrcollection") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Locations'] = obj.data.CidrBlocks;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('route53', obj.id, 'AWS::Route53::CidrCollection'),
+            'region': obj.region,
+            'service': 'route53',
+            'type': 'AWS::Route53::CidrCollection',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.CollectionId
             }
         });
     } else {

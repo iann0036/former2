@@ -448,6 +448,45 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'FSx ONTAP Locations': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'URI',
+                        field: 'uri',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -461,6 +500,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     blockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-fsxopenzfslocations-datatable');
+    blockUI('#section-migrationandtransfer-datasync-fsxontaplocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
     blockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
@@ -590,13 +630,26 @@ async function updateDatatableMigrationAndTransferDataSync() {
                         creationtime: data.CreationTime
                     }]);
                 });
-            } else if (location.LocationUri.split(":")[0].toUpperCase() == "FSXO") {
-                return sdkcall("DataSync", "describeLocationFsxLustre", {
+            } else if (location.LocationUri.split(":")[0].toUpperCase() == "FSXZ") {
+                return sdkcall("DataSync", "describeLocationFsxOpenZfs", {
                     LocationArn: location.LocationArn
                 }, true).then((data) => {
                     $('#section-migrationandtransfer-datasync-fsxopenzfslocations-datatable').deferredBootstrapTable('append', [{
                         f2id: data.LocationArn,
                         f2type: 'datasync.locationfsxopenzfs',
+                        f2data: data,
+                        f2region: region,
+                        uri: data.LocationUri,
+                        creationtime: data.CreationTime
+                    }]);
+                });
+            } else if (location.LocationUri.split(":")[0].toUpperCase() == "FSXT") {
+                return sdkcall("DataSync", "describeLocationFsxOntap", {
+                    LocationArn: location.LocationArn
+                }, true).then((data) => {
+                    $('#section-migrationandtransfer-datasync-fsxontaplocations-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.LocationArn,
+                        f2type: 'datasync.locationfsxontap',
                         f2data: data,
                         f2region: region,
                         uri: data.LocationUri,
@@ -656,6 +709,7 @@ async function updateDatatableMigrationAndTransferDataSync() {
     unblockUI('#section-migrationandtransfer-datasync-fsxwindowslocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-fsxlustrelocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-fsxopenzfslocations-datatable');
+    unblockUI('#section-migrationandtransfer-datasync-fsxontaplocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-smblocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-objectstoragelocations-datatable');
     unblockUI('#section-migrationandtransfer-datasync-hdfslocations-datatable');
@@ -917,6 +971,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'datasync',
             'type': 'AWS::DataSync::LocationFSxOpenZFS',
+            'options': reqParams
+        });
+    } else if (obj.type == "datasync.locationfsxontap") {
+        reqParams.cfn['StorageVirtualMachineArn'] = obj.data.LocationArn;
+        if (obj.data.LocationUri) {
+            var uri = new URL(obj.data.LocationUri);
+            reqParams.cfn['Subdirectory'] = uri.pathname;
+        }
+        reqParams.cfn['SecurityGroupArns'] = obj.data.SecurityGroupArns;
+        reqParams.cfn['Protocol'] = obj.data.Protocol;
+
+        /*
+        TODO:
+        Tags
+        */
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('datasync', obj.id, 'AWS::DataSync::LocationFSxONTAP'),
+            'region': obj.region,
+            'service': 'datasync',
+            'type': 'AWS::DataSync::LocationFSxONTAP',
             'options': reqParams
         });
     } else if (obj.type == "datasync.locationsmb") {

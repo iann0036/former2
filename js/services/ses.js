@@ -305,6 +305,58 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Dedicated IP Pools': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // no params
+                ]
+            ]
+        },
+        'Email Identities': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Identity',
+                        field: 'identity',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // no params
+                ]
+            ]
         }
     }
 });
@@ -314,6 +366,8 @@ async function updateDatatableBusinessApplicationsSES() {
         blockUI('#section-businessapplications-ses-receiptfilters-datatable');
         blockUI('#section-businessapplications-ses-receiptrules-datatable');
         blockUI('#section-businessapplications-ses-receiptrulesets-datatable');
+        blockUI('#section-businessapplications-ses-dedicatedippools-datatable');
+        blockUI('#section-businessapplications-ses-emailidentities-datatable');
 
         await sdkcall("SES", "listReceiptFilters", {
             // no params
@@ -372,10 +426,54 @@ async function updateDatatableBusinessApplicationsSES() {
                     });
                 });
             }));
-
-            unblockUI('#section-businessapplications-ses-receiptrules-datatable');
-            unblockUI('#section-businessapplications-ses-receiptrulesets-datatable');
         });
+
+        await sdkcall("SESV2", "listDedicatedIpPools", {
+            // no params
+        }, true).then((data) => {
+            $('#section-businessapplications-ses-dedicatedippools-datatable').deferredBootstrapTable('removeAll');
+
+            data.DedicatedIpPools.forEach(pool => {
+                $('#section-businessapplications-ses-dedicatedippools-datatable').deferredBootstrapTable('append', [{
+                    f2id: pool,
+                    f2type: 'ses.dedicatedippool',
+                    f2data: pool,
+                    f2region: region,
+                    name: pool
+                }]);
+            });
+
+            unblockUI('#section-businessapplications-ses-dedicatedippools-datatable');
+        }).catch(() => { });
+
+        await sdkcall("SESV2", "listEmailIdentities", {
+            // no params
+        }, true).then(async (data) => {
+            $('#section-businessapplications-ses-emailidentities-datatable').deferredBootstrapTable('removeAll');
+
+            await Promise.all(data.EmailIdentities.map(emailidentity => {
+                return sdkcall("SESV2", "getEmailIdentity", {
+                    EmailIdentity: emailidentity.IdentityName
+                }, true).then((data) => {
+                    data['EmailIdentity'] = emailidentity.IdentityName;
+
+                    $('#section-businessapplications-ses-emailidentities-datatable').deferredBootstrapTable('append', [{
+                        f2id: emailidentity.IdentityName + " Email Identity",
+                        f2type: 'ses.emailidentity',
+                        f2data: data,
+                        f2region: region,
+                        identity: emailidentity.IdentityName
+                    }]);
+                });
+            }));
+
+            unblockUI('#section-businessapplications-ses-emailidentities-datatable');
+        }).catch(() => { });
+
+        unblockUI('#section-businessapplications-ses-receiptrules-datatable');
+        unblockUI('#section-businessapplications-ses-receiptrulesets-datatable');
+        unblockUI('#section-businessapplications-ses-dedicatedippools-datatable');
+        unblockUI('#section-businessapplications-ses-emailidentities-datatable');
     }
 
     if ([
@@ -714,6 +812,45 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ses',
             'type': 'AWS::SES::ContactList',
+            'options': reqParams
+        });
+    } else if (obj.type == "ses.dedicatedippool") {
+        reqParams.cfn['PoolName'] = obj.data;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::DedicatedIpPool'),
+            'region': obj.region,
+            'service': 'ses',
+            'type': 'AWS::SES::DedicatedIpPool',
+            'options': reqParams
+        });
+    } else if (obj.type == "ses.emailidentity") {
+        reqParams.cfn['EmailIdentity'] = obj.data.EmailIdentity;
+        if (obj.data.DkimAttributes) {
+            reqParams.cfn['DkimAttributes'] = {
+                'SigningEnabled': obj.data.DkimAttributes.SigningEnabled
+            };
+        }
+        if (obj.data.MailFromAttributes) {
+            reqParams.cfn['MailFromAttributes'] = {
+                'MailFromDomain': obj.data.MailFromAttributes.MailFromDomain,
+                'BehaviorOnMxFailure': obj.data.MailFromAttributes.BehaviorOnMxFailure
+            };
+        }
+        reqParams.cfn['ConfigurationSetAttributes'] = {
+            'ConfigurationSetName': obj.data.ConfigurationSetName
+        }
+        reqParams.cfn['FeedbackAttributes'] = {
+            'EmailForwardingEnabled': obj.data.FeedbackForwardingStatus
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('ses', obj.id, 'AWS::SES::EmailIdentity'),
+            'region': obj.region,
+            'service': 'ses',
+            'type': 'AWS::SES::EmailIdentity',
             'options': reqParams
         });
     } else {
