@@ -1,3 +1,4 @@
+const keysToFilterBy = ['id', 'name', 'arn']
 var sections = [];
 
 /* ========================================================================== */
@@ -207,6 +208,67 @@ function lambdaRuntimeFormatter(data) {
     return data;
 }
 
+function filterListOfStrings(data) {
+    const filteredData = []
+    for (let i = 0; i < data[Object.keys(data)[0]].length; i++) {
+        if (isResourceEqualToArn(i, data[Object.keys(data)[0]])) {
+            filteredData.push(data[Object.keys(data)[0]][i])
+        }
+    }
+    data[Object.keys(data)[0]] = filteredData
+    return data
+}
+
+function filterListOfFlattenObjects(data) {
+    const new_data = []
+    for (let q = 0; q < data[Object.keys(data)[0]].length; q++) {
+        for (let k in data[Object.keys(data)[0]][q]) {
+            if (isKeyNameValidToFilter(k) && isResourceEqualToArn(k, data[Object.keys(data)[0]][q])) {
+                new_data.push(data[Object.keys(data)[0]][q])
+                break
+            }
+        }
+    }
+    data[Object.keys(data)[0]] = new_data
+    return data
+}
+
+function isKeyNameValidToFilter(key) {
+    return keysToFilterBy.some(substring => key.toLowerCase().includes(substring));
+}
+
+function isResourceEqualToArn(key, data) {
+    if (typeof(data[key]) === 'string') {
+        return resourcesArn.some(f => data[key].toLowerCase().indexOf(f) > -1)
+    } else {
+        return true
+    }
+}
+
+function isValidMethod(svc, method) {
+    if (svc === 'DynamoDB' && method.startsWith('describe')) return false
+    return true
+}
+
+function filterDataByArnIds(shouldFilter, data, svc, method) {
+    switch ( svc ) {
+        case 'EKS':
+            data = filterListOfStrings(data);
+            break;
+        case 'S3':
+            data = filterListOfFlattenObjects(data);
+            break;
+        case 'DynamoDB':
+            if (!isValidMethod(svc, method)) break;
+            data = filterListOfStrings(data);
+            break;
+        default:
+            break
+    }
+    return data
+}
+
+
 /* ========================================================================== */
 // SDK Helpers
 /* ========================================================================== */
@@ -301,7 +363,14 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     reject(data);
                     return;
                 }
-                
+                console.log(`CloudFormationer log - sdkcall with svc: ${svc}, method: ${method}, params: ${params}`)
+                console.log('CloudFormationer log - sdkcall data before filtering: ', data)
+                if (resourcesArn.length > 0 && Object.keys(params).length === 0) {
+                    console.log('CloudFormationer log - starting to filter the data')
+                    data = filterDataByArnIds(params, data, svc, method)
+                }
+                console.log('CloudFormationer log - sdkcall data after filtering: ', data)
+
                 // https://github.com/iann0036/aws-pagination-rules
                 if (svc == "CloudWatchLogs" && method == "describeLogStreams") {
                     resolve(data);
@@ -521,3 +590,33 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
 }
 
 // Service-specific mappings are now defined in services/
+
+/*
+* if (Object.keys(shouldFilter).length) return data;
+    if (typeof data[Object.keys(data)[0]][0] === 'string') {
+        for (let i = 0; i < data[Object.keys(data)[0]].length; i++) {
+            if (!isResourceEqualToArn(i, data[Object.keys(data)[0]])) {
+                data[Object.keys(data)[0]].splice(i, 1)
+            }
+        }
+    } else {
+        const new_data = []
+        for (let q = 0; q < data[Object.keys(data)[0]].length; q++) {
+            for (let k in data[Object.keys(data)[0]][q]) {
+                if (isKeyNameValidToFilter(k) && isResourceEqualToArn(k, data[Object.keys(data)[0]][q])) {
+                    new_data.push(data[Object.keys(data)[0]][q])
+                    break
+                }
+                if (k === 'properties') {
+                    for (let z in data[Object.keys(data)[0]][q]['properties']) {
+                        if (isKeyNameValidToFilter(z) && isResourceEqualToArn(z, data[Object.keys(data)[0]][q]['properties'])) {
+                            new_data.push(data[Object.keys(data)[0]][q])
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        data[Object.keys(data)[0]] = new_data
+    }
+    return data*/
