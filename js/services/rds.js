@@ -1168,23 +1168,28 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['instance_class'] = obj.data.DBInstanceClass;
         reqParams.cfn['Engine'] = obj.data.Engine;
         reqParams.tf['engine'] = obj.data.Engine;
-        if (!obj.data.Engine.startsWith("aurora")) {
-            reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
-            reqParams.tf['username'] = obj.data.MasterUsername;
-            reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
-            reqParams.tf['password'] = 'REPLACEME';
-        }
-        reqParams.cfn['DBName'] = obj.data.DBName;
-        reqParams.tf['name'] = obj.data.DBName;
-        reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
-        if (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") {
-            reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
+        if (obj.data.ReadReplicaSourceDBInstanceIdentifier) {
+            reqParams.cfn['SourceDBInstanceIdentifier'] = obj.data.ReadReplicaSourceDBInstanceIdentifier;
+            reqParams.tf['replicate_source_db'] = obj.data.ReadReplicaSourceDBInstanceIdentifier;
         } else {
-            reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
-        }
-        if (!obj.data.Engine.startsWith("aurora")) {
-            reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
-            reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+            if (!obj.data.Engine.startsWith("aurora")) {
+                reqParams.cfn['MasterUsername'] = obj.data.MasterUsername;
+                reqParams.tf['username'] = obj.data.MasterUsername;
+                reqParams.cfn['MasterUserPassword'] = 'REPLACEME';
+                reqParams.tf['password'] = 'REPLACEME';
+            }
+            reqParams.cfn['DBName'] = obj.data.DBName;
+            reqParams.tf['name'] = obj.data.DBName;
+            reqParams.cfn['PreferredBackupWindow'] = obj.data.PreferredBackupWindow;
+            if (obj.data.DBClusterIdentifier && obj.data.DBClusterIdentifier != "") {
+                reqParams.tf['preferred_backup_window'] = obj.data.PreferredBackupWindow;
+            } else {
+                reqParams.tf['backup_window'] = obj.data.PreferredBackupWindow;
+            }
+            if (!obj.data.Engine.startsWith("aurora")) {
+                reqParams.cfn['BackupRetentionPeriod'] = obj.data.BackupRetentionPeriod;
+                reqParams.tf['backup_retention_period'] = obj.data.BackupRetentionPeriod;
+            }
         }
         reqParams.cfn['AvailabilityZone'] = obj.data.AvailabilityZone;
         reqParams.tf['availability_zone'] = obj.data.AvailabilityZone;
