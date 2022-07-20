@@ -201,6 +201,9 @@ async function updateDatatableRoboticsRoboMaker() {
     blockUI('#section-robotics-robomaker-robotapplications-datatable');
     blockUI('#section-robotics-robomaker-simulationapplications-datatable');
 
+    /*
+    DEPRECATED: https://docs.aws.amazon.com/robomaker/latest/dg/chapter-support-policy.html#software-support-policy-may2022
+
     await sdkcall("RoboMaker", "listFleets", {
         // no params
     }, true).then(async (data) => {
@@ -221,8 +224,6 @@ async function updateDatatableRoboticsRoboMaker() {
             });
         }));
     }).catch(() => { });
-
-    unblockUI('#section-robotics-robomaker-fleets-datatable');
 
     await sdkcall("RoboMaker", "listRobots", {
         // no params
@@ -247,7 +248,7 @@ async function updateDatatableRoboticsRoboMaker() {
         }));
     }).catch(() => { });
 
-    unblockUI('#section-robotics-robomaker-robots-datatable');
+    */
 
     await sdkcall("RoboMaker", "listRobotApplications", {
         versionQualifier: "ALL"
@@ -272,8 +273,6 @@ async function updateDatatableRoboticsRoboMaker() {
         }));
     }).catch(() => { });
 
-    unblockUI('#section-robotics-robomaker-robotapplications-datatable');
-
     await sdkcall("RoboMaker", "listSimulationApplications", {
         versionQualifier: "ALL"
     }, true).then(async (data) => {
@@ -297,6 +296,9 @@ async function updateDatatableRoboticsRoboMaker() {
         }));
     }).catch(() => { });
 
+    unblockUI('#section-robotics-robomaker-fleets-datatable');
+    unblockUI('#section-robotics-robomaker-robots-datatable');
+    unblockUI('#section-robotics-robomaker-robotapplications-datatable');
     unblockUI('#section-robotics-robomaker-simulationapplications-datatable');
 }
 
