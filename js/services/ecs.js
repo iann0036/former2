@@ -1010,7 +1010,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
                 var environmentFiles = null;
                 if (containerDefinition.environmentFiles) {
-                    systemControls = [];
+                    environmentFiles = [];
                     containerDefinition.environmentFiles.forEach(environmentFile => {
                         environmentFiles.push({
                             'Type': environmentFile.type,
