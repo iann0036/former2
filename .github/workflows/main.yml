@@ -23,5 +23,5 @@ jobs:
 
     - name: Sync files to origin S3 bucket
       run: |
-        aws s3 sync --delete --cache-control max-age=300 --recursive . s3://${{ secrets.FORMER2_AWS_S3_BUCKET }}/ --exclude ".git/*" --exclude "cli/*" --exclude ".*" --exclude "notes.txt" --exclude "*.md" --exclude "Dockerfile" --exclude "LICENSE" --exclude "*.yml" --exclude ".gitignore" --exclude "util/*" --exclude "lib/*" && \
+        aws s3 sync --delete --cache-control max-age=300 . s3://${{ secrets.FORMER2_AWS_S3_BUCKET }}/ --exclude ".git/*" --exclude "cli/*" --exclude ".*" --exclude "notes.txt" --exclude "*.md" --exclude "Dockerfile" --exclude "LICENSE" --exclude "*.yml" --exclude ".gitignore" --exclude "util/*" --exclude "lib/*" && \
         aws cloudfront create-invalidation --distribution-id ${{ secrets.FORMER2_AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
