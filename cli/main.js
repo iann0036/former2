@@ -96,6 +96,7 @@ var resource_tag_cache = {};
 const iaclangselect = "typescript";
 
 function $(selector) { return new $obj(selector) }
+const isAllIncludes = (arr, target) => arr.every(el => target.includes(el));
 $obj = function (selector) { };
 $obj.prototype.bootstrapTable = function (action, data) {
     if (action == "append") {
@@ -249,6 +250,16 @@ async function main(opts) {
                             });
                             break;
                         }
+                    }
+                } else if (opts.searchFilter.includes("&")) {
+                    const searchWords = opts.searchFilter.split("&")
+                    if (isAllIncludes(searchWords, jsonres)) {
+                        output_objects.push({
+                            'id': cli_resources[i].f2id,
+                            'type': cli_resources[i].f2type,
+                            'data': cli_resources[i].f2data,
+                            'region': cli_resources[i].f2region
+                        });
                     }
                 } else {
                     if (jsonres.includes(opts.searchFilter)) {
