@@ -1392,12 +1392,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Schedule'] = obj.data.Schedule;
         reqParams.cfn['WorkflowName'] = obj.data.WorkflowName;
         reqParams.cfn['StartOnCreation'] = true;
-        if (obj.data.actions) {
+        if (obj.data.Actions) {
             reqParams.cfn['Actions'] = [];
-            obj.data.actions.forEach(action => {
+            obj.data.Actions.forEach(action => {
                 reqParams.cfn['Actions'].push({
                     'JobName': action.JobName,
-                    'Arguments': action.Arguments
+                    'Arguments': action.Arguments,
+                    'CrawlerName': action.CrawlerName,
+                    'NotificationProperty': action.NotificationProperty,
+                    'SecurityConfiguration': action.SecurityConfiguration,
+                    'Timeout': action.Timeout
                 });
             });
         }
