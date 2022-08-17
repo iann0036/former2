@@ -225,9 +225,9 @@ async function main(opts) {
                             break;
                         }
                     }
-                }else if (opts.searchFilter.includes("&")) {
+                } else if (opts.searchFilter.includes("&")) {
                     const searchWords = opts.searchFilter.split("&")
-                    if (isAllIncludes(searchWords, jsonres)){
+                    if (isAllIncludes(searchWords, jsonres)) {
                         output_objects.push({
                             'id': cli_resources[i].f2id,
                             'type': cli_resources[i].f2type,
