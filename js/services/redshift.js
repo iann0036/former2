@@ -365,6 +365,92 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Serverless Namespaces': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Serverless Workgroups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'namespace',
+                        title: 'Namespace',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
         }
     }
 });
@@ -378,6 +464,8 @@ async function updateDatatableDatabaseRedshift() {
     blockUI('#section-database-redshift-endpointauthorizations-datatable');
     blockUI('#section-database-redshift-eventsubscriptions-datatable');
     blockUI('#section-database-redshift-scheduledactions-datatable');
+    blockUI('#section-database-redshift-serverlessnamespaces-datatable');
+    blockUI('#section-database-redshift-serverlessworkgroups-datatable');
 
     await sdkcall("Redshift", "describeClusters", {
         // no params
@@ -529,11 +617,56 @@ async function updateDatatableDatabaseRedshift() {
         });
     }).catch(() => { });
 
+    await sdkcall("RedshiftServerless", "listNamespaces", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-database-redshift-serverlessnamespaces-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.namespaces.map(async (namespace) => {
+            return sdkcall("RedshiftServerless", "getNamespace", {
+                namespaceName: namespace.namespaceName
+            }, true).then((data) => {
+                $('#section-database-redshift-serverlessnamespaces-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.namespace.namespaceArn,
+                    f2type: 'redshift.serverlessnamespace',
+                    f2data: data.namespace,
+                    f2region: region,
+                    name: data.namespace.namespaceName,
+                    creationtime: data.namespace.creationDate
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("RedshiftServerless", "listWorkgroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-database-redshift-serverlessworkgroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.workgroups.map(async (workgroup) => {
+            return sdkcall("RedshiftServerless", "getWorkgroup", {
+                workgroupName: workgroup.workgroupName
+            }, true).then((data) => {
+                $('#section-database-redshift-serverlessworkgroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.workgroup.workgroupArn,
+                    f2type: 'redshift.serverlessworkgroup',
+                    f2data: data.workgroup,
+                    f2region: region,
+                    name: data.workgroup.workgroupName,
+                    namespace: data.workgroup.namespaceName,
+                    creationtime: data.workgroup.creationDate
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-database-redshift-securitygroups-datatable');
     unblockUI('#section-database-redshift-endpointaccesses-datatable');
     unblockUI('#section-database-redshift-endpointauthorizations-datatable');
     unblockUI('#section-database-redshift-eventsubscriptions-datatable');
     unblockUI('#section-database-redshift-scheduledactions-datatable');
+    unblockUI('#section-database-redshift-serverlessnamespaces-datatable');
+    unblockUI('#section-database-redshift-serverlessworkgroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -772,6 +905,56 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'redshift',
             'type': 'AWS::Redshift::ScheduledAction',
             'options': reqParams
+        });
+    } else if (obj.type == "redshift.serverlessnamespace") {
+        reqParams.cfn['AdminUsername'] = obj.data.adminUsername;
+        reqParams.cfn['AdminUserPassword'] = "REPLACEME";
+        reqParams.cfn['DbName'] = obj.data.dbName;
+        reqParams.cfn['DefaultIamRoleArn'] = obj.data.defaultIamRoleArn;
+        reqParams.cfn['IamRoles'] = obj.data.iamRoles;
+        reqParams.cfn['KmsKeyId'] = obj.data.kmsKeyId;
+        reqParams.cfn['LogExports'] = obj.data.logExports;
+        reqParams.cfn['NamespaceName'] = obj.data.namespaceName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::RedshiftServerless::Namespace'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::RedshiftServerless::Namespace',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.namespaceName
+            }
+        });
+    } else if (obj.type == "redshift.serverlessworkgroup") {
+        reqParams.cfn['BaseCapacity'] = obj.data.baseCapacity;
+        if (obj.data.configParameters) {
+            reqParams.cfn['ConfigParameters'] = [];
+            obj.data.configParameters.forEach(configparameter => {
+                reqParams.cfn['ConfigParameters'].push({
+                    'ParameterKey': configparameter.parameterKey,
+                    'ParameterValue': configparameter.parameterValue
+                });
+            });
+        }
+        reqParams.cfn['EnhancedVpcRouting'] = obj.data.enhancedVpcRouting;
+        reqParams.cfn['NamespaceName'] = obj.data.namespaceName;
+        reqParams.cfn['PubliclyAccessible'] = obj.data.publiclyAccessible;
+        reqParams.cfn['SecurityGroupIds'] = obj.data.securityGroupIds;
+        reqParams.cfn['SubnetIds'] = obj.data.subnetIds;
+        reqParams.cfn['WorkgroupName'] = obj.data.workgroupName;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('redshift', obj.id, 'AWS::RedshiftServerless::Workgroup'),
+            'region': obj.region,
+            'service': 'redshift',
+            'type': 'AWS::RedshiftServerless::Workgroup',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.workgroupName
+            }
         });
     } else {
         return false;

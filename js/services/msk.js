@@ -53,6 +53,45 @@ sections.push({
                 ]
             ]
         },
+        'Serverless Clusters': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'creationtime',
+                        title: 'Creation Time',
+                        sortable: true,
+                        editable: true,
+                        formatter: dateFormatter,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Connectors': {
             'columns': [
                 [
@@ -160,6 +199,7 @@ sections.push({
 
 async function updateDatatableAnalyticsMSK() {
     blockUI('#section-analytics-msk-clusters-datatable');
+    blockUI('#section-analytics-msk-serverlessclusters-datatable');
     blockUI('#section-analytics-msk-connectors-datatable');
     blockUI('#section-analytics-msk-configurations-datatable');
     blockUI('#section-analytics-msk-batchscramsecrets-datatable');
@@ -196,6 +236,27 @@ async function updateDatatableAnalyticsMSK() {
                     },
                     f2region: region,
                     cluster: cluster.ClusterArn
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("Kafka", "listClustersV2", {
+        ClusterTypeFilter: "SERVERLESS"
+    }, false).then(async (data) => {
+        $('#section-analytics-msk-serverlessclusters-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ClusterInfoList.map(async (cluster) => {
+            return sdkcall("Kafka", "describeClusterV2", {
+                ClusterArn: cluster.ClusterArn
+            }, true).then(async (data) => {
+                $('#section-analytics-msk-serverlessclusters-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ClusterInfo.ClusterArn,
+                    f2type: 'msk.serverlesscluster',
+                    f2data: data.ClusterInfo,
+                    f2region: region,
+                    name: data.ClusterInfo.ClusterName,
+                    creationtime: data.ClusterInfo.CreationTime
                 }]);
             });
         }));
@@ -251,6 +312,7 @@ async function updateDatatableAnalyticsMSK() {
     }).catch(() => { });
 
     unblockUI('#section-analytics-msk-clusters-datatable');
+    unblockUI('#section-analytics-msk-serverlessclusters-datatable');
     unblockUI('#section-analytics-msk-connectors-datatable');
     unblockUI('#section-analytics-msk-configurations-datatable');
     unblockUI('#section-analytics-msk-batchscramsecrets-datatable');
@@ -295,6 +357,31 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'msk',
             'type': 'AWS::MSK::Cluster',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.ClusterArn
+            }
+        });
+    } else if (obj.type == "msk.serverlesscluster") {
+        reqParams.cfn['ClusterName'] = obj.data.ClusterName;
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+        reqParams.cfn['ClientAuthentication'] = obj.data.Serverless.ClientAuthentication;
+        if (obj.data.Serverless.VpcConfigs) {
+            reqParams.cfn['VpcConfigs'] = [];
+            obj.data.Serverless.VpcConfigs.forEach(vpcconfig => {
+                reqParams.cfn['VpcConfigs'].push({
+                    'SubnetIds': vpcconfig.SubnetIds,
+                    'SecurityGroups': vpcconfig.SecurityGroupIds
+                });
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('msk', obj.id, 'AWS::MSK::ServerlessCluster'),
+            'region': obj.region,
+            'service': 'msk',
+            'type': 'AWS::MSK::ServerlessCluster',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.ClusterArn

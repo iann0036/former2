@@ -487,6 +487,44 @@ sections.push({
                 ]
             ]
         },
+        'Synthetics Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'id',
+                        title: 'ID',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Application Insights Applications': {
             'columns': [
                 [
@@ -791,6 +829,44 @@ sections.push({
                 ]
             ]
         },
+        'Evidently Segments': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'RUM App Monitors': {
             'columns': [
                 [
@@ -844,6 +920,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-syntheticsgroups-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
@@ -852,6 +929,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     blockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
+    blockUI('#section-managementandgovernance-cloudwatch-evidentlysegments-datatable');
     blockUI('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable');
 
     await sdkcall("CloudWatch", "describeAlarms", {
@@ -1070,6 +1148,29 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     }).catch(() => { });
 
+    await sdkcall("Synthetics", "listGroups", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-syntheticsgroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Groups.map(async (group) => {
+            return sdkcall("Synthetics", "listGroupResources", {
+                GroupIdentifier: group.Id
+            }, true).then((data) => {
+                group['Resources'] = data.Resources;
+
+                $('#section-managementandgovernance-cloudwatch-syntheticsgroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: group.Arn,
+                    f2type: 'cloudwatch.syntheticsgroup',
+                    f2data: group,
+                    f2region: region,
+                    name: group.Name,
+                    id: group.Id
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     await sdkcall("ApplicationInsights", "listApplications", {
         // no params
     }, true).then(async (data) => {
@@ -1233,6 +1334,27 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         }));
     }).catch(() => { });
 
+    await sdkcall("Evidently", "listSegments", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-managementandgovernance-cloudwatch-evidentlysegments-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.segments.map(async (segment) => {
+            return sdkcall("Evidently", "getSegment", {
+                segment: segment.arn
+            }, true).then((data) => {
+                $('#section-managementandgovernance-cloudwatch-evidentlysegments-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.segment.arn,
+                    f2type: 'cloudwatch.evidentlysegment',
+                    f2data: data.segment,
+                    f2region: region,
+                    name: data.segment.name,
+                    description: data.segment.description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     await sdkcall("RUM", "listAppMonitors", {
         // no params
     }, true).then(async (data) => {
@@ -1260,6 +1382,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-anomalydetectors-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-insightrules-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-canaries-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-syntheticsgroups-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-applicationinsightsapplications-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-metricstreams-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-querydefinitions-datatable');
@@ -1268,6 +1391,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlyexperiments-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlyfeatures-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-evidentlylaunches-datatable');
+    unblockUI('#section-managementandgovernance-cloudwatch-evidentlysegments-datatable');
     unblockUI('#section-managementandgovernance-cloudwatch-rumappmonitors-datatable');
 }
 
@@ -1586,6 +1710,24 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 }
             }
         });
+    } else if (obj.type == "cloudwatch.syntheticsgroup") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['ResourceArns'] = obj.data.Resources;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Synthetics::Group'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Synthetics::Group',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Id': obj.data.Id
+                }
+            }
+        });
     } else if (obj.type == "applicationinsights.application") {
         reqParams.cfn['ResourceGroupName'] = obj.data.ResourceGroupName;
         reqParams.cfn['OpsItemSNSTopicArn'] = obj.data.OpsItemSNSTopicArn;
@@ -1879,6 +2021,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'cloudwatch',
             'type': 'AWS::Evidently::Launch',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.arn
+            }
+        });
+    } else if (obj.type == "cloudwatch.evidentlysegment") {
+        reqParams.cfn['Name'] = obj.data.name;
+        reqParams.cfn['Description'] = obj.data.description;
+        reqParams.cfn['Pattern'] = obj.data.pattern;
+        if (obj.data.tags) {
+            reqParams.cfn['Tags'] = [];
+            for (var k in obj.data.tags) {
+                if (!k.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': k,
+                        'Value': obj.data.tags[k]
+                    });
+                }
+            }
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudwatch', obj.id, 'AWS::Evidently::Segment'),
+            'region': obj.region,
+            'service': 'cloudwatch',
+            'type': 'AWS::Evidently::Segment',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.arn
