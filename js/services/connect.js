@@ -6,6 +6,44 @@ sections.push({
     'category': 'Business Applications',
     'service': 'Connect',
     'resourcetypes': {
+        'Instances': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'alias',
+                        title: 'Alias',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Customer Profiles Domains': {
             'columns': [
                 [
@@ -704,6 +742,7 @@ sections.push({
 });
 
 async function updateDatatableBusinessApplicationsConnect() {
+    blockUI('#section-businessapplications-connect-instances-datatable');
     blockUI('#section-businessapplications-connect-customerprofilesdomains-datatable');
     blockUI('#section-businessapplications-connect-customerprofilesobjecttypes-datatable');
     blockUI('#section-businessapplications-connect-customerprofilesintegrations-datatable');
@@ -787,6 +826,7 @@ async function updateDatatableBusinessApplicationsConnect() {
     await sdkcall("Connect", "listInstances", {
         // no params
     }, false).then(async (data) => {
+        $('#section-businessapplications-connect-instances-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-quickconnects-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-hoursofoperation-datatable').deferredBootstrapTable('removeAll');
         $('#section-businessapplications-connect-users-datatable').deferredBootstrapTable('removeAll');
@@ -798,6 +838,24 @@ async function updateDatatableBusinessApplicationsConnect() {
 
         await Promise.all(data.InstanceSummaryList.map(async (instance) => {
             return Promise.all([
+                sdkcall("Connect", "describeInstance", {
+                    InstanceId: instance.Id
+                }, true).then(async (data) => {
+                    return sdkcall("Connect", "listInstanceAttributes", {
+                        InstanceId: instance.Id
+                    }, true).then(async (attributesdata) => {
+                        data.Instance['Attributes'] = attributesdata['Attributes'];
+
+                        $('#section-businessapplications-connect-instances-datatable').deferredBootstrapTable('append', [{
+                            f2id: data.Instance.Arn,
+                            f2type: 'connect.instance',
+                            f2data: data.Instance,
+                            f2region: region,
+                            id: data.Instance.Id,
+                            alias: data.Instance.InstanceAlias
+                        }]);
+                    }).catch(() => { });
+                }).catch(() => { }),
                 sdkcall("Connect", "listQuickConnects", {
                     InstanceId: instance.Id
                 }, true).then(async (data) => {
@@ -1092,6 +1150,7 @@ async function updateDatatableBusinessApplicationsConnect() {
         }));
     }).catch(() => { });
     
+    unblockUI('#section-businessapplications-connect-instances-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesdomains-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesobjecttypes-datatable');
     unblockUI('#section-businessapplications-connect-customerprofilesintegrations-datatable');
@@ -1112,7 +1171,48 @@ async function updateDatatableBusinessApplicationsConnect() {
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
-    if (obj.type == "connect.customerprofilesdomain") {
+    if (obj.type == "connect.instance") {
+        reqParams.cfn['IdentityManagementType'] = obj.data.IdentityManagementType;
+        reqParams.cfn['InstanceAlias'] = obj.data.InstanceAlias;
+        reqParams.cfn['DirectoryId'] = "REPLACEME";
+        if (obj.data.Attributes) {
+            reqParams.cfn['Attributes'] = {};
+            obj.data.Attributes.forEach(attribute => {
+                try {
+                    if (attribute.AttributeType == "AUTO_RESOLVE_BEST_VOICES") {
+                        reqParams.cfn['Attributes']['AutoResolveBestVoices'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "CONTACTFLOW_LOGS") {
+                        reqParams.cfn['Attributes']['ContactflowLogs'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "CONTACT_LENS") {
+                        reqParams.cfn['Attributes']['ContactLens'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "EARLY_MEDIA") {
+                        reqParams.cfn['Attributes']['EarlyMedia'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "INBOUND_CALLS") {
+                        reqParams.cfn['Attributes']['InboundCalls'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "OUTBOUND_CALLS") {
+                        reqParams.cfn['Attributes']['OutboundCalls'] = JSON.parse(attribute.Value);
+                    } else if (attribute.AttributeType == "USE_CUSTOM_TTS_VOICES") {
+                        reqParams.cfn['Attributes']['UseCustomTTSVoices'] = JSON.parse(attribute.Value);
+                    }
+                } catch (err) {}
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('connect', obj.id, 'AWS::Connect::Instance'),
+            'region': obj.region,
+            'service': 'connect',
+            'type': 'AWS::Connect::Instance',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "connect.customerprofilesdomain") {
         reqParams.cfn['DomainName'] = obj.data.DomainName;
         reqParams.cfn['DefaultEncryptionKey'] = obj.data.DefaultEncryptionKey;
         reqParams.cfn['DefaultExpirationDays'] = obj.data.DefaultExpirationDays;
