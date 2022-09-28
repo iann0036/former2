@@ -168,6 +168,52 @@ sections.push({
                 ]
             ]
         },
+        'Origin Access Controls': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    },
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Cache Policies': {
             'columns': [
                 [
@@ -481,6 +527,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-distributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-originaccesscontrols-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
@@ -508,6 +555,26 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
     });
+
+    await sdkcall("CloudFront", "listOriginAccessControls", {
+        // no params
+    }, false).then((data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-originaccesscontrols-datatable').deferredBootstrapTable('removeAll');
+
+        data.OriginAccessControlList.Items.forEach(item => {
+            $('#section-networkingandcontentdelivery-cloudfront-originaccesscontrols-datatable').deferredBootstrapTable('append', [{
+                f2id: item.Id,
+                f2type: 'cloudfront.originaccesscontrol',
+                f2data: item,
+                f2region: region,
+                id: item.Id,
+                name: item.Name,
+                description: item.Description
+            }]);
+        });
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-originaccesscontrols-datatable');
+    }).catch(err => { });
 
     await sdkcall("CloudFront", "listDistributions", {
         // no params
@@ -1369,6 +1436,26 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::ResponseHeadersPolicy',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
+        });
+    } else if (obj.type == "cloudfront.originaccesscontrol") {
+        reqParams.cfn['OriginAccessControlConfig'] = {
+            'Name': obj.data.Name,
+            'Description': obj.data.Description,
+            'OriginAccessControlOriginType': obj.data.OriginAccessControlOriginType,
+            'SigningBehavior': obj.data.SigningBehavior,
+            'SigningProtocol': obj.data.SigningProtocol
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::OriginAccessControl'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::OriginAccessControl',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.Id
