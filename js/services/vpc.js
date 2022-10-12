@@ -6299,8 +6299,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'GetAtt': {
                     'Arn': obj.data.PrefixListArn,
                     'OwnerId': obj.data.OwnerId,
-                    'PrefixListId': obj.data.PrefixListId,
-                    'Version': obj.data.Version
+                    'PrefixListId': obj.data.PrefixListId
                 },
                 'Import': {
                     'PrefixListId': obj.data.PrefixListId
