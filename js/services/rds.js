@@ -1465,7 +1465,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'rds',
             'type': 'AWS::RDS::DBParameterGroup',
             'terraformType': 'aws_db_parameter_group',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.DBParameterGroupName
+            }
         });
     } else if (obj.type == "rds.optiongroup") {
         reqParams.cfn['EngineName'] = obj.data.EngineName;
