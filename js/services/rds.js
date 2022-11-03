@@ -1438,6 +1438,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "rds.parametergroup") {
+        reqParams.cfn['DBClusterParameterGroupName'] = obj.data.DBParameterGroupName;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['Family'] = obj.data.DBParameterGroupFamily;
