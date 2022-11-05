@@ -802,7 +802,7 @@ async function updateDatatableInternetofThingsGreengrass() {
     blockUI('#section-internetofthings-greengrass-subscriptiondefinitionversions-datatable');
     blockUI('#section-internetofthings-greengrass-v2componentversions-datatable');
 
-    if (["us-east-1", "us-east-2", "us-west-2", "ap-south-1", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ap-northeast-1", "eu-central-1", "eu-west-1", "eu-west-2", "us-gov-east-1", "us-gov-west-1"].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
+    if (["us-east-1", "us-east-2", "us-west-2", "ap-south-1", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ap-southeast-3", "ap-northeast-1", "eu-central-1", "eu-west-1", "eu-west-2", "us-gov-east-1", "us-gov-west-1"].includes(region)) { // has to be whitelisted otherwise it hangs on the API call
         await sdkcall("Greengrass", "listConnectorDefinitions", {
             // no params
         }, true).then(async (data) => {
