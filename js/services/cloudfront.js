@@ -892,6 +892,15 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 });
             });
         }
+        var defaultCacheFunctionAssociations = [];
+        if (obj.data.DistributionConfig.DefaultCacheBehavior.FunctionAssociations.Items && obj.data.DistributionConfig.DefaultCacheBehavior.FunctionAssociations.Items.length) {
+            obj.data.DistributionConfig.DefaultCacheBehavior.FunctionAssociations.Items.forEach(functionAssociation => {
+                defaultCacheFunctionAssociations.push({
+                    'EventType': functionAssociation.EventType,
+                    'FunctionARN': functionAssociation.FunctionARN
+                });
+            });
+        }
         var cookiesWhitelistedNames = null;
         if (obj.data.DistributionConfig.DefaultCacheBehavior && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies && obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames) {
             cookiesWhitelistedNames = obj.data.DistributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames.Items;
@@ -932,6 +941,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                 'OriginRequestPolicyId': obj.data.DistributionConfig.DefaultCacheBehavior.OriginRequestPolicyId,
                 'FieldLevelEncryptionId': (obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId == "" ? null : obj.data.DistributionConfig.DefaultCacheBehavior.FieldLevelEncryptionId),
                 'ForwardedValues': forwardedValues,
+                'FunctionAssociations': defaultCacheFunctionAssociations,
                 'LambdaFunctionAssociations': defaultCacheLambdaFunctionAssociations,
                 'MaxTTL': obj.data.DistributionConfig.DefaultCacheBehavior.MaxTTL,
                 'MinTTL': obj.data.DistributionConfig.DefaultCacheBehavior.MinTTL,
@@ -977,6 +987,15 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                         });
                     });
                 }
+                var cacheFunctionAssociations = [];
+                if (cacheBehaviour.FunctionAssociations.Items && cacheBehaviour.FunctionAssociations.Items.length) {
+                    cacheBehaviour.FunctionAssociations.Items.forEach(functionAssociation => {
+                        cacheFunctionAssociations.push({
+                            'EventType': functionAssociation.EventType,
+                            'FunctionARN': functionAssociation.FunctionARN
+                        });
+                    });
+                }
                 var cookiesWhitelistedNames = null;
                 if (cacheBehaviour.ForwardedValues && cacheBehaviour.ForwardedValues.Cookies && cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames) {
                     cookiesWhitelistedNames = cacheBehaviour.ForwardedValues.Cookies.WhitelistedNames.Items;
@@ -1016,6 +1035,7 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
                     'OriginRequestPolicyId': cacheBehaviour.OriginRequestPolicyId,
                     'FieldLevelEncryptionId': (cacheBehaviour.FieldLevelEncryptionId == "" ? null : cacheBehaviour.FieldLevelEncryptionId),
                     'ForwardedValues': forwardedValues,
+                    'FunctionAssociations': cacheFunctionAssociations,
                     'LambdaFunctionAssociations': cacheLambdaFunctionAssociations,
                     'MaxTTL': cacheBehaviour.MaxTTL,
                     'MinTTL': cacheBehaviour.MinTTL,
