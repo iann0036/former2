@@ -351,15 +351,17 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
 
                 data.Policy['TargetIds'] = targets;
 
-                $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.Policy.PolicySummary.Arn,
-                    f2type: 'organizations.policy',
-                    f2data: data.Policy,
-                    f2region: region,
-                    id: data.Policy.PolicySummary.Id,
-                    name: data.Policy.PolicySummary.Name,
-                    description: data.Policy.PolicySummary.Description
-                }]);
+                if (!data.Policy.PolicySummary.AwsManaged) {
+                    $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Policy.PolicySummary.Arn,
+                        f2type: 'organizations.policy',
+                        f2data: data.Policy,
+                        f2region: region,
+                        id: data.Policy.PolicySummary.Id,
+                        name: data.Policy.PolicySummary.Name,
+                        description: data.Policy.PolicySummary.Description
+                    }]);
+                }
             });
         }));
     }).catch(() => { });
