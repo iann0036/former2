@@ -410,7 +410,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'organizations',
             'type': 'AWS::Organizations::OrganizationalUnit',
             'terraformType': 'aws_organizations_organizational_unit',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
         });
     } else if (obj.type == "organizations.account") {
         reqParams.cfn['AccountName'] = obj.data.Name;
@@ -440,14 +443,17 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'organizations',
             'type': 'AWS::Organizations::Account',
             'terraformType': 'aws_organizations_account',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
         });
     } else if (obj.type == "organizations.policy") {
         reqParams.cfn['Content'] = obj.data.Content;
         reqParams.cfn['Name'] = obj.data.PolicySummary.Name;
         reqParams.cfn['Description'] = obj.data.PolicySummary.Description;
         reqParams.cfn['Type'] = obj.data.PolicySummary.Type;
-        reqParams.cfn['TargetIds'] = obj.data.PolicySummary.Type;
+        reqParams.cfn['TargetIds'] = obj.data.TargetIds;
         reqParams.tf['content'] = obj.data.Content;
         reqParams.tf['name'] = obj.data.PolicySummary.Name;
         reqParams.tf['description'] = obj.data.PolicySummary.Description;
