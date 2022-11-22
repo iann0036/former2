@@ -255,43 +255,39 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
         }
     }).catch(() => { });
 
-    await sdkcall("STS", "getCallerIdentity", {
+    await sdkcall("Organizations", "listRoots", {
         // no params
-    }, true).then(async (data) => {
-        var accountId = data.Account;
+    }, false).then(async (data) => {
+        $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('removeAll');
 
-        await sdkcall("Organizations", "listParents", {
-            ChildId: accountId
-        }, false).then(async (data) => {
-            if (data.Parents.length == 1) {
-                $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('removeAll');
+        if (!data.Roots || data.Roots.length < 1) {
+            return;
+        }
 
-                var parents = [data.Parents[0].Id];
+        var parents = [data.Roots[0].Id];
 
-                while (parents.length) {
-                    var parentid = parents.pop();
+        while (parents.length) {
+            var parentid = parents.pop();
 
-                    await sdkcall("Organizations", "listOrganizationalUnitsForParent", {
-                        ParentId: parentid
-                    }, false).then(async (data) => {
-                        data.OrganizationalUnits.forEach(ou => {
-                            ou['ParentId'] = parentid;
+            await sdkcall("Organizations", "listOrganizationalUnitsForParent", {
+                ParentId: parentid
+            }, false).then(async (data) => {
+                data.OrganizationalUnits.forEach(ou => {
+                    ou['ParentId'] = parentid;
 
-                            $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('append', [{
-                                f2id: ou.Arn,
-                                f2type: 'organizations.organizationalunit',
-                                f2data: ou,
-                                f2region: region,
-                                id: ou.Id,
-                                name: ou.Name
-                            }]);
+                    $('#section-managementandgovernance-organizations-organizationalunits-datatable').deferredBootstrapTable('append', [{
+                        f2id: ou.Arn,
+                        f2type: 'organizations.organizationalunit',
+                        f2data: ou,
+                        f2region: region,
+                        id: ou.Id,
+                        name: ou.Name
+                    }]);
 
-                            parents.push(ou.Id);
-                        });
-                    });
-                }
-            }
-        }).catch(() => { });
+                    parents.push(ou.Id);
+                });
+            });
+        }
     });
 
     await sdkcall("Organizations", "listAccounts", {
