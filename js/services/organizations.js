@@ -46,7 +46,6 @@ sections.push({
             ]
         },
         'Organizational Units': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -85,7 +84,6 @@ sections.push({
             ]
         },
         'Accounts': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -132,7 +130,6 @@ sections.push({
             ]
         },
         'Policies': {
-            'terraformonly': true,
             'columns': [
                 [
                     {
@@ -302,7 +299,13 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
     }, false).then(async (data) => {
         $('#section-managementandgovernance-organizations-accounts-datatable').deferredBootstrapTable('removeAll');
 
-        data.Accounts.forEach(account => {
+        data.Accounts.forEach(async (account) => {
+            await sdkcall("Organizations", "listParents", {
+                ChildId: account.Id
+            }, false).then(async (data) => {
+                account.Parents = data.Parents;
+            });
+
             $('#section-managementandgovernance-organizations-accounts-datatable').deferredBootstrapTable('append', [{
                 f2id: account.Arn,
                 f2type: 'organizations.account',
@@ -325,21 +328,14 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
             await sdkcall("Organizations", "describePolicy", {
                 PolicyId: policy.Id
             }, false).then(async (data) => {
-                $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.Policy.PolicySummary.Arn,
-                    f2type: 'organizations.policy',
-                    f2data: data.Policy,
-                    f2region: region,
-                    id: data.Policy.PolicySummary.Id,
-                    name: data.Policy.PolicySummary.Name,
-                    description: data.Policy.PolicySummary.Description
-                }]);
+                var targets = [];
 
                 await sdkcall("Organizations", "listTargetsForPolicy", {
                     PolicyId: policy.Id
                 }, false).then(async (data) => {
                     data.Targets.forEach(target => {
                         target['PolicyId'] = policy.Id;
+                        targets.push(target.TargetId);
 
                         $('#section-managementandgovernance-organizations-policyattachments-datatable').deferredBootstrapTable('append', [{
                             f2id: target.Arn,
@@ -352,6 +348,18 @@ async function updateDatatableManagementAndGovernanceOrganizations() {
                         }]);
                     });
                 });
+
+                data.Policy['TargetIds'] = targets;
+
+                $('#section-managementandgovernance-organizations-policies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Policy.PolicySummary.Arn,
+                    f2type: 'organizations.policy',
+                    f2data: data.Policy,
+                    f2region: region,
+                    id: data.Policy.PolicySummary.Id,
+                    name: data.Policy.PolicySummary.Name,
+                    description: data.Policy.PolicySummary.Description
+                }]);
             });
         }));
     }).catch(() => { });
@@ -390,20 +398,33 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'options': reqParams
         });
     } else if (obj.type == "organizations.organizationalunit") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['ParentId'] = obj.data.ParentId;
         reqParams.tf['name'] = obj.data.Name;
         reqParams.tf['parent_id'] = obj.data.ParentId;
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::OrganizationalUnit'), // not real resource type
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::OrganizationalUnit'),
             'region': obj.region,
             'service': 'organizations',
+            'type': 'AWS::Organizations::OrganizationalUnit',
             'terraformType': 'aws_organizations_organizational_unit',
             'options': reqParams
         });
     } else if (obj.type == "organizations.account") {
+        reqParams.cfn['AccountName'] = obj.data.Name;
+        reqParams.cfn['Email'] = obj.data.Email;
         reqParams.tf['name'] = obj.data.Name;
         reqParams.tf['email'] = obj.data.Email;
+
+        if (obj.data.Parents) {
+            var parents = [];
+            obj.data.Parents.forEach(parent => {
+                parents.push(parent.Id);
+            });
+            reqParams.cfn['ParentIds'] = parents;
+        }
 
         /*
         TODO:
@@ -414,13 +435,19 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Account'), // not real resource type
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Account'),
             'region': obj.region,
             'service': 'organizations',
+            'type': 'AWS::Organizations::Account',
             'terraformType': 'aws_organizations_account',
             'options': reqParams
         });
     } else if (obj.type == "organizations.policy") {
+        reqParams.cfn['Content'] = obj.data.Content;
+        reqParams.cfn['Name'] = obj.data.PolicySummary.Name;
+        reqParams.cfn['Description'] = obj.data.PolicySummary.Description;
+        reqParams.cfn['Type'] = obj.data.PolicySummary.Type;
+        reqParams.cfn['TargetIds'] = obj.data.PolicySummary.Type;
         reqParams.tf['content'] = obj.data.Content;
         reqParams.tf['name'] = obj.data.PolicySummary.Name;
         reqParams.tf['description'] = obj.data.PolicySummary.Description;
@@ -428,9 +455,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
         tracked_resources.push({
             'obj': obj,
-            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Policy'), // not real resource type
+            'logicalId': getResourceName('organizations', obj.id, 'AWS::Organizations::Policy'),
             'region': obj.region,
             'service': 'organizations',
+            'type': 'AWS::Organizations::Policy',
             'terraformType': 'aws_organizations_policy',
             'options': reqParams
         });
