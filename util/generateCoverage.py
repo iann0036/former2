@@ -133,7 +133,10 @@ with open("util/cfnspec.json", "r") as f:
 
     for k, v in loaded_spec['ResourceTypes'].items():
         if k not in cfn_exceptions.keys():
-            spec[k] = getProps(k, v, 0)
+            try:
+                spec[k] = getProps(k, v, 0)
+            except Exception as e:
+                print(e)
 
 # Find occurences
 def find_occs(resourcetype, prop, indent, subprops):
