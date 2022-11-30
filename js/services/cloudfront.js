@@ -214,6 +214,44 @@ sections.push({
                 ]
             ]
         },
+        'Continuous Deployment Policies': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'ID',
+                        field: 'id',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'type',
+                        title: 'Type',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Cache Policies': {
             'columns': [
                 [
@@ -528,6 +566,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
     blockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originaccessidentities-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originaccesscontrols-datatable');
+    blockUI('#section-networkingandcontentdelivery-cloudfront-continuousdeploymentpolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-cachepolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-originrequestpolicies-datatable');
     blockUI('#section-networkingandcontentdelivery-cloudfront-realtimelogconfigs-datatable');
@@ -625,6 +664,29 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-cloudfront-streamingdistributions-datatable');
+    });
+
+    await sdkcall("CloudFront", "listContinuousDeploymentPolicies", {
+        // no params
+    }, true).then(async (data) => {
+        $('#section-networkingandcontentdelivery-cloudfront-continuousdeploymentpolicies-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ContinuousDeploymentPolicyList.Items.map(continuousDeploymentPolicy => {
+            return sdkcall("CloudFront", "getContinuousDeploymentPolicy", {
+                Id: continuousDeploymentPolicy.ContinuousDeploymentPolicy.Id
+            }, true).then((data) => {
+                $('#section-networkingandcontentdelivery-cloudfront-continuousdeploymentpolicies-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.ContinuousDeploymentPolicy.Id,
+                    f2type: 'cloudfront.continuousdeploymentpolicy',
+                    f2data: data.ContinuousDeploymentPolicy,
+                    f2region: region,
+                    id: data.ContinuousDeploymentPolicy.Id,
+                    type: data.ContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfig.TrafficConfig.Type
+                }]);
+            });
+        }));
+
+        unblockUI('#section-networkingandcontentdelivery-cloudfront-continuousdeploymentpolicies-datatable');
     });
 
     await sdkcall("CloudFront", "listCachePolicies", {
@@ -804,6 +866,7 @@ async function updateDatatableNetworkingAndContentDeliveryCloudFront() {
         }));
     });
 
+    unblockUI('#section-networkingandcontentdelivery-cloudfront-continuousdeploymentpolicies-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-keygroups-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-publickeys-datatable');
     unblockUI('#section-networkingandcontentdelivery-cloudfront-functions-datatable');
@@ -1476,6 +1539,25 @@ service_mapping_functions.push(async function(reqParams, obj, tracked_resources)
             'region': obj.region,
             'service': 'cloudfront',
             'type': 'AWS::CloudFront::OriginAccessControl',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Id
+            }
+        });
+    } else if (obj.type == "cloudfront.continuousdeploymentpolicy") {
+        reqParams.cfn['ContinuousDeploymentPolicyConfig'] = {
+            'Enabled': obj.data.ContinuousDeploymentPolicyConfig.Enabled,
+            'StagingDistributionDnsNames': obj.data.ContinuousDeploymentPolicyConfig.StagingDistributionDnsNames.Items,
+            'TrafficConfig': obj.data.ContinuousDeploymentPolicyConfig.TrafficConfig,
+            'Type': obj.data.ContinuousDeploymentPolicyConfig.Type
+        };
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('cloudfront', obj.id, 'AWS::CloudFront::ContinuousDeploymentPolicy'),
+            'region': obj.region,
+            'service': 'cloudfront',
+            'type': 'AWS::CloudFront::ContinuousDeploymentPolicy',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.Id
