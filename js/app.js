@@ -971,6 +971,7 @@ $(document).ready(function(){
         "ap-northeast-1": "Asia Pacific (Tokyo)",
         "ca-central-1": "Canada (Central)",
         "eu-central-1": "EU (Frankfurt)",
+        "eu-central-2": "EU (Zurich)",
         "eu-west-1": "EU (Ireland)",
         "eu-west-2": "EU (London)",
         "eu-west-3": "EU (Paris)",
