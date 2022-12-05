@@ -636,7 +636,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.distributions.forEach(distribution => {
                 reqParams.cfn['Distributions'].push({
                     'Region': distribution.region,
-                    'amiDistributionConfiguration': distribution.amiDistributionConfiguration,
+                    'AmiDistributionConfiguration': distribution.amiDistributionConfiguration,
                     'LicenseConfigurationArns': distribution.licenseConfigurationArns
                 });
             });
