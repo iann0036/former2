@@ -780,6 +780,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['FileSystemConfigs'] = obj.data.Configuration.FileSystemConfigs;
         reqParams.cfn['EphemeralStorage'] = obj.data.Configuration.EphemeralStorage;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = new Map();
+            obj.data.Tags.forEach(tag => {
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
+                }
+            });
+        }
 
         /*
         SKIPPED: ZipFile

@@ -4877,10 +4877,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['instance_tenancy'] = obj.data.InstanceTenancy;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -4990,10 +4990,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ec2.internetgateway") {
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5063,10 +5063,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5105,10 +5105,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['vpn_gateway_id'] = obj.data.VpnGatewayId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5164,10 +5164,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     } else if (obj.type == "ec2.peeringconnection") {
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5199,10 +5199,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['vpc_id'] = obj.data.VpcId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5227,10 +5227,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['vpc_id'] = obj.data.VpcId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5291,10 +5291,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['Type'] = obj.data.Type;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5326,10 +5326,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['type'] = obj.data.Type;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5453,10 +5453,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['source_dest_check'] = obj.data.SourceDestCheck;
         reqParams.cfn['Tags'] = obj.data.TagSet;
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5534,10 +5534,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5617,10 +5617,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['transit_gateway_id'] = obj.data.TransitGatewayId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5639,10 +5639,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['transit_gateway_id'] = obj.data.TransitGatewayId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }
@@ -5779,10 +5779,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['subnet_id'] = obj.data.SubnetId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }

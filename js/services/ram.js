@@ -119,14 +119,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['allow_external_principals'] = obj.data.allowExternalPrincipals;
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.tags.forEach(tag => {
                 if (!tag.key.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tag.key,
                         'Value': tag.value
                     });
-                    reqParams.tf['tags'][tag.key] = tag.value;
+                    reqParams.tf['tags'].set(tag.key, tag.value);
                 }
             });
         }

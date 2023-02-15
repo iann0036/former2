@@ -1989,13 +1989,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }
@@ -2086,13 +2087,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['xray_tracing_enabled'] = obj.data.tracingEnabled;
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }
@@ -2516,13 +2518,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['OwnershipVerificationCertificateArn'] = obj.data.ownershipVerificationCertificateArn;
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }
@@ -2675,13 +2678,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['DisableExecuteApiEndpoint'] = obj.data.DisableExecuteApiEndpoint;
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.Tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.Tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }
@@ -2766,13 +2770,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['auto_deploy'] = obj.data.AutoDeploy;
         if (obj.data.Tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.Tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.Tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }
@@ -3080,13 +3085,14 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['subnet_ids'] = obj.data.SubnetIds;
         if (obj.data.tags) {
             reqParams.cfn['Tags'] = [];
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.tags).forEach(tagKey => {
                 if (!tagKey.startsWith("aws:")) {
                     reqParams.cfn['Tags'].push({
                         'Key': tagKey,
                         'Value': obj.data.tags[tagKey]
                     });
+                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
                 }
             });
         }

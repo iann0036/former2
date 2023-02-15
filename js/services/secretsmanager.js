@@ -197,10 +197,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['kms_key_id'] = obj.data.KmsKeyId;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
         if (obj.data.Tags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             obj.data.Tags.forEach(tag => {
                 if (!tag.Key.startsWith("aws:")) {
-                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
                 }
             });
         }

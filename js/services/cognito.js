@@ -1018,9 +1018,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['UserPoolTags'] = obj.data.UserPoolTags;
         if (obj.data.UserPoolTags) {
-            reqParams.tf['tags'] = new Set();
+            reqParams.tf['tags'] = new Map();
             Object.keys(obj.data.UserPoolTags).forEach(tag => {
-                reqParams.tf['tags'][tag] = obj.data.UserPoolTags[tag];
+                reqParams.tf['tags'].set(tag, obj.data.UserPoolTags[tag]);
             });
         }
         reqParams.cfn['AccountRecoverySetting'] = obj.data.AccountRecoverySetting;

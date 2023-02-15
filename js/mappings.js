@@ -191,6 +191,7 @@ function processTfParameter(param, spacing, keyname, index, tracked_resources) {
         }
 
         for (let paramitem of param) {
+            console.log(paramitem);
             paramitems.push(processTfParameter(paramitem, spacing, keyname, index, tracked_resources));
         };
 
@@ -198,6 +199,32 @@ function processTfParameter(param, spacing, keyname, index, tracked_resources) {
 ` + ' '.repeat(spacing) + keyname + " " + paramitems.join(`
 ` + ' '.repeat(spacing) + keyname + " ") + `
 ` + ' '.repeat(spacing);
+    }
+    if (param instanceof Map) {
+        if (param.size == 0) {
+            return "{}";
+        }
+
+        Array.from(param.keys()).forEach(function (key) {
+            var subvalue = processTfParameter(param.get(key), spacing + 4, key, index, tracked_resources);
+            if (typeof subvalue !== "undefined") {
+                if (param.get(key) instanceof Set) {
+                    paramitems.push(subvalue);
+                } else if (subvalue[0] == '{') {
+                    paramitems.push(key + " " + subvalue);
+                } else {
+                    if (key.match(/^[0-9]+$/g)) {
+                        key = "\"" + key + "\"";
+                    }
+                    paramitems.push(key + " = " + subvalue);
+                }
+            }
+        });
+
+        return `{
+` + ' '.repeat(spacing + 4) + paramitems.join(`
+` + ' '.repeat(spacing + 4)) + `
+` + ' '.repeat(spacing) + `}`;
     }
     if (Array.isArray(param)) {
         if (param.length == 0) {
@@ -2547,7 +2574,7 @@ function outputMapTf(index, service, type, options, region, was_blocked, logical
                 } else {
                     var optionvalue = processTfParameter(options[option], 4, option, index, tracked_resources);
                     if (typeof optionvalue !== "undefined") {
-                        if (options[option].constructor === Set) {
+                        if (options[option].constructor === Set || options[option].constructor === Map) {
                             params += `
     ${option} = ${optionvalue}`;
                         } else if (optionvalue[0] == '{') {
