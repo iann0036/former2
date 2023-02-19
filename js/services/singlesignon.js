@@ -228,10 +228,15 @@ async function updateDatatableSecurityIdentityAndComplianceSingleSignOn() {
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
     if (obj.type == "singlesignon.permissionset") {
         reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.tf['name'] = obj.data.Name;
         reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.tf['description'] = obj.data.Description;
         reqParams.cfn['SessionDuration'] = obj.data.SessionDuration;
+        reqParams.tf['session_duration'] = obj.data.SessionDuration;
         reqParams.cfn['RelayStateType'] = obj.data.RelayState;
+        reqParams.tf['relay_state'] = obj.data.RelayState;
         reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
+        reqParams.tf['instance_arn'] = obj.data.InstanceArn;
         reqParams.cfn['InlinePolicy'] = obj.data.InlinePolicy;
         if (obj.data.ManagedPolicies) {
             reqParams.cfn['ManagedPolicies'] = [];
@@ -253,13 +258,69 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'singlesignon',
             'type': 'AWS::SSO::PermissionSet',
+            'terraformType': 'aws_ssoadmin_permission_set',
             'options': reqParams,
             'returnValues': {
+                'Terraform': {
+                    'arn': obj.data.PermissionSetArn
+                },
                 'GetAtt': {
                     'PermissionSetArn': obj.data.PermissionSetArn
                 }
             }
         });
+
+        if (obj.data.InlinePolicy) {
+            reqParams = {
+                'boto3': {},
+                'go': {},
+                'cfn': {},
+                'cli': {},
+                'tf': {},
+                'iam': {}
+            };
+
+            reqParams.tf['inline_policy'] = obj.data.InlinePolicy;
+            reqParams.tf['instance_arn'] = obj.data.InstanceArn;
+            reqParams.tf['permission_set_arn'] = obj.data.PermissionSetArn;
+
+            tracked_resources.push({
+                'obj': obj,
+                'logicalId': getResourceName('singlesignon', obj.id + " Inline Policy", 'AWS::SSO::PermissionSetInlinePolicy'), // not real resource type
+                'region': obj.region,
+                'service': 'singlesignon',
+                'terraformType': 'aws_ssoadmin_permission_set_inline_policy',
+                'options': reqParams
+            });
+        }
+
+        if (obj.data.ManagedPolicies) {
+            var i = 0;
+            obj.data.ManagedPolicies.forEach(managedpolicy => {
+                i += 1;
+                reqParams = {
+                    'boto3': {},
+                    'go': {},
+                    'cfn': {},
+                    'cli': {},
+                    'tf': {},
+                    'iam': {}
+                };
+
+                reqParams.tf['managed_policy_arn'] = managedpolicy.Arn;
+                reqParams.tf['instance_arn'] = obj.data.InstanceArn;
+                reqParams.tf['permission_set_arn'] = obj.data.PermissionSetArn;
+
+                tracked_resources.push({
+                    'obj': obj,
+                    'logicalId': getResourceName('singlesignon', obj.id + " Managed Policy Attachment " + i, 'AWS::SSO::ManagedPolicyAttachment'), // not real resource type
+                    'region': obj.region,
+                    'service': 'singlesignon',
+                    'terraformType': 'aws_ssoadmin_managed_policy_attachment',
+                    'options': reqParams
+                });
+            });
+        }
     } else if (obj.type == "singlesignon.assignment") {
         reqParams.cfn['InstanceArn'] = obj.data.InstanceArn;
         reqParams.tf['instance_arn'] = obj.data.InstanceArn;
