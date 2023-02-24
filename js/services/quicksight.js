@@ -687,7 +687,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ColumnGroups'] = obj.data.ColumnGroups;
         if (obj.data.FieldFolders) {
             reqParams.cfn['FieldFolders'] = {};
-            for (var k in Object.keys(obj.data.FieldFolders)) {
+            for (var k of Object.keys(obj.data.FieldFolders)) {
                 reqParams.cfn['FieldFolders'][k] = {
                     'Description': obj.data.FieldFolders[k]['description'],
                     'Columns': obj.data.FieldFolders[k]['columns']
