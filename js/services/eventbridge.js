@@ -444,6 +444,70 @@ sections.push({
                     }
                 ]
             ]
+        },
+        'Schedules': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
+        'Schedule Groups': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    }
+                ],
+                [
+                    // no extra properties
+                ]
+            ]
         }
     }
 });
@@ -460,6 +524,8 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
     blockUI('#section-applicationintegration-eventbridge-connections-datatable');
     blockUI('#section-applicationintegration-eventbridge-endpoints-datatable');
+    blockUI('#section-applicationintegration-eventbridge-schedules-datatable');
+    blockUI('#section-applicationintegration-eventbridge-schedulegroups-datatable');
 
     await sdkcall("EventBridge", "listRules", {
         // no params
@@ -739,6 +805,47 @@ async function updateDatatableApplicationIntegrationEventBridge() {
         }));
     }).catch(() => { });
 
+    await sdkcall("Scheduler", "listSchedules", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-schedules-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Schedules.map(async (schedule) => {
+            return sdkcall("Scheduler", "getSchedule", {
+                Name: schedule.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-schedules-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'eventbridge.schedule',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
+    await sdkcall("Scheduler", "listScheduleGroups", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-schedulegroups-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.ScheduleGroups.map(async (schedulegroup) => {
+            return sdkcall("Scheduler", "getScheduleGroup", {
+                Name: schedulegroup.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-schedulegroups-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'eventbridge.schedulegroup',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name
+                }]);
+            });
+        }));
+    }).catch(() => { });
+
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
@@ -750,6 +857,8 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     unblockUI('#section-applicationintegration-eventbridge-apidestinations-datatable');
     unblockUI('#section-applicationintegration-eventbridge-connections-datatable');
     unblockUI('#section-applicationintegration-eventbridge-endpoints-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-schedules-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-schedulegroups-datatable');
 }
 
 service_mapping_functions.push(function(reqParams, obj, tracked_resources){
@@ -1111,6 +1220,121 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.EndpointId,
                 'GetAtt': {
                     'EndpointUrl': obj.data.EndpointUrl
+                }
+            }
+        });
+    } else if (obj.type == "eventbridge.schedule") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['StartDate'] = obj.data.StartDate;
+        reqParams.cfn['EndDate'] = obj.data.EndDate;
+        reqParams.cfn['State'] = obj.data.State;
+        reqParams.cfn['GroupName'] = obj.data.GroupName;
+        reqParams.cfn['KmsKeyArn'] = obj.data.KmsKeyArn;
+        reqParams.cfn['ScheduleExpression'] = obj.data.ScheduleExpression;
+        reqParams.cfn['ScheduleExpressionTimezone'] = obj.data.ScheduleExpressionTimezone;
+        reqParams.cfn['FlexibleTimeWindow'] = obj.data.FlexibleTimeWindow;
+        if (obj.data.Target) {
+            var ecsParameters = null;
+            if (obj.data.Target.EcsParameters) {
+                var capacityProviderStrategy = null;
+                if (obj.data.Target.EcsParameters.CapacityProviderStrategy) {
+                    capacityProviderStrategy = [];
+                    for (var capacityProviderStrategyItem of obj.data.Target.EcsParameters.CapacityProviderStrategy) {
+                        capacityProviderStrategy.push({
+                            'Base': capacityProviderStrategyItem.base,
+                            'CapacityProvider': capacityProviderStrategyItem.capacityProvider,
+                            'Weight': capacityProviderStrategyItem.weight
+                        });
+                    }
+                }
+                var networkConfiguration = null;
+                if (obj.data.Target.EcsParameters.NetworkConfiguration) {
+                    networkConfiguration = {
+                        'AwsvpcConfiguration': obj.data.Target.EcsParameters.NetworkConfiguration.awsvpcConfiguration
+                    };
+                }
+                var placementConstraints = null;
+                if (obj.data.Target.EcsParameters.PlacementConstraints) {
+                    placementConstraints = [];
+                    for (var placementConstraint of obj.data.Target.EcsParameters.PlacementConstraints) {
+                        placementConstraints.push({
+                            'Expression': placementConstraint.expression,
+                            'Type': placementConstraint.type
+                        });
+                    }
+                }
+                var placementStrategy = null;
+                if (obj.data.Target.EcsParameters.PlacementStrategy) {
+                    placementStrategy = [];
+                    for (var placementStrategyItem of obj.data.Target.EcsParameters.PlacementStrategy) {
+                        placementStrategy.push({
+                            'Expression': placementStrategyItem.expression,
+                            'Type': placementStrategyItem.type
+                        });
+                    }
+                }
+
+                ecsParameters = {
+                    'CapacityProviderStrategy': capacityProviderStrategy,
+                    'EnableECSManagedTags': obj.data.Target.EcsParameters.EnableECSManagedTags,
+                    'EnableExecuteCommand': obj.data.Target.EcsParameters.EnableExecuteCommand,
+                    'Group': obj.data.Target.EcsParameters.Group,
+                    'LaunchType': obj.data.Target.EcsParameters.LaunchType,
+                    'NetworkConfiguration': networkConfiguration,
+                    'PlacementConstraints': placementConstraints,
+                    'PlacementStrategy': placementStrategy,
+                    'PlatformVersion': obj.data.Target.EcsParameters.PlatformVersion,
+                    'PropagateTags': obj.data.Target.EcsParameters.PropagateTags,
+                    'ReferenceId': obj.data.Target.EcsParameters.ReferenceId,
+                    'Tags': obj.data.Target.EcsParameters.Tags,
+                    'TaskCount': obj.data.Target.EcsParameters.TaskCount,
+                    'TaskDefinitionArn': obj.data.Target.EcsParameters.TaskDefinitionArn
+                };
+            }
+
+            reqParams.cfn['Target'] = {
+                'Arn': obj.data.Target.Arn,
+                'DeadLetterConfig': obj.data.Target.DeadLetterConfig,
+                'EcsParameters': ecsParameters,
+                'EventBridgeParameters': obj.data.Target.EventBridgeParameters,
+                'Input': obj.data.Target.Input,
+                'KinesisParameters': obj.data.Target.KinesisParameters,
+                'RetryPolicy': obj.data.Target.RetryPolicy,
+                'RoleArn': obj.data.Target.RoleArn,
+                'SageMakerPipelineParameters': obj.data.Target.SageMakerPipelineParameters,
+                'SqsParameters': obj.data.Target.SqsParameters
+            };
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Scheduler::Schedule'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Scheduler::Schedule',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
+                }
+            }
+        });
+    } else if (obj.type == "eventbridge.schedulegroup") {
+        reqParams.cfn['Name'] = obj.data.Name;
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Scheduler::ScheduleGroup'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Scheduler::ScheduleGroup',
+            'options': reqParams,
+            'returnValues': {
+                'Ref': obj.data.Name,
+                'GetAtt': {
+                    'Arn': obj.data.Arn
                 }
             }
         });
