@@ -835,13 +835,15 @@ async function updateDatatableApplicationIntegrationEventBridge() {
             return sdkcall("Scheduler", "getScheduleGroup", {
                 Name: schedulegroup.Name
             }, true).then(async (data) => {
-                $('#section-applicationintegration-eventbridge-schedulegroups-datatable').deferredBootstrapTable('append', [{
-                    f2id: data.Arn,
-                    f2type: 'eventbridge.schedulegroup',
-                    f2data: data,
-                    f2region: region,
-                    name: data.Name
-                }]);
+                if (data.Name != "default") {
+                    $('#section-applicationintegration-eventbridge-schedulegroups-datatable').deferredBootstrapTable('append', [{
+                        f2id: data.Arn,
+                        f2type: 'eventbridge.schedulegroup',
+                        f2data: data,
+                        f2region: region,
+                        name: data.Name
+                    }]);
+                }
             });
         }));
     }).catch(() => { });
