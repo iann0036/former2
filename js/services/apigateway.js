@@ -2685,7 +2685,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'Key': tagKey,
                         'Value': obj.data.Tags[tagKey]
                     });
-                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
+                    reqParams.tf['tags'].set(tagKey, obj.data.Tags[tagKey]);
                 }
             });
         }
@@ -2777,7 +2777,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                         'Key': tagKey,
                         'Value': obj.data.Tags[tagKey]
                     });
-                    reqParams.tf['tags'].set(tagKey, obj.data.tags[tagKey]);
+                    reqParams.tf['tags'].set(tagKey, obj.data.Tags[tagKey]);
                 }
             });
         }
