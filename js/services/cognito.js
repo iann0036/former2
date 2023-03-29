@@ -692,6 +692,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                         });
                     }));
                 }),
+                (window && window.localStorage.getItem('skipirrelevantresources') != "true") ? // potentially skip
                 sdkcall("CognitoIdentityServiceProvider", "listUsers", {
                     UserPoolId: userPool.Id
                 }, true).then(async (data) => {
@@ -737,7 +738,7 @@ async function updateDatatableSecurityIdentityAndComplianceCognito() {
                             }]);
                         });
                     }));
-                }),
+                }) : Promise.resolve(),
                 sdkcall("CognitoIdentityServiceProvider", "listGroups", {
                     UserPoolId: userPool.Id
                 }, true).then(async (data) => {
