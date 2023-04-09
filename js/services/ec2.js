@@ -1946,8 +1946,9 @@ async function updateDatatableComputeEC2() {
                         sdkcall("ELBv2", "describeRules", {
                             ListenerArn: listener.ListenerArn
                         }, true).then((data) => {
-                            data.Rules.forEach(rule => {
+                            data.Rules.forEach(async (rule) => {
                                 rule['ListenerArn'] = listener.ListenerArn;
+                                rule['Tags'] = await getResourceTags(rule.RuleArn);
                                 $('#section-compute-ec2-v2loadbalancerlistenerrules-datatable').deferredBootstrapTable('append', [{
                                     f2id: rule.RuleArn,
                                     f2type: 'elbv2.loadbalancerlistenerrule',
@@ -3624,6 +3625,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             }
             reqParams.cfn['Actions'] = obj.data.Actions;
+
+            reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+            if (obj.data.Tags) {
+                reqParams.tf['tags'] = new Set();
+                obj.data.Tags.forEach(tag => {
+                    if (!tag.Key.startsWith("aws:")) {
+                        reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                    }
+                });
+            }
 
             tracked_resources.push({
                 'obj': obj,

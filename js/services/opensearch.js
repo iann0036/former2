@@ -82,7 +82,7 @@ async function updateDatatableAnalyticsOpenSearch() {
                     f2type: 'opensearch.domain',
                     f2data: data.DomainStatusList[0],
                     f2region: region,
-                    f2link: 'https://console.aws.amazon.com/es/home#domain:resource=' + data.DomainStatusList[0].DomainId,
+                    f2link: 'https://console.aws.amazon.com/aos/home#domain:resource=' + data.DomainStatusList[0].DomainId,
                     name: data.DomainStatusList[0].DomainName,
                     id: data.DomainStatusList[0].DomainId,
                     endpoint: data.DomainStatusList[0].Endpoint,
