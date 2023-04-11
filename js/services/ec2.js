@@ -1913,7 +1913,8 @@ async function updateDatatableComputeEC2() {
             await sdkcall("ELBv2", "describeListeners", {
                 LoadBalancerArn: loadBalancer.LoadBalancerArn
             }, true).then(async (data) => {
-                await Promise.all(data.Listeners.map(listener => {
+                await Promise.all(data.Listeners.map(async (listener) => {
+                    listener['Tags'] = await getResourceTags(listener.ListenerArn)
                     $('#section-compute-ec2-v2loadbalancerlisteners-datatable').deferredBootstrapTable('append', [{
                         f2id: listener.ListenerArn,
                         f2type: 'elbv2.loadbalancerlistener',
@@ -3467,6 +3468,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.tf['protocol'] = obj.data.Protocol;
         reqParams.cfn['SslPolicy'] = obj.data.SslPolicy;
         reqParams.tf['ssl_policy'] = obj.data.SslPolicy;
+
+        reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+
+        if (obj.data.Tags && obj.data.Tags.length) {
+            reqParams.tf['tags'] = new Set();
+            obj.data.Tags.forEach(tag => {
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'][tag['Key']] = tag['Value'];
+                }
+            });
+        }
+
         if (obj.data.Certificates) {
             reqParams.cfn['Certificates'] = [];
             obj.data.Certificates.forEach(certificate => {
