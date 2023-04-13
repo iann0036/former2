@@ -230,6 +230,8 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
             service = new AWS[svc]({ region: 'us-west-2', customUserAgent: 'former2/latest' });
         } else if (svc == "CostExplorer") {
             service = new AWS[svc]({ region: 'us-east-1', customUserAgent: 'former2/latest' });
+        } else if (svc == "DynamoDB") {
+            service = new AWS[svc]({ region: region, customUserAgent: 'former2/latest', dynamoDbCrc32: false });
         }
 
         service[method].call(service, params, async function (err, data) {
