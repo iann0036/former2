@@ -1360,7 +1360,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         }
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-account-datatable');
-    });
+    }).catch(err => {});
 
     await sdkcall("APIGateway", "getClientCertificates", {
         // no params
@@ -1378,7 +1378,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-clientcertificates-datatable');
-    });
+    }).catch(err => {});
 
     await sdkcall("APIGateway", "getApiKeys", {
         // no params
@@ -1398,7 +1398,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         });
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-apikeys-datatable');
-    });
+    }).catch(err => {});
 
     // V1
     await sdkcall("APIGateway", "getVpcLinks", {
@@ -1415,7 +1415,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 description: vpcLink.description
             }]);
         });
-    });
+    }).catch(err => {});
 
     // V2
     await sdkcall("ApiGatewayV2", "getVpcLinks", {
@@ -1469,7 +1469,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-usageplans-datatable');
         unblockUI('#section-networkingandcontentdelivery-apigateway-usageplankeys-datatable');
-    });
+    }).catch(err => {});
 
     await sdkcall("APIGateway", "getRestApis", {
         // no params
@@ -1741,7 +1741,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
         }));
 
         unblockUI('#section-networkingandcontentdelivery-apigateway-restapis-datatable');
-    });
+    }).catch(err => {});
 
     // V2
     await sdkcall("ApiGatewayV2", "getApis", {
@@ -1948,7 +1948,7 @@ async function updateDatatableNetworkingAndContentDeliveryAPIGateway() {
                 });
             }));
         });
-    });
+    }).catch(err => {});
 
     unblockUI('#section-networkingandcontentdelivery-apigateway-stages-datatable');
     unblockUI('#section-networkingandcontentdelivery-apigateway-deployments-datatable');
