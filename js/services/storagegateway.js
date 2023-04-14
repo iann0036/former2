@@ -64,7 +64,7 @@ async function updateDatatableStorageStorageGateway() {
     }, true).then(async (data) => {
         $('#section-storage-storagegateway-gateways-datatable').deferredBootstrapTable('removeAll');
 
-        await Promise.all(data.Gateways.map(gateways => {
+        await Promise.all(data.Gateways.map(gateway => {
             return sdkcall("StorageGateway", "describeGatewayInformation", {
                 GatewayARN: gateway.GatewayARN
             }, true).then(async (data) => {
