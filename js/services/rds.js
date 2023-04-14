@@ -713,7 +713,7 @@ async function updateDatatableDatabaseRDS() {
     await sdkcall("RDS", "describeDBClusters", {
         Filters: [{
             Name: 'engine',
-            Values: ['aurora', 'aurora-mysql', 'aurora-postgresql']
+            Values: ['aurora-mysql', 'aurora-postgresql']
         }]
     }, true).then(async (data) => {
         $('#section-database-rds-clusters-datatable').deferredBootstrapTable('removeAll');
