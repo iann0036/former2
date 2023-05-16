@@ -1132,9 +1132,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             obj.data.IntelligentTieringConfiguration.forEach(itconfig => {
                 reqParams.cfn['OwnershipControls'].push({
                     'Id': itconfig.Id,
-                    'Prefix': itconfig.Filter.Prefix,
+                    'Prefix': (itconfig.Filter ? itconfig.Filter.Prefix : null),
                     'Status': itconfig.Status,
-                    'TagFilters': itconfig.Filter.Tag,
+                    'TagFilters': (itconfig.Filter ? itconfig.Filter.Tag : null),
                     'Tierings': itconfig.Tierings
                 });
             });
