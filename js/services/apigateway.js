@@ -2024,6 +2024,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'RestApiId': obj.data.id
+                },
+                'Terraform': {
+                    'id': obj.data.id
                 }
             }
         });
@@ -2240,6 +2243,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Import': {
                     'RestApiId': obj.data.restApiId,
                     'AuthorizerId': obj.data.id
+                },
+                'Terraform': {
+                    'id': obj.data.id
                 }
             }
         });
