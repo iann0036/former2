@@ -529,8 +529,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
         if (obj.data.schedule) {
-            reqParams.cfn['ScheduleSchedule'] = {
-                'ScheduleExpressionScheduleExpression': obj.data.schedule.scheduleExpression,
+            reqParams.cfn['Schedule'] = {
+                'ScheduleExpression': obj.data.schedule.scheduleExpression,
                 'PipelineExecutionStartCondition': obj.data.schedule.pipelineExecutionStartCondition
             };
         }
