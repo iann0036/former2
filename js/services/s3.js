@@ -1127,9 +1127,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         }
         reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
         reqParams.cfn['OwnershipControls'] = obj.data.OwnershipControls;
-        if (obj.data.IntelligentTieringConfiguration) {
+        if (obj.data.OwnershipControls) {
             reqParams.cfn['OwnershipControls'] = [];
-            obj.data.IntelligentTieringConfiguration.forEach(itconfig => {
+            obj.data.OwnershipControls.forEach(itconfig => {
                 reqParams.cfn['OwnershipControls'].push({
                     'Id': itconfig.Id,
                     'Prefix': (itconfig.Filter ? itconfig.Filter.Prefix : null),
