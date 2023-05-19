@@ -1161,6 +1161,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 'Ref': obj.data.Name,
                 'Import': {
                     'BucketName': obj.data.Name
+                },
+                'Terraform': {
+                    'id': obj.data.Name,
+                    'arn': 'arn:aws:s3:::' + obj.data.Name
                 }
             }
         });
