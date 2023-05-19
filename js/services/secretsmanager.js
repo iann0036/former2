@@ -219,7 +219,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_secretsmanager_secret',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.ARN
+                'Ref': obj.data.ARN,
+                'Terraform': {
+                    'id': obj.data.ARN
+                }
             }
         });
 
@@ -232,7 +235,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'iam': {}
         };
 
-        reqParams.tf['secret_id'] = obj.data.ARN
+        reqParams.tf['secret_id'] = obj.data.ARN;
         reqParams.tf['secret_string'] = obj.data.SecretString;
 
         tracked_resources.push({
