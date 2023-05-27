@@ -526,6 +526,11 @@ async function updateDatatableStorageS3() {
                     Bucket: bucket.Name
                 }, false).then((data) => {
                     bucket['OwnershipControls'] = data.OwnershipControls;
+                }).catch(() => { }),
+                sdkcall("S3", "getPublicAccessBlock", {
+                    Bucket: bucket.Name
+                }, false).then((data) => {
+                    bucket['PublicAccessBlockConfiguration'] = data.PublicAccessBlockConfiguration;
                 }).catch(() => { })
             ]).then(async () => {
                 $('#section-storage-s3-buckets-datatable').deferredBootstrapTable('append', [{
@@ -1140,14 +1145,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
 
-        /*
-        TODO:
-        AccessControl: String
-        PublicAccessBlockConfiguration: 
-            PublicAccessBlockConfiguration
-        Tags:
-            - Resource Tag
-        */
+        reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
+        reqParams.cfn['Tags'] = obj.data.Tags;
 
         tracked_resources.push({
             'obj': obj,
