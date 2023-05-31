@@ -942,7 +942,7 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
 
             await sdkcall("Route53", "listResourceRecordSets", {
                 HostedZoneId: hostedZone.Id.split("/").pop()
-            }, true).then((data) => {
+            }, true).then(async (data) => {
                 data.ResourceRecordSets.forEach(resourceRecordSet => {
                     resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
 
@@ -956,6 +956,32 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                         ttl: resourceRecordSet.TTL
                     }]);
                 });
+
+                var nextData = data;
+
+                while (nextData.NextRecordName && nextData.NextRecordType) {
+                    await sdkcall("Route53", "listResourceRecordSets", {
+                        HostedZoneId: hostedZone.Id.split("/").pop(),
+                        StartRecordType: data.NextRecordType,
+                        StartRecordName: data.NextRecordName
+                    }, true).then(async (data) => {
+                        data.ResourceRecordSets.forEach(resourceRecordSet => {
+                            resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
+        
+                            $('#section-networkingandcontentdelivery-route53-records-datatable').deferredBootstrapTable('append', [{
+                                f2id: resourceRecordSet.Name + " " + resourceRecordSet.Type,
+                                f2type: 'route53.record',
+                                f2data: resourceRecordSet,
+                                f2region: region,
+                                name: resourceRecordSet.Name,
+                                type: resourceRecordSet.Type,
+                                ttl: resourceRecordSet.TTL
+                            }]);
+                        });
+
+                        nextData = data;
+                    });
+                }
             });
 
             return sdkcall("Route53", "getDNSSEC", {
