@@ -962,9 +962,9 @@ async function updateDatatableNetworkingAndContentDeliveryRoute53() {
                 while (nextData.IsTruncated) {
                     await sdkcall("Route53", "listResourceRecordSets", {
                         HostedZoneId: hostedZone.Id.split("/").pop(),
-                        StartRecordType: data.NextRecordType,
-                        StartRecordName: data.NextRecordName,
-                        StartRecordIdentifier: data.NextRecordIdentifier
+                        StartRecordType: nextData.NextRecordType,
+                        StartRecordName: nextData.NextRecordName,
+                        StartRecordIdentifier: nextData.NextRecordIdentifier
                     }, true).then(async (data) => {
                         data.ResourceRecordSets.forEach(resourceRecordSet => {
                             resourceRecordSet['HostedZoneId'] = hostedZone.Id.split("/").pop();
