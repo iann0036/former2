@@ -1142,7 +1142,9 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
-        reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
+        if (obj.data.ObjectLockConfiguration) {
+            reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
+        }
         if (obj.data.OwnershipControls && obj.data.OwnershipControls.Rules) {
             var ownershipcontrolsrules = [];
             obj.data.OwnershipControls.Rules.forEach(occonfig => {
