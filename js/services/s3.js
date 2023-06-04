@@ -1085,6 +1085,18 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+        if (obj.data.IntelligentTieringConfiguration) {
+            reqParams.cfn['IntelligentTieringConfiguration'] = [];
+            obj.data.IntelligentTieringConfiguration.forEach(itconfig => {
+                reqParams.cfn['IntelligentTieringConfiguration'].push({
+                    'Id': itconfig.Id,
+                    'Prefix': (itconfig.Filter ? itconfig.Filter.Prefix : null),
+                    'Status': itconfig.Status,
+                    'TagFilters': (itconfig.Filter ? itconfig.Filter.Tag : null),
+                    'Tierings': itconfig.Tierings
+                });
+            });
+        }
         if (obj.data.InventoryConfigurations && obj.data.InventoryConfigurations.InventoryConfigurationList) {
             reqParams.cfn['InventoryConfigurations'] = [];
             obj.data.InventoryConfigurations.InventoryConfigurationList.forEach(config => {
