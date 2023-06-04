@@ -1157,8 +1157,15 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             };
         }
 
-        reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
         reqParams.cfn['Tags'] = obj.data.Tags;
+        if (obj.data.PublicAccessBlockConfiguration) {
+            reqParams.cfn['PublicAccessBlockConfiguration'] = {
+                'BlockPublicAcls': obj.data.PublicAccessBlockConfiguration.BlockPublicAcls,
+                'BlockPublicPolicy': obj.data.PublicAccessBlockConfiguration.BlockPublicPolicy,
+                'IgnorePublicAcls': obj.data.PublicAccessBlockConfiguration.IgnorePublicAcls,
+                'RestrictPublicBuckets': obj.data.PublicAccessBlockConfiguration.RestrictPublicBuckets
+            };
+        }
 
         tracked_resources.push({
             'obj': obj,
