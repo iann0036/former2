@@ -1131,18 +1131,16 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             });
         }
         reqParams.cfn['ObjectLockConfiguration'] = obj.data.ObjectLockConfiguration;
-        reqParams.cfn['OwnershipControls'] = obj.data.OwnershipControls;
-        if (obj.data.OwnershipControls) {
-            reqParams.cfn['OwnershipControls'] = [];
-            obj.data.OwnershipControls.forEach(itconfig => {
-                reqParams.cfn['OwnershipControls'].push({
-                    'Id': itconfig.Id,
-                    'Prefix': (itconfig.Filter ? itconfig.Filter.Prefix : null),
-                    'Status': itconfig.Status,
-                    'TagFilters': (itconfig.Filter ? itconfig.Filter.Tag : null),
-                    'Tierings': itconfig.Tierings
+        if (obj.data.OwnershipControls && obj.data.OwnershipControls.Rules) {
+            var ownershipcontrolsrules = [];
+            obj.data.OwnershipControls.Rules.forEach(occonfig => {
+                ownershipcontrolsrules.push({
+                    'ObjectOwnership': occonfig.ObjectOwnership
                 });
             });
+            reqParams.cfn['OwnershipControls'] = {
+                'Rules': ownershipcontrolsrules
+            };
         }
 
         reqParams.cfn['PublicAccessBlockConfiguration'] = obj.data.PublicAccessBlockConfiguration;
