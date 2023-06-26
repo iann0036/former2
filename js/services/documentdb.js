@@ -227,10 +227,7 @@ async function updateDatatableDatabaseDocumentDB() {
     blockUI('#section-database-documentdb-subnetgroups-datatable');
 
     await sdkcall("DocDB", "describeDBClusters", {
-        Filters: [{
-            Name: 'engine',
-            Values: ['docdb']
-        }]
+        // no params
     }, true).then((data) => {
         $('#section-database-documentdb-clusters-datatable').deferredBootstrapTable('removeAll');
 
