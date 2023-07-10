@@ -214,22 +214,24 @@ async function updateDatatableDeveloperToolsCodeBuild() {
     }, true).then(async (data) => {
         $('#section-developertools-codebuild-projects-datatable').deferredBootstrapTable('removeAll');
 
-        await sdkcall("CodeBuild", "batchGetProjects", {
-            names: data.projects
-        }, true).then((data) => {
-            data.projects.forEach(project => {
-                $('#section-developertools-codebuild-projects-datatable').deferredBootstrapTable('append', [{
-                    f2id: project.arn,
-                    f2type: 'codebuild.project',
-                    f2data: project,
-                    f2region: region,
-                    name: project.name,
-                    description: project.description,
-                    timeout: project.timeoutInMinutes + " minutes",
-                    creationtime: project.created
-                }]);
-            })
-        });
+        if (data.projects && data.projects.length) {
+            await sdkcall("CodeBuild", "batchGetProjects", {
+                names: data.projects
+            }, true).then((data) => {
+                data.projects.forEach(project => {
+                    $('#section-developertools-codebuild-projects-datatable').deferredBootstrapTable('append', [{
+                        f2id: project.arn,
+                        f2type: 'codebuild.project',
+                        f2data: project,
+                        f2region: region,
+                        name: project.name,
+                        description: project.description,
+                        timeout: project.timeoutInMinutes + " minutes",
+                        creationtime: project.created
+                    }]);
+                })
+            });
+        }
     });
 
     await sdkcall("CodeBuild", "listSourceCredentials", {
