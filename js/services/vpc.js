@@ -5967,7 +5967,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['AccessGroupId'] = obj.data.AccessGroupId;
         reqParams.cfn['AuthorizeAllGroups'] = obj.data.AuthorizeAllGroups;
         reqParams.cfn['Description'] = obj.data.Description;
-        reqParams.cfn['TargetNetworkCidr'] = obj.data.TargetNetworkCidr;
+        reqParams.cfn['TargetNetworkCidr'] = obj.data.DestinationCidr;
 
         tracked_resources.push({
             'obj': obj,
