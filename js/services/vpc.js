@@ -5964,12 +5964,8 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "ec2.clientvpnauthorizationrule") {
         reqParams.cfn['ClientVpnEndpointId'] = obj.data.ClientVpnEndpointId;
-        if (obj.data.AccessGroupId) {
-            reqParams.cfn['AccessGroupId'] = obj.data.AccessGroupId;
-        } else {
-            reqParams.cfn['AuthorizeAllGroups'] = true;
-        }
-        reqParams.cfn['AuthorizeAllGroups'] = obj.data.AuthorizeAllGroups;
+        reqParams.cfn['AccessGroupId'] = obj.data.GroupId;
+        reqParams.cfn['AuthorizeAllGroups'] = obj.data.AccessAll;
         reqParams.cfn['Description'] = obj.data.Description;
         reqParams.cfn['TargetNetworkCidr'] = obj.data.DestinationCidr;
 
