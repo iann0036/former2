@@ -856,7 +856,6 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 var lifecyclerule = {
                     'AbortIncompleteMultipartUpload': rule.AbortIncompleteMultipartUpload,
                     'Id': rule.ID,
-                    'Prefix': rule.Prefix,
                     'Status': rule.Status
                 };
 
@@ -888,6 +887,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     }
                 }
 
+                if (rule.Filter && rule.Filter.Prefix) {
+                    lifecyclerule['Prefix'] = rule.Filter.Prefix;
+                }
+                
                 if (rule.Transitions) {
                     lifecyclerule['Transitions'] = [];
                     rule.Transitions.forEach(transition => {
