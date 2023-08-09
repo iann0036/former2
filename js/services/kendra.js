@@ -183,7 +183,7 @@ async function updateDatatableMachineLearningKendra() {
                     }]);
                 }),
                 sdkcall("Kendra", "listDataSources", {
-                    // no params
+                    IndexId: index.Id
                 }, true).then(async (data) => {
                     $('#section-machinelearning-kendra-datasources-datatable').deferredBootstrapTable('removeAll');
             
@@ -208,7 +208,7 @@ async function updateDatatableMachineLearningKendra() {
                     }))
                 }).catch(() => { }),
                 sdkcall("Kendra", "listFaqs", {
-                    // no params
+                    IndexId: index.Id
                 }, true).then(async (data) => {
                     $('#section-machinelearning-kendra-faqs-datatable').deferredBootstrapTable('removeAll');
             
