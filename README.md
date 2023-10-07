@@ -64,7 +64,7 @@ EXTRA_CORS_ALLOWED_ORIGINS=moz-extension://853c673f-1bd8-4226-a5ff-f1473f7b3d90
 
 _For Microsoft Edge:_
 ```
-EXTRA_CORS_ALLOWED_ORIGINS=chrome-extension://okkjnfohglnomdbpimkcdkiojbeiedof
+EXTRA_CORS_ALLOWED_ORIGINS=extension://okkjnfohglnomdbpimkcdkiojbeiedof
 ```
 
 ## Security
