@@ -2786,6 +2786,11 @@ function outputMapCli(service, method, options, region, was_blocked) {
 }
 
 async function generateDiagram() {
+    if (window && window.localStorage.getItem('uselocalstackendpoint') == "true") {
+        clearDiagram();
+        return;
+    }
+
     if (tracked_resources.length < 1) {
         clearDiagram();
         return;

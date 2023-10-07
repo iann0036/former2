@@ -213,7 +213,14 @@ function lambdaRuntimeFormatter(data) {
 
 function sdkcallwaiter(svc, method, params1, params2) {
     return new Promise(function (resolve, reject) {
-        var service = new _AWS[svc]({ region: region });
+        var serviceoptions = { region: region };
+        if (window && window.localStorage.getItem('uselocalstackendpoint') == "true") {
+            serviceoptions['accessKeyId'] = 'test';
+            serviceoptions['secretAccessKey'] = 'test';
+            serviceoptions['sessionToken'] = null;
+            serviceoptions['endpoint'] = 'http://localhost:4566';
+        }
+        var service = new _AWS[svc](serviceoptions);        
 
         service[method].call(service, params1, params2, async function (err, data) {
             resolve();
@@ -225,14 +232,29 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
     f2debug(String(svc) + "." + String(method) + " - " + JSON.stringify(params));
 
     return new Promise(function (resolve, reject) {
-        var service = new AWS[svc]({ region: region, customUserAgent: 'former2/latest' });
+        var serviceoptions = { region: region, customUserAgent: 'former2/latest' };
         if (svc == "GlobalAccelerator") {
-            service = new AWS[svc]({ region: 'us-west-2', customUserAgent: 'former2/latest' });
+            serviceoptions['region'] = 'us-west-2';
         } else if (svc == "CostExplorer") {
-            service = new AWS[svc]({ region: 'us-east-1', customUserAgent: 'former2/latest' });
+            serviceoptions['region'] = 'us-east-1';
         } else if (svc == "DynamoDB") {
-            service = new AWS[svc]({ region: region, customUserAgent: 'former2/latest', dynamoDbCrc32: false });
+            serviceoptions['dynamoDbCrc32'] = false;
         }
+        if (window && window.localStorage.getItem('uselocalstackendpoint') == "true") {
+            serviceoptions['accessKeyId'] = 'test';
+            serviceoptions['secretAccessKey'] = 'test';
+            serviceoptions['sessionToken'] = null;
+            serviceoptions['endpoint'] = 'http://localhost:4566';
+
+            if (svc == "STS" && method == "GetCallerIdentity") {
+                resolve({
+                    Account: "000000000000", 
+                    Arn: "arn:aws:iam::000000000000:user/localstackuser", 
+                    UserId: "AKIAI44QH8DHBEXAMPLE"
+                });
+            }
+        }
+        var service = new AWS[svc](serviceoptions);
 
         service[method].call(service, params, async function (err, data) {
             if (err) {
@@ -265,6 +287,10 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                         f2log("Skipping " + svc + "." + method + " ForbiddenException");
                     } else if (err.code == "AccessDeniedException" && svc == "FSx") {
                         f2log("Skipping " + svc + "." + method + " AccessDeniedException");
+                    } else if (err.code == "UnknownError" && window && window.localStorage.getItem('uselocalstackendpoint') == "true") {
+                        f2log("Skipping " + svc + "." + method + " UnknownError when in LocalStack mode");
+                    } else if (err.code == "InternalFailure" && window && window.localStorage.getItem('uselocalstackendpoint') == "true") {
+                        f2log("Skipping " + svc + "." + method + " InternalFailure when in LocalStack mode");
                     } else if (alert_on_errors) {
                         f2log("Error calling " + svc + "." + method + ". " + (err.message || JSON.stringify(err)));
                         f2trace(err);
@@ -278,13 +304,15 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                                 type: 'danger'
                             });
                         } else if (err.retryDelay) {
-                            $.notify({
-                                icon: 'font-icon font-icon-warning',
-                                title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
-                                message: 'Credentials may not be correctly configured'
-                            }, {
-                                type: 'danger'
-                            });
+                            if (window && window.localStorage.getItem('uselocalstackendpoint') != "true") {
+                                $.notify({
+                                    icon: 'font-icon font-icon-warning',
+                                    title: '<strong>Error calling ' + svc + '.' + method + '</strong>',
+                                    message: 'Credentials may not be correctly configured'
+                                }, {
+                                    type: 'danger'
+                                });
+                            }
                         } else {
                             $.notify({
                                 icon: 'font-icon font-icon-warning',

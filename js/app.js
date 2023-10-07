@@ -1578,6 +1578,13 @@ $(document).ready(function(){
         window.localStorage.setItem('skipirrelevantresources', $(this).is(':checked').toString());
     });
 
+    if (window.localStorage.getItem('uselocalstackendpoint') == "true") {
+        $('#uselocalstackendpoint').prop('checked', true);
+    }
+    $('#uselocalstackendpoint').change(function() {
+        window.localStorage.setItem('uselocalstackendpoint', $(this).is(':checked').toString());
+    });
+
     if (window.localStorage.getItem('includedefaultresources') == "true") {
         $('#includedefaultresources').prop('checked', true);
         include_default_resources = true;
@@ -1751,6 +1758,7 @@ function saveSettings() {
             'iaclangselect': window.localStorage.getItem('iaclangselect') || 'typescript',
             'relatedresourcessetting': window.localStorage.getItem('relatedresourcessetting'),
             'skipirrelevantresources': window.localStorage.getItem('skipirrelevantresources'),
+            'uselocalstackendpoint': window.localStorage.getItem('uselocalstackendpoint'),
             'includedefaultresources': window.localStorage.getItem('includedefaultresources')
         }
     };
@@ -1798,6 +1806,13 @@ function loadSettings() {
                     $('#skipirrelevantresources').prop('checked', true);
                 } else {
                     $('#skipirrelevantresources').prop('checked', false);
+                }
+            }
+            if ('uselocalstackendpoint' in loaded_settings.settings) {
+                if (loaded_settings.settings.uselocalstackendpoint == "true") {
+                    $('#uselocalstackendpoint').prop('checked', true);
+                } else {
+                    $('#uselocalstackendpoint').prop('checked', false);
                 }
             }
             if ('includedefaultresources' in loaded_settings.settings) {
