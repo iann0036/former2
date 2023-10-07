@@ -48,6 +48,25 @@ The following outputs are currently supported:
 
 A command-line version of Former2 with limited functionality is available for installation. For more information, see the [CLI instructions](cli/README.md).
 
+### LocalStack Support
+
+To enable support for use against [LocalStack](https://docs.localstack.cloud/references/network-troubleshooting/endpoint-url/) endpoints, enable the setting in the Settings page, ensure you are using the Former2 Helper extension/add-on, and add the following [configuration](https://docs.localstack.cloud/references/configuration/) to LocalStack:
+
+_For Google Chrome:_
+```
+EXTRA_CORS_ALLOWED_ORIGINS=chrome-extension://fhejmeojlbhfhjndnkkleooeejklmigi
+```
+
+_For Mozilla Firefox:_
+```
+EXTRA_CORS_ALLOWED_ORIGINS=moz-extension://853c673f-1bd8-4226-a5ff-f1473f7b3d90
+```
+
+_For Microsoft Edge:_
+```
+EXTRA_CORS_ALLOWED_ORIGINS=chrome-extension://okkjnfohglnomdbpimkcdkiojbeiedof
+```
+
 ## Security
 
 Former2 does not create any resources within your AWS account.
