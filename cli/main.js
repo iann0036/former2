@@ -11,7 +11,7 @@ const cliargs = require('commander');
 const cliprogress = require('cli-progress');
 const logplease = require('logplease');
 const _colors = require('colors');
-const pjson = require('./package.json');
+const pjson = require('../package.json');
 const { openStdin } = require("process");
 const CLI = true;
 
@@ -41,7 +41,7 @@ async function getResourceTags(arn) {
 
     if (!resource_tag_cache[ service/*+ "." + type*/ ]) {
         resource_tag_cache[service] = "PENDING";
-        
+
         await sdkcall("ResourceGroupsTaggingAPI", "getResources", {
             ResourceTypeFilters: [ service/* + "." + type*/ ]
         }, false).then((data) => {
@@ -119,12 +119,15 @@ if (!region) {
 }
 
 var stack_parameters = [];
-eval(fs.readFileSync(path.join(__dirname, 'deepmerge.js'), 'utf8'));
-eval(fs.readFileSync(path.join(__dirname, 'mappings.js'), 'utf8'));
-eval(fs.readFileSync(path.join(__dirname, 'datatables.js'), 'utf8'));
-var items = fs.readdirSync(path.join(__dirname, 'services'));
+
+// note: defining `window` here, as it is being referenced by some of the imported scripts below
+const window = undefined;
+eval(fs.readFileSync(path.join(__dirname, '../js/deepmerge.js'), 'utf8'));
+eval(fs.readFileSync(path.join(__dirname, '../js/mappings.js'), 'utf8'));
+eval(fs.readFileSync(path.join(__dirname, '../js/datatables.js'), 'utf8'));
+var items = fs.readdirSync(path.join(__dirname, '../js/services'));
 for (var i=0; i<items.length; i++) {
-    eval(fs.readFileSync(path.join(__dirname, 'services', items[i]), 'utf8'));
+    eval(fs.readFileSync(path.join(__dirname, '../js/services', items[i]), 'utf8'));
 };
 
 f2log = function(msg){};
@@ -214,6 +217,7 @@ async function main(opts) {
                 try {
                     await work();
                 } catch (err) {
+                    // TODO: verify log setup for CLI (errors do not seem to appear when running `former2`)
                     awslog.warn(util.format('updateDatatable failed: %j', err));
                 } finally {
                     b1.increment();

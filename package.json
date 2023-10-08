@@ -12,9 +12,8 @@
     "type": "git",
     "url": "https://github.com/iann0036/former2"
   },
-  "main": "main.js",
+  "main": "cli/main.js",
   "scripts": {
-    "prepare": "cp -f ../js/deepmerge.js . && cp -f ../js/mappings.js . && cp -f ../js/datatables.js . && cp -r ../js/services .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ian Mckay",
@@ -30,6 +29,6 @@
     "proxy-agent": "^3.1.1"
   },
   "bin": {
-    "former2": "main.js"
+    "former2": "cli/main.js"
   }
 }

@@ -648,7 +648,7 @@ async function updateDatatableStorageS3() {
             AccountId: accountId
         }, true).then(async (data) => {
             $('#section-storage-s3-storagelenses-datatable').deferredBootstrapTable('removeAll');
-    
+
             await Promise.all(data.StorageLensConfigurationList.map(config => {
                 return sdkcall("S3Control", "getStorageLensConfiguration", {
                     ConfigId: config.Id,
@@ -671,7 +671,7 @@ async function updateDatatableStorageS3() {
         }, false).then(async (data) => {
             $('#section-storage-s3-outpostbuckets-datatable').deferredBootstrapTable('removeAll');
             $('#section-storage-s3-outpostbucketpolicies-datatable').deferredBootstrapTable('removeAll');
-    
+
             await Promise.all(data.RegionalBucketList.map(async (bucket) => {
                 await sdkcall("S3Control", "getBucket", {
                     Bucket: bucket.Bucket,
@@ -717,7 +717,7 @@ async function updateDatatableStorageS3() {
             AccountId: accountId
         }, false).then(async (data) => {
             $('#section-storage-s3-outpostaccesspoints-datatable').deferredBootstrapTable('removeAll');
-    
+
             await Promise.all(data.AccessPointList.map(async (accesspoint) => {
                 return sdkcall("S3Control", "getAccessPoint", {
                     Name: accesspoint.Name,
@@ -749,7 +749,7 @@ async function updateDatatableStorageS3() {
         }, true).then(async (data) => {
             $('#section-storage-s3-objectlambdaaccesspoints-datatable').deferredBootstrapTable('removeAll');
             $('#section-storage-s3-objectlambdaaccesspointpolicies-datatable').deferredBootstrapTable('removeAll');
-    
+
             await Promise.all(data.ObjectLambdaAccessPointList.map(async (accesspoint) => {
                 await sdkcall("S3Control", "getAccessPointConfigurationForObjectLambda", {
                     Name: accesspoint.Name,
@@ -890,7 +890,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 if (rule.Filter && rule.Filter.Prefix) {
                     lifecyclerule['Prefix'] = rule.Filter.Prefix;
                 }
-                
+
                 if (rule.Transitions) {
                     lifecyclerule['Transitions'] = [];
                     rule.Transitions.forEach(transition => {
