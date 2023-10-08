@@ -15,6 +15,8 @@ const pjson = require('../package.json');
 const { openStdin } = require("process");
 const CLI = true;
 
+process.env.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE = '1';
+
 logplease.setLogLevel('NONE');
 const awslog = logplease.create('AWS');
 AWS.config.logger = awslog;
