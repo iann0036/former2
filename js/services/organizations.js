@@ -447,12 +447,20 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             }
         });
     } else if (obj.type == "organizations.policy") {
-        reqParams.cfn['Content'] = obj.data.Content;
+        var spacinglength = 4;
+        try {
+            var spacingamount = window.localStorage.getItem('cfnspacing');
+            if (spacingamount && spacingamount == 2) {
+                spacinglength = 2;
+            }
+        } catch(e) {};
+
+        reqParams.cfn['Content'] = JSON.stringify(JSON.parse(obj.data.Content), null, spacinglength);
         reqParams.cfn['Name'] = obj.data.PolicySummary.Name;
         reqParams.cfn['Description'] = obj.data.PolicySummary.Description;
         reqParams.cfn['Type'] = obj.data.PolicySummary.Type;
         reqParams.cfn['TargetIds'] = obj.data.TargetIds;
-        reqParams.tf['content'] = obj.data.Content;
+        reqParams.tf['content'] = JSON.stringify(JSON.parse(obj.data.Content), null, spacinglength);
         reqParams.tf['name'] = obj.data.PolicySummary.Name;
         reqParams.tf['description'] = obj.data.PolicySummary.Description;
         reqParams.tf['type'] = obj.data.PolicySummary.Type;
