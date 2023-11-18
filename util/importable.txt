@@ -9,6 +9,7 @@ AWS::Amplify::App ('Arn', '', '', '')
 AWS::Amplify::Branch ('Arn', '', '', '')
 AWS::Amplify::Domain ('Arn', '', '', '')
 AWS::AmplifyUIBuilder::Component ('AppId', 'EnvironmentName', 'Id', '')
+AWS::AmplifyUIBuilder::Form ('AppId', 'EnvironmentName', 'Id', '')
 AWS::AmplifyUIBuilder::Theme ('AppId', 'EnvironmentName', 'Id', '')
 AWS::ApiGateway::Account ('Id', '', '', '')
 AWS::ApiGateway::ApiKey ('APIKeyId', '', '', '')
@@ -16,6 +17,7 @@ AWS::ApiGateway::Authorizer ('RestApiId', 'AuthorizerId', '', '')
 AWS::ApiGateway::BasePathMapping ('DomainName', 'BasePath', '', '')
 AWS::ApiGateway::ClientCertificate ('ClientCertificateId', '', '', '')
 AWS::ApiGateway::Deployment ('DeploymentId', 'RestApiId', '', '')
+AWS::ApiGateway::DocumentationPart ('DocumentationPartId', 'RestApiId', '', '')
 AWS::ApiGateway::DocumentationVersion ('DocumentationVersion', 'RestApiId', '', '')
 AWS::ApiGateway::DomainName ('DomainName', '', '', '')
 AWS::ApiGateway::Method ('RestApiId', 'ResourceId', 'HttpMethod', '')
@@ -26,20 +28,48 @@ AWS::ApiGateway::RestApi ('RestApiId', '', '', '')
 AWS::ApiGateway::Stage ('RestApiId', 'StageName', '', '')
 AWS::ApiGateway::UsagePlan ('Id', '', '', '')
 AWS::ApiGateway::UsagePlanKey ('Id', '', '', '')
+AWS::ApiGateway::VpcLink ('VpcLinkId', '', '', '')
+AWS::ApiGatewayV2::Api ('ApiId', '', '', '')
+AWS::ApiGatewayV2::ApiMapping ('ApiMappingId', 'DomainName', '', '')
+AWS::ApiGatewayV2::Authorizer ('AuthorizerId', 'ApiId', '', '')
+AWS::ApiGatewayV2::Deployment ('ApiId', 'DeploymentId', '', '')
+AWS::ApiGatewayV2::DomainName ('DomainName', '', '', '')
+AWS::ApiGatewayV2::IntegrationResponse ('ApiId', 'IntegrationId', 'IntegrationResponseId', '')
+AWS::ApiGatewayV2::Model ('ApiId', 'ModelId', '', '')
+AWS::ApiGatewayV2::Route ('ApiId', 'RouteId', '', '')
+AWS::ApiGatewayV2::RouteResponse ('ApiId', 'RouteId', 'RouteResponseId', '')
+AWS::ApiGatewayV2::VpcLink ('VpcLinkId', '', '', '')
+AWS::AppConfig::Application ('ApplicationId', '', '', '')
+AWS::AppConfig::ConfigurationProfile ('ApplicationId', 'ConfigurationProfileId', '', '')
+AWS::AppConfig::Extension ('Id', '', '', '')
+AWS::AppConfig::ExtensionAssociation ('Id', '', '', '')
+AWS::AppFlow::Connector ('ConnectorLabel', '', '', '')
 AWS::AppFlow::ConnectorProfile ('ConnectorProfileName', '', '', '')
 AWS::AppFlow::Flow ('FlowName', '', '', '')
 AWS::AppIntegrations::DataIntegration ('Id', '', '', '')
 AWS::AppIntegrations::EventIntegration ('Name', '', '', '')
+AWS::AppRunner::AutoScalingConfiguration ('AutoScalingConfigurationArn', '', '', '')
+AWS::AppRunner::ObservabilityConfiguration ('ObservabilityConfigurationArn', '', '', '')
 AWS::AppRunner::Service ('ServiceArn', '', '', '')
 AWS::AppRunner::VpcConnector ('VpcConnectorArn', '', '', '')
+AWS::AppRunner::VpcIngressConnection ('VpcIngressConnectionArn', '', '', '')
 AWS::AppStream::AppBlock ('Arn', '', '', '')
+AWS::AppStream::AppBlockBuilder ('Name', '', '', '')
 AWS::AppStream::Application ('Arn', '', '', '')
 AWS::AppStream::ApplicationEntitlementAssociation ('StackName', 'EntitlementName', 'ApplicationIdentifier', '')
 AWS::AppStream::ApplicationFleetAssociation ('FleetName', 'ApplicationArn', '', '')
+AWS::AppStream::DirectoryConfig ('DirectoryName', '', '', '')
 AWS::AppStream::Entitlement ('StackName', 'Name', '', '')
+AWS::AppStream::ImageBuilder ('Name', '', '', '')
 AWS::AppSync::DomainName ('DomainName', '', '', '')
 AWS::AppSync::DomainNameApiAssociation ('ApiAssociationIdentifier', '', '', '')
+AWS::AppSync::FunctionConfiguration ('FunctionArn', '', '', '')
+AWS::AppSync::Resolver ('ResolverArn', '', '', '')
+AWS::AppSync::SourceApiAssociation ('AssociationArn', '', '', '')
+AWS::ApplicationAutoScaling::ScalableTarget ('ResourceId', 'ScalableDimension', 'ServiceNamespace', '')
+AWS::ApplicationAutoScaling::ScalingPolicy ('Arn', 'ScalableDimension', '', '')
 AWS::ApplicationInsights::Application ('ApplicationARN', '', '', '')
+AWS::Athena::CapacityReservation ('Arn', '', '', '')
 AWS::Athena::DataCatalog ('Name', '', '', '')
 AWS::Athena::NamedQuery ('NamedQueryId', '', '', '')
 AWS::Athena::PreparedStatement ('StatementName', 'WorkGroup', '', '')
@@ -48,17 +78,22 @@ AWS::AuditManager::Assessment ('AssessmentId', '', '', '')
 AWS::AutoScaling::AutoScalingGroup ('AutoScalingGroupName', '', '', '')
 AWS::AutoScaling::LaunchConfiguration ('LaunchConfigurationName', '', '', '')
 AWS::AutoScaling::LifecycleHook ('AutoScalingGroupName', 'LifecycleHookName', '', '')
-AWS::AutoScaling::ScalingPolicy ('PolicyName', '', '', '')
-AWS::AutoScaling::ScheduledAction ('ScheduledActionName', '', '', '')
+AWS::AutoScaling::ScalingPolicy ('Arn', '', '', '')
+AWS::AutoScaling::ScheduledAction ('ScheduledActionName', 'AutoScalingGroupName', '', '')
 AWS::AutoScaling::WarmPool ('AutoScalingGroupName', '', '', '')
 AWS::Backup::BackupPlan ('BackupPlanId', '', '', '')
 AWS::Backup::BackupSelection ('Id', '', '', '')
 AWS::Backup::BackupVault ('BackupVaultName', '', '', '')
 AWS::Backup::Framework ('FrameworkArn', '', '', '')
 AWS::Backup::ReportPlan ('ReportPlanArn', '', '', '')
+AWS::BackupGateway::Hypervisor ('HypervisorArn', '', '', '')
 AWS::Batch::ComputeEnvironment ('ComputeEnvironmentArn', '', '', '')
 AWS::Batch::JobQueue ('JobQueueArn', '', '', '')
 AWS::Batch::SchedulingPolicy ('Arn', '', '', '')
+AWS::BillingConductor::BillingGroup ('Arn', '', '', '')
+AWS::BillingConductor::CustomLineItem ('Arn', '', '', '')
+AWS::BillingConductor::PricingPlan ('Arn', '', '', '')
+AWS::BillingConductor::PricingRule ('Arn', '', '', '')
 AWS::Budgets::BudgetsAction ('ActionId', 'BudgetName', '', '')
 AWS::CE::AnomalyMonitor ('MonitorArn', '', '', '')
 AWS::CE::AnomalySubscription ('SubscriptionArn', '', '', '')
@@ -67,9 +102,14 @@ AWS::CUR::ReportDefinition ('ReportName', '', '', '')
 AWS::Cassandra::Keyspace ('KeyspaceName', '', '', '')
 AWS::Cassandra::Table ('KeyspaceName', 'TableName', '', '')
 AWS::CertificateManager::Account ('AccountId', '', '', '')
+AWS::Chatbot::MicrosoftTeamsChannelConfiguration ('Arn', '', '', '')
 AWS::Chatbot::SlackChannelConfiguration ('Arn', '', '', '')
+AWS::CleanRooms::Collaboration ('CollaborationIdentifier', '', '', '')
+AWS::CleanRooms::ConfiguredTable ('ConfiguredTableIdentifier', '', '', '')
+AWS::CleanRooms::ConfiguredTableAssociation ('ConfiguredTableAssociationIdentifier', 'MembershipIdentifier', '', '')
+AWS::CleanRooms::Membership ('MembershipIdentifier', '', '', '')
 AWS::CloudFormation::HookDefaultVersion ('Arn', '', '', '')
-AWS::CloudFormation::HookTypeConfig ('TypeArn', '', '', '')
+AWS::CloudFormation::HookTypeConfig ('ConfigurationArn', '', '', '')
 AWS::CloudFormation::HookVersion ('Arn', '', '', '')
 AWS::CloudFormation::ModuleDefaultVersion ('Arn', '', '', '')
 AWS::CloudFormation::ModuleVersion ('Arn', '', '', '')
@@ -82,35 +122,69 @@ AWS::CloudFormation::StackSet ('StackSetId', '', '', '')
 AWS::CloudFormation::TypeActivation ('Arn', '', '', '')
 AWS::CloudFront::CachePolicy ('Id', '', '', '')
 AWS::CloudFront::CloudFrontOriginAccessIdentity ('Id', '', '', '')
+AWS::CloudFront::ContinuousDeploymentPolicy ('Id', '', '', '')
 AWS::CloudFront::Distribution ('Id', '', '', '')
 AWS::CloudFront::Function ('FunctionARN', '', '', '')
 AWS::CloudFront::KeyGroup ('Id', '', '', '')
+AWS::CloudFront::MonitoringSubscription ('DistributionId', '', '', '')
+AWS::CloudFront::OriginAccessControl ('Id', '', '', '')
 AWS::CloudFront::OriginRequestPolicy ('Id', '', '', '')
 AWS::CloudFront::PublicKey ('Id', '', '', '')
 AWS::CloudFront::RealtimeLogConfig ('Arn', '', '', '')
 AWS::CloudFront::ResponseHeadersPolicy ('Id', '', '', '')
+AWS::CloudTrail::Channel ('ChannelArn', '', '', '')
+AWS::CloudTrail::EventDataStore ('EventDataStoreArn', '', '', '')
+AWS::CloudTrail::ResourcePolicy ('ResourceArn', '', '', '')
 AWS::CloudTrail::Trail ('TrailName', '', '', '')
 AWS::CloudWatch::Alarm ('AlarmName', '', '', '')
 AWS::CloudWatch::CompositeAlarm ('AlarmName', '', '', '')
 AWS::CloudWatch::MetricStream ('Name', '', '', '')
 AWS::CodeArtifact::Domain ('Arn', '', '', '')
 AWS::CodeArtifact::Repository ('Arn', '', '', '')
+AWS::CodeDeploy::Application ('ApplicationName', '', '', '')
+AWS::CodeDeploy::DeploymentConfig ('DeploymentConfigName', '', '', '')
 AWS::CodeGuruProfiler::ProfilingGroup ('ProfilingGroupName', '', '', '')
 AWS::CodeGuruReviewer::RepositoryAssociation ('AssociationArn', '', '', '')
+AWS::CodePipeline::CustomActionType ('Category', 'Provider', 'Version', '')
 AWS::CodeStarConnections::Connection ('ConnectionArn', '', '', '')
 AWS::CodeStarNotifications::NotificationRule ('Arn', '', '', '')
-AWS::Config::AggregationAuthorization ('AggregationAuthorizationArn', '', '', '')
+AWS::Cognito::IdentityPoolPrincipalTag ('IdentityPoolId', 'IdentityProviderName', '', '')
+AWS::Cognito::UserPool ('UserPoolId', '', '', '')
+AWS::Cognito::UserPoolClient ('UserPoolId', 'ClientId', '', '')
+AWS::Cognito::UserPoolGroup ('UserPoolId', 'GroupName', '', '')
+AWS::Cognito::UserPoolUser ('UserPoolId', 'Username', '', '')
+AWS::Cognito::UserPoolUserToGroupAttachment ('UserPoolId', 'GroupName', 'Username', '')
+AWS::Comprehend::DocumentClassifier ('Arn', '', '', '')
+AWS::Comprehend::Flywheel ('Arn', '', '', '')
+AWS::Config::AggregationAuthorization ('AuthorizedAccountId', 'AuthorizedAwsRegion', '', '')
+AWS::Config::ConfigRule ('ConfigRuleName', '', '', '')
 AWS::Config::ConfigurationAggregator ('ConfigurationAggregatorName', '', '', '')
 AWS::Config::ConformancePack ('ConformancePackName', '', '', '')
 AWS::Config::OrganizationConformancePack ('OrganizationConformancePackName', '', '', '')
 AWS::Config::StoredQuery ('QueryName', '', '', '')
+AWS::Connect::ApprovedOrigin ('InstanceId', 'Origin', '', '')
 AWS::Connect::ContactFlow ('ContactFlowArn', '', '', '')
 AWS::Connect::ContactFlowModule ('ContactFlowModuleArn', '', '', '')
+AWS::Connect::EvaluationForm ('EvaluationFormArn', '', '', '')
 AWS::Connect::HoursOfOperation ('HoursOfOperationArn', '', '', '')
+AWS::Connect::Instance ('Arn', '', '', '')
+AWS::Connect::InstanceStorageConfig ('InstanceArn', 'AssociationId', 'ResourceType', '')
+AWS::Connect::IntegrationAssociation ('InstanceId', 'IntegrationType', 'IntegrationArn', '')
+AWS::Connect::PhoneNumber ('PhoneNumberArn', '', '', '')
+AWS::Connect::Prompt ('PromptArn', '', '', '')
+AWS::Connect::Queue ('QueueArn', '', '', '')
 AWS::Connect::QuickConnect ('QuickConnectArn', '', '', '')
+AWS::Connect::RoutingProfile ('RoutingProfileArn', '', '', '')
+AWS::Connect::Rule ('RuleArn', '', '', '')
+AWS::Connect::SecurityKey ('InstanceId', 'AssociationId', '', '')
+AWS::Connect::TaskTemplate ('Arn', '', '', '')
 AWS::Connect::User ('UserArn', '', '', '')
 AWS::Connect::UserHierarchyGroup ('UserHierarchyGroupArn', '', '', '')
+AWS::ConnectCampaigns::Campaign ('Arn', '', '', '')
+AWS::ControlTower::EnabledControl ('TargetIdentifier', 'ControlIdentifier', '', '')
+AWS::CustomerProfiles::CalculatedAttributeDefinition ('DomainName', 'CalculatedAttributeName', '', '')
 AWS::CustomerProfiles::Domain ('DomainName', '', '', '')
+AWS::CustomerProfiles::EventStream ('DomainName', 'EventStreamName', '', '')
 AWS::CustomerProfiles::Integration ('DomainName', 'Uri', '', '')
 AWS::CustomerProfiles::ObjectType ('DomainName', 'ObjectTypeName', '', '')
 AWS::DataBrew::Dataset ('Name', '', '', '')
@@ -119,26 +193,38 @@ AWS::DataBrew::Project ('Name', '', '', '')
 AWS::DataBrew::Recipe ('Name', '', '', '')
 AWS::DataBrew::Ruleset ('Name', '', '', '')
 AWS::DataBrew::Schedule ('Name', '', '', '')
+AWS::DataPipeline::Pipeline ('PipelineId', '', '', '')
 AWS::DataSync::Agent ('AgentArn', '', '', '')
 AWS::DataSync::LocationEFS ('LocationArn', '', '', '')
+AWS::DataSync::LocationFSxLustre ('LocationArn', '', '', '')
+AWS::DataSync::LocationFSxONTAP ('LocationArn', '', '', '')
+AWS::DataSync::LocationFSxOpenZFS ('LocationArn', '', '', '')
 AWS::DataSync::LocationFSxWindows ('LocationArn', '', '', '')
 AWS::DataSync::LocationHDFS ('LocationArn', '', '', '')
 AWS::DataSync::LocationNFS ('LocationArn', '', '', '')
 AWS::DataSync::LocationObjectStorage ('LocationArn', '', '', '')
 AWS::DataSync::LocationS3 ('LocationArn', '', '', '')
 AWS::DataSync::LocationSMB ('LocationArn', '', '', '')
+AWS::DataSync::StorageSystem ('StorageSystemArn', '', '', '')
 AWS::DataSync::Task ('TaskArn', '', '', '')
 AWS::Detective::Graph ('Arn', '', '', '')
 AWS::Detective::MemberInvitation ('GraphArn', 'MemberId', '', '')
+AWS::Detective::OrganizationAdmin ('AccountId', '', '', '')
+AWS::DevOpsGuru::LogAnomalyDetectionIntegration ('AccountId', '', '', '')
 AWS::DevOpsGuru::NotificationChannel ('Id', '', '', '')
 AWS::DevOpsGuru::ResourceCollection ('ResourceCollectionType', '', '', '')
+AWS::DirectoryService::SimpleAD ('DirectoryId', '', '', '')
+AWS::DocDBElastic::Cluster ('ClusterArn', '', '', '')
 AWS::DynamoDB::GlobalTable ('TableName', '', '', '')
 AWS::DynamoDB::Table ('TableName', '', '', '')
+AWS::EC2::CapacityReservation ('Id', '', '', '')
 AWS::EC2::CapacityReservationFleet ('CapacityReservationFleetId', '', '', '')
 AWS::EC2::CarrierGateway ('CarrierGatewayId', '', '', '')
+AWS::EC2::CustomerGateway ('CustomerGatewayId', '', '', '')
 AWS::EC2::DHCPOptions ('DhcpOptionsId', '', '', '')
 AWS::EC2::EC2Fleet ('FleetId', '', '', '')
-AWS::EC2::EIP ('PublicIp', '', '', '')
+AWS::EC2::EIP ('PublicIp', 'AllocationId', '', '')
+AWS::EC2::EIPAssociation ('Id', '', '', '')
 AWS::EC2::EgressOnlyInternetGateway ('Id', '', '', '')
 AWS::EC2::EnclaveCertificateIamRoleAssociation ('CertificateArn', 'RoleArn', '', '')
 AWS::EC2::FlowLog ('Id', '', '', '')
@@ -147,11 +233,18 @@ AWS::EC2::Host ('HostId', '', '', '')
 AWS::EC2::IPAM ('IpamId', '', '', '')
 AWS::EC2::IPAMAllocation ('IpamPoolId', 'IpamPoolAllocationId', 'Cidr', '')
 AWS::EC2::IPAMPool ('IpamPoolId', '', '', '')
+AWS::EC2::IPAMPoolCidr ('IpamPoolId', 'IpamPoolCidrId', '', '')
+AWS::EC2::IPAMResourceDiscovery ('IpamResourceDiscoveryId', '', '', '')
+AWS::EC2::IPAMResourceDiscoveryAssociation ('IpamResourceDiscoveryAssociationId', '', '', '')
 AWS::EC2::IPAMScope ('IpamScopeId', '', '', '')
 AWS::EC2::Instance ('InstanceId', '', '', '')
 AWS::EC2::InternetGateway ('InternetGatewayId', '', '', '')
+AWS::EC2::KeyPair ('KeyName', '', '', '')
+AWS::EC2::LaunchTemplate ('LaunchTemplateId', '', '', '')
 AWS::EC2::LocalGatewayRoute ('DestinationCidrBlock', 'LocalGatewayRouteTableId', '', '')
+AWS::EC2::LocalGatewayRouteTable ('LocalGatewayRouteTableId', '', '', '')
 AWS::EC2::LocalGatewayRouteTableVPCAssociation ('LocalGatewayRouteTableVpcAssociationId', '', '', '')
+AWS::EC2::LocalGatewayRouteTableVirtualInterfaceGroupAssociation ('LocalGatewayRouteTableVirtualInterfaceGroupAssociationId', '', '', '')
 AWS::EC2::NatGateway ('NatGatewayId', '', '', '')
 AWS::EC2::NetworkAcl ('Id', '', '', '')
 AWS::EC2::NetworkInsightsAccessScope ('NetworkInsightsAccessScopeId', '', '', '')
@@ -159,24 +252,46 @@ AWS::EC2::NetworkInsightsAccessScopeAnalysis ('NetworkInsightsAccessScopeAnalysi
 AWS::EC2::NetworkInsightsAnalysis ('NetworkInsightsAnalysisId', '', '', '')
 AWS::EC2::NetworkInsightsPath ('NetworkInsightsPathId', '', '', '')
 AWS::EC2::NetworkInterface ('Id', '', '', '')
+AWS::EC2::NetworkInterfaceAttachment ('AttachmentId', '', '', '')
+AWS::EC2::NetworkPerformanceMetricSubscription ('Source', 'Destination', 'Metric', 'Statistic')
+AWS::EC2::PlacementGroup ('GroupName', '', '', '')
 AWS::EC2::PrefixList ('PrefixListId', '', '', '')
+AWS::EC2::Route ('RouteTableId', 'CidrBlock', '', '')
 AWS::EC2::RouteTable ('RouteTableId', '', '', '')
 AWS::EC2::SecurityGroup ('GroupId', '', '', '')
 AWS::EC2::SpotFleet ('Id', '', '', '')
 AWS::EC2::Subnet ('SubnetId', '', '', '')
+AWS::EC2::SubnetCidrBlock ('Id', '', '', '')
 AWS::EC2::SubnetRouteTableAssociation ('Id', '', '', '')
 AWS::EC2::TransitGateway ('Id', '', '', '')
+AWS::EC2::TransitGatewayAttachment ('Id', '', '', '')
 AWS::EC2::TransitGatewayConnect ('TransitGatewayAttachmentId', '', '', '')
 AWS::EC2::TransitGatewayMulticastDomain ('TransitGatewayMulticastDomainId', '', '', '')
 AWS::EC2::TransitGatewayMulticastDomainAssociation ('TransitGatewayMulticastDomainId', 'TransitGatewayAttachmentId', 'SubnetId', '')
 AWS::EC2::TransitGatewayMulticastGroupMember ('TransitGatewayMulticastDomainId', 'GroupIpAddress', 'NetworkInterfaceId', '')
 AWS::EC2::TransitGatewayMulticastGroupSource ('TransitGatewayMulticastDomainId', 'GroupIpAddress', 'NetworkInterfaceId', '')
 AWS::EC2::TransitGatewayPeeringAttachment ('TransitGatewayAttachmentId', '', '', '')
+AWS::EC2::TransitGatewayRouteTable ('TransitGatewayRouteTableId', '', '', '')
 AWS::EC2::TransitGatewayVpcAttachment ('Id', '', '', '')
 AWS::EC2::VPC ('VpcId', '', '', '')
 AWS::EC2::VPCDHCPOptionsAssociation ('DhcpOptionsId', 'VpcId', '', '')
+AWS::EC2::VPCEndpoint ('Id', '', '', '')
+AWS::EC2::VPCEndpointConnectionNotification ('VPCEndpointConnectionNotificationId', '', '', '')
+AWS::EC2::VPCEndpointService ('ServiceId', '', '', '')
+AWS::EC2::VPCEndpointServicePermissions ('ServiceId', '', '', '')
+AWS::EC2::VPCGatewayAttachment ('AttachmentType', 'VpcId', '', '')
+AWS::EC2::VPCPeeringConnection ('Id', '', '', '')
+AWS::EC2::VPNConnection ('VpnConnectionId', '', '', '')
+AWS::EC2::VPNConnectionRoute ('DestinationCidrBlock', 'VpnConnectionId', '', '')
+AWS::EC2::VPNGateway ('VPNGatewayId', '', '', '')
+AWS::EC2::VerifiedAccessEndpoint ('VerifiedAccessEndpointId', '', '', '')
+AWS::EC2::VerifiedAccessGroup ('VerifiedAccessGroupId', '', '', '')
+AWS::EC2::VerifiedAccessInstance ('VerifiedAccessInstanceId', '', '', '')
+AWS::EC2::VerifiedAccessTrustProvider ('VerifiedAccessTrustProviderId', '', '', '')
 AWS::EC2::Volume ('VolumeId', '', '', '')
+AWS::EC2::VolumeAttachment ('VolumeId', 'InstanceId', '', '')
 AWS::ECR::PublicRepository ('RepositoryName', '', '', '')
+AWS::ECR::PullThroughCacheRule ('EcrRepositoryPrefix', '', '', '')
 AWS::ECR::RegistryPolicy ('RegistryId', '', '', '')
 AWS::ECR::ReplicationConfiguration ('RegistryId', '', '', '')
 AWS::ECR::Repository ('RepositoryName', '', '', '')
@@ -193,29 +308,43 @@ AWS::EFS::MountTarget ('Id', '', '', '')
 AWS::EKS::Addon ('ClusterName', 'AddonName', '', '')
 AWS::EKS::Cluster ('Name', '', '', '')
 AWS::EKS::FargateProfile ('ClusterName', 'FargateProfileName', '', '')
+AWS::EKS::IdentityProviderConfig ('IdentityProviderConfigName', 'ClusterName', 'Type', '')
 AWS::EKS::Nodegroup ('Id', '', '', '')
+AWS::EMR::SecurityConfiguration ('Name', '', '', '')
 AWS::EMR::Studio ('StudioId', '', '', '')
 AWS::EMR::StudioSessionMapping ('StudioId', 'IdentityType', 'IdentityName', '')
 AWS::EMRContainers::VirtualCluster ('Id', '', '', '')
+AWS::EMRServerless::Application ('ApplicationId', '', '', '')
 AWS::ElastiCache::GlobalReplicationGroup ('GlobalReplicationGroupId', '', '', '')
+AWS::ElastiCache::SubnetGroup ('CacheSubnetGroupName', '', '', '')
 AWS::ElastiCache::User ('UserId', '', '', '')
 AWS::ElastiCache::UserGroup ('UserGroupId', '', '', '')
+AWS::ElasticBeanstalk::Application ('ApplicationName', '', '', '')
+AWS::ElasticBeanstalk::ApplicationVersion ('ApplicationName', 'Id', '', '')
+AWS::ElasticBeanstalk::ConfigurationTemplate ('ApplicationName', 'TemplateName', '', '')
+AWS::ElasticBeanstalk::Environment ('EnvironmentName', '', '', '')
 AWS::ElasticLoadBalancing::LoadBalancer ('LoadBalancerName', '', '', '')
 AWS::ElasticLoadBalancingV2::Listener ('ListenerArn', '', '', '')
 AWS::ElasticLoadBalancingV2::ListenerRule ('RuleArn', '', '', '')
 AWS::ElasticLoadBalancingV2::LoadBalancer ('LoadBalancerArn', '', '', '')
+AWS::ElasticLoadBalancingV2::TargetGroup ('TargetGroupArn', '', '', '')
 AWS::EventSchemas::RegistryPolicy ('Id', '', '', '')
 AWS::Events::ApiDestination ('Name', '', '', '')
 AWS::Events::Archive ('ArchiveName', '', '', '')
 AWS::Events::Connection ('Name', '', '', '')
+AWS::Events::Endpoint ('Name', '', '', '')
+AWS::Events::EventBus ('Name', '', '', '')
 AWS::Events::Rule ('Arn', '', '', '')
 AWS::Evidently::Experiment ('Arn', '', '', '')
 AWS::Evidently::Feature ('Arn', '', '', '')
 AWS::Evidently::Launch ('Arn', '', '', '')
 AWS::Evidently::Project ('Arn', '', '', '')
+AWS::Evidently::Segment ('Arn', '', '', '')
 AWS::FIS::ExperimentTemplate ('Id', '', '', '')
 AWS::FMS::NotificationChannel ('SnsTopicArn', '', '', '')
 AWS::FMS::Policy ('Id', '', '', '')
+AWS::FMS::ResourceSet ('Id', '', '', '')
+AWS::FSx::DataRepositoryAssociation ('AssociationId', '', '', '')
 AWS::FinSpace::Environment ('EnvironmentId', '', '', '')
 AWS::Forecast::Dataset ('Arn', '', '', '')
 AWS::Forecast::DatasetGroup ('DatasetGroupArn', '', '', '')
@@ -223,11 +352,18 @@ AWS::FraudDetector::Detector ('Arn', '', '', '')
 AWS::FraudDetector::EntityType ('Arn', '', '', '')
 AWS::FraudDetector::EventType ('Arn', '', '', '')
 AWS::FraudDetector::Label ('Arn', '', '', '')
+AWS::FraudDetector::List ('Arn', '', '', '')
 AWS::FraudDetector::Outcome ('Arn', '', '', '')
 AWS::FraudDetector::Variable ('Arn', '', '', '')
 AWS::GameLift::Alias ('AliasId', '', '', '')
+AWS::GameLift::Build ('BuildId', '', '', '')
 AWS::GameLift::Fleet ('FleetId', '', '', '')
 AWS::GameLift::GameServerGroup ('GameServerGroupArn', '', '', '')
+AWS::GameLift::GameSessionQueue ('Name', '', '', '')
+AWS::GameLift::Location ('LocationName', '', '', '')
+AWS::GameLift::MatchmakingConfiguration ('Name', '', '', '')
+AWS::GameLift::MatchmakingRuleSet ('Name', '', '', '')
+AWS::GameLift::Script ('Id', '', '', '')
 AWS::GlobalAccelerator::Accelerator ('AcceleratorArn', '', '', '')
 AWS::GlobalAccelerator::EndpointGroup ('EndpointGroupArn', '', '', '')
 AWS::GlobalAccelerator::Listener ('ListenerArn', '', '', '')
@@ -235,19 +371,32 @@ AWS::Glue::Registry ('Arn', '', '', '')
 AWS::Glue::Schema ('Arn', '', '', '')
 AWS::Glue::SchemaVersion ('VersionId', '', '', '')
 AWS::Glue::SchemaVersionMetadata ('SchemaVersionId', 'Key', 'Value', '')
+AWS::Grafana::Workspace ('Id', '', '', '')
 AWS::GreengrassV2::ComponentVersion ('Arn', '', '', '')
+AWS::GreengrassV2::Deployment ('DeploymentId', '', '', '')
 AWS::GroundStation::Config ('Arn', '', '', '')
 AWS::GroundStation::DataflowEndpointGroup ('Id', '', '', '')
 AWS::GroundStation::MissionProfile ('Id', 'Arn', '', '')
+AWS::GuardDuty::Detector ('Id', '', '', '')
+AWS::GuardDuty::IPSet ('Id', 'DetectorId', '', '')
+AWS::GuardDuty::ThreatIntelSet ('Id', 'DetectorId', '', '')
 AWS::HealthLake::FHIRDatastore ('DatastoreId', '', '', '')
+AWS::IAM::GroupPolicy ('PolicyName', 'GroupName', '', '')
 AWS::IAM::OIDCProvider ('Arn', '', '', '')
+AWS::IAM::RolePolicy ('PolicyName', 'RoleName', '', '')
 AWS::IAM::SAMLProvider ('Arn', '', '', '')
 AWS::IAM::ServerCertificate ('ServerCertificateName', '', '', '')
+AWS::IAM::ServiceLinkedRole ('RoleName', '', '', '')
+AWS::IAM::UserPolicy ('PolicyName', 'UserName', '', '')
 AWS::IAM::VirtualMFADevice ('SerialNumber', '', '', '')
 AWS::IVS::Channel ('Arn', '', '', '')
 AWS::IVS::PlaybackKeyPair ('Arn', '', '', '')
 AWS::IVS::RecordingConfiguration ('Arn', '', '', '')
 AWS::IVS::StreamKey ('Arn', '', '', '')
+AWS::IVSChat::LoggingConfiguration ('Arn', '', '', '')
+AWS::IVSChat::Room ('Arn', '', '', '')
+AWS::IdentityStore::Group ('GroupId', 'IdentityStoreId', '', '')
+AWS::IdentityStore::GroupMembership ('MembershipId', 'IdentityStoreId', '', '')
 AWS::ImageBuilder::Component ('Arn', '', '', '')
 AWS::ImageBuilder::ContainerRecipe ('Arn', '', '', '')
 AWS::ImageBuilder::DistributionConfiguration ('Arn', '', '', '')
@@ -259,8 +408,11 @@ AWS::Inspector::AssessmentTarget ('Arn', '', '', '')
 AWS::Inspector::AssessmentTemplate ('Arn', '', '', '')
 AWS::Inspector::ResourceGroup ('Arn', '', '', '')
 AWS::InspectorV2::Filter ('Arn', '', '', '')
+AWS::InternetMonitor::Monitor ('MonitorName', '', '', '')
 AWS::IoT::AccountAuditConfiguration ('AccountId', '', '', '')
 AWS::IoT::Authorizer ('AuthorizerName', '', '', '')
+AWS::IoT::BillingGroup ('BillingGroupName', '', '', '')
+AWS::IoT::CACertificate ('Id', '', '', '')
 AWS::IoT::Certificate ('Id', '', '', '')
 AWS::IoT::CustomMetric ('MetricName', '', '', '')
 AWS::IoT::Dimension ('Name', '', '', '')
@@ -269,11 +421,15 @@ AWS::IoT::FleetMetric ('MetricName', '', '', '')
 AWS::IoT::JobTemplate ('JobTemplateId', '', '', '')
 AWS::IoT::Logging ('AccountId', '', '', '')
 AWS::IoT::MitigationAction ('ActionName', '', '', '')
+AWS::IoT::Policy ('Id', '', '', '')
 AWS::IoT::ProvisioningTemplate ('TemplateName', '', '', '')
 AWS::IoT::ResourceSpecificLogging ('TargetId', '', '', '')
+AWS::IoT::RoleAlias ('RoleAlias', '', '', '')
 AWS::IoT::ScheduledAudit ('ScheduledAuditName', '', '', '')
 AWS::IoT::SecurityProfile ('SecurityProfileName', '', '', '')
 AWS::IoT::Thing ('ThingName', '', '', '')
+AWS::IoT::ThingGroup ('ThingGroupName', '', '', '')
+AWS::IoT::ThingType ('ThingTypeName', '', '', '')
 AWS::IoT::TopicRule ('RuleName', '', '', '')
 AWS::IoT::TopicRuleDestination ('Arn', '', '', '')
 AWS::IoTAnalytics::Channel ('ChannelName', '', '', '')
@@ -281,9 +437,16 @@ AWS::IoTAnalytics::Dataset ('DatasetName', '', '', '')
 AWS::IoTAnalytics::Datastore ('DatastoreName', '', '', '')
 AWS::IoTAnalytics::Pipeline ('PipelineName', '', '', '')
 AWS::IoTCoreDeviceAdvisor::SuiteDefinition ('SuiteDefinitionId', '', '', '')
+AWS::IoTEvents::AlarmModel ('AlarmModelName', '', '', '')
 AWS::IoTEvents::DetectorModel ('DetectorModelName', '', '', '')
 AWS::IoTEvents::Input ('InputName', '', '', '')
 AWS::IoTFleetHub::Application ('ApplicationId', '', '', '')
+AWS::IoTFleetWise::Campaign ('Name', '', '', '')
+AWS::IoTFleetWise::DecoderManifest ('Name', '', '', '')
+AWS::IoTFleetWise::Fleet ('Id', '', '', '')
+AWS::IoTFleetWise::ModelManifest ('Name', '', '', '')
+AWS::IoTFleetWise::SignalCatalog ('Name', '', '', '')
+AWS::IoTFleetWise::Vehicle ('Name', '', '', '')
 AWS::IoTSiteWise::AccessPolicy ('AccessPolicyId', '', '', '')
 AWS::IoTSiteWise::Asset ('AssetId', '', '', '')
 AWS::IoTSiteWise::AssetModel ('AssetModelId', '', '', '')
@@ -291,14 +454,21 @@ AWS::IoTSiteWise::Dashboard ('DashboardId', '', '', '')
 AWS::IoTSiteWise::Gateway ('GatewayId', '', '', '')
 AWS::IoTSiteWise::Portal ('PortalId', '', '', '')
 AWS::IoTSiteWise::Project ('ProjectId', '', '', '')
+AWS::IoTTwinMaker::ComponentType ('WorkspaceId', 'ComponentTypeId', '', '')
+AWS::IoTTwinMaker::Entity ('WorkspaceId', 'EntityId', '', '')
+AWS::IoTTwinMaker::Scene ('WorkspaceId', 'SceneId', '', '')
+AWS::IoTTwinMaker::SyncJob ('WorkspaceId', 'SyncSource', '', '')
+AWS::IoTTwinMaker::Workspace ('WorkspaceId', '', '', '')
 AWS::IoTWireless::Destination ('Name', '', '', '')
 AWS::IoTWireless::DeviceProfile ('Id', '', '', '')
 AWS::IoTWireless::FuotaTask ('Id', '', '', '')
 AWS::IoTWireless::MulticastGroup ('Id', '', '', '')
+AWS::IoTWireless::NetworkAnalyzerConfiguration ('Name', '', '', '')
 AWS::IoTWireless::PartnerAccount ('PartnerAccountId', '', '', '')
 AWS::IoTWireless::ServiceProfile ('Id', '', '', '')
 AWS::IoTWireless::TaskDefinition ('Id', '', '', '')
 AWS::IoTWireless::WirelessDevice ('Id', '', '', '')
+AWS::IoTWireless::WirelessDeviceImportTask ('Id', '', '', '')
 AWS::IoTWireless::WirelessGateway ('Id', '', '', '')
 AWS::KMS::Alias ('AliasName', '', '', '')
 AWS::KMS::Key ('KeyId', '', '', '')
@@ -307,14 +477,24 @@ AWS::KafkaConnect::Connector ('ConnectorArn', '', '', '')
 AWS::Kendra::DataSource ('Id', 'IndexId', '', '')
 AWS::Kendra::Faq ('Id', 'IndexId', '', '')
 AWS::Kendra::Index ('Id', '', '', '')
+AWS::KendraRanking::ExecutionPlan ('Id', '', '', '')
 AWS::Kinesis::Stream ('Name', '', '', '')
+AWS::KinesisAnalyticsV2::Application ('ApplicationName', '', '', '')
 AWS::KinesisFirehose::DeliveryStream ('DeliveryStreamName', '', '', '')
 AWS::KinesisVideo::SignalingChannel ('Name', '', '', '')
 AWS::KinesisVideo::Stream ('Name', '', '', '')
+AWS::LakeFormation::DataCellsFilter ('TableCatalogId', 'DatabaseName', 'TableName', 'Name')
+AWS::LakeFormation::PrincipalPermissions ('PrincipalIdentifier', 'ResourceIdentifier', '', '')
+AWS::LakeFormation::Tag ('TagKey', '', '', '')
+AWS::LakeFormation::TagAssociation ('ResourceIdentifier', 'TagsIdentifier', '', '')
 AWS::Lambda::Alias ('AliasArn', '', '', '')
 AWS::Lambda::CodeSigningConfig ('CodeSigningConfigArn', '', '', '')
 AWS::Lambda::EventSourceMapping ('Id', '', '', '')
 AWS::Lambda::Function ('FunctionName', '', '', '')
+AWS::Lambda::LayerVersion ('LayerVersionArn', '', '', '')
+AWS::Lambda::LayerVersionPermission ('Id', '', '', '')
+AWS::Lambda::Permission ('FunctionName', 'Id', '', '')
+AWS::Lambda::Url ('FunctionArn', '', '', '')
 AWS::Lambda::Version ('FunctionArn', '', '', '')
 AWS::Lex::Bot ('Id', '', '', '')
 AWS::Lex::BotAlias ('BotAliasId', 'BotId', '', '')
@@ -339,56 +519,108 @@ AWS::Location::PlaceIndex ('IndexName', '', '', '')
 AWS::Location::RouteCalculator ('CalculatorName', '', '', '')
 AWS::Location::Tracker ('TrackerName', '', '', '')
 AWS::Location::TrackerConsumer ('TrackerName', 'ConsumerArn', '', '')
+AWS::Logs::AccountPolicy ('AccountId', 'PolicyType', 'PolicyName', '')
+AWS::Logs::Destination ('DestinationName', '', '', '')
 AWS::Logs::LogGroup ('LogGroupName', '', '', '')
-AWS::Logs::MetricFilter ('FilterName', '', '', '')
+AWS::Logs::LogStream ('LogGroupName', 'LogStreamName', '', '')
+AWS::Logs::MetricFilter ('LogGroupName', 'FilterName', '', '')
 AWS::Logs::QueryDefinition ('QueryDefinitionId', '', '', '')
 AWS::Logs::ResourcePolicy ('PolicyName', '', '', '')
-AWS::Logs::SubscriptionFilter ('LogGroupName', 'FilterName', '', '')
+AWS::Logs::SubscriptionFilter ('FilterName', 'LogGroupName', '', '')
 AWS::LookoutEquipment::InferenceScheduler ('InferenceSchedulerName', '', '', '')
 AWS::LookoutMetrics::Alert ('Arn', '', '', '')
 AWS::LookoutMetrics::AnomalyDetector ('Arn', '', '', '')
 AWS::LookoutVision::Project ('ProjectName', '', '', '')
+AWS::M2::Application ('ApplicationArn', '', '', '')
+AWS::M2::Environment ('EnvironmentArn', '', '', '')
+AWS::MSK::BatchScramSecret ('ClusterArn', '', '', '')
 AWS::MSK::Cluster ('Arn', '', '', '')
+AWS::MSK::ClusterPolicy ('ClusterArn', '', '', '')
+AWS::MSK::Configuration ('Arn', '', '', '')
+AWS::MSK::ServerlessCluster ('Arn', '', '', '')
+AWS::MSK::VpcConnection ('Arn', '', '', '')
 AWS::MWAA::Environment ('Name', '', '', '')
+AWS::Macie::AllowList ('Id', '', '', '')
 AWS::Macie::CustomDataIdentifier ('Id', '', '', '')
 AWS::Macie::FindingsFilter ('Id', '', '', '')
 AWS::Macie::Session ('AwsAccountId', '', '', '')
+AWS::ManagedBlockchain::Accessor ('Id', '', '', '')
+AWS::MediaConnect::Bridge ('BridgeArn', '', '', '')
+AWS::MediaConnect::BridgeOutput ('BridgeArn', 'Name', '', '')
+AWS::MediaConnect::BridgeSource ('BridgeArn', 'Name', '', '')
 AWS::MediaConnect::Flow ('FlowArn', '', '', '')
 AWS::MediaConnect::FlowEntitlement ('EntitlementArn', '', '', '')
 AWS::MediaConnect::FlowOutput ('OutputArn', '', '', '')
 AWS::MediaConnect::FlowSource ('SourceArn', '', '', '')
 AWS::MediaConnect::FlowVpcInterface ('FlowArn', 'Name', '', '')
+AWS::MediaConnect::Gateway ('GatewayArn', '', '', '')
 AWS::MediaPackage::Asset ('Id', '', '', '')
 AWS::MediaPackage::Channel ('Id', '', '', '')
 AWS::MediaPackage::OriginEndpoint ('Id', '', '', '')
 AWS::MediaPackage::PackagingConfiguration ('Id', '', '', '')
 AWS::MediaPackage::PackagingGroup ('Id', '', '', '')
+AWS::MediaTailor::PlaybackConfiguration ('Name', '', '', '')
 AWS::MemoryDB::ACL ('ACLName', '', '', '')
 AWS::MemoryDB::Cluster ('ClusterName', '', '', '')
 AWS::MemoryDB::ParameterGroup ('ParameterGroupName', '', '', '')
 AWS::MemoryDB::SubnetGroup ('SubnetGroupName', '', '', '')
 AWS::MemoryDB::User ('UserName', '', '', '')
+AWS::Neptune::DBCluster ('DBClusterIdentifier', '', '', '')
 AWS::NetworkFirewall::Firewall ('FirewallArn', '', '', '')
 AWS::NetworkFirewall::FirewallPolicy ('FirewallPolicyArn', '', '', '')
 AWS::NetworkFirewall::LoggingConfiguration ('FirewallArn', '', '', '')
 AWS::NetworkFirewall::RuleGroup ('RuleGroupArn', '', '', '')
+AWS::NetworkManager::ConnectAttachment ('AttachmentId', '', '', '')
+AWS::NetworkManager::ConnectPeer ('ConnectPeerId', '', '', '')
+AWS::NetworkManager::CoreNetwork ('CoreNetworkId', '', '', '')
 AWS::NetworkManager::CustomerGatewayAssociation ('GlobalNetworkId', 'CustomerGatewayArn', '', '')
 AWS::NetworkManager::Device ('GlobalNetworkId', 'DeviceId', '', '')
 AWS::NetworkManager::GlobalNetwork ('Id', '', '', '')
 AWS::NetworkManager::Link ('GlobalNetworkId', 'LinkId', '', '')
 AWS::NetworkManager::LinkAssociation ('GlobalNetworkId', 'DeviceId', 'LinkId', '')
 AWS::NetworkManager::Site ('GlobalNetworkId', 'SiteId', '', '')
+AWS::NetworkManager::SiteToSiteVpnAttachment ('AttachmentId', '', '', '')
+AWS::NetworkManager::TransitGatewayPeering ('PeeringId', '', '', '')
 AWS::NetworkManager::TransitGatewayRegistration ('GlobalNetworkId', 'TransitGatewayArn', '', '')
+AWS::NetworkManager::TransitGatewayRouteTableAttachment ('AttachmentId', '', '', '')
+AWS::NetworkManager::VpcAttachment ('AttachmentId', '', '', '')
 AWS::NimbleStudio::LaunchProfile ('LaunchProfileId', 'StudioId', '', '')
 AWS::NimbleStudio::StreamingImage ('StudioId', 'StreamingImageId', '', '')
 AWS::NimbleStudio::Studio ('StudioId', '', '', '')
 AWS::NimbleStudio::StudioComponent ('StudioComponentId', 'StudioId', '', '')
+AWS::OSIS::Pipeline ('PipelineArn', '', '', '')
+AWS::Oam::Link ('Arn', '', '', '')
+AWS::Oam::Sink ('Arn', '', '', '')
+AWS::Omics::AnnotationStore ('Name', '', '', '')
+AWS::Omics::ReferenceStore ('ReferenceStoreId', '', '', '')
+AWS::Omics::RunGroup ('Id', '', '', '')
+AWS::Omics::SequenceStore ('SequenceStoreId', '', '', '')
+AWS::Omics::VariantStore ('Name', '', '', '')
+AWS::Omics::Workflow ('Id', '', '', '')
+AWS::OpenSearchServerless::AccessPolicy ('Type', 'Name', '', '')
+AWS::OpenSearchServerless::Collection ('Id', '', '', '')
+AWS::OpenSearchServerless::SecurityConfig ('Id', '', '', '')
+AWS::OpenSearchServerless::SecurityPolicy ('Type', 'Name', '', '')
+AWS::OpenSearchServerless::VpcEndpoint ('Id', '', '', '')
 AWS::OpenSearchService::Domain ('DomainName', '', '', '')
 AWS::OpsWorksCM::Server ('ServerName', '', '', '')
+AWS::Organizations::Account ('AccountId', '', '', '')
+AWS::Organizations::Organization ('Id', '', '', '')
+AWS::Organizations::OrganizationalUnit ('Id', '', '', '')
+AWS::Organizations::Policy ('Id', '', '', '')
+AWS::Organizations::ResourcePolicy ('Id', '', '', '')
 AWS::Panorama::ApplicationInstance ('ApplicationInstanceId', '', '', '')
 AWS::Panorama::Package ('PackageId', '', '', '')
 AWS::Panorama::PackageVersion ('PackageId', 'PackageVersion', 'PatchVersion', '')
+AWS::Personalize::Dataset ('DatasetArn', '', '', '')
+AWS::Personalize::DatasetGroup ('DatasetGroupArn', '', '', '')
+AWS::Personalize::Schema ('SchemaArn', '', '', '')
+AWS::Personalize::Solution ('SolutionArn', '', '', '')
 AWS::Pinpoint::InAppTemplate ('TemplateName', '', '', '')
+AWS::Pipes::Pipe ('Name', '', '', '')
+AWS::Proton::EnvironmentAccountConnection ('Arn', '', '', '')
+AWS::Proton::EnvironmentTemplate ('Arn', '', '', '')
+AWS::Proton::ServiceTemplate ('Arn', '', '', '')
 AWS::QLDB::Stream ('LedgerName', 'Id', '', '')
 AWS::QuickSight::Analysis ('AnalysisId', 'AwsAccountId', '', '')
 AWS::QuickSight::Dashboard ('AwsAccountId', 'DashboardId', '', '')
@@ -396,26 +628,43 @@ AWS::QuickSight::DataSet ('AwsAccountId', 'DataSetId', '', '')
 AWS::QuickSight::DataSource ('AwsAccountId', 'DataSourceId', '', '')
 AWS::QuickSight::Template ('AwsAccountId', 'TemplateId', '', '')
 AWS::QuickSight::Theme ('ThemeId', 'AwsAccountId', '', '')
+AWS::QuickSight::Topic ('AwsAccountId', 'TopicId', '', '')
+AWS::QuickSight::VPCConnection ('AwsAccountId', 'VPCConnectionId', '', '')
+AWS::RAM::Permission ('Arn', '', '', '')
+AWS::RDS::CustomDBEngineVersion ('Engine', 'EngineVersion', '', '')
 AWS::RDS::DBCluster ('DBClusterIdentifier', '', '', '')
+AWS::RDS::DBClusterParameterGroup ('DBClusterParameterGroupName', '', '', '')
 AWS::RDS::DBInstance ('DBInstanceIdentifier', '', '', '')
+AWS::RDS::DBParameterGroup ('DBParameterGroupName', '', '', '')
 AWS::RDS::DBProxy ('DBProxyName', '', '', '')
 AWS::RDS::DBProxyEndpoint ('DBProxyEndpointName', '', '', '')
 AWS::RDS::DBProxyTargetGroup ('TargetGroupArn', '', '', '')
+AWS::RDS::DBSubnetGroup ('DBSubnetGroupName', '', '', '')
+AWS::RDS::EventSubscription ('SubscriptionName', '', '', '')
 AWS::RDS::GlobalCluster ('GlobalClusterIdentifier', '', '', '')
+AWS::RDS::OptionGroup ('OptionGroupName', '', '', '')
 AWS::RUM::AppMonitor ('Name', '', '', '')
 AWS::Redshift::Cluster ('ClusterIdentifier', '', '', '')
+AWS::Redshift::ClusterParameterGroup ('ParameterGroupName', '', '', '')
+AWS::Redshift::ClusterSubnetGroup ('ClusterSubnetGroupName', '', '', '')
 AWS::Redshift::EndpointAccess ('EndpointName', '', '', '')
 AWS::Redshift::EndpointAuthorization ('ClusterIdentifier', 'Account', '', '')
 AWS::Redshift::EventSubscription ('SubscriptionName', '', '', '')
 AWS::Redshift::ScheduledAction ('ScheduledActionName', '', '', '')
+AWS::RedshiftServerless::Namespace ('NamespaceName', '', '', '')
+AWS::RedshiftServerless::Workgroup ('WorkgroupName', '', '', '')
 AWS::RefactorSpaces::Application ('EnvironmentIdentifier', 'ApplicationIdentifier', '', '')
 AWS::RefactorSpaces::Environment ('EnvironmentIdentifier', '', '', '')
 AWS::RefactorSpaces::Route ('EnvironmentIdentifier', 'ApplicationIdentifier', 'RouteIdentifier', '')
 AWS::RefactorSpaces::Service ('EnvironmentIdentifier', 'ApplicationIdentifier', 'ServiceIdentifier', '')
 AWS::Rekognition::Collection ('CollectionId', '', '', '')
 AWS::Rekognition::Project ('ProjectName', '', '', '')
+AWS::Rekognition::StreamProcessor ('Name', '', '', '')
 AWS::ResilienceHub::App ('AppArn', '', '', '')
 AWS::ResilienceHub::ResiliencyPolicy ('PolicyArn', '', '', '')
+AWS::ResourceExplorer2::DefaultViewAssociation ('AssociatedAwsPrincipal', '', '', '')
+AWS::ResourceExplorer2::Index ('Arn', '', '', '')
+AWS::ResourceExplorer2::View ('ViewArn', '', '', '')
 AWS::ResourceGroups::Group ('Name', '', '', '')
 AWS::RoboMaker::Fleet ('Arn', '', '', '')
 AWS::RoboMaker::Robot ('Arn', '', '', '')
@@ -423,6 +672,10 @@ AWS::RoboMaker::RobotApplication ('Arn', '', '', '')
 AWS::RoboMaker::RobotApplicationVersion ('Arn', '', '', '')
 AWS::RoboMaker::SimulationApplication ('Arn', '', '', '')
 AWS::RoboMaker::SimulationApplicationVersion ('Arn', '', '', '')
+AWS::RolesAnywhere::CRL ('CrlId', '', '', '')
+AWS::RolesAnywhere::Profile ('ProfileId', '', '', '')
+AWS::RolesAnywhere::TrustAnchor ('TrustAnchorId', '', '', '')
+AWS::Route53::CidrCollection ('Id', '', '', '')
 AWS::Route53::DNSSEC ('HostedZoneId', '', '', '')
 AWS::Route53::HealthCheck ('HealthCheckId', '', '', '')
 AWS::Route53::HostedZone ('Id', '', '', '')
@@ -446,6 +699,7 @@ AWS::Route53Resolver::ResolverRule ('ResolverRuleId', '', '', '')
 AWS::Route53Resolver::ResolverRuleAssociation ('ResolverRuleAssociationId', '', '', '')
 AWS::S3::AccessPoint ('Name', '', '', '')
 AWS::S3::Bucket ('BucketName', '', '', '')
+AWS::S3::BucketPolicy ('Bucket', '', '', '')
 AWS::S3::MultiRegionAccessPoint ('Name', '', '', '')
 AWS::S3::MultiRegionAccessPointPolicy ('MrapName', '', '', '')
 AWS::S3ObjectLambda::AccessPoint ('Name', '', '', '')
@@ -457,14 +711,22 @@ AWS::S3Outposts::Endpoint ('Arn', '', '', '')
 AWS::SES::ConfigurationSet ('Name', '', '', '')
 AWS::SES::ConfigurationSetEventDestination ('Id', '', '', '')
 AWS::SES::ContactList ('ContactListName', '', '', '')
+AWS::SES::DedicatedIpPool ('PoolName', '', '', '')
+AWS::SES::EmailIdentity ('EmailIdentity', '', '', '')
 AWS::SES::Template ('Id', '', '', '')
+AWS::SES::VdmAttributes ('VdmAttributesResourceId', '', '', '')
 AWS::SNS::Topic ('TopicArn', '', '', '')
+AWS::SNS::TopicInlinePolicy ('TopicArn', '', '', '')
 AWS::SQS::Queue ('QueueUrl', '', '', '')
 AWS::SSM::Association ('AssociationId', '', '', '')
 AWS::SSM::Document ('Name', '', '', '')
+AWS::SSM::Parameter ('Name', '', '', '')
 AWS::SSM::ResourceDataSync ('SyncName', '', '', '')
+AWS::SSM::ResourcePolicy ('PolicyId', 'ResourceArn', '', '')
 AWS::SSMContacts::Contact ('Arn', '', '', '')
 AWS::SSMContacts::ContactChannel ('Arn', '', '', '')
+AWS::SSMContacts::Plan ('Arn', '', '', '')
+AWS::SSMContacts::Rotation ('Arn', '', '', '')
 AWS::SSMIncidents::ReplicationSet ('Arn', '', '', '')
 AWS::SSMIncidents::ResponsePlan ('Arn', '', '', '')
 AWS::SSO::InstanceAccessControlAttributeConfiguration ('InstanceArn', '', '', '')
@@ -472,36 +734,75 @@ AWS::SSO::PermissionSet ('InstanceArn', 'PermissionSetArn', '', '')
 AWS::SageMaker::App ('AppName', 'AppType', 'DomainId', 'UserProfileName')
 AWS::SageMaker::AppImageConfig ('AppImageConfigName', '', '', '')
 AWS::SageMaker::DataQualityJobDefinition ('JobDefinitionArn', '', '', '')
-AWS::SageMaker::Device ('DeviceFleetName', '', '', '')
 AWS::SageMaker::DeviceFleet ('DeviceFleetName', '', '', '')
 AWS::SageMaker::Domain ('DomainId', '', '', '')
 AWS::SageMaker::FeatureGroup ('FeatureGroupName', '', '', '')
 AWS::SageMaker::Image ('ImageArn', '', '', '')
 AWS::SageMaker::ImageVersion ('ImageVersionArn', '', '', '')
+AWS::SageMaker::InferenceExperiment ('Name', '', '', '')
 AWS::SageMaker::ModelBiasJobDefinition ('JobDefinitionArn', '', '', '')
+AWS::SageMaker::ModelCard ('ModelCardName', '', '', '')
 AWS::SageMaker::ModelExplainabilityJobDefinition ('JobDefinitionArn', '', '', '')
+AWS::SageMaker::ModelPackage ('ModelPackageArn', '', '', '')
 AWS::SageMaker::ModelPackageGroup ('ModelPackageGroupArn', '', '', '')
 AWS::SageMaker::ModelQualityJobDefinition ('JobDefinitionArn', '', '', '')
 AWS::SageMaker::MonitoringSchedule ('MonitoringScheduleArn', '', '', '')
 AWS::SageMaker::Pipeline ('PipelineName', '', '', '')
 AWS::SageMaker::Project ('ProjectArn', '', '', '')
+AWS::SageMaker::Space ('DomainId', 'SpaceName', '', '')
 AWS::SageMaker::UserProfile ('UserProfileName', 'DomainId', '', '')
+AWS::Scheduler::Schedule ('Name', '', '', '')
+AWS::Scheduler::ScheduleGroup ('Name', '', '', '')
+AWS::SecretsManager::Secret ('Id', '', '', '')
+AWS::SecurityHub::AutomationRule ('RuleArn', '', '', '')
+AWS::SecurityHub::Standard ('StandardsSubscriptionArn', '', '', '')
 AWS::ServiceCatalog::CloudFormationProvisionedProduct ('ProvisionedProductId', '', '', '')
 AWS::ServiceCatalog::ServiceAction ('Id', '', '', '')
 AWS::ServiceCatalog::ServiceActionAssociation ('ProductId', 'ProvisioningArtifactId', 'ServiceActionId', '')
 AWS::ServiceCatalogAppRegistry::Application ('Id', '', '', '')
 AWS::ServiceCatalogAppRegistry::AttributeGroup ('Id', '', '', '')
-AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation ('Id', '', '', '')
-AWS::ServiceCatalogAppRegistry::ResourceAssociation ('Id', '', '', '')
+AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation ('ApplicationArn', 'AttributeGroupArn', '', '')
+AWS::ServiceCatalogAppRegistry::ResourceAssociation ('ApplicationArn', 'ResourceArn', 'ResourceType', '')
+AWS::Shield::DRTAccess ('AccountId', '', '', '')
+AWS::Shield::ProactiveEngagement ('AccountId', '', '', '')
+AWS::Shield::Protection ('ProtectionArn', '', '', '')
+AWS::Shield::ProtectionGroup ('ProtectionGroupArn', '', '', '')
 AWS::Signer::ProfilePermission ('StatementId', 'ProfileName', '', '')
 AWS::Signer::SigningProfile ('Arn', '', '', '')
+AWS::SimSpaceWeaver::Simulation ('Name', '', '', '')
 AWS::StepFunctions::Activity ('Arn', '', '', '')
 AWS::StepFunctions::StateMachine ('Arn', '', '', '')
+AWS::StepFunctions::StateMachineAlias ('Arn', '', '', '')
+AWS::StepFunctions::StateMachineVersion ('Arn', '', '', '')
+AWS::SupportApp::AccountAlias ('AccountAliasResourceId', '', '', '')
+AWS::SupportApp::SlackChannelConfiguration ('TeamId', 'ChannelId', '', '')
+AWS::SupportApp::SlackWorkspaceConfiguration ('TeamId', '', '', '')
 AWS::Synthetics::Canary ('Name', '', '', '')
+AWS::Synthetics::Group ('Name', '', '', '')
+AWS::SystemsManagerSAP::Application ('Arn', '', '', '')
 AWS::Timestream::Database ('DatabaseName', '', '', '')
 AWS::Timestream::ScheduledQuery ('Arn', '', '', '')
 AWS::Timestream::Table ('DatabaseName', 'TableName', '', '')
+AWS::Transfer::Agreement ('AgreementId', 'ServerId', '', '')
+AWS::Transfer::Certificate ('CertificateId', '', '', '')
+AWS::Transfer::Connector ('ConnectorId', '', '', '')
+AWS::Transfer::Profile ('ProfileId', '', '', '')
 AWS::Transfer::Workflow ('WorkflowId', '', '', '')
+AWS::VerifiedPermissions::IdentitySource ('IdentitySourceId', 'PolicyStoreId', '', '')
+AWS::VerifiedPermissions::Policy ('PolicyId', 'PolicyStoreId', '', '')
+AWS::VerifiedPermissions::PolicyStore ('PolicyStoreId', '', '', '')
+AWS::VerifiedPermissions::PolicyTemplate ('PolicyStoreId', 'PolicyTemplateId', '', '')
+AWS::VoiceID::Domain ('DomainId', '', '', '')
+AWS::VpcLattice::AccessLogSubscription ('Arn', '', '', '')
+AWS::VpcLattice::AuthPolicy ('ResourceIdentifier', '', '', '')
+AWS::VpcLattice::Listener ('Arn', '', '', '')
+AWS::VpcLattice::ResourcePolicy ('ResourceArn', '', '', '')
+AWS::VpcLattice::Rule ('Arn', '', '', '')
+AWS::VpcLattice::Service ('Arn', '', '', '')
+AWS::VpcLattice::ServiceNetwork ('Arn', '', '', '')
+AWS::VpcLattice::ServiceNetworkServiceAssociation ('Arn', '', '', '')
+AWS::VpcLattice::ServiceNetworkVpcAssociation ('Arn', '', '', '')
+AWS::VpcLattice::TargetGroup ('Arn', '', '', '')
 AWS::WAFv2::IPSet ('Name', 'Id', 'Scope', '')
 AWS::WAFv2::LoggingConfiguration ('ResourceArn', '', '', '')
 AWS::WAFv2::RegexPatternSet ('Name', 'Id', 'Scope', '')
@@ -513,6 +814,7 @@ AWS::Wisdom::AssistantAssociation ('AssistantAssociationId', 'AssistantId', '', 
 AWS::Wisdom::KnowledgeBase ('KnowledgeBaseId', '', '', '')
 AWS::WorkSpaces::ConnectionAlias ('AliasId', '', '', '')
 AWS::XRay::Group ('GroupARN', '', '', '')
+AWS::XRay::ResourcePolicy ('PolicyName', '', '', '')
 AWS::XRay::SamplingRule ('RuleARN', '', '', '')
 
 {
@@ -575,6 +877,13 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::AmplifyUIBuilder::Form": {
+        "importProperties": [
+            "AppId",
+            "EnvironmentName",
+            "Id"
+        ]
+    },
     "AWS::AmplifyUIBuilder::Theme": {
         "importProperties": [
             "AppId",
@@ -612,6 +921,12 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::ApiGateway::Deployment": {
         "importProperties": [
             "DeploymentId",
+            "RestApiId"
+        ]
+    },
+    "AWS::ApiGateway::DocumentationPart": {
+        "importProperties": [
+            "DocumentationPartId",
             "RestApiId"
         ]
     },
@@ -672,6 +987,96 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::ApiGateway::VpcLink": {
+        "importProperties": [
+            "VpcLinkId"
+        ]
+    },
+    "AWS::ApiGatewayV2::Api": {
+        "importProperties": [
+            "ApiId"
+        ]
+    },
+    "AWS::ApiGatewayV2::ApiMapping": {
+        "importProperties": [
+            "ApiMappingId",
+            "DomainName"
+        ]
+    },
+    "AWS::ApiGatewayV2::Authorizer": {
+        "importProperties": [
+            "AuthorizerId",
+            "ApiId"
+        ]
+    },
+    "AWS::ApiGatewayV2::Deployment": {
+        "importProperties": [
+            "ApiId",
+            "DeploymentId"
+        ]
+    },
+    "AWS::ApiGatewayV2::DomainName": {
+        "importProperties": [
+            "DomainName"
+        ]
+    },
+    "AWS::ApiGatewayV2::IntegrationResponse": {
+        "importProperties": [
+            "ApiId",
+            "IntegrationId",
+            "IntegrationResponseId"
+        ]
+    },
+    "AWS::ApiGatewayV2::Model": {
+        "importProperties": [
+            "ApiId",
+            "ModelId"
+        ]
+    },
+    "AWS::ApiGatewayV2::Route": {
+        "importProperties": [
+            "ApiId",
+            "RouteId"
+        ]
+    },
+    "AWS::ApiGatewayV2::RouteResponse": {
+        "importProperties": [
+            "ApiId",
+            "RouteId",
+            "RouteResponseId"
+        ]
+    },
+    "AWS::ApiGatewayV2::VpcLink": {
+        "importProperties": [
+            "VpcLinkId"
+        ]
+    },
+    "AWS::AppConfig::Application": {
+        "importProperties": [
+            "ApplicationId"
+        ]
+    },
+    "AWS::AppConfig::ConfigurationProfile": {
+        "importProperties": [
+            "ApplicationId",
+            "ConfigurationProfileId"
+        ]
+    },
+    "AWS::AppConfig::Extension": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::AppConfig::ExtensionAssociation": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::AppFlow::Connector": {
+        "importProperties": [
+            "ConnectorLabel"
+        ]
+    },
     "AWS::AppFlow::ConnectorProfile": {
         "importProperties": [
             "ConnectorProfileName"
@@ -692,6 +1097,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Name"
         ]
     },
+    "AWS::AppRunner::AutoScalingConfiguration": {
+        "importProperties": [
+            "AutoScalingConfigurationArn"
+        ]
+    },
+    "AWS::AppRunner::ObservabilityConfiguration": {
+        "importProperties": [
+            "ObservabilityConfigurationArn"
+        ]
+    },
     "AWS::AppRunner::Service": {
         "importProperties": [
             "ServiceArn"
@@ -702,9 +1117,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "VpcConnectorArn"
         ]
     },
+    "AWS::AppRunner::VpcIngressConnection": {
+        "importProperties": [
+            "VpcIngressConnectionArn"
+        ]
+    },
     "AWS::AppStream::AppBlock": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::AppStream::AppBlockBuilder": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::AppStream::Application": {
@@ -725,9 +1150,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ApplicationArn"
         ]
     },
+    "AWS::AppStream::DirectoryConfig": {
+        "importProperties": [
+            "DirectoryName"
+        ]
+    },
     "AWS::AppStream::Entitlement": {
         "importProperties": [
             "StackName",
+            "Name"
+        ]
+    },
+    "AWS::AppStream::ImageBuilder": {
+        "importProperties": [
             "Name"
         ]
     },
@@ -741,9 +1176,42 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ApiAssociationIdentifier"
         ]
     },
+    "AWS::AppSync::FunctionConfiguration": {
+        "importProperties": [
+            "FunctionArn"
+        ]
+    },
+    "AWS::AppSync::Resolver": {
+        "importProperties": [
+            "ResolverArn"
+        ]
+    },
+    "AWS::AppSync::SourceApiAssociation": {
+        "importProperties": [
+            "AssociationArn"
+        ]
+    },
+    "AWS::ApplicationAutoScaling::ScalableTarget": {
+        "importProperties": [
+            "ResourceId",
+            "ScalableDimension",
+            "ServiceNamespace"
+        ]
+    },
+    "AWS::ApplicationAutoScaling::ScalingPolicy": {
+        "importProperties": [
+            "Arn",
+            "ScalableDimension"
+        ]
+    },
     "AWS::ApplicationInsights::Application": {
         "importProperties": [
             "ApplicationARN"
+        ]
+    },
+    "AWS::Athena::CapacityReservation": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::Athena::DataCatalog": {
@@ -790,12 +1258,13 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::AutoScaling::ScalingPolicy": {
         "importProperties": [
-            "PolicyName"
+            "Arn"
         ]
     },
     "AWS::AutoScaling::ScheduledAction": {
         "importProperties": [
-            "ScheduledActionName"
+            "ScheduledActionName",
+            "AutoScalingGroupName"
         ]
     },
     "AWS::AutoScaling::WarmPool": {
@@ -828,6 +1297,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ReportPlanArn"
         ]
     },
+    "AWS::BackupGateway::Hypervisor": {
+        "importProperties": [
+            "HypervisorArn"
+        ]
+    },
     "AWS::Batch::ComputeEnvironment": {
         "importProperties": [
             "ComputeEnvironmentArn"
@@ -839,6 +1313,26 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::Batch::SchedulingPolicy": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::BillingConductor::BillingGroup": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::BillingConductor::CustomLineItem": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::BillingConductor::PricingPlan": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::BillingConductor::PricingRule": {
         "importProperties": [
             "Arn"
         ]
@@ -885,9 +1379,35 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "AccountId"
         ]
     },
+    "AWS::Chatbot::MicrosoftTeamsChannelConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
     "AWS::Chatbot::SlackChannelConfiguration": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::CleanRooms::Collaboration": {
+        "importProperties": [
+            "CollaborationIdentifier"
+        ]
+    },
+    "AWS::CleanRooms::ConfiguredTable": {
+        "importProperties": [
+            "ConfiguredTableIdentifier"
+        ]
+    },
+    "AWS::CleanRooms::ConfiguredTableAssociation": {
+        "importProperties": [
+            "ConfiguredTableAssociationIdentifier",
+            "MembershipIdentifier"
+        ]
+    },
+    "AWS::CleanRooms::Membership": {
+        "importProperties": [
+            "MembershipIdentifier"
         ]
     },
     "AWS::CloudFormation::HookDefaultVersion": {
@@ -897,7 +1417,7 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::CloudFormation::HookTypeConfig": {
         "importProperties": [
-            "TypeArn"
+            "ConfigurationArn"
         ]
     },
     "AWS::CloudFormation::HookVersion": {
@@ -960,6 +1480,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::CloudFront::ContinuousDeploymentPolicy": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::CloudFront::Distribution": {
         "importProperties": [
             "Id"
@@ -971,6 +1496,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::CloudFront::KeyGroup": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::CloudFront::MonitoringSubscription": {
+        "importProperties": [
+            "DistributionId"
+        ]
+    },
+    "AWS::CloudFront::OriginAccessControl": {
         "importProperties": [
             "Id"
         ]
@@ -993,6 +1528,21 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::CloudFront::ResponseHeadersPolicy": {
         "importProperties": [
             "Id"
+        ]
+    },
+    "AWS::CloudTrail::Channel": {
+        "importProperties": [
+            "ChannelArn"
+        ]
+    },
+    "AWS::CloudTrail::EventDataStore": {
+        "importProperties": [
+            "EventDataStoreArn"
+        ]
+    },
+    "AWS::CloudTrail::ResourcePolicy": {
+        "importProperties": [
+            "ResourceArn"
         ]
     },
     "AWS::CloudTrail::Trail": {
@@ -1025,6 +1575,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::CodeDeploy::Application": {
+        "importProperties": [
+            "ApplicationName"
+        ]
+    },
+    "AWS::CodeDeploy::DeploymentConfig": {
+        "importProperties": [
+            "DeploymentConfigName"
+        ]
+    },
     "AWS::CodeGuruProfiler::ProfilingGroup": {
         "importProperties": [
             "ProfilingGroupName"
@@ -1033,6 +1593,13 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::CodeGuruReviewer::RepositoryAssociation": {
         "importProperties": [
             "AssociationArn"
+        ]
+    },
+    "AWS::CodePipeline::CustomActionType": {
+        "importProperties": [
+            "Category",
+            "Provider",
+            "Version"
         ]
     },
     "AWS::CodeStarConnections::Connection": {
@@ -1045,9 +1612,61 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::Cognito::IdentityPoolPrincipalTag": {
+        "importProperties": [
+            "IdentityPoolId",
+            "IdentityProviderName"
+        ]
+    },
+    "AWS::Cognito::UserPool": {
+        "importProperties": [
+            "UserPoolId"
+        ]
+    },
+    "AWS::Cognito::UserPoolClient": {
+        "importProperties": [
+            "UserPoolId",
+            "ClientId"
+        ]
+    },
+    "AWS::Cognito::UserPoolGroup": {
+        "importProperties": [
+            "UserPoolId",
+            "GroupName"
+        ]
+    },
+    "AWS::Cognito::UserPoolUser": {
+        "importProperties": [
+            "UserPoolId",
+            "Username"
+        ]
+    },
+    "AWS::Cognito::UserPoolUserToGroupAttachment": {
+        "importProperties": [
+            "UserPoolId",
+            "GroupName",
+            "Username"
+        ]
+    },
+    "AWS::Comprehend::DocumentClassifier": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Comprehend::Flywheel": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
     "AWS::Config::AggregationAuthorization": {
         "importProperties": [
-            "AggregationAuthorizationArn"
+            "AuthorizedAccountId",
+            "AuthorizedAwsRegion"
+        ]
+    },
+    "AWS::Config::ConfigRule": {
+        "importProperties": [
+            "ConfigRuleName"
         ]
     },
     "AWS::Config::ConfigurationAggregator": {
@@ -1070,6 +1689,12 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "QueryName"
         ]
     },
+    "AWS::Connect::ApprovedOrigin": {
+        "importProperties": [
+            "InstanceId",
+            "Origin"
+        ]
+    },
     "AWS::Connect::ContactFlow": {
         "importProperties": [
             "ContactFlowArn"
@@ -1080,14 +1705,74 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ContactFlowModuleArn"
         ]
     },
+    "AWS::Connect::EvaluationForm": {
+        "importProperties": [
+            "EvaluationFormArn"
+        ]
+    },
     "AWS::Connect::HoursOfOperation": {
         "importProperties": [
             "HoursOfOperationArn"
         ]
     },
+    "AWS::Connect::Instance": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Connect::InstanceStorageConfig": {
+        "importProperties": [
+            "InstanceArn",
+            "AssociationId",
+            "ResourceType"
+        ]
+    },
+    "AWS::Connect::IntegrationAssociation": {
+        "importProperties": [
+            "InstanceId",
+            "IntegrationType",
+            "IntegrationArn"
+        ]
+    },
+    "AWS::Connect::PhoneNumber": {
+        "importProperties": [
+            "PhoneNumberArn"
+        ]
+    },
+    "AWS::Connect::Prompt": {
+        "importProperties": [
+            "PromptArn"
+        ]
+    },
+    "AWS::Connect::Queue": {
+        "importProperties": [
+            "QueueArn"
+        ]
+    },
     "AWS::Connect::QuickConnect": {
         "importProperties": [
             "QuickConnectArn"
+        ]
+    },
+    "AWS::Connect::RoutingProfile": {
+        "importProperties": [
+            "RoutingProfileArn"
+        ]
+    },
+    "AWS::Connect::Rule": {
+        "importProperties": [
+            "RuleArn"
+        ]
+    },
+    "AWS::Connect::SecurityKey": {
+        "importProperties": [
+            "InstanceId",
+            "AssociationId"
+        ]
+    },
+    "AWS::Connect::TaskTemplate": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::Connect::User": {
@@ -1100,9 +1785,32 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "UserHierarchyGroupArn"
         ]
     },
+    "AWS::ConnectCampaigns::Campaign": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::ControlTower::EnabledControl": {
+        "importProperties": [
+            "TargetIdentifier",
+            "ControlIdentifier"
+        ]
+    },
+    "AWS::CustomerProfiles::CalculatedAttributeDefinition": {
+        "importProperties": [
+            "DomainName",
+            "CalculatedAttributeName"
+        ]
+    },
     "AWS::CustomerProfiles::Domain": {
         "importProperties": [
             "DomainName"
+        ]
+    },
+    "AWS::CustomerProfiles::EventStream": {
+        "importProperties": [
+            "DomainName",
+            "EventStreamName"
         ]
     },
     "AWS::CustomerProfiles::Integration": {
@@ -1147,12 +1855,32 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Name"
         ]
     },
+    "AWS::DataPipeline::Pipeline": {
+        "importProperties": [
+            "PipelineId"
+        ]
+    },
     "AWS::DataSync::Agent": {
         "importProperties": [
             "AgentArn"
         ]
     },
     "AWS::DataSync::LocationEFS": {
+        "importProperties": [
+            "LocationArn"
+        ]
+    },
+    "AWS::DataSync::LocationFSxLustre": {
+        "importProperties": [
+            "LocationArn"
+        ]
+    },
+    "AWS::DataSync::LocationFSxONTAP": {
+        "importProperties": [
+            "LocationArn"
+        ]
+    },
+    "AWS::DataSync::LocationFSxOpenZFS": {
         "importProperties": [
             "LocationArn"
         ]
@@ -1187,6 +1915,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "LocationArn"
         ]
     },
+    "AWS::DataSync::StorageSystem": {
+        "importProperties": [
+            "StorageSystemArn"
+        ]
+    },
     "AWS::DataSync::Task": {
         "importProperties": [
             "TaskArn"
@@ -1203,6 +1936,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "MemberId"
         ]
     },
+    "AWS::Detective::OrganizationAdmin": {
+        "importProperties": [
+            "AccountId"
+        ]
+    },
+    "AWS::DevOpsGuru::LogAnomalyDetectionIntegration": {
+        "importProperties": [
+            "AccountId"
+        ]
+    },
     "AWS::DevOpsGuru::NotificationChannel": {
         "importProperties": [
             "Id"
@@ -1211,6 +1954,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::DevOpsGuru::ResourceCollection": {
         "importProperties": [
             "ResourceCollectionType"
+        ]
+    },
+    "AWS::DirectoryService::SimpleAD": {
+        "importProperties": [
+            "DirectoryId"
+        ]
+    },
+    "AWS::DocDBElastic::Cluster": {
+        "importProperties": [
+            "ClusterArn"
         ]
     },
     "AWS::DynamoDB::GlobalTable": {
@@ -1223,6 +1976,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "TableName"
         ]
     },
+    "AWS::EC2::CapacityReservation": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::EC2::CapacityReservationFleet": {
         "importProperties": [
             "CapacityReservationFleetId"
@@ -1231,6 +1989,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::EC2::CarrierGateway": {
         "importProperties": [
             "CarrierGatewayId"
+        ]
+    },
+    "AWS::EC2::CustomerGateway": {
+        "importProperties": [
+            "CustomerGatewayId"
         ]
     },
     "AWS::EC2::DHCPOptions": {
@@ -1245,7 +2008,13 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::EC2::EIP": {
         "importProperties": [
-            "PublicIp"
+            "PublicIp",
+            "AllocationId"
+        ]
+    },
+    "AWS::EC2::EIPAssociation": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::EC2::EgressOnlyInternetGateway": {
@@ -1291,6 +2060,22 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "IpamPoolId"
         ]
     },
+    "AWS::EC2::IPAMPoolCidr": {
+        "importProperties": [
+            "IpamPoolId",
+            "IpamPoolCidrId"
+        ]
+    },
+    "AWS::EC2::IPAMResourceDiscovery": {
+        "importProperties": [
+            "IpamResourceDiscoveryId"
+        ]
+    },
+    "AWS::EC2::IPAMResourceDiscoveryAssociation": {
+        "importProperties": [
+            "IpamResourceDiscoveryAssociationId"
+        ]
+    },
     "AWS::EC2::IPAMScope": {
         "importProperties": [
             "IpamScopeId"
@@ -1306,15 +2091,35 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "InternetGatewayId"
         ]
     },
+    "AWS::EC2::KeyPair": {
+        "importProperties": [
+            "KeyName"
+        ]
+    },
+    "AWS::EC2::LaunchTemplate": {
+        "importProperties": [
+            "LaunchTemplateId"
+        ]
+    },
     "AWS::EC2::LocalGatewayRoute": {
         "importProperties": [
             "DestinationCidrBlock",
             "LocalGatewayRouteTableId"
         ]
     },
+    "AWS::EC2::LocalGatewayRouteTable": {
+        "importProperties": [
+            "LocalGatewayRouteTableId"
+        ]
+    },
     "AWS::EC2::LocalGatewayRouteTableVPCAssociation": {
         "importProperties": [
             "LocalGatewayRouteTableVpcAssociationId"
+        ]
+    },
+    "AWS::EC2::LocalGatewayRouteTableVirtualInterfaceGroupAssociation": {
+        "importProperties": [
+            "LocalGatewayRouteTableVirtualInterfaceGroupAssociationId"
         ]
     },
     "AWS::EC2::NatGateway": {
@@ -1352,9 +2157,33 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::EC2::NetworkInterfaceAttachment": {
+        "importProperties": [
+            "AttachmentId"
+        ]
+    },
+    "AWS::EC2::NetworkPerformanceMetricSubscription": {
+        "importProperties": [
+            "Source",
+            "Destination",
+            "Metric",
+            "Statistic"
+        ]
+    },
+    "AWS::EC2::PlacementGroup": {
+        "importProperties": [
+            "GroupName"
+        ]
+    },
     "AWS::EC2::PrefixList": {
         "importProperties": [
             "PrefixListId"
+        ]
+    },
+    "AWS::EC2::Route": {
+        "importProperties": [
+            "RouteTableId",
+            "CidrBlock"
         ]
     },
     "AWS::EC2::RouteTable": {
@@ -1377,12 +2206,22 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "SubnetId"
         ]
     },
+    "AWS::EC2::SubnetCidrBlock": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::EC2::SubnetRouteTableAssociation": {
         "importProperties": [
             "Id"
         ]
     },
     "AWS::EC2::TransitGateway": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::EC2::TransitGatewayAttachment": {
         "importProperties": [
             "Id"
         ]
@@ -1423,6 +2262,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "TransitGatewayAttachmentId"
         ]
     },
+    "AWS::EC2::TransitGatewayRouteTable": {
+        "importProperties": [
+            "TransitGatewayRouteTableId"
+        ]
+    },
     "AWS::EC2::TransitGatewayVpcAttachment": {
         "importProperties": [
             "Id"
@@ -1439,14 +2283,92 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "VpcId"
         ]
     },
+    "AWS::EC2::VPCEndpoint": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::EC2::VPCEndpointConnectionNotification": {
+        "importProperties": [
+            "VPCEndpointConnectionNotificationId"
+        ]
+    },
+    "AWS::EC2::VPCEndpointService": {
+        "importProperties": [
+            "ServiceId"
+        ]
+    },
+    "AWS::EC2::VPCEndpointServicePermissions": {
+        "importProperties": [
+            "ServiceId"
+        ]
+    },
+    "AWS::EC2::VPCGatewayAttachment": {
+        "importProperties": [
+            "AttachmentType",
+            "VpcId"
+        ]
+    },
+    "AWS::EC2::VPCPeeringConnection": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::EC2::VPNConnection": {
+        "importProperties": [
+            "VpnConnectionId"
+        ]
+    },
+    "AWS::EC2::VPNConnectionRoute": {
+        "importProperties": [
+            "DestinationCidrBlock",
+            "VpnConnectionId"
+        ]
+    },
+    "AWS::EC2::VPNGateway": {
+        "importProperties": [
+            "VPNGatewayId"
+        ]
+    },
+    "AWS::EC2::VerifiedAccessEndpoint": {
+        "importProperties": [
+            "VerifiedAccessEndpointId"
+        ]
+    },
+    "AWS::EC2::VerifiedAccessGroup": {
+        "importProperties": [
+            "VerifiedAccessGroupId"
+        ]
+    },
+    "AWS::EC2::VerifiedAccessInstance": {
+        "importProperties": [
+            "VerifiedAccessInstanceId"
+        ]
+    },
+    "AWS::EC2::VerifiedAccessTrustProvider": {
+        "importProperties": [
+            "VerifiedAccessTrustProviderId"
+        ]
+    },
     "AWS::EC2::Volume": {
         "importProperties": [
             "VolumeId"
         ]
     },
+    "AWS::EC2::VolumeAttachment": {
+        "importProperties": [
+            "VolumeId",
+            "InstanceId"
+        ]
+    },
     "AWS::ECR::PublicRepository": {
         "importProperties": [
             "RepositoryName"
+        ]
+    },
+    "AWS::ECR::PullThroughCacheRule": {
+        "importProperties": [
+            "EcrRepositoryPrefix"
         ]
     },
     "AWS::ECR::RegistryPolicy": {
@@ -1535,9 +2457,21 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "FargateProfileName"
         ]
     },
+    "AWS::EKS::IdentityProviderConfig": {
+        "importProperties": [
+            "IdentityProviderConfigName",
+            "ClusterName",
+            "Type"
+        ]
+    },
     "AWS::EKS::Nodegroup": {
         "importProperties": [
             "Id"
+        ]
+    },
+    "AWS::EMR::SecurityConfiguration": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::EMR::Studio": {
@@ -1557,9 +2491,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::EMRServerless::Application": {
+        "importProperties": [
+            "ApplicationId"
+        ]
+    },
     "AWS::ElastiCache::GlobalReplicationGroup": {
         "importProperties": [
             "GlobalReplicationGroupId"
+        ]
+    },
+    "AWS::ElastiCache::SubnetGroup": {
+        "importProperties": [
+            "CacheSubnetGroupName"
         ]
     },
     "AWS::ElastiCache::User": {
@@ -1570,6 +2514,28 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::ElastiCache::UserGroup": {
         "importProperties": [
             "UserGroupId"
+        ]
+    },
+    "AWS::ElasticBeanstalk::Application": {
+        "importProperties": [
+            "ApplicationName"
+        ]
+    },
+    "AWS::ElasticBeanstalk::ApplicationVersion": {
+        "importProperties": [
+            "ApplicationName",
+            "Id"
+        ]
+    },
+    "AWS::ElasticBeanstalk::ConfigurationTemplate": {
+        "importProperties": [
+            "ApplicationName",
+            "TemplateName"
+        ]
+    },
+    "AWS::ElasticBeanstalk::Environment": {
+        "importProperties": [
+            "EnvironmentName"
         ]
     },
     "AWS::ElasticLoadBalancing::LoadBalancer": {
@@ -1592,6 +2558,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "LoadBalancerArn"
         ]
     },
+    "AWS::ElasticLoadBalancingV2::TargetGroup": {
+        "importProperties": [
+            "TargetGroupArn"
+        ]
+    },
     "AWS::EventSchemas::RegistryPolicy": {
         "importProperties": [
             "Id"
@@ -1608,6 +2579,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::Events::Connection": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Events::Endpoint": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Events::EventBus": {
         "importProperties": [
             "Name"
         ]
@@ -1637,6 +2618,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::Evidently::Segment": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
     "AWS::FIS::ExperimentTemplate": {
         "importProperties": [
             "Id"
@@ -1650,6 +2636,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::FMS::Policy": {
         "importProperties": [
             "Id"
+        ]
+    },
+    "AWS::FMS::ResourceSet": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::FSx::DataRepositoryAssociation": {
+        "importProperties": [
+            "AssociationId"
         ]
     },
     "AWS::FinSpace::Environment": {
@@ -1687,6 +2683,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::FraudDetector::List": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
     "AWS::FraudDetector::Outcome": {
         "importProperties": [
             "Arn"
@@ -1702,6 +2703,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "AliasId"
         ]
     },
+    "AWS::GameLift::Build": {
+        "importProperties": [
+            "BuildId"
+        ]
+    },
     "AWS::GameLift::Fleet": {
         "importProperties": [
             "FleetId"
@@ -1710,6 +2716,31 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::GameLift::GameServerGroup": {
         "importProperties": [
             "GameServerGroupArn"
+        ]
+    },
+    "AWS::GameLift::GameSessionQueue": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::GameLift::Location": {
+        "importProperties": [
+            "LocationName"
+        ]
+    },
+    "AWS::GameLift::MatchmakingConfiguration": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::GameLift::MatchmakingRuleSet": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::GameLift::Script": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::GlobalAccelerator::Accelerator": {
@@ -1749,9 +2780,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Value"
         ]
     },
+    "AWS::Grafana::Workspace": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::GreengrassV2::ComponentVersion": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::GreengrassV2::Deployment": {
+        "importProperties": [
+            "DeploymentId"
         ]
     },
     "AWS::GroundStation::Config": {
@@ -1770,14 +2811,43 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::GuardDuty::Detector": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::GuardDuty::IPSet": {
+        "importProperties": [
+            "Id",
+            "DetectorId"
+        ]
+    },
+    "AWS::GuardDuty::ThreatIntelSet": {
+        "importProperties": [
+            "Id",
+            "DetectorId"
+        ]
+    },
     "AWS::HealthLake::FHIRDatastore": {
         "importProperties": [
             "DatastoreId"
         ]
     },
+    "AWS::IAM::GroupPolicy": {
+        "importProperties": [
+            "PolicyName",
+            "GroupName"
+        ]
+    },
     "AWS::IAM::OIDCProvider": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::IAM::RolePolicy": {
+        "importProperties": [
+            "PolicyName",
+            "RoleName"
         ]
     },
     "AWS::IAM::SAMLProvider": {
@@ -1788,6 +2858,17 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IAM::ServerCertificate": {
         "importProperties": [
             "ServerCertificateName"
+        ]
+    },
+    "AWS::IAM::ServiceLinkedRole": {
+        "importProperties": [
+            "RoleName"
+        ]
+    },
+    "AWS::IAM::UserPolicy": {
+        "importProperties": [
+            "PolicyName",
+            "UserName"
         ]
     },
     "AWS::IAM::VirtualMFADevice": {
@@ -1813,6 +2894,28 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IVS::StreamKey": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::IVSChat::LoggingConfiguration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::IVSChat::Room": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::IdentityStore::Group": {
+        "importProperties": [
+            "GroupId",
+            "IdentityStoreId"
+        ]
+    },
+    "AWS::IdentityStore::GroupMembership": {
+        "importProperties": [
+            "MembershipId",
+            "IdentityStoreId"
         ]
     },
     "AWS::ImageBuilder::Component": {
@@ -1870,6 +2973,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::InternetMonitor::Monitor": {
+        "importProperties": [
+            "MonitorName"
+        ]
+    },
     "AWS::IoT::AccountAuditConfiguration": {
         "importProperties": [
             "AccountId"
@@ -1878,6 +2986,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IoT::Authorizer": {
         "importProperties": [
             "AuthorizerName"
+        ]
+    },
+    "AWS::IoT::BillingGroup": {
+        "importProperties": [
+            "BillingGroupName"
+        ]
+    },
+    "AWS::IoT::CACertificate": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::IoT::Certificate": {
@@ -1920,6 +3038,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ActionName"
         ]
     },
+    "AWS::IoT::Policy": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::IoT::ProvisioningTemplate": {
         "importProperties": [
             "TemplateName"
@@ -1928,6 +3051,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IoT::ResourceSpecificLogging": {
         "importProperties": [
             "TargetId"
+        ]
+    },
+    "AWS::IoT::RoleAlias": {
+        "importProperties": [
+            "RoleAlias"
         ]
     },
     "AWS::IoT::ScheduledAudit": {
@@ -1943,6 +3071,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IoT::Thing": {
         "importProperties": [
             "ThingName"
+        ]
+    },
+    "AWS::IoT::ThingGroup": {
+        "importProperties": [
+            "ThingGroupName"
+        ]
+    },
+    "AWS::IoT::ThingType": {
+        "importProperties": [
+            "ThingTypeName"
         ]
     },
     "AWS::IoT::TopicRule": {
@@ -1980,6 +3118,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "SuiteDefinitionId"
         ]
     },
+    "AWS::IoTEvents::AlarmModel": {
+        "importProperties": [
+            "AlarmModelName"
+        ]
+    },
     "AWS::IoTEvents::DetectorModel": {
         "importProperties": [
             "DetectorModelName"
@@ -1993,6 +3136,36 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::IoTFleetHub::Application": {
         "importProperties": [
             "ApplicationId"
+        ]
+    },
+    "AWS::IoTFleetWise::Campaign": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::IoTFleetWise::DecoderManifest": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::IoTFleetWise::Fleet": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::IoTFleetWise::ModelManifest": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::IoTFleetWise::SignalCatalog": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::IoTFleetWise::Vehicle": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::IoTSiteWise::AccessPolicy": {
@@ -2030,6 +3203,35 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ProjectId"
         ]
     },
+    "AWS::IoTTwinMaker::ComponentType": {
+        "importProperties": [
+            "WorkspaceId",
+            "ComponentTypeId"
+        ]
+    },
+    "AWS::IoTTwinMaker::Entity": {
+        "importProperties": [
+            "WorkspaceId",
+            "EntityId"
+        ]
+    },
+    "AWS::IoTTwinMaker::Scene": {
+        "importProperties": [
+            "WorkspaceId",
+            "SceneId"
+        ]
+    },
+    "AWS::IoTTwinMaker::SyncJob": {
+        "importProperties": [
+            "WorkspaceId",
+            "SyncSource"
+        ]
+    },
+    "AWS::IoTTwinMaker::Workspace": {
+        "importProperties": [
+            "WorkspaceId"
+        ]
+    },
     "AWS::IoTWireless::Destination": {
         "importProperties": [
             "Name"
@@ -2050,6 +3252,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::IoTWireless::NetworkAnalyzerConfiguration": {
+        "importProperties": [
+            "Name"
+        ]
+    },
     "AWS::IoTWireless::PartnerAccount": {
         "importProperties": [
             "PartnerAccountId"
@@ -2066,6 +3273,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::IoTWireless::WirelessDevice": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::IoTWireless::WirelessDeviceImportTask": {
         "importProperties": [
             "Id"
         ]
@@ -2112,9 +3324,19 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Id"
         ]
     },
+    "AWS::KendraRanking::ExecutionPlan": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::Kinesis::Stream": {
         "importProperties": [
             "Name"
+        ]
+    },
+    "AWS::KinesisAnalyticsV2::Application": {
+        "importProperties": [
+            "ApplicationName"
         ]
     },
     "AWS::KinesisFirehose::DeliveryStream": {
@@ -2130,6 +3352,31 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::KinesisVideo::Stream": {
         "importProperties": [
             "Name"
+        ]
+    },
+    "AWS::LakeFormation::DataCellsFilter": {
+        "importProperties": [
+            "TableCatalogId",
+            "DatabaseName",
+            "TableName",
+            "Name"
+        ]
+    },
+    "AWS::LakeFormation::PrincipalPermissions": {
+        "importProperties": [
+            "PrincipalIdentifier",
+            "ResourceIdentifier"
+        ]
+    },
+    "AWS::LakeFormation::Tag": {
+        "importProperties": [
+            "TagKey"
+        ]
+    },
+    "AWS::LakeFormation::TagAssociation": {
+        "importProperties": [
+            "ResourceIdentifier",
+            "TagsIdentifier"
         ]
     },
     "AWS::Lambda::Alias": {
@@ -2150,6 +3397,27 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::Lambda::Function": {
         "importProperties": [
             "FunctionName"
+        ]
+    },
+    "AWS::Lambda::LayerVersion": {
+        "importProperties": [
+            "LayerVersionArn"
+        ]
+    },
+    "AWS::Lambda::LayerVersionPermission": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::Lambda::Permission": {
+        "importProperties": [
+            "FunctionName",
+            "Id"
+        ]
+    },
+    "AWS::Lambda::Url": {
+        "importProperties": [
+            "FunctionArn"
         ]
     },
     "AWS::Lambda::Version": {
@@ -2276,13 +3544,32 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ConsumerArn"
         ]
     },
+    "AWS::Logs::AccountPolicy": {
+        "importProperties": [
+            "AccountId",
+            "PolicyType",
+            "PolicyName"
+        ]
+    },
+    "AWS::Logs::Destination": {
+        "importProperties": [
+            "DestinationName"
+        ]
+    },
     "AWS::Logs::LogGroup": {
         "importProperties": [
             "LogGroupName"
         ]
     },
+    "AWS::Logs::LogStream": {
+        "importProperties": [
+            "LogGroupName",
+            "LogStreamName"
+        ]
+    },
     "AWS::Logs::MetricFilter": {
         "importProperties": [
+            "LogGroupName",
             "FilterName"
         ]
     },
@@ -2298,8 +3585,8 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::Logs::SubscriptionFilter": {
         "importProperties": [
-            "LogGroupName",
-            "FilterName"
+            "FilterName",
+            "LogGroupName"
         ]
     },
     "AWS::LookoutEquipment::InferenceScheduler": {
@@ -2322,7 +3609,42 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ProjectName"
         ]
     },
+    "AWS::M2::Application": {
+        "importProperties": [
+            "ApplicationArn"
+        ]
+    },
+    "AWS::M2::Environment": {
+        "importProperties": [
+            "EnvironmentArn"
+        ]
+    },
+    "AWS::MSK::BatchScramSecret": {
+        "importProperties": [
+            "ClusterArn"
+        ]
+    },
     "AWS::MSK::Cluster": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::MSK::ClusterPolicy": {
+        "importProperties": [
+            "ClusterArn"
+        ]
+    },
+    "AWS::MSK::Configuration": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::MSK::ServerlessCluster": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::MSK::VpcConnection": {
         "importProperties": [
             "Arn"
         ]
@@ -2330,6 +3652,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::MWAA::Environment": {
         "importProperties": [
             "Name"
+        ]
+    },
+    "AWS::Macie::AllowList": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::Macie::CustomDataIdentifier": {
@@ -2345,6 +3672,28 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::Macie::Session": {
         "importProperties": [
             "AwsAccountId"
+        ]
+    },
+    "AWS::ManagedBlockchain::Accessor": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::MediaConnect::Bridge": {
+        "importProperties": [
+            "BridgeArn"
+        ]
+    },
+    "AWS::MediaConnect::BridgeOutput": {
+        "importProperties": [
+            "BridgeArn",
+            "Name"
+        ]
+    },
+    "AWS::MediaConnect::BridgeSource": {
+        "importProperties": [
+            "BridgeArn",
+            "Name"
         ]
     },
     "AWS::MediaConnect::Flow": {
@@ -2373,6 +3722,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Name"
         ]
     },
+    "AWS::MediaConnect::Gateway": {
+        "importProperties": [
+            "GatewayArn"
+        ]
+    },
     "AWS::MediaPackage::Asset": {
         "importProperties": [
             "Id"
@@ -2396,6 +3750,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::MediaPackage::PackagingGroup": {
         "importProperties": [
             "Id"
+        ]
+    },
+    "AWS::MediaTailor::PlaybackConfiguration": {
+        "importProperties": [
+            "Name"
         ]
     },
     "AWS::MemoryDB::ACL": {
@@ -2423,6 +3782,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "UserName"
         ]
     },
+    "AWS::Neptune::DBCluster": {
+        "importProperties": [
+            "DBClusterIdentifier"
+        ]
+    },
     "AWS::NetworkFirewall::Firewall": {
         "importProperties": [
             "FirewallArn"
@@ -2441,6 +3805,21 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::NetworkFirewall::RuleGroup": {
         "importProperties": [
             "RuleGroupArn"
+        ]
+    },
+    "AWS::NetworkManager::ConnectAttachment": {
+        "importProperties": [
+            "AttachmentId"
+        ]
+    },
+    "AWS::NetworkManager::ConnectPeer": {
+        "importProperties": [
+            "ConnectPeerId"
+        ]
+    },
+    "AWS::NetworkManager::CoreNetwork": {
+        "importProperties": [
+            "CoreNetworkId"
         ]
     },
     "AWS::NetworkManager::CustomerGatewayAssociation": {
@@ -2479,10 +3858,30 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "SiteId"
         ]
     },
+    "AWS::NetworkManager::SiteToSiteVpnAttachment": {
+        "importProperties": [
+            "AttachmentId"
+        ]
+    },
+    "AWS::NetworkManager::TransitGatewayPeering": {
+        "importProperties": [
+            "PeeringId"
+        ]
+    },
     "AWS::NetworkManager::TransitGatewayRegistration": {
         "importProperties": [
             "GlobalNetworkId",
             "TransitGatewayArn"
+        ]
+    },
+    "AWS::NetworkManager::TransitGatewayRouteTableAttachment": {
+        "importProperties": [
+            "AttachmentId"
+        ]
+    },
+    "AWS::NetworkManager::VpcAttachment": {
+        "importProperties": [
+            "AttachmentId"
         ]
     },
     "AWS::NimbleStudio::LaunchProfile": {
@@ -2508,6 +3907,78 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "StudioId"
         ]
     },
+    "AWS::OSIS::Pipeline": {
+        "importProperties": [
+            "PipelineArn"
+        ]
+    },
+    "AWS::Oam::Link": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Oam::Sink": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Omics::AnnotationStore": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Omics::ReferenceStore": {
+        "importProperties": [
+            "ReferenceStoreId"
+        ]
+    },
+    "AWS::Omics::RunGroup": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::Omics::SequenceStore": {
+        "importProperties": [
+            "SequenceStoreId"
+        ]
+    },
+    "AWS::Omics::VariantStore": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Omics::Workflow": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::OpenSearchServerless::AccessPolicy": {
+        "importProperties": [
+            "Type",
+            "Name"
+        ]
+    },
+    "AWS::OpenSearchServerless::Collection": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::OpenSearchServerless::SecurityConfig": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::OpenSearchServerless::SecurityPolicy": {
+        "importProperties": [
+            "Type",
+            "Name"
+        ]
+    },
+    "AWS::OpenSearchServerless::VpcEndpoint": {
+        "importProperties": [
+            "Id"
+        ]
+    },
     "AWS::OpenSearchService::Domain": {
         "importProperties": [
             "DomainName"
@@ -2516,6 +3987,31 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::OpsWorksCM::Server": {
         "importProperties": [
             "ServerName"
+        ]
+    },
+    "AWS::Organizations::Account": {
+        "importProperties": [
+            "AccountId"
+        ]
+    },
+    "AWS::Organizations::Organization": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::Organizations::OrganizationalUnit": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::Organizations::Policy": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::Organizations::ResourcePolicy": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::Panorama::ApplicationInstance": {
@@ -2535,9 +4031,49 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "PatchVersion"
         ]
     },
+    "AWS::Personalize::Dataset": {
+        "importProperties": [
+            "DatasetArn"
+        ]
+    },
+    "AWS::Personalize::DatasetGroup": {
+        "importProperties": [
+            "DatasetGroupArn"
+        ]
+    },
+    "AWS::Personalize::Schema": {
+        "importProperties": [
+            "SchemaArn"
+        ]
+    },
+    "AWS::Personalize::Solution": {
+        "importProperties": [
+            "SolutionArn"
+        ]
+    },
     "AWS::Pinpoint::InAppTemplate": {
         "importProperties": [
             "TemplateName"
+        ]
+    },
+    "AWS::Pipes::Pipe": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Proton::EnvironmentAccountConnection": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Proton::EnvironmentTemplate": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::Proton::ServiceTemplate": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::QLDB::Stream": {
@@ -2582,14 +4118,47 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "AwsAccountId"
         ]
     },
+    "AWS::QuickSight::Topic": {
+        "importProperties": [
+            "AwsAccountId",
+            "TopicId"
+        ]
+    },
+    "AWS::QuickSight::VPCConnection": {
+        "importProperties": [
+            "AwsAccountId",
+            "VPCConnectionId"
+        ]
+    },
+    "AWS::RAM::Permission": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::RDS::CustomDBEngineVersion": {
+        "importProperties": [
+            "Engine",
+            "EngineVersion"
+        ]
+    },
     "AWS::RDS::DBCluster": {
         "importProperties": [
             "DBClusterIdentifier"
         ]
     },
+    "AWS::RDS::DBClusterParameterGroup": {
+        "importProperties": [
+            "DBClusterParameterGroupName"
+        ]
+    },
     "AWS::RDS::DBInstance": {
         "importProperties": [
             "DBInstanceIdentifier"
+        ]
+    },
+    "AWS::RDS::DBParameterGroup": {
+        "importProperties": [
+            "DBParameterGroupName"
         ]
     },
     "AWS::RDS::DBProxy": {
@@ -2607,9 +4176,24 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "TargetGroupArn"
         ]
     },
+    "AWS::RDS::DBSubnetGroup": {
+        "importProperties": [
+            "DBSubnetGroupName"
+        ]
+    },
+    "AWS::RDS::EventSubscription": {
+        "importProperties": [
+            "SubscriptionName"
+        ]
+    },
     "AWS::RDS::GlobalCluster": {
         "importProperties": [
             "GlobalClusterIdentifier"
+        ]
+    },
+    "AWS::RDS::OptionGroup": {
+        "importProperties": [
+            "OptionGroupName"
         ]
     },
     "AWS::RUM::AppMonitor": {
@@ -2620,6 +4204,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::Redshift::Cluster": {
         "importProperties": [
             "ClusterIdentifier"
+        ]
+    },
+    "AWS::Redshift::ClusterParameterGroup": {
+        "importProperties": [
+            "ParameterGroupName"
+        ]
+    },
+    "AWS::Redshift::ClusterSubnetGroup": {
+        "importProperties": [
+            "ClusterSubnetGroupName"
         ]
     },
     "AWS::Redshift::EndpointAccess": {
@@ -2641,6 +4235,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::Redshift::ScheduledAction": {
         "importProperties": [
             "ScheduledActionName"
+        ]
+    },
+    "AWS::RedshiftServerless::Namespace": {
+        "importProperties": [
+            "NamespaceName"
+        ]
+    },
+    "AWS::RedshiftServerless::Workgroup": {
+        "importProperties": [
+            "WorkgroupName"
         ]
     },
     "AWS::RefactorSpaces::Application": {
@@ -2678,6 +4282,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ProjectName"
         ]
     },
+    "AWS::Rekognition::StreamProcessor": {
+        "importProperties": [
+            "Name"
+        ]
+    },
     "AWS::ResilienceHub::App": {
         "importProperties": [
             "AppArn"
@@ -2686,6 +4295,21 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::ResilienceHub::ResiliencyPolicy": {
         "importProperties": [
             "PolicyArn"
+        ]
+    },
+    "AWS::ResourceExplorer2::DefaultViewAssociation": {
+        "importProperties": [
+            "AssociatedAwsPrincipal"
+        ]
+    },
+    "AWS::ResourceExplorer2::Index": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::ResourceExplorer2::View": {
+        "importProperties": [
+            "ViewArn"
         ]
     },
     "AWS::ResourceGroups::Group": {
@@ -2721,6 +4345,26 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::RoboMaker::SimulationApplicationVersion": {
         "importProperties": [
             "Arn"
+        ]
+    },
+    "AWS::RolesAnywhere::CRL": {
+        "importProperties": [
+            "CrlId"
+        ]
+    },
+    "AWS::RolesAnywhere::Profile": {
+        "importProperties": [
+            "ProfileId"
+        ]
+    },
+    "AWS::RolesAnywhere::TrustAnchor": {
+        "importProperties": [
+            "TrustAnchorId"
+        ]
+    },
+    "AWS::Route53::CidrCollection": {
+        "importProperties": [
+            "Id"
         ]
     },
     "AWS::Route53::DNSSEC": {
@@ -2839,6 +4483,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "BucketName"
         ]
     },
+    "AWS::S3::BucketPolicy": {
+        "importProperties": [
+            "Bucket"
+        ]
+    },
     "AWS::S3::MultiRegionAccessPoint": {
         "importProperties": [
             "Name"
@@ -2894,12 +4543,32 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ContactListName"
         ]
     },
+    "AWS::SES::DedicatedIpPool": {
+        "importProperties": [
+            "PoolName"
+        ]
+    },
+    "AWS::SES::EmailIdentity": {
+        "importProperties": [
+            "EmailIdentity"
+        ]
+    },
     "AWS::SES::Template": {
         "importProperties": [
             "Id"
         ]
     },
+    "AWS::SES::VdmAttributes": {
+        "importProperties": [
+            "VdmAttributesResourceId"
+        ]
+    },
     "AWS::SNS::Topic": {
+        "importProperties": [
+            "TopicArn"
+        ]
+    },
+    "AWS::SNS::TopicInlinePolicy": {
         "importProperties": [
             "TopicArn"
         ]
@@ -2919,9 +4588,20 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Name"
         ]
     },
+    "AWS::SSM::Parameter": {
+        "importProperties": [
+            "Name"
+        ]
+    },
     "AWS::SSM::ResourceDataSync": {
         "importProperties": [
             "SyncName"
+        ]
+    },
+    "AWS::SSM::ResourcePolicy": {
+        "importProperties": [
+            "PolicyId",
+            "ResourceArn"
         ]
     },
     "AWS::SSMContacts::Contact": {
@@ -2930,6 +4610,16 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
         ]
     },
     "AWS::SSMContacts::ContactChannel": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::SSMContacts::Plan": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::SSMContacts::Rotation": {
         "importProperties": [
             "Arn"
         ]
@@ -2973,11 +4663,6 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "JobDefinitionArn"
         ]
     },
-    "AWS::SageMaker::Device": {
-        "importProperties": [
-            "DeviceFleetName"
-        ]
-    },
     "AWS::SageMaker::DeviceFleet": {
         "importProperties": [
             "DeviceFleetName"
@@ -3003,14 +4688,29 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ImageVersionArn"
         ]
     },
+    "AWS::SageMaker::InferenceExperiment": {
+        "importProperties": [
+            "Name"
+        ]
+    },
     "AWS::SageMaker::ModelBiasJobDefinition": {
         "importProperties": [
             "JobDefinitionArn"
         ]
     },
+    "AWS::SageMaker::ModelCard": {
+        "importProperties": [
+            "ModelCardName"
+        ]
+    },
     "AWS::SageMaker::ModelExplainabilityJobDefinition": {
         "importProperties": [
             "JobDefinitionArn"
+        ]
+    },
+    "AWS::SageMaker::ModelPackage": {
+        "importProperties": [
+            "ModelPackageArn"
         ]
     },
     "AWS::SageMaker::ModelPackageGroup": {
@@ -3038,10 +4738,41 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "ProjectArn"
         ]
     },
+    "AWS::SageMaker::Space": {
+        "importProperties": [
+            "DomainId",
+            "SpaceName"
+        ]
+    },
     "AWS::SageMaker::UserProfile": {
         "importProperties": [
             "UserProfileName",
             "DomainId"
+        ]
+    },
+    "AWS::Scheduler::Schedule": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::Scheduler::ScheduleGroup": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::SecretsManager::Secret": {
+        "importProperties": [
+            "Id"
+        ]
+    },
+    "AWS::SecurityHub::AutomationRule": {
+        "importProperties": [
+            "RuleArn"
+        ]
+    },
+    "AWS::SecurityHub::Standard": {
+        "importProperties": [
+            "StandardsSubscriptionArn"
         ]
     },
     "AWS::ServiceCatalog::CloudFormationProvisionedProduct": {
@@ -3073,12 +4804,35 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     },
     "AWS::ServiceCatalogAppRegistry::AttributeGroupAssociation": {
         "importProperties": [
-            "Id"
+            "ApplicationArn",
+            "AttributeGroupArn"
         ]
     },
     "AWS::ServiceCatalogAppRegistry::ResourceAssociation": {
         "importProperties": [
-            "Id"
+            "ApplicationArn",
+            "ResourceArn",
+            "ResourceType"
+        ]
+    },
+    "AWS::Shield::DRTAccess": {
+        "importProperties": [
+            "AccountId"
+        ]
+    },
+    "AWS::Shield::ProactiveEngagement": {
+        "importProperties": [
+            "AccountId"
+        ]
+    },
+    "AWS::Shield::Protection": {
+        "importProperties": [
+            "ProtectionArn"
+        ]
+    },
+    "AWS::Shield::ProtectionGroup": {
+        "importProperties": [
+            "ProtectionGroupArn"
         ]
     },
     "AWS::Signer::ProfilePermission": {
@@ -3092,6 +4846,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::SimSpaceWeaver::Simulation": {
+        "importProperties": [
+            "Name"
+        ]
+    },
     "AWS::StepFunctions::Activity": {
         "importProperties": [
             "Arn"
@@ -3102,9 +4861,45 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "Arn"
         ]
     },
+    "AWS::StepFunctions::StateMachineAlias": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::StepFunctions::StateMachineVersion": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::SupportApp::AccountAlias": {
+        "importProperties": [
+            "AccountAliasResourceId"
+        ]
+    },
+    "AWS::SupportApp::SlackChannelConfiguration": {
+        "importProperties": [
+            "TeamId",
+            "ChannelId"
+        ]
+    },
+    "AWS::SupportApp::SlackWorkspaceConfiguration": {
+        "importProperties": [
+            "TeamId"
+        ]
+    },
     "AWS::Synthetics::Canary": {
         "importProperties": [
             "Name"
+        ]
+    },
+    "AWS::Synthetics::Group": {
+        "importProperties": [
+            "Name"
+        ]
+    },
+    "AWS::SystemsManagerSAP::Application": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::Timestream::Database": {
@@ -3123,9 +4918,108 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
             "TableName"
         ]
     },
+    "AWS::Transfer::Agreement": {
+        "importProperties": [
+            "AgreementId",
+            "ServerId"
+        ]
+    },
+    "AWS::Transfer::Certificate": {
+        "importProperties": [
+            "CertificateId"
+        ]
+    },
+    "AWS::Transfer::Connector": {
+        "importProperties": [
+            "ConnectorId"
+        ]
+    },
+    "AWS::Transfer::Profile": {
+        "importProperties": [
+            "ProfileId"
+        ]
+    },
     "AWS::Transfer::Workflow": {
         "importProperties": [
             "WorkflowId"
+        ]
+    },
+    "AWS::VerifiedPermissions::IdentitySource": {
+        "importProperties": [
+            "IdentitySourceId",
+            "PolicyStoreId"
+        ]
+    },
+    "AWS::VerifiedPermissions::Policy": {
+        "importProperties": [
+            "PolicyId",
+            "PolicyStoreId"
+        ]
+    },
+    "AWS::VerifiedPermissions::PolicyStore": {
+        "importProperties": [
+            "PolicyStoreId"
+        ]
+    },
+    "AWS::VerifiedPermissions::PolicyTemplate": {
+        "importProperties": [
+            "PolicyStoreId",
+            "PolicyTemplateId"
+        ]
+    },
+    "AWS::VoiceID::Domain": {
+        "importProperties": [
+            "DomainId"
+        ]
+    },
+    "AWS::VpcLattice::AccessLogSubscription": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::AuthPolicy": {
+        "importProperties": [
+            "ResourceIdentifier"
+        ]
+    },
+    "AWS::VpcLattice::Listener": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::ResourcePolicy": {
+        "importProperties": [
+            "ResourceArn"
+        ]
+    },
+    "AWS::VpcLattice::Rule": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::Service": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::ServiceNetwork": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::ServiceNetworkServiceAssociation": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::ServiceNetworkVpcAssociation": {
+        "importProperties": [
+            "Arn"
+        ]
+    },
+    "AWS::VpcLattice::TargetGroup": {
+        "importProperties": [
+            "Arn"
         ]
     },
     "AWS::WAFv2::IPSet": {
@@ -3191,6 +5085,11 @@ AWS::XRay::SamplingRule ('RuleARN', '', '', '')
     "AWS::XRay::Group": {
         "importProperties": [
             "GroupARN"
+        ]
+    },
+    "AWS::XRay::ResourcePolicy": {
+        "importProperties": [
+            "PolicyName"
         ]
     },
     "AWS::XRay::SamplingRule": {
