@@ -410,7 +410,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_organizations_organizational_unit',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.Id
+                'Ref': obj.data.Id,
+                'Import': {
+                    'Id': obj.data.Id
+                }
             }
         });
     } else if (obj.type == "organizations.account") {
@@ -443,7 +446,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'terraformType': 'aws_organizations_account',
             'options': reqParams,
             'returnValues': {
-                'Ref': obj.data.Id
+                'Ref': obj.data.Id,
+                'Import': {
+                    'AccountId': obj.data.Id
+                }
             }
         });
     } else if (obj.type == "organizations.policy") {
@@ -472,7 +478,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'service': 'organizations',
             'type': 'AWS::Organizations::Policy',
             'terraformType': 'aws_organizations_policy',
-            'options': reqParams
+            'options': reqParams,
+            'returnValues': {
+                'Import': {
+                    'Id': obj.data.PolicySummary.Id
+                }
+            }
         });
     } else if (obj.type == "organizations.policyattachment") {
         reqParams.tf['policy_id'] = obj.data.PolicyId;
