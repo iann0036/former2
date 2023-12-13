@@ -396,6 +396,10 @@ async function updateDatatableMachineLearningLex() {
                 botId: bot.botId
             }, true).then(async (data) => {
                 await Promise.all(data.botVersionSummaries.map(async (botversion) => {
+                    if (botversion.botVersion == "DRAFT") {
+                        return Promise.resolve();
+                    }
+
                     return sdkcall("LexModelsV2", "describeBotVersion", {
                         botId: data.botId,
                         botVersion: botversion.botVersion
