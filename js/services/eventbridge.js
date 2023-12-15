@@ -69,6 +69,44 @@ sections.push({
                 ]
             ]
         },
+        'Pipes': {
+            'columns': [
+                [
+                    {
+                        field: 'state',
+                        checkbox: true,
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle'
+                    },
+                    {
+                        title: 'Name',
+                        field: 'name',
+                        rowspan: 2,
+                        align: 'center',
+                        valign: 'middle',
+                        sortable: true,
+                        formatter: primaryFieldFormatter,
+                        footerFormatter: textFormatter
+                    },
+                    {
+                        title: 'Properties',
+                        colspan: 4,
+                        align: 'center'
+                    }
+                ],
+                [
+                    {
+                        field: 'description',
+                        title: 'Description',
+                        sortable: true,
+                        editable: true,
+                        footerFormatter: textFormatter,
+                        align: 'center'
+                    }
+                ]
+            ]
+        },
         'Event Buses': {
             'columns': [
                 [
@@ -514,6 +552,7 @@ sections.push({
 
 async function updateDatatableApplicationIntegrationEventBridge() {
     blockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    blockUI('#section-applicationintegration-eventbridge-pipes-datatable');
     blockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     blockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
     blockUI('#section-applicationintegration-eventbridge-schemas-datatable');
@@ -553,6 +592,27 @@ async function updateDatatableApplicationIntegrationEventBridge() {
                         enabled: (data.State == "ENABLED")
                     }]);
                 });
+            });
+        }));
+    });
+
+    await sdkcall("Pipes", "listPipes", {
+        // no params
+    }, false).then(async (data) => {
+        $('#section-applicationintegration-eventbridge-pipes-datatable').deferredBootstrapTable('removeAll');
+
+        await Promise.all(data.Pipes.map(pipe => {
+            return sdkcall("Pipes", "describePipe", {
+                Name: pipe.Name
+            }, true).then(async (data) => {
+                $('#section-applicationintegration-eventbridge-pipes-datatable').deferredBootstrapTable('append', [{
+                    f2id: data.Arn,
+                    f2type: 'eventbridge.pipe',
+                    f2data: data,
+                    f2region: region,
+                    name: data.Name,
+                    description: data.Description
+                }]);
             });
         }));
     });
@@ -849,6 +909,7 @@ async function updateDatatableApplicationIntegrationEventBridge() {
     }).catch(() => { });
 
     unblockUI('#section-applicationintegration-eventbridge-rules-datatable');
+    unblockUI('#section-applicationintegration-eventbridge-pipes-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuses-datatable');
     unblockUI('#section-applicationintegration-eventbridge-eventbuspolicies-datatable');
     unblockUI('#section-applicationintegration-eventbridge-schemas-datatable');
@@ -1025,6 +1086,38 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 });
             });
         }
+    } else if (obj.type == "eventbridge.pipe") {
+        reqParams.cfn['Name'] = obj.data.Name;
+        reqParams.cfn['Description'] = obj.data.Description;
+        reqParams.cfn['RoleArn'] = obj.data.RoleArn;
+        reqParams.cfn['Source'] = obj.data.Source;
+        reqParams.cfn['SourceParameters'] = obj.data.SourceParameters;
+        reqParams.cfn['DesiredState'] = obj.data.DesiredState;
+        reqParams.cfn['Enrichment'] = obj.data.Enrichment;
+        reqParams.cfn['EnrichmentParameters'] = obj.data.EnrichmentParameters;
+        reqParams.cfn['LogConfiguration'] = obj.data.LogConfiguration;
+        reqParams.cfn['Target'] = obj.data.Target;
+        reqParams.cfn['TargetParameters'] = obj.data.TargetParameters;
+        if (obj.data.Tags) {
+            reqParams.cfn['Tags'] = [];
+            Object.keys(obj.data.Tags).forEach(tagKey => {
+                if (!tagKey.startsWith("aws:")) {
+                    reqParams.cfn['Tags'].push({
+                        'Key': tagKey,
+                        'Value': obj.data.Tags[tagKey]
+                    });
+                }
+            });
+        }
+
+        tracked_resources.push({
+            'obj': obj,
+            'logicalId': getResourceName('eventbridge', obj.id, 'AWS::Pipes::Pipe'),
+            'region': obj.region,
+            'service': 'eventbridge',
+            'type': 'AWS::Pipes::Pipe',
+            'options': reqParams
+        });
     } else if (obj.type == "eventbridge.eventbuspolicy") {
         reqParams.cfn['Action'] = obj.data.Action;
         if (obj.data.Condition && obj.data.Condition.StringEquals && obj.data.Condition.StringEquals['aws:PrincipalOrgID']) {
