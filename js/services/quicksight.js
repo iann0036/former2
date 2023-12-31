@@ -354,7 +354,7 @@ async function updateDatatableAnalyticsQuickSight() {
                     data.Dashboard['AccountId'] = accountId;
 
                     await sdkcall("QuickSight", "describeDashboardPermissions", {
-                        AnalysisId: analysis.AnalysisId,
+                        DashboardId: dashboard.DashboardId,
                         AwsAccountId: accountId
                     }, false).then(permissionsdata => {
                         data.Dashboard['Permissions'] = permissionsdata.Permissions;
