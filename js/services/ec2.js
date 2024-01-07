@@ -3624,7 +3624,93 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                     });
                 });
             }
-            reqParams.cfn['Actions'] = obj.data.Actions;
+            if (obj.data.Actions) {
+                reqParams.cfn['Actions'] = obj.data.Actions;
+                reqParams.tf['action'] = [];
+                obj.data.Actions.forEach(action => {
+                    var forward = null;
+                    if (action.ForwardConfig) {
+                        var targetgroups = null;
+                        if (action.ForwardConfig.TargetGroups) {
+                            targetgroups = [];
+                            action.ForwardConfig.TargetGroups.forEach(targetgroup => {
+                                targetgroups.push({
+                                    'arn': targetgroup.TargetGroupArn,
+                                    'weight': targetgroup.Weight
+                                });
+                            });
+                        }
+                        var targetgroupstickinessconfig = null;
+                        if (action.ForwardConfig.TargetGroupStickinessConfig) {
+                            targetgroupstickinessconfig = {
+                                'duration': action.ForwardConfig.TargetGroupStickinessConfig.DurationSeconds,
+                                'enabled': action.ForwardConfig.TargetGroupStickinessConfig.Enabled
+                            };
+                        }
+                        forward = {
+                            'target_group': targetgroups,
+                            'stickiness': targetgroupstickinessconfig
+                        };
+                    }
+                    var redirect = null;
+                    if (action.RedirectConfig) {
+                        redirect = {
+                            'host': action.RedirectConfig.Host,
+                            'path': action.RedirectConfig.Path,
+                            'port': action.RedirectConfig.Port,
+                            'protocol': action.RedirectConfig.Protocol,
+                            'query': action.RedirectConfig.Query,
+                            'status_code': action.RedirectConfig.StatusCode,
+                        };
+                    }
+                    var fixedresponse = null;
+                    if (action.FixedResponseConfig) {
+                        fixedresponse = {
+                            'content_type': action.FixedResponseConfig.ContentType,
+                            'message_body': action.FixedResponseConfig.MessageBody,
+                            'status_code': action.FixedResponseConfig.StatusCode
+                        };
+                    }
+                    var authcognito = null;
+                    if (action.AuthenticateCognitoConfig) {
+                        authcognito = {
+                            'authentication_request_extra_params': action.AuthenticateCognitoConfig.AuthenticationRequestExtraParams,
+                            'on_unauthenticated_request': action.AuthenticateCognitoConfig.OnUnauthenticatedRequest,
+                            'scope': action.AuthenticateCognitoConfig.Scope,
+                            'session_cookie_name': action.AuthenticateCognitoConfig.SessionCookieName,
+                            'session_timeout': action.AuthenticateCognitoConfig.SessionTimeout,
+                            'user_pool_arn': action.AuthenticateCognitoConfig.UserPoolArn,
+                            'user_pool_client_id': action.AuthenticateCognitoConfig.UserPoolClientId,
+                            'user_pool_domain': action.AuthenticateCognitoConfig.UserPoolDomain
+                        };
+                    }
+                    var authoidc = null;
+                    if (action.AuthenticateOidcConfig) {
+                        authoidc = {
+                            'authentication_request_extra_params': action.AuthenticateOidcConfig.AuthenticationRequestExtraParams,
+                            'authorization_endpoint': action.AuthenticateOidcConfig.AuthorizationEndpoint,
+                            'client_id': action.AuthenticateOidcConfig.ClientId,
+                            'client_secret': action.AuthenticateOidcConfig.ClientSecret,
+                            'issuer': action.AuthenticateOidcConfig.Issuer,
+                            'on_unauthenticated_request': action.AuthenticateOidcConfig.OnUnauthenticatedRequest,
+                            'scope': action.AuthenticateOidcConfig.Scope,
+                            'session_cookie_name': action.AuthenticateOidcConfig.SessionCookieName,
+                            'session_timeout': action.AuthenticateOidcConfig.SessionTimeout,
+                            'token_endpoint': action.AuthenticateOidcConfig.TokenEndpoint,
+                            'user_info_endpoint': action.AuthenticateOidcConfig.UserInfoEndpoint
+                        };
+                    }
+                    reqParams.tf['action'].push({
+                        'type': action.Type,
+                        'target_group_arn': action.TargetGroupArn,
+                        'forward': forward,
+                        'redirect': redirect,
+                        'fixed_response': fixedresponse,
+                        'authenticate_cognito': authcognito,
+                        'authenticate_oidc': authoidc
+                    });
+                });
+            }
 
             reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
             if (obj.data.Tags) {
