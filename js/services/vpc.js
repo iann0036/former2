@@ -6282,10 +6282,30 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         });
     } else if (obj.type == "ec2.prefixlist") {
         reqParams.cfn['AddressFamily'] = obj.data.AddressFamily;
+        reqParams.tf['address_family'] = obj.data.AddressFamily;
         reqParams.cfn['PrefixListName'] = obj.data.PrefixListName;
+        reqParams.tf['name'] = obj.data.PrefixListName;
         reqParams.cfn['MaxEntries'] = obj.data.MaxEntries;
+        reqParams.tf['max_entries'] = obj.data.MaxEntries;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.Tags);
+        if (obj.data.Tags) {
+            reqParams.tf['tags'] = new Map();
+            obj.data.Tags.forEach(tag => {
+                if (!tag.Key.startsWith("aws:")) {
+                    reqParams.tf['tags'].set(tag['Key'], tag['Value']);
+                }
+            });
+        }
         reqParams.cfn['Entries'] = obj.data.Entries;
+        if (obj.data.Entries) {
+            reqParams.tf['entry'] = [];
+            for (var entry of obj.data.Entries) {
+                reqParams.tf['entry'].push({
+                    'cidr': entry.Cidr,
+                    'description': entry.Description
+                });
+            }
+        }
 
         tracked_resources.push({
             'obj': obj,
@@ -6293,6 +6313,7 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             'region': obj.region,
             'service': 'ec2',
             'type': 'AWS::EC2::PrefixList',
+            'terraformType': 'aws_ec2_managed_prefix_list',
             'options': reqParams,
             'returnValues': {
                 'Ref': obj.data.PrefixListId,
@@ -6303,6 +6324,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                 },
                 'Import': {
                     'PrefixListId': obj.data.PrefixListId
+                },
+                'Terraform': {
+                    'arn': obj.data.PrefixListArn,
+                    'id': obj.data.PrefixListId
                 }
             }
         });
