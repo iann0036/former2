@@ -3612,16 +3612,68 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
             reqParams.tf['listener_arn'] = obj.data.ListenerArn;
             if (obj.data.Conditions) {
                 reqParams.cfn['Conditions'] = [];
-                reqParams.tf['condition'] = [];
+                reqParams.tf['condition'] = {};
                 obj.data.Conditions.forEach(condition => {
-                    reqParams.cfn['Conditions'].push({
-                        'Field': condition.Field,
-                        'Values': condition.Values
-                    });
-                    reqParams.tf['condition'].push({
-                        'field': condition.Field,
-                        'values': condition.Values
-                    });
+                    var cfnblock = {
+                        'Field': condition.Field
+                    };
+
+                    if (condition.Field == "host-header") {
+                        cfnblock['HostHeaderConfig'] = {
+                            'Values': condition.HostHeaderConfig.Values
+                        };
+                        reqParams.tf['condition']['host_header'] = {
+                            'values': condition.HostHeaderConfig.Values
+                        };
+                    } else if (condition.Field == "http-header") {
+                        cfnblock['HttpHeaderConfig'] = {
+                            'HttpHeaderName': condition.HttpHeaderConfig.HttpHeaderName,
+                            'Values': condition.HttpHeaderConfig.Values
+                        };
+                        reqParams.tf['condition']['http_header'] = {
+                            'http_header_name': condition.HttpHeaderConfig.HttpHeaderName,
+                            'values': condition.HttpHeaderConfig.Values
+                        };
+                    } else if (condition.Field == "http-request-method") {
+                        cfnblock['HttpRequestMethodConfig'] = {
+                            'Values': condition.HttpRequestMethodConfig.Values
+                        };
+                        reqParams.tf['condition']['http_request_method'] = {
+                            'values': condition.HttpRequestMethodConfig.Values
+                        };
+                    } else if (condition.Field == "path-pattern") {
+                        cfnblock['PathPatternConfig'] = {
+                            'Values': condition.PathPatternConfig.Values
+                        };
+                        reqParams.tf['condition']['path_pattern'] = {
+                            'values': condition.PathPatternConfig.Values
+                        };
+                    } else if (condition.Field == "query-string") {
+                        cfnblock['QueryStringConfig'] = {
+                            'Values': condition.QueryStringConfig.Values
+                        };
+                        if (condition.QueryStringConfig.Values) {
+                            var values = [];
+                            for (var val of condition.QueryStringConfig.Values) {
+                                values.push({
+                                    'key': val.Key,
+                                    'value': val.Value
+                                });
+                            }
+                            reqParams.tf['condition']['query_string'] = {
+                                'values': values
+                            };
+                        }
+                    } else if (condition.Field == "source-ip") {
+                        cfnblock['SourceIpConfig'] = {
+                            'Values': condition.SourceIpConfig.Values
+                        };
+                        reqParams.tf['condition']['source_ip'] = {
+                            'values': condition.SourceIpConfig.Values
+                        };
+                    }
+
+                    reqParams.cfn['Conditions'].push(cfnblock);
                 });
             }
             if (obj.data.Actions) {
