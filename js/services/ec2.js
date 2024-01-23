@@ -3660,9 +3660,10 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
                                     'value': val.Value
                                 });
                             }
-                            reqParams.tf['condition']['query_string'] = {
+                            /*reqParams.tf['condition']['query_string'] = {
                                 'values': values
-                            };
+                            };*/
+                            reqParams.tf['condition']['query_string'] = new Set(values);
                         }
                     } else if (condition.Field == "source-ip") {
                         cfnblock['SourceIpConfig'] = {
