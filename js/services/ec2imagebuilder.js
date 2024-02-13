@@ -608,10 +608,12 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
         reqParams.cfn['ChangeDescription'] = obj.data.changeDescription;
         reqParams.cfn['Platform'] = obj.data.platform;
         reqParams.cfn['KmsKeyId'] = obj.data.kmsKeyId;
+        reqParams.cfn['SupportedOsVersions'] = obj.data.supportedOsVersions;
+        reqParams.cfn['Data'] = obj.data.data;
         reqParams.cfn['Tags'] = stripAWSTags(obj.data.tags);
-
+        
         /*
-        TODO:
+        SKIPPED:
         Uri
         */
 
