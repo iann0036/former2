@@ -442,7 +442,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
     await sdkcall("DAX", "describeClusters", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-database-dynamodb-acceleratorclusters-datatable').deferredBootstrapTable('removeAll');
 
         data.Clusters.forEach(cluster => {
@@ -464,7 +464,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
     await sdkcall("DAX", "describeParameterGroups", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-database-dynamodb-acceleratorparametergroups-datatable').deferredBootstrapTable('removeAll');
 
         await Promise.all(data.ParameterGroups.map(parameterGroup => {
@@ -491,7 +491,7 @@ async function updateDatatableDatabaseDynamoDB() {
 
     await sdkcall("DAX", "describeSubnetGroups", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-database-dynamodb-acceleratorsubnetgroups-datatable').deferredBootstrapTable('removeAll');
 
         data.SubnetGroups.forEach(subnetGroup => {
