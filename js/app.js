@@ -1398,7 +1398,9 @@ $(document).ready(function(){
     });
 
     window.addEventListener('message', (message) => {
-        var evt = JSON.parse(message.data);
+        try {
+            var evt = JSON.parse(message.data);
+        } catch(err) {};
         if (evt['event'] == "init") {
             clearDiagram();
         } else if (evt['event'] == "export") {
