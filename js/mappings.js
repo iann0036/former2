@@ -2167,7 +2167,7 @@ function tfToCdktfProp(str) {
     }
     
     var split = str.split("_");
-    var ret = split.map(x => x[0].toUpperCase() + x.substr(1)).join('');
+    var ret = split.map(x => x[0] ? x[0].toUpperCase() : '' + x.substr(1)).join('');
     ret = ret[0].toLowerCase() + ret.substr(1);
 
     return ret;
