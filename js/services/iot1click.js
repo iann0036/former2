@@ -147,7 +147,7 @@ async function updateDatatableInternetofThings1Click() {
 
     await sdkcall("IoT1ClickProjects", "listProjects", {
         // no params
-    }, true).then(async (data) => {
+    }, false).then(async (data) => {
         $('#section-internetofthings-1click-projects-datatable').deferredBootstrapTable('removeAll');
         $('#section-internetofthings-1click-placements-datatable').deferredBootstrapTable('removeAll');
 

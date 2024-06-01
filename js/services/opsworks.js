@@ -637,7 +637,7 @@ async function updateDatatableManagementAndGovernanceOpsWorks() {
 
     await sdkcall("OpsWorksCM", "describeServers", {
         // no params
-    }, true).then((data) => {
+    }, false).then((data) => {
         $('#section-managementandgovernance-opsworks-configurationmanagementservers-datatable').deferredBootstrapTable('removeAll');
 
         data.Servers.forEach(server => {
