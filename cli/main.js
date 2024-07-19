@@ -98,7 +98,7 @@ var resource_tag_cache = {};
 const iaclangselect = "typescript";
 
 function $(selector) { return new $obj(selector) }
-const isAllIncludes = (arr, target) => arr.every(el => target.includes(el));
+const isAllIncludes = (arr, target) => arr.every(el => (el[0] == "~" ? !target.includes(el.substr(1)) : target.includes(el)));
 $obj = function (selector) { };
 $obj.prototype.bootstrapTable = function (action, data) {
     if (action == "append") {
@@ -247,7 +247,7 @@ async function main(opts) {
                 var jsonres = JSON.stringify(cli_resources[i]);
                 if (opts.searchFilter.includes(",")) {
                     for (var searchterm of opts.searchFilter.split(",")) {
-                        if (jsonres.includes(searchterm)) {
+                        if (isAllIncludes([searchterm], jsonres)) {                        
                             output_objects.push({
                                 'id': cli_resources[i].f2id,
                                 'type': cli_resources[i].f2type,
@@ -268,7 +268,7 @@ async function main(opts) {
                         });
                     }
                 } else {
-                    if (jsonres.includes(opts.searchFilter)) {
+                    if (isAllIncludes([opts.searchFilter], jsonres)) {
                         output_objects.push({
                             'id': cli_resources[i].f2id,
                             'type': cli_resources[i].f2type,
