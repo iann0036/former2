@@ -59,7 +59,7 @@ Options:
   --output-raw-data <filename>           filename for debug output (full)
   --output-logical-id-mapping <filename> filename for logical to physical id mapping
   --cfn-deletion-policy <Delete|Retain>  add DeletionPolicy in CloudFormation output
-  --search-filter <value>                search filter for discovered resources ('or search' can be comma separated, 'and search' can be '&' separated.)
+  --search-filter <value>                regexp filter for discovered resources to include in the output
   --services <value>                     list of services to include (can be comma separated (default: ALL))
   --exclude-services <value>             list of services to exclude (can be comma separated)
   --sort-output                          sort resources by their ID before outputting
@@ -217,11 +217,31 @@ Generate CloudFormation output all services excluding CloudWatch and KMS.
 former2 generate --output-cloudformation "cfn.yaml" --exclude-services "CloudWatch,KMS"
 ```
 
+Generate CloudFormation output for EC2 excluding instances with volumes/ENIs
+
+```
+former2 generate --output-cloudformation "cfn.yaml" --services EC2 --search-filter '"f2type":(?!"(ec2.instance|ec2.volume|ec2.networkinterface))'
+```
+
 Generates Terraform output only for the resources that contain "myapp" in Names or Tags etc.
 Filtering by whether the JSON responses of the AWS SDK calls contain a specified string.
 
 ```
 former2 generate --output-terraform "tf.hcl" --search-filter "myapp"
+```
+
+## filter
+
+The `filter` command will use saved raw data output from previous `generate` run to produce the outputs instead of queryng the cloud every time you need to change the filter.
+
+The use case which inspired this command was to produce EC2 CFN file without instances and volumes because autoscaling groups take care of launching instances.
+
+```
+former2 filter \
+  --output-cloudformation "cloudformation.yml" \
+  --input-file "debug.json" \
+  --search-filter '"f2type":(?!"(ec2.instance|elbv2.loadbalancerlistenercertificate|ec2.volume|ec2.networkinterface))' \
+  --sort-output
 ```
 
 ## Security

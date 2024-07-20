@@ -98,7 +98,6 @@ var resource_tag_cache = {};
 const iaclangselect = "typescript";
 
 function $(selector) { return new $obj(selector) }
-const isAllIncludes = (arr, target) => arr.every(el => (el[0] == "~" ? !target.includes(el.substr(1)) : target.includes(el)));
 $obj = function (selector) { };
 $obj.prototype.bootstrapTable = function (action, data) {
     if (action == "append") {
@@ -135,7 +134,49 @@ for (var i=0; i<items.length; i++) {
 f2log = function(msg){};
 f2trace = function(err){};
 
-async function main(opts) {
+function saveOutput(opts) {
+    if (opts.sortOutput) {
+        cli_resources = cli_resources.sort((a, b) => (a.f2id > b.f2id) ? 1 : -1);
+    }
+
+    if (opts.outputCloudformation || opts.outputTerraform) {
+        var output_objects = [];
+
+        for (var i=0; i<cli_resources.length; i++) {
+            if (opts.searchFilter) {
+                var jsonres = JSON.stringify(cli_resources[i]);
+                var ok = opts.searchFilter.test(jsonres);
+                if (opts.debug) {
+                    f2log(`${ok?"":"NOT-"}MATCHED: ${jsonres}`);
+                }
+                if (!ok) continue;
+            }
+            output_objects.push({
+                'id': cli_resources[i].f2id,
+                'type': cli_resources[i].f2type,
+                'data': cli_resources[i].f2data,
+                'region': cli_resources[i].f2region
+            });
+        }
+
+        var tracked_resources = performF2Mappings(output_objects);
+        var mapped_outputs = compileOutputs(tracked_resources, opts.cfnDeletionPolicy);
+
+        if (opts.outputLogicalIdMapping) {
+            fs.writeFileSync(opts.outputLogicalIdMapping, JSON.stringify(getLogicalToPhysicalIdMap()))
+        }
+
+        if (opts.outputCloudformation) {
+            fs.writeFileSync(opts.outputCloudformation, mapped_outputs['cfn']);
+        }
+
+        if (opts.outputTerraform) {
+            fs.writeFileSync(opts.outputTerraform, mapped_outputs['tf']);
+        }
+    }
+}
+
+function parseOpts(opts) {
     if (!opts.outputRawData && !opts.outputCloudformation && !opts.outputTerraform) {
         throw new Error('You must specify an output type');
     }
@@ -146,12 +187,36 @@ async function main(opts) {
         f2debug = function(msg){ console.log(Date.now().toString() + ": " + msg); };
     }
 
+    if (opts.searchFilter) {
+        opts.searchFilter = new RegExp(opts.searchFilter);
+    }
+
+    if (opts.cfnDeletionPolicy && opts.cfnDeletionPolicy != "Delete" && opts.cfnDeletionPolicy != "Retain") {
+        throw new Error('You must specify --cfn-deletion-policy value in [Delete, Retain]');
+    }
+
+    outputMapCdk = function(){};
+    outputMapCdkv2 = function(){};
+    outputMapTroposphere = function(){};
+    outputMapPulumi = function(){};
+    outputMapCdktf = function(){};
+    if (!opts.outputCloudformation) { outputMapCfn = function(){}; }
+    if (!opts.outputTerraform) { outputMapTf = function(){}; }
+
     if (opts.includeDefaultResources) {
         include_default_resources = true;
     }
 
+}
+
+async function main(opts) {
+
     if (opts.profile) {
         AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: opts.profile});
+        if (!opts.region) {
+            var profiles = AWS.util.getProfilesFromSharedConfig(AWS.util.iniLoader, "");
+            if (profiles[opts.profile]) opts.region = profiles[opts.profile].region;
+        }
     }
 
     if (AWS.config.region) {
@@ -187,18 +252,6 @@ async function main(opts) {
         sections = sections.filter(val => val); // reindex
     }
 
-    if (opts.cfnDeletionPolicy && opts.cfnDeletionPolicy != "Delete" && opts.cfnDeletionPolicy != "Retain") {
-        throw new Error('You must specify --cfn-deletion-policy value in [Delete, Retain]');
-    }
-
-    outputMapCdk = function(){};
-    outputMapCdkv2 = function(){};
-    outputMapTroposphere = function(){};
-    outputMapPulumi = function(){};
-    outputMapCdktf = function(){};
-    if (!opts.outputCloudformation) { outputMapCfn = function(){}; }
-    if (!opts.outputTerraform) { outputMapTf = function(){}; }
-
     const b1 = new cliprogress.SingleBar({
         format: _colors.cyan('{bar}') + '  {percentage}% ({value}/{total} services completed)',
         barCompleteChar: '\u2588',
@@ -231,77 +284,12 @@ async function main(opts) {
 
     b1.stop();
 
-    if (opts.sortOutput) {
-        cli_resources = cli_resources.sort((a, b) => (a.f2id > b.f2id) ? 1 : -1);
-    }
-
     if (opts.outputRawData) {
         fs.writeFileSync(opts.outputRawData, JSON.stringify(cli_resources, null, 4));
     }
 
-    if (opts.outputCloudformation || opts.outputTerraform) {
-        var output_objects = [];
+    saveOutput(opts);
 
-        for (var i=0; i<cli_resources.length; i++) {
-            if (opts.searchFilter) {
-                var jsonres = JSON.stringify(cli_resources[i]);
-                if (opts.searchFilter.includes(",")) {
-                    for (var searchterm of opts.searchFilter.split(",")) {
-                        if (isAllIncludes([searchterm], jsonres)) {                        
-                            output_objects.push({
-                                'id': cli_resources[i].f2id,
-                                'type': cli_resources[i].f2type,
-                                'data': cli_resources[i].f2data,
-                                'region': cli_resources[i].f2region
-                            });
-                            break;
-                        }
-                    }
-                } else if (opts.searchFilter.includes("&")) {
-                    const searchWords = opts.searchFilter.split("&")
-                    if (isAllIncludes(searchWords, jsonres)) {
-                        output_objects.push({
-                            'id': cli_resources[i].f2id,
-                            'type': cli_resources[i].f2type,
-                            'data': cli_resources[i].f2data,
-                            'region': cli_resources[i].f2region
-                        });
-                    }
-                } else {
-                    if (isAllIncludes([opts.searchFilter], jsonres)) {
-                        output_objects.push({
-                            'id': cli_resources[i].f2id,
-                            'type': cli_resources[i].f2type,
-                            'data': cli_resources[i].f2data,
-                            'region': cli_resources[i].f2region
-                        });
-                    }
-                }
-            } else {
-                output_objects.push({
-                    'id': cli_resources[i].f2id,
-                    'type': cli_resources[i].f2type,
-                    'data': cli_resources[i].f2data,
-                    'region': cli_resources[i].f2region
-                });
-            }
-        }
-
-        var tracked_resources = performF2Mappings(output_objects);
-        var mapped_outputs = compileOutputs(tracked_resources, opts.cfnDeletionPolicy);
-
-        if(opts.outputLogicalIdMapping) {
-            fs.writeFileSync(opts.outputLogicalIdMapping, JSON.stringify(getLogicalToPhysicalIdMap()))
-        }
-
-        if (opts.outputCloudformation) {
-            fs.writeFileSync(opts.outputCloudformation, mapped_outputs['cfn']);
-        }
-
-        if (opts.outputTerraform) {
-            fs.writeFileSync(opts.outputTerraform, mapped_outputs['tf']);
-        }
-    }
 }
 
 let validation = false;
@@ -314,7 +302,7 @@ cliargs
     .option('--output-raw-data <filename>', 'filename for debug output (full)')
     .option('--output-logical-id-mapping <filename>', 'filename for logical to physical id mapping')
     .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
-    .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
+    .option('--search-filter <regex>', 'search filter as a RegExp for discovered resources')
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
@@ -324,6 +312,7 @@ cliargs
     .option('--proxy <protocol://host:port>', 'use proxy')
     .option('--debug', 'log debugging messages')
     .action(async (opts) => {
+        parseOpts(opts);
         // The followings are here to silence Node runtime complaining about event emitter listeners
         // due to the number of TLS requests that suddenly go out to AWS APIs. This is harmless here
         require('events').EventEmitter.defaultMaxListeners = 1000;
@@ -335,6 +324,25 @@ cliargs
             console.log("\nERROR: " + err.message + "\n")
             cliargs.help();
         }
+    });
+
+cliargs
+    .command('filter')
+    .description('load resources from file and writes them to the specified file')
+    .requiredOption('--input-file <filename>', 'filename with raw data from the generate command')
+    .option('--output-cloudformation <filename>', 'filename for CloudFormation output')
+    .option('--output-terraform <filename>', 'filename for Terraform output')
+    .option('--output-logical-id-mapping <filename>', 'filename for logical to physical id mapping')
+    .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
+    .option('--search-filter <regex>', 'search filter as a RegExp for discovered resources')
+    .option('--sort-output', 'sort resources by their ID before outputting')
+    .option('--include-default-resources', 'include default resources such as default VPCs and their subnets')
+    .option('--debug', 'log debugging messages')
+    .action((opts) => {
+        parseOpts(opts);
+        validation = true;
+        cli_resources = require(opts.inputFile);
+        saveOutput(opts);
     });
 
 cliargs.parse(process.argv);
