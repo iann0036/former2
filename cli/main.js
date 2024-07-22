@@ -140,15 +140,25 @@ function saveOutput(opts) {
     }
 
     if (opts.outputCloudformation || opts.outputTerraform) {
-        var output_objects = [];
+        var output_objects = [], jsonres;
 
         for (var i=0; i<cli_resources.length; i++) {
+            jsonres = null;
             if (opts.searchFilter) {
-                var jsonres = JSON.stringify(cli_resources[i]);
-                var ok = opts.searchFilter.test(jsonres);
-                if (opts.debug) {
-                    f2log(`${ok?"":"NOT-"}MATCHED: ${jsonres}`);
+                jsonres = JSON.stringify(cli_resources[i]);
+                if (opts.searchFilter.includes(",")) {
+                    if (!opts.searchFilter.split(",").some((el) => jsonres.includes(el))) continue;
+                } else
+                if (opts.searchFilter.includes("&")) {
+                    if (!opts.searchFilter.split("&").every((el) => jsonres.includes(el))) continue;
+                } else {
+                    if (!jsonres.includes(opts.searchFilter)) continue;
                 }
+            }
+            if (opts.regexFilter) {
+                if (!jsonres) jsonres = JSON.stringify(cli_resources[i]);
+                const ok = opts.regexFilter.test(jsonres);
+                f2log(`${ok?"":"NOT-"}MATCHED: ${jsonres}`);
                 if (!ok) continue;
             }
             output_objects.push({
@@ -187,8 +197,8 @@ function parseOpts(opts) {
         f2debug = function(msg){ console.log(Date.now().toString() + ": " + msg); };
     }
 
-    if (opts.searchFilter) {
-        opts.searchFilter = new RegExp(opts.searchFilter);
+    if (opts.regexFilter) {
+        opts.regexFilter = new RegExp(opts.regexFilter);
     }
 
     if (opts.cfnDeletionPolicy && opts.cfnDeletionPolicy != "Delete" && opts.cfnDeletionPolicy != "Retain") {
@@ -302,7 +312,8 @@ cliargs
     .option('--output-raw-data <filename>', 'filename for debug output (full)')
     .option('--output-logical-id-mapping <filename>', 'filename for logical to physical id mapping')
     .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
-    .option('--search-filter <regex>', 'search filter as a RegExp for discovered resources')
+    .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
+    .option('--regex-filter <regex>', 'search filter as a RegExp for discovered resources')
     .option('--services <value>', 'list of services to include (can be comma separated (default: ALL))')
     .option('--exclude-services <value>', 'list of services to exclude (can be comma separated)')
     .option('--sort-output', 'sort resources by their ID before outputting')
@@ -334,14 +345,15 @@ cliargs
     .option('--output-terraform <filename>', 'filename for Terraform output')
     .option('--output-logical-id-mapping <filename>', 'filename for logical to physical id mapping')
     .option('--cfn-deletion-policy <Delete|Retain>', 'add DeletionPolicy in CloudFormation output')
-    .option('--search-filter <regex>', 'search filter as a RegExp for discovered resources')
+    .option('--search-filter <value>', 'search filter for discovered resources (can be comma separated)')
+    .option('--regex-filter <regex>', 'search filter as a RegExp for discovered resources')
     .option('--sort-output', 'sort resources by their ID before outputting')
     .option('--include-default-resources', 'include default resources such as default VPCs and their subnets')
     .option('--debug', 'log debugging messages')
     .action((opts) => {
         parseOpts(opts);
         validation = true;
-        cli_resources = require(opts.inputFile);
+        cli_resources = JSON.parse(fs.readFileSync(opts.inputFile).toString());
         saveOutput(opts);
     });
 
