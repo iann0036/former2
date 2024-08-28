@@ -50,6 +50,7 @@ sections.push({
 async function updateDatatableDeveloperToolsCodeStar() {
     blockUI('#section-developertools-codestar-githubrepositories-datatable');
 
+    /*
     await sdkcall("CodeStar", "listProjects", {
         // no params
     }, false).then(async (data) => {
@@ -86,6 +87,7 @@ async function updateDatatableDeveloperToolsCodeStar() {
         }));
 
     }).catch(() => { });
+    */
 
     unblockUI('#section-developertools-codestar-githubrepositories-datatable');
 }
