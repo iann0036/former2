@@ -97,6 +97,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
     blockUI('#section-developertools-codecommit-repositories-datatable');
     blockUI('#section-developertools-codecommit-notificationrules-datatable');
 
+    /*
     await sdkcall("CodeCommit", "listRepositories", {
         // no params
     }, true).then(async (data) => {
@@ -143,6 +144,7 @@ async function updateDatatableDeveloperToolsCodeCommit() {
             });
         }));
     }).catch(() => { });
+    */
 
     unblockUI('#section-developertools-codecommit-repositories-datatable');
     unblockUI('#section-developertools-codecommit-notificationrules-datatable');
