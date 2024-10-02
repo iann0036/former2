@@ -330,9 +330,9 @@ async function updateDatatableContainersEKS() {
                             clusterName: cluster,
                             fargateProfileName: fargateProfileName
                         }, true).then((data) => {
-                            $('#section-containers-eks-fargateprofles-datatable').deferredBootstrapTable('append', [{
+                            $('#section-containers-eks-fargateprofiles-datatable').deferredBootstrapTable('append', [{
                                 f2id: data.fargateProfile.nodegroupArn,
-                                f2type: 'eks.fargateprofle',
+                                f2type: 'eks.fargateprofile',
                                 f2data: data.fargateProfile,
                                 f2region: region,
                                 name: data.fargateProfile.fargateProfileName,
