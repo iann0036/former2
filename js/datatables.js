@@ -354,18 +354,22 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                         reject(data);
                     });
                 } else if (data.NextMarker) {
-                    if (["WAF", "WAFRegional", "WAFV2"].includes(svc)) {
-                        params['NextMarker'] = data.NextMarker;
+                    if (params && params['Marker'] && data && data.NextMarker && params['Marker'] == data.NextMarker) {
+                        resolve(data);
                     } else {
-                        params['Marker'] = data.NextMarker;
-                    }
-                    sdkcall(svc, method, params, alert_on_errors).then(newdata => {
-                        var mergeddata = deepmerge.all([data, newdata]);
+                        if (["WAF", "WAFRegional", "WAFV2"].includes(svc)) {
+                            params['NextMarker'] = data.NextMarker;
+                        } else {
+                            params['Marker'] = data.NextMarker;
+                        }
+                        sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                            var mergeddata = deepmerge.all([data, newdata]);
 
-                        resolve(mergeddata);
-                    }, data => {
-                        reject(data);
-                    });
+                            resolve(mergeddata);
+                        }, data => {
+                            reject(data);
+                        });
+                    }
                 } else if (data.NextPageMarker) { // Route53Domains
                     params['Marker'] = data.NextPageMarker;
                     sdkcall(svc, method, params, alert_on_errors).then(newdata => {
