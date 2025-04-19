@@ -6368,7 +6368,7 @@ async function downloadImportTemplate(stack_name, deletion_policy) {
     });
 
     if (import_json_objects.length > 0) {
-        mapped_cfn_output += "# " + JSON.stringify(import_json_objects, null, 4).replace(/\n/g, "\n# ");
+        mapped_cfn_output += "# Resource import JSON:\n# \n# " + JSON.stringify(import_json_objects, null, 4).replace(/\n/g, "\n# ") + "\n\n";
     }
 
     mapped_cfn_output += compileOutputs(importable_resources, deletion_policy)['cfn'];
