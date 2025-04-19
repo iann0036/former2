@@ -6353,14 +6353,23 @@ async function downloadImportTemplate(stack_name, deletion_policy) {
     }
 
     var mapped_cfn_output = "";
+    var import_json_objects = [];
 
     resources_to_import.forEach(res => {
-        mapped_cfn_output += "# Import properties for " + res['LogicalResourceId'] + " (" + res['ResourceType'] + ")\n# \n";
+        var json_object = {
+            "ResourceType": res['ResourceType'],
+            "LogicalResourceId": res['LogicalResourceId'],
+            "ResourceIdentifier": {}
+        }
         Object.keys(res['ResourceIdentifier']).forEach(k => {
-            mapped_cfn_output += "#     " + k + ": " + res['ResourceIdentifier'][k] + "\n";
+            json_object["ResourceIdentifier"][k] = res['ResourceIdentifier'][k];
         });
-        mapped_cfn_output += "# \n";
+        import_json_objects.push(json_object)
     });
+
+    if (import_json_objects.length > 0) {
+        mapped_cfn_output += "# " + JSON.stringify(import_json_objects, null, 4).replace(/\n/g, "\n# ");
+    }
 
     mapped_cfn_output += compileOutputs(importable_resources, deletion_policy)['cfn'];
     
