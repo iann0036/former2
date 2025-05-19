@@ -583,7 +583,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
             }
             return Promise.resolve();
         }));
-    });
+    }).catch(() => {});
 
     await Promise.all([
         sdkcall("IAM", "listGroups", {
@@ -715,7 +715,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     });
                 }));
             });
-        }),
+        }).catch(() => {}),
         sdkcall("IAM", "listRoles", {
             // no params
         }, true).then(async (data) => {
@@ -792,7 +792,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                     }));
                 });
             }));
-        })
+        }).catch(() => {})
     ]);
 
     await sdkcall("IAM", "listInstanceProfiles", {
@@ -811,7 +811,7 @@ async function updateDatatableSecurityIdentityAndComplianceIAM() {
                 path: instanceProfile.Path
             }]);
         });
-    });
+    }).catch(() => {});
 
     await sdkcall("AccessAnalyzer", "listAnalyzers", {
         type: 'ACCOUNT'
