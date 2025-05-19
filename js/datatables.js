@@ -353,6 +353,19 @@ function sdkcall(svc, method, params, alert_on_errors, backoff) {
                     }, data => {
                         reject(data);
                     });
+                } else if (data.DistributionList && data.DistributionList.NextMarker) {
+                    if (params && params['Marker'] == data.DistributionList.NextMarker) {
+                        resolve(data);
+                    } else {
+                        params['Marker'] = data.DistributionList.NextMarker;
+                        sdkcall(svc, method, params, alert_on_errors).then(newdata => {
+                            var mergeddata = deepmerge.all([data, newdata]);
+
+                            resolve(mergeddata);
+                        }, data => {
+                            reject(data);
+                        });
+                    }
                 } else if (data.NextMarker) {
                     if (params && params['Marker'] && data && data.NextMarker && params['Marker'] == data.NextMarker) {
                         resolve(data);
