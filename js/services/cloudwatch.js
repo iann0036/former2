@@ -1247,6 +1247,8 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
         });
     }).catch(() => { });
 
+    // DISCONTINUED
+    /*
     await sdkcall("Evidently", "listProjects", {
         // no params
     }, true).then(async (data) => {
@@ -1354,6 +1356,7 @@ async function updateDatatableManagementAndGovernanceCloudWatch() {
             });
         }));
     }).catch(() => { });
+    */
 
     await sdkcall("RUM", "listAppMonitors", {
         // no params

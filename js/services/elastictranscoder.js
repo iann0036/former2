@@ -64,6 +64,8 @@ sections.push({
     }
 });
 
+// DEPRECATED
+/*
 async function updateDatatableMediaServicesElasticTranscoder() {
     blockUI('#section-mediaservices-elastictranscoder-pipelines-datatable');
 
@@ -155,3 +157,4 @@ service_mapping_functions.push(function(reqParams, obj, tracked_resources){
 
     return true;
 });
+*/

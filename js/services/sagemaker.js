@@ -1420,6 +1420,8 @@ async function updateDatatableMachineLearningSageMaker() {
         unblockUI('#section-machinelearning-sagemaker-pipelines-datatable');
     }).catch(() => { });
 
+    // DISCONTINUED
+    /*
     await sdkcall("SageMaker", "listDeviceFleets", {
         // no params
     }, false).then(async (data) => {
@@ -1442,6 +1444,7 @@ async function updateDatatableMachineLearningSageMaker() {
 
         unblockUI('#section-machinelearning-sagemaker-devicefleets-datatable');
     }).catch(() => { });
+    */
 
     await sdkcall("SageMaker", "listDevices", {
         // no params
