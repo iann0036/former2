@@ -699,6 +699,7 @@ $(document).ready(function(){
         $('#header-button-import-cfn').attr('style', 'margin-left: 16px; display: none;');
         $('#header-button-download-diagram').attr('style', 'display: none;');
         $('#header-button-copy-tf').attr('style', 'display: none;');
+        $('#header-button-copy-tf-imports').attr('style', 'display: none;');
         $('#header-button-copy-troposphere').attr('style', 'display: none;');
         $('#header-button-copy-cdk').attr('style', 'display: none;');
         $('#header-button-copy-cdkv2').attr('style', 'display: none;');
@@ -828,6 +829,13 @@ $(document).ready(function(){
                         theme: "material"
                     });
                 }, 1);
+            } else if (location.hash == "#section-outputs-tf-imports") {
+                $('#header-button-copy-tf-imports').attr('style', '');
+                $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
+
+                setTimeout(function(){
+                    tf_imports_editor.refresh();
+                }, 1);
             } else if (location.hash == "#section-outputs-diagram") {
                 $('#header-button-download-diagram').attr('style', '');
                 $('#header-button-clear-outputs').attr('style', 'margin-left: 16px;');
@@ -906,6 +914,7 @@ $(document).ready(function(){
 
             cfn_editor.getDoc().setValue(mapped_outputs['cfn']);
             tf_editor.getDoc().setValue(mapped_outputs['tf']);
+            tf_imports_editor.getDoc().setValue(mapped_outputs['tf_imports']);
             troposphere_editor.getDoc().setValue(mapped_outputs['troposphere']);
             cdk_editor.getDoc().setValue(mapped_outputs['cdk']);
             cdkv2_editor.getDoc().setValue(mapped_outputs['cdkv2']);
@@ -1159,6 +1168,18 @@ $(document).ready(function(){
     });
     setCopyEvent('#header-button-copy-raw', raw_editor);
 
+    tf_imports_editor = CodeMirror.fromTextArea(document.getElementById('tf_imports'), {
+        lineNumbers: true,
+        gutters: ["f2gutter", "CodeMirror-linenumbers"],
+        lineWrapping: true,
+        mode: "shell",
+        theme: "material",
+        indentUnit: 4,
+        height: "auto",
+        viewportMargin: Infinity,
+        scrollbarStyle: "null"
+    });
+    setCopyEvent('#header-button-copy-tf-imports', tf_imports_editor);
     $('#header-button-clear-outputs').click(function() {
         output_objects = [];
         regenerateOutputs();

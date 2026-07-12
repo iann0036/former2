@@ -4422,7 +4422,9 @@ template = Template()
 
 template.add_version("2010-09-09")
 
-`}`
+`}`,
+
+        'tf_imports': generateTerraformImports(tracked_resources)
     }
 
     if (has_cfn) {
